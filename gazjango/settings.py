@@ -79,6 +79,7 @@ INSTALLED_APPS = (
     'django.contrib.sites',
     'gazjango.articles',
     'gazjango.accounts',
+    'gazjango.tagging',
 )
 
 AUTH_PROFILE_MODULE = "accounts.userprofile"
