@@ -52,9 +52,9 @@ SECRET_KEY = '1ei&mww+)d1q&b6a5-@#(2(^@$bnt_56_gm_-i+3#x#5*nl&f%'
 
 # List of callables that know how to import templates from various sources.
 TEMPLATE_LOADERS = (
-    'django.template.loaders.filesystem.load_template_source',
+    # 'django.template.loaders.filesystem.load_template_source',
     'django.template.loaders.app_directories.load_template_source',
-#     'django.template.loaders.eggs.load_template_source',
+    # 'django.template.loaders.eggs.load_template_source',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -67,9 +67,7 @@ MIDDLEWARE_CLASSES = (
 ROOT_URLCONF = 'gazjango.urls'
 
 TEMPLATE_DIRS = (
-    # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
-    # Always use forward slashes, even on Windows.
-    # Don't forget to use absolute paths, not relative paths.
+    # we're using app/templates/ directory
 )
 
 INSTALLED_APPS = (
@@ -77,9 +75,13 @@ INSTALLED_APPS = (
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.sites',
-    'gazjango.articles',
-    'gazjango.accounts',
+    'django.contrib.comments',
+    
+    'gazjango.comment_utils'
     'gazjango.tagging',
+    
+    'gazjango.accounts',
+    'gazjango.articles',
 )
 
 AUTH_PROFILE_MODULE = "accounts.userprofile"
