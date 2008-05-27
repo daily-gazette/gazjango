@@ -7,8 +7,6 @@ class Article(models.Model):
     text = models.TextField()
     
     def allow_edit(self, user):
-        if(user.get_profile() in self.authors.all() or user.has_perm('articles.change_article')):
-            return True
-        else:
-            return False
+        return self.authors.filter(user__username=user.username).count() > 0 or \
+               user.has_perm('articles.change_article');
 
