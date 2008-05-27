@@ -77,7 +77,7 @@ INSTALLED_APPS = (
     'django.contrib.sites',
     'django.contrib.comments',
     
-    'gazjango.comment_utils'
+    'gazjango.comment_utils',
     'gazjango.tagging',
     
     'gazjango.accounts',
