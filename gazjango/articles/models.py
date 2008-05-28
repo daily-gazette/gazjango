@@ -43,16 +43,25 @@ class Category(models.Model):
         return u"Category"
 
 
-class Announcements(models.Model):
-    """An announcement: either a staff announcement or a community one.
+class Announcement(models.Model):
+    """An announcement of any kind
     
     The first day it runs is date_start, and the last is date_end."""
     
     slug       = models.SlugField()
-    kind       = models.CharField(max_length=30)
+    kind       = models.ForeignKey('AnnouncementKind')
     text       = models.TextField()
     date_start = models.DateField(default=datetime.datetime.today)
     date_end   = models.DateField(default=datetime.datetime.today)
 
     def __unicode__(self):
         return slug
+
+class AnnouncementKind(models.Model):
+    """ A kind of announcement: staff, email, community, etc."""
+
+    name = models.CharField(max_length=30)
+    description = models.CharField(blank=True, max_length=250)
+
+    def __unicode__(self):
+        return name
