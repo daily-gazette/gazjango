@@ -1,7 +1,7 @@
 from django.db                  import models
 from django.contrib.auth.models import User
 from accounts.models            import UserProfile
-import datetime
+from datetime                   import datetime
 
 
 class Article(models.Model):
@@ -18,7 +18,7 @@ class Article(models.Model):
     summary  = models.TextField()
     text     = models.TextField()
     
-    pub_date = models.DateTimeField(default=datetime.datetime.now)
+    pub_date = models.DateTimeField(default=datetime.now)
     authors  = models.ManyToManyField(UserProfile, related_name="articles")
     category = models.ForeignKey('Category')
     
@@ -40,25 +40,26 @@ class Category(models.Model):
     slug        = models.SlugField(prepopulate_from=("name",))
     
     def __unicode__(self):
-        return u"Category"
+        return name
 
 
 class Announcement(models.Model):
-    """An announcement of any kind
+    """An announcement.
     
     The first day it runs is date_start, and the last is date_end."""
     
     slug       = models.SlugField()
     kind       = models.ForeignKey('AnnouncementKind')
     text       = models.TextField()
-    date_start = models.DateField(default=datetime.datetime.today)
-    date_end   = models.DateField(default=datetime.datetime.today)
+    date_start = models.DateField(default=datetime.today)
+    date_end   = models.DateField(default=datetime.today)
 
     def __unicode__(self):
         return slug
+    
 
 class AnnouncementKind(models.Model):
-    """ A kind of announcement: staff, email, community, etc."""
+    """ A kind of announcement: from the staff, the community, etc."""
 
     name = models.CharField(max_length=30)
     description = models.CharField(blank=True, max_length=250)
