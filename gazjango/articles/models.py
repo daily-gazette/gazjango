@@ -23,11 +23,11 @@ class Article(models.Model):
     category = models.ForeignKey('Category')
     
     def allow_edit(self, user):
-        return self.authors.filter(user__username=user.username).count() > 0 or \
-               user.has_perm('articles.change_article');
+        return self.authors.filter(user__username=user.username).count() > 0 \
+            or user.has_perm('articles.change_article');
                               
     def __unicode__(self):
-        return slug
+        return self.slug
 
 
 class Category(models.Model):
@@ -40,7 +40,7 @@ class Category(models.Model):
     slug        = models.SlugField(prepopulate_from=("name",))
     
     def __unicode__(self):
-        return name
+        return self.name
 
 
 class Announcement(models.Model):
@@ -55,7 +55,7 @@ class Announcement(models.Model):
     date_end   = models.DateField(default=datetime.today)
 
     def __unicode__(self):
-        return slug
+        return self.slug
     
 
 class AnnouncementKind(models.Model):
@@ -65,4 +65,4 @@ class AnnouncementKind(models.Model):
     description = models.CharField(blank=True, max_length=250)
 
     def __unicode__(self):
-        return name
+        return self.name
