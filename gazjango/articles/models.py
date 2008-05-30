@@ -22,7 +22,7 @@ class Article(models.Model):
     category = models.ForeignKey('Category')
     
     def allow_edit(self, user):
-        return self.authors.filter(user__username=user.username).count() > 0 \
+        return self.authors.filter(user__pk=user.pk).count() > 0 \
             or user.has_perm('articles.change_article');
     
     def __unicode__(self):
