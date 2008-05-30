@@ -1,8 +1,7 @@
 from django.db                  import models
 from django.contrib.auth.models import User
 from accounts.models            import UserProfile
-from datetime                   import datetime
-
+from datetime                   import datetime, date
 
 class Article(models.Model):
     """A story or other article to be published.
@@ -25,7 +24,7 @@ class Article(models.Model):
     def allow_edit(self, user):
         return self.authors.filter(user__username=user.username).count() > 0 \
             or user.has_perm('articles.change_article');
-                              
+    
     def __unicode__(self):
         return self.slug
 
@@ -41,7 +40,7 @@ class Category(models.Model):
     
     def __unicode__(self):
         return self.name
-
+    
 
 class Announcement(models.Model):
     """An announcement.
@@ -51,8 +50,8 @@ class Announcement(models.Model):
     slug       = models.SlugField()
     kind       = models.ForeignKey('AnnouncementKind')
     text       = models.TextField()
-    date_start = models.DateField(default=datetime.today)
-    date_end   = models.DateField(default=datetime.today)
+    date_start = models.DateField(default=date.today)
+    date_end   = models.DateField(default=date.today)
 
     def __unicode__(self):
         return self.slug
@@ -60,9 +59,10 @@ class Announcement(models.Model):
 
 class AnnouncementKind(models.Model):
     """ A kind of announcement: from the staff, the community, etc."""
-
+    
     name = models.CharField(max_length=30)
     description = models.CharField(blank=True, max_length=250)
-
+    
     def __unicode__(self):
         return self.name
+    
