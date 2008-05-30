@@ -5,7 +5,7 @@ from articles.models            import Article
 
 class UserTestCase(unittest.TestCase):
     def setUp(self):
-        self.bob = User.objects.create(username="bob")
+        self.bob = User.objects.create_user('bob', 'bob@example.com')
         self.bob.userprofile_set.add(UserProfile())
         
         self.reader   = Position.objects.create(name="Reader")

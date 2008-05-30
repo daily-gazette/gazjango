@@ -6,7 +6,7 @@ from accounts.models            import UserProfile
 class ArticleTestCase(unittest.TestCase):
     
     def setUp(self):
-        self.bob = User.objects.create(username="bob")
+        self.bob = User.objects.create_user("bob", 'bob@example.com')
         self.bob.userprofile_set.add(UserProfile())
         self.bob_profile = self.bob.get_profile()
         
