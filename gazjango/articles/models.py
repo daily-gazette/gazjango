@@ -29,8 +29,7 @@ class Article(models.Model):
     def text_with_revisions(self):
         d = diff_match_patch()
         revised_text = self.text
-        revs = ArticleRevision.objects.filter(article__pk=self.pk).order_by('-revision_date')
-        for r in revs:
+        for r in self.revisions.filter(active=True):
             revised_text = d.patch_apply(d.patch_fromText(r.delta),revised_text)[0]
         return revised_text
 
@@ -47,10 +46,13 @@ class Article(models.Model):
 class ArticleRevision(models.Model):
     """ A revision of an article. Only deltas are stored."""
 
-    article       = models.ForeignKey('Article')
+    article       = models.ForeignKey('Article', related_name='revisions')
     delta         = models.TextField()
     revision_date = models.DateTimeField(default=datetime.now)
     active        = models.BooleanField(default=True)
+
+    class Meta:
+        ordering = ['-revision_date']
 
 
 class Category(models.Model):
