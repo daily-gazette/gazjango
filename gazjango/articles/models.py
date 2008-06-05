@@ -29,7 +29,7 @@ class Article(models.Model):
     def text_with_revisions(self):
         d = diff_match_patch()
         revised_text = self.text
-        revs = ArticleRevision.objects.filter(article__pk=self.pk).order_by('revision_date')
+        revs = ArticleRevision.objects.filter(article__pk=self.pk).order_by('-revision_date')
         for r in revs:
             revised_text = d.patch_apply(d.patch_fromText(r.delta),revised_text)[0]
         return revised_text

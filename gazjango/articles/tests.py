@@ -31,4 +31,7 @@ class ArticleTestCase(unittest.TestCase):
 
     def test_article_revision(self):
         self.boring_article.revise_article("Boring Text (!)")
-        self.assertEquals(self.boring_article.text_with_revisions(), "Boring Text (!)")
+        self.assertEquals(self.boring_article.text_with_revisions(), u"Boring Text (!)")
+        self.assertEquals(self.boring_article.text, u"Boring Text")
+        self.boring_article.revise_article("Boring Text (with some boring revisions)")
+        self.assertEquals(self.boring_article.text_with_revisions(), u"Boring Text (with some boring revisions)")
