@@ -1,7 +1,8 @@
-from django.db                  import models
-from django.contrib.auth.models import User
-from accounts.models            import UserProfile
-from datetime                   import datetime, date
+from django.db                         import models
+from django.contrib.auth.models        import User
+from accounts.models                   import UserProfile
+from datetime                          import datetime, date
+from diff_match_patch.diff_match_patch import diff_match_patch
 
 class Article(models.Model):
     """A story or other article to be published.
@@ -24,9 +25,32 @@ class Article(models.Model):
     def allow_edit(self, user):
         return self.authors.filter(user__pk=user.pk).count() > 0 \
             or user.has_perm('articles.change_article');
+
+    def text_with_revisions(self):
+        d = diff_match_patch()
+        revised_text = self.text
+        revs = ArticleRevision.objects.filter(article__pk=self.pk).order_by('revision_date')
+        for r in revs:
+            revised_text = d.patch_apply(d.patch_fromText(r.delta),revised_text)[0]
+        return revised_text
+
+    def revise_article(self, revised_text):
+        d = diff_match_patch()
+        revision = ArticleRevision()
+        revision.article = self
+        revision.delta = d.patch_toText(d.patch_make(self.text, revised_text))
+        revision.save()
     
     def __unicode__(self):
         return self.slug
+
+class ArticleRevision(models.Model):
+    """ A revision of an article. Only deltas are stored."""
+
+    article       = models.ForeignKey('Article')
+    delta         = models.TextField()
+    revision_date = models.DateTimeField(default=datetime.now)
+    active        = models.BooleanField(default=True)
 
 
 class Category(models.Model):

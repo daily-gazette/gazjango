@@ -28,3 +28,7 @@ class ArticleTestCase(unittest.TestCase):
         self.assert_(self.boring_article in self.bob_profile.articles.all())
         self.assert_(self.bob_profile in self.boring_article.authors.all())
         self.assertTrue(self.boring_article.allow_edit(self.bob))
+
+    def test_article_revision(self):
+        self.boring_article.revise_article("Boring Text (!)")
+        self.assertEquals(self.boring_article.text_with_revisions(), "Boring Text (!)")
