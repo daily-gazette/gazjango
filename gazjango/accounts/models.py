@@ -27,7 +27,7 @@ class UserProfile(models.Model):
 
 class Position(models.Model):
     "A position in the organization: Staff Reporter, Editor-in-Chief, etc."
-    name = models.CharField(blank=True, max_length=40)
+    name = models.CharField(max_length=40, unique=True)
     
     def __unicode__(self):
         return self.name

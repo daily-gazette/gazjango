@@ -12,7 +12,7 @@ class Poll(models.Model):
     
     name       = models.CharField(max_length=150)
     question   = models.TextField(blank=True)
-    slug       = models.SlugField(prepopulate_from=("name",))
+    slug       = models.SlugField(prepopulate_from=("name",), unique_for_year=True)
     time_start = models.DateTimeField(default=datetime.now)
     time_stop  = models.DateTimeField(default=datetime.now)
     allow_anon = models.BooleanField(default=True)
@@ -63,7 +63,7 @@ class Option(models.Model):
     """An option in a poll."""
     
     poll        = models.ForeignKey(Poll)
-    name        = models.CharField(max_length=100)
+    name        = models.CharField(max_length=100, unique=True)
     description = models.TextField(blank=True)
     votes       = models.IntegerField(blank=True, default=0)
     
