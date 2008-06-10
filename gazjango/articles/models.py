@@ -9,8 +9,6 @@ class Article(models.Model):
     
     Includes news stories, editorials, etc, but not announcements or jobs."""
     
-    # TODO: revisions, media, polls
-    
     headline = models.CharField(max_length=250)
     subtitle = models.CharField(blank=True, max_length=200)
     slug     = models.SlugField(prepopulate_from=("headline",))
@@ -63,6 +61,8 @@ class Category(models.Model):
     name        = models.CharField(max_length=40)
     description = models.CharField(blank=True, max_length=250)
     slug        = models.SlugField(prepopulate_from=("name",))
+    parent      = models.ForeignKey('self', blank=True, null=True, 
+                                    related_name='child_set')
     
     def __unicode__(self):
         return self.name
