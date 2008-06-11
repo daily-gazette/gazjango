@@ -16,9 +16,8 @@ class UserProfile(models.Model):
         query_end = Q(date_end__isnull = True) | Q(date_end__gte=now)
         return self.positions.filter(query_end, date_start__gte=now)
     
-    def add_position(self, position, date_start, date_end=None):
+    def add_position(self, position, date_start=datetime.today, date_end=None):
         "Adds a new PositionHeld relation for this user."
-        if date_start is None: date_start = datetime.today()
         self.positions.add(PositionHeld.objects.create(
             user_profile = self,       position    = position,
             date_start   = date_start, date_end    = date_end))
