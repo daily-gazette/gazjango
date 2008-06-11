@@ -1,4 +1,5 @@
 from django.db                  import models
+from django.db.models           import Q
 from django.contrib.auth.models import User
 from datetime                   import datetime
 
@@ -11,9 +12,10 @@ class UserProfile(models.Model):
     
     def current_positions(self):
         "Returns positions currently held by this user."
-        return self.positions.filter(date_end=None).all()
+        query = Q(date_end__isnull = True) | Q(date_end__gte=datetime.now()))
+        return self.positions.filter(query)
     
-    def add_position(self, position, date_start=None, date_end=None):
+    def add_position(self, position, date_start, date_end=None):
         "Adds a new PositionHeld relation for this user."
         if date_start is None: date_start = datetime.today()
         self.positions.add(PositionHeld.objects.create(
