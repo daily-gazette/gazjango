@@ -12,8 +12,9 @@ class UserProfile(models.Model):
     
     def current_positions(self):
         "Returns positions currently held by this user."
-        query = Q(date_end__isnull = True) | Q(date_end__gte=datetime.now()))
-        return self.positions.filter(query)
+        now = datetime.now()
+        query_end = Q(date_end__isnull = True) | Q(date_end__gte=now)
+        return self.positions.filter(query_end, date_start__gte=now)
     
     def add_position(self, position, date_start, date_end=None):
         "Adds a new PositionHeld relation for this user."
