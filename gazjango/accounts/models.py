@@ -1,7 +1,7 @@
 from django.db                  import models
 from django.db.models           import Q
 from django.contrib.auth.models import User
-from datetime                   import datetime
+from datetime                   import datetime, date
 
 class UserProfile(models.Model):
     "Extra information about users."
@@ -12,12 +12,13 @@ class UserProfile(models.Model):
     
     def current_positions(self):
         "Returns positions currently held by this user."
-        now = datetime.now()
+        now = date.today()
         query_end = Q(date_end__isnull = True) | Q(date_end__gte=now)
-        return self.positions.filter(query_end, date_start__gte=now)
+        return self.positions.filter(query_end, date_start__lte=now)
     
-    def add_position(self, position, date_start=datetime.today, date_end=None):
+    def add_position(self, position, date_start=None, date_end=None):
         "Adds a new PositionHeld relation for this user."
+        if date_start is None: date_start = date.today()
         self.positions.add(PositionHeld.objects.create(
             user_profile = self,       position    = position,
             date_start   = date_start, date_end    = date_end))
@@ -43,7 +44,7 @@ class PositionHeld(models.Model):
     
     user_profile = models.ForeignKey(UserProfile, related_name='positions')
     position     = models.ForeignKey(Position, related_name='holdings')
-    date_start   = models.DateField()
+    date_start   = models.DateField(default=date.today)
     date_end     = models.DateField(null=True, blank=True)
     
     def __unicode__(self):

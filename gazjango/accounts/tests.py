@@ -2,6 +2,7 @@ import unittest
 from django.contrib.auth.models import User
 from accounts.models            import UserProfile, Position, PositionHeld
 from articles.models            import Article
+from datetime                   import date, datetime, timedelta
 
 class UserTestCase(unittest.TestCase):
     def setUp(self):
@@ -28,8 +29,20 @@ class UserTestCase(unittest.TestCase):
         self.assertEquals(p.positions.count(), 1)
         self.assertEquals(p.current_positions()[0].position, self.reader)
         
-        p.add_position(self.reporter)
+        p.add_position(self.reporter, date.today(), date.today() + timedelta(days=1))
         self.assertEquals(p.positions.count(), 2)
         self.assertEquals(set([ph.position for ph in p.current_positions()]), 
                           set([self.reader, self.reporter]))
+        
+        p.add_position(self.editor, date.today() + timedelta(days=4))
+        self.assertEquals(p.positions.count(), 3)
+        self.assertEquals(set([ph.position for ph in p.current_positions()]),
+                          set([self.reader, self.reporter]))
+        
+        reader = p.positions.get(position__name='Reader')
+        reader.date_end = date.today() - timedelta(days=1)
+        reader.save()
+        self.assertEquals(p.positions.count(), 3)
+        self.assertEquals(set([ph.position for ph in p.current_positions()]),
+                          set([self.reporter]))
     
