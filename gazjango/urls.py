@@ -1,9 +1,9 @@
 from django.conf.urls.defaults import *
+import articles
 
 urlpatterns = patterns('',
-    # Example:
-    # (r'^gazjango/', include('gazjango.foo.urls')),
-
-    # Uncomment this for admin:
-#     (r'^admin/', include('django.contrib.admin.urls')),
+                       (r'^(\d{4})/$', 'articles.views.archive_year'),
+                       (r'^(\d{4})/(\d{1,2})/$', 'articles.views.archive_month'),
+                       (r'^(\d{4})/(\d{1,2})/(\d{1,2})/([\w-]+)/$'),
+                       (r'^(\d{4})/(\d{1,2})/(\d{1,2})/([\w-]+)/$', 'articles.views.article_page')
 )
