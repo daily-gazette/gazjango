@@ -4,23 +4,28 @@ from accounts.models                   import UserProfile
 from exceptions                        import RelationshipMismatch
 from datetime                          import datetime, date
 from diff_match_patch.diff_match_patch import diff_match_patch
+import formats
 
 class Article(models.Model):
     """A story or other article to be published.
     
     Includes news stories, editorials, etc, but not announcements or jobs."""
     
-    headline = models.CharField(max_length=250)
-    subtitle = models.CharField(blank=True, max_length=200)
-    slug     = models.SlugField(prepopulate_from=("headline",), unique_for_date=True)
+    headline  = models.CharField(max_length=250)
+    subtitle  = models.CharField(blank=True, max_length=200)
+    slug      = models.SlugField(prepopulate_from=("headline",), unique_for_date=True)
     
-    summary  = models.TextField()
-    text     = models.TextField()
+    summary   = models.TextField()
+    text      = models.TextField()
     
-    pub_date = models.DateTimeField(default=datetime.now)
-    authors  = models.ManyToManyField(UserProfile, related_name="articles")
-    category = models.ForeignKey('Category')
-    
+    pub_date  = models.DateTimeField(default=datetime.now)
+    authors   = models.ManyToManyField(UserProfile, related_name="articles")
+    category  = models.ForeignKey('Category')
+
+    published = models.BooleanField()
+
+    format    = models.ForeignKey('Format')
+
     def allow_edit(self, user):
         return self.authors.filter(user__pk=user.pk).count() > 0 \
             or user.has_perm('articles.change_article');
@@ -42,6 +47,10 @@ class Article(models.Model):
         
         self.text = revised_text
         self.save()
+
+    def formatted_text(self):
+        formatter = getattr(formats, self.format.function)
+        return formatter(self.text)
     
     def __unicode__(self):
         return self.slug
@@ -107,3 +116,8 @@ class AnnouncementKind(models.Model):
     def __unicode__(self):
         return self.name
     
+class Format(models.Model):
+    """ A format: html, textile, etc. """
+
+    name     = models.CharField(max_length=30, unique=True)
+    function = models.CharField(max_length=30)

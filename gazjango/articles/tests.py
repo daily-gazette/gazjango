@@ -1,6 +1,6 @@
 import unittest
 from django.contrib.auth.models import User, Permission
-from articles.models            import Article, ArticleRevision, Category
+from articles.models            import Article, ArticleRevision, Category, Format
 from accounts.models            import UserProfile
 
 class ArticleTestCase(unittest.TestCase):
@@ -11,13 +11,25 @@ class ArticleTestCase(unittest.TestCase):
         self.bob_profile = self.bob.get_profile()
         
         self.news = Category.objects.create(name="News")
+
+        self.textile = Format.objects.create(name     = "textile",
+                                             function = "textile")
+        self.html = Format.objects.create(name     = "html",
+                                          function = "html")
+
         self.boring_article = Article.objects.create(headline = "...Boring",
                                                      text     = "Boring Text",
                                                      slug     = 'boring',
-                                                     category = self.news)
+                                                     category = self.news,
+                                                     format   = self.html)
+        self.formatted_article = Article.objects.create(headline = "Formatted!",
+                                                        text     = "_Emphasis_",
+                                                        slug     = "formatted",
+                                                        category = self.news,
+                                                        format   = self.textile)
     
     def tearDown(self):
-        for m in (User, UserProfile, Category, Article, ArticleRevision):
+        for m in (User, UserProfile, Category, Article, ArticleRevision, Format):
             m.objects.all().delete()
     
     def test_articles_empty(self):
@@ -44,4 +56,8 @@ class ArticleTestCase(unittest.TestCase):
             for j in range(i):
                 self.assertEquals(a.text_at_revision(rs[j]), strs[j])
     
-
+    def test_article_formatting(self):
+        self.formatted_article.format = self.textile
+        self.assertEquals(self.formatted_article.formatted_text(), "<p><em>Emphasis</em></p>")
+        self.formatted_article.format = self.html
+        self.assertEquals(self.formatted_article.formatted_text(), self.formatted_article.text)
