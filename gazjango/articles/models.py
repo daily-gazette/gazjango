@@ -80,7 +80,7 @@ class ArticleRevision(models.Model):
 class Category(models.Model):
     """A category of stories: news, features, etc.
     
-    Only applies to Articles: Announcements don't use this."""
+    Only applies to Articles: Announcements use AnnouncementKind."""
     
     name        = models.CharField(max_length=40, unique=True)
     description = models.CharField(blank=True, max_length=250)
