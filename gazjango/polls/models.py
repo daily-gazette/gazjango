@@ -67,6 +67,10 @@ class Option(models.Model):
     description = models.TextField(blank=True)
     votes       = models.IntegerField(blank=True, default=0)
     
+    class Meta:
+        order_with_respect_to = 'poll'
+        unique_together = ('poll', 'name')
+    
     def __unicode__(self):
         return self.name
     
