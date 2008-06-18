@@ -83,6 +83,7 @@ INSTALLED_APPS = (
     'gazjango.accounts',
     'gazjango.articles',
     'gazjango.polls',
+    'gazjango.issues',
 )
 
 AUTH_PROFILE_MODULE = "accounts.userprofile"
