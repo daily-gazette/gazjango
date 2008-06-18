@@ -5,6 +5,7 @@ from exceptions                        import RelationshipMismatch
 from datetime                          import datetime, date
 from diff_match_patch.diff_match_patch import diff_match_patch
 import formats
+import tagging
 
 class Article(models.Model):
     """A story or other article to be published.
@@ -21,11 +22,10 @@ class Article(models.Model):
     pub_date  = models.DateTimeField(default=datetime.now)
     authors   = models.ManyToManyField(UserProfile, related_name="articles")
     category  = models.ForeignKey('Category')
-
+    
     published = models.BooleanField()
-
     format    = models.ForeignKey('Format')
-
+    
     def allow_edit(self, user):
         return self.authors.filter(user__pk=user.pk).count() > 0 \
             or user.has_perm('articles.change_article');
@@ -59,6 +59,11 @@ class Article(models.Model):
     def __unicode__(self):
         return self.slug
     
+
+try:
+    tagging.register(Article)
+except tagging.AlreadyRegistered:
+    pass # this happens in testing, for some reason
 
 class ArticleRevision(models.Model):
     """ A revision of an article. Only deltas are stored.
