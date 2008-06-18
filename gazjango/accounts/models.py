@@ -6,9 +6,9 @@ from datetime                   import datetime, date
 class UserProfile(models.Model):
     "Extra information about users."
     user    = models.ForeignKey(User, unique=True)
-    bio     = models.TextField(blank=True)
+    bio     = models.TextField(blank=True, null=True)
     phone   = models.PhoneNumberField(blank=True, null=True)
-    contact = models.TextField(blank=True)
+    contact = models.TextField(blank=True, null=True)
     # many-to-many Articles, has-many PositionsHeld
     
     def current_positions(self):
