@@ -47,10 +47,14 @@ class Article(models.Model):
         
         self.text = revised_text
         self.save()
-
+    
     def formatted_text(self):
         formatter = getattr(formats, self.format.function)
         return formatter(self.text)
+    
+    def formatted_text_at_revision(self, revision):
+        formatter = getattr(formats, self.format.function)
+        return formatter(self.text_at_revision(revision))
     
     def __unicode__(self):
         return self.slug
