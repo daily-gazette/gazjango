@@ -7,6 +7,7 @@ class UserProfile(models.Model):
     "Extra information about users."
     user    = models.ForeignKey(User, unique=True)
     bio     = models.TextField(blank=True)
+    phone   = models.PhoneNumberField(blank=True, null=True)
     contact = models.TextField(blank=True)
     # many-to-many Articles, has-many PositionsHeld
     
