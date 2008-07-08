@@ -1,0 +1,74 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+  "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en">
+
+<head>
+  <title>{% block title %}{% endblock title %} :: The Daily Gazette</title>
+
+  <link rel="stylesheet" href="css/toolbox.css" type="text/css" media="screen, projection, print" />
+  <link rel="stylesheet" href="css/style.css" type="text/css" media="screen, projection" />
+  <link rel="stylesheet" href="css/print.css" type="text/css" media="print" />
+
+  <link rel="alternate" type="application/rss+xml" title="RSS 2.0" href="" />
+  <link rel="alternate" type="text/xml" title="RSS .92" href="" />
+  <link rel="alternate" type="application/atom+xml" title="Atom 0.3" href="" />
+
+  {% block customheader %}
+  {% endblock customheader %}
+</head>
+
+<body>
+  <div id="container">
+  	<div id="header">
+  		<div id="headerColor">
+  			<div id="headerContent">
+  				<div id="headerSubscribe">
+  					<p>Subscribe: <a href="">Email</a> | <a href="">News Feed [RSS]</a> | <a href="">Twitter</a> | <a href="">Facebook</a></p>
+  					<p><a href="">Login</a> | May 18, 2008</p>
+  				</div>
+				
+  				<div id="headerTitle">
+  					<center><h1><a href=""><img src="images/header/title.png" title="Title" /></a></h1></center>
+  				</div>
+  			</div>
+  		</div>
+			
+  		<div id="headerNav">
+        <center>
+					<ul>
+						<li><a href="">News</a></li>
+						<li><a href="">Features</a></li>
+						<li><a href="">Specials</a></li>
+						<li><a href="">Athletics</a></li>
+						<li><a href="">Multimedia &amp; Photography</a></li>
+						<li><a href="">Opinions &amp; Columns</a></li>
+						<li><a href="">Archives</a></li>
+					</ul>
+				</center>
+		  </div>
+	
+      {% block topbar %}
+      {% endblock topbar %}
+	  </div>
+
+    <div id="content">
+      {% block content %}
+      {% endblock content %}
+
+      {% block footer %}
+    	<div id="footer">
+    		<div id="footerContent">
+    			<p>The Daily Gazette is a publication written by members of the Swarthmore College community. The administration of Swarthmore College has no editorial control or oversight regarding the content or presentation of the Daily Gazette. Funding for the Gazette is provided by the Student Budget Committee and by advertising revenue.</p>
+    			<br/>
+			    <p>
+			      <span class="floatLeft">Contact | About | Employment | <a href="policies.html">Policies</a></span>
+			      <span class="floatRight">Register an Account | Manage an Account | Login</span>
+			    </p>
+        </div>
+	    </div>
+	    {% endblock footer %}
+    </div>
+  </div>
+</body>
+
+</html>
