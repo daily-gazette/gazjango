@@ -37,13 +37,17 @@ def make_user(username, email, first, last, phone=None, contact=None, bio=None, 
     return user
 
 bob  = make_user('bob', 'bob@example.com', 'Bob', 'Jones', 
-                 '123-456-7890', 'AIM: bobjones52', groups=[reader_group, editor_group])
+                 '123-456-7890', 'AIM: bobjones52',
+                 groups=[reader_group, editor_group])
 jack = make_user('jack', 'jack@uppityup.com', 'Jack', 'McSmith', 
-                 bio="I'm pretty much the man.", groups=[reader_group, photographer_group, editor_group])
+                 bio="I'm pretty much the man.",
+                 groups=[reader_group, photographer_group, editor_group])
 jill = make_user('jill', 'jill@thehill.com',  'Jill', 'Carnegie', 
-                 contact="GTalk: jill@thehill.com", groups=[reader_group, admin_group])
+                 contact="GTalk: jill@thehill.com", 
+                 groups=[reader_group, admin_group])
 bone = make_user('bone', 'doctress@example.com', 'The', 'Bone Doctress', 
-                 bio="I'm a mysterious figure.", groups=[reader_group, reporter_group])
+                 bio="I'm a mysterious figure.", 
+                 groups=[reader_group, reporter_group])
 angry = make_user('angry', 'somedude@swat.net', 'Angry', 'Man',
                  bio="I used to be in charge of this paper, but I've since moved "
                      "on to bigger and better things: complaining and nitpicking.",
@@ -90,17 +94,23 @@ angry_p.add_position(reader,  date(2006, 9, 1))
 
 ### Categories
 
-news     = Category.objects.create(name="News", slug="news",
-                                   description="What's going on in the world.")
-features = Category.objects.create(name="Features", slug="features",
-                                   description="The happenings around town.")
-opinions = Category.objects.create(name="Opinions", slug="opinions",
-                                   description="What people have to say.")
-columns  = Category.objects.create(name="Columns", slug="columns",
-                                   description="Foreign countries, sex, or both.")
-bone_doctress = Category.objects.create(name="The Bone Doctress", 
-                                   slug="bone_doctress",
-                                   description="Everyone's favorite sex column.")
+def cat(name, slug, description, parent=None):
+    args = { 'name': name, 'slug': slug, 'description': description }
+    if parent:
+        args['parent'] = parent
+    return Category.objects.create(**args)
+
+
+news = cat("News", "news", "What's going on in the world.")
+students = cat("Students", "students", "Swarthmore students and their doings.", news)
+facstaff = cat("Faculty & Staff", "facstaff", "About Swarthmore faculty and staff.", news)
+
+features = cat("Features", "features", "The happenings around town.")
+opinions = cat("Opinions", "opinions", "What people have to say.")
+
+columns  = cat("Columns", "columns", "Foreign countries, sex, or both.")
+bone_doctress = cat("The Bone Doctress", "bone_doctress", 
+                    "Everyone's favorite sex column.", columns)
 
 ### Formats
 textile = Format.objects.create(name="Textile", function="textile")
