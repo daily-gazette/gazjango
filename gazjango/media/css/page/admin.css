@@ -1,0 +1,305 @@
+
+
+
+
+#storyBox {	width: 655px;	margin: 0 0 25px 0;	position: relative;
+	padding-left: 25px;
+}#admin p {
+	margin: 0;
+	padding: 0 0 10px 5px;
+	float: left
+	color: black;	width: 650px;
+	text-align: justify;
+	line-height: 1.4;
+	font-size: 1.4em;
+}#admin h2{	font-size: 200%;	font-family: "Helvetica Neue", Arial, Helvetica, Geneva, sans-serif;	color: black;	margin: 5px 0px 5px 0px;	text-align: left;	font-size: 3em;	}#admin a {	text-decoration: underline;	}#admin h3 {	font-size: 1.8em;	line-height: 1em;	font-family: "Helvetica Neue", Arial, Helvetica, Geneva, sans-serif;	color: black;	text-align: left;	padding: 2px;	font-weight: bold;
+	background: #eeeeee;
+	padding: 5px;	}
+	
+	
+#pageHead {
+	width: 100%;
+	float: left;
+	border-bottom: 2px solid #000000;
+	position: relative;
+	background: #ffffff
+}
+
+#pageMain {
+	width: 200px;
+	float: left;
+}
+
+#pageMain h2{
+	margin: 0px;
+	padding: 0px;
+}
+
+#pageAlternatives {
+	width: 450px;
+	float: left;
+}
+
+#pageAlternatives ul {
+	margin: 0;
+	padding: 0;
+	list-style-type: none;
+	display: inline;
+	overflow: hidden;
+	position: absolute;
+	bottom: 0;
+	right: 0;
+}
+
+#pageAlternatives li {
+	display: inline;
+	overflow: hidden;
+	width: 35px;
+	padding: 5px 2px 5px 2px;
+	font: 1.25em "Helvetica Neue", Arial, Helvetica, Geneva, sans-serif;
+}
+
+#pageAlternatives li a {
+	text-decoration: none;
+}
+
+#pageAlternatives li a:hover {
+	text-decoration: overline;
+}
+	
+/**************************************
+
+FORM STYLES
+
+**************************************/
+
+label {
+	float: left;
+	width: 3em;
+}
+
+.formColumn {
+	float: left;
+	width: 130px;
+	padding: 5px;
+}
+
+.formWide {
+	width: 100%;
+	float: left;
+}
+
+.sideBox {
+	width: 245px;
+	float: right;
+	background-color: #ffffff;
+	padding-left: 5px;
+}
+
+/**************************************
+
+RIGHT MENU STYLES
+
+**************************************/	
+#commentColumn {
+	width: 260px;
+	float: right;
+	z-index: 10;
+	display: block;
+}
+
+#commentBox {
+	float: right;
+	width: 245px;
+	margin-right: 4px;
+	margin-top: 0px;
+	padding: 4px;
+	position: fixed;
+	background-color: #eeeeee;
+}
+
+
+
+#commentBox ul {
+	list-style-type: none;
+	margin: 0px 0px 0px 5px;
+	padding: 0 0 0px 10px;
+	font-size: 1.3em;	
+}
+
+#commentBox ul ul {
+	list-style-type: none;
+	margin: 0px 0px 0px 0px;
+	padding: 5px 0 0px 0px;
+	font-size: 1.0em;	
+}
+
+/**************************************
+
+COLUMNS
+
+**************************************/
+
+.floatLeft {
+	float: left;
+}
+
+.floatRight {
+	float: right;
+}
+
+.column {
+	padding: 5px;
+	border-style: solid;
+	display: inline-block;
+	text-align: left;
+}
+
+.column ul {
+	list-style-type: square;
+	margin: 0px 0px 0px 15px;
+	padding: 0 0 0px 10px;
+	font-size: 1.3em;	
+}
+
+.column ul ul {
+	font-size: .9em;
+	list-style-type: none;
+	margin-left: 5px;
+}
+
+/**************************************
+
+MENU BAR
+
+**************************************/
+
+
+#adminSectionBar {
+	background-color: #432c16;
+	width: 950px;
+	height: 30px;
+	margin: 0 auto;
+}
+
+
+.adminSection {
+	float: left;
+	width: 900px;
+	margin: 4px 25px 0px 25px;
+	display: inline-block;
+}
+
+.adminSection ul {
+	margin: 0;
+	padding: 0;
+	width: 900px;
+	list-style-type: none;
+	margin: 0 auto;
+	padding: 2px 0 2px 0px;
+	display: inline;
+	overflow:hidden;
+	position: static;
+	color: #ffffff;
+}
+
+.adminSection li {
+	display: inline;
+	overflow:hidden;
+	width:  150px;
+	height: 25px;
+	padding: 5px 20px 5px 10px;
+	font: 1.78em "Helvetica Neue", Arial, Helvetica, Geneva, sans-serif;
+}
+
+.adminSection ul li a {
+	color: #ffffff;
+	text-decoration: underline;
+}
+
+.adminSection ul li a:hover {
+	text-decoration: overline;
+	color: #dddddd;
+}
+
+.adminSection ul li a {
+	display: inline;
+	overflow:hidden;
+	text-decoration: none;
+}
+
+.adminSection ul li.small {
+	font-size: .5em;
+	font-style: italic;
+}
+
+.adminSection ul li.active {
+	font-weight: bold;
+}
+
+
+#adminSectionSubMenu {
+	background-color: #6d4824;
+	width: 950px;
+	height: 30px;
+	margin: 0 auto;
+	position: relative;
+}
+
+#adminSectionSubSubMenu {
+	background-color: #986432;
+	width: 950px;
+	height: 30px;
+	margin: 0 auto;
+	position: relative;
+}
+
+
+/**************************************
+
+GENERAL STYLE GUIDES
+
+**************************************/
+.imgLeft {
+	float: left;
+	display: inline;
+	overflow:hidden;
+	margin: 10px 10px 10px 0px;
+}
+
+.imgRight {
+	margin: 5px 0px 5px 5px;
+	float: right;
+}
+
+.ten {
+	width: 10%;
+}
+
+.twentyfive {
+	width: 25%;
+}
+
+.thirty {
+	width: 30%;
+}
+
+.thirtyfive {
+	width: 35%;
+}
+
+.fourty {
+	width: 40%;
+}
+
+.fifty {
+	width: 50%;
+}
+
+.seventyfive {
+	width: 75%;
+}
+
+.hundred {
+	width: 100%;
+}
