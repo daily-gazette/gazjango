@@ -55,3 +55,4 @@ class IssueAnnouncement(models.Model):
     def __unicode__(self):
         return u"%s on %s" % (self.announcement.slug, self.issue.date)
     
+

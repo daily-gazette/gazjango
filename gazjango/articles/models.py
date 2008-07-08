@@ -166,3 +166,4 @@ class Format(models.Model):
     
     name     = models.CharField(max_length=30, unique=True)
     function = models.CharField(max_length=30)
+
