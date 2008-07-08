@@ -1,6 +1,7 @@
-from django.db       import models
-from articles.models import Article, Announcement
-from datetime        import date
+from django.db        import models
+from django.db.models import permalink
+from articles.models  import Article, Announcement
+from datetime         import date
 
 class Issue(models.Model):
     """An issue of the paper."""
@@ -21,6 +22,11 @@ class Issue(models.Model):
     def __unicode__(self):
         return self.date.strftime("%a, %d %B %Y")
     
+    @permalink
+    def get_absolute_url(self):
+        a = [str(x) for x in (self.date.year, self.date.month, self.date.day)]
+        return ('issues.views.for_date', a)
+    
 
 class IssueArticle(models.Model):
     """An issue's having an article. Includes position metadata."""
@@ -34,6 +40,7 @@ class IssueArticle(models.Model):
     
     def __unicode__(self):
         return u"%s on %s" % (self.article.slug, self.issue.date)
+    
 
 class IssueAnnouncement(models.Model):
     """An issue's having an announcement. Includes position metadata."""

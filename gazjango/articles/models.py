@@ -1,4 +1,5 @@
 from django.db                         import models
+from django.db.models                  import permalink
 from django.contrib.auth.models        import User
 from accounts.models                   import UserProfile
 from exceptions                        import RelationshipMismatch
@@ -14,7 +15,7 @@ class Article(models.Model):
     
     headline  = models.CharField(max_length=250)
     subtitle  = models.CharField(blank=True, max_length=200)
-    slug      = models.SlugField(prepopulate_from=("headline",), unique_for_date=True)
+    slug      = models.SlugField(prepopulate_from=("headline",), unique_for_date="pub_date")
     
     summary   = models.TextField()
     text      = models.TextField()
@@ -59,11 +60,18 @@ class Article(models.Model):
     def __unicode__(self):
         return self.slug
     
+    @permalink
+    def get_absolute_url(self):
+        d = self.pub_date
+        a = [str(x) for x in (d.year, d.month, d.day)]
+        return ('articles.views.article', a + [self.slug])
+    
 
 try:
     tagging.register(Article)
 except tagging.AlreadyRegistered:
     pass # this happens in testing, for some reason
+
 
 class ArticleRevision(models.Model):
     """ A revision of an article. Only deltas are stored.
@@ -97,8 +105,23 @@ class Category(models.Model):
     parent      = models.ForeignKey('self', blank=True, null=True,
                                     related_name='child_set')
     
+    def descendants(self):
+        "Returns all sub-categories of this category, including itself."
+        descendants = [self]
+        for child in self.child_set.all():
+            descendants.extend(child.descendants())
+        return descendants
+    
+    def all_articles(self):
+        "Returns all articles in this category or one of its sub-categories."
+        Article.objects.filter(category__in=[d.pk for d in self.descendants()])
+    
     def __unicode__(self):
         return self.name
+    
+    @permalink
+    def get_absolute_url(self):
+        return ('articles.views.category', [self.slug])
     
 
 class Announcement(models.Model):
@@ -106,15 +129,23 @@ class Announcement(models.Model):
     
     The first day it runs is date_start, and the last is date_end."""
     
-    slug       = models.SlugField(unique_for_month=True)
+    slug       = models.SlugField(unique_for_month="date_start")
     kind       = models.ForeignKey('AnnouncementKind')
     text       = models.TextField()
     date_start = models.DateField(default=date.today)
     date_end   = models.DateField(default=date.today)
     
+    # TODO: replace unique_for_month with a custom validator that checks the span
+    
     def __unicode__(self):
         return self.slug
-
+    
+    @permalink
+    def get_absolute_url(self):
+        d = self.pub_date
+        a = [str(x) for x in (d.year, d.month, d.day)]
+        return ('articles.views.announcement', a + [self.slug])
+    
 
 class AnnouncementKind(models.Model):
     """ A kind of announcement: from the staff, the community, etc."""
@@ -125,8 +156,13 @@ class AnnouncementKind(models.Model):
     def __unicode__(self):
         return self.name
     
+    @permalink
+    def get_absolute_url(self):
+        return ('articles.views.announcement_kind', [self.slug])
+    
+
 class Format(models.Model):
     """ A format: html, textile, etc. """
-
+    
     name     = models.CharField(max_length=30, unique=True)
     function = models.CharField(max_length=30)

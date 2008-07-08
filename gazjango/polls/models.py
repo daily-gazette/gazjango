@@ -12,7 +12,7 @@ class Poll(models.Model):
     
     name       = models.CharField(max_length=150)
     question   = models.TextField(blank=True)
-    slug       = models.SlugField(prepopulate_from=("name",), unique_for_year=True)
+    slug       = models.SlugField(prepopulate_from=("name",), unique_for_year="time_start")
     time_start = models.DateTimeField(default=datetime.now)
     time_stop  = models.DateTimeField(default=datetime.now)
     allow_anon = models.BooleanField(default=True)
@@ -57,6 +57,9 @@ class Poll(models.Model):
     def __unicode__(self):
         return self.slug
     
+    @permalink
+    def get_absolute_url(self):
+        return ('poll-details', [str(self.time_start.year), self.slug])
 
 
 class Option(models.Model):

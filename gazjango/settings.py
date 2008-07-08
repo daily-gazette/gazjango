@@ -1,20 +1,21 @@
 # Django settings for gazjango project.
 
-DEBUG = True
-TEMPLATE_DEBUG = DEBUG
+import os
+_base = os.path.dirname(__file__)
+
+TEMPLATE_DEBUG = DEBUG = True
 
 ADMINS = (
-    # ('Your Name', 'your_email@domain.com'),
+    ('Dougal Sutherland', 'webmaster@daily.swarthmore.edu'),
 )
-
 MANAGERS = ADMINS
 
-DATABASE_ENGINE = 'sqlite3'        # 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
-DATABASE_NAME = './development.db' # Or path to database file if using sqlite3.
-DATABASE_USER = ''             # Not used with sqlite3.
-DATABASE_PASSWORD = ''         # Not used with sqlite3.
-DATABASE_HOST = ''             # Set to empty string for localhost. Not used with sqlite3.
-DATABASE_PORT = ''             # Set to empty string for default. Not used with sqlite3.
+DATABASE_ENGINE   = 'sqlite3'
+DATABASE_NAME     = './development.db'
+DATABASE_USER     = ''
+DATABASE_PASSWORD = ''
+DATABASE_HOST     = ''
+DATABASE_PORT     = ''
 
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
@@ -52,8 +53,8 @@ SECRET_KEY = '1ei&mww+)d1q&b6a5-@#(2(^@$bnt_56_gm_-i+3#x#5*nl&f%'
 
 # List of callables that know how to import templates from various sources.
 TEMPLATE_LOADERS = (
-    # 'django.template.loaders.filesystem.load_template_source',
-    'django.template.loaders.app_directories.load_template_source',
+    'django.template.loaders.filesystem.load_template_source',
+    # 'django.template.loaders.app_directories.load_template_source',
     # 'django.template.loaders.eggs.load_template_source',
 )
 
@@ -67,7 +68,7 @@ MIDDLEWARE_CLASSES = (
 ROOT_URLCONF = 'gazjango.urls'
 
 TEMPLATE_DIRS = (
-    # we're using app/templates/ directory
+    os.path.join(_base, 'templates'),
 )
 
 INSTALLED_APPS = (
