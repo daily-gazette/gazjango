@@ -106,14 +106,20 @@ class Category(models.Model):
                                     related_name='child_set')
     
     def ancestors(self):
-        """Returns all super-categories of this category, including itself."""
+        """Returns all super-categories of this category, including itself.
+        
+        Ordering is [grandparent, parent, self]."""
         if self.parent is None:
             return [self]
         else:
             return self.parent.ancestors() + [self]
     
     def descendants(self):
-        "Returns all sub-categories of this category, including itself."
+        """Returns all sub-categories of this category, including itself.
+        
+        This is a preorder / depth-first traversal, so the ordering is:
+        [self, child1, grandchild1a, grandchild1b, child2, grandchild2a],
+        if that makes sense."""
         descendants = [self]
         for child in self.child_set.all():
             descendants.extend(child.descendants())
