@@ -1,4 +1,5 @@
 from django.db                  import models
+from django.db.models           import permalink
 from django.contrib.auth.models import User
 from accounts.models            import UserProfile
 from articles.models            import Article
@@ -77,4 +78,3 @@ class Option(models.Model):
     def __unicode__(self):
         return self.name
     
-
