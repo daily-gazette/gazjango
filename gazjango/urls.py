@@ -17,6 +17,7 @@ urlpatterns = patterns('articles.views',
     (r'^%(year)s/%(month)s/%(day)s/%(slug)s/$'       % reps, 'article'),
     (r'^%(year)s/%(month)s/%(day)s/%(slug)s/print/$' % reps, 'print_article'),
 
+    (r'^archives/$', 'archives'),
     (r'^%(year)s/$'                   % reps, 'articles_for_year'),
     (r'^%(year)s/%(month)s/$'         % reps, 'articles_for_month'),
     (r'^%(year)s/%(month)s/%(day)s/$' % reps, 'articles_for_day'),
