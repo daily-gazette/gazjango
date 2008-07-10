@@ -105,6 +105,13 @@ class Category(models.Model):
     parent      = models.ForeignKey('self', blank=True, null=True,
                                     related_name='child_set')
     
+    def ancestors(self):
+        """Returns all super-categories of this category, including itself."""
+        if self.parent is None:
+            return [self]
+        else:
+            return self.parent.ancestors() + [self]
+    
     def descendants(self):
         "Returns all sub-categories of this category, including itself."
         descendants = [self]
