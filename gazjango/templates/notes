@@ -1,73 +1,71 @@
 BLOCKS
 
-{% block title %}{% endblock title %}						Page Title
+{% block title %}{% endblock title %}           Page Title
+{% block full-title %}                          To override the :: The Daily Gazette bit
 
-{% block customheader %}									Custom Header Block (eg. CSS/JS)
+{% block customheader %}                        Custom Header Block (eg. CSS/JS)
 {% endblock customheader %}
 
-{% block topbar %}											Menu bar (search bar) content
+{% block topbar %}                              Menu bar (search bar) content
 {% endblock topbar %}
 
-{% block content %}											Main page content
+{% block content %}                             Main page content
 {% endblock content %}
 
-{% block footer %}											Footer content (usually no change)
+{% block footer %}                              Footer content (usually no change)
 {% endblock footer %}
 
 
 CLASS
 
 user
-	user.is_authenticated				True if use is logged in
-	user.manage_url						URL to user's "Manage Account" page (log in if none)
-	user.register_url					URL to register (manage if logged in)
-	user.login_url						URL to login (manage if logged in)
-	
+    user.is_authenticated               True if user is logged in
+    user.
+    
+    {% url login }                      URL to login page
+    {% url logout }                     URL to logout page
+    {% url accounts.views.manage user %}  URL to user's "Manage Account" page
+    {% url accounts.views.register}     URL to register
+    
 story
-	story.headline						Headline of story (in page title)
-	story.get_title						Title of the story (in story title--same as above?)
-	story.author						A list of the story's authors
-		item.url							URL to author's page
-		item.author							Author's name
-		item.get_title						Author's title
-	story.date							Date function
-		date.url							URL to that day's page in the archives
-	story.print							Print function
-		print.url							URL to print-this-story
-	story.email							Email story function
-		email.url							URL to email-this-story
-	story.related_list					A list of stories that are related to the current story
-		item.get_absolute_url				Abs. URL to the item in the related_list
-		item.get_title						Title of item in related_list
-		
-comments								A list of the most recent comments (~15)
-	item									Item in said list
-	item.get_absolute_url					The absolute URL to the story referenced in a comment
-	item.get_title							The title of the story the comment is under
-		
+    story.headline                      Headline of story (in page title)
+    story.authors                       A list of the story's authors (the UserProfile)
+        author.get_absolute_url             URL to author's page
+        author.name                         Author's name
+        author.position                     Author's position
+    story.pub_date                      Date of publication
+
+    {% url issues.views.issue_for_day story.pub_date}           URL to that day's issue
+    {% url articles.views.articles_for_day story.pub_date %}    URL to that day's page in the archives
+    {% url articles.views.print_article story}                  URL for print function
+    {% url articles.views.email_article story}                  URL for email function
+
+    story.related_list                  A list of stories that are related to the current story
+        item.get_absolute_url               Abs. URL to the item in the related_list
+        item.headline                       Title of item in related_list
+        
+comments                                A list of the most recent comments (~15)
+    item                                    Item in said list
+    item.get_absolute_url                   The absolute URL to the story referenced in a comment
+    item.story.headline                     The title of the story the comment is under
+
 
 section
-	section.get_absolute_url			URL to the story's section
-	section.get_title					Title of the story's section
-	
+    section.get_absolute_url            URL to the story's section
+    section.get_title                   Title of the story's section
+    
 subsection
-	subsection.get_absolute_url			URL to the subsection
-	subsection.get_title				Title of the story's section
-	
+    subsection.get_absolute_url         URL to the subsection
+    subsection.get_title                Title of the story's section
+    
 social_list
-	item								A social networking service
-	item.url							URL to submit the story to the service
-	item.name							Name of the service
-	item.image_url						URL to a small icon for the service
-	
+    item                                A social networking service
+    item.url                            URL to submit the story to the service
+    item.name                           Name of the service
+    item.image_url                      URL to a small icon for the service
+
 topstory
-	topstory.absolute_url				Absolute URL to the current top story
-	topstory.get_vert_thumbnail			URL to the vertical thumbnail for the top story
-	topstory.get_title					Title of the current top story
-	topstory.get_short_excerpt			Get the top story's short excerpt
-	
-	
-OTHER FUNCTIONS
-	{% ifequal user currentuser %}		Include a user's selected comment box in right if logged in
-		{% include user.commentBox %}
-	{% endif %}
+    topstory.absolute_url               Absolute URL to the current top story
+    topstory.get_vert_thumbnail         URL to the vertical thumbnail for the top story
+    topstory.get_title                  Title of the current top story
+    topstory.get_short_excerpt          Get the top story's short excerpt
