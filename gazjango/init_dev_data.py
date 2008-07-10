@@ -55,16 +55,17 @@ angry = make_user('angry', 'somedude@swat.net', 'Angry', 'Man',
 
 ### Positions
 
-reader          = Position.objects.create(name="Reader")
-columnist       = Position.objects.create(name="Columnist")
-reporter        = Position.objects.create(name="Staff Reporter")
-photographer    = Position.objects.create(name="Staff Photographer")
-bossman         = Position.objects.create(name="Editor-In-Chief")
-news_editor     = Position.objects.create(name="News Editor")
-arts_editor     = Position.objects.create(name="Arts Editor")
-features_editor = Position.objects.create(name="Features Editor")
-photo_editor    = Position.objects.create(name="Photography Editor")
-tech_director   = Position.objects.create(name="Technical Director")
+reader          = Position.objects.create(name="Reader",             rank=0)
+swat_reader     = Position.objects.create(name="Swarthmore Reader",  rank=1)
+columnist       = Position.objects.create(name="Columnist",          rank=4)
+reporter        = Position.objects.create(name="Staff Reporter",     rank=5)
+photographer    = Position.objects.create(name="Staff Photographer", rank=5)
+tech_director   = Position.objects.create(name="Technical Director", rank=8)
+news_editor     = Position.objects.create(name="News Editor",        rank=9)
+arts_editor     = Position.objects.create(name="Arts Editor",        rank=9)
+features_editor = Position.objects.create(name="Features Editor",    rank=9)
+photo_editor    = Position.objects.create(name="Photography Editor", rank=9)
+bossman         = Position.objects.create(name="Editor-In-Chief",    rank=10)
 
 
 ### Users' having Positions
