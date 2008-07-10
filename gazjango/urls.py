@@ -6,14 +6,16 @@ reps = {
     'day':   r'(?P<day>\d{1,2})',
     'slug': r'(?P<slug>[\w-]+)',
     'kind': r'(?P<kind>[\w-]+)',
-    'category': r'(?P<category>[\w-]+)'
+    'category': r'(?P<category>[\w-]+)',
+    'name': r'(?P<name>[\w]+)'
 }
 
 
 urlpatterns = patterns('articles.views',
     (r'^/$', 'homepage'),
     
-    (r'^%(year)s/%(month)s/%(day)s/%(slug)s/$' % reps, 'article'),
+    (r'^%(year)s/%(month)s/%(day)s/%(slug)s/$'       % reps, 'article'),
+    (r'^%(year)s/%(month)s/%(day)s/%(slug)s/print/$' % reps, 'print_article'),
 
     (r'^%(year)s/$'                   % reps, 'articles_for_year'),
     (r'^%(year)s/%(month)s/$'         % reps, 'articles_for_month'),
@@ -51,9 +53,12 @@ urlpatterns += patterns('polls.views',
 )
 
 urlpatterns += patterns('',
-    (r'^accounts/login/$', 'django.contrib.auth.views.login'),
-    (r'^accounts/logout/$', 'django.contrib.auth.views.logout'),
-    (r'^accounts/manage/$', 'accounts.views.manage')
+    url(r'^accounts/login/$',  'django.contrib.auth.views.login', name='login'),
+    url(r'^accounts/logout/$', 'django.contrib.auth.views.logout', name='logout'),
+    (r'^accounts/manage/$',    'accounts.views.manage'),
+    (r'^accounts/register/$',  'accounts.views.register'),
+    
+    (r'users/%(name)s/$' % reps, 'accounts.views.user_details')
 )
 
 # category match needs to be last, to avoid shadowing others
