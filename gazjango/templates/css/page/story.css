@@ -1,0 +1,233 @@
+
+
+
+
+#storyBox {	width: 655px;	margin: 0 0 25px 0;	position: relative;
+	padding-left: 25px;
+}#story p {
+	margin: 0;
+	padding: 0 0 10px 0px;
+	float: left
+	color: black;	width: 650px;
+	text-align: justify;
+	line-height: 1.4;
+	font-size: 1.4em;
+}#story h2{	font-size: 200%;	font-family: "Helvetica Neue", Arial, Helvetica, Geneva, sans-serif;	color: black;	margin: 5px 0px 5px 0px;	text-align: left;	border-bottom: 2px solid #000000;
+	font-size: 3em;	}#story a {	text-decoration: underline;
+	padding: 0px;	}.leftImage {	float: left;	margin: 10px 10px 10px 0px;	width: 300px;	}.pullQuote {	color: black;	text-align: left;	float: left;	border-top: 2px solid #000000;	margin: 5px 15px 5px 0px;	padding: 2px;	width: 200px;
+	font: italic;
+	font-size: 1.5em;
+}
+	.pullQuote a {
+	font-weight: normal;
+	font-style: normal;
+}#story h3 {	font-size: 2em;	line-height: 1em;	font-family: "Helvetica Neue", Arial, Helvetica, Geneva, sans-serif;	color: black;	text-align: left;	padding: 2px;	width: 500px;	font-weight: bold;	}
+	
+	
+#story ul {
+	list-style-type: square;
+	margin: 0px 0px 10px 15px;
+	padding: 0 0 0px 10px;
+	font-size: 1.3em;	
+}
+
+/**************************************
+
+RIGHT MENU STYLES
+
+**************************************/	
+#commentColumn {
+	width: 234px;
+	float: right;
+	z-index: 10;
+	
+}
+
+#commentBox {
+	float: right;
+	width: 200px;
+	margin-right: 25px;
+	margin-top: 60px;
+	padding: 4px;
+	position: fixed;
+	background-color: #eeeeee;
+}
+
+#commentField {
+	width: 360px;
+	background-color: #dddddd;
+	display: none;
+	position: relative;
+	right: 158px;
+	z-index: 5;
+}
+
+#commentBox ul {
+	list-style-type: square;
+	margin: 0px 0px 0px 15px;
+	padding: 0 0 0px 10px;
+	font-size: 1.3em;	
+}
+
+/**************************************
+
+STORY INCLUDES
+
+**************************************/
+
+#shareBox {
+	width: 100%;
+	margin-top: 10px;
+	margin-bottom: 5px;
+	border-top: 3px solid #cccccc;
+	border-bottom: 1px solid #cccccc;
+	border-left: 1px solid #cccccc;
+	border-right: 1px solid #cccccc;
+	background-color: #eeeeee;
+	padding: 4px;
+}
+
+#shareBox p {
+	margin: 0;
+	padding: 0;
+	font: 1.2em "Helvetica Neue", Arial, Helvetica, Geneva, sans-serif;
+}
+#shareBox a {
+	text-decoration: none;
+	font-family: "Helvetica Neue", Arial, Helvetica, Geneva, sans-serif;
+}
+
+#shareBox .right {
+	width: 225px;
+	float: right;
+	margin: 0;
+	padding: 0;
+	font-family: "Helvetica Neue", Arial, Helvetica, Geneva, sans-serif;
+}
+
+#continueBox {
+	width: 100%;
+	margin-top: 0px;
+	margin-bottom: 5px;
+	border-bottom: 1px solid #cccccc;
+	border-left: 1px solid #cccccc;
+	border-right: 1px solid #cccccc;
+	background-color: #eeeeee;
+	padding: 4px;
+	height: 115px;	
+}
+
+#continueBox #top {
+	width: 225px;
+	float: left;
+	border-right: 1px solid #cccccc;
+	margin: 0 5px 0 0px;
+	padding: 5px;
+	font-weight: normal;
+	font-style: normal;
+}
+
+
+#continueBox #top img {
+	width: 50px;
+	border: none;
+	float: left;
+}
+
+#continueBox #top .content {
+	margin-left: 55px;
+	
+}
+
+#continueBox #more {
+	float: left;
+}
+
+#continueBox #more .box {
+	width: 200px;
+	float: left;
+}
+
+#continueBox #more .box ul {
+	list-style-type: square;
+	margin: 0px 0px 0px 15px;
+	padding: 0 0 0px 10px;
+	font-size: 1.3em;	
+}
+
+#bottomComments {
+	width: 100%
+	float: left;
+	display: inline;
+	overflow:hidden;
+	height: 1%;
+}
+
+#submitComment {
+	float: left;
+	width: 425px;
+	display: inline;
+	overflow:hidden;
+}
+
+#commentRules {
+	float: right;
+	display: inline;
+	overflow:hidden;
+	width: 200px;
+
+}
+
+#commentRules ul {
+	list-style-type: square;
+	margin: 0px 0px 0px 15px;
+	padding: 0 0 0px 10px;
+	font-size: 1.3em;
+}
+
+
+/**************************************
+
+IMAGE STYLES
+
+**************************************/
+
+.imgLeft {
+	float: left;
+	display: inline;
+	overflow:hidden;
+	margin: 10px 10px 10px 0px;
+}
+
+.imgRight {
+	margin: 5px 0px 5px 5px;
+	float: right;
+}
+
+.ten {
+	width: 10%;
+}
+
+.twentyfive {
+	width: 25%;
+}
+
+.thirtyfive {
+	width: 35%;
+}
+
+.fourty {
+	width: 40%;
+}
+
+.fifty {
+	width: 50%;
+}
+
+.seventyfive {
+	width: 75%;
+}
+
+.hundred {
+	width: 100%;
+}
