@@ -3,7 +3,11 @@
 <html lang="en">
 
 <head>
-  <title>{% block title %}{% endblock title %} :: The Daily Gazette</title>
+  <title>
+    {% block full-title %}
+      {% block title %}{% endblock title %} :: The Daily Gazette
+    {% endblock full-title %}
+  </title>
 
   <link rel="stylesheet" href="css/toolbox.css" type="text/css" media="screen, projection, print" />
   <link rel="stylesheet" href="css/style.css" type="text/css" media="screen, projection" />
@@ -24,11 +28,23 @@
   			<div id="headerContent">
   				<div id="headerSubscribe">
   					<p>Subscribe: <a href="">Email</a> | <a href="">News Feed [RSS]</a> | <a href="">Twitter</a> | <a href="">Facebook</a></p>
-  					<p><a href="">Login</a> | May 18, 2008</p>
+  					<p>
+  					  {% if user.is_authenticated %} 
+  					    {% if user.is_staff %}
+  					      <a href="">Admin</a> |
+  					    {% endif %}
+			          <a href="{% url accounts.views.manage user %}">Manage your Account</a> |
+			          <a href="{% url logout %}">Logout</a>
+			        {% else %}
+			          <a href="{% url register %}">Register an Account</a> |
+			          <a href="{% url login %}">Login</a>
+			        {% endif %}
+			        | {% now "F j, Y" %}
+  					</p>
   				</div>
 				
   				<div id="headerTitle">
-  					<center><h1><a href=""><img src="images/header/title.png" title="Title" /></a></h1></center>
+  					<center><h1><a href="{% url articles.views.homepage %}"><img src="images/header/title.png" alt="The Daily Gazette" /></a></h1></center>
   				</div>
   			</div>
   		</div>
@@ -36,13 +52,15 @@
   		<div id="headerNav">
         <center>
 					<ul>
-						<li><a href="">News</a></li>
-						<li><a href="">Features</a></li>
-						<li><a href="">Specials</a></li>
-						<li><a href="">Athletics</a></li>
-						<li><a href="">Multimedia &amp; Photography</a></li>
-						<li><a href="">Opinions &amp; Columns</a></li>
-						<li><a href="">Archives</a></li>
+						<li><a href="{% url article.views.category 'news' %}">News</a></li>
+						<li><a href="{% url article.views.category 'features' %}">Features</a></li>
+						<li><a href="{% url article.views.category 'athletics' %}">Athletics</a></li>
+						<li><a href="{% url article.views.category 'multimedia' %}">Multimedia &amp; Photography</a></li>
+						<li><a href="{% url article.views.category 'opinions' %}">Opinions</a></li>
+						<li><a href="{% url article.views.category 'columns' %}">Columns</a></li>
+						<li><a href="{% url article.views.archives %}">Archives</a></li>
+						{# TODO: not sure what to do with the specials category yet #}
+						{# <li><a href="">Specials</a></li> #}
 					</ul>
 				</center>
 		  </div>
@@ -61,8 +79,21 @@
     			<p>The Daily Gazette is a publication written by members of the Swarthmore College community. The administration of Swarthmore College has no editorial control or oversight regarding the content or presentation of the Daily Gazette. Funding for the Gazette is provided by the Student Budget Committee and by advertising revenue.</p>
     			<br/>
 			    <p>
-			      <span class="floatLeft">Contact | About | Employment | <a href="policies.html">Policies</a></span>
-			      <span class="floatRight">{% if user.is_authenticated %} <a href="{{ user.manage_url }}">Manage an Account</a>{% else %} | <a href="{{ user.register_url }}">Register an Account</a> | | <a href="{{ user.login_url }}">Login</a>{% endif %}</span>
+			      <span class="floatLeft">
+			        Contact | 
+			        About | 
+			        Employment | 
+			        <a href="policies.html">Policies</a>
+			      </span>
+			      <span class="floatRight">
+			        {% if user.is_authenticated %} 
+			          <a href="{% url accounts.views.manage user %}">Manage your Account</a> |
+			          <a href="{% url logout %}">Logout</a>
+			        {% else %}
+			          <a href="{% url register %}">Register an Account</a> |
+			          <a href="{% url login %}">Login</a>
+			        {% endif %}
+			      </span>
 			    </p>
         </div>
 	    </div>
