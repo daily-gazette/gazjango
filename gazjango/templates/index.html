@@ -1,0 +1,253 @@
+{% extends "base.html" %}
+
+{% block title %}Index{% endblock title %}
+
+
+{% block customheader %}
+
+<script type="text/javascript" src="js/jquery-1.2.1.pack.js"></script>
+<script type="text/javascript" src="js/jcarousel/lib/jquery.jcarousel.pack.js"></script>
+
+<link rel="stylesheet" type="text/css" href="js/jcarousel/lib/jquery.jcarousel.css" />
+<link rel="stylesheet" type="text/css" href="js/jcarousel/skins/tango/skin.css" />
+
+
+<link rel="stylesheet" type="text/css" href="js/ajaxtabs/ajaxtabs.css" />
+<script type="text/javascript" src="js/ajaxtabs/ajaxtabs.js"></script>
+
+
+
+<script type="text/javascript">
+
+jQuery(document).ready(function() {
+    jQuery('#mycarousel').jcarousel({
+        scroll: 3,
+        wrap: "both",
+    });
+});
+
+</script>
+
+{% endblock customheader %}
+
+
+{% block topbar %}
+	<div id="headerSectionBar">
+			<div id="headerSearch">
+				<form method="get" id="searchform" action="http://www.sccs.swarthmore.edu">Search: <input type="text" class="textbox" value="" name="s" id="s" /><input type="submit" id="searchsubmit" value="Go" /></p>
+			</div>
+			
+			<div id="headerColumn">
+			
+				<div id="headerComments">
+					<h4>Newest Comments</h4>
+					
+					<ul>
+					{% for item in comments|slice:":5" %}
+							<li><a href="{{item.get_absolute_url}}">{{ item.get_title }}</a><br />Comment @ {{item.get_date:"F j, Y" }}</li>
+					{% endfor %}
+					</ul>
+					
+				</div>
+			
+				<div id="headerContentBox">
+				
+				
+						<ul id="sideContent" class="shadetabs">
+							<li><a href="#" class="selected" rel="#default">Weather</a></li>
+							<li><a href="menus.htm" rel="countrycontainer">Menus</a></li>
+							<li><a href="events.htm" rel="countrycontainer">Events</a></li>
+						</ul>
+								
+						<div id="weather">
+							<h4>Weather</h4>
+						</div>
+						
+						
+						<script type="text/javascript">
+
+							var countries=new ddajaxtabs("sideContent", "weather")
+							countries.setpersist(true)
+							countries.setselectedClassTarget("link") //"link" or "linkparent"
+							countries.init()
+						
+						</script>
+
+						
+						
+						
+						
+				</div>
+				
+				<div id="zagette">
+					<a href=""><img src="images/index/zagette.png" title="The Zagette: Swarthmore's Guide to Wining and Dining" /></a>
+				</div>
+			</div>
+		</div>
+{% endblock topbar %}
+
+	
+{% block content %}
+		<div id="indexMainBox">
+		
+			<div id="indexMainStory">
+				<h2><a href="{{ topstory.absolute_url }}">{{topstory.get_title}}</a></h2>
+				<p class="byline"><span class="author">by {% for item in topstory.author %} <a href="{{item.url}}" alt="{{item.name}}">{{ item.name.upper }}, {{ item.get_title.upper }}</a>{% endfor %}</span><span class="date"> | <a href="{{ topstory.date.url }}">{{ topstory.date:"F j, Y" }}</a></p>
+				<img class="wide" src="files/images/2008/05/al-bloom.jpg" title="President Al Bloom to Retire" />
+				{{ topstory.get_long_excerpt }}
+			</div>
+			
+			<div id="indexHeadlines">
+				<div class="indexHeadlinesBox floatLeft">
+					<ul>
+					{% for item in lowstories|slice:":3" %>
+						<li><h4><a href="{{ item.get_absolute_url }}">{{ item.get_title }}</a></h4><span class="author"> | By {% for item in item.author|slice:":1" %}{{ item.name.upper }}{% endfor %}</span></li>
+					{% endfor %}
+					</ul>
+				</div>
+		
+				<div class="indexHeadlinesBox floatRight">
+					<ul>
+					{% for item in lowstories|slice:"3:6" %>
+						<li><h4><a href="{{ item.get_absolute_url }}">{{ item.get_title }}</a></h4><span class="author"> | By {% for item in item.author|slice:":1" %}{{ item.name.upper }}{% endfor %}</span></li>
+					{% endfor %}
+					</ul>
+				</div>
+			</div>
+		</div>
+		
+		<div id="indexSecondary">
+			
+			{% for item in midstories|slice:":2" %}
+			
+				{% if item.thumbnail_type=="tall" %}
+					<img src="{{ item.thumbnail_tall }}" class="tall" title="item.
+			
+			{% endfor %}
+			<img src="files/images/2008/05/facebook.jpg" class="wide" title="Under-Reporting? Facebook at Swarthmore" />
+			<h3><a href="facebook.html">Under Reporting? Facebook at Swarthmore</a></h3>
+			<p class="byline"><span class="author">by BRANDON LEE WOLFF, GUEST WRITER</span><span class="date"> | 5/18/2008</span></p>
+			<p>The social networking website Facebook is ubiquitous at the College, but in a recent survey students admitted to using the site for only fifteen minutes each day, on average. <a href="" class="readMore">Read More</a></p>
+			
+			<img src="files/images/2008/05/pat-james.jpg" class="tall" title="Assoc. Director of Lang Center to Resign" />
+			<h3><a href="">Associate Director of Lang Center to Resign</a></h3>
+			<p class="byline"><span class="author">by DOUGAL SUTHERLAND, TECHNOLOGY EDITOR</span><span class="date"> | 5/18/2008</span></p>
+			<p>Patricia James has announced that she will resign from her position at the Lang Center in less than a month. A tthe Center, James directed the Lang Opportunity Scholars and Swarthmore Foundation programs. <a href="" class="readMore">Read More</a></p>
+
+		
+		</div>
+		
+		<div id="indexPOTDbar">
+		
+			<center><hr width="900px" color="#dddddd" size=.5px />
+			
+  <ul id="mycarousel" class="jcarousel-skin-tango">
+    <li><h5>Gazette News &rsaquo;&rsaquo;</h5><img src="files/images/2008/05/hiring/slideshow.png" width="150" height="150" alt="" /><p><a href="#">The Gazette is Hiring</a></p></li>
+    <li><h5>Specials &rsaquo;&rsaquo;</h5><img src="files/images/2008/05/dining/slideshow.png" width="150" height="150" alt="" /><p><a href="#">The Gazette's Zagette Goes Live!</a></p></li>
+    <li><h5>Ask the Gazette &rsaquo;&rsaquo;</h5><img src="files/images/2008/05/atg-bluetree/slideshow.png" width="150" height="150" alt="" /><p><a href="#">What Happened to the Blue Tree?</a></p></li>
+    <li><h5>Arts &rsaquo;&rsaquo;</h5><img src="files/images/2008/05/senior-art/slideshow.png" width="150" height="150" alt="" /><p><a href="#">Senior Art Exhibits</a></p></li>
+    <li><h5>Columns &rsaquo;&rsaquo;</h5><img src="files/images/2008/05/austria/slideshow.png" width="150" height="150" alt="" /><p><a href="#"><em>Nestbeschumtzer</em> Now Out of Austria</a></p></li>
+    <li><img src="http://static.flickr.com/72/199481203_ad4cdcf109_s.jpg" width="75" height="75" alt="" /></li>
+    <li><img src="http://static.flickr.com/58/199481218_264ce20da0_s.jpg" width="75" height="75" alt="" /></li>
+    <li><img src="http://static.flickr.com/69/199481255_fdfe885f87_s.jpg" width="75" height="75" alt="" /></li>
+    <li><img src="http://static.flickr.com/60/199480111_87d4cb3e38_s.jpg" width="75" height="75" alt="" /></li>
+    <li><img src="http://static.flickr.com/70/229228324_08223b70fa_s.jpg" width="75" height="75" alt="" /></li>
+  </ul>
+			
+			<hr width="900px" color="#dddddd" size=.5px /></center>
+			
+		</div>
+		
+
+		
+		
+		<div id="indexBottom">
+		
+			<div class="indexBottomColumn floatLeft margin25">
+				<h3>Announcements</h3>
+				
+				<h4>Gaming Party!</h4>
+				<p>Sponsored by <a href=#">SCCS</a>.</p>
+				<p>When: Tuesday at 7pm</p>
+				<p>Where: SCCS Lounge</p>
+				<hr width=50%/>
+				<h4>Jamboree</h4>
+				<p>Sponsored by <a href=#">Cantatrix</a>.</p>
+				<p>When: Wednesday at 7pm</p>
+				<p>Where: Concert Hall</p>
+				<hr width=50%/>
+				<h4>Super Soaker Battle</h4>
+				<p>Sponsored by <a href=#">Psi Phi</a>.</p>
+				<p>When: Saturday at 2:30pm</p>
+				<p>Where: Behind Sharples</p>
+				
+			</div>
+			
+			<div class="indexBottomColumn floatLeft margin25">
+				<h3>Jobs &amp; Internships</h3>
+				
+				<h4>Volunteer with Chester Children</h4>
+				<p>Paid: No</p>
+				<p>Hours: Part-time</p>
+				<p>	When: Summer</p>
+				<p>Where: Chester, PA</p>
+				<hr width=50%/>
+
+				<h4>ITS Web Intern</h4>
+				<p>Paid: Yes</p>
+				<p>Hours: Full-time</p>
+				<p>	When: Summer</p>
+				<p>Where: Swarthmore, PA</p>
+				<hr width=50%/>
+				
+				<h4>Publications Intern</h4>
+				<p>Paid: Yes</p>
+				<p>Hours: Full-time</p>
+				<p>	When: Summer</p>
+				<p>Where: Swarthmore, PA</p>
+				
+			</div>
+			
+			<div class="indexBottomColumn floatLeft">
+			
+				<h3>From <a href="http://www.biconews.com/"><em>The BiCo News</em></a></h3>
+				<h5><a href="http://www.biconews.com"><em>The BiCo News</em></a> is the weekly paper for Bryn Mawr and Haverford Colleges.</h5>
+				
+				<h4>Men's Squash Caps Season with 37th Place Finish at Nationals</h4>
+				<p class="byline"><span class="author">by JEFF MONHAIT</span></p>
+				<h4>Website's Colors Don't Click with Mawrtyrs</h4>
+				<p class="byline"><span class="author">by CHRISTINA HARVIEW</span></p>
+				<h4>Shopping for a Better Registration System</h4>
+				<p class="byline"><span class="author">by Jennifer Rajchel</span></p>
+				
+				<hr />
+				
+				<a href="http://repairmycreditnow.com/Credit_Repair_Advice.htm">Credit Repair</a> | 
+				
+				<!-- TLA -->
+				  <a href="http://www.elearners.com/online-degrees/index.asp">College Degrees</a>   | 
+				  <a href="http://www.homesecuritystore.com/security-cameras.html">Security Camera</a>   | 
+				  <a href="http://www.ibdna.com/">DNA Tests</a>   | 
+				  <a href="http://www.finemoments.com">Birth Announcements</a>   | 
+				  <a href="http://www.cars4causes.net/">donate car</a>   | 
+				  <a href="http://www.nextstudent.com/">Student Loans</a>   | 
+				  <a href="http://jobs.fresho.com/">jobs in education</a>   | 
+				  <a href="http://www.homebulletin.net">moving companies</a>   | 
+				  <a href="http://www.payslipsp60.co.uk">Payslip</a>   | 
+				 <a href="http://www.arcadekill.com">Free Flash Arcade Games</a>
+				 
+				<br /><br />
+				
+				<!-- LCA  -->
+				<a href="http://www.couponcactus.com/coupons/Rosetta_Stone/">Rosetta Coupon</a> |
+				<a href="http://www.thinkfinancial.com/">college loans</a> |
+				<a href="http://www.acairoots.com">acai</a> |
+				<a href="http://www.hotel-erb.de">Last Minute Hotel</a> |
+				<a href="http://www.officefurniture2go.com/">office furniture</a> |
+				<a href="http://www.essaybay.com">Custom Essays</a> | <a href="http://www.limolinkexchange.com/">Limo, Town Car, Party Bus</a> | <a href="http://www.chicagolimo.com/">Chicago Limo - airport car</a>
+				
+			</div>
+		
+		</div>
+
+{% endblock content %}
