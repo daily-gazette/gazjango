@@ -1,52 +1,65 @@
 from django.conf.urls.defaults import *
 
-def urls_for_partial_date(prefix, view_prefix, name_list, singular=None, general=None):
-    """Makes a url pattern for each partial date application.
-    
-    For example, ufpd(r'^', 'articles.views', 'articles', 'article') returns
-       patterns('articles.views',
-         (r'^(\d{4})/$',                              'articles_year'),
-         (r'^(\d{4})/(\d{1,2})/$',                    'articles_month),
-         (r'^(\d{4})/(\d{1,2})/(\d{1,2})/$',          'articles_day'),
-         (r'^(\d{4})/(\d{1,2})/(\d{1,2})/([\w-]+)/$', 'article')
-       )
-    (except that the arguments are named 'year', 'month', 'day', and 'slug')."""
-    
-    a = []
-    
-    if general:
-        a.append( (prefix + r'/$', name_list) )
-    
-    regex = prefix
-    for time, num_digits in (('year', '4'), ('month', '1,2'), ('day', '1,2')):
-        regex += r'(?P<%s>\d{%s})/' % (time, num_digits)
-        a += (regex, "%s_%s" % (name_list, num_digits))
-    
-    if singular:
-        a.append( regex + r'(?P<slug>[\w-]+)/$', singular) )
-    
-    return patterns(view_prefix, *a)
-
-ufpd = urls_for_partial_date
+reps = {
+    'year':  r'(?P<year>\d{4})',
+    'month': r'(?P<month>\d{1,2})',
+    'day':   r'(?P<day>\d{1,2})',
+    'slug': r'(?P<slug>[\w-]+)',
+    'kind': r'(?P<kind>[\w-]+)',
+    'category': r'(?P<category>[\w-]+)'
+}
 
 
-urlpatterns = patterns('',
-    (r'^/$', 'articles.views.homepage'),
+urlpatterns = patterns('articles.views',
+    (r'^/$', 'homepage'),
     
-    (r'^issue/$', 'issues.views.today'),
+    (r'^%(year)s/%(month)s/%(day)s/%(slug)s/$' % reps, 'article'),
+
+    (r'^%(year)s/$'                   % reps, 'articles_for_year'),
+    (r'^%(year)s/%(month)s/$'         % reps, 'articles_for_month'),
+    (r'^%(year)s/%(month)s/%(day)s/$' % reps, 'articles_for_day'),
+    
+    (r'^announcements/%(year)s/%(month)s/%(slug)s/$'         % reps, 'announcement'),
+    (r'^announcements/%(year)s/%(month)s/%(day)s/%(slug)s/$' % reps, 'announcement'),
+    
+    (r'^announcements/$',                                   'announcements'),
+    (r'^announcements/%(year)s/$'                   % reps, 'announcements_for_year'),
+    (r'^announcements/%(year)s/%(month)s/$'         % reps, 'announcements_for_month'),
+    (r'^announcements/%(year)s/%(month)s/%(day)s/$' % reps, 'announcements_for_day'),
+    
+    (r'^announcements/%(kind)s/$'                            % reps, 'announcement_kind'),
+    (r'^announcements/%(kind)s/%(year)s/$'                   % reps, 'announcement_kind_for_year'),
+    (r'^announcements/%(kind)s/%(year)s/%(month)s/$'         % reps, 'announcement_kind_for_month'),
+    (r'^announcements/%(kind)s/%(year)s/%(month)s/%(day)s/$' % reps, 'announcement_kind_for_day')
 )
 
-urlpatterns += ufpd(r'^', 'articles.views', 'articles', 'article')
-urlpatterns += ufpd(r'^announcements/', 'articles.views', 'announcements', 'announcement')
-urlpatterns += ufpd(r'^announcements/([\w-]+)/', 'articles.views', 
-                      'announcement_kind', general='announcement_kind')
-urlpatterns += ufpd(r'^issue/', 'articles.views', 'issues')
+urlpatterns += patterns('issues.views',
+    (r'^issue/$',                                   'issue_for_today')
+    (r'^issue/%(year)s/$'                   % reps, 'issues_for_year'),
+    (r'^issue/%(year)s/%(month)s/$'         % reps, 'issues_for_month'),
+    (r'^issue/%(year)s/%(month)s/%(day)s/$' % reps, 'issues_for_day'),
+)
 
-urlpatterns += ufpd(r'^polls/', 'polls.views', 'polls', 'poll')
 urlpatterns += patterns('polls.views',
-    url(r'^polls/(?P<year>\d{4})/(?P<slug>[\w-]+)/$', 'poll', name='poll-details'),
-    (r'^polls/(?P<year>\d{4})/(?P<month>\d{1,2})/(?P<slug>[\w-]+)/$', 'poll')
+    (r'^polls/%(year)s/%(slug)s/$'                   % reps, 'poll'),
+    (r'^polls/%(year)s/%(month)s/%(slug)s/$'         % reps, 'poll'),
+    (r'^polls/%(year)s/%(month)s/%(day)s/%(slug)s/$' % reps, 'poll', {}, 'poll-details'),
+    
+    (r'^polls/%(year)s/$'                   % reps, 'polls_for_year'),
+    (r'^polls/%(year)s/%(month)s/$'         % reps, 'polls_for_month'),
+    (r'^polls/%(year)s/%(month)s/%(day)s/$' % reps, 'polls_for_day')
 )
 
-# category needs to be last, to avoid shadowing others
-urlpatterns += ufpd(r'^([\w-]+)/', 'articles.views', 'category', general='category')
+urlpatterns += patterns('',
+    (r'^accounts/login/$', 'django.contrib.auth.views.login'),
+    (r'^accounts/logout/$', 'django.contrib.auth.views.logout'),
+    (r'^accounts/manage/$', 'accounts.views.manage')
+)
+
+# category match needs to be last, to avoid shadowing others
+urlpatterns += patterns('articles.views',
+    (r'^%(category)s/$'                            % reps, 'category'),
+    (r'^%(category)s/%(year)s/$'                   % reps, 'category_for_year'),
+    (r'^%(category)s/%(year)s/%(month)s/$'         % reps, 'category_for_month'),
+    (r'^%(category)s/%(year)s/%(month)s/%(day)s/$' % reps, 'category_for_day'),
+)
