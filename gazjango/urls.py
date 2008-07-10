@@ -13,9 +13,11 @@ reps = {
 
 urlpatterns = patterns('articles.views',
     (r'^/$', 'homepage'),
+    (r'^search/$', 'search'),
     
-    (r'^%(year)s/%(month)s/%(day)s/%(slug)s/$'       % reps, 'article'),
-    (r'^%(year)s/%(month)s/%(day)s/%(slug)s/print/$' % reps, 'print_article'),
+    (r'^%(year)s/%(month)s/%(day)s/%(slug)s/$'        % reps, 'article'),
+    (r'^%(year)s/%(month)s/%(day)s/%(slug)s/comment$' % reps, 'comment'),
+    (r'^%(year)s/%(month)s/%(day)s/%(slug)s/print/$'  % reps, 'print_article'),
 
     (r'^archives/$', 'archives'),
     (r'^%(year)s/$'                   % reps, 'articles_for_year'),
