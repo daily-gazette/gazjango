@@ -108,7 +108,7 @@ h3 {
 	padding: 0;
 	font-family: "Helvetica Neue", Arial, Helvetica, Geneva, sans-serif;
 	font-size: 1.7em;
-	line-height: ;
+/*  line-height: ;*/
 }
 
 h4 {
@@ -120,7 +120,7 @@ h4 {
 }
 
 h5 {
-	font: Georgia, Times, "Times New Roman";
+	font-family: Georgia, Times, "Times New Roman";
 	font-size: 1.3em;
 
 }
@@ -295,7 +295,7 @@ p {
 }
 
 #headerContentBox {
-	background-color: #fffff;
+	background-color: #ffffff;
 	height:  225px;
 	margin-top: 10px;
 }
@@ -440,7 +440,8 @@ p {
 	margin: 0px;
 	padding: 0;
 	font-size: 2em;
-	font: bold "Helvetica Neue", Arial, Helvetica, Geneva, sans-serif;
+	font-weight: bold;
+	font-family: "Helvetica Neue", Arial, Helvetica, Geneva, sans-serif;
 }
 
 #indexMainStory h2 a {
@@ -477,7 +478,7 @@ p {
 }
 .indexHeadlinesBox ul li {
 	list-style-type: none;
-	wide: 175px;
+	width: 175px;
 	display: block;
 	margin: 0 5px 5px 5px;
 	font-size: 1.1em;
@@ -508,7 +509,7 @@ p {
 }
 
 #POTDscroll {
-	width: ;
+/*  width: ;*/
 	margin: 0 auto;
 }
 
