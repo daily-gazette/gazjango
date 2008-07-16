@@ -4,15 +4,25 @@ import settings
 from django.core.management import setup_environ
 setup_environ(settings)
 
-from datetime                   import date, timedelta
-from django.contrib.auth.models import User, Group
+### imports
 
-from accounts.models            import UserProfile, Position
-from articles.models            import Article, Category, Format
-from articles.models            import Announcement, AnnouncementKind
-from issues.models              import Issue
-from polls.models               import Poll, Option
+from datetime import date, timedelta
+
+from django.contrib.auth.models  import User, Group
+from django.contrib.sites.models import Site
 import tagging
+
+from accounts.models import UserProfile, Position
+from articles.models import Article, Category, Format
+from articles.models import Announcement, AnnouncementKind
+from issues.models   import Issue
+from polls.models    import Poll, Option
+from misc.models     import SocialService
+
+### Site
+
+Site.objects.all().delete()
+Site.objects.create(name="The Daily Gazette", domain="daily.swarthmore.edu", pk=1)
 
 
 ### Groups
@@ -127,7 +137,11 @@ nobody_loves_me = Article.objects.create(
     category=bone_doctress,
     summary="The Bone Doctress takes a break from her usual witty recountings of "
             "sexual escapades to share with you the lyrics to a Portishead song.",
-    format=textile
+    short="The Bone Doctress laments the lack of love in her life, by way of "
+          "Portishead lyrics.",
+    format=textile,
+    published=True,
+    position=2
 )
 nobody_loves_me.authors.add(bone_p)
 nobody_loves_me.text = """To pretend no one can find
@@ -186,10 +200,12 @@ scandal = Article.objects.create(
     headline="Al Bloom Pressured Out By Board of Managers",
     subtitle="Allegations of Involvement with Empereror's Club VIP Surface",
     slug="bloom_scandal",
-    category=news,
-    summary="A Daily Gazette investigation has uncovered allegations that "
-            "Al Bloom was involved in the Emperor's Club VIP scandal. Some say"
-            "this is related to his recent resignation.",
+    category=facstaff,
+    short="Allegations have surfaced that Al Bloom was involved in the "
+            "Emperor's Club VIP scandal.",
+    summary="One member of the Board of Managers has allegedly accuesed Al Bloom "
+            "of involvement with the Emperor's Club VIP, and has pictures to back "
+            "it up. Some say this is related to his recent resignation.",
     text="An investigation by the Gazette has uncovered connections between Al "
          "Bloom and the Emperor's Club VIP. Photos have surfaced that show him "
          "clearly engaging in unseemly acts with a woman who looks suspiciously "
@@ -201,13 +217,42 @@ scandal = Article.objects.create(
          "have expressed concern that the photos may be fake: \"I can tell by the "
          "pixels,\" claimed one rising senior, \"and by having seen a few 'shops "
          "in my time.\"\n\nThe Gazette will have more on this story as information "
-         "becomes available.\n\n[source: http:\/\/dailyjolt.com]",
-    format=textile
+         "becomes available.\n\n[source: http://dailyjolt.com]",
+    format=textile,
+    published=True,
+    position=1
 )
 scandal.authors.add(bob_p, jack_p)
 scandal.tags = "Al Bloom, Board of Managers, Daily Jolt"
 scandal.save()
 
+
+boring = Article.objects.create(
+    headline="Nothing Happened",
+    subtitle="It's Summer: Did You Expect Something Else?",
+    slug="boredom",
+    category=news,
+    summary="Absolutely nothing happened at all. It was quite boring.",
+    text="Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod "
+         "tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim "
+         "veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea "
+         "commodo consequat. Duis aute irure dolor in reprehenderit in voluptate "
+         "velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint "
+         "occaecat cupidatat non proident, sunt in culpa qui officia deserunt "
+         "mollit anim id est laborum.\n\n"
+         "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod "
+         "tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim "
+         "veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea "
+         "commodo consequat. Duis aute irure dolor in reprehenderit in voluptate "
+         "velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint "
+         "occaecat cupidatat non proident, sunt in culpa qui officia deserunt "
+         "mollit anim id est laborum.",
+    format=textile,
+    published=True,
+    position=2
+)
+boring.authors.add(jack_p)
+boring.save()
 
 ### Announcements
 
@@ -274,3 +319,4 @@ issue_today = Issue.objects.create(
 )
 issue_today.add_article(scandal)
 issue_today.add_article(nobody_loves_me)
+issue_today.add_article(boring)
