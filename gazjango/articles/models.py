@@ -8,15 +8,34 @@ from diff_match_patch.diff_match_patch import diff_match_patch
 import formats
 import tagging
 
+
+class PublishedArticlesManager(models.Manager):
+    "A custom manager for Articles, returning only published articles."
+    def get_query_set(self):
+        orig = super(PublishedArticlesManager, self).get_query_set()
+        return orig.filter(published=True)
+    
+    def get_top_story(self):
+        """Returns a random published article with position=1.
+        
+        There should generally only be one, but just in case, we rotate."""
+        return self.filter(position=1).order_by("?")[0]
+    
+    def get_secondary_stories(self, num=2):
+        """Returns a list of `num` stories with position=2."""
+        return self.filter(position=2).order_by("?")[:num]
+    
+
 class Article(models.Model):
     """A story or other article to be published.
     
     Includes news stories, editorials, etc, but not announcements or jobs."""
     
-    headline  = models.CharField(max_length=250)
+    headline  = models.CharField(max_length=200)
     subtitle  = models.CharField(blank=True, max_length=200)
     slug      = models.SlugField(prepopulate_from=("headline",), unique_for_date="pub_date")
     
+    short     = models.CharField(max_length=150)
     summary   = models.TextField()
     text      = models.TextField()
     
@@ -24,8 +43,14 @@ class Article(models.Model):
     authors   = models.ManyToManyField(UserProfile, related_name="articles")
     category  = models.ForeignKey('Category')
     
-    published = models.BooleanField()
+    published = models.BooleanField(default=False)
     format    = models.ForeignKey('Format')
+    
+    # null = nothing special, 1 = top story, 2 = second-tier story
+    position  = models.PositiveSmallIntegerField(blank=True, null=True)
+    
+    objects = models.Manager()
+    published_objects = PublishedArticlesManager()
     
     def allow_edit(self, user):
         return self.authors.filter(user__pk=user.pk).count() > 0 \
@@ -57,6 +82,12 @@ class Article(models.Model):
         formatter = getattr(formats, self.format.function)
         return formatter(self.text_at_revision(revision))
     
+    def related_list(self, num=None):
+        """Returns a QuerySet of related stories."""
+        # TODO: improve related_list
+        related = self.category.article_set.order_by('-pub_date')
+        return related[:num] if num else related
+    
     def __unicode__(self):
         return self.slug
     
@@ -71,7 +102,6 @@ try:
     tagging.register(Article)
 except tagging.AlreadyRegistered:
     pass # this happens in testing, for some reason
-
 
 class ArticleRevision(models.Model):
     """ A revision of an article. Only deltas are stored.
@@ -109,10 +139,12 @@ class Category(models.Model):
         """Returns all super-categories of this category, including itself.
         
         Ordering is [grandparent, parent, self]."""
-        if self.parent is None:
-            return [self]
-        else:
-            return self.parent.ancestors() + [self]
+        curr = self
+        ancestors = [self]
+        while curr.parent is not None:
+            ancestors.insert(0, curr.parent)
+            curr = curr.parent
+        return ancestors
     
     def descendants(self):
         """Returns all sub-categories of this category, including itself.
@@ -136,6 +168,17 @@ class Category(models.Model):
     def get_absolute_url(self):
         return ('articles.views.category', [self.slug])
     
+
+class Format(models.Model):
+    """ A format: html, textile, etc. """
+    
+    name     = models.CharField(max_length=30, unique=True)
+    function = models.CharField(max_length=30)
+    
+    def __unicode__(self):
+        return name
+    
+
 
 class Announcement(models.Model):
     """An announcement.
@@ -173,10 +216,3 @@ class AnnouncementKind(models.Model):
     def get_absolute_url(self):
         return ('articles.views.announcement_kind', [self.slug])
     
-
-class Format(models.Model):
-    """ A format: html, textile, etc. """
-    
-    name     = models.CharField(max_length=30, unique=True)
-    function = models.CharField(max_length=30)
-
