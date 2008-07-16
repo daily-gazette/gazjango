@@ -20,12 +20,12 @@ CLASS
 
 user
     user.is_authenticated               True if user is logged in
-    user.
+    user.is_staff                       True if user is a member of staff
     
-    {% url login }                      URL to login page
-    {% url logout }                     URL to logout page
-    {% url accounts.views.manage user %}  URL to user's "Manage Account" page
-    {% url accounts.views.register}     URL to register
+    {% url login %}                     URL to login page
+    {% url logout %}                    URL to logout page
+    {% url manage %}                    URL to "Manage Account" page
+    {% url register %}                  URL to register an account
     
 story
     story.headline                      Headline of story (in page title)
@@ -35,12 +35,12 @@ story
         author.position                     Author's position
     story.pub_date                      Date of publication
 
-    {% url issues.views.issue_for_day story.pub_date}           URL to that day's issue
+    {% url issue story.pub_date}        URL to that day's issue
     {% url articles.views.articles_for_day story.pub_date %}    URL to that day's page in the archives
-    {% url articles.views.print_article story}                  URL for print function
-    {% url articles.views.email_article story}                  URL for email function
+    {% url print story}                 URL for print function
+    {% url email story}                 URL for email function
 
-    story.related_list                  A list of stories that are related to the current story
+    related                     A list of stories that are related to the current story
         item.get_absolute_url               Abs. URL to the item in the related_list
         item.headline                       Title of item in related_list
         
@@ -49,23 +49,13 @@ comments                                A list of the most recent comments (~15)
     item.get_absolute_url                   The absolute URL to the story referenced in a comment
     item.story.headline                     The title of the story the comment is under
 
-
-section
-    section.get_absolute_url            URL to the story's section
-    section.get_title                   Title of the story's section
-    
-subsection
-    subsection.get_absolute_url         URL to the subsection
-    subsection.get_title                Title of the story's section
-    
-social_list
-    item                                A social networking service
-    item.url                            URL to submit the story to the service
-    item.name                           Name of the service
-    item.image_url                      URL to a small icon for the service
+story.category                      the story's most specific category
+    category.name                       the category's name
+    category.get_absolute_url           URL for the category
+    category.ancestors                  all categories, from least to most specific
 
 topstory
-    topstory.absolute_url               Absolute URL to the current top story
+    topstory.get_absolute_url           Absolute URL to the current top story
     topstory.get_vert_thumbnail         URL to the vertical thumbnail for the top story
-    topstory.get_title                  Title of the current top story
-    topstory.get_short_excerpt          Get the top story's short excerpt
+    topstory.headline                   Title of the current top story
+    topstory.short                      Get the top story's short excerpt
