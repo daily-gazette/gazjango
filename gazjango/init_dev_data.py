@@ -17,7 +17,6 @@ from articles.models import Article, Category, Format
 from articles.models import Announcement, AnnouncementKind
 from issues.models   import Issue
 from polls.models    import Poll, Option
-from misc.models     import SocialService
 
 ### Site
 
