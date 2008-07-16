@@ -9,9 +9,9 @@
     {% endblock full-title %}
   </title>
 
-  <link rel="stylesheet" href="css/toolbox.css" type="text/css" media="screen, projection, print" />
-  <link rel="stylesheet" href="css/style.css" type="text/css" media="screen, projection" />
-  <link rel="stylesheet" href="css/print.css" type="text/css" media="print" />
+  <link rel="stylesheet" href="/css/toolbox.css" type="text/css" media="screen, projection, print" />
+  <link rel="stylesheet" href="/css/style.css" type="text/css" media="screen, projection" />
+  <link rel="stylesheet" href="/css/print.css" type="text/css" media="print" />
 
   <link rel="alternate" type="application/rss+xml" title="RSS 2.0" href="" />
   <link rel="alternate" type="text/xml" title="RSS .92" href="" />
@@ -44,7 +44,7 @@
   				</div>
 				
   				<div id="headerTitle">
-  					<center><h1><a href="{% url articles.views.homepage %}"><img src="images/header/title.png" alt="The Daily Gazette" /></a></h1></center>
+  					<center><h1><a href="{% url articles.views.homepage %}"><img src="/images/header/title.png" alt="The Daily Gazette" /></a></h1></center>
   				</div>
   			</div>
   		</div>
@@ -52,13 +52,13 @@
   		<div id="headerNav">
         <center>
 					<ul>
-						<li><a href="{% url article.views.category 'news' %}">News</a></li>
-						<li><a href="{% url article.views.category 'features' %}">Features</a></li>
-						<li><a href="{% url article.views.category 'athletics' %}">Athletics</a></li>
-						<li><a href="{% url article.views.category 'multimedia' %}">Multimedia &amp; Photography</a></li>
-						<li><a href="{% url article.views.category 'opinions' %}">Opinions</a></li>
-						<li><a href="{% url article.views.category 'columns' %}">Columns</a></li>
-						<li><a href="{% url article.views.archives %}">Archives</a></li>
+						<li><a href="{% url category "news" %}">News</a></li>
+						<li><a href="{% url category "features" %}">Features</a></li>
+						<li><a href="{% url category "athletics" %}">Athletics</a></li>
+						<li><a href="{% url category "multimedia" %}">Multimedia &amp; Photography</a></li>
+						<li><a href="{% url category "opinions" %}">Opinions</a></li>
+						<li><a href="{% url category "columns" %}">Columns</a></li>
+						<li><a href="{% url archives %}">Archives</a></li>
 						{# TODO: not sure what to do with the specials category yet #}
 						{# <li><a href="">Specials</a></li> #}
 					</ul>
@@ -76,9 +76,10 @@
       {% block footer %}
     	<div id="footer">
     		<div id="footerContent">
-    			<p>The Daily Gazette is a publication written by members of the Swarthmore College community. The administration of Swarthmore College has no editorial control or oversight regarding the content or presentation of the Daily Gazette. Funding for the Gazette is provided by the Student Budget Committee and by advertising revenue.</p>
-    			<br/>
-			    <p>
+    			<p>
+    			  The Daily Gazette is a publication written by members of the Swarthmore College community. The administration of Swarthmore College has no editorial control or oversight regarding the content or presentation of the Daily Gazette. Funding for the Gazette is provided by the Student Budget Committee and by advertising revenue.
+    			  <br/>
+    			  <br/>
 			      <span class="floatLeft">
 			        Contact | 
 			        About | 
