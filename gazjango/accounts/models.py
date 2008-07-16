@@ -1,5 +1,5 @@
 from django.db                  import models
-from django.db.models           import Q
+from django.db.models           import Q, permalink
 from django.contrib.auth.models import User
 from datetime                   import datetime, date
 
@@ -11,7 +11,7 @@ class UserProfile(models.Model):
     contact = models.TextField(blank=True, null=True)
     # many-to-many Articles, has-many PositionsHeld
     
-    name = property(lambda self: self.get_full_name())
+    name = property(lambda self: self.user.get_full_name())
     
     def position_at(self, date):
         """Returns the highest-ranked of this user's Positions at date."""
@@ -52,6 +52,10 @@ class UserProfile(models.Model):
     
     def __unicode__(self):
         return self.user.username
+    
+    @permalink
+    def get_absolute_url(self):
+        return ('accounts.views.user_details', [self.user.username])
     
 
 
