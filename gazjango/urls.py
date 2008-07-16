@@ -1,4 +1,5 @@
 from django.conf.urls.defaults import *
+import settings, os
 
 reps = {
     'year':  r'(?P<year>\d{4})',
@@ -12,14 +13,15 @@ reps = {
 
 
 urlpatterns = patterns('articles.views',
-    (r'^/$', 'homepage'),
-    (r'^search/$', 'search'),
+    (r'^$', 'homepage'),
+    (r'^search/$', 'search', {}, 'search'),
     
     (r'^%(year)s/%(month)s/%(day)s/%(slug)s/$'        % reps, 'article'),
     (r'^%(year)s/%(month)s/%(day)s/%(slug)s/comment$' % reps, 'comment'),
-    (r'^%(year)s/%(month)s/%(day)s/%(slug)s/print/$'  % reps, 'print_article'),
+    (r'^%(year)s/%(month)s/%(day)s/%(slug)s/print/$'  % reps, 'print_article', {}, 'print'),
+    (r'^%(year)s/%(month)s/%(day)s/%(slug)s/email/$'  % reps, 'email_article', {}, 'email'),
 
-    (r'^archives/$', 'archives'),
+    (r'^archives/$', 'archives', {}, 'archives'),
     (r'^%(year)s/$'                   % reps, 'articles_for_year'),
     (r'^%(year)s/%(month)s/$'         % reps, 'articles_for_month'),
     (r'^%(year)s/%(month)s/%(day)s/$' % reps, 'articles_for_day'),
@@ -39,10 +41,10 @@ urlpatterns = patterns('articles.views',
 )
 
 urlpatterns += patterns('issues.views',
-    (r'^issue/$',                                   'issue_for_today')
+    (r'^issue/$',                                   'issue_for_today'),
     (r'^issue/%(year)s/$'                   % reps, 'issues_for_year'),
     (r'^issue/%(year)s/%(month)s/$'         % reps, 'issues_for_month'),
-    (r'^issue/%(year)s/%(month)s/%(day)s/$' % reps, 'issues_for_day'),
+    (r'^issue/%(year)s/%(month)s/%(day)s/$' % reps, 'issues_for_day', {}, 'issue'),
 )
 
 urlpatterns += patterns('polls.views',
@@ -56,17 +58,25 @@ urlpatterns += patterns('polls.views',
 )
 
 urlpatterns += patterns('',
-    url(r'^accounts/login/$',  'django.contrib.auth.views.login', name='login'),
-    url(r'^accounts/logout/$', 'django.contrib.auth.views.logout', name='logout'),
-    (r'^accounts/manage/$',    'accounts.views.manage'),
-    (r'^accounts/register/$',  'accounts.views.register'),
+    (r'^accounts/login/$',    'django.contrib.auth.views.login',  {}, 'login'),
+    (r'^accounts/logout/$',   'django.contrib.auth.views.logout', {}, 'logout'),
+    (r'^accounts/manage/$',   'accounts.views.manage', {}, 'manage'),
+    (r'^accounts/register/$', 'accounts.views.register', {}, 'register'),
     
-    (r'users/%(name)s/$' % reps, 'accounts.views.user_details')
+    (r'users/%(name)s/$' % reps, 'accounts.views.user_details', 'user-details')
 )
+
+if settings.DEBUG:
+    path = os.path.join(settings._base, 'media')
+    urlpatterns += patterns('django.views.static', 
+        (r'^css/(?P<path>.*)$',    'serve', {'document_root': os.path.join(path, 'css')}),
+        (r'^js/(?P<path>.*)$',     'serve', {'document_root': os.path.join(path, 'js')}),
+        (r'^images/(?P<path>.*)$', 'serve', {'document_root': os.path.join(path, 'images')}),
+    )
 
 # category match needs to be last, to avoid shadowing others
 urlpatterns += patterns('articles.views',
-    (r'^%(category)s/$'                            % reps, 'category'),
+    (r'^%(category)s/$'                            % reps, 'category', {}, 'category'),
     (r'^%(category)s/%(year)s/$'                   % reps, 'category_for_year'),
     (r'^%(category)s/%(year)s/%(month)s/$'         % reps, 'category_for_month'),
     (r'^%(category)s/%(year)s/%(month)s/%(day)s/$' % reps, 'category_for_day'),
