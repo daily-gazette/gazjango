@@ -5,7 +5,7 @@
 
 {% block customheader %}
 
-<link rel="stylesheet" href="css/page/story.css" type="text/css" media="screen, projection" />
+<link rel="stylesheet" href="/css/page/story.css" type="text/css" media="screen, projection" />
 
 <script>
 
@@ -27,141 +27,154 @@ function toggleLayer( whichLayer )
 
 </script>
 
+{# <script type="text/javascript" src="http://s7.addthis.com/js/152/addthis_widget.js"></script> #}
+{# <script type="text/javascript"> #}
+{#   addthis_pub = 'dailygazette'; #}
+{#   addthis_brand = 'The Daily Gazette'; #}
+{# </script> #}
+
 {% endblock customheader %}
 
 
 {% block topbar %}
   <div id="headerSectionBar">
-
     <div id="headerSection">
-      <h3><a href="{{ section.get_absolute_url }}">{{ section.get_title }}</a> {% for subsection %}
-																						>> <a href="{{ subsection.get_absolute_url }}">{{ subsection.get_title }}</a>
-																						{% endfor %}</h3>
-			</div>
+      <h3>
+        {% for cat in story.category.ancestors %}
+          {% if not forloop.first %} >> {% endif %}
+          <a href="{{ cat.get_absolute_url }}">{{ cat.name }}</a>
+				{% endfor %}
+			</h3>
+		</div>
 		
-			<div id="headerSearch" class="floatRight">
-				<form method="get" id="searchform" action="http://www.sccs.swarthmore.edu">Search: <input type="text" class="textbox" value="" name="s" id="s" /><input type="submit" id="searchsubmit" value="Go" /></p>
-			</div>
-			
+		<div id="headerSearch" class="floatRight">
+		  <form method="get" id="searchform" action="{% url search %}">
+		    Search: 
+		    <input type="text" class="textbox" value="" name="s" id="s" />
+		    <input type="submit" id="searchsubmit" value="Go" />
+		  </form>
 		</div>
 	</div>
 {% endblock topbar %}
 
 	
 {% block content %}
-		<div id="commentColumn">
-			<div id="commentBox">
-				{% ifequal user currentuser %}
-					{% include user.commentBox %}
-				{% else %}
+	<div id="commentColumn">
+		<div id="commentBox">
+			{% if user.is_authenticated %}
+				{% include "story_sidebar.html" %}
+			{% else %}
+				{% include "story_sidebar.html" %}
+			{% endif %}
+				
+		</div>
+	</div>
+		
+	<div id="storyBox">
+		<div id="story">
+			<h2>{{ story.headline }}</h2>
+			<p class="byline">
+			  <span class="author">by 
+			    {% for author in story.authors.all %}
+			      <a href="{{ author.get_absolute_url }}">
+			        {{ author.name|upper }}, {{ author.position|upper }}
+			      </a>{% if not forloop.last %};{% endif %}
+			    {% endfor %}
+			  </span>
+			  <span class="date">
+			    | <a href="{% url issue story.pub_date.year,story.pub_date.month,story.pub_date.day %}">
+			        {{ story.pub_date|date:"F j, Y" }}
+			      </a>
+			  </span>
+			</p>
+				
+			{{ story.formatted_text|safe }}
+								
+		</div>
+				
+		<div id="shareBox">
+			<div class="right">
+			  <strong>Share:</strong>
+			  {% include "share.html" %}
+        
+			</div>
+          
+			<p>
+			  <a href="{% url print story %}"><img src="/images/icons/print.png" /> Print</a>
+			  &nbsp;&nbsp;
+			  <a href="{% url email story %}"><img src="/images/icons/email.png" /> Email</a>
+			</p>
+		</div>
+				
+		<div id="continueBox">
+			<div id="top">
+				<a href="{{ topstory.get_absolute_url }}">
+				  <img src="{{ topstory.get_vert_thumbnail }}" />
+				</a>
+				<div class="content">
+				  <h4><a href="{{ topstory.get_absolute_url }}">{{ topstory.headline }}</a></h4> 
+				  <p>{{ topstory.short }}</p>
+				</div>
+			</div>
+      
+			<div id="more">
+				<div class="box">
 					<h4>Related Stories</h4>
 					<ul>
-						{% for item in story.related_list|slice:":2" %}
-							<li><a href="{{item.get_absolute_url}}">{{ item.get_title }}</a></li>
+						{% for rel in related %}
+						  <li><a href="{{rel.get_absolute_url}}">{{ rel.headline }}</a></li>
 						{% endfor %}
 					</ul>
-				{% endif %}
+				</div>
+				<div class="box">
+					<h4>Recent Comments</h4>
+					<ul>
+						{% for comment in comments|slice:":2" %}
+							<li><a href="{{comment.get_absolute_url}}">{{ comment.get_title }}</a></li>
+						{% endfor %}
+					</ul>
+				</div>			
+			</div>
+		</div>
 				
-				<hr width="50%" color="#ffffff" size=1px /> 
-				<h4>Share!</h4>
-				
+		<div id="bottomComments">
+			<div id="submitComment">
 				<p>
-				{% for item in social_list %}
-					<a href="{{ item.url }}" alt="{{item.name}}"><img src="{{item.image_url}}" /></a> 
-				{% endfor %}
+				  <label class="text" for="author">Name: </label>
+				  <input type="text" name="author" id="author" value="" class="textfield" tabindex="1" />
+				  
+				  <label class="text" for="email">E-Mail: </label>
+				  <input type="text" name="email" id="email" value="" class="textfield" tabindex="2" />
 				</p>
 				
-				<hr width="50%" color="#ffffff" size=1px />
-				<h4><a href="javascript:toggleLayer('commentField');" title="Add a comment to this entry">Add a comment</a></h4>
-				
-				{# something needs to be done with comments -- this box should only be visible for logged in users #}
-				
-				<div id="commentField">
-					<textarea rows="10" cols="48">Have your say.</textarea><br />
-					<input type="reset" name="reset" value="Submit" /><input type="reset" name="reset" value="Cancel" onclick="javascript:toggleLayer('commentField');" />
-				</div>
-				
-			</div>
-		</div>
-		
-		<div id="storyBox">
-			<div id="story">
-
-				<h2>{{ story.get_title }}</h2>
-				<p class="byline"><span class="author">by {% for item in story.author %} <a href="{{item.url}}" alt="{{item.author}}">{{ item.author.upper }}, {{ item.get_title.upper }}</a>{% endfor %}</span><span class="date"> | <a href="{{story.date.url}}">{{ story.date:"F j, Y" }}</a></p>
-				
-				{{ story.content }}
-								
+				<textarea rows="8" cols="54">Have your say.</textarea><br />
+				<input type="submit" name="sumbit" value="Submit" />
+				<input type="reset" name="reset" value="Cancel" />
 			</div>
 			
-			
-			<div id="shareBox">
-				
-					<div class="right"><strong>Share:</strong> {% for item in social_list %}
-					<a href="{{ item.url }}" alt="{{item.name}}"><img src="{{item.image_url}}" /></a> 
-					{% endfor %}</div>
-				
-					<p><a href="{{ story.print.url }}"><img src="images/icons/print.png" /> Print</a>&nbsp;&nbsp;<a href="{{ story.email.url }}"><img src="images/icons/email.png" /> Email</a></p>
-				
-				</div>
-				
-				<div id="continueBox">
-				
-					<div id="top">
-						<a href="{{ topstory.absolute_url }}"><img src="{{ topstory.get_vert_thumbnail }}" /></a> <div class="content"><h4><a href="{{ topstory.absolute_url }}">{{ topstory.get_title }}</a></h4> <p>{{ topstory.get_short_excerpt }}</p></div>
-					</div>
+			<div id="commentRules">
+  			<h4>Discussion Rules</h4>
+				<ul>
+					<li>Be nice.</li>
+					<li>Be constructive.</li>
+					<li>Don't curse.</li>
+					<li>Don't threaten.</li>
+				</ul>
 					
-					<div id="more">
-						<div class="box">
-							<h4>Related Stories</h4>
-							<ul>
-								{% for item in story.related_list|slice:":2" %}
-									<li><a href="{{item.get_absolute_url}}">{{ item.get_title }}</a></li>
-								{% endfor %}
-							</ul>
-						</div>
-						
-						<div class="box">
-							<h4>Recent Comments</h4>
-							<ul>
-								{% for item in comments|slice:":2" %}
-									<li><a href="{{item.get_absolute_url}}">{{ item.get_title }}</a></li>
-								{% endfor %}
-							</ul>
-						</div>
-						
-					</div>
+				<p>More details on our policies <a href="{{ site.links.policy.get_absolute_url }}">here</a>.</p>
 				
-				</div>
-				
-				<div id="bottomComments">
-								
-				<div id="submitComment">
-					<p><label class="text">Name: </label><input type="text" name="author" id="author" value="" class="textfield" tabindex="1" /> <label class="text">E-Mail: </label><input type="text" name="email" id="email" value="" class="textfield" tabindex="2" /></p>
-					<textarea rows="8" cols="54">Have your say.</textarea><br />
-					<input type="reset" name="reset" value="Submit" /><input type="reset" name="reset" value="Cancel" />
-				</div>
-				
-				<div id="commentRules">
-					<h4>Discussion Rules</h4>
-					<ul>
-						<li>Be nice.</li>
-						<li>Be constructive.</li>
-						<li>Don't curse.</li>
-						<li>Don't threaten.</li>
-					</ul>
-					
-					<p>More details on our policies <a href="{{ site.links.policy.get_absolute_url }}">here</a>.</p>
-					
-					<hr width="50%" color="#dddddd" size=1px /> 
+				<hr width="50%" color="#dddddd" size=1px /> 
 									
-					<p>{% if user.is_authenticated %} <a href="{{ user.manage_url }}">Manage an Account</a>{% else %} | <a href="{{ user.register_url }}">Register an Account</a> | | <a href="{{ user.login_url }}">Login</a>{% endif %}</p>
-				</div>
-				
-				
-				
-				</div>
-			
+				<p>
+				  {% if user.is_authenticated %} 
+				    <a href="{{ user.manage_url }}">Manage your Account</a>
+				  {% else %}
+				    <a href="{{ user.register_url }}">Register an Account</a> |
+				    <a href="{{ user.login_url }}">Login</a>
+				  {% endif %}
+				</p>
+			</div>
 		</div>
+	</div>
 
 {% endblock content %}
