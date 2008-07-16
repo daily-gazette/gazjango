@@ -1,1 +1,7 @@
-# Create your views here.
+from django.template  import RequestContext
+from django.shortcuts import render_to_response, get_object_or_404
+
+issue_for_today  = lambda request, **kwargs: render_to_response("base.html", locals())
+issues_for_year  = lambda request, **kwargs: render_to_response("base.html", locals())
+issues_for_month = lambda request, **kwargs: render_to_response("base.html", locals())
+issues_for_day   = lambda request, **kwargs: render_to_response("base.html", locals())
