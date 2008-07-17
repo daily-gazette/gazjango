@@ -83,16 +83,19 @@ INSTALLED_APPS = (
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.sites',
-    'django.contrib.comments',
     'django.contrib.flatpages',
     
-    'gazjango.comment_utils',
     'gazjango.tagging',
     
     'gazjango.accounts',
     'gazjango.articles',
+    'gazjango.comments',
     'gazjango.polls',
     'gazjango.issues',
 )
 
 AUTH_PROFILE_MODULE = "accounts.userprofile"
+
+AKISMET_API_KEY = '14b6e46fb868'
+
+SWARTHMORE_IP_BLOCK = '130.58.'
