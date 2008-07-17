@@ -15,6 +15,8 @@ BLOCKS
 {% block footer %}                              Footer content (usually no change)
 {% endblock footer %}
 
+{% block subheader %}						Block containing siderbar content in the admin theme
+
 
 CLASS
 
@@ -26,6 +28,20 @@ user
     {% url logout %}                    URL to logout page
     {% url manage %}                    URL to "Manage Account" page
     {% url register %}                  URL to register an account
+    
+    user.claimed						list of stories claimed by the user
+    user.stories						list of stories published by the user
+    	stories.revised					list of stories published by a user, recently revised
+    		item.revisee				name of user who revised said story
+    		item.get_date				date of revision
+    	stories.comments				list of stories published by a user, recently commented
+    		item.commenter				name of the person who commented
+    		item.get_date				date of comment
+    	
+			.get_absolute_url
+			.get_headline
+			.pub_date
+    
     
 story
     story.headline                      Headline of story (in page title)
@@ -44,12 +60,12 @@ story
         item.get_absolute_url               Abs. URL to the item in the related_list
         item.headline                       Title of item in related_list
         
-comments                                A list of the most recent comments (~15)
+comments                              		A list of the most recent comments (~15)
     item                                    Item in said list
     item.get_absolute_url                   The absolute URL to the story referenced in a comment
     item.story.headline                     The title of the story the comment is under
 
-story.category                      the story's most specific category
+story.category                    		the story's most specific category
     category.name                       the category's name
     category.get_absolute_url           URL for the category
     category.ancestors                  all categories, from least to most specific
@@ -59,3 +75,19 @@ topstory
     topstory.get_vert_thumbnail         URL to the vertical thumbnail for the top story
     topstory.headline                   Title of the current top story
     topstory.short                      Get the top story's short excerpt
+    
+    
+
+admin									functions for the administration section
+	admin.announcement					announcement, set by an editor which shows up on admin pages
+	admin.announcement.author (re: story.author functions) author of the announcement
+	admin.announcement.author.get_url	as above
+	
+	
+storylist								list of all upcoming stories, entered by admin
+	storylist.unclaimed					list of all unclaimed stories
+	storylist.claimed					list of all claimed stories
+		*.get_title						get the title of an item in an above list
+		*,get_claimer					get the name of the person who claimed said story
+		*.get_dueDate					date the item is due
+		*.get_notes						notes, set by an editor, about an upcoming story

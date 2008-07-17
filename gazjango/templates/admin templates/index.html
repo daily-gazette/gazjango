@@ -27,7 +27,7 @@
 				<h3>Your Stories</h3>
 				<ul>
 					{% for item in user.stories|slice:":10" %}
-						<li><a href="{{ item.get_url }}">{{ item.get_title }}</a> - {{ item.get_date }}</li>
+						<li><a href="{{ item.get_absolute_url }}">{{ item.get_headline }}</a> - {{ item.pub_date }}</li>
 					{% endfor %}
 				</ul>
 			</div>
@@ -36,7 +36,7 @@
 				<h3>Recent Revisions</h3>
 				<ul>
 					{% for item in user.stories.revised|slice:":3" %}
-						<li><a href="{{ item.get_url }}">{{ item.get_title }}</a> - {{ item.revisee }} - {{ item.get_date }}</li>
+						<li><a href="{{ item.get_absolute_url }}">{{ item.get_headline }}</a> - {{ item.revisee }} - {{ item.get_date }}</li>
 					{% endfor %}
 				</ul>
 			</div>
