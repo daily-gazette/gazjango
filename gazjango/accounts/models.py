@@ -12,6 +12,8 @@ class UserProfile(models.Model):
     # many-to-many Articles, has-many PositionsHeld
     
     name = property(lambda self: self.user.get_full_name())
+    username = property(lambda self: self.user.username)
+    email = property(lambda self: self.user.email)
     
     def position_at(self, date):
         """Returns the highest-ranked of this user's Positions at date."""
