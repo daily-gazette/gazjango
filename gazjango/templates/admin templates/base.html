@@ -1,0 +1,107 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+  "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en">
+
+<head>
+  <title>{% block title %}{% endblock title %} :: The Daily Gazette</title>
+
+  <link rel="stylesheet" href="css/toolbox.css" type="text/css" media="screen, projection, print" />
+  <link rel="stylesheet" href="css/print.css" type="text/css" media="print" />
+
+  <link rel="alternate" type="application/rss+xml" title="RSS 2.0" href="" />
+  <link rel="alternate" type="text/xml" title="RSS .92" href="" />
+  <link rel="alternate" type="application/atom+xml" title="Atom 0.3" href="" />
+
+  {% block customheader %}
+  {% endblock customheader %}
+</head>
+
+
+<div id="container"> <!-- holds all -->
+
+	<!--HEADER-->
+	<div id="header">
+	
+		<div class="floatLeft"><h1><img src="images/header.png" /></h1></div>
+		
+		<div id="linkBox">
+			<a href="http://daily.swarthmore.edu">Visit Site</a> | <a href="{{ user.logout_url }}">Log Out</a>
+		</div>
+		
+	</div>
+	
+	<div id="subheader">
+		<center>
+		{% block subheader %}
+		
+		<ul>
+			<li><a href="#">Write</a></li>	
+			<li><a href="#">Manage</a></li>
+			<li><a href="#">Comments</a></li>
+		</ul>
+		
+		{% endblock subheader %}
+		</center>
+	</div>
+	<!--END HEADER-->
+	
+	<!--ARTICLE BAR-->
+	<div id="sidebar">
+		
+		{% block sidebar %}
+		
+		<h2>Announcements</h2>
+		
+		{{ admin.announcement }}
+		
+		<p>-<a href="{{ admin.announcement.author.url }}">{{ admin.announcement.author }}</a></p>
+		
+		<h2>Coming Up</h2>
+		<h3>Yours</h3>
+		
+		<ul>
+		{% for item in user.claimed|slice:":3" %}
+			<li>{{ item.get_title }} - {{ item.get_dueDate }}<br /><span class="notes">{{ item.get_notes }}</span></li>
+		{% endfor %}
+		</ul>
+		
+		<h3>Unclaimed</h3>
+		<h4><a href="#">claim a story</a></h4>
+		<ul>
+		{% for item in storylist.unclaimed|slice:":3" %}
+			<li>{{ item.get_title }} - {{ item.get_dueDate }}<br /><span class="notes">{{ item.get_notes }}</span></li>
+		{% endfor %}
+		</ul>
+			
+		<h3>Others</h3>
+		{% for item in storylist.claimed|slice:":3" %}
+			<li>{{ item.get_title }} - {{ item.get_claimer }} - {{ item.get_dueDate }}</li>
+		{% endfor %}
+		
+		{% endblock sidebar %}
+		
+	</div>
+	<!--END ARTICLE BAR-->
+	
+	<!--MAIN COLUMN-->
+	<div id="main">
+		<span id="mainRight">
+		<span id="mainTopRight">
+			
+		<div id="centerColumn">
+		
+			{% block content %}
+			{% endblock content %}
+		
+		</div>
+		
+		</span>
+		</span>
+	
+	</div>
+	<!--END MAIN COLUMN-->
+	
+	
+</div>
+
+<!-- END FOOTER -->

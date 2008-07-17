@@ -1,0 +1,58 @@
+{% block title %}Admin Panel{% endblock title %}
+
+
+{% block customheader %}
+
+<link rel="stylesheet" href="../css/page/admin.css" type="text/css" media="screen, projection" />
+
+{% endblock customheader %}
+
+
+
+{% block content %}
+		
+			<div id="buttonBox">
+			
+				<div id="buttonBoxMajor">
+					<a href="#"><img src="images/buttons/write.png" /></a>
+				</div>
+				<div id="buttonBoxMinor">
+					<a href="#"><img src="images/buttons/profile.png" /></a><br />
+					<a href="#"><img src="images/buttons/stories.png" /></a><br />
+					<a href="#"><img src="images/buttons/comments.png" /></a><br />
+				</div>
+			</div>
+			
+			<div class="tallBox">
+				<h3>Your Stories</h3>
+				<ul>
+					{% for item in user.stories|slice:":10" %}
+						<li><a href="{{ item.get_url }}">{{ item.get_title }}</a> - {{ item.get_date }}</li>
+					{% endfor %}
+				</ul>
+			</div>
+			
+			<div class="shortBox">
+				<h3>Recent Revisions</h3>
+				<ul>
+					{% for item in user.stories.revised|slice:":3" %}
+						<li><a href="{{ item.get_url }}">{{ item.get_title }}</a> - {{ item.revisee }} - {{ item.get_date }}</li>
+					{% endfor %}
+				</ul>
+			</div>
+			
+			<div class="shortBox">
+				<h3>Comments</h3>
+				<ul>
+					{% for item in user.stories.comments|slice:":3" %}
+						<li><a href="{{ item.get_url }}">{{ item.get_title }}</a> - {{ item.commenter }} - {{ item.get_date }}</li>
+					{% endfor %}
+				</ul>
+			</div>		
+		
+		</div>
+		
+		</span>
+		</span>
+	
+{% endblock content %}
