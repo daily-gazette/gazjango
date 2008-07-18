@@ -1,0 +1,241 @@
+{% extends "base.html" %}
+
+{% block title %}Index{% endblock title %}
+
+{% block title %}Archives - {{ archives.get_headline }}{% endblock title %}
+
+
+{% block customheader %}
+
+
+<link rel="stylesheet" href="css/page/story.css" type="text/css" media="screen, projection" />
+<link rel="stylesheet" type="text/css" href="js/ajaxtabs/ajaxtabs.css" />
+
+
+<script>
+
+function toggleLayer( whichLayer )
+{
+  var elem, vis;
+  if( document.getElementById ) // this is the way the standards work
+    elem = document.getElementById( whichLayer );
+  else if( document.all ) // this is the way old msie versions work
+      elem = document.all[whichLayer];
+  else if( document.layers ) // this is the way nn4 works
+    elem = document.layers[whichLayer];
+  vis = elem.style;
+  // if the style.display value is blank we try to figure it out here
+  if(vis.display==''&&elem.offsetWidth!=undefined&&elem.offsetHeight!=undefined)
+    vis.display = (elem.offsetWidth!=0&&elem.offsetHeight!=0)?'block':'none';
+  vis.display = (vis.display==''||vis.display=='block')?'none':'block';
+}
+
+</script>
+
+<script type="text/javascript" src="js/jquery-1.2.1.pack.js"></script>
+<script type="text/javascript" src="js/ajaxtabs/ui.tabs.pack.js"></script>
+<script type="text/javascript">
+          var $j = jQuery.noConflict();
+			$j(function() {
+			$j('#container-4 ul').tabs({ fxFade: true, fxSpeed: 'fast' });
+			$j('#container-11 ul').tabs({ event: 'mouseover' }).find('a').click(function() {
+			return false;
+			});
+				});
+</script>
+
+
+
+{% endblock customheader %}
+
+
+{% block topbar %}
+		<div id="headerSectionBar">
+		
+			<div id="headerSection">
+				<h3><a href="{{ archives.get_absolute_url }}">{{ archives.get_title }}</a></h3>
+			</div>
+		
+			<div id="headerSearch" class="floatRight">
+				<form method="get" id="searchform" action="http://www.sccs.swarthmore.edu">Search: <input type="text" class="textbox" value="" name="s" id="s" /><input type="submit" id="searchsubmit" value="Go" /></p>
+			</div>
+			
+		</div>
+	</div>
+{% endblock topbar %}
+
+
+{% block content %}
+		<div id="commentColumn">
+			<div id="commentBox">
+				{% ifequal user currentuser %}
+					{% include user.commentBox %}
+				{% else %}
+					<h4>Related Stories</h4>
+					<ul>
+						{% for item in story.related_list|slice:":2" %}
+							<li><a href="{{item.get_absolute_url}}">{{ item.get_title }}</a></li>
+						{% endfor %}
+					</ul>
+				{% endif %}
+				
+				<hr width="50%" color="#ffffff" size=1px /> 
+				<h4>Share!</h4>
+				
+				<p>
+				{% for item in social_list %}
+					<a href="{{ item.url }}" alt="{{item.name}}"><img src="{{item.image_url}}" /></a> 
+				{% endfor %}
+				</p>
+							
+			</div>
+		</div>
+		
+		<div id="storyBox">
+			<div id="story">
+
+				
+				<div id="container-4">
+				  <ul>
+					<li><a class="ui-tabs" href="#fragment-1">Recent Stories</a></li>
+					<li><a class="ui-tabs" href="#fragment-2">Recent Issues</a></li>
+					<li><a class="ui-tabs" href="#fragment-3">Popular Stories</a></li>
+					<li><a class="ui-tabs" href="#fragment-4">Full Archives</a></li>
+				  </ul>
+
+				  <div id="fragment-1">
+						<h2>Recent Stories</h2>
+						
+						{% for item in storylist|slice:":15" }
+						
+							<h3><a href="{{ item.get_absolute_url }}">{{ item.get_title }}</a></h3>
+							<p class="byline">
+							  <span class="author">by 
+								{% for author in story.authors.all %}
+								  <a href="{{ author.get_absolute_url }}">
+									{{ author.name|upper }}, {{ author.position|upper }}
+								  </a>{% if not forloop.last %};{% endif %}
+								{% endfor %}
+							  </span>
+							  <span class="date">
+								| <a href="{% url issue story.pub_date.year,story.pub_date.month,story.pub_date.day %}">
+									{{ story.pub_date|date:"F j, Y" }}
+								  </a>
+							  </span>
+							</p>
+							{% if item.graphic %}
+							<div class="imgLeft thirtyfive"><img src="{{ item.graphic.get_absolute_url }}" class="hundred" title="{{ item.get_title }}" /></div>{% endif %}{{ item.short }}
+						
+						{% endfor %}
+				  </div>
+				  
+				  <div id="fragment-2">
+				  		<h2>Recent Issues</h2>
+				  		
+				  		{% for item in issuelist|slice:":25" }
+						
+							<h3><a href="{{ item.get_absolute_url }}">{{ item.get_title }}</a></h3>
+													
+						{% endfor %}
+						
+				  </div>
+				  
+				  <div id="fragment-3">
+				  		<h2>Popular Stories</h2>
+				  		
+				  		{% for item in popularlist|slice:":15" }
+						
+							<h3><a href="{{ item.get_absolute_url }}">{{ item.get_title }}</a></h3>
+							<p class="byline">
+							  <span class="author">by 
+								{% for author in story.authors.all %}
+								  <a href="{{ author.get_absolute_url }}">
+									{{ author.name|upper }}, {{ author.position|upper }}
+								  </a>{% if not forloop.last %};{% endif %}
+								{% endfor %}
+							  </span>
+							  <span class="date">
+								| <a href="{% url issue story.pub_date.year,story.pub_date.month,story.pub_date.day %}">
+									{{ story.pub_date|date:"F j, Y" }}
+								  </a>
+							  </span>
+							</p>
+							{% if item.graphic %}
+							<div class="imgLeft thirtyfive"><img src="{{ item.graphic.get_absolute_url }}" class="hundred" title="{{ item.get_title }}" /></div>{% endif %}{{ item.short }}
+						
+						{% endfor %}
+				  </div>
+				  
+				  <div id="fragment-4">
+				  		<h2>Full Archives</h2>
+				  		
+				  		{# could one of you do this: it should be a list. 
+				  		
+				  			like:
+				  			
+				  			2008
+				  			
+				  			MAY
+				  			1 2 3 4 5 6 7 8 9 10
+				  			11 12 13 14 15 16 17
+				  			
+				  			JUNE
+				  			1 2 3 4 5 ... etc.
+				  			
+				  			Spacing should be even. The numbers should correspond to the day of the month the story was published -- if there was no story on a given day, the number should be grayed out, or a white blank should be left in its place. 
+				  			
+				  			This months should be descended, the day numbers ascending
+				  			The list should go back through our entire archives and link to our daily issues. #}
+				  </div>
+				</div>
+				
+				
+				
+								
+			</div>
+			
+			
+			<div id="shareBox">
+				
+					<div class="right"><strong>Share:</strong> {% for item in social_list %}
+					<a href="{{ item.url }}" alt="{{item.name}}"><img src="{{item.image_url}}" /></a> 
+					{% endfor %}</div>
+				
+					<p><a href="{{ story.print.url }}"><img src="images/icons/print.png" /> Print</a>&nbsp;&nbsp;<a href="{{ story.email.url }}"><img src="images/icons/email.png" /> Email</a></p>
+				
+				</div>
+				
+				<div id="continueBox">
+				
+					<div id="top">
+						<a href="{{ topstory.absolute_url }}"><img src="{{ topstory.get_vert_thumbnail }}" /></a> <div class="content"><h4><a href="{{ topstory.absolute_url }}">{{ topstory.get_title }}</a></h4> <p>{{ topstory.get_short_excerpt }}</p></div>
+					</div>
+					
+					<div id="more">
+						<div class="box">
+							<h4>Related Stories</h4>
+							<ul>
+								{% for item in story.related_list|slice:":2" %}
+									<li><a href="{{item.get_absolute_url}}">{{ item.get_title }}</a></li>
+								{% endfor %}
+							</ul>
+						</div>
+						
+						<div class="box">
+							<h4>Recent Comments</h4>
+							<ul>
+								{% for item in comments|slice:":2" %}
+									<li><a href="{{item.story.get_absolute_url}}">{{ item.story.get_title }}</a></li>
+								{% endfor %}
+							</ul>
+						</div>
+						
+					</div>
+				
+				</div>
+							
+		</div>
+
+
+
+{% endblock content %}
