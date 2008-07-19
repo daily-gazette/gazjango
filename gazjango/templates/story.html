@@ -27,12 +27,6 @@ function toggleLayer( whichLayer )
 
 </script>
 
-{# <script type="text/javascript" src="http://s7.addthis.com/js/152/addthis_widget.js"></script> #}
-{# <script type="text/javascript"> #}
-{#   addthis_pub = 'dailygazette'; #}
-{#   addthis_brand = 'The Daily Gazette'; #}
-{# </script> #}
-
 {% endblock customheader %}
 
 
@@ -76,9 +70,7 @@ function toggleLayer( whichLayer )
 			<p class="byline">
 			  <span class="author">by 
 			    {% for author in story.authors.all %}
-			      <a href="{{ author.get_absolute_url }}">
-			        {{ author.name|upper }}, {{ author.position|upper }}
-			      </a>{% if not forloop.last %};{% endif %}
+			      <a href="{{ author.get_absolute_url }}">{{ author.name|upper }}, {{ author.position|upper }}</a>{% if not forloop.last %};{% endif %}
 			    {% endfor %}
 			  </span>
 			  <span class="date">
@@ -89,16 +81,13 @@ function toggleLayer( whichLayer )
 			</p>
 				
 			{{ story.formatted_text|safe }}
-								
 		</div>
 				
 		<div id="shareBox">
 			<div class="right">
 			  <strong>Share:</strong>
 			  {% include "share.html" %}
-        
 			</div>
-          
 			<p>
 			  <a href="{% url print story %}"><img src="/images/icons/print.png" /> Print</a>
 			  &nbsp;&nbsp;
@@ -136,7 +125,7 @@ function toggleLayer( whichLayer )
 				</div>			
 			</div>
 		</div>
-				
+		
 		<div id="bottomComments">
 			<div id="submitComment">
 				<p>
