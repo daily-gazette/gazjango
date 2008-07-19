@@ -13,7 +13,7 @@ class Poll(models.Model):
     
     name       = models.CharField(max_length=150)
     question   = models.TextField(blank=True)
-    slug       = models.SlugField(prepopulate_from=("name",), unique_for_year="time_start")
+    slug       = models.SlugField(unique_for_year="time_start")
     time_start = models.DateTimeField(default=datetime.now)
     time_stop  = models.DateTimeField(default=datetime.now)
     allow_anon = models.BooleanField(default=True)

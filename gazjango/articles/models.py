@@ -33,7 +33,7 @@ class Article(models.Model):
     
     headline  = models.CharField(max_length=200)
     subtitle  = models.CharField(blank=True, max_length=200)
-    slug      = models.SlugField(prepopulate_from=("headline",), unique_for_date="pub_date")
+    slug      = models.SlugField(unique_for_date="pub_date")
     
     short     = models.CharField(max_length=150)
     summary   = models.TextField()
@@ -131,7 +131,7 @@ class Category(models.Model):
     
     name        = models.CharField(max_length=40, unique=True)
     description = models.CharField(blank=True, max_length=250)
-    slug        = models.SlugField(prepopulate_from=("name",), unique=True)
+    slug        = models.SlugField(unique=True)
     parent      = models.ForeignKey('self', blank=True, null=True,
                                     related_name='child_set')
     
