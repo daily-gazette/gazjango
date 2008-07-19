@@ -67,7 +67,7 @@ urlpatterns += patterns('',
 )
 
 if settings.DEBUG:
-    path = os.path.join(settings._base, 'media')
+    path = os.path.join(settings._base, 'static')
     urlpatterns += patterns('django.views.static', 
         (r'^css/(?P<path>.*)$',    'serve', {'document_root': os.path.join(path, 'css')}),
         (r'^js/(?P<path>.*)$',     'serve', {'document_root': os.path.join(path, 'js')}),
