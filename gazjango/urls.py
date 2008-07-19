@@ -5,10 +5,12 @@ reps = {
     'year':  r'(?P<year>\d{4})',
     'month': r'(?P<month>\d{1,2})',
     'day':   r'(?P<day>\d{1,2})',
+    
     'slug': r'(?P<slug>[\w-]+)',
+    'name': r'(?P<name>[\w]+)',
     'kind': r'(?P<kind>[\w-]+)',
     'category': r'(?P<category>[\w-]+)',
-    'name': r'(?P<name>[\w]+)'
+    'bucket': r'(?P<bucket>[\w]+)',
 }
 
 
@@ -55,6 +57,11 @@ urlpatterns += patterns('polls.views',
     (r'^polls/%(year)s/$'                   % reps, 'polls_for_year'),
     (r'^polls/%(year)s/%(month)s/$'         % reps, 'polls_for_month'),
     (r'^polls/%(year)s/%(month)s/%(day)s/$' % reps, 'polls_for_day')
+)
+
+urlpatterns += patterns('media.views',
+    (r'^files/%(bucket)s$/'          % reps, 'bucket'),
+    (r'^files/%(bucket)s/%(slug)s/$' % reps, 'file')
 )
 
 urlpatterns += patterns('',

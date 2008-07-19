@@ -1,10 +1,15 @@
-from django.db                         import models
-from django.db.models                  import permalink
-from django.contrib.auth.models        import User
-from accounts.models                   import UserProfile
-from exceptions                        import RelationshipMismatch
-from datetime                          import datetime, date
 from diff_match_patch.diff_match_patch import diff_match_patch
+from datetime                          import datetime, date
+
+from django.db                          import models
+from django.db.models                   import permalink
+from django.contrib.auth.models         import User
+from django.contrib.contenttypes.models import ContentType
+from django.contrib.contenttypes        import generic
+
+from accounts.models            import UserProfile
+from media.models               import MediaFile, ImageFile
+from exceptions                 import RelationshipMismatch
 import formats
 import tagging
 
@@ -22,7 +27,7 @@ class PublishedArticlesManager(models.Manager):
         return self.filter(position=1).order_by("?")[0]
     
     def get_secondary_stories(self, num=2):
-        """Returns a list of `num` stories with position=2."""
+        """Returns a list of ``num`` stories with position=2."""
         return self.filter(position=2).order_by("?")[:num]
     
 
@@ -38,6 +43,11 @@ class Article(models.Model):
     short     = models.CharField(max_length=150)
     summary   = models.TextField()
     text      = models.TextField()
+    
+    front_image     = models.ForeignKey(ImageFile, null=True, related_name="articles_with_front")
+    vert_thumbnail  = models.ForeignKey(ImageFile, null=True, related_name="articles_with_vert")
+    horiz_thumbnail = models.ForeignKey(ImageFile, null=True, related_name="articles_with_horiz")
+    media = models.ManyToManyField(MediaFile, related_name="articles")
     
     pub_date  = models.DateTimeField(default=datetime.now)
     authors   = models.ManyToManyField(UserProfile, related_name="articles")

@@ -1,0 +1,67 @@
+from datetime         import datetime
+from django.db        import models
+from django.db.models import permalink
+from accounts.models  import UserProfile
+
+class MediaBucket(models.Model):
+    """
+    A bucket containing media files related in some way.
+    
+    Examples include: photos taken at a given event, Suzy Q.'s miscellaneous 
+    photos of the day, photos related to a certain article, etc.
+    """
+    
+    name = models.CharField(blank=True, max_length=100)
+    slug = models.SlugField(unique=True)
+    description = models.TextField(blank=True)
+    
+    def __unicode__(self):
+        return self.slug
+    
+
+# TODO: media should be stored in S3 / Fedora Commons / the filesystem by
+#       bucket/slug, not by date/slug
+
+class MediaFile(models.Model):
+    """
+    The abstract base for media files; associated with a MediaBucket, as well
+    as the articles in which it is used.
+    
+    Include authorship and licensing details, if relevant, in the ``license``
+    field. If the file was created by one or more users, use the ``users`` m2m.
+    """
+    
+    # NOTE: I can't figure out how to have an ImageField in the subclass. 
+    #       idk if it matters.
+    data = models.FileField(upload_to="uploads/%Y/%m/%d")
+    
+    name   = models.CharField(max_length=100)
+    slug   = models.SlugField()
+    bucket = models.ForeignKey(MediaBucket)
+    
+    users = models.ManyToManyField(UserProfile, related_name="media")
+    
+    description = models.TextField(blank=True)
+    license     = models.TextField(blank=True)
+    
+    pub_date = models.DateTimeField(blank=True, default=datetime.now)
+    
+    def __unicode__(self):
+        return "%s (in %s)" % (self.slug, self.bucket)
+    
+    @permalink
+    def get_absolute_url(self):
+        return ('media.views.file', [self.bucket.slug, self.slug])
+    
+    class Meta:
+        unique_together = ("slug", "bucket")
+    
+
+
+class ImageFile(MediaFile):
+    """
+    An image file. Adds some extra functionality to MediaFile, relating to 
+    resizing and cropping the image.
+    """
+    
+    # TODO: implement ImageFile stuff

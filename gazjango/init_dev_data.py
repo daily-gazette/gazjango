@@ -17,6 +17,7 @@ from articles.models import Article, Category, Format
 from articles.models import Announcement, AnnouncementKind
 from issues.models   import Issue
 from polls.models    import Poll, Option
+from media.models    import ImageFile, MediaBucket
 
 ### Site
 
@@ -223,6 +224,8 @@ scandal = Article.objects.create(
 )
 scandal.authors.add(bob_p, jack_p)
 scandal.tags = "Al Bloom, Board of Managers, Daily Jolt"
+scandal_pics = MediaBucket.objects.create(slug="bloom_scandal")
+scandal.vert_thumbnail = ImageFile.objects.create(bucket=scandal_pics, data="uploads/al-bloom.png", slug="bloom_walking")
 scandal.save()
 
 
