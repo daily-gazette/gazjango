@@ -9,7 +9,7 @@ from datetime import datetime
 import akismet
 import settings
 
-class CommentsManager(object):
+class CommentsManager(models.Manager):
     def add(self, **data):
         """Makes a new comment, checking it for spam and such."""
         comment = PublicComment(**data) # pass on any errors
@@ -23,6 +23,12 @@ class CommentsManager(object):
             comment.is_public = False
         comment.save()
         return comment
+    
+
+class VisibleCommentsManager(CommentsManager):
+    def get_query_set(self):
+        orig = super(VisibleCommentsManager, self).get_query_set()
+        return orig.filter(is_public=True)
     
 
 class PublicComment(models.Model):
@@ -55,6 +61,7 @@ class PublicComment(models.Model):
     is_anonymous = property(lambda self: self.name is not None)
     
     objects = CommentsManager()
+    visible = VisibleCommentsManager()
     
     def askimet_says_spam(self):
         "Checks whether the comment is spam."
