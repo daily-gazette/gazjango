@@ -31,8 +31,6 @@ class MediaFile(models.Model):
     field. If the file was created by one or more users, use the ``users`` m2m.
     """
     
-    # NOTE: I can't figure out how to have an ImageField in the subclass. 
-    #       idk if it matters.
     data = models.FileField(upload_to="uploads/%Y/%m/%d")
     
     name   = models.CharField(max_length=100)
@@ -63,5 +61,9 @@ class ImageFile(MediaFile):
     An image file. Adds some extra functionality to MediaFile, relating to 
     resizing and cropping the image.
     """
-    
+    SHAPE_CHOICES = (
+        ('t', 'tall'),
+        ('w', 'wide'),
+    )
+    shape = models.CharField(max_length=1, choices=SHAPE_CHOICES)
     # TODO: implement ImageFile stuff
