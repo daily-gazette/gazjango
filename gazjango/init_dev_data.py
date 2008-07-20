@@ -36,7 +36,8 @@ admin_group        = Group.objects.create(name="Admins")
 
 ### Users
 
-def make_user(username, email, first, last, phone=None, contact=None, bio=None, groups=None):
+def make_user(username, first, last, email=None, phone=None, contact=None, bio=None, groups=None):
+    email = email or "%s@swarthmore.edu" % username
     user = User.objects.create_user(username, email)
     user.userprofile_set.add(UserProfile(phone=phone, contact=contact, bio=bio))
     user.first_name = first
@@ -46,28 +47,34 @@ def make_user(username, email, first, last, phone=None, contact=None, bio=None, 
     user.save()
     return user
 
-bob  = make_user('bob', 'bob@example.com', 'Bob', 'Jones', 
+bob  = make_user('bob', 'Bob', 'Jones', 'bob@example.com',
                  '123-456-7890', 'AIM: bobjones52',
                  groups=[reader_group, editor_group])
-jack = make_user('jack', 'jack@uppityup.com', 'Jack', 'McSmith', 
+jack = make_user('jack', 'Jack', 'McSmith', 'jack@uppityup.com',
                  bio="I'm pretty much the man.",
                  groups=[reader_group, photographer_group, editor_group])
-jill = make_user('jill', 'jill@thehill.com',  'Jill', 'Carnegie', 
+jill = make_user('jill', 'Jill', 'Carnegie', 'jill@thehill.com',
                  contact="GTalk: jill@thehill.com", 
                  groups=[reader_group, admin_group])
-bone = make_user('bone', 'doctress@example.com', 'The', 'Bone Doctress', 
+bone = make_user('bone', 'The', 'Bone Doctress', 'doctress@example.com',
                  bio="I'm a mysterious figure.", 
                  groups=[reader_group, reporter_group])
-angry = make_user('angry', 'somedude@swat.net', 'Angry', 'Man',
+angry = make_user('angry', 'Angry', 'Man', 'somedude@swat.net',
                  bio="I used to be in charge of this paper, but I've since moved "
                      "on to bigger and better things: complaining and nitpicking.",
                  groups=[reader_group])
+zoe = make_user('zoe', 'Zoe', 'Davis', groups=[reader_group, reporter_group])
+finlay = make_user('finlay', 'Finlay', 'Logan', groups=[reader_group, reporter_group])
+neena = make_user('neena', 'Neena', 'Cherayil', groups=[reader_group, reporter_group])
+lauren = make_user('lauren', 'Lauren', 'Stokes', groups=[reader_group, reporter_group])
+brandon = make_user('brandon', 'Brandon', 'Lee Wolff', groups=[reader_group])
 
 ### Positions
 
 reader          = Position.objects.create(name="Reader",             rank=0)
 swat_reader     = Position.objects.create(name="Swarthmore Reader",  rank=1)
-columnist       = Position.objects.create(name="Columnist",          rank=4)
+columnist       = Position.objects.create(name="Columnist",          rank=3)
+guest_writer    = Position.objects.create(name="Guest Writer",       rank=4)
 reporter        = Position.objects.create(name="Staff Reporter",     rank=5)
 photographer    = Position.objects.create(name="Staff Photographer", rank=5)
 tech_director   = Position.objects.create(name="Technical Director", rank=8)
@@ -102,6 +109,13 @@ bone_p.add_position(columnist, date(2008, 1, 21))
 angry_p.add_position(bossman, date(2002, 9, 1), date(2006, 9, 1))
 angry_p.add_position(reader,  date(2006, 9, 1))
 
+p = lambda u: u.get_profile()
+
+p(zoe).add_position(reporter)
+p(finlay).add_position(reporter)
+p(neena).add_position(reporter)
+p(lauren).add_position(bossman)
+p(brandon).add_position(guest_writer)
 
 ### Categories
 
@@ -115,6 +129,7 @@ def cat(name, slug, description, parent=None):
 news = cat("News", "news", "What's going on in the world.")
 students = cat("Students", "students", "Swarthmore students and their doings.", news)
 facstaff = cat("Faculty & Staff", "facstaff", "About Swarthmore faculty and staff.", news)
+alumni = cat("Alumni", "alumni", "The crazy world after Swarthmore.", news)
 
 features = cat("Features", "features", "The happenings around town.")
 opinions = cat("Opinions", "opinions", "What people have to say.")
@@ -131,14 +146,15 @@ html    = Format.objects.create(name="Raw HTML", function="html")
 ### Articles
 
 nobody_loves_me = Article.objects.create(
+    short_title="Nobody Loves Me",
     headline="Nobody Loves Me",
     subtitle="It's True: Not Like You Do",
     slug='no_love',
     category=bone_doctress,
     summary="The Bone Doctress takes a break from her usual witty recountings of "
             "sexual escapades to share with you the lyrics to a Portishead song.",
-    short="The Bone Doctress laments the lack of love in her life, by way of "
-          "Portishead lyrics.",
+    short_summary="The Bone Doctress laments the lack of love in her life, by way of "
+                  "Portishead lyrics.",
     format=textile,
     published=True,
     position=2
@@ -193,19 +209,33 @@ nobody_loves_me.revise_text( nobody_loves_me.text +
   "called nobody loves me or sour times or somethyng, off dummy i think. mebbe "
   "portishead. actually yeah i think its off theyr secund album. lawl. kkthx.")
 nobody_loves_me.tags = "music"
+
+bucket_o_bones = MediaBucket.objects.create(slug="bone_doctress")
+nobody_loves_me.front_image = ImageFile.objects.create(slug="portishead",
+                                    data="uploads/portishead.jpg",
+                                    bucket=bucket_o_bones,
+                                    shape='w')
 nobody_loves_me.save()
 
 
 scandal = Article.objects.create(
     headline="Al Bloom Pressured Out By Board of Managers",
+    short_title="Al Bloom Forced Out By BoM",
     subtitle="Allegations of Involvement with Empereror's Club VIP Surface",
     slug="bloom_scandal",
     category=facstaff,
-    short="Allegations have surfaced that Al Bloom was involved in the "
+    short_summary="Allegations have surfaced that Al Bloom was involved in the "
             "Emperor's Club VIP scandal.",
-    summary="One member of the Board of Managers has allegedly accuesed Al Bloom "
+    summary="One member of the Board of Managers has allegedly accused Al Bloom "
             "of involvement with the Emperor's Club VIP, and has pictures to back "
             "it up. Some say this is related to his recent resignation.",
+    long_summary="Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do "
+                 "eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim "
+                 "ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut "
+                 "aliquip ex ea commodo consequat. Duis aute irure dolor in "
+                 "reprehenderit in voluptate velit esse cillum dolore eu fugiat "
+                 "nulla pariatur. Excepteur sint occaecat cupidatat non proident, "
+                 "sunt in culpa qui officia deserunt mollit anim id est laborum.",
     text="An investigation by the Gazette has uncovered connections between Al "
          "Bloom and the Emperor's Club VIP. Photos have surfaced that show him "
          "clearly engaging in unseemly acts with a woman who looks suspiciously "
@@ -224,8 +254,16 @@ scandal = Article.objects.create(
 )
 scandal.authors.add(bob_p, jack_p)
 scandal.tags = "Al Bloom, Board of Managers, Daily Jolt"
+
 scandal_pics = MediaBucket.objects.create(slug="bloom_scandal")
-scandal.vert_thumbnail = ImageFile.objects.create(bucket=scandal_pics, data="uploads/al-bloom.png", slug="bloom_walking")
+scandal.thumbnail = ImageFile.objects.create(data="uploads/al-bloom-thumb.png", 
+                                             slug="bloom_walking_thumb",
+                                             bucket=scandal_pics,
+                                             shape='t')
+scandal.front_image = ImageFile.objects.create(data="uploads/al-bloom.jpg", 
+                                               slug="bloom_walking", 
+                                               bucket=scandal_pics,
+                                               shape='w')
 scandal.save()
 
 
@@ -234,7 +272,9 @@ boring = Article.objects.create(
     subtitle="It's Summer: Did You Expect Something Else?",
     slug="boredom",
     category=news,
-    summary="Absolutely nothing happened at all. It was quite boring.",
+    summary="Absolutely nothing happened at all. It was quite boring. So boring, "
+            "to be perfectly honest, I have not a thing to say about it. That's "
+            "why the text of the story is all latin and crap.",
     text="Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod "
          "tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim "
          "veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea "
@@ -254,7 +294,76 @@ boring = Article.objects.create(
     position=2
 )
 boring.authors.add(jack_p)
+
+internet_bucket = MediaBucket.objects.create(slug="internet")
+boring.front_image = ImageFile.objects.create(slug="boring_baby",
+                                              bucket = internet_bucket,
+                                              data="uploads/boring.jpg",
+                                              shape='t')
 boring.save()
+
+
+def art(author, **keywords):
+    keywords.setdefault('format', textile)
+    keywords.setdefault('published', True)
+    article = Article.objects.create(**keywords)
+    article.authors.add(p(author))
+    article.save()
+
+school = art(
+    headline="Project Shingayi Plans to Construct Zimbabwean School",
+    slug="project_shingayi",
+    category=students,
+    summary="Yay African schools lah lah lah.",
+    text="whoa",
+    author=zoe
+)
+
+poker = art(
+    headline="Swat Alums Turn Poker Pros",
+    slug="poker_pros",
+    category=alumni,
+    summary="Maybe the coolest thing ever.",
+    text="double whoa",
+    author=finlay
+)
+
+paces = art(
+    headline="The History Of Paces' Mural",
+    slug="paces_mural",
+    category=features,
+    summary="It was painted by some dude.",
+    text="yah",
+    author=neena
+)
+
+tarble = art(
+    headline="Major Changes Planned For Tarble",
+    slug="tarble_changes",
+    category=news,
+    summary="They be changin' stuff, yo.",
+    text="",
+    author=finlay
+)
+
+nestbeschmutzer = art(
+    headline="<i>Nestbeschmutzer</i>, Now Out of Austria",
+    slug="nestbeschmutzer",
+    category=columns,
+    summary="whoa. german.",
+    text="",
+    author=lauren
+)
+
+facebook = art(
+    headline="Under Reporting? Facebook at Swarthmore",
+    short_title="Under Reporting? Swat Facebook Use",
+    slug="facebook",
+    category=students,
+    summary="People use it, probably more than they admit to.",
+    text="Stat 11 <3",
+    author=brandon
+)
 
 ### Announcements
 
