@@ -30,41 +30,51 @@ class PublishedArticlesManager(models.Manager):
         """Returns a list of ``num`` stories with position=2."""
         return self.filter(position=2).order_by("?")[:num]
     
+    def get_tertiary_stories(self, num=6):
+        """Returns the ``num`` most recent stories with a null position."""
+        return self.filter(position=None).order_by("-pub_date")[:num]
 
 class Article(models.Model):
     """A story or other article to be published.
     
     Includes news stories, editorials, etc, but not announcements or jobs."""
     
-    headline  = models.CharField(max_length=200)
-    subtitle  = models.CharField(blank=True, max_length=200)
-    slug      = models.SlugField(unique_for_date="pub_date")
+    headline    = models.CharField(max_length=200)
+    short_title = models.CharField(blank=True, max_length=100)
+    subtitle    = models.CharField(blank=True, max_length=200)
+    slug        = models.SlugField(unique_for_date="pub_date")
     
-    short     = models.CharField(max_length=150)
-    summary   = models.TextField()
-    text      = models.TextField()
+    summary = models.TextField()
+    short_summary = models.CharField(max_length=150)
+    long_summary  = models.TextField(blank=True)
     
-    front_image     = models.ForeignKey(ImageFile, null=True, related_name="articles_with_front")
-    vert_thumbnail  = models.ForeignKey(ImageFile, null=True, related_name="articles_with_vert")
-    horiz_thumbnail = models.ForeignKey(ImageFile, null=True, related_name="articles_with_horiz")
+    text   = models.TextField()
+    format = models.ForeignKey('Format')
+    
+    pub_date = models.DateTimeField(default=datetime.now)
+    authors  = models.ManyToManyField(UserProfile, related_name="articles")
+    category = models.ForeignKey('Category')
+    
+    front_image = models.ForeignKey(ImageFile, null=True, related_name="articles_with_front")
+    thumbnail   = models.ForeignKey(ImageFile, null=True, related_name="articles_with_thumbnail")
     media = models.ManyToManyField(MediaFile, related_name="articles")
     
-    pub_date  = models.DateTimeField(default=datetime.now)
-    authors   = models.ManyToManyField(UserProfile, related_name="articles")
-    category  = models.ForeignKey('Category')
-    
     published = models.BooleanField(default=False)
-    format    = models.ForeignKey('Format')
     
-    # null = nothing special, 1 = top story, 2 = second-tier story
     position  = models.PositiveSmallIntegerField(blank=True, null=True)
+    # null = nothing special, 1 = top story, 2 = second-tier story
     
     objects = models.Manager()
     published_objects = PublishedArticlesManager()
     
+    def get_title(self):
+        return (self.short_title or self.headline)
+    
+    
     def allow_edit(self, user):
         return self.authors.filter(user__pk=user.pk).count() > 0 \
             or user.has_perm('articles.change_article');
+    
     
     def text_at_revision(self, revision):
         """Returns the text as it was at the specified revision."""
@@ -84,6 +94,7 @@ class Article(models.Model):
         self.text = revised_text
         self.save()
     
+    
     def formatted_text(self):
         formatter = getattr(formats, self.format.function)
         return formatter(self.text)
@@ -92,11 +103,14 @@ class Article(models.Model):
         formatter = getattr(formats, self.format.function)
         return formatter(self.text_at_revision(revision))
     
+    
     def related_list(self, num=None):
         """Returns a QuerySet of related stories."""
         # TODO: improve related_list
-        related = self.category.article_set.order_by('-pub_date')
+        related = self.category.root().all_articles()
+        related = related.exclude(pk=self.pk).order_by('-pub_date')
         return related[:num] if num else related
+    
     
     def __unicode__(self):
         return self.slug
@@ -156,6 +170,13 @@ class Category(models.Model):
             curr = curr.parent
         return ancestors
     
+    def root(self):
+        """Returns the highest super-category of this category."""
+        curr = self
+        while curr.parent is not None:
+            curr = curr.parent
+        return curr
+    
     def descendants(self):
         """Returns all sub-categories of this category, including itself.
         
@@ -169,7 +190,7 @@ class Category(models.Model):
     
     def all_articles(self):
         "Returns all articles in this category or one of its sub-categories."
-        Article.objects.filter(category__in=[d.pk for d in self.descendants()])
+        return Article.objects.filter(category__in=[d.pk for d in self.descendants()])
     
     def __unicode__(self):
         return self.name
