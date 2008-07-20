@@ -1,5 +1,10 @@
 #!/usr/bin/env bash
 
-rm -f development.db
-./manage.py syncdb --noinput
+echo "This will delete ALL DATA related to Django in your database."
+echo "Are you absolutely sure this is what you want to do?"
+echo -n 'Enter "yes" to continue: '
+read resp
+[[ "$resp" != "yes" ]] && exit
+
+./manage.py reset --noinput `python -c 'import settings; print " ".join(map(lambda s: s.split(".")[-1], settings.INSTALLED_APPS))'`
 ./init_dev_data.py
