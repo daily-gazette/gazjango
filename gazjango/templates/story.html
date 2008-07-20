@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load story_extras %}
 
 {% block title %}{{ story.headline }}{% endblock title %}
 
@@ -60,7 +61,6 @@ function toggleLayer( whichLayer )
 			{% else %}
 				{% include "story_sidebar.html" %}
 			{% endif %}
-				
 		</div>
 	</div>
 		
@@ -68,15 +68,9 @@ function toggleLayer( whichLayer )
 		<div id="story">
 			<h2>{{ story.headline }}</h2>
 			<p class="byline">
-			  <span class="author">by 
-			    {% for author in story.authors.all %}
-			      <a href="{{ author.get_absolute_url }}">{{ author.name|upper }}, {{ author.position|upper }}</a>{% if not forloop.last %};{% endif %}
-			    {% endfor %}
-			  </span>
-			  <span class="date">
-			    | <a href="{% url issue story.pub_date.year,story.pub_date.month,story.pub_date.day %}">
-			        {{ story.pub_date|date:"F j, Y" }}
-			      </a>
+			  <span class="author">by {{ story.authors|join_authors:"l" }}</span>
+			  <span class="date">| 
+			    <a href="{{ story.pub_date|issue_url }}">{{ story.pub_date|date:"F j, Y" }}</a>
 			  </span>
 			</p>
 				
@@ -98,11 +92,11 @@ function toggleLayer( whichLayer )
 		<div id="continueBox">
 			<div id="top">
 				<a href="{{ topstory.get_absolute_url }}">
-				  <img src="{{ topstory.vert_thumbnail.get_absolute_url }}" />
+				  <img src="{{ topstory.thumbnail.get_absolute_url }}" />
 				</a>
 				<div class="content">
 				  <h4><a href="{{ topstory.get_absolute_url }}">{{ topstory.headline }}</a></h4> 
-				  <p>{{ topstory.short }}</p>
+				  <p>{{ topstory.short_summary }}</p>
 				</div>
 			</div>
       

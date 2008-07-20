@@ -1,21 +1,22 @@
 {% extends "base.html" %}
+{% load story_extras %}
 
-{% block title %}Index{% endblock title %}
+{% block full-title %}
+The Daily Gazette :: Swarthmore College's Daily Paper
+{% endblock full-title %}
 
 
 {% block customheader %}
 
-<script type="text/javascript" src="js/jquery-1.2.1.pack.js"></script>
-<script type="text/javascript" src="js/jcarousel/lib/jquery.jcarousel.pack.js"></script>
+<script type="text/javascript" src="/js/jquery-1.2.1.pack.js"></script>
+<script type="text/javascript" src="/js/jcarousel/lib/jquery.jcarousel.pack.js"></script>
 
-<link rel="stylesheet" type="text/css" href="js/jcarousel/lib/jquery.jcarousel.css" />
-<link rel="stylesheet" type="text/css" href="js/jcarousel/skins/tango/skin.css" />
-
-
-<link rel="stylesheet" type="text/css" href="js/ajaxtabs/ajaxtabs.css" />
-<script type="text/javascript" src="js/ajaxtabs/ajaxtabs.js"></script>
+<link rel="stylesheet" type="text/css" href="/js/jcarousel/lib/jquery.jcarousel.css" />
+<link rel="stylesheet" type="text/css" href="/js/jcarousel/skins/tango/skin.css" />
 
 
+<link rel="stylesheet" type="text/css" href="/js/ajaxtabs/ajaxtabs.css" />
+<script type="text/javascript" src="/js/ajaxtabs/ajaxtabs.js"></script>
 
 <script type="text/javascript">
 
@@ -34,26 +35,29 @@ jQuery(document).ready(function() {
 {% block topbar %}
 	<div id="headerSectionBar">
 			<div id="headerSearch">
-				<form method="get" id="searchform" action="http://www.sccs.swarthmore.edu">Search: <input type="text" class="textbox" value="" name="s" id="s" /><input type="submit" id="searchsubmit" value="Go" /></p>
+				<form method="get" id="searchform" action="{% url search %}">
+				  Search:
+				  <input type="text" class="textbox" value="" name="s" id="s" />
+				  <input type="submit" id="searchsubmit" value="Go" />
+				</form>
 			</div>
 			
 			<div id="headerColumn">
-			
 				<div id="headerComments">
 					<h4>Newest Comments</h4>
-					
 					<ul>
-					{% for item in comments|slice:":5" %}
-							<li><a href="{{item.get_absolute_url}}">{{ item.get_title }}</a><br />Comment @ {{item.get_date:"F j, Y" }}</li>
+					{% for comment in comments %}
+							<li>
+							  <a href="{{comment.get_absolute_url}}">{{ comment.article.get_title }}</a>
+							  <br />
+							  Comment @ {{comment.time|date:"F j, Y" }}
+							</li>
 					{% endfor %}
 					</ul>
-					
 				</div>
 			
 				<div id="headerContentBox">
-				
-				
-						<ul id="sideContent" class="shadetabs">
+					<ul id="sideContent" class="shadetabs">
 							<li><a href="#" class="selected" rel="#default">Weather</a></li>
 							<li><a href="menus.htm" rel="countrycontainer">Menus</a></li>
 							<li><a href="events.htm" rel="countrycontainer">Events</a></li>
@@ -63,20 +67,12 @@ jQuery(document).ready(function() {
 							<h4>Weather</h4>
 						</div>
 						
-						
 						<script type="text/javascript">
-
 							var countries=new ddajaxtabs("sideContent", "weather")
 							countries.setpersist(true)
 							countries.setselectedClassTarget("link") //"link" or "linkparent"
 							countries.init()
-						
 						</script>
-
-						
-						
-						
-						
 				</div>
 				
 				<div id="zagette">
@@ -91,25 +87,37 @@ jQuery(document).ready(function() {
 		<div id="indexMainBox">
 		
 			<div id="indexMainStory">
-				<h2><a href="{{ topstory.absolute_url }}">{{topstory.get_title}}</a></h2>
-				<p class="byline"><span class="author">by {% for item in topstory.author %} <a href="{{item.url}}" alt="{{item.name}}">{{ item.name.upper }}, {{ item.get_title.upper }}</a>{% endfor %}</span><span class="date"> | <a href="{{ topstory.date.url }}">{{ topstory.date:"F j, Y" }}</a></p>
-				<img class="wide" src="files/images/2008/05/al-bloom.jpg" title="President Al Bloom to Retire" />
-				{{ topstory.get_long_excerpt }}
+				<h2><a href="{{ topstory.get_absolute_url }}">{{topstory.get_title|safe}}</a></h2>
+				<p class="byline">
+				  <span class="author">by {{ topstory.authors|join_authors }}</span>
+				  <span class="date">| {{ topstory.pub_date|date:"n/j/Y" }}</span>
+				</p>
+				<img class="{{ topstory.front_image.get_shape_display }}" src="{{ topstory.front_image.get_absolute_url }}" title="{{ topstory.headline }}" />
+				<p>
+  				{{ topstory.long_summary|safe }}
+  				<a class="readMore" href="{{ topstory.get_absolute_url }}">More</a>
+  			</p>
 			</div>
 			
 			<div id="indexHeadlines">
 				<div class="indexHeadlinesBox floatLeft">
 					<ul>
-					{% for item in lowstories|slice:":3" %>
-						<li><h4><a href="{{ item.get_absolute_url }}">{{ item.get_title }}</a></h4><span class="author"> | By {% for item in item.author|slice:":1" %}{{ item.name.upper }}{% endfor %}</span></li>
+					{% for story in lowstories|slice:":3" %}
+						<li>
+						  <h4><a href="{{ story.get_absolute_url }}">{{ story.get_title|safe }}</a></h4>
+						  <span class="author"> | By {{ story.authors|join_authors:"1x" }}</span>
+						</li>
 					{% endfor %}
 					</ul>
 				</div>
 		
 				<div class="indexHeadlinesBox floatRight">
 					<ul>
-					{% for item in lowstories|slice:"3:6" %>
-						<li><h4><a href="{{ item.get_absolute_url }}">{{ item.get_title }}</a></h4><span class="author"> | By {% for item in item.author|slice:":1" %}{{ item.name.upper }}{% endfor %}</span></li>
+					{% for story in lowstories|slice:"3:6" %}
+						<li>
+						  <h4><a href="{{ story.get_absolute_url }}">{{ story.get_title|safe }}</a></h4>
+						  <span class="author"> | By {{ story.authors|join_authors:"1x" }}</span>
+						</li>
 					{% endfor %}
 					</ul>
 				</div>
@@ -117,24 +125,18 @@ jQuery(document).ready(function() {
 		</div>
 		
 		<div id="indexSecondary">
-			
-			{% for item in midstories|slice:":2" %}
-			
-				{% if item.thumbnail_type=="tall" %}
-					<img src="{{ item.thumbnail_tall }}" class="tall" title="item.
-			
+			{% for story in midstories %}			
+				<img src="{{ story.front_image.get_absolute_url }}" class="{{ story.front_image.get_shape_display }}" title="{{ story.headline }}" alt="" />
+			  <h3><a href="{{ story.get_absolute_url }}">{{ story.get_title|safe }}</a></h3>
+			  <p class="byline">
+          <span class="author">by {{ story.authors|join_authors }}</span>
+          <span class="date"> | {{ story.pub_date|date:"n/j/Y" }}</span>
+			  </p>
+			  <p>
+			   {{ story.summary|safe }}
+			   <a class="readMore" href="{{ story.get_absolute_url }}">More</a>
+			  </p>
 			{% endfor %}
-			<img src="files/images/2008/05/facebook.jpg" class="wide" title="Under-Reporting? Facebook at Swarthmore" />
-			<h3><a href="facebook.html">Under Reporting? Facebook at Swarthmore</a></h3>
-			<p class="byline"><span class="author">by BRANDON LEE WOLFF, GUEST WRITER</span><span class="date"> | 5/18/2008</span></p>
-			<p>The social networking website Facebook is ubiquitous at the College, but in a recent survey students admitted to using the site for only fifteen minutes each day, on average. <a href="" class="readMore">Read More</a></p>
-			
-			<img src="files/images/2008/05/pat-james.jpg" class="tall" title="Assoc. Director of Lang Center to Resign" />
-			<h3><a href="">Associate Director of Lang Center to Resign</a></h3>
-			<p class="byline"><span class="author">by DOUGAL SUTHERLAND, TECHNOLOGY EDITOR</span><span class="date"> | 5/18/2008</span></p>
-			<p>Patricia James has announced that she will resign from her position at the Lang Center in less than a month. A tthe Center, James directed the Lang Opportunity Scholars and Swarthmore Foundation programs. <a href="" class="readMore">Read More</a></p>
-
-		
 		</div>
 		
 		<div id="indexPOTDbar">
@@ -167,17 +169,17 @@ jQuery(document).ready(function() {
 				<h3>Announcements</h3>
 				
 				<h4>Gaming Party!</h4>
-				<p>Sponsored by <a href=#">SCCS</a>.</p>
+				<p>Sponsored by <a href="#">SCCS</a>.</p>
 				<p>When: Tuesday at 7pm</p>
 				<p>Where: SCCS Lounge</p>
 				<hr width=50%/>
 				<h4>Jamboree</h4>
-				<p>Sponsored by <a href=#">Cantatrix</a>.</p>
+				<p>Sponsored by <a href="#">Cantatrix</a>.</p>
 				<p>When: Wednesday at 7pm</p>
 				<p>Where: Concert Hall</p>
 				<hr width=50%/>
 				<h4>Super Soaker Battle</h4>
-				<p>Sponsored by <a href=#">Psi Phi</a>.</p>
+				<p>Sponsored by <a href="#">Psi Phi</a>.</p>
 				<p>When: Saturday at 2:30pm</p>
 				<p>Where: Behind Sharples</p>
 				

@@ -1,6 +1,7 @@
 from django.template  import RequestContext
 from django.shortcuts import render_to_response, get_object_or_404
 from articles.models  import Article
+from comments.models  import PublicComment
 
 def article(request, slug, year, month, day, template="story.html"):
     story = get_object_or_404(Article, slug=slug,
@@ -12,10 +13,20 @@ def article(request, slug, year, month, day, template="story.html"):
         'comments': []
     }
     rc = RequestContext(request)
-    return render_to_response("story.html", data, context_instance=rc)
+    return render_to_response(template, data, context_instance=rc)
 
 
-homepage      = lambda request, **kwargs: render_to_response("base.html", locals())
+def homepage(request, template="index.html"):
+    data = {
+        'topstory': Article.published_objects.get_top_story(),
+        'midstories': Article.published_objects.get_secondary_stories(2),
+        'lowstories': Article.published_objects.get_tertiary_stories(6),
+        'comments': PublicComment.visible.order_by('-time').all()[:5]
+    }
+    rc = RequestContext(request)
+    return render_to_response(template, data, context_instance=rc)
+
+
 search        = lambda request, **kwargs: render_to_response("base.html", locals())
 comment       = lambda request, **kwargs: render_to_response("base.html", locals())
 print_article = lambda request, **kwargs: render_to_response("base.html", locals())
