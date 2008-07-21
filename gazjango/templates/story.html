@@ -95,7 +95,7 @@ function toggleLayer( whichLayer )
 				  <img src="{{ topstory.thumbnail.get_absolute_url }}" />
 				</a>
 				<div class="content">
-				  <h4><a href="{{ topstory.get_absolute_url }}">{{ topstory.headline }}</a></h4> 
+				  <h4><a href="{{ topstory.get_absolute_url }}">{{ topstory.get_title }}</a></h4> 
 				  <p>{{ topstory.short_summary }}</p>
 				</div>
 			</div>
@@ -105,7 +105,7 @@ function toggleLayer( whichLayer )
 					<h4>Related Stories</h4>
 					<ul>
 						{% for rel in related %}
-						  <li><a href="{{rel.get_absolute_url}}">{{ rel.headline }}</a></li>
+						  <li><a href="{{rel.get_absolute_url}}">{{ rel.get_title|safe }}</a></li>
 						{% endfor %}
 					</ul>
 				</div>
@@ -113,7 +113,7 @@ function toggleLayer( whichLayer )
 					<h4>Recent Comments</h4>
 					<ul>
 						{% for comment in comments|slice:":2" %}
-							<li><a href="{{comment.get_absolute_url}}">{{ comment.get_title }}</a></li>
+							<li><a href="{{comment.get_absolute_url}}">{{ comment.article.get_title }}</a></li>
 						{% endfor %}
 					</ul>
 				</div>			

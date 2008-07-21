@@ -3,7 +3,7 @@
 <h4>Related Stories</h4>
 <ul>
 	{% for rel in related %}
-		<li><a href="{{rel.get_absolute_url}}">{{ rel.headline }}</a></li>
+		<li><a href="{{rel.get_absolute_url}}">{{ rel.get_title|safe }}</a></li>
 	{% endfor %}
 </ul>
 
