@@ -207,7 +207,7 @@ class Format(models.Model):
     function = models.CharField(max_length=30)
     
     def __unicode__(self):
-        return name
+        return self.name
     
 
 
