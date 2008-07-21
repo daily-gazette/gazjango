@@ -529,6 +529,10 @@ p {
 	overflow:hidden;
 }
 
+.indexBottomColumn h3 {
+    margin-bottom: 1em;
+}
+
 .margin25 {
 	margin-right: 25px;
 }
