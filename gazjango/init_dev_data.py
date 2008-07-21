@@ -12,12 +12,12 @@ from django.contrib.auth.models  import User, Group
 from django.contrib.sites.models import Site
 import tagging
 
-from accounts.models import UserProfile, Position
-from articles.models import Article, Category, Format
-from articles.models import Announcement, AnnouncementKind
-from issues.models   import Issue
-from polls.models    import Poll, Option
-from media.models    import ImageFile, MediaBucket
+from accounts.models      import UserProfile, Position
+from announcements.models import Announcement
+from articles.models      import Article, Category, Format
+from issues.models        import Issue
+from media.models         import ImageFile, MediaBucket
+from polls.models         import Poll, Option
 
 ### Site
 
@@ -156,7 +156,7 @@ nobody_loves_me = Article.objects.create(
     short_summary="The Bone Doctress laments the lack of love in her life, by way of "
                   "Portishead lyrics.",
     format=textile,
-    published=True,
+    is_published=True,
     position=2
 )
 nobody_loves_me.authors.add(bone_p)
@@ -249,7 +249,7 @@ scandal = Article.objects.create(
          "in my time.\"\n\nThe Gazette will have more on this story as information "
          "becomes available.\n\n[source: http://dailyjolt.com]",
     format=textile,
-    published=True,
+    is_published=True,
     position=1
 )
 scandal.authors.add(bob_p, jack_p)
@@ -290,7 +290,7 @@ boring = Article.objects.create(
          "occaecat cupidatat non proident, sunt in culpa qui officia deserunt "
          "mollit anim id est laborum.",
     format=textile,
-    published=True,
+    is_published=True,
     position=2
 )
 boring.authors.add(jack_p)
@@ -305,7 +305,7 @@ boring.save()
 
 def art(author, **keywords):
     keywords.setdefault('format', textile)
-    keywords.setdefault('published', True)
+    keywords.setdefault('is_published', True)
     article = Article.objects.create(**keywords)
     article.authors.add(p(author))
     article.save()
@@ -367,13 +367,8 @@ facebook = art(
 
 ### Announcements
 
-community = AnnouncementKind.objects.create(name="Community",
-                  description="Announcements from the greater Swarthmore community.")
-staff     = AnnouncementKind.objects.create(name="Staff",
-                  description="Announcements from the Daily Gazette.")
-
 Announcement.objects.create(
-    kind=staff, 
+    kind='s', 
     slug="summer_return",
     text="We're up and publishing for a very special summer term! This is a "
          "very special term, though, so only a select handful get to read us "
@@ -382,13 +377,29 @@ Announcement.objects.create(
 )
 
 Announcement.objects.create(
-    kind=community,
+    kind='c',
     slug="cookies",
     date_end = date.today() + timedelta(days=10),
+    sponsor="Summer Cookie Fairies",
+    title="There Will Be Cookies",
     text="There will be cookies in each and every cabinet across campus, "
-         "courtesy of the Summer Cookie Faries. Get them while they last!"
+         "courtesy of the Summer Cookie Fairies. Get them while they last!",
+    is_published=True
 )
 
+Announcement.objects.create(
+    kind='c',
+    slug='games',
+    date_end=date.today() + timedelta(days=2),
+    sponsor="SCCS",
+    sponsor_url="http://sccs.swarthmore.edu/",
+    title="There Will Be Games",
+    event_place="SCCS Lounge",
+    event_date=date.today() + timedelta(days=2),
+    event_time="7pm",
+    text="Come play games with us, and stuff.",
+    is_published=True
+)
 
 ### Polls
 

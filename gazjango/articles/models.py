@@ -18,7 +18,7 @@ class PublishedArticlesManager(models.Manager):
     "A custom manager for Articles, returning only published articles."
     def get_query_set(self):
         orig = super(PublishedArticlesManager, self).get_query_set()
-        return orig.filter(published=True)
+        return orig.filter(is_published=True)
     
     def get_top_story(self):
         """Returns a random published article with position=1.
@@ -59,13 +59,13 @@ class Article(models.Model):
     thumbnail   = models.ForeignKey(ImageFile, null=True, related_name="articles_with_thumbnail")
     media = models.ManyToManyField(MediaFile, related_name="articles")
     
-    published = models.BooleanField(default=False)
+    is_published = models.BooleanField(default=False)
     
     position  = models.PositiveSmallIntegerField(blank=True, null=True)
     # null = nothing special, 1 = top story, 2 = second-tier story
     
     objects = models.Manager()
-    published_objects = PublishedArticlesManager()
+    published = PublishedArticlesManager()
     
     def get_title(self):
         return (self.short_title or self.headline)
@@ -208,42 +208,4 @@ class Format(models.Model):
     
     def __unicode__(self):
         return self.name
-    
-
-
-class Announcement(models.Model):
-    """An announcement.
-    
-    The first day it runs is date_start, and the last is date_end."""
-    
-    slug       = models.SlugField(unique_for_month="date_start")
-    kind       = models.ForeignKey('AnnouncementKind')
-    text       = models.TextField()
-    date_start = models.DateField(default=date.today)
-    date_end   = models.DateField(default=date.today)
-    
-    # TODO: replace unique_for_month with a custom validator that checks the span
-    
-    def __unicode__(self):
-        return self.slug
-    
-    @permalink
-    def get_absolute_url(self):
-        d = self.pub_date
-        a = [str(x) for x in (d.year, d.month, d.day)]
-        return ('articles.views.announcement', a + [self.slug])
-    
-
-class AnnouncementKind(models.Model):
-    """ A kind of announcement: from the staff, the community, etc."""
-    
-    name = models.CharField(max_length=30, unique=True)
-    description = models.CharField(blank=True, max_length=250)
-    
-    def __unicode__(self):
-        return self.name
-    
-    @permalink
-    def get_absolute_url(self):
-        return ('articles.views.announcement_kind', [self.slug])
     

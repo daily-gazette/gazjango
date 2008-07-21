@@ -1,7 +1,8 @@
 import unittest
-from articles.models import Article, Announcement, Category, Format
-from issues.models   import Issue, IssueArticle, IssueAnnouncement
-from datetime        import date, timedelta
+from articles.models      import Article, Category, Format
+from announcements.models import Announcement
+from issues.models        import Issue, IssueArticle, IssueAnnouncement
+from datetime import date, timedelta
 
 class IssueTestCase(unittest.TestCase):
     

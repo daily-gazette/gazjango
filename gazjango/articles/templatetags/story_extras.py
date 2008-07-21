@@ -3,6 +3,10 @@ from django.core.urlresolvers import reverse
 from django.utils.safestring  import mark_safe
 from django.utils.html        import conditional_escape
 
+from django.contrib.humanize.templatetags.humanize import ordinal
+
+from datetime import date
+
 register = template.Library()
 
 @register.filter
@@ -82,3 +86,21 @@ def issue_url(date):
     return reverse('issue', kwargs=d)
 
 issue_url.is_safe = True
+
+
+@register.filter
+def near_future_date(date):
+    """
+    Returns just the name of the day if it's in the next few days; if it's
+    in the next month, a string like "Tuesday the 5th"; otherwise, a string
+    like "May 12".
+    """
+    distance = (date - date.today()).days
+    if 0 < distance < 6:
+        return date.strftime("%A")
+    elif 0 < distance < 20:
+        return date.strftime("%A the ") + ordinal(date.day)
+    else:
+        return date.strftime("%B ") + str(date.day)
+
+near_future_date.is_safe = True

@@ -168,21 +168,26 @@ jQuery(document).ready(function() {
 			<div class="indexBottomColumn floatLeft margin25">
 				<h3>Announcements</h3>
 				
-				<h4>Gaming Party!</h4>
-				<p>Sponsored by <a href="#">SCCS</a>.</p>
-				<p>When: Tuesday at 7pm</p>
-				<p>Where: SCCS Lounge</p>
-				<hr width=50%/>
-				<h4>Jamboree</h4>
-				<p>Sponsored by <a href="#">Cantatrix</a>.</p>
-				<p>When: Wednesday at 7pm</p>
-				<p>Where: Concert Hall</p>
-				<hr width=50%/>
-				<h4>Super Soaker Battle</h4>
-				<p>Sponsored by <a href="#">Psi Phi</a>.</p>
-				<p>When: Saturday at 2:30pm</p>
-				<p>Where: Behind Sharples</p>
-				
+				{% for announcement in announcements %}
+				  {% if announcement.is_event %}
+  				  <h4>{{ announcement.title }}</h4>
+  				  <p>Sponsored by 
+  				    {% if announcement.sponsor_url %}
+  				      <a href="{{ announcement.sponsor_url }}">{{ announcement.sponsor }}</a>.
+  				    {% else %}
+                {{ announcement.sponsor }}.
+              {% endif %}
+            </p>
+            <p>When: {{ announcement.event_date|near_future_date }} at {{ announcement.event_time }}</p>
+            <p>Where: {{ announcement.event_place }}</p>
+
+				  {% else %}
+				    <h4>{{ announcement.title }}</h4>
+				    <p>{{ announcement.brief_excerpt|safe }}</p>
+				  {% endif %}
+				  
+				  {% if not forloop.last %}<hr width="50%" />{% endif %}
+				{% endfor %}				
 			</div>
 			
 			<div class="indexBottomColumn floatLeft margin25">

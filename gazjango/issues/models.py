@@ -1,7 +1,8 @@
-from django.db        import models
-from django.db.models import permalink
-from articles.models  import Article, Announcement
-from datetime         import date
+from django.db            import models
+from django.db.models     import permalink
+from articles.models      import Article
+from announcements.models import Announcement
+from datetime             import date
 
 class Issue(models.Model):
     """An issue of the paper."""

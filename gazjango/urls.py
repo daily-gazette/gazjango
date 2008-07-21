@@ -27,19 +27,22 @@ urlpatterns = patterns('articles.views',
     (r'^%(year)s/$'                   % reps, 'articles_for_year'),
     (r'^%(year)s/%(month)s/$'         % reps, 'articles_for_month'),
     (r'^%(year)s/%(month)s/%(day)s/$' % reps, 'articles_for_day'),
-    
-    (r'^announcements/%(year)s/%(month)s/%(slug)s/$'         % reps, 'announcement'),
+)
+
+urlpatterns += patterns('announcements.views',
+    (r'^announcements/%(year)s/%(month)s/%(slug)s/$'         % reps, 'announcement', {}, 'announcement'),
     (r'^announcements/%(year)s/%(month)s/%(day)s/%(slug)s/$' % reps, 'announcement'),
     
     (r'^announcements/$',                                   'announcements'),
-    (r'^announcements/%(year)s/$'                   % reps, 'announcements_for_year'),
-    (r'^announcements/%(year)s/%(month)s/$'         % reps, 'announcements_for_month'),
-    (r'^announcements/%(year)s/%(month)s/%(day)s/$' % reps, 'announcements_for_day'),
     
-    (r'^announcements/%(kind)s/$'                            % reps, 'announcement_kind'),
-    (r'^announcements/%(kind)s/%(year)s/$'                   % reps, 'announcement_kind_for_year'),
-    (r'^announcements/%(kind)s/%(year)s/%(month)s/$'         % reps, 'announcement_kind_for_month'),
-    (r'^announcements/%(kind)s/%(year)s/%(month)s/%(day)s/$' % reps, 'announcement_kind_for_day')
+    (r'^announcements/%(year)s/$'                   % reps, 'kind_for_year', {'kind': 'community'}),
+    (r'^announcements/%(year)s/%(month)s/$'         % reps, 'kind_for_month', {'kind': 'community'}),
+    (r'^announcements/%(year)s/%(month)s/%(day)s/$' % reps, 'kind_for_day', {'kind': 'community'}),
+    
+    (r'^announcements/%(kind)s/$'                            % reps, 'kind'),
+    (r'^announcements/%(kind)s/%(year)s/$'                   % reps, 'kind_for_year'),
+    (r'^announcements/%(kind)s/%(year)s/%(month)s/$'         % reps, 'kind_for_month'),
+    (r'^announcements/%(kind)s/%(year)s/%(month)s/%(day)s/$' % reps, 'kind_for_day')
 )
 
 urlpatterns += patterns('issues.views',
@@ -74,7 +77,7 @@ urlpatterns += patterns('',
 )
 
 if settings.DEBUG:
-    path = os.path.join(settings._base, 'static')
+    path = settings.BASE + "/" + 'static'
     urlpatterns += patterns('django.views.static', 
         (r'^css/(?P<path>.*)$',    'serve', {'document_root': os.path.join(path, 'css')}),
         (r'^js/(?P<path>.*)$',     'serve', {'document_root': os.path.join(path, 'js')}),
