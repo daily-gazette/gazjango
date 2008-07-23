@@ -6,5 +6,5 @@ echo -n 'Enter "yes" to continue: '
 read resp
 [[ "$resp" != "yes" ]] && exit
 
-./manage.py reset --noinput `python -c 'import settings; print " ".join(map(lambda s: s.split(".")[-1], settings.INSTALLED_APPS))'`
+./manage.py reset --noinput `python -c 'import settings; print " ".join([s.split(".")[-1] for s in settings.INSTALLED_APPS])'`
 ./init_dev_data.py
