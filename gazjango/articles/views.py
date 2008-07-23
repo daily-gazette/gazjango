@@ -1,6 +1,6 @@
 from django.template  import RequestContext
 from django.shortcuts import render_to_response, get_object_or_404
-from articles.models      import Article
+from articles.models      import Article, Special
 from announcements.models import Announcement
 from comments.models      import PublicComment
 
@@ -23,6 +23,7 @@ def homepage(request, template="index.html"):
         'midstories': Article.published.get_secondary_stories(2),
         'lowstories': Article.published.get_tertiary_stories(6),
         'comments': PublicComment.visible.order_by('-time').all()[:5],
+        'specials': Special.objects.order_by('-date').all()[:10],
         'announcements': Announcement.community.now_running()
     }
     rc = RequestContext(request)

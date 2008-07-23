@@ -209,3 +209,25 @@ class Format(models.Model):
     def __unicode__(self):
         return self.name
     
+
+
+class SpecialsCategory(models.Model):
+    name = models.CharField(max_length=100)
+    
+    def __unicode__(self):
+        return self.name
+    
+
+class Special(models.Model):
+    "A special thing / article / whatever to be advertised on the homepage."
+    
+    title = models.CharField(max_length=100)
+    category = models.ForeignKey(SpecialsCategory)
+    date = models.DateTimeField(default=datetime.now)
+    
+    image = models.ForeignKey(ImageFile)
+    url = models.URLField()
+    
+    def __unicode__(self):
+        return self.title
+    

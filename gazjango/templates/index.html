@@ -104,7 +104,10 @@ jQuery(document).ready(function() {
 					<ul>
 					{% for story in lowstories|slice:":3" %}
 						<li>
-						  <h4><a href="{{ story.get_absolute_url }}">{{ story.get_title|safe }}</a></h4>
+						  <h4>
+						    {# TODO: show "column", etc here #}
+						    <a href="{{ story.get_absolute_url }}">{{ story.get_title|safe }}</a>
+						  </h4>
 						  <span class="author"> | By {{ story.authors|join_authors:"1x" }}</span>
 						</li>
 					{% endfor %}
@@ -140,37 +143,33 @@ jQuery(document).ready(function() {
 		</div>
 		
 		<div id="indexPOTDbar">
-		
-			<center><hr width="900px" color="#dddddd" size=.5px />
+			<center>
+			  <hr width="900px" color="#dddddd" size=.5px />
 			
-  <ul id="mycarousel" class="jcarousel-skin-tango">
-    <li><h5>Gazette News &rsaquo;&rsaquo;</h5><img src="files/images/2008/05/hiring/slideshow.png" width="150" height="150" alt="" /><p><a href="#">The Gazette is Hiring</a></p></li>
-    <li><h5>Specials &rsaquo;&rsaquo;</h5><img src="files/images/2008/05/dining/slideshow.png" width="150" height="150" alt="" /><p><a href="#">The Gazette's Zagette Goes Live!</a></p></li>
-    <li><h5>Ask the Gazette &rsaquo;&rsaquo;</h5><img src="files/images/2008/05/atg-bluetree/slideshow.png" width="150" height="150" alt="" /><p><a href="#">What Happened to the Blue Tree?</a></p></li>
-    <li><h5>Arts &rsaquo;&rsaquo;</h5><img src="files/images/2008/05/senior-art/slideshow.png" width="150" height="150" alt="" /><p><a href="#">Senior Art Exhibits</a></p></li>
-    <li><h5>Columns &rsaquo;&rsaquo;</h5><img src="files/images/2008/05/austria/slideshow.png" width="150" height="150" alt="" /><p><a href="#"><em>Nestbeschumtzer</em> Now Out of Austria</a></p></li>
-    <li><img src="http://static.flickr.com/72/199481203_ad4cdcf109_s.jpg" width="75" height="75" alt="" /></li>
-    <li><img src="http://static.flickr.com/58/199481218_264ce20da0_s.jpg" width="75" height="75" alt="" /></li>
-    <li><img src="http://static.flickr.com/69/199481255_fdfe885f87_s.jpg" width="75" height="75" alt="" /></li>
-    <li><img src="http://static.flickr.com/60/199480111_87d4cb3e38_s.jpg" width="75" height="75" alt="" /></li>
-    <li><img src="http://static.flickr.com/70/229228324_08223b70fa_s.jpg" width="75" height="75" alt="" /></li>
-  </ul>
+        <ul id="mycarousel" class="jcarousel-skin-tango">
+          {% for special in specials %}
+            <li>
+              <h5>{{ special.category.name|safe }} &rsaquo;&rsaquo;</h5>
+              <img src="{{ special.image.get_absolute_url }}" width="150" height="150" alt="" />
+              <p><a href="{{ special.url }}">{{ special.title|safe }}</a></p>
+            </li>
+          {% endfor %}
+        </ul>
 			
-			<hr width="900px" color="#dddddd" size=.5px /></center>
-			
+  			<hr width="900px" color="#dddddd" size=.5px />
+  		</center>
 		</div>
-		
-
 		
 		
 		<div id="indexBottom">
-		
 			<div class="indexBottomColumn floatLeft margin25">
 				<h3>Announcements</h3>
 				
 				{% for announcement in announcements %}
+				  <h4>
+				    <a href="{{ announcement.get_absolute_url }}">{{ announcement.title }}</a>
+				  </h4>
 				  {% if announcement.is_event %}
-  				  <h4>{{ announcement.title }}</h4>
   				  <p>Sponsored by 
   				    {% if announcement.sponsor_url %}
   				      <a href="{{ announcement.sponsor_url }}">{{ announcement.sponsor }}</a>.
@@ -180,9 +179,8 @@ jQuery(document).ready(function() {
             </p>
             <p>When: {{ announcement.event_date|near_future_date }} at {{ announcement.event_time }}</p>
             <p>Where: {{ announcement.event_place }}</p>
-
+            
 				  {% else %}
-				    <h4>{{ announcement.title }}</h4>
 				    <p>{{ announcement.brief_excerpt|safe }}</p>
 				  {% endif %}
 				  
@@ -212,11 +210,9 @@ jQuery(document).ready(function() {
 				<p>Hours: Full-time</p>
 				<p>	When: Summer</p>
 				<p>Where: Swarthmore, PA</p>
-				
 			</div>
 			
 			<div class="indexBottomColumn floatLeft">
-			
 				<h3>From <a href="http://www.biconews.com/"><em>The BiCo News</em></a></h3>
 				<h5><a href="http://www.biconews.com"><em>The BiCo News</em></a> is the weekly paper for Bryn Mawr and Haverford Colleges.</h5>
 				
@@ -254,7 +250,5 @@ jQuery(document).ready(function() {
 				<a href="http://www.essaybay.com">Custom Essays</a> | <a href="http://www.limolinkexchange.com/">Limo, Town Car, Party Bus</a> | <a href="http://www.chicagolimo.com/">Chicago Limo - airport car</a>
 				
 			</div>
-		
 		</div>
-
 {% endblock content %}

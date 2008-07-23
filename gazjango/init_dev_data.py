@@ -14,7 +14,7 @@ import tagging
 
 from accounts.models      import UserProfile, Position
 from announcements.models import Announcement
-from articles.models      import Article, Category, Format
+from articles.models      import Article, Category, Format, Special, SpecialsCategory
 from issues.models        import Issue
 from media.models         import ImageFile, MediaBucket
 from polls.models         import Poll, Option
@@ -309,6 +309,7 @@ def art(author, **keywords):
     article = Article.objects.create(**keywords)
     article.authors.add(p(author))
     article.save()
+    return article
 
 school = art(
     headline="Project Shingayi Plans to Construct Zimbabwean School",
@@ -442,3 +443,58 @@ issue_today = Issue.objects.create(
 issue_today.add_article(scandal)
 issue_today.add_article(nobody_loves_me)
 issue_today.add_article(boring)
+
+
+### Specials
+
+rand = MediaBucket.objects.create(slug="random")
+
+nestbesch = Special.objects.create(
+    title="<em>Nestbeschumtzer</em> Now Out Of Austria",
+    url=nestbeschmutzer.get_absolute_url(),
+    category=SpecialsCategory.objects.create(name="Columns"),
+    image=ImageFile.objects.create(bucket=rand, 
+                                   slug="tunnel", 
+                                   data="uploads/specials/austria.png",
+                                   name="Crazy Austrian Tunnel")
+)
+
+arts = Special.objects.create(
+    title="Senior Arts Exhibits",
+    url="",
+    category= SpecialsCategory.objects.create(name="Arts"),
+    image=ImageFile.objects.create(bucket=rand,
+                                   slug="artistry",
+                                   data="uploads/specials/senior-art.png",
+                                   name="Some Senior Art")
+)
+
+blue_tree = Special.objects.create(
+    title="What Happened To The Blue Tree?",
+    url="",
+    category=SpecialsCategory.objects.create(name="Ask The Gazette"),
+    image=ImageFile.objects.create(bucket=rand,
+                                   slug="blue_tree",
+                                   data="uploads/specials/atg-blue-tree.png",
+                                   name="The Blue Tree")
+)
+
+zagette = Special.objects.create(
+    title="The Gazette's Zagette Goes Live!",
+    url="",
+    category=SpecialsCategory.objects.create(name="Specials"),
+    image=ImageFile.objects.create(bucket=rand,
+                                   slug="zagette",
+                                   data="uploads/specials/dining.png",
+                                   name="Dining")
+)
+
+hiring = Special.objects.create(
+    title="The Gazette Is Hiring",
+    url="",
+    category=SpecialsCategory.objects.create(name="Gazette News"),
+    image=ImageFile.objects.create(bucket=rand,
+                                   slug="hiring",
+                                   data="uploads/specials/hiring.png",
+                                   name="Reportin' 'n Stuff")
+)
