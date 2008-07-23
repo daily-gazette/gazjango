@@ -4,8 +4,8 @@ from django.db.models import permalink
 from articles.models      import Article
 from announcements.models import Announcement
 
-from datetime          import date
-from scrapers.sharples import get_menu
+from datetime import date
+import scrapers.sharples
 
 
 class Issue(models.Model):
@@ -71,12 +71,14 @@ class MenuManager(models.Manager):
         try:
             return self.get(date=date.today())
         except self.model.DoesNotExist:
-            menu = get_menu(ignore_closed=True)
-            if menu['closed']:
-                args = { 'closed': True, 'message': menu }
-            else:
-                args = { 'lunch': menu['lunch'], 'dinner': menu['dinner'] }
-            return Menu.objects.create(date=date.today(), **args)
+            menu = scrapers.sharples.get_menu()
+            return Menu.objects.create(
+                date = date.today(),
+                closed  = menu['closed'],
+                message = menu['message'],
+                lunch   = menu['lunch'],
+                dinner  = menu['dinner']
+            )
     
 
 class Menu(models.Model):
