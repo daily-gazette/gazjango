@@ -57,26 +57,26 @@ jQuery(document).ready(function() {
 				</div>
 			
 				<div id="headerContentBox">
-					<ul id="sideContent" class="shadetabs">
-							<li><a href="#" class="selected" rel="#default">Weather</a></li>
-							<li><a href="menus.htm" rel="countrycontainer">Menus</a></li>
-							<li><a href="events.htm" rel="countrycontainer">Events</a></li>
-						</ul>
-								
-						<div id="weather">
-							<h4>Weather</h4>
-						</div>
+					<ul id="sideContent" class="shadetabs" id="tabs">
+						<li><a href="#" class="selected" rel="#default">Weather</a></li>
+						<li><a href="/menu" rel="extraContainer">Menus</a></li>
+						<li><a href="/events" rel="extraContainer">Events</a></li>
+					</ul>
 						
-						<script type="text/javascript">
-							var countries=new ddajaxtabs("sideContent", "weather")
-							countries.setpersist(true)
-							countries.setselectedClassTarget("link") //"link" or "linkparent"
-							countries.init()
-						</script>
+					<div id="extraContainer">
+					 
+					</div>
+						
+					<script type="text/javascript">
+						var switcher = new ddajaxtabs("sideContent", "extraContainer");
+						switcher.setpersist(true);
+						switcher.setselectedClassTarget("link");
+						switcher.init();
+					</script>
 				</div>
 				
 				<div id="zagette">
-					<a href=""><img src="images/index/zagette.png" title="The Zagette: Swarthmore's Guide to Wining and Dining" /></a>
+					<a href=""><img src="images/index/zagette.png" alt="The Zagette: Swarthmore's Guide to Wining and Dining" /></a>
 				</div>
 			</div>
 		</div>

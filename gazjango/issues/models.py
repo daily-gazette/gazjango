@@ -1,14 +1,18 @@
-from django.db            import models
-from django.db.models     import permalink
+from django.db        import models
+from django.db.models import permalink
+
 from articles.models      import Article
 from announcements.models import Announcement
-from datetime             import date
+
+from datetime          import date
+from scrapers.sharples import get_menu
+
 
 class Issue(models.Model):
     """An issue of the paper."""
     
     date    = models.DateField(default=date.today)
-    menu    = models.TextField(blank=True)
+    menu    = models.ForeignKey('Menu')
     weather = models.TextField(blank=True)
     events  = models.TextField(blank=True)
     
@@ -57,3 +61,37 @@ class IssueAnnouncement(models.Model):
         return u"%s on %s" % (self.announcement.slug, self.issue.date)
     
 
+
+class MenuManager(models.Manager):
+    def for_today(self):
+        """
+        Returns the Sharples menu object for today, creating a new one (by 
+        parsing it from the XML feed) if necessary.
+        """
+        try:
+            return self.get(date=date.today())
+        except self.model.DoesNotExist:
+            menu = get_menu(ignore_closed=True)
+            if menu['closed']:
+                args = { 'closed': True, 'message': menu }
+            else:
+                args = { 'lunch': menu['lunch'], 'dinner': menu['dinner'] }
+            return Menu.objects.create(date=date.today(), **args)
+    
+
+class Menu(models.Model):
+    """The menu at Sharples for a given day."""
+    
+    date = models.DateField(default=date.today)
+    
+    closed  = models.BooleanField(default=False)
+    message = models.TextField(blank=True)
+    
+    lunch  = models.TextField(blank=True)
+    dinner = models.TextField(blank=True)
+    
+    objects = MenuManager()
+    
+    def __unicode__(self):
+        return self.date.strftime("%m/%d/%Y")
+    

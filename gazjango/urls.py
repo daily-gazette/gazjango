@@ -18,6 +18,8 @@ urlpatterns = patterns('articles.views',
     (r'^$', 'homepage'),
     (r'^search/$', 'search', {}, 'search'),
     
+    (r'^menu', 'menu_partial'),
+    
     (r'^%(year)s/%(month)s/%(day)s/%(slug)s/$'        % reps, 'article'),
     (r'^%(year)s/%(month)s/%(day)s/%(slug)s/comment$' % reps, 'comment'),
     (r'^%(year)s/%(month)s/%(day)s/%(slug)s/print/$'  % reps, 'print_article', {}, 'print'),

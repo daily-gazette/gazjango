@@ -15,7 +15,7 @@ import tagging
 from accounts.models      import UserProfile, Position
 from announcements.models import Announcement
 from articles.models      import Article, Category, Format, Special, SpecialsCategory
-from issues.models        import Issue
+from issues.models        import Issue, Menu
 from media.models         import ImageFile, MediaBucket
 from polls.models         import Poll, Option
 
@@ -429,7 +429,7 @@ jolt_poll.vote(bone, jolt_maybe)
 ### Issues
 
 issue_today = Issue.objects.create(
-    menu="Sharples is closed, sucka!",
+    menu=Menu.objects.create(closed=True, message="Sharples is closed, sucka!"),
     weather = "Today: very happy.\n"
               "I don't like writing weather jokes.\n"
               "\n"
