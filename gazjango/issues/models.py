@@ -12,7 +12,7 @@ class Issue(models.Model):
     """An issue of the paper."""
     
     date    = models.DateField(default=date.today)
-    menu    = models.ForeignKey('Menu')
+    menu    = models.ForeignKey('Menu', null=True)
     weather = models.TextField(blank=True)
     events  = models.TextField(blank=True)
     
@@ -60,7 +60,6 @@ class IssueAnnouncement(models.Model):
     def __unicode__(self):
         return u"%s on %s" % (self.announcement.slug, self.issue.date)
     
-
 
 class MenuManager(models.Manager):
     def for_today(self):
