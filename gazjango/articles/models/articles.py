@@ -1,17 +1,14 @@
 from diff_match_patch.diff_match_patch import diff_match_patch
-from datetime                          import datetime, date
+from datetime import datetime
 
-from django.db                          import models
-from django.db.models                   import permalink
-from django.contrib.auth.models         import User
-from django.contrib.contenttypes.models import ContentType
-from django.contrib.contenttypes        import generic
-
-from accounts.models            import UserProfile
-from media.models               import MediaFile, ImageFile
-from exceptions                 import RelationshipMismatch
-import formats
-import tagging
+from django.db                  import models
+from django.db.models           import permalink
+from django.contrib.auth.models import User
+from gazjango.accounts.models            import UserProfile
+from gazjango.media.models               import MediaFile, ImageFile
+from gazjango.articles.exceptions        import RelationshipMismatch
+from gazjango.articles.models.categories import Category
+import gazjango.articles.formats as formats
 
 
 class PublishedArticlesManager(models.Manager):
@@ -28,16 +25,24 @@ class PublishedArticlesManager(models.Manager):
     
     def get_secondary_stories(self, num=2):
         """Returns a list of ``num`` stories with position=2."""
-        return self.filter(position=2).order_by("?")[:num]
+        return self.filter(position=2).order_by("-pub_date")[:num]
     
     def get_tertiary_stories(self, num=6):
         """Returns the ``num`` most recent stories with a null position."""
         return self.filter(position=None).order_by("-pub_date")[:num]
+    
+
 
 class Article(models.Model):
-    """A story or other article to be published.
+    """
+    A story or other article to be published. Includes news stories,
+    editorials, etc, but not announcements or jobs.
     
-    Includes news stories, editorials, etc, but not announcements or jobs."""
+    Stores major revisions of the article: whatever the author decides to
+    save manually while writing, changes editors make afterwards, and then
+    any changes made after publication. Comments can (and should) be attached
+    to these revisions.
+    """
     
     headline    = models.CharField(max_length=200)
     short_title = models.CharField(blank=True, max_length=100)
@@ -53,7 +58,7 @@ class Article(models.Model):
     
     pub_date = models.DateTimeField(default=datetime.now)
     authors  = models.ManyToManyField(UserProfile, related_name="articles")
-    category = models.ForeignKey('Category')
+    category = models.ForeignKey(Category)
     
     front_image = models.ForeignKey(ImageFile, null=True, related_name="articles_with_front")
     thumbnail   = models.ForeignKey(ImageFile, null=True, related_name="articles_with_thumbnail")
@@ -121,11 +126,10 @@ class Article(models.Model):
         a = [str(x) for x in (d.year, d.month, d.day)]
         return ('articles.views.article', a + [self.slug])
     
+    class Meta:
+        app_label = 'articles'
+    
 
-try:
-    tagging.register(Article)
-except tagging.AlreadyRegistered:
-    pass # this happens in testing, for some reason
 
 class ArticleRevision(models.Model):
     """ A revision of an article. Only deltas are stored.
@@ -143,61 +147,10 @@ class ArticleRevision(models.Model):
     
     class Meta:
         ordering = ['-date']
+        app_label = 'articles'
     
     def __unicode__(self):
         return u"%s - %s" % (self.article.slug, self.date)
-    
-
-class Category(models.Model):
-    """A category of stories: news, features, etc.
-    
-    Only applies to Articles: Announcements use AnnouncementKind."""
-    
-    name        = models.CharField(max_length=40, unique=True)
-    description = models.CharField(blank=True, max_length=250)
-    slug        = models.SlugField(unique=True)
-    parent      = models.ForeignKey('self', blank=True, null=True,
-                                    related_name='child_set')
-    
-    def ancestors(self):
-        """Returns all super-categories of this category, including itself.
-        
-        Ordering is [grandparent, parent, self]."""
-        curr = self
-        ancestors = [self]
-        while curr.parent is not None:
-            ancestors.insert(0, curr.parent)
-            curr = curr.parent
-        return ancestors
-    
-    def root(self):
-        """Returns the highest super-category of this category."""
-        curr = self
-        while curr.parent is not None:
-            curr = curr.parent
-        return curr
-    
-    def descendants(self):
-        """Returns all sub-categories of this category, including itself.
-        
-        This is a preorder / depth-first traversal, so the ordering is:
-        [self, child1, grandchild1a, grandchild1b, child2, grandchild2a],
-        if that makes sense."""
-        descendants = [self]
-        for child in self.child_set.all():
-            descendants.extend(child.descendants())
-        return descendants
-    
-    def all_articles(self):
-        "Returns all articles in this category or one of its sub-categories."
-        return Article.objects.filter(category__in=[d.pk for d in self.descendants()])
-    
-    def __unicode__(self):
-        return self.name
-    
-    @permalink
-    def get_absolute_url(self):
-        return ('articles.views.category', [self.slug])
     
 
 class Format(models.Model):
@@ -209,25 +162,6 @@ class Format(models.Model):
     def __unicode__(self):
         return self.name
     
-
-
-class SpecialsCategory(models.Model):
-    name = models.CharField(max_length=100)
-    
-    def __unicode__(self):
-        return self.name
-    
-
-class Special(models.Model):
-    "A special thing / article / whatever to be advertised on the homepage."
-    
-    title = models.CharField(max_length=100)
-    category = models.ForeignKey(SpecialsCategory)
-    date = models.DateTimeField(default=datetime.now)
-    
-    image = models.ForeignKey(ImageFile)
-    url = models.URLField()
-    
-    def __unicode__(self):
-        return self.title
+    class Meta:
+        app_label = 'articles'
     
