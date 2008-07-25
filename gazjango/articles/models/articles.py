@@ -15,7 +15,7 @@ class PublishedArticlesManager(models.Manager):
     "A custom manager for Articles, returning only published articles."
     def get_query_set(self):
         orig = super(PublishedArticlesManager, self).get_query_set()
-        return orig.filter(is_published=True)
+        return orig.filter(status='p')
     
     def get_top_story(self):
         """Returns a random published article with position=1.
@@ -68,9 +68,12 @@ class Article(models.Model):
     STATUS_CHOICES = (
         ('d', 'Draft'),
         ('e', 'Pending Review'),
+        ('w', 'Scheduled'),
         ('p', 'Published')
     )
     status = models.CharField(max_length=1, choices=STATUS_CHOICES)
+    
+    comments_allowed = models.BooleanField(default=True)
     
     position  = models.PositiveSmallIntegerField(blank=True, null=True)
     # null = nothing special, 1 = top story, 2 = second-tier story
