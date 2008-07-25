@@ -64,7 +64,13 @@ class Article(models.Model):
     thumbnail   = models.ForeignKey(ImageFile, null=True, related_name="articles_with_thumbnail")
     media = models.ManyToManyField(MediaFile, related_name="articles")
     
-    is_published = models.BooleanField(default=False)
+    
+    STATUS_CHOICES = (
+        ('d', 'Draft'),
+        ('e', 'Pending Review'),
+        ('p', 'Published')
+    )
+    status = models.CharField(max_length=1, choices=STATUS_CHOICES)
     
     position  = models.PositiveSmallIntegerField(blank=True, null=True)
     # null = nothing special, 1 = top story, 2 = second-tier story

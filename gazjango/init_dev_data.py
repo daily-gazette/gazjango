@@ -157,7 +157,7 @@ nobody_loves_me = Article.objects.create(
     short_summary="The Bone Doctress laments the lack of love in her life, by way of "
                   "Portishead lyrics.",
     format=textile,
-    is_published=True,
+    status='p',
     position=2
 )
 nobody_loves_me.authors.add(bone_p)
@@ -250,7 +250,7 @@ scandal = Article.objects.create(
          "in my time.\"\n\nThe Gazette will have more on this story as information "
          "becomes available.\n\n[source: http://dailyjolt.com]",
     format=textile,
-    is_published=True,
+    status='p',
     position=1
 )
 scandal.authors.add(bob_p, jack_p)
@@ -291,7 +291,7 @@ boring = Article.objects.create(
          "occaecat cupidatat non proident, sunt in culpa qui officia deserunt "
          "mollit anim id est laborum.",
     format=textile,
-    is_published=True,
+    status='p',
     position=2
 )
 boring.authors.add(jack_p)
@@ -306,7 +306,7 @@ boring.save()
 
 def art(author, **keywords):
     keywords.setdefault('format', textile)
-    keywords.setdefault('is_published', True)
+    keywords.setdefault('status', 'p')
     article = Article.objects.create(**keywords)
     article.authors.add(p(author))
     article.save()
