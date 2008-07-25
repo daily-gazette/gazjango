@@ -360,7 +360,7 @@ p {
 
 #weather .joke {
     font-size: 1.3em;
-    padding: 0 1.5em;
+    padding-left: 1.5em;
 }
 
 #weather #attrib {
@@ -491,7 +491,7 @@ p {
 }
 .indexHeadlinesBox ul li {
 	list-style-type: none;
-	width: 175px;
+	width: 170px;
 	display: block;
 	margin: 0 5px 5px 5px;
 	font-size: 1.1em;

@@ -1,10 +1,10 @@
 <div id="menu">
-  <center><h4>Sharples Menu</h4></center>
-
   {% if menu.closed %}
     <p>{{ menu.message|safe }}</p>
   {% else %}
     <p><strong>Lunch:</strong> {{ menu.lunch|safe }}</p>
     <p><strong>Dinner:</strong> {{ menu.dinner|safe }}</p>
   {% endif %}
+  
+  <p>More information available in the <a href="http://www.swarthmore.edu/dashboards/feeds/dining/4weekmenu.php">4-week menu</a>.</p>
 </div>
