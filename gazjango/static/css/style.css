@@ -343,6 +343,8 @@ p {
 	height: 190px;
 	background-color: #dddddd;
 	padding: 5px;
+	
+	overflow: scroll;
 }
 
 #menu h4 {
@@ -359,7 +361,7 @@ p {
 }
 
 #weather .joke {
-    font-size: 1.3em;
+    font-size: 1.1em;
     padding-left: 1.5em;
 }
 
