@@ -64,7 +64,15 @@ jQuery(document).ready(function() {
 					</ul>
 						
 					<div id="extraContainer">
-					 
+            <div id="weather">
+              <p class="weather"><strong>Today:</strong> {{ weather.today }}</p>
+              <p class="joke">{{ joke.line_one }}</p>
+              <p class="weather"><strong>Tonight:</strong> {{ weather.tonight }}</p>
+              <p class="joke">{{ joke.line_two }}</p>
+              <p class="weather"><strong>Tomorrow:</strong> {{ weather.tomorrow }}</p>
+              <p class="joke">{{ joke.line_three }}</p>
+              <p id="attrib">Weather data updated daily from the <a href="http://weather.gov">National Weather Service</a>.</p>
+            </div>
 					</div>
 						
 					<script type="text/javascript">

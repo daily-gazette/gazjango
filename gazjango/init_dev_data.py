@@ -15,7 +15,7 @@ import tagging
 from accounts.models      import UserProfile, Position
 from announcements.models import Announcement
 from articles.models      import Article, Category, Format, Special, SpecialsCategory
-from issues.models        import Issue, Menu
+from issues.models        import Issue, Menu, Weather, WeatherJoke
 from media.models         import ImageFile, MediaBucket
 from polls.models         import Poll, Option
 from jobs.models          import JobListing
@@ -430,15 +430,17 @@ jolt_poll.vote(bone, jolt_maybe)
 ### Issues
 
 issue_today = Issue.objects.create(
-    menu=Menu.objects.create(closed=True, message="Sharples is closed, sucka!"),
-    weather = "Today: very happy.\n"
-              "I don't like writing weather jokes.\n"
-              "\n"
-              "Tonight: very sad.\n"
-              "And nobody's going to complain if there isn't one here.\n"
-              "\n"
-              "Tomorrow: happy and sad at the same time.\n"
-              "So why would I bother to write a real one?",
+    menu = Menu.objects.create(closed=True, message="Sharples is closed, sucka!"),
+    weather = Weather.objects.create(
+        today = "Very happy. High of 234.",
+        tonight = "Very sad. Low of 12.",
+        tomorrow = "Chance of euphoria. High of 68."
+    ),
+    joke = WeatherJoke.objects.create(
+        line_one = "I don't like writing weather jokes, most of the time.",
+        line_two = "And nobody's going to complain if there isn't one here.",
+        line_three = "So why would I bother to write a real one?"
+    ),
     events = "Nothing's happening."
 )
 issue_today.add_article(scandal)

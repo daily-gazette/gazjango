@@ -354,6 +354,18 @@ p {
     padding: 10px 0;
 }
 
+#weather .weather {
+    font-size: 1.4em;
+}
+
+#weather .joke {
+    font-size: 1.3em;
+    padding: 0 1.5em;
+}
+
+#weather #attrib {
+}
+
 .on {
 	
 }

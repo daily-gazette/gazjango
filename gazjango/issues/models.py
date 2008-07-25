@@ -6,6 +6,7 @@ from announcements.models import Announcement
 
 from datetime import date, timedelta
 import scrapers.sharples
+import scrapers.weather
 
 
 class Issue(models.Model):
@@ -13,7 +14,8 @@ class Issue(models.Model):
     
     date    = models.DateField(default=date.today)
     menu    = models.ForeignKey('Menu', null=True)
-    weather = models.TextField(blank=True)
+    weather = models.ForeignKey('Weather', null=True)
+    joke    = models.ForeignKey('WeatherJoke', null=True)
     events  = models.TextField(blank=True)
     
     def add_article(self, article):
@@ -81,15 +83,14 @@ class MenuManager(models.Manager):
         
         except self.model.DoesNotExist:
             menu = scrapers.sharples.get_menu(tomorrow=tomorrow)
-            return Menu.objects.create(
-                date = date.today(),
+            return self.create(
+                date    = day,
                 closed  = menu['closed'],
                 message = menu['message'],
                 lunch   = menu['lunch'],
                 dinner  = menu['dinner']
             )
     
-
 
 class Menu(models.Model):
     """The menu at Sharples for a given day."""
@@ -106,4 +107,75 @@ class Menu(models.Model):
     
     def __unicode__(self):
         return self.date.strftime("%m/%d/%Y")
+    
+
+
+class WeatherManager(models.Manager):
+    def for_today(self):
+        return self.get_or_parse(tomorrow=False)
+    
+    def for_tomorrow(self):
+        return self.get_or_parse(tomorrow=True)
+    
+    def get_or_parse(self, tomorrow=False):
+        """
+        Returns the weather object for today/tomorrow, creating a new
+        one (by parsing it from the online data feed) if necessary.
+        """
+        try:
+            day = date.today()
+            if tomorrow:
+                day += timedelta(days=1)
+            return self.get(date=day)
+        
+        except self.model.DoesNotExist:
+            weather = scrapers.weather.get_weather(date=day)
+            return self.create(
+                date     = day,
+                today    = weather['today'],
+                tonight  = weather['tonight'],
+                tomorrow = weather['tomorrow']
+            )
+
+class Weather(models.Model):
+    """
+    Weather published for a given day. Includes the forecast for the day in
+    question, that day's night, and the next day.
+    
+    Note that this is not necessarily connected with an issue; it is updated
+    daily, so that over weekends / breaks it doesn't become totally irrelevant.
+    Days where we don't publish will still have a Weather object.
+    """
+    
+    date = models.DateField(default=date.today)
+    
+    today    = models.CharField(max_length=100)
+    tonight  = models.CharField(max_length=100)
+    tomorrow = models.CharField(max_length=100)
+    
+    objects = WeatherManager()
+    
+    def __unicode__(self):
+        return self.date.strftime("%m/%d/%Y")
+    
+
+class WeatherJoke(models.Model):
+    """
+    The weather joke. A long-time tradition that most of those who send
+    out (except Urooj) have always wanted to abolish, and yet it's a 
+    Gazette tradition that *someone* complains about when we quietly try
+    to forget about it. Persistent little bastard.
+    """
+    
+    date = models.DateField(default=date.today)
+    
+    line_one   = models.CharField(max_length=100)
+    line_two   = models.CharField(max_length=100)
+    line_three = models.CharField(max_length=100)
+    
+    def __unicode__(self):
+        return self.date.strftime("%m/%d/%Y")
+    
+    class Meta:
+        get_latest_by = "date"
     
