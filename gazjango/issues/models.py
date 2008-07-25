@@ -4,7 +4,7 @@ from django.db.models import permalink
 from articles.models      import Article
 from announcements.models import Announcement
 
-from datetime import date
+from datetime import date, timedelta
 import scrapers.sharples
 
 
@@ -63,14 +63,24 @@ class IssueAnnouncement(models.Model):
 
 class MenuManager(models.Manager):
     def for_today(self):
+        return self.get_or_parse(tomorrow=False)
+    
+    def for_tomorrow(self):
+        return self.get_or_parse(tomorrow=True)
+    
+    def get_or_parse(self, tomorrow=False):
         """
-        Returns the Sharples menu object for today, creating a new one (by 
-        parsing it from the XML feed) if necessary.
+        Returns the Sharples menu object for today/tomorrow, creating a
+        new one (by parsing it from the XML feed) if necessary.
         """
         try:
-            return self.get(date=date.today())
+            day = date.today()
+            if tomorrow:
+                day += timedelta(days=1)
+            return self.get(date=day)
+        
         except self.model.DoesNotExist:
-            menu = scrapers.sharples.get_menu()
+            menu = scrapers.sharples.get_menu(tomorrow=tomorrow)
             return Menu.objects.create(
                 date = date.today(),
                 closed  = menu['closed'],
@@ -79,6 +89,7 @@ class MenuManager(models.Manager):
                 dinner  = menu['dinner']
             )
     
+
 
 class Menu(models.Model):
     """The menu at Sharples for a given day."""
