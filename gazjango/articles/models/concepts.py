@@ -40,7 +40,7 @@ class StoryConcept(models.Model):
                                 related_name="concept")
     
     objects = models.Manager()
-    unpublished = UnpubishedConceptsManager()
+    unpublished = UnpublishedConceptsManager()
     
     class Meta:
         app_label = 'articles'
