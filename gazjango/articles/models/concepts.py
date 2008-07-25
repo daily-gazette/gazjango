@@ -1,6 +1,6 @@
 from django.db       import models
 from accounts.models import UserProfile
-from articles        import Article
+from stories         import Article
 from datetime        import date
 
 class UnpublishedConceptsManager(models.Manager):

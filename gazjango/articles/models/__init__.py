@@ -1,4 +1,4 @@
-from articles   import Article, ArticleRevision, Format
+from stories    import Article, ArticleRevision, Format
 from categories import Category
 from specials   import Special, SpecialsCategory
 from concepts   import StoryConcept
