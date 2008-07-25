@@ -4,6 +4,7 @@ from articles.models      import Article, Special
 from announcements.models import Announcement
 from comments.models      import PublicComment
 from issues.models        import Menu
+from jobs.models          import JobListing
 from datetime import date
 
 def article(request, slug, year, month, day, template="story.html"):
@@ -27,7 +28,8 @@ def homepage(request, template="index.html"):
         'comments': PublicComment.visible.order_by('-time').all()[:5],
         'specials': Special.objects.order_by('-date').all()[:10],
         'announcements': Announcement.community.now_running(),
-        'menu': Menu.objects.for_today()
+        'menu': Menu.objects.for_today(),
+        'jobs': JobListing.objects.filter(is_filled=False)[:3]
     }
     rc = RequestContext(request)
     return render_to_response(template, data, context_instance=rc)

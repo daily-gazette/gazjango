@@ -191,25 +191,24 @@ jQuery(document).ready(function() {
 			<div class="indexBottomColumn floatLeft margin25">
 				<h3>Jobs &amp; Internships</h3>
 				
-				<h4>Volunteer with Chester Children</h4>
-				<p>Paid: No</p>
-				<p>Hours: Part-time</p>
-				<p>	When: Summer</p>
-				<p>Where: Chester, PA</p>
-				<hr width=50%/>
-
-				<h4>ITS Web Intern</h4>
-				<p>Paid: Yes</p>
-				<p>Hours: Full-time</p>
-				<p>	When: Summer</p>
-				<p>Where: Swarthmore, PA</p>
-				<hr width=50%/>
-				
-				<h4>Publications Intern</h4>
-				<p>Paid: Yes</p>
-				<p>Hours: Full-time</p>
-				<p>	When: Summer</p>
-				<p>Where: Swarthmore, PA</p>
+				{% for job in jobs %}
+				  <h4><a href="{{ job.get_absolute_url }}">{{ job.name }}</a></h4>
+				  <p>
+				    Pay:
+				    {% if job.is_paid %}
+				      {{ job.pay }}
+				    {% else %}
+              None
+				    {% endif %}
+				  </p>
+				  <p>Hours: {{ job.hours }}</p>
+				  <p>When: {{ job.when }}</p>
+				  <p>Where: {{ job.where }}</p>
+				  
+				  {% if not forloop.last %}
+				    <hr width="50%" />
+				  {% endif %}
+				{% endfor %}
 			</div>
 			
 			<div class="indexBottomColumn floatLeft">

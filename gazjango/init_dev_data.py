@@ -18,6 +18,7 @@ from articles.models      import Article, Category, Format, Special, SpecialsCat
 from issues.models        import Issue, Menu
 from media.models         import ImageFile, MediaBucket
 from polls.models         import Poll, Option
+from jobs.models          import JobListing
 
 ### Site
 
@@ -149,7 +150,7 @@ nobody_loves_me = Article.objects.create(
     short_title="Nobody Loves Me",
     headline="Nobody Loves Me",
     subtitle="It's True: Not Like You Do",
-    slug='no_love',
+    slug='no-love',
     category=bone_doctress,
     summary="The Bone Doctress takes a break from her usual witty recountings of "
             "sexual escapades to share with you the lyrics to a Portishead song.",
@@ -210,7 +211,7 @@ nobody_loves_me.revise_text( nobody_loves_me.text +
   "portishead. actually yeah i think its off theyr secund album. lawl. kkthx.")
 nobody_loves_me.tags = "music"
 
-bucket_o_bones = MediaBucket.objects.create(slug="bone_doctress")
+bucket_o_bones = MediaBucket.objects.create(slug="bone-doctress")
 nobody_loves_me.front_image = ImageFile.objects.create(slug="portishead",
                                     data="uploads/portishead.jpg",
                                     bucket=bucket_o_bones,
@@ -222,7 +223,7 @@ scandal = Article.objects.create(
     headline="Al Bloom Pressured Out By Board of Managers",
     short_title="Al Bloom Forced Out By BoM",
     subtitle="Allegations of Involvement with Empereror's Club VIP Surface",
-    slug="bloom_scandal",
+    slug="bloom-scandal",
     category=facstaff,
     short_summary="Allegations have surfaced that Al Bloom was involved in the "
             "Emperor's Club VIP scandal.",
@@ -255,13 +256,13 @@ scandal = Article.objects.create(
 scandal.authors.add(bob_p, jack_p)
 scandal.tags = "Al Bloom, Board of Managers, Daily Jolt"
 
-scandal_pics = MediaBucket.objects.create(slug="bloom_scandal")
+scandal_pics = MediaBucket.objects.create(slug="bloom-scandal")
 scandal.thumbnail = ImageFile.objects.create(data="uploads/al-bloom-thumb.png", 
-                                             slug="bloom_walking_thumb",
+                                             slug="bloom-walking-thumb",
                                              bucket=scandal_pics,
                                              shape='t')
 scandal.front_image = ImageFile.objects.create(data="uploads/al-bloom.jpg", 
-                                               slug="bloom_walking", 
+                                               slug="bloom-walking", 
                                                bucket=scandal_pics,
                                                shape='w')
 scandal.save()
@@ -296,7 +297,7 @@ boring = Article.objects.create(
 boring.authors.add(jack_p)
 
 internet_bucket = MediaBucket.objects.create(slug="internet")
-boring.front_image = ImageFile.objects.create(slug="boring_baby",
+boring.front_image = ImageFile.objects.create(slug="boring-baby",
                                               bucket = internet_bucket,
                                               data="uploads/boring.jpg",
                                               shape='t')
@@ -313,7 +314,7 @@ def art(author, **keywords):
 
 school = art(
     headline="Project Shingayi Plans to Construct Zimbabwean School",
-    slug="project_shingayi",
+    slug="project-shingayi",
     category=students,
     summary="Yay African schools lah lah lah.",
     text="whoa",
@@ -322,7 +323,7 @@ school = art(
 
 poker = art(
     headline="Swat Alums Turn Poker Pros",
-    slug="poker_pros",
+    slug="poker-pros",
     category=alumni,
     summary="Maybe the coolest thing ever.",
     text="double whoa",
@@ -331,7 +332,7 @@ poker = art(
 
 paces = art(
     headline="The History Of Paces' Mural",
-    slug="paces_mural",
+    slug="paces-mural",
     category=features,
     summary="It was painted by some dude.",
     text="yah",
@@ -340,7 +341,7 @@ paces = art(
 
 tarble = art(
     headline="Major Changes Planned For Tarble",
-    slug="tarble_changes",
+    slug="tarble-changes",
     category=news,
     summary="They be changin' stuff, yo.",
     text="",
@@ -370,7 +371,7 @@ facebook = art(
 
 Announcement.objects.create(
     kind='s', 
-    slug="summer_return",
+    slug="summer-return",
     text="We're up and publishing for a very special summer term! This is a "
          "very special term, though, so only a select handful get to read us "
          "right now...or ever.",
@@ -406,7 +407,7 @@ Announcement.objects.create(
 
 jolt_poll = Poll.objects.create(
     name = "Is the Daily Jolt a legitimate news source?",
-    slug = "is_jolt_legit",
+    slug = "is-jolt-legit",
     question = "We got most (read: all) of our information from this article "
                "from the Daily Jolt. Is that okay?",
     allow_anon = True,
@@ -474,7 +475,7 @@ blue_tree = Special.objects.create(
     url="",
     category=SpecialsCategory.objects.create(name="Ask The Gazette"),
     image=ImageFile.objects.create(bucket=rand,
-                                   slug="blue_tree",
+                                   slug="blue-tree",
                                    data="uploads/specials/atg-blue-tree.png",
                                    name="The Blue Tree")
 )
@@ -497,4 +498,58 @@ hiring = Special.objects.create(
                                    slug="hiring",
                                    data="uploads/specials/hiring.png",
                                    name="Reportin' 'n Stuff")
+)
+
+
+### Jobs
+
+kids = JobListing.objects.create(
+    name="Volunteer with Chester Children",
+    slug='chester-kids',
+    pub_date=date(2008, 5, 10),
+    is_filled=False,
+    is_paid=False,
+    hours="9-3, Tues-Wed-Thurs",
+    when="July 7 - August 7",
+    where="Nia Center, Chester, PA",
+    at_swat=False,
+    needs_car=False,
+    description="Volunteers needed to help with an arts and "
+"academics camp held from 9am-3pm, Tues-Wed-Thurs from July 7-August 7. "
+"If you are planning to be in the area and have some free time (any help "
+"would be great, even just one day a week or part days) this will be a lot "
+" of fun! The children are K-5th grade and will be working on reading, "
+"math, an art for peace project, and other fun activities like going to the "
+"park/pool or fieldtrips.\n"
+"If you are interested and available, please contact Lauren Yoshizawa '09 "
+"(lyoshiz1) to get more information."
+)
+
+publications = JobListing.objects.create(
+    name="Publications Intern",
+    slug='publications-intern',
+    pub_date=date(2008, 4, 22),
+    is_filled=False,
+    is_paid=True,
+    pay="$8.56/hr",
+    hours="12/wk",
+    when="Summer",
+    where="Publications Office",
+    at_swat=True,
+    needs_car=False,
+    description="Publications Office Needs Summer Student Worker. Conscientious, organized, and reliable student with an eye for accuracy needed to work in the Publications Office up to 12 hours per week during the summer. Work will include among other duties, fact checking copy using College database, Internet, and other resources; proofreading; and compiling mailing packets for Class Notes secretaries. Successful candidate must have good writing, grammar, and spelling skills, and be computer savvy. Familiarity with AP and Chicago style is a plus. Position could continue into academic year. Salary: $8.56 per hour. Please contact Susan Breen at ext. 8579 or submit resume including specific qualifications for this position to sbreen1@swarthmore.edu by April 30."
+)
+
+its = JobListing.objects.create(
+    name="ITS Web Intern",
+    slug='its-web-intern',
+    pub_date=date(2008, 4, 30),
+    is_filled=False,
+    is_paid=False,
+    hours="Negotiable",
+    when="Summer",
+    where="ITS",
+    at_swat=True,
+    needs_car=False,
+    description="Do some stuff. More at http://www.swarthmore.edu/webintern.xml ."
 )
