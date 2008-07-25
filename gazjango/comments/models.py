@@ -73,6 +73,7 @@ class PublicComment(models.Model):
                 'comment_author': self.name or self.user.name,
                 'comment_author_email': self.email or self.user.email,
                 'comment_author_url': self.site,
+                'permalink': self.get_absolute_url(),
                 'user_ip': self.ip,
                 'user_agent': self.user_agent
             }
