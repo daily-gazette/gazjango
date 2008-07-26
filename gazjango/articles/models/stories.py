@@ -38,6 +38,10 @@ class Article(models.Model):
     A story or other article to be published. Includes news stories,
     editorials, etc, but not announcements or jobs.
     
+    Note that although there are a ton of summaries, only major stories (ie
+    thoe that go in the topstories bit) need a long_summary or a short_summary.
+    All stories, however, should have a regular summary.
+    
     Stores major revisions of the article: whatever the author decides to
     save manually while writing, changes editors make afterwards, and then
     any changes made after publication. Comments can (and should) be attached
