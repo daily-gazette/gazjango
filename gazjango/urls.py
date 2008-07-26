@@ -6,11 +6,11 @@ reps = {
     'month': r'(?P<month>\d{1,2})',
     'day':   r'(?P<day>\d{1,2})',
     
-    'slug': r'(?P<slug>[-\w]+)',
-    'name': r'(?P<name>[-\w]+)',
-    'kind': r'(?P<kind>[-\w]+)',
-    'category': r'(?P<category>[-\w]+)',
-    'bucket': r'(?P<bucket>[-\w]+)',
+    'slug': r'(?P<slug>[\w-]+)',
+    'name': r'(?P<name>[\w]+)',
+    'kind': r'(?P<kind>[\w-]+)',
+    'category': r'(?P<category>[\w-]+)',
+    'bucket': r'(?P<bucket>[\w]+)',
 }
 
 
@@ -18,17 +18,15 @@ urlpatterns = patterns('articles.views',
     (r'^$', 'homepage'),
     (r'^search/$', 'search', {}, 'search'),
     
-    (r'^menu', 'menu_partial'),
-    
     (r'^%(year)s/%(month)s/%(day)s/%(slug)s/$'        % reps, 'article'),
     (r'^%(year)s/%(month)s/%(day)s/%(slug)s/comment$' % reps, 'comment'),
     (r'^%(year)s/%(month)s/%(day)s/%(slug)s/print/$'  % reps, 'print_article', {}, 'print'),
     (r'^%(year)s/%(month)s/%(day)s/%(slug)s/email/$'  % reps, 'email_article', {}, 'email'),
 
     (r'^archives/$', 'archives', {}, 'archives'),
-    (r'^%(year)s/$'                   % reps, 'articles_for_year'),
-    (r'^%(year)s/%(month)s/$'         % reps, 'articles_for_month'),
-    (r'^%(year)s/%(month)s/%(day)s/$' % reps, 'articles_for_day'),
+    (r'^%(year)s/$'                   % reps, 'articles'),
+    (r'^%(year)s/%(month)s/$'         % reps, 'articles'),
+    (r'^%(year)s/%(month)s/%(day)s/$' % reps, 'articles'),
 )
 
 urlpatterns += patterns('announcements.views',
@@ -64,14 +62,8 @@ urlpatterns += patterns('polls.views',
     (r'^polls/%(year)s/%(month)s/%(day)s/$' % reps, 'polls_for_day')
 )
 
-urlpatterns += patterns('jobs.views',
-    (r'jobs/$',                               'list_jobs', {}, 'job_list'),
-    (r'jobs/list/(?P<options>(?:[\w-]+/)*)$', 'list_jobs'),
-    (r'jobs/%(slug)s/$' % reps,               'job_details')
-)
-
 urlpatterns += patterns('media.views',
-    (r'^files/%(bucket)s/$'          % reps, 'bucket'),
+    (r'^files/%(bucket)s$/'          % reps, 'bucket'),
     (r'^files/%(bucket)s/%(slug)s/$' % reps, 'file')
 )
 

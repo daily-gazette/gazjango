@@ -19,6 +19,20 @@ def article(request, slug, year, month, day, template="story.html"):
     rc = RequestContext(request)
     return render_to_response(template, data, context_instance=rc)
 
+def articles(request, year=None, month=None, day=None):
+    articles = Article.published_objects.all()
+    if year:
+        articles = articles.filter(pub_date__year=year)
+        if month:
+            articles = articles.filter(pub_date__month=month)
+            if day:
+                articles = articles.filter(pub_date__day=day)
+    to_return = ""
+    for article in articles:
+        to_return += article.slug + "\n"
+    from django.http import HttpResponse
+    return HttpResponse(to_return)
+
 
 def homepage(request, template="index.html"):
     data = {
@@ -48,11 +62,7 @@ search        = lambda request, **kwargs: render_to_response("base.html", locals
 comment       = lambda request, **kwargs: render_to_response("base.html", locals())
 print_article = lambda request, **kwargs: render_to_response("base.html", locals())
 email_article = lambda request, **kwargs: render_to_response("base.html", locals())
-archives      = lambda request, **kwargs: render_to_response("base.html", locals())
-
-articles_for_year  = lambda request, **kwargs: render_to_response("base.html", locals())
-articles_for_month = lambda request, **kwargs: render_to_response("base.html", locals())
-articles_for_day   = lambda request, **kwargs: render_to_response("base.html", locals())
+archives      = articles
 
 category           = lambda request, **kwargs: render_to_response("base.html", locals())
 category_for_year  = lambda request, **kwargs: render_to_response("base.html", locals())
