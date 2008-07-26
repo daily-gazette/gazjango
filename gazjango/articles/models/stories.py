@@ -1,14 +1,16 @@
 from diff_match_patch.diff_match_patch import diff_match_patch
 from datetime import datetime
 
-from django.db                  import models
-from django.db.models           import permalink
-from django.contrib.auth.models import User
-from gazjango.accounts.models            import UserProfile
-from gazjango.media.models               import MediaFile, ImageFile
-from gazjango.articles.exceptions        import RelationshipMismatch
-from gazjango.articles.models.categories import Category
-import gazjango.articles.formats as formats
+from django.db                   import models
+from django.contrib.auth.models  import User
+from django.contrib.contenttypes import generic
+
+from accounts.models            import UserProfile
+from comments.models            import PublicComment
+from media.models               import MediaFile, ImageFile
+from articles.exceptions        import RelationshipMismatch
+from articles.models.categories import Category
+import articles.formats as formats
 
 
 class PublishedArticlesManager(models.Manager):
@@ -68,6 +70,9 @@ class Article(models.Model):
     thumbnail   = models.ForeignKey(ImageFile, null=True, related_name="articles_with_thumbnail")
     media = models.ManyToManyField(MediaFile, related_name="articles")
     
+    comments = generic.GenericRelation(PublicComment,
+                                       content_type_field='subject_type',
+                                       object_id_field='subject_id')
     
     STATUS_CHOICES = (
         ('d', 'Draft'),
@@ -133,7 +138,7 @@ class Article(models.Model):
     def __unicode__(self):
         return self.slug
     
-    @permalink
+    @models.permalink
     def get_absolute_url(self):
         d = self.pub_date
         a = [str(x) for x in (d.year, d.month, d.day)]

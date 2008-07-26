@@ -1,4 +1,5 @@
-from django.db import models
+from django.db                   import models
+from django.contrib.contenttypes import generic
 from accounts.models import UserProfile
 from media.models    import ImageFile
 from datetime import datetime
@@ -9,6 +10,10 @@ class PhotoSpread(models.Model):
     slug     = models.SlugField(unique_for_date="pub_date")
     creators = models.ManyToManyField(UserProfile)
     pub_date = models.DateTimeField(default=datetime.now)
+    
+    comments = generic.GenericRelation(PublicComment,
+                                       content_type_field='subject_type',
+                                       object_id_field='subject_id')
     
     def get_photo_number(self, num):
         try:

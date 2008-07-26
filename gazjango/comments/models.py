@@ -1,13 +1,15 @@
-from django.db                   import models
-from django.utils.encoding       import smart_str
-from django.contrib.sites.models import Site
+from django.db                          import models
+from django.utils.encoding              import smart_str
+from django.contrib.sites.models        import Site
+from django.contrib.contenttypes.models import ContentType
+from django.contrib.contenttypes        import generic
 
 from accounts.models import UserProfile
-from articles.models import Article, ArticleRevision
 
 from datetime import datetime
 import akismet
 import settings
+
 
 class CommentsManager(models.Manager):
     def add(self, **data):
@@ -33,14 +35,17 @@ class VisibleCommentsManager(CommentsManager):
 
 class PublicComment(models.Model):
     """
-    Represents a comment on an article, to show up on the public-facing site.
+    Represents a comment on an article or photo spread, to show up on the
+    public-facing site.
     
-    May be associated with a UserProfile and/or a name, email combination. If we
-    have both a UserProfile and a name, the comment shows only the name and is
-    treated as "anonymous," even though we know who actually posted it.
+    May be associated with a UserProfile and/or a name, email combination. If
+    we have both a UserProfile and a name, the comment shows only the name 
+    and is treated as "anonymous," even though we know who actually posted it.
     """
     
-    article = models.ForeignKey(Article, related_name="comments")
+    subject_type = models.ForeignKey(ContentType)
+    subject_id   = models.PositiveIntegerField()
+    subject      = generic.GenericForeignKey('subject_type', 'subject_id')
     
     user  = models.ForeignKey(UserProfile, null=True, blank=True)
     
