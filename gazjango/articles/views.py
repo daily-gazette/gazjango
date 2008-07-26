@@ -7,7 +7,7 @@ from issues.models        import Menu, Weather, WeatherJoke
 from jobs.models          import JobListing
 from datetime import date, timedelta
 
-def get_by_pub_date_or_404(model, year, month, day, field='pub_date', **oth):
+def get_by_date_or_404(model, year, month, day, field='pub_date', **oth):
     d = oth
     d.update({field+'__year': year, field+'__month': month, field+'__day': day})
     return get_object_or_404(Article, **d)
