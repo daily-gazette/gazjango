@@ -1,7 +1,8 @@
-from stories    import Article, ArticleRevision, Format
-from categories import Category
-from specials   import Special, SpecialsCategory
-from concepts   import StoryConcept
+from stories       import Article, ArticleRevision, Format
+from categories    import Category
+from specials      import Special, SpecialsCategory
+from concepts      import StoryConcept
+from photo_spreads import PhotoSpread, PhotoInSpread
 import tagging
 
 try:

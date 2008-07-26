@@ -1,15 +1,20 @@
 from django.template  import RequestContext
 from django.shortcuts import render_to_response, get_object_or_404
-from articles.models      import Article, Special
+from articles.models      import Article, Special, PhotoSpread
 from announcements.models import Announcement
 from comments.models      import PublicComment
 from issues.models        import Menu, Weather, WeatherJoke
 from jobs.models          import JobListing
 from datetime import date, timedelta
 
+def get_by_pub_date_or_404(model, year, month, day, field='pub_date', **oth):
+    d = oth
+    d.update({field+'__year': year, field+'__month': month, field+'__day': day})
+    return get_object_or_404(Article, **d)
+
+
 def article(request, slug, year, month, day, template="story.html"):
-    story = get_object_or_404(Article, slug=slug,
-                pub_date__year=year, pub_date__month=month, pub_date__day=day)
+    story = get_by_date_or_404(Article, year, month, day, slug=slug)
     data = {
         'story': story,
         'related': story.related_list(3),
@@ -19,19 +24,17 @@ def article(request, slug, year, month, day, template="story.html"):
     rc = RequestContext(request)
     return render_to_response(template, data, context_instance=rc)
 
-def articles(request, year=None, month=None, day=None):
-    articles = Article.published_objects.all()
+def articles(request, year=None, month=None, day=None, template="article_list.html"):
+    articles = Article.published.all()
     if year:
         articles = articles.filter(pub_date__year=year)
         if month:
             articles = articles.filter(pub_date__month=month)
             if day:
                 articles = articles.filter(pub_date__day=day)
-    to_return = ""
-    for article in articles:
-        to_return += article.slug + "\n"
-    from django.http import HttpResponse
-    return HttpResponse(to_return)
+    data = {'articles': articles, 'year': year, 'month': month, 'day': day}
+    rc = RequestContext(request)
+    return render_to_response(template, data, context_instance=rc)
 
 
 def homepage(request, template="index.html"):
@@ -57,6 +60,16 @@ def homepage(request, template="index.html"):
 def menu_partial(request):
     menu = Menu.objects.for_today()
     return render_to_response("scraped/menu.html", { 'menu': menu })
+
+
+def spread(request, slug, year, month, day, num=None):
+    spread = get_by_date_or_404(PhotoSpread, year, month, day, slug=slug)
+    data = {'spread': spread}
+    if num:
+        data['page'] = spread.get_photo_number(num)
+    rc = RequestContext(request)
+    return render_to_response("photo_spread.html", data, context_instance=rc)
+
 
 search        = lambda request, **kwargs: render_to_response("base.html", locals())
 comment       = lambda request, **kwargs: render_to_response("base.html", locals())

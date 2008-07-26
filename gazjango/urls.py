@@ -10,7 +10,9 @@ reps = {
     'name': r'(?P<name>[-\w]+)',
     'kind': r'(?P<kind>[-\w]+)',
     'category': r'(?P<category>[-\w]+)',
-    'bucket': r'(?P<bucket>[-\w]+)',
+    'bucket':   r'(?P<bucket>[-\w]+)',
+    
+    'num': r'(?P<num>\d+)'
 }
 
 
@@ -24,7 +26,9 @@ urlpatterns = patterns('articles.views',
     (r'^%(year)s/%(month)s/%(day)s/%(slug)s/comment$' % reps, 'comment'),
     (r'^%(year)s/%(month)s/%(day)s/%(slug)s/print/$'  % reps, 'print_article', {}, 'print'),
     (r'^%(year)s/%(month)s/%(day)s/%(slug)s/email/$'  % reps, 'email_article', {}, 'email'),
-
+    
+    (r'^photos/%(year)s/%(month)s/%(day)s/%(slug)s/(?:%(num)s/)?$' % reps, 'spread')
+    
     (r'^archives/$', 'archives', {}, 'archives'),
     (r'^%(year)s/$'                   % reps, 'articles'),
     (r'^%(year)s/%(month)s/$'         % reps, 'articles'),
