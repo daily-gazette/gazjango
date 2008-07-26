@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% load story_extras %}
 
-{% block title %}{{ story.headline }}{% endblock title %}
+{% block title %}{{ story.headline|removetags:"em strong b i" }}{% endblock title %}
 
 
 {% block customheader %}
@@ -66,7 +66,7 @@ function toggleLayer( whichLayer )
 		
 	<div id="storyBox">
 		<div id="story">
-			<h2>{{ story.headline }}</h2>
+			<h2>{{ story.headline|safe }}</h2>
 			<p class="byline">
 			  <span class="author">by {{ story.authors|join_authors:"l" }}</span>
 			  <span class="date">| 

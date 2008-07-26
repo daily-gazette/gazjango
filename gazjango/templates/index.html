@@ -158,8 +158,10 @@ jQuery(document).ready(function() {
           {% for special in specials %}
             <li>
               <h5>{{ special.category.name|safe }} &rsaquo;&rsaquo;</h5>
-              <img src="{{ special.image.get_absolute_url }}" width="150" height="150" alt="" />
-              <p><a href="{{ special.url }}">{{ special.title|safe }}</a></p>
+              <a href="{{ special.get_target_url }}">
+                <img src="{{ special.image.get_absolute_url }}" width="150" height="150" alt="" />
+              </a>
+              <p><a href="{{ special.get_target_url }}">{{ special.title|safe }}</a></p>
             </li>
           {% endfor %}
         </ul>

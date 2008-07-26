@@ -1,6 +1,6 @@
 from stories       import Article, ArticleRevision, Format
 from categories    import Category
-from specials      import Special, SpecialsCategory
+from specials      import Special, SpecialsCategory, DummySpecialTarget
 from concepts      import StoryConcept
 from photo_spreads import PhotoSpread, PhotoInSpread
 import tagging
