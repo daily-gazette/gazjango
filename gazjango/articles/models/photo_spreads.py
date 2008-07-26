@@ -1,6 +1,7 @@
 from django.db                   import models
 from django.contrib.contenttypes import generic
 from accounts.models import UserProfile
+from comments.models import PublicComment
 from media.models    import ImageFile
 from datetime import datetime
 
