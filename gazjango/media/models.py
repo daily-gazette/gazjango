@@ -35,7 +35,7 @@ class MediaFile(models.Model):
     
     name   = models.CharField(max_length=100)
     slug   = models.SlugField()
-    bucket = models.ForeignKey(MediaBucket)
+    bucket = models.ForeignKey(MediaBucket, related_name="files")
     
     users = models.ManyToManyField(UserProfile, related_name="media")
     

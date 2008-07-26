@@ -213,6 +213,7 @@ nobody_loves_me.revise_text( nobody_loves_me.text +
 nobody_loves_me.tags = "music"
 
 bucket_o_bones = MediaBucket.objects.create(slug="bone-doctress")
+nobody_loves_me.bucket = bucket_o_bones
 nobody_loves_me.front_image = ImageFile.objects.create(slug="portishead",
                                     data="uploads/portishead.jpg",
                                     bucket=bucket_o_bones,
@@ -258,6 +259,7 @@ scandal.authors.add(bob_p, jack_p)
 scandal.tags = "Al Bloom, Board of Managers, Daily Jolt"
 
 scandal_pics = MediaBucket.objects.create(slug="bloom-scandal")
+scandal.bucket = scandal_pics
 scandal.thumbnail = ImageFile.objects.create(data="uploads/al-bloom-thumb.png", 
                                              slug="bloom-walking-thumb",
                                              bucket=scandal_pics,
@@ -298,6 +300,7 @@ boring = Article.objects.create(
 boring.authors.add(jack_p)
 
 internet_bucket = MediaBucket.objects.create(slug="internet")
+boring.bucket = internet_bucket
 boring.front_image = ImageFile.objects.create(slug="boring-baby",
                                               bucket = internet_bucket,
                                               data="uploads/boring.jpg",

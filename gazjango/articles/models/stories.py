@@ -1,5 +1,7 @@
 from diff_match_patch.diff_match_patch import diff_match_patch
 from datetime import datetime
+from BeautifulSoup import BeautifulSoup
+import re
 
 from django.db                   import models
 from django.contrib.auth.models  import User
@@ -7,7 +9,7 @@ from django.contrib.contenttypes import generic
 
 from accounts.models            import UserProfile
 from comments.models            import PublicComment
-from media.models               import MediaFile, ImageFile
+from media.models               import MediaFile, ImageFile, MediaBucket
 from articles.exceptions        import RelationshipMismatch
 from articles.models.categories import Category
 import articles.formats as formats
@@ -68,7 +70,8 @@ class Article(models.Model):
     
     front_image = models.ForeignKey(ImageFile, null=True, related_name="articles_with_front")
     thumbnail   = models.ForeignKey(ImageFile, null=True, related_name="articles_with_thumbnail")
-    media = models.ManyToManyField(MediaFile, related_name="articles")
+    media  = models.ManyToManyField(MediaFile, related_name="articles")
+    bucket = models.ForeignKey(MediaBucket, null=True, related_name="articles")
     
     comments = generic.GenericRelation(PublicComment,
                                        content_type_field='subject_type',
@@ -118,13 +121,75 @@ class Article(models.Model):
         self.save()
     
     
-    def formatted_text(self):
+    def formatted_text(self, revision=None):
+        text = self.text_at_revision(revision) if revision else self.text
         formatter = getattr(formats, self.format.function)
-        return formatter(self.text)
+        return formatter(text)
     
-    def formatted_text_at_revision(self, revision):
-        formatter = getattr(formats, self.format.function)
-        return formatter(self.text_at_revision(revision))
+    
+    def resolved_text(self, revision=None):
+        """
+        Formats the text (at the revision specified by ``revision``, if
+        passed) and then goes through and replaces the image references within
+        it to links that will actually work.
+        """
+        formatted = self.formatted_text(revision)
+        soup = BeautifulSoup(formatted)
+        
+        reg = re.compile("https?://")
+        matches = lambda src: not re.match(reg, src)
+        for image in soup.findAll("img", src=matches):
+            image['src'] = self.resolve_image_link(image['src'])
+        
+        return unicode(soup)
+    
+    def resolve_image_link(self, image_path, complain=False):
+        """
+        Turns relative image links in articles into absolute URLs. For
+        example, if an article's text includes "<img src='cool-pic'/>",
+        ``resolved_text`` will call this function to replace 'cool-pic' with
+        '/files/some-bucket/cool-pic'. This function will also add any 
+        
+        If the path in the image includes a '/', it's parsed as 
+        'bucket-slug/image-slug'. Otherwise, we first check the media files
+        that are explicitly associated with this article, and then this
+        article's bucket. This can potentially cause confusion if the
+        article is associated with 'lame-bucket', 'awesome-bucket/cool-pic'
+        is in the article's media m2m, and 'lame-bucket' has a file called 
+        'cool-pic'. In this case, we use 'awesome-bucket/cool-pic'.
+        
+        This function will throw a MediaFile.MultipleObjectsReturned
+        error, or return "[ambiguous reference to (slug)]", depending on the
+        value of ``complain``, if article.media has more than one file (in
+        different buckets) with the same slug, and the bucket slug is not
+        explicit. Don't let this happen. The UI for setting associated media
+        should either not allow this, or give stern warnings.
+        """
+        if "/" in image_path:
+            bucket_slug, slug = image_path.split("/", 1)
+            args = {'bucket__slug': bucket_slug, 'slug': slug}
+        else:
+            args = {'slug': image_path}
+        
+        try:
+            # self.media should be cached, so we try it first
+            image = self.media.get(**args)
+        except MediaFile.DoesNotExist:
+            try:
+                args.setdefault('bucket__slug', self.bucket.slug)
+                image = ImageFile.objects.get(**args)
+                self.media.add(image)
+            except ImageFile.DoesNotExist, e:
+                if complain:
+                    raise e
+                else:
+                    return ""
+        except MediaFile.MultipleObjectsReturned, e:
+            if complain:
+                raise e
+            else:
+                return "[ambiguous reference to %s]" % image_path
+        return image.get_absolute_url()
     
     
     def related_list(self, num=None):
