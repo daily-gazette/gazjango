@@ -68,9 +68,9 @@ urlpatterns += patterns('polls.views',
 )
 
 urlpatterns += patterns('jobs.views',
-    (r'jobs/$',                               'list_jobs', {}, 'job_list'),
-    (r'jobs/list/(?P<options>(?:[\w-]+/)*)$', 'list_jobs'),
-    (r'jobs/%(slug)s/$' % reps,               'job_details')
+    (r'^jobs/$',                               'list_jobs', {}, 'job_list'),
+    (r'^jobs/list/(?P<options>(?:[\w-]+/)*)$', 'list_jobs'),
+    (r'^jobs/%(slug)s/$' % reps,               'job_details')
 )
 
 urlpatterns += patterns('media.views',
@@ -84,7 +84,7 @@ urlpatterns += patterns('',
     (r'^accounts/manage/$',   'accounts.views.manage', {}, 'manage'),
     (r'^accounts/register/$', 'accounts.views.register', {}, 'register'),
     
-    (r'users/%(name)s/$' % reps, 'accounts.views.user_details', 'user-details')
+    (r'^users/%(name)s/$' % reps, 'accounts.views.user_details', 'user-details')
 )
 
 if settings.DEBUG:
