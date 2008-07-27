@@ -267,18 +267,21 @@ scandal = Article.objects.create(
                  "reprehenderit in voluptate velit esse cillum dolore eu fugiat "
                  "nulla pariatur. Excepteur sint occaecat cupidatat non proident, "
                  "sunt in culpa qui officia deserunt mollit anim id est laborum.",
-    text="An investigation by the Gazette has uncovered connections between Al "
+    text='<div class="imgLeft"><img src="bloom-walking-thumb" /></div>\n\n'
+         "An investigation by the Gazette has uncovered connections between Al "
          "Bloom and the Emperor's Club VIP. Photos have surfaced that show him "
          "clearly engaging in unseemly acts with a woman who looks suspiciously "
-         "like former New York governor Spitzer's pricey prostitute.\n\nA senior "
-         "member of the Board of Managers, who wished to remain anonymous, supplied "
-         "these photos to the community through an online forum and claimed that "
-         "they were the true reason behind Al Bloom's unexpected retirement.\n\nThe "
-         "College and other Board members refused comment. Some students, however, "
-         "have expressed concern that the photos may be fake: \"I can tell by the "
-         "pixels,\" claimed one rising senior, \"and by having seen a few 'shops "
-         "in my time.\"\n\nThe Gazette will have more on this story as information "
-         "becomes available.\n\n[source: http://dailyjolt.com]",
+         "like former New York governor Spitzer's pricey prostitute.\n\n"
+         "A senior member of the Board of Managers, who refused to reveal his "
+         "actual identity in the posting, supplied these photos to the community "
+         "through an online forum and claimed that they were the true reason "
+         "behind Al Bloom's unexpected retirement.\n\n "
+         "The College and other Board members refused comment.\n\n"
+         "Some students, however, have expressed concern that the photos may be "
+         'fake: "I can tell by the pixels," claimed one rising senior, "and by '
+         "having seen a few 'shops in my time.\"\n\n"
+         "The Gazette will have more on this story as the story develops.\n\n"
+         "[source: http://dailyjolt.com]",
     format=textile,
     status='p',
     position=1
