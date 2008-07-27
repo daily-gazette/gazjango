@@ -76,11 +76,9 @@ def spread(request, slug, year, month, day, num=None):
     return render_to_response("photo_spread.html", data, context_instance=rc)
 
 
-
 search        = lambda request, **kwargs: render_to_response("base.html", locals())
 comment       = lambda request, **kwargs: render_to_response("base.html", locals())
 email_article = lambda request, **kwargs: render_to_response("base.html", locals())
-archives      = articles
 
 def category(request, slug, year=None, month=None, day=None, recurse=True, template="category.html"):
     category = get_object_or_404(Category, slug=slug)

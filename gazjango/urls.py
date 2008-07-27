@@ -28,10 +28,10 @@ urlpatterns = patterns('articles.views',
     
     (r'^photos/%(year)s/%(month)s/%(day)s/%(slug)s/(?:%(num)s/)?$' % reps, 'spread'),
     
-    (r'^archives/$', 'archives', {}, 'archives'),
-    (r'^%(year)s/$'                   % reps, 'articles'),
-    (r'^%(year)s/%(month)s/$'         % reps, 'articles'),
-    (r'^%(year)s/%(month)s/%(day)s/$' % reps, 'articles'),
+    (r'^archives/$', 'articles', {}, 'archives'),
+    (r'^(?:archives/)?%(year)s/$'                   % reps, 'articles'),
+    (r'^(?:archives/)?%(year)s/%(month)s/$'         % reps, 'articles'),
+    (r'^(?:archives/)?%(year)s/%(month)s/%(day)s/$' % reps, 'articles'),
 )
 
 urlpatterns += patterns('announcements.views',
