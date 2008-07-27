@@ -1,21 +1,23 @@
 import unittest
 from django.contrib.auth.models import User
-from accounts.models            import UserProfile, Position, PositionHeld
+from accounts.models            import UserProfile, Position, PositionHeld, UserKind
 from articles.models            import Article
 from datetime                   import date, datetime, timedelta
 
 class UserTestCase(unittest.TestCase):
     def setUp(self):
+        self.student = UserKind.objects.create(kind='s', year=2010)
+        
         self.bob = User.objects.create_user('bob', 'bob@example.com')
-        self.bob.userprofile_set.add(UserProfile())
+        self.bob_p = self.bob.userprofile_set.create(kind=self.student)
         
         self.reader   = Position.objects.create(name="Reader",         rank=0)
         self.reporter = Position.objects.create(name="Staff Reporter", rank=5)
         self.editor   = Position.objects.create(name="Arts Editor",    rank=9)
     
     def tearDown(self):
-        for x in (self.bob, self.reader, self.reporter, self.editor):
-            x.delete()
+        for m in (User, UserProfile, Position, PositionHeld, UserKind):
+            m.objects.all().delete()
     
     def test_positions_empty(self):
         self.assertEquals(len(self.bob.get_profile().current_positions()), 0)

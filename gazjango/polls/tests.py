@@ -1,18 +1,19 @@
 import unittest
 from django.contrib.auth.models import User, AnonymousUser
 from articles.models            import Article, Category, Format
-from accounts.models            import UserProfile
+from accounts.models            import UserProfile, UserKind
 from polls.models               import Poll, Option
 from datetime                   import datetime, timedelta
 
 class PollTestCase(unittest.TestCase):
     
     def setUp(self):
+        oh_ten = UserKind.objects.create(kind='s', year=2010)
         self.bob = User.objects.create_user("bob", "bob@example.com")
-        self.bob.userprofile_set.add(UserProfile())
+        self.bob.userprofile_set.add(UserProfile(kind=oh_ten))
         
         self.john = User.objects.create_user("john", "john@example.com")
-        self.john.userprofile_set.add(UserProfile())
+        self.john.userprofile_set.add(UserProfile(kind=oh_ten))
         
         self.anon = AnonymousUser()
         
@@ -37,7 +38,7 @@ class PollTestCase(unittest.TestCase):
         }
     
     def tearDown(self):
-        for m in (User, UserProfile, Category, Article, Format, Poll, Option):
+        for m in (User, UserProfile, UserKind, Category, Article, Format, Poll, Option):
             m.objects.all().delete()
         del self.anon
         

@@ -2,14 +2,15 @@ import unittest
 from django.core.exceptions     import ObjectDoesNotExist, MultipleObjectsReturned
 from django.contrib.auth.models import User
 from articles.models import Article, ArticleRevision, Category, Format
-from accounts.models import UserProfile
+from accounts.models import UserProfile, UserKind
 from media.models    import MediaBucket, MediaFile, ImageFile
 
 class ArticleTestCase(unittest.TestCase):
     
     def setUp(self):
+        oh_ten = UserKind.objects.create(kind='s', year=2010)
         self.bob = User.objects.create_user("bob", 'bob@example.com')
-        self.bob.userprofile_set.add(UserProfile())
+        self.bob.userprofile_set.add(UserProfile(kind=oh_ten))
         self.bob_profile = self.bob.get_profile()
         
         self.news = Category.objects.create(name="News")
@@ -66,7 +67,7 @@ class ArticleTestCase(unittest.TestCase):
         )
     
     def tearDown(self):
-        used = (User, UserProfile, Category, Article, ArticleRevision, Format)
+        used = (User, UserProfile, UserKind, Category, Article, ArticleRevision, Format)
         for m in used + (MediaBucket, MediaFile, ImageFile):
             m.objects.all().delete()
     

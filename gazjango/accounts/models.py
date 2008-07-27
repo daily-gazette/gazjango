@@ -3,17 +3,66 @@ from django.db.models           import Q, permalink
 from django.contrib.auth.models import User
 from datetime                   import datetime, date
 
+class UserKind(models.Model):
+    """
+    A kind of user. 
+    
+    There is at most one kind per class year, plus faculty/staff,
+    parents, specs, and other.
+    """
+    KINDS = (
+        ('s', 'Student'),
+        ('a', 'Alum'),
+        ('f', 'Faculty/Staff'),
+        ('p', 'Parent'),
+        ('k', 'Prospective Student'),
+        ('o', 'Other')
+    )
+    kind = models.CharField(max_length=1, choices=KINDS)
+    year = models.IntegerField(null=True) # for students/alumni
+    
+    class Meta:
+        unique_together = ('kind', 'year')
+    
+    def __unicode__(self):
+        return self.kind + (" (%s)" % self.year if self.year else "")
+    
+
+class ContactMethod(models.Model):
+    """
+    A way to get in touch with someone. In general, this will probably
+    be mainly be used only for the various IM services. We also use it
+    for phone numbers, though, for consistency's sake.
+    """
+    name = models.CharField(max_length=40)
+    
+    def __unicode__(self):
+        return self.name
+    
+
+class ContactItem(models.Model):
+    """
+    A user's contact information for a given ContactMethod. For example,
+    if Joe has an MSN screenname and an AIM one, he'd have one of these
+    for each. He'd also probably have one for his cell.
+    """
+    user   = models.ForeignKey('UserProfile', related_name="contact_items")
+    method = models.ForeignKey(ContactMethod, related_name="items")
+    value  = models.CharField(max_length=50)
+    
+    def __unicode__(self):
+        return "%s on %s" % (self.value, self.method)
+    
+
 class UserProfile(models.Model):
     "Extra information about users."
-    user    = models.ForeignKey(User, unique=True)
-    bio     = models.TextField(blank=True, null=True)
-    phone   = models.PhoneNumberField(blank=True, null=True)
-    contact = models.TextField(blank=True, null=True)
-    # many-to-many Articles, has-many PositionsHeld
+    user = models.ForeignKey(User, unique=True)
+    bio  = models.TextField(blank=True, null=True)
+    kind = models.ForeignKey(UserKind)
     
-    name = property(lambda self: self.user.get_full_name())
+    name     = property(lambda self: self.user.get_full_name())
     username = property(lambda self: self.user.username)
-    email = property(lambda self: self.user.email)
+    email    = property(lambda self: self.user.email)
     
     def position_at(self, date):
         """Returns the highest-ranked of this user's Positions at date."""
