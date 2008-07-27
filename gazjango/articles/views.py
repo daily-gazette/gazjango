@@ -1,5 +1,6 @@
 from django.template  import RequestContext
 from django.shortcuts import render_to_response, get_object_or_404
+from helpers          import get_by_date_or_404, filter_by_date
 from articles.models      import Article, Category, Special, PhotoSpread
 from announcements.models import Announcement
 from comments.models      import PublicComment
@@ -7,26 +8,6 @@ from issues.models        import Menu, Weather, WeatherJoke
 from jobs.models          import JobListing
 from datetime import date, timedelta
 
-### helpers
-
-def get_by_date_or_404(model, year, month, day, field='pub_date', **oth):
-    d = oth
-    d.update({field+'__year': year, field+'__month': month, field+'__day': day})
-    return get_object_or_404(Article, **d)
-
-def filter_by_date(qset, year=None, month=None, day=None, field='pub_date'):
-    args = {}
-    if year:
-        args[field + '__year'] = year
-        if month:
-            args[field + '__month'] = month
-            if day:
-                args[field + '__day'] = day
-    return qset.filter(**args)
-
-
-
-### actual views
 
 def article(request, slug, year, month, day, print_view=False, template="story.html"):
     story = get_by_date_or_404(Article, year, month, day, slug=slug)
