@@ -12,16 +12,20 @@ import settings
 
 
 class CommentsManager(models.Manager):
-    def add(self, **data):
-        """Makes a new comment, checking it for spam and such."""
-        comment = PublicComment(**data) # pass on any errors
+    def new(self, check_spam=True, **data):
+        """
+        Makes a new comment, checking it for spam if necessary -- that is,
+        the user doesn't have the `comments.can_post_directly` permission,
+        and `check_spam` is not set to False.
+        """
+        comment = PublicComment(**data)
         
         user = data.get('user', None)
         if user and user.has_perm('comments.can_post_directly'):
             comment.is_spam = False
             comment.is_public = True
         else:
-            comment.is_spam = comment.check_with_akismet()
+            comment.is_spam = check_spam and comment.check_with_akismet()
             comment.is_public = False
         comment.save()
         return comment
@@ -49,7 +53,7 @@ class PublicComment(models.Model):
     
     user  = models.ForeignKey(UserProfile, null=True, blank=True)
     
-    name  = models.CharField(max_length=75, null=True, blank=True)
+    name  = models.CharField(max_length=75, blank=True)
     email = models.EmailField(null=True, blank=True)
     site  = models.URLField(blank=True, verify_exists=True)
     
@@ -63,12 +67,12 @@ class PublicComment(models.Model):
     is_spam   = models.BooleanField(default=False)
     score = models.IntegerField(default=0)
     
-    is_anonymous = property(lambda self: self.name is not None)
+    is_anonymous = property(lambda self: not self.name)
     
     objects = CommentsManager()
     visible = VisibleCommentsManager()
     
-    def askimet_says_spam(self):
+    def check_with_akismet(self):
         "Checks whether the comment is spam."
         url = 'http://%s/' % Site.objects.get_current().domain
         akismet_api = akismet.Akismet(key=settings.AKISMET_API_KEY, blog_url=url)
