@@ -1,6 +1,6 @@
 from diff_match_patch.diff_match_patch import diff_match_patch
 from datetime import datetime
-from BeautifulSoup import BeautifulSoup
+from scrapers.BeautifulSoup import BeautifulSoup
 import re
 
 from django.db                   import models
