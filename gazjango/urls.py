@@ -19,12 +19,12 @@ urlpatterns = patterns('articles.views',
     (r'^$', 'homepage'),
     (r'^search/$', 'search', {}, 'search'),
     
-    (r'^menu', 'menu_partial'),
+    (r'^menu/$', 'menu_partial'),
     
-    (r'^%(year)s/%(month)s/%(day)s/%(slug)s/$'        % reps, 'article'),
-    (r'^%(year)s/%(month)s/%(day)s/%(slug)s/comment$' % reps, 'comment'),
-    (r'^%(year)s/%(month)s/%(day)s/%(slug)s/print/$'  % reps, 'article', {'print_view': True}, 'print'),
-    (r'^%(year)s/%(month)s/%(day)s/%(slug)s/email/$'  % reps, 'email_article', {}, 'email'),
+    (r'^%(year)s/%(month)s/%(day)s/%(slug)s/$'         % reps, 'article', {}, 'article'),
+    (r'^%(year)s/%(month)s/%(day)s/%(slug)s/comment/$' % reps, 'comment', {}, 'comment'),
+    (r'^%(year)s/%(month)s/%(day)s/%(slug)s/print/$'   % reps, 'article', {'print_view': True}, 'print'),
+    (r'^%(year)s/%(month)s/%(day)s/%(slug)s/email/$'   % reps, 'email_article', {}, 'email'),
     
     (r'^photos/%(year)s/%(month)s/%(day)s/%(slug)s/(?:%(num)s/)?$' % reps, 'spread'),
     
@@ -35,19 +35,20 @@ urlpatterns = patterns('articles.views',
 )
 
 urlpatterns += patterns('announcements.views',
-    (r'^announcements/%(year)s/%(month)s/%(slug)s/$'         % reps, 'announcement', {}, 'announcement'),
+    (r'^announcements/%(year)s/%(slug)s/$'                   % reps, 'announcement', {}, 'announcement'),
+    (r'^announcements/%(year)s/%(month)s/%(slug)s/$'         % reps, 'announcement'),
     (r'^announcements/%(year)s/%(month)s/%(day)s/%(slug)s/$' % reps, 'announcement'),
     
-    (r'^announcements/$',                                   'announcements'),
+    (r'^announcements/$', 'announcements', {'order': 'descending'}),
     
-    (r'^announcements/%(year)s/$'                   % reps, 'kind_for_year', {'kind': 'community'}),
-    (r'^announcements/%(year)s/%(month)s/$'         % reps, 'kind_for_month', {'kind': 'community'}),
-    (r'^announcements/%(year)s/%(month)s/%(day)s/$' % reps, 'kind_for_day', {'kind': 'community'}),
+    (r'^announcements/%(year)s/$'                   % reps, 'list_announcements', {'kind': 'community'}),
+    (r'^announcements/%(year)s/%(month)s/$'         % reps, 'list_announcements', {'kind': 'community'}),
+    (r'^announcements/%(year)s/%(month)s/%(day)s/$' % reps, 'list_announcements', {'kind': 'community'}),
     
-    (r'^announcements/%(kind)s/$'                            % reps, 'kind'),
-    (r'^announcements/%(kind)s/%(year)s/$'                   % reps, 'kind_for_year'),
-    (r'^announcements/%(kind)s/%(year)s/%(month)s/$'         % reps, 'kind_for_month'),
-    (r'^announcements/%(kind)s/%(year)s/%(month)s/%(day)s/$' % reps, 'kind_for_day')
+    (r'^announcements/%(kind)s/$'                            % reps, 'list_announcements'),
+    (r'^announcements/%(kind)s/%(year)s/$'                   % reps, 'list_announcements'),
+    (r'^announcements/%(kind)s/%(year)s/%(month)s/$'         % reps, 'list_announcements'),
+    (r'^announcements/%(kind)s/%(year)s/%(month)s/%(day)s/$' % reps, 'list_announcements')
 )
 
 urlpatterns += patterns('issues.views',
@@ -81,18 +82,18 @@ urlpatterns += patterns('media.views',
 urlpatterns += patterns('',
     (r'^accounts/login/$',    'django.contrib.auth.views.login',  {}, 'login'),
     (r'^accounts/logout/$',   'django.contrib.auth.views.logout', {}, 'logout'),
-    (r'^accounts/manage/$',   'accounts.views.manage', {}, 'manage'),
-    (r'^accounts/register/$', 'accounts.views.register', {}, 'register'),
+    (r'^accounts/manage/$',   'accounts.views.manage',            {}, 'manage'),
+    (r'^accounts/register/$', 'accounts.views.register',          {}, 'register'),
     
     (r'^users/%(name)s/$' % reps, 'accounts.views.user_details', 'user-details')
 )
 
 if settings.DEBUG:
-    path = settings.BASE + "/" + 'static'
+    path = settings.BASE +'/static'
     urlpatterns += patterns('django.views.static', 
-        (r'^css/(?P<path>.*)$',    'serve', {'document_root': os.path.join(path, 'css')}),
-        (r'^js/(?P<path>.*)$',     'serve', {'document_root': os.path.join(path, 'js')}),
-        (r'^images/(?P<path>.*)$', 'serve', {'document_root': os.path.join(path, 'images')}),
+        (r'^css/(?P<path>.*)$',    'serve', {'document_root': path + '/css'}),
+        (r'^js/(?P<path>.*)$',     'serve', {'document_root': path + '/js'}),
+        (r'^images/(?P<path>.*)$', 'serve', {'document_root': path + '/images'}),
     )
 
 # category match should be last, to avoid shadowing others
