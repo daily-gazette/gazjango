@@ -1,6 +1,6 @@
-from django.template  import RequestContext
-from django.shortcuts import render_to_response, get_object_or_404
-from helpers          import get_by_date_or_404, filter_by_date
+from django.template   import RequestContext
+from django.shortcuts  import render_to_response, get_object_or_404
+from misc.view_helpers import get_by_date_or_404, filter_by_date
 from articles.models      import Article, Category, Special, PhotoSpread
 from announcements.models import Announcement
 from comments.models      import PublicComment

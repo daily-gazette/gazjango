@@ -1,6 +1,6 @@
-from django.template  import RequestContext
-from django.shortcuts import render_to_response, get_object_or_404
-from helpers          import filter_by_date
+from django.template   import RequestContext
+from django.shortcuts  import render_to_response, get_object_or_404
+from misc.view_helpers import filter_by_date
 from models               import Announcement
 from articles.models      import Article
 

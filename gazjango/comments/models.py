@@ -7,7 +7,7 @@ from django.contrib.contenttypes        import generic
 from accounts.models import UserProfile
 
 from datetime import datetime
-import akismet
+import misc.akismet
 import settings
 
 
