@@ -13,7 +13,8 @@ from django.contrib.sites.models     import Site
 from django.contrib.flatpages.models import FlatPage
 import tagging
 
-from accounts.models      import UserProfile, Position
+from accounts.models      import UserProfile, UserKind, Position
+from accounts.models      import ContactMethod, ContactItem
 from announcements.models import Announcement
 from articles.models      import Article, Category, Format
 from articles.models      import Special, SpecialsCategory, DummySpecialTarget
@@ -66,25 +67,35 @@ admin_group        = Group.objects.create(name="Admins")
 
 ### Users
 
-def make_user(username, first, last, email=None, phone=None, contact=None, bio=None, groups=None):
+student = UserKind.objects.create(kind='s', year=2000)
+
+cell_phone = ContactMethod.objects.create(name="Cell Phone")
+aim        = ContactMethod.objects.create(name="AIM")
+gtalk      = ContactMethod.objects.create(name="GTalk / Jabber")
+
+def make_user(username, first, last, email=None, contact={}, bio=None, kind=student, groups=None):
     email = email or "%s@swarthmore.edu" % username
     user = User.objects.create_user(username, email)
-    user.userprofile_set.add(UserProfile(phone=phone, contact=contact, bio=bio))
     user.first_name = first
     user.last_name  = last
     if groups:
         user.groups = groups
     user.save()
+    
+    profile = UserProfile.objects.create(user=user, bio=bio, kind=kind)
+    for method in contact:
+        profile.contact_items.create(method=method, value=contact[method])
+    
     return user
 
 bob  = make_user('bob', 'Bob', 'Jones', 'bob@example.com',
-                 '123-456-7890', 'AIM: bobjones52',
+                 {cell_phone:'123-456-7890', aim: 'bobjones52'},
                  groups=[reader_group, editor_group])
 jack = make_user('jack', 'Jack', 'McSmith', 'jack@uppityup.com',
                  bio="I'm pretty much the man.",
                  groups=[reader_group, photographer_group, editor_group])
 jill = make_user('jill', 'Jill', 'Carnegie', 'jill@thehill.com',
-                 contact="GTalk: jill@thehill.com", 
+                 contact={gtalk: "jill@thehill.com"}, 
                  groups=[reader_group, admin_group])
 bone = make_user('bone', 'The', 'Bone Doctress', 'doctress@example.com',
                  bio="I'm a mysterious figure.", 
