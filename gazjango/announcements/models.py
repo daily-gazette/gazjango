@@ -32,10 +32,11 @@ class CommunityAnnouncementsManager(PublishedAnnouncementsManager):
 class Announcement(models.Model):
     """
     An announcement. The first day it runs is date_start, and the last 
-    is date_end.
+    is date_end. Slugs must be unique per-year.
     
-    Note that overlapping announcements must have distinct slugs; this is
-    enforced at the field level.
+    Slug-uniqueness is technically only enforced on the start-year, but
+    as announcements spanning years seem unlikely, this should not be a
+    major issue.
     """
     
     ANNOUNCEMENT_KINDS = (
@@ -45,7 +46,7 @@ class Announcement(models.Model):
     kind = models.CharField(max_length=1, choices=ANNOUNCEMENT_KINDS)
     
     title = models.CharField(blank=True, max_length=100)
-    slug  = models.SlugField()
+    slug  = models.SlugField(unique_for_year="date_start")
     text  = models.TextField()
     
     sponsor = models.CharField(max_length=50)
