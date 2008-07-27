@@ -143,6 +143,21 @@ class ArticleTestCase(unittest.TestCase):
         
         # by bucket/slug, other bucket, in media
         self.assertEquals(resolve('from-the-newspapers/war-declared'), war_url)
+        
+        # by bucket/slug, non-existant file
+        self.assertRaises(ObjectDoesNotExist,
+                          lambda: resolve('fake-bucket/fakery', complain=True))
+        self.assertEquals(resolve('fake-bucket/fakery', complain=False), "")
+        
+        # by slug with a duplicate in media
+        bucket = MediaBucket.objects.create(slug='trickster')
+        self.images_article.media.create(slug="kitteh", bucket=bucket, data="")
+        
+        self.assertRaises(MultipleObjectsReturned, 
+                          lambda: resolve("kitteh", complain=True))
+        self.assertEquals(resolve('kitteh', complain=False),
+                          "[ambiguous reference to 'kitteh']")
+    
     
     def test_resolved_text(self):
         resolved = self.images_article.resolved_text()

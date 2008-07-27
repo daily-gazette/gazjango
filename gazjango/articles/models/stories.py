@@ -133,15 +133,18 @@ class Article(models.Model):
         passed) and then goes through and replaces the image references within
         it to links that will actually work.
         """
-        formatted = self.formatted_text(revision)
-        soup = BeautifulSoup(formatted)
-        
-        reg = re.compile("https?://")
-        matches = lambda src: not re.match(reg, src)
-        for image in soup.findAll("img", src=matches):
-            image['src'] = self.resolve_image_link(image['src'])
-        
-        return unicode(soup)
+        text = self.formatted_text(revision)
+        if self.media.count() > 0 or re.search("<img", text, re.IGNORECASE):
+            soup = BeautifulSoup(text)
+            
+            reg = re.compile(r"^\s*https?://")
+            matches = lambda src: not re.match(reg, src)
+            for image in soup.findAll("img", src=matches):
+                image['src'] = self.resolve_image_link(image['src'])
+            
+            return unicode(soup)
+        else:
+            return text
     
     def resolve_image_link(self, image_path, complain=False):
         """
@@ -171,8 +174,12 @@ class Article(models.Model):
         else:
             args = {'slug': image_path}
         
-        try:
-            # self.media should be cached, so we try it first
+        if complain:
+            def error(exception, message): raise exception
+        else:
+            def error(exception, message): return message
+        
+        try: # self.media should be cached, so we try it first
             image = self.media.get(**args)
         except MediaFile.DoesNotExist:
             try:
@@ -180,15 +187,10 @@ class Article(models.Model):
                 image = ImageFile.objects.get(**args)
                 self.media.add(image)
             except ImageFile.DoesNotExist, e:
-                if complain:
-                    raise e
-                else:
-                    return ""
+                return error(e, "")
         except MediaFile.MultipleObjectsReturned, e:
-            if complain:
-                raise e
-            else:
-                return "[ambiguous reference to %s]" % image_path
+            return error(e, "[ambiguous reference to '%s']" % image_path)
+        
         return image.get_absolute_url()
     
     
