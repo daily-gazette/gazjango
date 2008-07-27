@@ -1,6 +1,6 @@
 from django.template  import RequestContext
 from django.shortcuts import render_to_response, get_object_or_404
-from articles.models      import Article, Special, PhotoSpread
+from articles.models      import Article, Category, Special, PhotoSpread
 from announcements.models import Announcement
 from comments.models      import PublicComment
 from issues.models        import Menu, Weather, WeatherJoke
@@ -11,6 +11,16 @@ def get_by_date_or_404(model, year, month, day, field='pub_date', **oth):
     d = oth
     d.update({field+'__year': year, field+'__month': month, field+'__day': day})
     return get_object_or_404(Article, **d)
+
+def filter_by_date(qset, year=None, month=None, day=None, field='pub_date'):
+    d = {}
+    if year:
+        d[field+'__year'] = year
+        if month:
+            d[field+'__month'] = month
+            if day:
+                d[field+'__day'] = day
+    return qset.filter(**d)
 
 
 def article(request, slug, year, month, day, template="story.html"):
@@ -25,13 +35,7 @@ def article(request, slug, year, month, day, template="story.html"):
     return render_to_response(template, data, context_instance=rc)
 
 def articles(request, year=None, month=None, day=None, template="article_list.html"):
-    articles = Article.published.all()
-    if year:
-        articles = articles.filter(pub_date__year=year)
-        if month:
-            articles = articles.filter(pub_date__month=month)
-            if day:
-                articles = articles.filter(pub_date__day=day)
+    articles = filter_by_date(Article.published.all(), year, month, day)
     data = {'articles': articles, 'year': year, 'month': month, 'day': day}
     rc = RequestContext(request)
     return render_to_response(template, data, context_instance=rc)
@@ -77,7 +81,15 @@ print_article = lambda request, **kwargs: render_to_response("base.html", locals
 email_article = lambda request, **kwargs: render_to_response("base.html", locals())
 archives      = articles
 
-category           = lambda request, **kwargs: render_to_response("base.html", locals())
-category_for_year  = lambda request, **kwargs: render_to_response("base.html", locals())
-category_for_month = lambda request, **kwargs: render_to_response("base.html", locals())
-category_for_day   = lambda request, **kwargs: render_to_response("base.html", locals())
+def category(request, slug, year=None, month=None, day=None, recurse=True, template="category.html"):
+    category = get_object_or_404(Category, slug=slug)
+    all_articles = category.all_articles() if recurse else category.articles
+    data = {
+        'category': category,
+        'articles': filter_by_date(all_articles, year, month, day),
+        'year': year,
+        'month': month,
+        'day': day
+    }
+    rc = RequestContext(request)
+    return render_to_response(template, data, context_instance=rc)

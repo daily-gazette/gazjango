@@ -9,8 +9,7 @@ reps = {
     'slug': r'(?P<slug>[-\w]+)',
     'name': r'(?P<name>[-\w]+)',
     'kind': r'(?P<kind>[-\w]+)',
-    'category': r'(?P<category>[-\w]+)',
-    'bucket':   r'(?P<bucket>[-\w]+)',
+    'bucket': r'(?P<bucket>[-\w]+)',
     
     'num': r'(?P<num>\d+)'
 }
@@ -96,10 +95,10 @@ if settings.DEBUG:
         (r'^images/(?P<path>.*)$', 'serve', {'document_root': os.path.join(path, 'images')}),
     )
 
-# category match needs to be last, to avoid shadowing others
+# category match should be last, to avoid shadowing others
 urlpatterns += patterns('articles.views',
-    (r'^%(category)s/$'                            % reps, 'category', {}, 'category'),
-    (r'^%(category)s/%(year)s/$'                   % reps, 'category_for_year'),
-    (r'^%(category)s/%(year)s/%(month)s/$'         % reps, 'category_for_month'),
-    (r'^%(category)s/%(year)s/%(month)s/%(day)s/$' % reps, 'category_for_day'),
+    (r'^%(slug)s/$'                            % reps, 'category', {}, 'category'),
+    (r'^%(slug)s/%(year)s/$'                   % reps, 'category'),
+    (r'^%(slug)s/%(year)s/%(month)s/$'         % reps, 'category'),
+    (r'^%(slug)s/%(year)s/%(month)s/%(day)s/$' % reps, 'category'),
 )
