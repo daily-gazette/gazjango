@@ -23,7 +23,7 @@ urlpatterns = patterns('articles.views',
     
     (r'^%(year)s/%(month)s/%(day)s/%(slug)s/$'        % reps, 'article'),
     (r'^%(year)s/%(month)s/%(day)s/%(slug)s/comment$' % reps, 'comment'),
-    (r'^%(year)s/%(month)s/%(day)s/%(slug)s/print/$'  % reps, 'print_article', {}, 'print'),
+    (r'^%(year)s/%(month)s/%(day)s/%(slug)s/print/$'  % reps, 'article', {'print_view': True}, 'print'),
     (r'^%(year)s/%(month)s/%(day)s/%(slug)s/email/$'  % reps, 'email_article', {}, 'email'),
     
     (r'^photos/%(year)s/%(month)s/%(day)s/%(slug)s/(?:%(num)s/)?$' % reps, 'spread'),

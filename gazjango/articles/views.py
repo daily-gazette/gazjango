@@ -13,23 +13,24 @@ def get_by_date_or_404(model, year, month, day, field='pub_date', **oth):
     return get_object_or_404(Article, **d)
 
 def filter_by_date(qset, year=None, month=None, day=None, field='pub_date'):
-    d = {}
+    args = {}
     if year:
-        d[field+'__year'] = year
+        args[field + '__year'] = year
         if month:
-            d[field+'__month'] = month
+            args[field + '__month'] = month
             if day:
-                d[field+'__day'] = day
-    return qset.filter(**d)
+                args[field + '__day'] = day
+    return qset.filter(**args)
 
 
-def article(request, slug, year, month, day, template="story.html"):
+def article(request, slug, year, month, day, print_view=False, template="story.html"):
     story = get_by_date_or_404(Article, year, month, day, slug=slug)
     data = {
         'story': story,
         'related': story.related_list(3),
         'topstory': Article.published.get_top_story(),
-        'comments': []
+        'comments': Article.comments.all().order_by('time'),
+        'print_view': print_view
     }
     rc = RequestContext(request)
     return render_to_response(template, data, context_instance=rc)
@@ -75,9 +76,9 @@ def spread(request, slug, year, month, day, num=None):
     return render_to_response("photo_spread.html", data, context_instance=rc)
 
 
+
 search        = lambda request, **kwargs: render_to_response("base.html", locals())
 comment       = lambda request, **kwargs: render_to_response("base.html", locals())
-print_article = lambda request, **kwargs: render_to_response("base.html", locals())
 email_article = lambda request, **kwargs: render_to_response("base.html", locals())
 archives      = articles
 
