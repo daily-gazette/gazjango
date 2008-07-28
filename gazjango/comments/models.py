@@ -55,7 +55,6 @@ class PublicComment(models.Model):
     
     name  = models.CharField(max_length=75, blank=True)
     email = models.EmailField(null=True, blank=True)
-    site  = models.URLField(blank=True, verify_exists=True)
     
     time = models.DateTimeField(default=datetime.now)
     text = models.TextField()
@@ -81,7 +80,6 @@ class PublicComment(models.Model):
                 'comment_type': 'comment',
                 'comment_author': self.name or self.user.name,
                 'comment_author_email': self.email or self.user.email,
-                'comment_author_url': self.site,
                 'permalink': self.get_absolute_url(),
                 'user_ip': self.ip,
                 'user_agent': self.user_agent
