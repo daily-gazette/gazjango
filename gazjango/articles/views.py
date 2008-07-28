@@ -16,7 +16,7 @@ def article(request, slug, year, month, day, print_view=False, template="story.h
         'story': story,
         'related': story.related_list(3),
         'topstory': Article.published.get_top_story(),
-        'comments': Article.comments.all().order_by('time'),
+        'comments': story.comments.all().order_by('time'),
         'print_view': print_view
     }
     rc = RequestContext(request)
