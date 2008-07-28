@@ -224,7 +224,7 @@ jQuery(document).ready(function() {
 			<div class="indexBottomColumn floatLeft" id="bico">
 				<h3>From <a href="http://www.biconews.com/"><em>The BiCo News</em></a></h3>
 				
-				{% for story in bico %}
+				{% for story in bico_news %}
 				  <h4><a href="{{ story.link }}">{{ story.headline }}</a></h4>
 				  <p class="byline"><span class="author">by {{ story.author|upper }}</span></p>
 				{% endfor %}
@@ -233,30 +233,21 @@ jQuery(document).ready(function() {
 				
 				<hr />
 				
-				<a href="http://repairmycreditnow.com/Credit_Repair_Advice.htm">Credit Repair</a> | 
+				{% for text, url in manual_links %}
+				  <a href="{{ url }}">{{ text }}</a> |
+				{% endfor %}
 				
 				<!-- TLA -->
-				  <a href="http://www.elearners.com/online-degrees/index.asp">College Degrees</a>   | 
-				  <a href="http://www.homesecuritystore.com/security-cameras.html">Security Camera</a>   | 
-				  <a href="http://www.ibdna.com/">DNA Tests</a>   | 
-				  <a href="http://www.finemoments.com">Birth Announcements</a>   | 
-				  <a href="http://www.cars4causes.net/">donate car</a>   | 
-				  <a href="http://www.nextstudent.com/">Student Loans</a>   | 
-				  <a href="http://jobs.fresho.com/">jobs in education</a>   | 
-				  <a href="http://www.homebulletin.net">moving companies</a>   | 
-				  <a href="http://www.payslipsp60.co.uk">Payslip</a>   | 
-				 <a href="http://www.arcadekill.com">Free Flash Arcade Games</a>
-				 
-				<br /><br />
+				  {% for link in tla_links %}
+				    {{ link|safe }} |
+				  {% endfor %}
+				
+				<!-- <br /><br /> -->
 				
 				<!-- LCA  -->
-				<a href="http://www.couponcactus.com/coupons/Rosetta_Stone/">Rosetta Coupon</a> |
-				<a href="http://www.thinkfinancial.com/">college loans</a> |
-				<a href="http://www.acairoots.com">acai</a> |
-				<a href="http://www.hotel-erb.de">Last Minute Hotel</a> |
-				<a href="http://www.officefurniture2go.com/">office furniture</a> |
-				<a href="http://www.essaybay.com">Custom Essays</a> | <a href="http://www.limolinkexchange.com/">Limo, Town Car, Party Bus</a> | <a href="http://www.chicagolimo.com/">Chicago Limo - airport car</a>
-				
+				{% for text, url in lca_links %}
+				  <a href="{{ url }}">{{ text }}</a>
+				{% endfor %}				
 			</div>
 		</div>
 {% endblock content %}

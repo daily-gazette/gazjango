@@ -1,13 +1,18 @@
+from datetime import date, timedelta
+
 from django.template   import RequestContext
 from django.shortcuts  import render_to_response, get_object_or_404
 from misc.view_helpers import get_by_date_or_404, filter_by_date
+
 from articles.models      import Article, Category, Special, PhotoSpread
 from announcements.models import Announcement
 from comments.models      import PublicComment
 from issues.models        import Menu, Weather, WeatherJoke
 from jobs.models          import JobListing
-from datetime      import date, timedelta
-from scrapers.bico import get_bico_news
+
+from scrapers.bico         import get_bico_news
+from scrapers.tla          import get_tla_links
+from scrapers.manual_links import manual_links, lca_links
 
 
 def article(request, slug, year, month, day, print_view=False, template="story.html"):
@@ -43,7 +48,10 @@ def homepage(request, template="index.html"):
         'announcements': Announcement.community.now_running(),
         'jobs': JobListing.objects.filter(is_filled=False)[:3],
         
-        'bico': get_bico_news()
+        'bico_news': get_bico_news(),
+        'tla_links': get_tla_links(),
+        'manual_links': manual_links,
+        'lca_links': lca_links
     }
     rc = RequestContext(request)
     return render_to_response(template, data, context_instance=rc)
