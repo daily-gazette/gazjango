@@ -247,6 +247,7 @@ jQuery(document).ready(function() {
 				<!-- LCA  -->
 				{% for text, url in lca_links %}
 				  <a href="{{ url }}">{{ text }}</a>
+				  {% if not forloop.last %}|{% endif %}
 				{% endfor %}				
 			</div>
 		</div>
