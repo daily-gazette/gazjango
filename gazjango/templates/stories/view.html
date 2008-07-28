@@ -56,11 +56,7 @@ function toggleLayer( whichLayer )
 {% block content %}
 	<div id="commentColumn">
 		<div id="commentBox">
-			{% if user.is_authenticated %}
-				{% include "story_sidebar.html" %}
-			{% else %}
-				{% include "story_sidebar.html" %}
-			{% endif %}
+		  {% include "stories/story_sidebar.html" %}
 		</div>
 	</div>
 		
@@ -80,7 +76,7 @@ function toggleLayer( whichLayer )
 		<div id="shareBox">
 			<div class="right">
 			  <strong>Share:</strong>
-			  {% include "share.html" %}
+			  {% include "stories/share.html" %}
 			</div>
 			<p>
 			  <a href="{% url print story %}"><img src="/images/icons/print.png" /> Print</a>
@@ -122,20 +118,50 @@ function toggleLayer( whichLayer )
 		
 		<div id="bottomComments">
 			<div id="submitComment">
-				<p>
-				  <label class="text" for="author">Name: </label>
-				  <input type="text" name="author" id="author" value="" class="textfield" tabindex="1" />
-				  
-				  <label class="text" for="email">E-Mail: </label>
-				  <input type="text" name="email" id="email" value="" class="textfield" tabindex="2" />
-				</p>
-				
-				<textarea rows="8" cols="54">Have your say.</textarea><br />
-				<input type="submit" name="sumbit" value="Submit" />
-				<input type="reset" name="reset" value="Cancel" />
+			  <h4 name="submitComment" style="display: none;">Submit a Comment</h4>
+			  <form method="post" action="comment/">
+          <table>
+            {% if user.is_authenticated %}
+              <tr>
+                <td>
+                  {{ comment_form.anonymous.label_tag }}
+                  {{ comment_form.anonymous }}
+                </td>
+                <td>{{ comment_form.name.label_tag }}:</td>
+                <td>{{ comment_form.name }}</td>
+              </tr>
+            {% else %}
+              <tr>
+                <td>{{ comment_form.name.label_tag }}:</td>
+                <td>{{ comment_form.name }}</td>
+                <td><a href="{% url login %}">Log in</a> to verify your identity.</td>
+              </tr>
+              <tr>
+                <td>{{ comment_form.email.label_tag }}:</td>
+                <td>{{ comment_form.email }}</td>
+                <td>Required, but will not be made public.</td>
+              </tr>
+            {% endif %}
+            <tr><td colspan="3">{{ comment_form.text }}</td></tr>
+            <tr>
+              <td></td>
+              <td></td>
+              <td>
+                <span style="float: right">
+                  <input type="submit" name="submit" value="Submit" />
+                  <input type="reset"  name="reset"  value="Cancel" />
+                </span>
+              </td>
+            </tr>
+          </table>
+			  </form>
 			</div>
 			
 			<div id="commentRules">
+			  <p>Comments posted anonymously must be approved by Gazette staff before they are published.</p>
+  			  
+			  <hr width="50%" color="#dddddd" size="1px">
+			  
   			<h4>Discussion Rules</h4>
 				<ul>
 					<li>Be nice.</li>
@@ -146,7 +172,7 @@ function toggleLayer( whichLayer )
 					
 				<p>More details on our policies <a href="{{ site.links.policy.get_absolute_url }}">here</a>.</p>
 				
-				<hr width="50%" color="#dddddd" size=1px /> 
+				<hr width="50%" color="#dddddd" size="1px" /> 
 									
 				<p>
 				  {% if user.is_authenticated %} 

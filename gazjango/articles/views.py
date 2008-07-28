@@ -7,6 +7,7 @@ from misc.view_helpers import get_by_date_or_404, filter_by_date
 from articles.models      import Article, Category, Special, PhotoSpread
 from announcements.models import Announcement
 from comments.models      import PublicComment
+from comments.forms       import AnonCommentForm, UserCommentForm
 from issues.models        import Menu, Weather, WeatherJoke
 from jobs.models          import JobListing
 
@@ -15,17 +16,27 @@ from scrapers.tla          import get_tla_links
 from scrapers.manual_links import manual_links, lca_links
 
 
-def article(request, slug, year, month, day, print_view=False, template="story.html"):
+def article(request, slug, year, month, day, print_view=False, template="stories/view.html"):
     story = get_by_date_or_404(Article, year, month, day, slug=slug)
+    
+    initial = {'text': 'Have your say.'}
+    if request.user.is_authenticated():
+        initial['name'] = request.user.name
+        form = UserCommentForm(inital=initial)
+    else:
+        form = AnonCommentForm(initial=initial)
+    
     data = {
         'story': story,
         'related': story.related_list(3),
         'topstory': Article.published.get_top_story(),
         'comments': story.comments.all().order_by('time'),
-        'print_view': print_view
+        'print_view': print_view,
+        'comment_form': form
     }
     rc = RequestContext(request)
     return render_to_response(template, data, context_instance=rc)
+
 
 def articles(request, year=None, month=None, day=None, template="article_list.html"):
     articles = filter_by_date(Article.published.all(), year, month, day)

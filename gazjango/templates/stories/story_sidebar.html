@@ -1,0 +1,17 @@
+{# TODO: customize story_sidebar depending on the user #}
+
+<h4>Related Stories</h4>
+<ul>
+	{% for rel in related %}
+		<li><a href="{{rel.get_absolute_url}}">{{ rel.get_title|safe }}</a></li>
+	{% endfor %}
+</ul>
+
+<hr width="50%" color="#ffffff" size="1px" />
+
+<h4>Share</h4>:
+{% include "stories/share.html" %}
+
+<hr width="50%" color="#ffffff" size="1px" />
+
+<h4><a href="#submitComment" title="Add a comment to this entry">Comment on this article</a></h4>

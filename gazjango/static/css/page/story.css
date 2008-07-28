@@ -96,6 +96,7 @@ RIGHT MENU STYLES
 	z-index: 5;
 }
 
+
 #commentBox ul {
 	list-style-type: square;
 	margin: 0px 0px 0px 15px;
@@ -201,7 +202,12 @@ STORY INCLUDES
 	float: left;
 	width: 425px;
 	display: inline;
-	overflow:hidden;
+    overflow:hidden;
+}
+
+#submitComment td {
+    font-size: 1.3em;
+    padding-bottom: 3px;
 }
 
 #commentRules {
