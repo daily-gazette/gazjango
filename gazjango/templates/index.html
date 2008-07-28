@@ -116,7 +116,7 @@ jQuery(document).ready(function() {
 						    {# TODO: show "column", etc here #}
 						    <a href="{{ story.get_absolute_url }}">{{ story.get_title|safe }}</a>
 						  </h4>
-						  <span class="author"> | By {{ story.authors|join_authors:"1x" }}</span>
+						  <span class="author"> | by {{ story.authors|join_authors:"1x" }}</span>
 						</li>
 					{% endfor %}
 					</ul>
@@ -127,7 +127,7 @@ jQuery(document).ready(function() {
 					{% for story in lowstories|slice:"3:6" %}
 						<li>
 						  <h4><a href="{{ story.get_absolute_url }}">{{ story.get_title|safe }}</a></h4>
-						  <span class="author"> | By {{ story.authors|join_authors:"1x" }}</span>
+						  <span class="author"> | by {{ story.authors|join_authors:"1x" }}</span>
 						</li>
 					{% endfor %}
 					</ul>
@@ -221,16 +221,15 @@ jQuery(document).ready(function() {
 				{% endfor %}
 			</div>
 			
-			<div class="indexBottomColumn floatLeft">
+			<div class="indexBottomColumn floatLeft" id="bico">
 				<h3>From <a href="http://www.biconews.com/"><em>The BiCo News</em></a></h3>
-				<h5><a href="http://www.biconews.com"><em>The BiCo News</em></a> is the weekly paper for Bryn Mawr and Haverford Colleges.</h5>
 				
-				<h4>Men's Squash Caps Season with 37th Place Finish at Nationals</h4>
-				<p class="byline"><span class="author">by JEFF MONHAIT</span></p>
-				<h4>Website's Colors Don't Click with Mawrtyrs</h4>
-				<p class="byline"><span class="author">by CHRISTINA HARVIEW</span></p>
-				<h4>Shopping for a Better Registration System</h4>
-				<p class="byline"><span class="author">by Jennifer Rajchel</span></p>
+				{% for story in bico %}
+				  <h4><a href="{{ story.link }}">{{ story.headline }}</a></h4>
+				  <p class="byline"><span class="author">by {{ story.author|upper }}</span></p>
+				{% endfor %}
+				
+				<p><a href="http://www.biconews.com"><em>The BiCo News</em></a> is the weekly paper for Bryn Mawr and Haverford Colleges.</p>
 				
 				<hr />
 				

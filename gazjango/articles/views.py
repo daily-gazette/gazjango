@@ -6,7 +6,8 @@ from announcements.models import Announcement
 from comments.models      import PublicComment
 from issues.models        import Menu, Weather, WeatherJoke
 from jobs.models          import JobListing
-from datetime import date, timedelta
+from datetime      import date, timedelta
+from scrapers.bico import get_bico_news
 
 
 def article(request, slug, year, month, day, print_view=False, template="story.html"):
@@ -40,7 +41,9 @@ def homepage(request, template="index.html"):
         
         'specials': Special.objects.order_by('-date').all()[:10],
         'announcements': Announcement.community.now_running(),
-        'jobs': JobListing.objects.filter(is_filled=False)[:3]
+        'jobs': JobListing.objects.filter(is_filled=False)[:3],
+        
+        'bico': get_bico_news()
     }
     rc = RequestContext(request)
     return render_to_response(template, data, context_instance=rc)

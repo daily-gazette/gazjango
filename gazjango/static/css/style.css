@@ -548,6 +548,10 @@ p {
     margin-bottom: 1em;
 }
 
+#bico p {
+    padding-bottom: 8px;
+}
+
 .margin25 {
 	margin-right: 25px;
 }
