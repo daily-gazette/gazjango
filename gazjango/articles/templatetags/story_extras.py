@@ -104,3 +104,51 @@ def near_future_date(date):
         return date.strftime("%B ") + str(date.day)
 
 near_future_date.is_safe = True
+
+
+
+ADD_THIS_PRE = """
+<script type="text/javascript">
+addthis_pub  = 'dailygazette';
+addthis_options = 'facebook, favorites, delicious, twitter, google, live, furl, more';
+</script>"""
+
+ADD_THIS_HOVER = """
+<a href="http://www.addthis.com/bookmark.php" onmouseover="return addthis_open(this, '', '[URL]', '[TITLE]')" onmouseout="addthis_close()" onclick="return addthis_sendto()"><img src="http://s9.addthis.com/button1-addthis.gif" alt="" border="0" height="16" width="125"></a>
+"""
+
+ADD_THIS_NO_HOVER = """
+<a href="http://www.addthis.com/bookmark.php" onclick="return addthis_sendto()"><img src="http://s9.addthis.com/button1-addthis.gif" alt="" border="0" height="16" width="125"></a>
+"""
+
+ADD_THIS_POST = """
+<script type="text/javascript" src="http://s7.addthis.com/js/152/addthis_widget.js"></script>"""
+
+
+class AddThisNode(template.Node):
+    def __init__(self, popup_on_hover):
+        self.text = ADD_THIS_PRE
+        if popup_on_hover:
+            self.text += ADD_THIS_HOVER
+        else:
+            self.text += ADD_THIS_NO_HOVER
+        self.text = mark_safe(self.text + ADD_THIS_POST)
+    
+    def render(self, context):
+        return self.text
+    
+
+@register.tag(name="add_this")
+def get_addthis_button(parser, token):
+    split = token.split_contents()
+    if len(split) == 1:
+        tag_name = split[0]
+    elif len(split) == 2:
+        tag_name, popup_on_hover = split
+    else:
+        raise template.TemplateSyntaxError, "%r tag requires one or zero arguments" % token.contents.split()[0]
+    
+    if popup_on_hover and popup_on_hover not in ('hover', 'no-hover'):
+        raise template.TemplateSyntaxError, "invalid argument to %r" % tag_name
+    
+    return AddThisNode(popup_on_hover == 'hover')

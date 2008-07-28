@@ -75,8 +75,7 @@ function toggleLayer( whichLayer )
 				
 		<div id="shareBox">
 			<div class="right">
-			  <strong>Share:</strong>
-			  {% include "stories/share.html" %}
+			  <strong>Share:</strong> {% add_this hover %}
 			</div>
 			<p>
 			  <a href="{% url print story %}"><img src="/images/icons/print.png" /> Print</a>
