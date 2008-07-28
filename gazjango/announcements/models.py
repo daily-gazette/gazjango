@@ -43,7 +43,7 @@ class Announcement(models.Model):
         ('s', 'Staff'),
         ('c', 'Community'),
     )
-    kind = models.CharField(max_length=1, choices=ANNOUNCEMENT_KINDS)
+    kind = models.CharField(max_length=1, choices=ANNOUNCEMENT_KINDS, default='c')
     
     title = models.CharField(blank=True, max_length=100)
     slug  = models.SlugField(unique_for_year="date_start")
