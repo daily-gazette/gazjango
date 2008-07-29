@@ -1,5 +1,6 @@
 from django.db                  import models
-from django.db.models           import Q, permalink
+from django.db.models           import Q, permalink, signals
+from django.dispatch            import dispatcher
 from django.contrib.auth.models import User
 from datetime                   import datetime, date
 
@@ -64,6 +65,8 @@ class UserProfile(models.Model):
     username = property(lambda self: self.user.username)
     email    = property(lambda self: self.user.email)
     
+    is_from_swat = models.BooleanField(default=False)
+    
     def position_at(self, date):
         """Returns the highest-ranked of this user's Positions at date."""
         held = self.positions_held_at(date).order_by("-position__rank")[0]
@@ -108,6 +111,13 @@ class UserProfile(models.Model):
     def get_absolute_url(self):
         return ('accounts.views.user_details', [self.user.username])
     
+
+def set_from_swat(sender, instance):
+    if instance.email.endswith('swarthmore.edu'):
+        instance.is_from_swat = True
+        instance.save()
+
+dispatcher.connect(set_from_swat, signal=signals.post_init, sender=UserProfile)
 
 
 class Position(models.Model):
