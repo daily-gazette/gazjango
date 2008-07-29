@@ -51,7 +51,7 @@ def homepage(request, template="index.html"):
         'midstories': Article.published.get_secondary_stories(2),
         'lowstories': Article.published.get_tertiary_stories(6),
         
-        'comments': PublicComment.visible.order_by('-time').all()[:5],
+        'comments': PublicComment.objects.order_by('-time').all()[:5],
         'weather': Weather.objects.for_today(),
         'joke': WeatherJoke.objects.latest(),
         
