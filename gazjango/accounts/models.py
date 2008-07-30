@@ -55,7 +55,7 @@ class ContactItem(models.Model):
     
 
 class UserProfile(models.Model):
-    "Extra information about users."
+    "Lots of extra information about users."
     user = models.ForeignKey(User, unique=True)
     bio  = models.TextField(blank=True, null=True)
     kind = models.ForeignKey(UserKind)
@@ -63,6 +63,8 @@ class UserProfile(models.Model):
     name     = property(lambda self: self.user.get_full_name())
     username = property(lambda self: self.user.username)
     email    = property(lambda self: self.user.email)
+    
+    positions = models.ManyToManyField('Position', through='Holding', related_name="holdings")
     
     _from_swat = models.BooleanField(default=False)
     
@@ -75,44 +77,37 @@ class UserProfile(models.Model):
             self.save()
             return True
         else:
-            return True
+            return False
+    
+    def positions_at(self, date):
+        """Returns the Positions the user had at the given date."""
+        null_end = Q(holding__date_end__isnull = True)
+        later_end = Q(holding__date_end__gte=date)
+        started = Q(holding__date_start__lte=date)
+        return self.positions.filter(started & (later_end | null_end))
+    
+    def current_positions(self):
+        "Returns Positions currently held by this user."
+        return self.positions_at(date.today())
     
     def position_at(self, date):
         """Returns the highest-ranked of this user's Positions at date."""
-        held = self.positions_held_at(date).order_by("-position__rank")[0]
-        return held.position
+        return self.positions_at(date).order_by("-rank")[0]
     
     def position(self):
         """Returns the highest-ranked of the user's Positions as of now."""
         return self.position_at(date.today())
     
     
-    def positions_held_at(self, date):
-        """Returns PositionsHeld the user had at the given date."""
-        query_end = Q(date_end__isnull = True) | Q(date_end__gte=date)
-        return self.positions_held.filter(query_end & Q(date_start__lte=date))
-    
-    def positions_at(self, date):
-        """Returns Positions the user held at the given date."""
-        helds = self.positions_held_at(date).select_related(depth=1)
-        return [p.position for p in helds]
-    
-    
-    def current_positions_held(self):
-        "Returns PositionHelds currently held by this user."
-        return self.positions_held_at(date.today())
-    
-    def current_positions(self):
-        "Returns Positions currently held by this user."
-        return self.positions_at(date.today())
-    
     
     def add_position(self, position, date_start=None, date_end=None):
-        "Adds a new PositionHeld relation for this user."
-        if date_start is None: date_start = date.today()
-        self.positions_held.add(PositionHeld.objects.create(
-            user_profile = self,       position    = position,
-            date_start   = date_start, date_end    = date_end))
+        "Adds a new position for this user."
+        Holding.objects.create(
+            user_profile = self,
+            position = position,
+            date_start = date_start or date.today(),
+            date_end   = date_end
+        )
     
     def __unicode__(self):
         return self.user.username
@@ -124,12 +119,14 @@ class UserProfile(models.Model):
 
 
 class Position(models.Model):
-    """A position in the organization: Staff Reporter, Editor-in-Chief, etc.
+    """
+    A position in the organization: Staff Reporter, Editor-in-Chief, etc.
     
     Has a rank, which is used for precedence in choosing the "correct" title
     when there is more than one choice. For example, if John is currently both
     arts editor and a photographer, being arts editor takes precedence and will
-    show up next to his name when he writes a story."""
+    show up next to his name when he writes a story.
+    """
     
     name = models.CharField(max_length=40, unique=True)
     rank = models.IntegerField()
@@ -138,14 +135,16 @@ class Position(models.Model):
         return self.name
     
 
-class PositionHeld(models.Model):
-    """A user's holding of a position.
+class Holding(models.Model):
+    """
+    A user's holding of a position.
     
     Contains information about when the position was held. If a position is
-    still held, date_end will be null."""
+    still held with no definite end date, date_end will be null.
+    """
     
-    user_profile = models.ForeignKey(UserProfile, related_name='positions_held')
-    position     = models.ForeignKey(Position, related_name='holdings')
+    user_profile = models.ForeignKey(UserProfile)
+    position     = models.ForeignKey(Position)
     date_start   = models.DateField(default=date.today)
     date_end     = models.DateField(null=True, blank=True)
     

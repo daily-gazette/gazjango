@@ -1,6 +1,6 @@
 import unittest
 from django.contrib.auth.models import User
-from accounts.models            import UserProfile, Position, PositionHeld, UserKind
+from accounts.models            import UserProfile, Position, Holding, UserKind
 from articles.models            import Article
 from datetime                   import date, datetime, timedelta
 
@@ -16,7 +16,7 @@ class UserTestCase(unittest.TestCase):
         self.editor   = Position.objects.create(name="Arts Editor",    rank=9)
     
     def tearDown(self):
-        for m in (User, UserProfile, Position, PositionHeld, UserKind):
+        for m in (User, UserProfile, Position, Holding, UserKind):
             m.objects.all().delete()
     
     def test_positions_empty(self):
@@ -24,45 +24,45 @@ class UserTestCase(unittest.TestCase):
         for pos in Position.objects.all():
             self.assertEquals(pos.holdings.count(), 0)
     
-    def test_current_positions(self):
-        p = self.bob.get_profile()
+    def test_positions(self):
+        bob = self.bob.get_profile()
         
         today = date.today()
         yesterday = today - timedelta(days=1)
         tomorrow  = today + timedelta(days=1)
         
-        p.add_position(self.reader)
-        self.assertEquals(p.positions_held.count(), 1)
-        self.assertEquals(p.current_positions()[0], self.reader)
-        self.assertEquals(p.position(), self.reader)
+        bob.add_position(self.reader)
+        self.assertEquals(bob.current_positions().count(), 1)
+        self.assertEquals(bob.current_positions()[0], self.reader)
+        self.assertEquals(bob.position(), self.reader)
         
-        p.add_position(self.reporter, today, tomorrow)
-        self.assertEquals(p.positions_held.count(), 2)
-        self.assertEquals(set(p.current_positions()), 
+        bob.add_position(self.reporter, today, tomorrow)
+        self.assertEquals(bob.current_positions().count(), 2)
+        self.assertEquals(set(bob.current_positions()), 
                           set([self.reader, self.reporter]))
-        self.assertEquals(p.position(), self.reporter)
-        self.assertEquals(p.position_at(today + timedelta(days=2)), self.reader)
+        self.assertEquals(bob.position(), self.reporter)
+        self.assertEquals(bob.position_at(today + timedelta(days=2)), self.reader)
         
-        p.add_position(self.editor, date.today() + timedelta(days=4))
-        self.assertEquals(p.positions_held.count(), 3)
-        self.assertEquals(set(p.current_positions()),
+        bob.add_position(self.editor, date.today() + timedelta(days=4))
+        self.assertEquals(bob.current_positions().count(), 2)
+        self.assertEquals(set(bob.current_positions()),
                           set([self.reader, self.reporter]))
-        self.assertEquals(p.position(), self.reporter)
-        self.assertEquals(p.position_at(today + timedelta(days=4)), self.editor)
+        self.assertEquals(bob.position(), self.reporter)
+        self.assertEquals(bob.position_at(today + timedelta(days=4)), self.editor)
         
-        reader = p.positions_held.get(position=self.reader)
+        reader = bob.holding_set.get(position=self.reader)
         reader.date_end = date.today() - timedelta(days=1)
         reader.save()
-        self.assertEquals(p.positions_held.count(), 3)
-        self.assertEquals(set(p.current_positions()),
+        self.assertEquals(bob.current_positions().count(), 1)
+        self.assertEquals(set(bob.current_positions()),
                           set([self.reporter]))
-        self.assertEquals(p.position(), self.reporter)
+        self.assertEquals(bob.position(), self.reporter)
         
-        editor = p.positions_held.get(position=self.editor)
+        editor = bob.holding_set.get(position=self.editor)
         editor.date_start = date.today()
         editor.save()
-        self.assertEquals(p.positions_held.count(), 3)
-        self.assertEquals(set(p.current_positions()),
+        self.assertEquals(bob.current_positions().count(), 2)
+        self.assertEquals(set(bob.current_positions()),
                           set([self.reporter, self.editor]))
-        self.assertEquals(p.position(), self.editor)
+        self.assertEquals(bob.position(), self.editor)
     
