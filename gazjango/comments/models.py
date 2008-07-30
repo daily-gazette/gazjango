@@ -1,5 +1,5 @@
 from django.db                          import models
-from django.db.models                   import signals
+from django.db.models                   import signals, Q
 from django.dispatch                    import dispatcher
 from django.utils.encoding              import smart_str
 from django.contrib.sites.models        import Site
@@ -8,31 +8,45 @@ from django.contrib.contenttypes        import generic
 
 from accounts.models import UserProfile
 
-from datetime import datetime
-import misc.akismet
+from datetime     import datetime
+from misc.helpers import is_from_swat
+from misc import akismet
 import settings
 
-
 class CommentsManager(models.Manager):
-    def new(self, check_spam=True, **data):
+    def new(self, check_spam=True, pre_approved=False, **data):
         """
         Makes a new comment, checking it for spam if necessary -- that is,
         the user doesn't have the `comments.can_post_directly` permission,
         and `check_spam` is not set to False.
         """
         comment = PublicComment(**data)
-        user = comment.user.user
+        user = comment.user.user if comment.user else None
         
         if comment.is_anonymous or not user.has_perm('comments.can_post_directly'):
             comment.is_spam = check_spam and comment.check_with_akismet()
-            comment.is_approved = False
+            comment.is_approved = pre_approved or False
         else:
             comment.is_spam = False
             comment.is_approved = True
         
+        previous = PublicComment.objects.filter(subject_id=comment.subject.pk,
+                                                subject_type=comment.subject_type)
+        if previous.count() > 0:
+            comment.number = previous.order_by('-number')[0].number + 1
+        else:
+            comment.number = 1
+        
         comment.score = comment.starting_score()
         comment.save()
         return comment
+    
+
+class VisibleCommentsManager(models.Manager):
+    def get_query_set(self):
+        orig = super(VisibleCommentsManager, self).get_query_set()
+        is_visible = Q(is_approved=True) & (Q(score__gt=0) | Q(score=None))
+        return orig.filter(is_visible)
     
 
 class PublicComment(models.Model):
@@ -43,16 +57,27 @@ class PublicComment(models.Model):
     May be associated with a UserProfile and/or a name, email combination. If
     we have both a UserProfile and a name, the comment shows only the name 
     and is treated as "anonymous," even though we know who actually posted it.
+    
+    Comments have a score. If that score is 0 or less, it's been modded down;
+    if that score is None, it's been permanently set as shown by an editor.
+    (If an editor permanently hides a comment, its score is unaffected but
+    is_approved is set to False.)
+    
+    Comments also have a per-article number, starting from one.
     """
     
     subject_type = models.ForeignKey(ContentType)
     subject_id   = models.PositiveIntegerField()
     subject      = generic.GenericForeignKey('subject_type', 'subject_id')
     
-    user  = models.ForeignKey(UserProfile, null=True, blank=True)
+    number = models.IntegerField()
     
+    user  = models.ForeignKey(UserProfile, null=True, blank=True)
     name  = models.CharField(max_length=75, blank=True)
     email = models.EmailField(null=True, blank=True)
+    
+    is_anonymous = property(lambda self: bool(self.name))
+    display_name = property(lambda self: self.name if self.name else self.user.name)
     
     time = models.DateTimeField(default=datetime.now)
     text = models.TextField()
@@ -64,15 +89,11 @@ class PublicComment(models.Model):
     is_spam     = models.BooleanField(default=False)
     score = models.IntegerField(default=0, null=True)
     
-    is_anonymous = property(lambda self: not self.name)
-    
     def is_visible(self):
-        if self.is_approved or self.score is None:
-            return True
-        else:
-            return self.score > 0
+        return self.is_approved and (self.score is None or self.score > 0)
     
     objects = CommentsManager()
+    visible = VisibleCommentsManager()
     
     def check_with_akismet(self):
         "Checks whether the comment is spam."
@@ -93,7 +114,7 @@ class PublicComment(models.Model):
             raise akismet.APIKeyError("Invalid Akismet API key.")
     
     def starting_score(self):
-        from_swat = self.user.is_from_swat(ip=self.ip_address)
+        from_swat = is_from_swat(user=self.user, ip=self.ip_address)
         if self.user and self.user.user.has_perm('comments.can_post_directly'):
             return 6 if from_swat else 5
         else:
@@ -115,16 +136,19 @@ class PublicComment(models.Model):
         self.score = score
     
     def __unicode__(self):
-        return u"on %s by %s" % (self.subject.slug, self.user.username)
+        return u"on %s by %s" % (self.subject.slug, self.display_name)
     
     def get_absolute_url(self):
-        return self.subject.get_absolute_url + '#c-' + self.pk
+        return "http://" + Site.objects.get_current().domain + \
+               self.subject.get_absolute_url() + \
+               ('#c-%d' % self.number) if self.number else ""
     
     class Meta:
         permissions = (
             ('can_post_directly', 'Can post comments without moderation'),
             ('can_moderate_absolutely', 'Can show or hide comments at will')
         )
+        unique_together = ('subject_type', 'subject_id', 'number')
     
 
 class CommentVote(models.Model):

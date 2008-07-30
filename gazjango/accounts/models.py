@@ -1,7 +1,8 @@
 from django.db                  import models
 from django.db.models           import Q, permalink
 from django.contrib.auth.models import User
-from datetime                   import datetime, date
+from misc.helpers import ip_from_swat
+from datetime     import datetime, date
 
 class UserKind(models.Model):
     """
@@ -71,8 +72,7 @@ class UserProfile(models.Model):
     def is_from_swat(self, ip=None):
         if self._from_swat:
             return True
-        elif self.email.endswith('swarthmore.edu') or \
-                            ip and ip.startswith(settings.SWARTHMORE_IP_BLOCK):
+        elif self.email.endswith('swarthmore.edu') or ip_from_swat(ip):
             self._from_swat = True
             self.save()
             return True
