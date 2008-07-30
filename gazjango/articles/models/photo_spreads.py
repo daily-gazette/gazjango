@@ -12,6 +12,8 @@ class PhotoSpread(models.Model):
     creators = models.ManyToManyField(UserProfile)
     pub_date = models.DateTimeField(default=datetime.now)
     
+    photos = models.ManyToManyField(ImageFile, through='PhotoInSpread', related_name='spreads')
+    
     comments = generic.GenericRelation(PublicComment,
                                        content_type_field='subject_type',
                                        object_id_field='subject_id')
