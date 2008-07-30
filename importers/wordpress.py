@@ -1,9 +1,17 @@
 import MySQLdb as db
+from optparse import OptionParser
+
+parser = OptionParser()
+parser.add_option("-h", "--host", dest="host", help="connect to HOST", metavar="HOST")
+parser.add_option("-u", "--user", dest="user", help="authenticate as USER", metavar="USER")
+parser.add_option("-p", "--passwd", dest="passwd", help="using PASSWD", metavar="PASSWD")
+
+(options, args) = parser.parse_args()
 
 conn = db.connect(
-    host="daily.swarthmore.edu",
-    user="gazette_main",
-    passwd="Firyraptor97",
+    host=options.host,
+    user=options.user,
+    passwd=options.passwd,
     db="gazette_daily"
 )
 
