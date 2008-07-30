@@ -12,18 +12,31 @@ import scrapers.weather
 class Issue(models.Model):
     """An issue of the paper."""
     
+    articles = models.ManyToManyField(Article,
+                                      through='IssueArticle', 
+                                      related_name='issues')
+    announcements = models.ManyToManyField(Announcement, 
+                                           through='IssueAnnouncement',
+                                           related_name='issues')
+    
     date    = models.DateField(default=date.today)
     menu    = models.ForeignKey('Menu', null=True)
     weather = models.ForeignKey('Weather', null=True)
     joke    = models.ForeignKey('WeatherJoke', null=True)
     events  = models.TextField(blank=True)
     
+    def articles_in_order(self):
+        """
+        Returns the articles in the order in which they should appear in the issue.
+        """
+        return self.articles.order_by('issuearticle___order')
+    
     def add_article(self, article):
-        """Appends an article to this issue."""
+        "Appends an article to this issue."
         IssueArticle.objects.create(issue=self, article=article)
     
     def add_announcement(self, announcement):
-        """Appends an announcement to this issue."""
+        "Appends an announcement to this issue."
         IssueAnnouncement.objects.create(issue=self, announcement=announcement)
     
     def __unicode__(self):
@@ -36,10 +49,10 @@ class Issue(models.Model):
     
 
 class IssueArticle(models.Model):
-    """An issue's having an article. Includes position metadata."""
+    "An issue's having an article. Includes position metadata."
     
-    issue    = models.ForeignKey(Issue, related_name="articles")
-    article  = models.ForeignKey(Article, related_name="issues")
+    issue    = models.ForeignKey(Issue)
+    article  = models.ForeignKey(Article)
     
     class Meta:
         order_with_respect_to = 'issue'
@@ -50,10 +63,10 @@ class IssueArticle(models.Model):
     
 
 class IssueAnnouncement(models.Model):
-    """An issue's having an announcement. Includes position metadata."""
+    "An issue's having an announcement. Includes position metadata."
     
-    issue        = models.ForeignKey(Issue, related_name="announcements")
-    announcement = models.ForeignKey(Announcement, related_name="issues")
+    issue        = models.ForeignKey(Issue)
+    announcement = models.ForeignKey(Announcement)
     
     class Meta:
         order_with_respect_to = 'issue'
@@ -75,10 +88,11 @@ class MenuManager(models.Manager):
         Returns the Sharples menu object for today/tomorrow, creating a
         new one (by parsing it from the XML feed) if necessary.
         """
+        day = date.today()
+        if tomorrow:
+            day += timedelta(days=1)
+        
         try:
-            day = date.today()
-            if tomorrow:
-                day += timedelta(days=1)
             return self.get(date=day)
         
         except self.model.DoesNotExist:
@@ -122,10 +136,10 @@ class WeatherManager(models.Manager):
         Returns the weather object for today/tomorrow, creating a new
         one (by parsing it from the online data feed) if necessary.
         """
+        day = date.today()
+        if tomorrow:
+            day += timedelta(days=1)
         try:
-            day = date.today()
-            if tomorrow:
-                day += timedelta(days=1)
             return self.get(date=day)
         
         except self.model.DoesNotExist:
@@ -136,6 +150,7 @@ class WeatherManager(models.Manager):
                 tonight  = weather['tonight'],
                 tomorrow = weather['tomorrow']
             )
+    
 
 class Weather(models.Model):
     """

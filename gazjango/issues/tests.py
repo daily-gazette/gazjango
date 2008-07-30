@@ -41,16 +41,16 @@ class IssueTestCase(unittest.TestCase):
         self.assertRaises(Exception, fail)
         
         self.assertEquals(self.issue_today.get_issuearticle_order(),
-                [self.boring_article.issues.get(issue=self.issue_today).pk])
+                [self.boring_article.issuearticle_set.get(issue=self.issue_today).pk])
         
         self.issue_today.add_article(self.exciting_article)
-        boring_ia   = self.boring_article.issues.get(  issue=self.issue_today)
-        exciting_ia = self.exciting_article.issues.get(issue=self.issue_today)
+        boring_ia   = self.boring_article.issuearticle_set.get(  issue=self.issue_today)
+        exciting_ia = self.exciting_article.issuearticle_set.get(issue=self.issue_today)
         
         self.assertEquals(self.issue_today.get_issuearticle_order(),
                           [boring_ia.pk, exciting_ia.pk])
         
         self.issue_today.set_issuearticle_order([exciting_ia.pk, boring_ia.pk])
-        self.assertEquals([ia.pk for ia in self.issue_today.articles.all()], 
-                          [exciting_ia.pk, boring_ia.pk])
+        self.assertEquals([a.pk for a in self.issue_today.articles_in_order().all()], 
+                         [self.exciting_article.pk, self.boring_article.pk])
     
