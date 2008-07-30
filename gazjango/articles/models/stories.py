@@ -11,7 +11,6 @@ from accounts.models            import UserProfile
 from comments.models            import PublicComment
 from media.models               import MediaFile, ImageFile, MediaBucket
 from articles.exceptions        import RelationshipMismatch
-from articles.models.categories import Category
 import articles.formats as formats
 
 
@@ -66,7 +65,7 @@ class Article(models.Model):
     
     pub_date = models.DateTimeField(default=datetime.now)
     authors  = models.ManyToManyField(UserProfile, related_name="articles")
-    category = models.ForeignKey(Category)
+    category = models.ForeignKey('articles.Category')
     
     front_image = models.ForeignKey(ImageFile, null=True, related_name="articles_with_front")
     thumbnail   = models.ForeignKey(ImageFile, null=True, related_name="articles_with_thumbnail")

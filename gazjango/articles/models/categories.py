@@ -1,5 +1,6 @@
 from django.db        import models
 from django.db.models import permalink
+from stories import Article
 
 class Category(models.Model):
     """
@@ -48,8 +49,7 @@ class Category(models.Model):
     
     def all_articles(self):
         "Returns all articles in this category or one of its sub-categories."
-        # this is actually defined in __init__.py, because of import issues
-        return None
+        return Article.objects.filter(category__in=[d.pk for d in self.descendants()])
     
     def __unicode__(self):
         return self.name
