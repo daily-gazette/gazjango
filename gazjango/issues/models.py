@@ -27,9 +27,17 @@ class Issue(models.Model):
     
     def articles_in_order(self):
         """
-        Returns the articles in the order in which they should appear in the issue.
+        Returns this issue's articles, in the order in which they should
+        appear in the issue.
         """
         return self.articles.order_by('issuearticle___order')
+    
+    def announcements_in_order(self):
+        """
+        Returns this issue's announcements, in the order in which they should
+        appear in the issue.
+        """
+        return self.announcements.order_by('issueannouncement___order')
     
     def add_article(self, article):
         "Appends an article to this issue."
@@ -45,7 +53,7 @@ class Issue(models.Model):
     @permalink
     def get_absolute_url(self):
         a = [str(x) for x in (self.date.year, self.date.month, self.date.day)]
-        return ('issues.views.for_date', a)
+        return ('issue', a)
     
 
 class IssueArticle(models.Model):
