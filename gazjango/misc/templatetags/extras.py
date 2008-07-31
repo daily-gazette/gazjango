@@ -182,7 +182,7 @@ class StaticFileURLNode(template.Node):
         self.name = name
     
     def render(self, context):
-        return '/%s/%s' % (self.kind, self.name)
+        return '/static/%s/%s' % (self.kind, self.name)
     
 
 @register.tag(name="static")
