@@ -44,6 +44,10 @@ class MediaFile(models.Model):
     
     pub_date = models.DateTimeField(blank=True, default=datetime.now)
     
+    def credit(self):
+        authors = self.users.order_by('user__lastname').all()
+        return ', '.join(user.name for user in authors)
+    
     def __unicode__(self):
         return "%s (in %s)" % (self.slug, self.bucket)
     
