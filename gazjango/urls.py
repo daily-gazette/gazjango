@@ -53,9 +53,9 @@ urlpatterns += patterns('announcements.views',
 
 urlpatterns += patterns('issues.views',
     (r'^issue/$',                                   'issue_for_today'),
-    (r'^issue/%(year)s/$'                   % reps, 'issues_for_year'),
-    (r'^issue/%(year)s/%(month)s/$'         % reps, 'issues_for_month'),
-    (r'^issue/%(year)s/%(month)s/%(day)s/$' % reps, 'issues_for_day', {}, 'issue'),
+    (r'^issue/%(year)s/$'                   % reps, 'issues_list'),
+    (r'^issue/%(year)s/%(month)s/$'         % reps, 'issues_list'),
+    (r'^issue/%(year)s/%(month)s/%(day)s/$' % reps, 'issue', {}, 'issue'),
 )
 
 urlpatterns += patterns('polls.views',
