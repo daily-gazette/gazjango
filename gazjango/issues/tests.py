@@ -1,7 +1,6 @@
 import unittest
 from articles.models      import Article, Category, Format
-from announcements.models import Announcement
-from issues.models        import Issue, IssueArticle, IssueAnnouncement
+from issues.models        import Issue, IssueArticle
 from datetime import date, timedelta
 
 class IssueTestCase(unittest.TestCase):
@@ -24,8 +23,7 @@ class IssueTestCase(unittest.TestCase):
         self.issue_yesterday = Issue.objects.create(date=yesterday)
     
     def tearDown(self):
-        ms = (Article, Announcement, Category, Format, Issue)
-        for m in ms + (IssueArticle, IssueAnnouncement):
+        for m in (Article, Category, Format, Issue, IssueArticle):
             m.objects.all().delete()
     
     def testOrdering(self):

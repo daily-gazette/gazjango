@@ -10,14 +10,23 @@ import scrapers.weather
 
 
 class Issue(models.Model):
-    """An issue of the paper."""
+    """
+    An issue of the paper.
+    
+    Articles are ordered; the first one is the top story, and appears with 
+    an image and a brief description. The next two are medium stories, with
+    brief descriptions only; the remainder appear only as "More Stories".
+    Note that although we use a many-to-many field for them, we use an
+    intermediary 'through' model, with order_with_respect_to; to get them
+    in order, you need to call articles_in_order().
+    
+    Announcements are fetched according to the date and cannot be ordered.
+    I don't think this should be a problem....
+    """
     
     articles = models.ManyToManyField(Article,
                                       through='IssueArticle', 
                                       related_name='issues')
-    announcements = models.ManyToManyField(Announcement, 
-                                           through='IssueAnnouncement',
-                                           related_name='issues')
     
     date    = models.DateField(default=date.today)
     menu    = models.ForeignKey('Menu', null=True)
@@ -32,20 +41,24 @@ class Issue(models.Model):
         """
         return self.articles.order_by('issuearticle___order')
     
-    def announcements_in_order(self):
-        """
-        Returns this issue's announcements, in the order in which they should
-        appear in the issue.
-        """
-        return self.announcements.order_by('issueannouncement___order')
+    def announcements(self):
+        """Grabs the announcements that should appear in this issue."""
+        a = Announcement.community
+        return a.filter(date_start__lte=self.date, date_end__gte=self.date)
+    
+    def topstory(self):
+        return self.articles_in_order()[0]
+    
+    def midstories(self, num=2):
+        return self.articles_in_order()[1:1+num]
+    
+    def lowstories(self, skip=3):
+        return self.articles_in_order()[skip:]
+    
     
     def add_article(self, article):
         "Appends an article to this issue."
         IssueArticle.objects.create(issue=self, article=article)
-    
-    def add_announcement(self, announcement):
-        "Appends an announcement to this issue."
-        IssueAnnouncement.objects.create(issue=self, announcement=announcement)
     
     def __unicode__(self):
         return self.date.strftime("%a, %d %B %Y")
@@ -70,48 +83,46 @@ class IssueArticle(models.Model):
         return u"%s on %s" % (self.article.slug, self.issue.date)
     
 
-class IssueAnnouncement(models.Model):
-    "An issue's having an announcement. Includes position metadata."
-    
-    issue        = models.ForeignKey(Issue)
-    announcement = models.ForeignKey(Announcement)
-    
-    class Meta:
-        order_with_respect_to = 'issue'
-        unique_together = ('issue', 'announcement')
-    
-    def __unicode__(self):
-        return u"%s on %s" % (self.announcement.slug, self.issue.date)
-    
-
 class MenuManager(models.Manager):
     def for_today(self):
-        return self.get_or_parse(tomorrow=False)
+        """
+        Returns the Sharples menu object for today, creating a new
+        one by scraping it from the XML feed if necessary.
+        """
+        try:
+            return self.get(date=date.today())
+        except self.model.DoesNotExist:
+            new = self.scrape_menu(tomorrow=False)
+            new.save()
+            return new
     
     def for_tomorrow(self):
-        return self.get_or_parse(tomorrow=True)
-    
-    def get_or_parse(self, tomorrow=False):
         """
-        Returns the Sharples menu object for today/tomorrow, creating a
-        new one (by parsing it from the XML feed) if necessary.
+        Returns the Sharples menu object for tomorrow, creating a new
+        one by scraping it from the XML feed if necessary.
         """
-        day = date.today()
-        if tomorrow:
-            day += timedelta(days=1)
-        
         try:
-            return self.get(date=day)
-        
+            tomorrow = date.today() + timedelta(days=1)
+            return self.get(date=tomorrow)
         except self.model.DoesNotExist:
-            menu = scrapers.sharples.get_menu(tomorrow=tomorrow)
-            return self.create(
-                date    = day,
-                closed  = menu['closed'],
-                message = menu['message'],
-                lunch   = menu['lunch'],
-                dinner  = menu['dinner']
-            )
+            new = self.scrape_menu(tomorrow=True)
+            new.save()
+            return new
+    
+    def scrape_menu(self, tomorrow=False):
+        """
+        Scrapes the XML feed for Sharples and returns a menu object for
+        either today or tomorrow. Note that the menu is not saved.
+        """
+        menu = scrapers.sharples.get_menu(tomorrow=tomorrow)
+        
+        return self.model(
+            date    = date.today() + timedelta(days=(1 if tomorrow else 0)),
+            closed  = menu['closed'],
+            message = menu['message'],
+            lunch   = menu['lunch'],
+            dinner  = menu['dinner']
+        )
     
 
 class Menu(models.Model):
@@ -197,7 +208,7 @@ class WeatherJoke(models.Model):
     line_three = models.CharField(max_length=100)
     
     def __unicode__(self):
-        return self.date.strftime("%m/%d/%Y")
+        return self.issue.date.strftime("%m/%d/%Y")
     
     class Meta:
         get_latest_by = "date"
