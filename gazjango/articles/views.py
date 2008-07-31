@@ -51,13 +51,13 @@ def homepage(request, template="index.html"):
         'midstories': Article.published.get_secondary_stories(2),
         'lowstories': Article.published.get_tertiary_stories(6),
         
-        'comments': PublicComment.objects.order_by('-time').all()[:5],
+        'comments': PublicComment.visible.order_by('-time').all()[:4],
         'weather': Weather.objects.for_today(),
         'joke': WeatherJoke.objects.latest(),
         
         'specials': Special.objects.order_by('-date').all()[:10],
         'announcements': Announcement.community.now_running(),
-        'jobs': JobListing.objects.filter(is_filled=False)[:3],
+        'jobs': JobListing.objects.order_by('-pub_date').filter(is_filled=False)[:3],
         
         'bico_news': get_bico_news(),
         'tla_links': get_tla_links(),
