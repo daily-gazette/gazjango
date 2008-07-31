@@ -182,13 +182,7 @@ jQuery(document).ready(function() {
 				    <a href="{{ announcement.get_absolute_url }}">{{ announcement.title }}</a>
 				  </h4>
 				  {% if announcement.is_event %}
-  				  <p>Sponsored by 
-  				    {% if announcement.sponsor_url %}
-  				      <a href="{{ announcement.sponsor_url }}">{{ announcement.sponsor }}</a>.
-  				    {% else %}
-                {{ announcement.sponsor }}.
-              {% endif %}
-            </p>
+  				  <p>Sponsored by {{ announcement.sponsor_link }}</p>
             <p>When: {{ announcement.event_date|near_future_date }} at {{ announcement.event_time }}</p>
             <p>Where: {{ announcement.event_place }}</p>
             

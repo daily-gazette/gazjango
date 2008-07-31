@@ -1,7 +1,7 @@
-from django.db        import models
-from django.db.models import permalink
-from django.core      import validators
-from datetime         import date
+from django.db               import models
+from django.db.models        import permalink
+from django.utils.safestring import mark_safe
+from datetime import date
 
 class PublishedAnnouncementsManager(models.Manager):
     "Deals only with published announcements."
@@ -77,6 +77,15 @@ class Announcement(models.Model):
             return self.text[:(num_chars-7)] + end
         else:
             return self.text[:(num_chars-4)] + '...'
+    
+    def long_excerpt(self, num_chars=300, link=True):
+        return self.brief_excerpt(num_chars=num_chars, link=link)
+    
+    def sponsor_link(self):
+        if self.sponsor_url:
+            return mark_safe('<a href="%s">%s</a>' % (self.sponsor_url, self.sponsor))
+        else:
+            return mark_safe(self.sponsor)
     
     def __unicode__(self):
         return self.slug
