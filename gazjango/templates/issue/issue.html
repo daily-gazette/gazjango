@@ -1,465 +1,462 @@
-
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+{% load story_extras %}
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+  "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en">
 <head>
-	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
-  	<title>THE DAILY GAZETTE -- {{ issue.date|:"F j, Y" }} </title>
-  	<style type="text/css">
-  	<!--
-  		a { text-decoration: none; }  	-->
-  	</style>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>THE DAILY GAZETTE -- {{ issue.date|date:"F j, Y" }} </title>
+  <style type="text/css">
+  <!--
+  a { text-decoration: none; }    -->
+  </style>
 </head>
 
 <body>
+  <table width="590" border="0" align="center" cellpadding="0" cellspacing="0">
+    <tr>
+      <td height="25" colspan="3" align="right">
+        <font size="2" face="Arial, Helvetica, sans-serif">
+          Problems with this email?
+          <strong>
+            <font color="#004484">
+              <a href="{{ issue.get_absolute_url }}">See it in your browser.</a>
+            </font>
+          </strong>
+        </font>
+      </td>
+    </tr>
+    <tr>
+      <td height="80" colspan="3">
+        <a href ="http://www.daily.swarthmore.edu">
+          <img border="0" src='/images/issue/header.png' alt="The Daily Gazette" width="590" height="80" />
+        </a>
+      </td>
+    </tr>
+    <tr>
+      <td height="30" colspan="3">
+        <table width="590" height="30" border="0" cellpadding="0" cellspacing="0">
+          <tr>
+            <td width="1" bgcolor="#999999"></td>
+            <td width="183" height="30">
+              &nbsp;&nbsp;&nbsp;
+              <a href="http://daily.swarthmore.edu">
+                <font color="#432c16" size="2" face="Arial, Helvetica, sans-serif">
+                  daily.swarthmore.edu
+                </font>
+              </a>
+            </td>
+            <td width="405" height="30" align="right" valign="middle" bgcolor="#ffffff">
+              <font color="#432c16" size="2" face="Arial, Helvetica, sans-serif">
+                {{ issue.date|date:"F j, Y" }}
+              </font>
+              &nbsp;&nbsp;&nbsp;
+            </td>
+            <td width="1" bgcolor="#999999"></td>
+          </tr>
+        </table>
+        <table width="590" height="1" border="0" cellpadding="0" cellspacing="0" bgcolor="#432c16">
+          <tr>
+            <td></td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+    <tr>
+      <td colspan="3">
+        <table width="590" cellspacing="0" cellpadding="0">
+          <tr>
+            <td width="1" bgcolor="#999999"></td>
+            <td width="588" align="left" valign="top">
+              <table width="588" height="24" border="0" cellpadding="0" cellspacing="0" bgcolor="#ffa754">
+                <tr>
+                  <td width="10" height="24" align="left" valign="middle"></td>
+                  <td width="375" align="left" valign="middle">
+                    <strong>
+                      <font color="#000000" size="3" face="Arial, Helvetica, sans-serif">
+                        {{ issue.topstory.headline|safe }}
+                      </font>
+                    </strong>
+                  </td>
+                </tr>
+              </table>
+            </td>
+            <td width="1" bgcolor="#999999"></td>
+          </tr>
+        </table>
 
+        <table width="590" cellspacing="0" cellpadding="0">
+          <tr>
+            <td width="1" bgcolor="#999999"></td>
+            <td width="385" align="left" valign="top">
+              <table width="385" border="0" cellspacing="0" cellpadding="10">
+                <tr>
+                  <td>
+                    <font color="#333333" size="2" face="Georgia, Times New Roman, Times, serif">
+                      {{ issue.topstory.summary|safe }}
+                    </font>
+                    <br />
 
+                    <a href="{{ issue.topstory.get_absolute_url }}">
+                      <font color="#004484" size="2" face="Arial, Helvetica, sans-serif">
+                        <strong>&gt;&gt; Read on</strong>
+                      </font>
+                    </a>
+                  </td>
+                </tr>
+              </table>
 
+              {% for story in issue.midstories %}
+              <table width="385" height="18" border="0" cellpadding="0" cellspacing="0" bgcolor="#ffa754">
+                <tr>
+                  <td width="10" height="18" align="left" valign="middle"></td>
+                  <td width="375" align="left" valign="middle">
+                    <strong>
+                      <font color="#000000" size="2" face="Arial, Helvetica, sans-serif">
+                        {{ story.headline|safe }}
+                      </font>
+                    </strong>
+                  </td>
+                </tr>
+              </table>
 
-<table width="590" border="0" align="center" cellpadding="0" cellspacing="0">
-	<tr>
-    	<td height="25" colspan="3" align="right"><font size="2" face="Arial, Helvetica, sans-serif">Problems with this email? <strong><font color="#004484"><a href="{{ issue.get_absolute_url }}">See it in your browser.</a></font></strong></font></td>
-  	</tr>
-  	<tr>
-    	<td height="80" colspan="3"><a href ="http://www.daily.swarthmore.edu"><img border="0" src='images/header.png' alt="The Daily Gazette" width="590" height="80" /></a></td>
-	</tr>
-  	<tr>
-    	<td height="30" colspan="3">
-    		<table width="590" height="30" border="0" cellpadding="0" cellspacing="0">
-      			<tr>
-        			<td width="1" bgcolor="#999999"></td>
-				<td width="183" height="30">&nbsp;&nbsp;&nbsp;<a href="http://daily.swarthmore.edu"><font color="#432c16" size="2" face="Arial, Helvetica, sans-serif">daily.swarthmore.edu</font></a></td>
-			        <td width="405" height="30" align="right" valign="middle" bgcolor="#ffffff"><font color="#432c16" size="2" face="Arial, Helvetica, sans-serif">{{ issue.date|:"F j, Y" }}</font>&nbsp;&nbsp;&nbsp;</td>
-				<td width="1" bgcolor="#999999"></td>
-      			</tr>
-    		</table>
-		<table width="590" height="1" border="0" cellpadding="0" cellspacing="0" bgcolor="#432c16">
-			<tr>
-  				<td></td>
-			</tr>
-		</table>
-    	</td>
-	</tr>
-	<tr>
-		<td colspan="3">
-        
-			<table width="590" cellspacing="0" cellpadding="0">
-            <tr>
-                	<td width="1" bgcolor="#999999"></td>
-        			<td width="588" align="left" valign="top">
-                    
-                        		<table width="588" height="24" border="0" cellpadding="0" cellspacing="0" bgcolor="#ffa754">
-	            		<tr>
-	              			<td width="10" height="24" align="left" valign="middle"></td>
-	              			<td width="375" align="left" valign="middle">
-	              				<strong><font color="#000000" size="3" face="Arial, Helvetica, sans-serif">
-	              					{{ issue.topstory.headline }}              		
-						</font></strong>
-	              			</td>
-	            		</tr>
-	          	</table>
-                    
-                    
-                    
+              <table width="385" border="0" cellspacing="0" cellpadding="10">
+                <tr>
+                  <td>
+                    <font color="#333333" size="2" face="Georgia, Times New Roman, Times, serif">
+                      {{ story.summary|safe }}
+                    </font>
+                    <br />
+                    <a href="{{ story.get_absolute_url }}">
+                      <font color="#004484" size="2" face="Arial, Helvetica, sans-serif">
+                        <strong>&gt;&gt; Read on</strong>
+                      </font>
+                    </a>
+                  </td>
+                </tr>
+              </table>
+
+              {% endfor %}
+
+              <table width="385" height="10" border="0" cellpadding="0" cellspacing="0">
+                <tr>
+                  <td></td>
+                </tr>
+              </table>
+
+              {% if issue.lowstories.all %}
+                <table width="385" height="2" border="0" cellpadding="0" cellspacing="0" bgcolor="#E47629">
+                  <tr>
+                    <td></td>
+                  </tr>
+                </table>
+
+                <table width="385" border="0" cellspacing="0" cellpadding="10">
+                  <tr>
+                    <td align="left" valign="top">
+                      <font size="2" face="Arial, Helvetica, sans-serif">
+                        MORE STORIES
+                        <br /><br />
+                        <font color="#004484">
+                          {% for story in issue.lowstories.all %}
+                            {{ story.category.name }}: 
+                            <a href="{{ story.get_absolute_url }}">
+                              <font color="#004484" size="2" face="Arial, Helvetica, sans-serif">
+                                <strong>{{ story.headline|safe }}</strong>
+                              </font>
+                            </a>
+                            <br />
+                          {% endfor %}
+                        </font>
+                      </font>
                     </td>
-                    <td width="1" bgcolor="#999999"></td>
-            </tr>
-            </table>
-
-			<table width="590" cellspacing="0" cellpadding="0">
-				
-                
-      			<tr>
-        			<td width="1" bgcolor="#999999"></td>
-        			<td width="385" align="left" valign="top">
-        			  					
-			
-					
-			<table width="385" border="0" cellspacing="0" cellpadding="10">
-				<tr>
-	            			<td>
-	            				<font color="#333333" size="2" face="Georgia, Times New Roman, Times, serif">		
-							{{ issue.topstory.short }}
-	            				</font>
-	            				<br />
-	            		
-	                			<a href="{{ issue.topstory.get_absolute_url }}">
-	                			<font color="#004484" size="2" face="Arial, Helvetica, sans-serif"><strong>&gt;&gt; Read on</strong></font></a>
-	            			</td>
-	        		</tr>
-	        	</table>
-
-			{% for item in issue.stories|slice:":1" %}
-
-			<table width="385" height="18" border="0" cellpadding="0" cellspacing="0" bgcolor="#ffa754">
-	            		<tr>
-	              			<td width="10" height="18" align="left" valign="middle"></td>
-	              			<td width="375" align="left" valign="middle">
-	              				<strong><font color="#000000" size="2" face="Arial, Helvetica, sans-serif">
-	              					{{ item.headline }}	              		
-						</font></strong>
-	              			</td>
-	            		</tr>
-	          	</table>
-
-			
-			<table width="385" border="0" cellspacing="0" cellpadding="10">
-				<tr>
-	            			<td>
-	            				<font color="#333333" size="2" face="Georgia, Times New Roman, Times, serif">		
-							{{ item.short }}
-	            				</font>
-	            				<br />
-	            		
-	                			<a href="{{ item.get_absolute_url }}">
-	                			<font color="#004484" size="2" face="Arial, Helvetica, sans-serif"><strong>&gt;&gt; Read on</strong></font></a>
-	            			</td>
-	        		</tr>
-	        	</table>
-
-			{% endfor %}
-
-
-			
-
-
-
-
-
-
-
-
-
-			<table width="385" height="10" border="0" cellpadding="0" cellspacing="0">
-				<tr>
-	            	<td></td>
-	            </tr>
-			</table>
-
-			
-										<table width="385" height="2" border="0" cellpadding="0" cellspacing="0" bgcolor="#E47629">
-	<tr>
-  		<td></td>
-	</tr>
-</table>
-<table width="385" border="0" cellspacing="0" cellpadding="10">
-	<tr>
-  		<td align="left" valign="top"><font size="2" face="Arial, Helvetica, sans-serif">
-  			MORE STORIES<br /><br />
-    		<font color="#004484">
-
-
-	{% for item in issue.stories|slice:"2:" %}
-
-	{{ item.category.name }}: <a href="{{ item.get_absolute_url }}"><font color="#004484" size="2" face="Arial, Helvetica, sans-serif"><strong>{{ item.headline }}</strong></font></a> <br /> 
-
-	{% endfor %}
-   
-
-
-
-    		</font>
-    	</td>
-	</tr>
-</table>
-<table width="385" height="2" border="0" cellpadding="0" cellspacing="0" bgcolor="#E47629">
-	<tr>
-	  	<td></td>
-	</tr>
-</table>
-<table width="385" height="10" border="0" cellpadding="0" cellspacing="0">
-	<tr>
-  		<td></td>
-	</tr>
-</table>
-								
-			
-				
-
-			<table width="385" height="24" border="0" cellpadding="0" cellspacing="0" bgcolor="#432c16">
-	            		<tr>
-	              			<td width="10" height="24" align="left" valign="middle"></td>
-	              			<td width="375" align="left" valign="middle">
-	              				<strong><font color="#ffffff" size="3" face="Arial, Helvetica, sans-serif">
-	              					Announcements	              		
-						</font></strong>
-	              			</td>
-	            		</tr>
-	          	</table>
-
-			{% for announcement in announcements %}
-
-			<table width="385" border="0" cellspacing="0" cellpadding="10">
-				<tr>
-	            			<td>
-	            				<font color="#333333" size="2" face="Georgia, Times New Roman, Times, serif">		
-											 
-				    <a href="{{ announcement.get_absolute_url }}"><strong>{{ announcement.title }}</strong></a>
-				  {% if announcement.is_event %}
-  				  <p>Sponsored by 
-  				    {% if announcement.sponsor_url %}
-  				      <a href="{{ announcement.sponsor_url }}">{{ announcement.sponsor }}</a>.
-  				    {% else %}
-                {{ announcement.sponsor }}.
+                  </tr>
+                </table>
               {% endif %}
-            </p>
-            <p>When: {{ announcement.event_date|near_future_date }} at {{ announcement.event_time }}</p>
-            <p>Where: {{ announcement.event_place }}</p>
+
+              <table width="385" height="2" border="0" cellpadding="0" cellspacing="0" bgcolor="#E47629">
+                <tr>
+                  <td></td>
+                </tr>
+              </table>
+
+              <table width="385" height="10" border="0" cellpadding="0" cellspacing="0">
+                <tr>
+                  <td></td>
+                </tr>
+              </table>
+
+              <table width="385" height="24" border="0" cellpadding="0" cellspacing="0" bgcolor="#432c16">
+                <tr>
+                  <td width="10" height="24" align="left" valign="middle"></td>
+                  <td width="375" align="left" valign="middle">
+                    <strong>
+                      <font color="#ffffff" size="3" face="Arial, Helvetica, sans-serif">
+                        Announcements
+                      </font>
+                    </strong>
+                  </td>
+                </tr>
+              </table>
+
+              {% for announcement in issue.announcements %}
+                <table width="385" border="0" cellspacing="0" cellpadding="10">
+                  <tr>
+                    <td>
+                      <font color="#333333" size="2" face="Georgia, Times New Roman, Times, serif">
+                        <a href="{{ announcement.get_absolute_url }}"><strong>{{ announcement.title }}</strong></a>
+
+                        {% if announcement.is_event %}
+                          (Sponsored by {{ announcement.sponsor_link }})
+                          <br/>
+                          {{ announcement.event_place }};
+                          {{ announcement.event_date|near_future_date }}
+                          at {{ announcement.event_time }}
+                          {% if announcement.text %}
+                            <br/><br/>
+                            {{ announcement.brief_excerpt|safe }}
+                          {% endif %}
+
+                        {% else %}
+                          {% if announcement.sponsor %}
+                            ({{ announcement.sponsor_link }})
+                          {% endif %}
+                          <br/><br/>
+                          {{ announcement.long_excerpt|safe }}
+                        {% endif %}
+                      </font>
+                    </td>
+                  </tr>
+                </table>
+              {% endfor %}
+
+              <table width="385" height="24" border="0" cellpadding="0" cellspacing="0" bgcolor="#432c16">
+                <tr>
+                  <td width="10" height="24" align="left" valign="middle"></td>
+                  <td width="375" align="left" valign="middle">
+                    <strong>
+                      <font color="#ffffff" size="3" face="Arial, Helvetica, sans-serif">
+                        The Weather
+                      </font>
+                    </strong>
+                  </td>
+                </tr>
+              </table>
+
+              <table width="385" border="0" cellspacing="0" cellpadding="10">
+                <tr>
+                  <td>
+                    <font color="#333333" size="2" face="Georgia, Times New Roman, Times, serif">
+                      <p><strong>Today:</strong> {{ issue.weather.today }}</p>
+                      <p>{{ issue.joke.line_one }}</p>
+                      <p><strong>Tonight:</strong> {{ issue.weather.tonight }}</p>
+                      <p>{{ issue.joke.line_two }}</p>
+                      <p><strong>Tomorrow:</strong> {{ issue.weather.tomorrow }}</p>
+                      <p>{{ issue.joke.line_three }}</p>
+                    </font>
+                  </td>
+                </tr>
+              </table>
+
+              <table width="385" height="24" border="0" cellpadding="0" cellspacing="0" bgcolor="#432c16">
+                <tr>
+                  <td width="10" height="24" align="left" valign="middle"></td>
+                  <td width="375" align="left" valign="middle">
+                    <strong>
+                      <font color="#ffffff" size="3" face="Arial, Helvetica, sans-serif">
+                        Menus
+                      </font>
+                    </strong>
+                  </td>
+                </tr>
+              </table>
+
+              <table width="385" border="0" cellspacing="0" cellpadding="10">
+                <tr>
+                  <td>
+                    <font color="#333333" size="2" face="Georgia, Times New Roman, Times, serif">
+                      {% if issue.menu.closed %}
+                        {{ issue.menu.message }}
+                      {% else %}
+                        <p><strong>Lunch</strong>: {{ menu.lunch }}</p>
+                        <p><strong>Dinner</strong>: {{ menu.dinner }}</p>
+                      {% endif %}
+                    </font>
+                  </td>
+                </tr>
+              </table>
+
+
+              <table width="385" height="24" border="0" cellpadding="0" cellspacing="0" bgcolor="#432c16">
+                <tr>
+                  <td width="10" height="24" align="left" valign="middle"></td>
+                  <td width="375" align="left" valign="middle">
+                    <strong>
+                      <font color="#ffffff" size="3" face="Arial, Helvetica, sans-serif">
+                        Upcoming Events
+                      </font>
+                    </strong>
+                  </td>
+                </tr>
+              </table>
+
+              {% for event in events %}
+                <table width="385" border="0" cellspacing="0" cellpadding="10">
+                  <tr>
+                    <td>
+                      <font color="#333333" size="2" face="Georgia, Times New Roman, Times, serif">
+                        <strong>{{ event.headline }}</strong> <br />
+                        Where: {{ event.location }} <br />
+                        When: {{event.time }} <br />
+                        Sponsor: {{ event.sponsor }} <br />
+                      </font>
+                      <br />
+                    </td>
+                  </tr>
+                </table>
+              {% endfor %}
+
+              <table width="385" height="2" border="0" cellpadding="0" cellspacing="0" bgcolor="#E47629">
+                <tr>
+                  <td></td>
+                </tr>
+              </table>
+
+              <table width="385" height="10" border="0" cellpadding="0" cellspacing="0">
+                <tr>
+                  <td></td>
+                </tr>
+              </table>
+
+
+              <!-- editable text, but handled here, not in the CMS -->
+              <table width="385" border="0" cellspacing="0" cellpadding="10">
+                <tr>
+                  <td>
+                    <p>
+                      <font color="#333333" size="2" face="Arial, Helvetica, sans-serif">
+                        The Daily Gazette is a publication written by members of the Swarthmore College community. The administration of Swarthmore College has no editorial control or oversight regarding the content or presentation of the Daily Gazette. Funding for the Gazette is provided by the Student Budget Committee and by advertising revenue.
+                        <br /><br />
+                        <a href="http://daily.swarthmore.edu/about/contact/">Contact</a> |
+                        <a href="http://daily.swarthmore.edu/about/">About</a> | 
+                        <a href="http://daily.swarthmore.edu/join/">Employment</a> | 
+                        <a href="http://daily.swarthmore.edu/policies/">Policies</a>
+                      </font>
+                    </p>
+                  </td>
+                </tr>
+              </table>
+
+            </td>
+
+            <td width="1" bgcolor="#999999"></td>
             
-				  {% else %}
-				    <p>{{ announcement.brief_excerpt|safe }}</p>
-				  {% endif %}
+            <td width="202" align="left" valign="top">
+              <table width="202" border="0" cellpadding="0" cellspacing="0">
+                <tr>
+                  <td width="202" align="center" valign="top" bgcolor="#ffa754">
+                    {{ issue.topstory.get_issue_thumbnail }}
+                    <br />
+                    <font color="#000000" size="2" face="Arial, Helvetica, sans-serif">
+                      by <em>{{ issue.topstory.photo.credit }}</em>
+                    </font>
+                  </td>
+                </tr>
+              </table>
 
+              <table width="202" height="30" border="0" cellpadding="0" cellspacing="0" bgcolor="#432c16">
+                <tr>
+                  <td width="10" align="left" valign="middle">&nbsp;</td>
+                  <td align="left" valign="middle">
+                    <strong>
+                      <font color="#FFFFFF" size="2" face="Arial, Helvetica, sans-serif">
+                        Newest Jobs
+                      </font>
+                    </strong>
+                  </td>
+                </tr>
+              </table>
 
+              <table width="202" height="110" border="0" cellpadding="0" cellspacing="0">
+                <tr>
+                  <td width="180" align="left" valign="middle">
+                    <font size="2" face="Arial, Helvetica, sans-serif" color="black">
+                      <br />
+                      {% for job in jobs %}
+                      <a href="{{ job.get_absolute_url }}">{{ job.name }}</a>: 
+                      {% if job.is_paid %}Paid, {% endif %}
+                      {{ job.where }}
+                      <br /><br/>
+                      {% endfor %}
+                    </font>
+                  </td>
+                </tr>
+              </table>
 
-	            				</font>
-	            			</td>
-	        		</tr>
-	        	</table>
+              <table width="202" height="30" border="0" cellpadding="0" cellspacing="0" bgcolor="#432c16">
+                <tr>
+                  <td width="10" align="left" valign="middle">&nbsp;</td>
+                  <td align="left" valign="middle">
+                    <strong>
+                      <font color="#FFFFFF" size="2" face="Arial, Helvetica, sans-serif">
+                        Newest Comments
+                      </font>
+                    </strong>
+                  </td>
+                </tr>
+              </table>
 
-			{% endfor %}
-			
+              <table width="202" height="110" border="0" cellpadding="0" cellspacing="0">
+                <tr>
+                  <td width="180" align="left" valign="middle">
+                    <font size="2" face="Arial, Helvetica, sans-serif" color="black">
+                      <br />
+                      {% for comment in comments %}
+                        On <a href="{{comment.get_absolute_url}}">{{comment.subject.get_title}}</a>
+                        by {{ comment.display_name }}
+                        at {{ comment.time|date:"g:i A" }},
+                        {{ comment.time|date:"F j" }}
 
+                        {% if not forloop.last %}<br/><br/>{% endif %}
+                      {% endfor %}
+                    </font>
+                  </td>
+                </tr>
+              </table>
 
+            </td>
+            <td width="1" bgcolor="#999999"></td>
+          </tr>
 
-			<table width="385" height="24" border="0" cellpadding="0" cellspacing="0" bgcolor="#432c16">
-	            		<tr>
-	              			<td width="10" height="24" align="left" valign="middle"></td>
-	              			<td width="375" align="left" valign="middle">
-	              				<strong><font color="#ffffff" size="3" face="Arial, Helvetica, sans-serif">
-	              					The Weather	              		
-						</font></strong>
-	              			</td>
-	            		</tr>
-	          	</table>
+        </table>
+      </td>
+    </tr>
+    
+    <tr>
+      <td height="1" colspan="3" bgcolor="#999999"></td>
+    </tr>
 
-			
-			<table width="385" border="0" cellspacing="0" cellpadding="10">
-				<tr>
-	            			<td>
-	            				<font color="#333333" size="2" face="Georgia, Times New Roman, Times, serif">	
+    <tr>
+      <td width="1" bgcolor="#999999"></td>
+      <td width="588" align="center" valign="middle">
+        <table width="588" border="0" cellspacing="0" cellpadding="10">
+          <tr>
+            <td width="588" align="center" valign="middle">
+              <div align="center">
+                <font color="#333333" size="1" face="Arial, Helvetica, sans-serif">
+                  To change your subscription status, log in at <a href="http://daily.swarthmore.edu{% url manage %}"><font color="#004484">daily.swarthmore.edu{% url manage %}</font></a>.
+                </font>
+              </div>
+            </td>
+          </tr>
+        </table>
+      </td>
+      <td width="1" bgcolor="#999999"></td>
+    </tr>
 
-	
-	      <p class="weather"><strong>Today:</strong> {{ weather.today }}</p>
-              <p class="joke">{{ joke.line_one }}</p>
-              <p class="weather"><strong>Tonight:</strong> {{ weather.tonight }}</p>
-              <p class="joke">{{ joke.line_two }}</p>
-              <p class="weather"><strong>Tomorrow:</strong> {{ weather.tomorrow }}</p>
-              <p class="joke">{{ joke.line_three }}</p>
-              <p id="attrib">Weather updated daily, courtesy of the <a href="http://weather.gov">NWS</a>.</p>
-
-
-	            				</font>
-            	
-	            			</td>
-	        		</tr>
-	        	</table>
-
-
-       			  					
-			
-			<table width="385" height="24" border="0" cellpadding="0" cellspacing="0" bgcolor="#432c16">
-	            		<tr>
-	              			<td width="10" height="24" align="left" valign="middle"></td>
-	              			<td width="375" align="left" valign="middle">
-	              				<strong><font color="#ffffff" size="3" face="Arial, Helvetica, sans-serif">
-	              					Menus              		
-						</font></strong>
-	              			</td>
-	            		</tr>
-	          	</table>
-
-			
-			<table width="385" border="0" cellspacing="0" cellpadding="10">
-				<tr>
-	            			<td>
-	            				<font color="#333333" size="2" face="Georgia, Times New Roman, Times, serif">		
-
-							<strong>Lunch</strong>: {{ menu.lunch }}
-							<strong>Dinner</strong>: {{ menu.dinner }}
-
-	            				</font>
-	            			</td>
-	        		</tr>
-	        	</table>
-
-
-			<table width="385" height="24" border="0" cellpadding="0" cellspacing="0" bgcolor="#432c16">
-	            		<tr>
-	              			<td width="10" height="24" align="left" valign="middle"></td>
-	              			<td width="375" align="left" valign="middle">
-	              				<strong><font color="#ffffff" size="3" face="Arial, Helvetica, sans-serif">
-	              					Upcoming Events              		
-						</font></strong>
-	              			</td>
-	            		</tr>
-	          	</table>
-
-			
-			{% for event in events %}
-
-			<table width="385" border="0" cellspacing="0" cellpadding="10">
-				<tr>
-	            			<td>
-	            				<font color="#333333" size="2" face="Georgia, Times New Roman, Times, serif">		
-
-						<strong>{{ event.headline }}</strong> <br />
-						Where: {{ event.location }} <br />
-						When: {{event.time }} <br />
-						Sponsor: {{ event.sponsor }} <br />	
-
-	            				</font>
-	            				<br />
-	            		
-	            			</td>
-	        		</tr>
-	        	</table>
-
-			{% endfor %}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<table width="385" height="2" border="0" cellpadding="0" cellspacing="0" bgcolor="#E47629">
-	<tr>
-	  	<td></td>
-	</tr>
-</table>
-<table width="385" height="10" border="0" cellpadding="0" cellspacing="0">
-	<tr>
-  		<td></td>
-	</tr>
-</table>
-
-
-
-					
-					<!-- editable text, but handled here, not in the CMS -->
-					<table width="385" border="0" cellspacing="0" cellpadding="10">
-						<tr>
-					  		<td>
-					  			<p>
-					  				<font color="#333333" size="2" face="Arial, Helvetica, sans-serif">The Daily Gazette is a publication written by members of the Swarthmore College community. The administration of Swarthmore College has no editorial control or oversight regarding the content or presentation of the Daily Gazette. Funding for the Gazette is provided by the Student Budget Committee and by advertising revenue. <br /><br />
-
-<a href="http://daily.swarthmore.edu/about/contact/">Contact</a> | <a href="http://daily.swarthmore.edu/about/">About</a> | <a href="http://daily.swarthmore.edu/join/">Employment</a> | <a href="http://daily.swarthmore.edu/policies/">Policies</a>
-</font>
-					    		</p>
-					    	</td>
-						</tr>
-					</table>
-				</td>
-				
-
-
-
-
-<td width="1" bgcolor="#999999"></td>
-<td width="202" align="left" valign="top">
-	<table width="202" border="0" cellpadding="0" cellspacing="0">
-  		<tr>
-    		<td width="202" align="center" valign="top" bgcolor="#ffa754">
-    			{{ issue.topstory.get_issue_thumbnail }}<br />
-                <font color="#000000" size="2" face="Arial, Helvetica, sans-serif">by <em>{{ issue.topstory.photo.credit }}</em></font>
-      		</td>
-  		</tr>
-	</table>
-
-	
-	
-           		                                                                                               
-
- <table width="202" height="30" border="0" cellpadding="0" cellspacing="0" bgcolor="#432c16">
-	<tr>
-		<td width="10" align="left" valign="middle">&nbsp;</td>
-	  	<td align="left" valign="middle"><strong><font color="#FFFFFF" size="2" face="Arial, Helvetica, sans-serif">Newest Jobs</font></strong></td>
-	</tr>
-</table>
-<table width="202" height="110" border="0" cellpadding="0" cellspacing="0">
-	<tr>
-	<td width="180" align="left" valign="middle">
-			<font size="2" face="Arial, Helvetica, sans-serif" color="black">
-					<a href="$">&nbsp;&nbsp;Job Title</a> <br />
-			{% for job in jobs %}
-                    <a href="{{ job.get_absolute_url }}">{{ job.name }}</a>: {% if job.is_paid %}Paid, {% endif %} {{ job.where }}<br />
-			<% endfor %}
-				</font>
-	</td></tr>
-
-		
-</table>
-
-
-<table width="202" height="30" border="0" cellpadding="0" cellspacing="0" bgcolor="#432c16">
-	<tr>
-		<td width="10" align="left" valign="middle">&nbsp;</td>
-	  	<td align="left" valign="middle"><strong><font color="#FFFFFF" size="2" face="Arial, Helvetica, sans-serif">Newest Comments</font></strong></td>
-	</tr>
-</table>
-<table width="202" height="110" border="0" cellpadding="0" cellspacing="0">
-	<tr>
-	<td width="180" align="left" valign="middle">
-			<font size="2" face="Arial, Helvetica, sans-serif" color="black">
-					<a href="$">&nbsp;&nbsp;Job Title</a> <br />
-                    	{% for comment in comments %}
-			<a href="{{comment.get_absolute_url}}">{{comment.article.get_title}}</a> @ {{comment.time|date:"F j, Y" }}</a>
-				</font>
-	</td></tr>
-
-		
-</table>
-
-
-	
-
-
-	</td>
-<td width="1" bgcolor="#999999"></td>
-		</tr>
-	</table>
-</td>
-</tr>
-
-	
-	<tr>
-		<td height="1" colspan="3" bgcolor="#999999"></td>
-	</tr>
-	<tr>
-		<td width="1" bgcolor="#999999"></td>
-	    <td width="588" align="center" valign="middle">
-	    	<table width="588" border="0" cellspacing="0" cellpadding="10">
-	    		<tr>
-	        		<td width="588" align="center" valign="middle">
-	        			<div align="center">
-	        				<font color="#333333" size="1" face="Arial, Helvetica, sans-serif">
-	        					To change your subscription status, log in at <a href="{% url manage %}"><font color="#004484">{% url manage %}</font></a>
-							</font>
-						</div>
-					</td>
-	      		</tr>
-	    	</table>
-	    </td>
-	    <td width="1" bgcolor="#999999"></td>
-	</tr>
-	<tr>
-		<td height="1" colspan="3" bgcolor="#999999"></td>
-	</tr>
-</table>
-
-
-
-
+    <tr>
+      <td height="1" colspan="3" bgcolor="#999999"></td>
+    </tr>
+  </table>
 </body>
 
 </html>
