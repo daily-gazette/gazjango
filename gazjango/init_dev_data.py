@@ -6,9 +6,9 @@ setup_environ(settings)
 
 ### imports
 
-from datetime import date, timedelta
+from datetime import date, datetime, timedelta
 
-from django.contrib.auth.models      import User, Group
+from django.contrib.auth.models      import User, Group, Permission
 from django.contrib.sites.models     import Site
 from django.contrib.flatpages.models import FlatPage
 import tagging
@@ -18,6 +18,7 @@ from accounts.models      import ContactMethod, ContactItem
 from announcements.models import Announcement
 from articles.models      import Article, Category, Format
 from articles.models      import Special, SpecialsCategory, DummySpecialTarget
+from comments.models      import PublicComment
 from issues.models        import Issue, Menu, Weather, WeatherJoke
 from media.models         import ImageFile, MediaBucket
 from polls.models         import Poll, Option
@@ -63,6 +64,13 @@ reporter_group     = Group.objects.create(name="Reporters")
 photographer_group = Group.objects.create(name="Photographers")
 editor_group       = Group.objects.create(name="Editors")
 admin_group        = Group.objects.create(name="Admins")
+
+reader_group.permissions.add(
+    Permission.objects.get(
+        content_type__model='publiccomment',
+        codename='can_post_directly'
+    )
+)
 
 
 ### Users
@@ -295,6 +303,7 @@ scandal = Article.objects.create(
          "[source: http://dailyjolt.com]",
     format=textile,
     status='p',
+    pub_date=datetime.now() - timedelta(hours=3),
     position=1
 )
 scandal.authors.add(bob_p, jack_p)
@@ -413,6 +422,47 @@ facebook = art(
     author=brandon
 )
 
+
+### Comments
+
+PublicComment.objects.new(
+    subject=scandal,
+    name="Concerned",
+    email='no@no.com',
+    text="First the Haverford president, then the Bryn Mawr president, "
+         "then the Swat president, one per year? Something more is "
+         "going on than just prostitution scandals!",
+    time=datetime.now() - timedelta(hours=2, minutes=4),
+    check_spam=False,
+    pre_approved=True
+)
+
+PublicComment.objects.new(
+    subject=scandal,
+    user=jack,
+    text="You're crazy, Concerned. Nothing's going on!",
+    time=datetime.now() - timedelta(hours=1, minutes=8)
+)
+
+PublicComment.objects.new(
+    subject=scandal,
+    user=jack,
+    name="Whoa",
+    text="#1 is so right. I bet Jack McSmith figured it out the real "
+         "conspiracy but doesn't want to expose it, because the conspirators "
+         "have his baby daughter held hostage or something.",
+    time=datetime.now() - timedelta(hours=1, minutes=7),
+    pre_approved=True,
+    check_spam=False
+)
+
+PublicComment.objects.new(
+    subject=scandal,
+    user=jill,
+    text="Our baby is being held hostage, Jack? I thought she was at your mom's!",
+    time=datetime.now()
+)
+
 ### Announcements
 
 Announcement.objects.create(
@@ -446,6 +496,18 @@ Announcement.objects.create(
     event_date=date.today() + timedelta(days=2),
     event_time="7pm",
     text="Come play games with us, and stuff.",
+    is_published=True
+)
+
+Announcement.objects.create(
+    kind='c',
+    slug='blood',
+    date_end=date.today() + timedelta(days=3),
+    sponsor='Movie Commitee',
+    title='There Will Be Blood',
+    event_place='Sci 101',
+    event_date=date.today() + timedelta(days=3),
+    event_time="7 and 9 pm",
     is_published=True
 )
 
@@ -492,7 +554,9 @@ issue_today = Issue.objects.create(
 issue_today.add_article(scandal)
 issue_today.add_article(nobody_loves_me)
 issue_today.add_article(boring)
-
+issue_today.add_article(tarble)
+issue_today.add_article(paces)
+issue_today.add_article(nestbeschmutzer)
 
 ### Specials
 
