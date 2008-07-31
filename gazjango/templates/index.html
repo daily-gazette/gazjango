@@ -48,9 +48,11 @@ jQuery(document).ready(function() {
 					<ul>
 					{% for comment in comments %}
 							<li>
-							  <a href="{{comment.get_absolute_url}}">{{ comment.article.get_title }}</a>
-							  <br />
-							  Comment @ {{comment.time|date:"F j, Y" }}
+							  On <a href="{{comment.get_absolute_url}}">{{ comment.subject.get_title }}</a>
+							  <br/>
+							  by {{ comment.display_name }}
+							  at {{ comment.time|date:"g:i A" }}
+							  on {{ comment.time|date:"F j" }}
 							</li>
 					{% endfor %}
 					</ul>
