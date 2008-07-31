@@ -6,7 +6,7 @@
 
 {% block customheader %}
 
-<link rel="stylesheet" href="/css/page/story.css" type="text/css" media="screen, projection" />
+<link rel="stylesheet" href="{% static css page/story.css %}" type="text/css" media="screen, projection" />
 
 <script>
 
@@ -78,9 +78,9 @@ function toggleLayer( whichLayer )
 			  <strong>Share:</strong> {% add_this hover %}
 			</div>
 			<p>
-			  <a href="{% url print story %}"><img src="/images/icons/print.png" /> Print</a>
+			  <a href="{% url print story %}"><img src="{% static images icons/print.png %}" /> Print</a>
 			  &nbsp;&nbsp;
-			  <a href="{% url email story %}"><img src="/images/icons/email.png" /> Email</a>
+			  <a href="{% url email story %}"><img src="{% static images icons/email.png %}" /> Email</a>
 			</p>
 		</div>
 				

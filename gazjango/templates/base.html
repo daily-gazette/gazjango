@@ -1,3 +1,4 @@
+{% load story_extras %}
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
   "http://www.w3.org/TR/html4/loose.dtd">
 <html lang="en">
@@ -9,13 +10,13 @@
     {% endblock full-title %}
   </title>
 
-  <link rel="stylesheet" href="/css/toolbox.css" type="text/css" media="screen, projection, print" />
-  <link rel="stylesheet" href="/css/style.css" type="text/css" media="screen, projection" />
-  <link rel="stylesheet" href="/css/print.css" type="text/css" media="print" />
+  <link rel="stylesheet" href="{% static css toolbox.css %}" type="text/css" media="screen, projection, print" />
+  <link rel="stylesheet" href="{% static css style.css %}" type="text/css" media="screen, projection" />
+  <link rel="stylesheet" href="{% static css print.css %}" type="text/css" media="print" />
 
-  <link rel="alternate" type="application/rss+xml" title="RSS 2.0" href="" />
-  <link rel="alternate" type="text/xml" title="RSS .92" href="" />
-  <link rel="alternate" type="application/atom+xml" title="Atom 0.3" href="" />
+  {# <link rel="alternate" type="application/rss+xml" title="RSS 2.0" href="" /> #}
+  {# <link rel="alternate" type="text/xml" title="RSS .92" href="" /> #}
+  {# <link rel="alternate" type="application/atom+xml" title="Atom 0.3" href="" /> #}
 
   {% block customheader %}
   {% endblock customheader %}

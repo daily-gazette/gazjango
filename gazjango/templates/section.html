@@ -7,8 +7,7 @@
 
 {% block customheader %}
 
-<link rel="stylesheet" href="css/page/section.css" type="text/css"/>
-
+<link rel="stylesheet" href="{% static css page/section.css %}" type="text/css"/>
 
 
 {% endblock customheader %}
@@ -19,7 +18,7 @@
 		<div id="headerSectionBar">
 		
 			<div id="headerSearch">
-				<form method="get" id="searchform" action="http://www.sccs.swarthmore.edu">Search: <input type="text" class="textbox" value="" name="s" id="s" /><input type="submit" id="searchsubmit" value="Go" /></p>
+				<form method="get" id="searchform" action="{% url search %}">Search: <input type="text" class="textbox" value="" name="s" id="s" /><input type="submit" id="searchsubmit" value="Go" /></p>
 			</div>
 			
 			<div id="headerColumn">
@@ -119,14 +118,6 @@
 			</div>
 			
 			<div id="lowBar">
-			
-{% for low_list in lowstories %}
-Ê <div id="lows-{{ foorloop.count }}">
-Ê Ê {% for story in low_list %}
-Ê Ê Ê ...
-Ê Ê {% endfor %}
-Ê </div>
-{% endfor %}
 			
 				{% for low_list in lowstories %}
 				

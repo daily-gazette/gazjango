@@ -8,15 +8,15 @@ The Daily Gazette :: Swarthmore College's Daily Paper
 
 {% block customheader %}
 
-<script type="text/javascript" src="/js/jquery-1.2.1.pack.js"></script>
-<script type="text/javascript" src="/js/jcarousel/lib/jquery.jcarousel.pack.js"></script>
+<script type="text/javascript" src="{% static js jquery-1.2.1.pack.js %}"></script>
+<script type="text/javascript" src="{% static js jcarousel/lib/jquery.jcarousel.pack.js %}"></script>
 
-<link rel="stylesheet" type="text/css" href="/js/jcarousel/lib/jquery.jcarousel.css" />
-<link rel="stylesheet" type="text/css" href="/js/jcarousel/skins/tango/skin.css" />
+<link rel="stylesheet" type="text/css" href="{% static js jcarousel/lib/jquery.jcarousel.css %}" />
+<link rel="stylesheet" type="text/css" href="{% static js jcarousel/skins/tango/skin.css %}" />
 
 
-<link rel="stylesheet" type="text/css" href="/js/ajaxtabs/ajaxtabs.css" />
-<script type="text/javascript" src="/js/ajaxtabs/ajaxtabs.js"></script>
+<link rel="stylesheet" type="text/css" href="{% static js ajaxtabs/ajaxtabs.css %}" />
+<script type="text/javascript" src="{% static js ajaxtabs/ajaxtabs.js %}"></script>
 
 <script type="text/javascript">
 
@@ -86,7 +86,7 @@ jQuery(document).ready(function() {
 				</div>
 				
 				<div id="zagette">
-					<a href=""><img src="images/index/zagette.png" alt="The Zagette: Swarthmore's Guide to Wining and Dining" /></a>
+					<a href=""><img src="{% static images index/zagette.png %}" alt="The Zagette: Swarthmore's Guide to Wining and Dining" /></a>
 				</div>
 			</div>
 		</div>
@@ -225,7 +225,7 @@ jQuery(document).ready(function() {
 				  <p class="byline"><span class="author">by {{ story.author|upper }}</span></p>
 				{% endfor %}
 				
-				<p><a href="http://www.biconews.com"><em>The BiCo News</em></a> is the weekly paper for Bryn Mawr and Haverford Colleges.</p>
+				<p><a href="http://www.biconews.com/"><em>The BiCo News</em></a> is the weekly paper for Bryn Mawr and Haverford Colleges.</p>
 				
 				<hr />
 				

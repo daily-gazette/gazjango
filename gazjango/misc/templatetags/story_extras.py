@@ -9,6 +9,10 @@ from datetime import date
 
 register = template.Library()
 
+
+### various filters to ease the outputting of more human text
+
+
 @register.filter
 def join_authors(authors, format='', autoescape=None):
     """
@@ -79,6 +83,9 @@ def join_authors(authors, format='', autoescape=None):
 join_authors.needs_autoescape = True
 
 
+
+
+
 @register.filter
 def issue_url(date):
     "Returns the url for ``date``'s issue."
@@ -86,6 +93,10 @@ def issue_url(date):
     return reverse('issue', kwargs=d)
 
 issue_url.is_safe = True
+
+
+
+
 
 
 @register.filter
@@ -105,6 +116,11 @@ def near_future_date(date):
 
 near_future_date.is_safe = True
 
+
+
+
+
+### stuff related to the AddThis button
 
 
 ADD_THIS_PRE = """
@@ -152,3 +168,29 @@ def get_addthis_button(parser, token):
         raise template.TemplateSyntaxError, "invalid argument to %r" % tag_name
     
     return AddThisNode(popup_on_hover == 'hover')
+
+
+
+
+### static file URLs: change this if/when the static serving scheme changes
+
+STATIC_FILE_KINDS = ('css', 'js', 'images')
+
+class StaticFileURLNode(template.Node):
+    def __init__(self, kind, name):
+        self.kind = kind
+        self.name = name
+    
+    def render(self, context):
+        return '/%s/%s' % (self.kind, self.name)
+    
+
+@register.tag(name="static")
+def get_static_file_link(parser, token):
+    split = token.split_contents()
+    if len(split) != 3:
+        raise template.TemplateSyntaxError, "%r tag requires two arguments" % token.content.split[0]
+    tag_name, kind, path = split
+    if kind not in STATIC_FILE_KINDS:
+        raise template.TemplatSyntaxError, "%r: invalid kind '%s'" % (tag_name, kind)
+    return StaticFileURLNode(kind, path)
