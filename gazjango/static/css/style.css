@@ -294,6 +294,10 @@ p {
 	padding: 5px;
 }
 
+#headerComments li {
+    margin-top: 10px;
+}
+
 #headerContentBox {
 	background-color: #ffffff;
 	height:  225px;
@@ -344,7 +348,7 @@ p {
 	background-color: #dddddd;
 	padding: 5px;
 	
-	overflow: scroll;
+	overflow: auto;
 }
 
 #menu h4 {
@@ -358,11 +362,11 @@ p {
 
 #weather .weather {
     font-size: 1.4em;
+    text-align: center;
 }
 
 #weather .joke {
-    font-size: 1.1em;
-    padding-left: 1.5em;
+    font-size: 1.2em;
 }
 
 #weather #attrib {
