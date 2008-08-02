@@ -31,7 +31,7 @@ class Subsection(models.Model):
     name = models.CharField(max_length=40)
     slug = models.SlugField(unique=True)
     description = models.CharField(max_length=250, blank=True)
-    section = models.ForeignKey(Section)
+    section = models.ForeignKey(Section, related_name="subsections")
     
     class Meta:
         app_label = 'articles'
