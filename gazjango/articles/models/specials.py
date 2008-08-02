@@ -4,6 +4,27 @@ from django.contrib.contenttypes        import generic
 from gazjango.media.models import ImageFile
 from datetime              import datetime
 
+class SectionSpecial(models.Model):
+    "A special to be advertised on section pages."
+    name = models.CharField(max_length=30)
+    description = models.CharField(max_length=100)
+    
+    section = models.ForeignKey('articles.Section', related_name="specials")
+    
+    target_type = models.ForeignKey(ContentType)
+    target_id   = models.PositiveIntegerField()
+    target      = generic.GenericForeignKey('target_type', 'target_id')
+    
+    def __unicode__(self):
+        return self.name
+    
+    class Meta:
+        app_label = 'articles'
+    
+    def get_target_url(self):
+        return self.target.get_absolute_url()
+    
+
 class SpecialsCategory(models.Model):
     name = models.CharField(max_length=100)
     
@@ -27,6 +48,7 @@ class Special(models.Model):
     target_id   = models.PositiveIntegerField()
     target      = generic.GenericForeignKey('target_type', 'target_id')
     
+    
     def get_target_url(self):
         return self.target.get_absolute_url()
     
@@ -47,6 +69,9 @@ class DummySpecialTarget(models.Model):
     specials = generic.GenericRelation(Special, 
                                        content_type_field='target_type',
                                        object_id_field='target_id')
+    section_specials = generic.GenericRelation(SectionSpecial, 
+                                               content_type_field='target_type',
+                                               object_id_field='target_id')
     
     def get_absolute_url(self):
         return self.url
