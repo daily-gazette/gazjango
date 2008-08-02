@@ -21,7 +21,7 @@ class PublishedArticlesManager(models.Manager):
         orig = super(PublishedArticlesManager, self).get_query_set()
         return orig.filter(status='p')
     
-    def get_stories(self, num_mids=2, num_lows=6, **extra_filter):
+    def get_stories(self, num_top=1, num_mid=2, num_low=6, **extra_filter):
         """
         Returns stories organized by priority. This method will do some
         rearranging to always get you the number of stories of each
@@ -32,7 +32,7 @@ class PublishedArticlesManager(models.Manager):
         
         The return format looks like:
         [
-            topstory,
+            [topstory],
             [midstory1, midstory2]
             [lowstory1, lowstory2, lowstory3, ...]
         ]
@@ -46,39 +46,39 @@ class PublishedArticlesManager(models.Manager):
         base = self.filter(**extra_filter) if extra_filter else self
         
         tops = list(base.filter(position='t').order_by("?"))
-        if len(tops) == 0:
-            top = base.filter(possible_position='t').order_by('-pub_date')[0]
+        if len(tops) < num_top:
+            cands = base.filter(possible_position='t').order_by('-pub_date')
+            needed = num_top - len(tops)
+            tops += list(cands[:needed])
             mids = []
         else:
-            top = tops[0]
-            mids = tops[1:]
+            mids = tops[num_top:]
+            tops = tops[:num_top]
         
         mids += list(base.filter(position='m').order_by("?"))
-        if len(mids) < num_mids:
-            exclude_pks = [top.pk] + [mid.pk for mid in mids]
-            
+        if len(mids) < num_mid:
             cands = base.filter(possible_position__in=('m', 't'))
+            
+            exclude_pks = [el.pk for el in (tops + mids)]
             cands = cands.exclude(pk__in=exclude_pks).order_by('-pub_date')
             
-            needed = num_mids - len(mids)
+            needed = num_mid - len(mids)
             mids += list(cands[:needed])
             lows = []
-        elif len(mids) == num_mids:
-            lows = []
         else:
-            lows = mids[num_mids:]
-            mids = mids[:num_mids]
+            lows = mids[num_mid:]
+            mids = mids[:num_mid]
         
-        if len(lows) < num_lows:
-            exclude_pks = [top.pk] + [el.pk for el in (mids+lows)]
-            
+        if len(lows) < num_low:
+            exclude_pks = [el.pk for el in (tops + mids + lows)]
             cands = base.exclude(pk__in=exclude_pks).order_by('-pub_date')
-            needed = num_lows - len(lows)
+            
+            needed = num_low - len(lows)
             lows += cands[:needed]
-        elif len(lows) > num_lows:
-            lows = lows[:num_lows]
+        else:
+            lows = lows[:num_low]
         
-        return [top, mids, lows]
+        return [tops, mids, lows]
     
     
     def get_top_story(self):

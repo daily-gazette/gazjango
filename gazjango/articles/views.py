@@ -46,9 +46,9 @@ def articles(request, year=None, month=None, day=None, template="article_list.ht
 
 
 def homepage(request, template="index.html"):
-    top, mids, lows = Article.published.get_stories(num_mids=2, num_lows=6)
+    tops, mids, lows = Article.published.get_stories(num_mids=2, num_lows=6)
     data = {
-        'topstory': top,
+        'topstory': tops[0],
         'midstories': mids,
         'lowstories': lows,
         

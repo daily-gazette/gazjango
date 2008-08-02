@@ -184,17 +184,17 @@ class ArticleTestCase(unittest.TestCase):
         
         get_stories = Article.published.get_stories
         def get_pks(**args):
-            top, mids, lows = get_stories(**args)
-            return [top.pk, [x.pk for x in mids], [x.pk for x in lows]]
+            res = get_stories(**args)
+            return [ [story.pk for story in lst] for lst in res ]
         
         def assert_pks(pks, **args):
             self.assertEqual(get_pks(**args), pks)
         
-        def assert_pks_gives(*possibilites, **args):
-            to_see = [poss for poss in possibilites]
-            for i in range(len(possibilites) * 8):
+        def assert_pks_gives(*possibilities, **args):
+            to_see = [poss for poss in possibilities]
+            for i in range(len(possibilities) * 8):
                 pks = get_pks(**args)
-                self.assert_(pks in possibilites)
+                self.assert_(pks in possibilities, "%s not in %s" % (pks, possibilities))
                 try:
                     to_see.remove(pks)
                 except ValueError:
@@ -211,39 +211,39 @@ class ArticleTestCase(unittest.TestCase):
             return Article.objects.create(**args)
         
         top1 = art(slug='squirrel-attack', position='t', possible_position='t')
-        assert_pks([top1.pk, [], []])
+        assert_pks([ [top1.pk], [], [] ])
         
         mid1 = art(slug='this-weekend', position='m', possible_position='m')
-        assert_pks([top1.pk, [mid1.pk], []])
+        assert_pks([ [top1.pk], [mid1.pk], [] ])
         
         top2 = art(slug='squirrel-hunt', position='t', possible_position='t')
-        assert_pks_gives( [top1.pk, [top2.pk, mid1.pk], []],
-                          [top2.pk, [top1.pk, mid1.pk], []] )
+        assert_pks_gives( [ [top1.pk], [top2.pk, mid1.pk], [] ],
+                          [ [top2.pk], [top1.pk, mid1.pk], [] ] )
         
         low_mid1 = art(slug='concert-last-week', position='n', possible_position='m')
-        assert_pks_gives( [top1.pk, [top2.pk, mid1.pk], [low_mid1.pk]],
-                          [top2.pk, [top1.pk, mid1.pk], [low_mid1.pk]] )
+        assert_pks_gives( [ [top1.pk], [top2.pk, mid1.pk], [low_mid1.pk] ],
+                          [ [top2.pk], [top1.pk, mid1.pk], [low_mid1.pk] ] )
         
         top2.delete()
-        assert_pks([top1.pk, [mid1.pk, low_mid1.pk], []])
+        assert_pks([ [top1.pk], [mid1.pk, low_mid1.pk], [] ])
         
         low_top1 = art(slug='deer-all-dead', position='n', possible_position='t',
                        pub_date=date.today() - timedelta(days=1))
-        assert_pks([top1.pk, [mid1.pk, low_mid1.pk], [low_top1.pk]])
+        assert_pks([ [top1.pk], [mid1.pk, low_mid1.pk], [low_top1.pk] ])
         
         top1.delete()
-        assert_pks([low_top1.pk, [mid1.pk, low_mid1.pk], []])
+        assert_pks([ [low_top1.pk], [mid1.pk, low_mid1.pk], [] ])
         
         mid2 = art(slug='why-are-there-so-many-penn-stations', 
                    position='m', possible_position='m')
-        assert_pks_gives( [low_top1.pk, [mid1.pk, mid2.pk], [low_mid1.pk]],
-                          [low_top1.pk, [mid2.pk, mid1.pk], [low_mid1.pk]] )
+        assert_pks_gives( [ [low_top1.pk], [mid1.pk, mid2.pk], [low_mid1.pk] ],
+                          [ [low_top1.pk], [mid2.pk, mid1.pk], [low_mid1.pk] ] )
         
         mid3 = art(slug='something-happened', position='m', possible_position='m')
-        assert_pks_gives( [low_top1.pk, [mid1.pk, mid2.pk], [mid3.pk, low_mid1.pk]],
-                          [low_top1.pk, [mid1.pk, mid3.pk], [mid2.pk, low_mid1.pk]],
-                          [low_top1.pk, [mid2.pk, mid1.pk], [mid3.pk, low_mid1.pk]],
-                          [low_top1.pk, [mid2.pk, mid3.pk], [mid1.pk, low_mid1.pk]],
-                          [low_top1.pk, [mid3.pk, mid1.pk], [mid2.pk, low_mid1.pk]],
-                          [low_top1.pk, [mid3.pk, mid2.pk], [mid1.pk, low_mid1.pk]] )
+        assert_pks_gives( [ [low_top1.pk], [mid1.pk, mid2.pk], [mid3.pk, low_mid1.pk] ],
+                          [ [low_top1.pk], [mid1.pk, mid3.pk], [mid2.pk, low_mid1.pk] ],
+                          [ [low_top1.pk], [mid2.pk, mid1.pk], [mid3.pk, low_mid1.pk] ],
+                          [ [low_top1.pk], [mid2.pk, mid3.pk], [mid1.pk, low_mid1.pk] ],
+                          [ [low_top1.pk], [mid3.pk, mid1.pk], [mid2.pk, low_mid1.pk] ],
+                          [ [low_top1.pk], [mid3.pk, mid2.pk], [mid1.pk, low_mid1.pk] ] )
     
