@@ -1,4 +1,4 @@
-from datetime import date, timedelta
+import datetime
 
 from django.template   import RequestContext
 from django.shortcuts  import render_to_response, get_object_or_404
@@ -40,7 +40,7 @@ def article(request, slug, year, month, day, print_view=False, template="stories
 
 def articles(request, year=None, month=None, day=None, template="article_list.html"):
     articles = filter_by_date(Article.published.all(), year, month, day)
-    data = {'articles': articles, 'year': year, 'month': month, 'day': day}
+    data = { 'articles': articles, 'year': year, 'month': month, 'day': day }
     rc = RequestContext(request)
     return render_to_response(template, data, context_instance=rc)
 
@@ -70,7 +70,10 @@ def homepage(request, template="index.html"):
 
 
 def menu_partial(request):
-    menu = Menu.objects.for_today()
+    if datetime.datetime.hour() < 21:
+        menu = Menu.objects.for_today()
+    else:
+        menu = Menu.objects.for_tomorrow()
     return render_to_response("scraped/menu.html", { 'menu': menu })
 
 
