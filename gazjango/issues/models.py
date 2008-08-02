@@ -120,8 +120,8 @@ class MenuManager(models.Manager):
             date    = date.today() + timedelta(days=(1 if tomorrow else 0)),
             closed  = menu['closed'],
             message = menu['message'],
-            lunch   = menu['lunch'],
-            dinner  = menu['dinner']
+            lunch   = menu['lunch']  if 'lunch'  in menu else "",
+            dinner  = menu['dinner'] if 'dinner' in menu else ""
         )
     
 
@@ -162,7 +162,11 @@ class WeatherManager(models.Manager):
             return self.get(date=day)
         
         except self.model.DoesNotExist:
-            weather = scrapers.weather.get_weather(date=day)
+            try:
+                weather = scrapers.weather.get_weather(date=day)
+            except scrapers.weather.WeatherError:
+                weather = { 'today': "", 'tonight': "", 'tomorrow': "" }
+            
             return self.create(
                 date     = day,
                 today    = weather['today'],

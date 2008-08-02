@@ -1,9 +1,6 @@
 from xml.etree import cElementTree as etree
-from urllib2   import urlopen
+import urllib2
 import datetime
-
-# TODO: make this more robust; make sure it works the same at different times of day
-
 
 # the National Weather Service provides us a nice xml feed with lots of weather data
 # <3 the US government
@@ -13,6 +10,9 @@ SWAT_LAT_LONG = {'lat': '39.903959', 'lon': '-75.35398'}
 
 class WeatherError(Exception):
     "Some kind of error in getting the weather."
+
+class WeatherLoadError(WeatherError):
+    "An error in loading the weather feed."
 
 class WeatherParseError(WeatherError):
     "An error in parsing the weather feed."
@@ -31,7 +31,13 @@ def get_weather(date=None):
     reps['date'] = date.strftime("%Y-%m-%d")
     url = FEED_URL % reps
     
-    feed = etree.parse(urlopen(url))
+    try:
+        page = urllib2.urlopen(url)
+    except URLError:
+        # TODO: log this error somehow
+        return WeatherLoadError("Couldn't load the feed.")
+    
+    feed = etree.parse(page)
     
     if feed.getroot().tag == "error":
         raise WeatherParseError("The feed returned an error.")
