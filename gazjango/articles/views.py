@@ -90,28 +90,33 @@ search        = lambda request, **kwargs: render_to_response("base.html", locals
 comment       = lambda request, **kwargs: render_to_response("base.html", locals())
 email_article = lambda request, **kwargs: render_to_response("base.html", locals())
 
-def section(request, section, year=None, month=None, day=None, template="section.html"):
-    sec = get_object_or_404(Section, slug=section)
-    data = {
-        'section': sec,
-        'articles': filter_by_date(section.articles, year, month, day),
-        'year': year,
-        'month': month,
-        'day': day
-    }
+
+def subsection(request, section, subsection, year=None, month=None, day=None, template="subsection.html"):
+    data = {}
+    data['section'] = sec = get_object_or_404(Section, slug=section)
+    
+    if subsection:
+        sub = get_object_or_404(Subsection, section=sec, slug=subsection)
+        data['subsection'] = sub
+        base = filter_by_date(sub.articles, year, month, day)
+    else:
+        base = filter_by_date(sec.articles, year, month, day)
+    
+    tops, mids, lows = Article.published.get_stories(base=base,
+                                         num_top=2, num_mid=3, num_low=12)
+    lowlist = [ lows[0:3], lows[3:6], lows[6:9], lows[9:12] ]
+    
+    data['topstories'] = tops
+    data['midstories'] = mids
+    data['lowlist'] = lowlist
+    
+    data['year'] = year
+    data['month'] = month
+    data['day'] = day
+    
+    
     rc = RequestContext(request)
     return render_to_response(template, data, context_instance=rc)
 
-def subsection(request, section, subsection, year=None, month=None, day=None, template="subsection.html"):
-    sec = get_object_or_404(Section, slug=section)
-    sub = get_object_or_404(Subsection, section=sec, slug=subsection)
-    data = {
-        'section': sec,
-        'subsection': sub,
-        'articles': filter_by_date(sub.articles, year, month, day),
-        'year': year,
-        'month': month,
-        'day': day
-    }
-    rc = RequestContext(request)
-    return render_to_response(template, data, context_instance=rc)
+def section(request, section, year=None, month=None, day=None, template="section.html"):
+    return subsection(request, section, None, year, month, day, template)
