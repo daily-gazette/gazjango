@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 from articles.models import Article, ArticleRevision, Category, Format
 from accounts.models import UserProfile, UserKind
 from media.models    import MediaBucket, MediaFile, ImageFile
+from datetime import date, timedelta
 
 class ArticleTestCase(unittest.TestCase):
     
@@ -97,9 +98,11 @@ class ArticleTestCase(unittest.TestCase):
     
     def test_article_formatting(self):
         self.formatted_article.format = self.textile
-        self.assertEquals(self.formatted_article.formatted_text(), "<p><em>Emphasis</em></p>")
+        self.assertEquals(self.formatted_article.formatted_text(),
+                          "<p><em>Emphasis</em></p>")
         self.formatted_article.format = self.html
-        self.assertEquals(self.formatted_article.formatted_text(), self.formatted_article.text)
+        self.assertEquals(self.formatted_article.formatted_text(),
+                          self.formatted_article.text)
     
     
     def test_link_resolution(self):
@@ -174,4 +177,73 @@ class ArticleTestCase(unittest.TestCase):
         resolved = self.textile_images_article.resolved_text()
         expected = '<p><img src="%s" alt="" /></p>'
         self.assertEqual(resolved, expected % self.war.get_absolute_url())
+    
+    
+    def test_get_stories(self):
+        Article.objects.all().delete()
+        
+        get_stories = Article.published.get_stories
+        def get_pks(**args):
+            top, mids, lows = get_stories(**args)
+            return [top.pk, [x.pk for x in mids], [x.pk for x in lows]]
+        
+        def assert_pks(pks, **args):
+            self.assertEqual(get_pks(**args), pks)
+        
+        def assert_pks_gives(*possibilites, **args):
+            to_see = [poss for poss in possibilites]
+            for i in range(len(possibilites) * 8):
+                pks = get_pks(**args)
+                self.assert_(pks in possibilites)
+                try:
+                    to_see.remove(pks)
+                except ValueError:
+                    pass
+                
+                if len(to_see) == 0:
+                    return
+            self.assertEqual(len(to_see), 0)
+        
+        def art(**args):
+            args.setdefault('format', self.textile)
+            args.setdefault('status', 'p')
+            args.setdefault('category', self.news)
+            return Article.objects.create(**args)
+        
+        top1 = art(slug='squirrel-attack', position='t', possible_position='t')
+        assert_pks([top1.pk, [], []])
+        
+        mid1 = art(slug='this-weekend', position='m', possible_position='m')
+        assert_pks([top1.pk, [mid1.pk], []])
+        
+        top2 = art(slug='squirrel-hunt', position='t', possible_position='t')
+        assert_pks_gives( [top1.pk, [top2.pk, mid1.pk], []],
+                          [top2.pk, [top1.pk, mid1.pk], []] )
+        
+        low_mid1 = art(slug='concert-last-week', position='n', possible_position='m')
+        assert_pks_gives( [top1.pk, [top2.pk, mid1.pk], [low_mid1.pk]],
+                          [top2.pk, [top1.pk, mid1.pk], [low_mid1.pk]] )
+        
+        top2.delete()
+        assert_pks([top1.pk, [mid1.pk, low_mid1.pk], []])
+        
+        low_top1 = art(slug='deer-all-dead', position='n', possible_position='t',
+                       pub_date=date.today() - timedelta(days=1))
+        assert_pks([top1.pk, [mid1.pk, low_mid1.pk], [low_top1.pk]])
+        
+        top1.delete()
+        assert_pks([low_top1.pk, [mid1.pk, low_mid1.pk], []])
+        
+        mid2 = art(slug='why-are-there-so-many-penn-stations', 
+                   position='m', possible_position='m')
+        assert_pks_gives( [low_top1.pk, [mid1.pk, mid2.pk], [low_mid1.pk]],
+                          [low_top1.pk, [mid2.pk, mid1.pk], [low_mid1.pk]] )
+        
+        mid3 = art(slug='something-happened', position='m', possible_position='m')
+        assert_pks_gives( [low_top1.pk, [mid1.pk, mid2.pk], [mid3.pk, low_mid1.pk]],
+                          [low_top1.pk, [mid1.pk, mid3.pk], [mid2.pk, low_mid1.pk]],
+                          [low_top1.pk, [mid2.pk, mid1.pk], [mid3.pk, low_mid1.pk]],
+                          [low_top1.pk, [mid2.pk, mid3.pk], [mid1.pk, low_mid1.pk]],
+                          [low_top1.pk, [mid3.pk, mid1.pk], [mid2.pk, low_mid1.pk]],
+                          [low_top1.pk, [mid3.pk, mid2.pk], [mid1.pk, low_mid1.pk]] )
     

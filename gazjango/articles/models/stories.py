@@ -16,23 +16,90 @@ import articles.formats as formats
 
 class PublishedArticlesManager(models.Manager):
     "A custom manager for Articles, returning only published articles."
+
     def get_query_set(self):
         orig = super(PublishedArticlesManager, self).get_query_set()
         return orig.filter(status='p')
     
-    def get_top_story(self):
-        """Returns a random published article with position=1.
+    def get_stories(self, num_mids=2, num_lows=6, **extra_filter):
+        """
+        Returns stories organized by priority. This method will do some
+        rearranging to always get you the number of stories of each
+        type that you request: if there are two topstories, one of them
+        gets bumped down to a midstory, and if there's not enough midstories,
+        we pull up the most recent article that can be a midstary, and other
+        such operations.
         
-        There should generally only be one, but just in case, we rotate."""
-        return self.filter(position=1).order_by("?")[0]
+        The return format looks like:
+        [
+            topstory,
+            [midstory1, midstory2]
+            [lowstory1, lowstory2, lowstory3, ...]
+        ]
+        Note that these are lists, *not* QuerySets.
+        
+        If you need to do something more specific, you can filter all of
+        the stories passed by giving extra arguments to the function: 
+        get_stories(category=news) will return only stories in the News
+        category (if `news` points to said category, of course).
+        """
+        base = self.filter(**extra_filter) if extra_filter else self
+        
+        tops = list(base.filter(position='t').order_by("?"))
+        if len(tops) == 0:
+            top = base.filter(possible_position='t').order_by('-pub_date')[0]
+            mids = []
+        else:
+            top = tops[0]
+            mids = tops[1:]
+        
+        mids += list(base.filter(position='m').order_by("?"))
+        if len(mids) < num_mids:
+            exclude_pks = [top.pk] + [mid.pk for mid in mids]
+            
+            cands = base.filter(possible_position__in=('m', 't'))
+            cands = cands.exclude(pk__in=exclude_pks).order_by('-pub_date')
+            
+            needed = num_mids - len(mids)
+            mids += list(cands[:needed])
+            lows = []
+        elif len(mids) == num_mids:
+            lows = []
+        else:
+            lows = mids[num_mids:]
+            mids = mids[:num_mids]
+        
+        if len(lows) < num_lows:
+            exclude_pks = [top.pk] + [el.pk for el in (mids+lows)]
+            
+            cands = base.exclude(pk__in=exclude_pks).order_by('-pub_date')
+            needed = num_lows - len(lows)
+            lows += cands[:needed]
+        elif len(lows) > num_lows:
+            lows = lows[:num_lows]
+        
+        return [top, mids, lows]
+    
+    
+    def get_top_story(self):
+        """
+        Returns a random article with is_topstory set. (Most of the time,
+        there will only be one.)
+        """
+        return self.filter(position='t').order_by("?")[0]
     
     def get_secondary_stories(self, num=2):
-        """Returns a list of ``num`` stories with position=2."""
-        return self.filter(position=2).order_by("-pub_date")[:num]
+        """
+        Returns a list of the ``num`` most recent stories with is_midstory set.
+        
+        If there aren't enough, we go into stories with can_be_midstory. Note
+        that this can cause repetition if you also call 
+        """
+        return self.filter(position='m').order_by("-pub_date")[:num]
     
     def get_tertiary_stories(self, num=6):
         """Returns the ``num`` most recent stories with a null position."""
-        return self.filter(position=None).order_by("-pub_date")[:num]
+        return self.filter(position='n').order_by("-pub_date")[:num]
     
 
 
@@ -86,15 +153,20 @@ class Article(models.Model):
     
     comments_allowed = models.BooleanField(default=True)
     
-    position  = models.PositiveSmallIntegerField(blank=True, null=True)
-    # null = nothing special, 1 = top story, 2 = second-tier story
+    POSITION_CHOICES = (
+        ('n', 'normal'),
+        ('m', 'middle'),
+        ('t', 'top')
+    )
+    pos_args = {'max_length': 1, 'choices': POSITION_CHOICES, 'default': 'n'}
+    position = models.CharField(**pos_args)
+    possible_position = models.CharField(**pos_args)
     
     objects = models.Manager()
     published = PublishedArticlesManager()
     
     def get_title(self):
         return (self.short_title or self.headline)
-    
     
     def allow_edit(self, user):
         return self.authors.filter(user__pk=user.pk).count() > 0 \
@@ -150,7 +222,7 @@ class Article(models.Model):
         Turns relative image links in articles into absolute URLs. For
         example, if an article's text includes "<img src='cool-pic'/>",
         ``resolved_text`` will call this function to replace 'cool-pic' with
-        '/files/some-bucket/cool-pic'. This function will also add any 
+        '/files/some-bucket/cool-pic'.
         
         If the path in the image includes a '/', it's parsed as 
         'bucket-slug/image-slug'. Otherwise, we first check the media files

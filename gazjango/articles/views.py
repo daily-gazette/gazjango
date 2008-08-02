@@ -46,10 +46,11 @@ def articles(request, year=None, month=None, day=None, template="article_list.ht
 
 
 def homepage(request, template="index.html"):
+    top, mids, lows = Article.published.get_stories(num_mids=2, num_lows=6)
     data = {
-        'topstory': Article.published.get_top_story(),
-        'midstories': Article.published.get_secondary_stories(2),
-        'lowstories': Article.published.get_tertiary_stories(6),
+        'topstory': top,
+        'midstories': mids,
+        'lowstories': lows,
         
         'comments': PublicComment.visible.order_by('-time').all()[:4],
         'weather': Weather.objects.for_today(),
