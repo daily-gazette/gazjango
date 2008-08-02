@@ -1,0 +1,15 @@
+#commentList {
+	
+}
+
+.comment {
+	padding: 3px;
+}
+
+.gray {
+	background-color: #dddddd;
+}
+
+.highlight {
+	background-color: #ebff8d;
+}
