@@ -1,6 +1,6 @@
 from django.core.cache import cache
 from xml.etree import cElementTree as etree
-from urllib2   import urlopen
+import urllib2
 
 def get_tla_links():
     cached = cache.get('tla_links')
@@ -9,13 +9,14 @@ def get_tla_links():
     else:
         try:
             return update_tla_links()
-        except URLError:
+        except urllib2.URLError:
+            # TODO: log this error
             return []
 
 
 def update_tla_links():
     url = "http://www.text-link-ads.com/xml.php?inventory_key=N085BPUAZXJB74O3QZ06"
-    feed = etree.parse(urlopen(url))
+    feed = etree.parse(urllib2.urlopen(url))
     links = []
     
     for link in feed.findall("/Link"):
