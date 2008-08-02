@@ -1,5 +1,5 @@
+import urllib2
 from BeautifulSoup import BeautifulStoneSoup
-from urllib2       import urlopen
 from datetime      import date, timedelta
 
 FEED_URL = "http://www.swarthmore.edu/dashboards/feeds/sharples.xml"
@@ -21,7 +21,15 @@ def get_menu(url=FEED_URL, tomorrow=False, die_on_closed=False):
     
     If ``tomorrow`` is set, tries to figure out the menu for tomorrow.
     """
-    
+    try:
+        page = urllib2.urlopen(url)
+    except urllib2.URLError:
+        # TODO: log this error somehow
+        message = "Sorry, it seems we're having some technical difficulties " \
+                  "with figuring out the Sharples menu. Try checking the " \
+                  "Dashboard or the Sharples website."
+        return { 'closed': True, 'message': message }
+
     feed = BeautifulStoneSoup(urlopen(url), selfClosingTags=['closed'])
     data = {}
     
