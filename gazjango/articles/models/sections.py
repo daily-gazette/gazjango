@@ -1,4 +1,5 @@
 from django.db import models
+from stories   import Article
 
 class Section(models.Model):
     """
@@ -22,6 +23,15 @@ class Section(models.Model):
     def get_absolute_url(self):
         return ('section', [self.slug])
     
+    def get_stories(self, num_top=2, num_mid=3, num_low=12, **extra):
+        "Calls Article.published.get_stories for stories in this section."
+        return Article.published.get_stories(
+            base = self,
+            num_top = num_top,
+            num_mid = num_mid,
+            num_low = num_low
+        )
+    
 
 class Subsection(models.Model):
     """
@@ -42,4 +52,13 @@ class Subsection(models.Model):
     @models.permalink
     def get_absolute_url(self):
         return ('subsection', [self.section.slug, self.slug])
+    
+    def get_stories(self, num_top=2, num_mid=3, num_low=12):
+        "Calls Articles.published.get_stories for stories in this subsection."
+        return Articles.published.get_stories(
+            base = self.articles,
+            num_top = num_top,
+            num_mid = num_mid, 
+            num_low = num_low
+        )
     
