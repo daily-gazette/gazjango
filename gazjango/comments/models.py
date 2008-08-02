@@ -104,7 +104,7 @@ class PublicComment(models.Model):
                 'comment_type': 'comment',
                 'comment_author': self.name or self.user.name,
                 'comment_author_email': self.email or self.user.email,
-                'permalink': self.get_absolute_url(),
+                'permalink': url[:-1] + self.get_absolute_url(),
                 'user_ip': self.ip_address,
                 'user_agent': self.user_agent
             }
@@ -139,8 +139,7 @@ class PublicComment(models.Model):
         return u"on %s by %s" % (self.subject.slug, self.display_name)
     
     def get_absolute_url(self):
-        return "http://" + Site.objects.get_current().domain + \
-               self.subject.get_absolute_url() + \
+        return self.subject.get_absolute_url() + \
                ('#c-%d' % self.number) if self.number else ""
     
     class Meta:
