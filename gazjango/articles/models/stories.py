@@ -21,7 +21,7 @@ class PublishedArticlesManager(models.Manager):
         orig = super(PublishedArticlesManager, self).get_query_set()
         return orig.filter(status='p')
     
-    def get_stories(self, num_top=1, num_mid=2, num_low=6, **extra_filter):
+    def get_stories(self, num_top=1, num_mid=2, num_low=6, base=None):
         """
         Returns stories organized by priority. This method will do some
         rearranging to always get you the number of stories of each
@@ -38,12 +38,12 @@ class PublishedArticlesManager(models.Manager):
         ]
         Note that these are lists, *not* QuerySets.
         
-        If you need to do something more specific, you can filter all of
-        the stories passed by giving extra arguments to the function: 
-        get_stories(section=news) will return only stories in the News
-        category (if `news` points to said section, of course).
+        If you need to do something more specific, you can pass `base`;
+        then all the stories will come out of there. For example,
+        get_stories(base=section.articles) would return stories from
+        the articles in `section` (but see Section's get_stories method).
         """
-        base = self.filter(**extra_filter) if extra_filter else self
+        base = base if base else self
         
         tops = list(base.filter(position='t').order_by("?"))
         if len(tops) < num_top:
