@@ -206,7 +206,8 @@ nobody_loves_me = Article.objects.create(
                   "Portishead lyrics.",
     format=textile,
     status='p',
-    position=2
+    position='m',
+    possible_position='m'
 )
 nobody_loves_me.authors.add(bone_p)
 nobody_loves_me.text = """To pretend no one can find
@@ -304,7 +305,8 @@ scandal = Article.objects.create(
     format=textile,
     status='p',
     pub_date=datetime.now() - timedelta(hours=3),
-    position=1
+    position='t',
+    possible_position='t'
 )
 scandal.authors.add(bob_p, jack_p)
 scandal.tags = "Al Bloom, Board of Managers, Daily Jolt"
@@ -346,7 +348,8 @@ boring = Article.objects.create(
          "mollit anim id est laborum.",
     format=textile,
     status='p',
-    position=2
+    position='m',
+    possible_position='m'
 )
 boring.authors.add(jack_p)
 
@@ -362,6 +365,8 @@ boring.save()
 def art(author, **keywords):
     keywords.setdefault('format', textile)
     keywords.setdefault('status', 'p')
+    keywords.setdefault('position', 'n')
+    keywords.setdefault('possible_position', 'n')
     article = Article.objects.create(**keywords)
     article.authors.add(p(author))
     article.save()
