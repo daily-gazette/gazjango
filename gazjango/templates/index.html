@@ -220,10 +220,14 @@ jQuery(document).ready(function() {
 			<div class="indexBottomColumn floatLeft" id="bico">
 				<h3>From <a href="http://www.biconews.com/"><em>The BiCo News</em></a></h3>
 				
-				{% for story in bico_news %}
-				  <h4><a href="{{ story.link }}">{{ story.headline }}</a></h4>
-				  <p class="byline"><span class="author">by {{ story.author|upper }}</span></p>
-				{% endfor %}
+				{% ifequal bico_news "error" %}
+				  <p>Unfortunately, we seem to be having some technical difficulties. We're working to resolve them, but in the meantime you can get news from the BiCo at <a href="http://www.biconews.com/">biconews.com</a>.</p>
+				{% else %}
+  				{% for story in bico_news %}
+  				  <h4><a href="{{ story.link }}">{{ story.headline }}</a></h4>
+  				  <p class="byline"><span class="author">by {{ story.author|upper }}</span></p>
+  				{% endfor %}
+				{% endifequal %}
 				
 				<p><a href="http://www.biconews.com/"><em>The BiCo News</em></a> is the weekly paper for Bryn Mawr and Haverford Colleges.</p>
 				

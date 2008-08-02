@@ -1,3 +1,4 @@
+import urllib2
 import feedparser
 import re
 
@@ -33,9 +34,14 @@ def get_bico_news(order=DEFAULT_ORDER):
     if cached:
         return cached
     else:
-        results = get_bico_news_directly(order)
-        cache.set(key, results, 13 * 60 * 60)
-        return results
+        try:
+            results = get_bico_news_directly(order)
+            cache.set(key, results, 13 * 60 * 60)
+            return results
+        except urllib2.URLError:
+            # TODO: log this somehow
+            cache.set(key, "error", 1 * 60 * 60)
+            return "error"
 
 
 def get_bico_news_directly(order=DEFAULT_ORDER):
@@ -53,7 +59,12 @@ def get_bico_news_directly(order=DEFAULT_ORDER):
         if cat in feeds:
             feed, next = feeds[cat]
         else:
-            feed = feedparser.parse(BASE_URL + CATEGORIES[cat])
+            try:
+                url = urllib2.urlopen(BASE_URL + CATEGORIES[cat])
+            except urllib2.URLError, e:
+                raise e
+            
+            feed = feedparser.parse(url)
             next = 0
             feeds[cat] = (feed, next)
         
