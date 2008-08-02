@@ -16,7 +16,7 @@ import articles.formats as formats
 
 class PublishedArticlesManager(models.Manager):
     "A custom manager for Articles, returning only published articles."
-
+    
     def get_query_set(self):
         orig = super(PublishedArticlesManager, self).get_query_set()
         return orig.filter(status='p')
@@ -40,8 +40,8 @@ class PublishedArticlesManager(models.Manager):
         
         If you need to do something more specific, you can filter all of
         the stories passed by giving extra arguments to the function: 
-        get_stories(category=news) will return only stories in the News
-        category (if `news` points to said category, of course).
+        get_stories(section=news) will return only stories in the News
+        category (if `news` points to said section, of course).
         """
         base = self.filter(**extra_filter) if extra_filter else self
         
@@ -88,20 +88,6 @@ class PublishedArticlesManager(models.Manager):
         """
         return self.filter(position='t').order_by("?")[0]
     
-    def get_secondary_stories(self, num=2):
-        """
-        Returns a list of the ``num`` most recent stories with is_midstory set.
-        
-        If there aren't enough, we go into stories with can_be_midstory. Note
-        that this can cause repetition if you also call 
-        """
-        return self.filter(position='m').order_by("-pub_date")[:num]
-    
-    def get_tertiary_stories(self, num=6):
-        """Returns the ``num`` most recent stories with a null position."""
-        return self.filter(position='n').order_by("-pub_date")[:num]
-    
-
 
 class Article(models.Model):
     """
@@ -132,10 +118,14 @@ class Article(models.Model):
     
     pub_date = models.DateTimeField(default=datetime.now)
     authors  = models.ManyToManyField(UserProfile, related_name="articles")
-    category = models.ForeignKey('articles.Category')
+    section = models.ForeignKey('articles.Section', related_name="articles")
+    subsections = models.ManyToManyField('articles.Subsection',
+                                         related_name="articles")
     
-    front_image = models.ForeignKey(ImageFile, null=True, related_name="articles_with_front")
-    thumbnail   = models.ForeignKey(ImageFile, null=True, related_name="articles_with_thumbnail")
+    front_image = models.ForeignKey(ImageFile, null=True,
+                                    related_name="articles_with_front")
+    thumbnail   = models.ForeignKey(ImageFile, null=True,
+                                    related_name="articles_with_thumbnail")
     media  = models.ManyToManyField(MediaFile, related_name="articles")
     bucket = models.ForeignKey(MediaBucket, null=True, related_name="articles")
     
@@ -268,9 +258,8 @@ class Article(models.Model):
     def related_list(self, num=None):
         """Returns a QuerySet of related stories."""
         # TODO: improve related_list
-        related = self.category.root().all_articles()
-        related = related.exclude(pk=self.pk).order_by('-pub_date')
-        return related[:num] if num else related
+        rel = self.section.articles.exclude(pk=self.pk).order_by('-pub_date')
+        return rel[:num] if num else rel
     
     
     def __unicode__(self):
@@ -288,13 +277,15 @@ class Article(models.Model):
 
 
 class ArticleRevision(models.Model):
-    """ A revision of an article. Only deltas are stored.
+    """
+    A revision of an article. Only deltas are stored.
     
-    Note that the most recent text is stored in the article's text attribute, while 
-    earlier versions are stored as revisions...as such, these are "reverse diffs."
-    For example, if an article has versions 1, 2, and 3, version 3 is stored directly
-    with the article, and there are ArticleRevisions to go from 3 to 2 and from 2 to
-    1."""
+    Note that the most recent text is stored in the article's text attribute,
+    while earlier versions are stored as revisions...as such, these are 
+    "reverse diffs." For example, if an article has versions 1, 2, and 3, 
+    version 3 is stored directly with the article, and there are 
+    ArticleRevisions to go from 3 to 2 and from 2 to 1.
+    """
     
     article = models.ForeignKey('Article', related_name='revisions')
     delta   = models.TextField()

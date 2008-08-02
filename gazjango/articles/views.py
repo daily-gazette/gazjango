@@ -4,7 +4,7 @@ from django.template   import RequestContext
 from django.shortcuts  import render_to_response, get_object_or_404
 from misc.view_helpers import get_by_date_or_404, filter_by_date
 
-from articles.models      import Article, Category, Special, PhotoSpread
+from articles.models      import Article, Section, Subsection, Special, PhotoSpread
 from announcements.models import Announcement
 from comments.models      import PublicComment
 from comments.forms       import AnonCommentForm, UserCommentForm
@@ -90,12 +90,25 @@ search        = lambda request, **kwargs: render_to_response("base.html", locals
 comment       = lambda request, **kwargs: render_to_response("base.html", locals())
 email_article = lambda request, **kwargs: render_to_response("base.html", locals())
 
-def category(request, slug, year=None, month=None, day=None, recurse=True, template="category.html"):
-    category = get_object_or_404(Category, slug=slug)
-    all_articles = category.all_articles() if recurse else category.articles
+def section(request, section, year=None, month=None, day=None, template="section.html"):
+    sec = get_object_or_404(Section, slug=section)
     data = {
-        'category': category,
-        'articles': filter_by_date(all_articles, year, month, day),
+        'section': sec,
+        'articles': filter_by_date(section.articles, year, month, day),
+        'year': year,
+        'month': month,
+        'day': day
+    }
+    rc = RequestContext(request)
+    return render_to_response(template, data, context_instance=rc)
+
+def subsection(request, section, subsection, year=None, month=None, day=None, template="subsection.html"):
+    sec = get_object_or_404(Section, slug=section)
+    sub = get_object_or_404(Subsection, section=sec, slug=subsection)
+    data = {
+        'section': sec,
+        'subsection': sub,
+        'articles': filter_by_date(sub.articles, year, month, day),
         'year': year,
         'month': month,
         'day': day

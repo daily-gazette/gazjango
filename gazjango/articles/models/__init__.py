@@ -1,5 +1,5 @@
 from stories       import Article, ArticleRevision, Format
-from categories    import Category
+from sections      import Section, Subsection
 from specials      import Special, SpecialsCategory, DummySpecialTarget
 from concepts      import StoryConcept
 from photo_spreads import PhotoSpread, PhotoInSpread

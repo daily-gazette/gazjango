@@ -16,7 +16,7 @@ import tagging
 from accounts.models      import UserProfile, UserKind, Position
 from accounts.models      import ContactMethod, ContactItem
 from announcements.models import Announcement
-from articles.models      import Article, Category, Format
+from articles.models      import Article, Section, Subsection, Format
 from articles.models      import Special, SpecialsCategory, DummySpecialTarget
 from comments.models      import PublicComment
 from issues.models        import Issue, Menu, Weather, WeatherJoke
@@ -166,26 +166,21 @@ p(neena).add_position(reporter)
 p(lauren).add_position(bossman)
 p(brandon).add_position(guest_writer)
 
-### Categories
+### Sections
 
-def cat(name, slug, description, parent=None):
-    args = { 'name': name, 'slug': slug, 'description': description }
-    if parent:
-        args['parent'] = parent
-    return Category.objects.create(**args)
+sect = lambda n, s, d: Section.objects.create(name=n, slug=s, description=d)
+sub = lambda p, n, s, d: Subsection.objects.create(name=n, slug=s, description=d, section=p)
 
+news = sect("News", "news", "What's going on in the world.")
+students = sub(news, "Students", "students", "Swarthmore students and their doings.")
+facstaff = sub(news, "Faculty & Staff", "facstaff", "About Swarthmore faculty and staff.")
+alumni = sub(news, "Alumni", "alumni", "The crazy world after Swarthmore.")
 
-news = cat("News", "news", "What's going on in the world.")
-students = cat("Students", "students", "Swarthmore students and their doings.", news)
-facstaff = cat("Faculty & Staff", "facstaff", "About Swarthmore faculty and staff.", news)
-alumni = cat("Alumni", "alumni", "The crazy world after Swarthmore.", news)
+features = sect("Features", "features", "The happenings around town.")
+opinions = sect("Opinions", "opinions", "What people have to say.")
 
-features = cat("Features", "features", "The happenings around town.")
-opinions = cat("Opinions", "opinions", "What people have to say.")
-
-columns  = cat("Columns", "columns", "Foreign countries, sex, or both.")
-bone_doctress = cat("The Bone Doctress", "bone_doctress", 
-                    "Everyone's favorite sex column.", columns)
+columns  = sect("Columns", "columns", "Foreign countries, sex, or both.")
+bone_doctress = sub(columns, "The Bone Doctress", "bone_doctress", "Everyone's favorite sex column.")
 
 ### Formats
 textile = Format.objects.create(name="Textile", function="textile")
@@ -199,7 +194,7 @@ nobody_loves_me = Article.objects.create(
     headline="Nobody Loves Me",
     subtitle="It's True: Not Like You Do",
     slug='no-love',
-    category=bone_doctress,
+    section=columns,
     summary="The Bone Doctress takes a break from her usual witty recountings of "
             "sexual escapades to share with you the lyrics to a Portishead song.",
     short_summary="The Bone Doctress laments the lack of love in her life, by way of "
@@ -210,6 +205,7 @@ nobody_loves_me = Article.objects.create(
     possible_position='m'
 )
 nobody_loves_me.authors.add(bone_p)
+nobody_loves_me.subsections.add(bone_doctress)
 nobody_loves_me.text = """To pretend no one can find
 The fallacies of morning rose
 Forbidden fruit, hidden eyes
@@ -274,7 +270,7 @@ scandal = Article.objects.create(
     short_title="Al Bloom Forced Out By BoM",
     subtitle="Allegations of Involvement with Empereror's Club VIP Surface",
     slug="bloom-scandal",
-    category=facstaff,
+    section=news,
     short_summary="Allegations have surfaced that Al Bloom was involved in the "
             "Emperor's Club VIP scandal.",
     summary="One member of the Board of Managers has allegedly accused Al Bloom "
@@ -309,6 +305,7 @@ scandal = Article.objects.create(
     possible_position='t'
 )
 scandal.authors.add(bob_p, jack_p)
+scandal.subsections.add(facstaff)
 scandal.tags = "Al Bloom, Board of Managers, Daily Jolt"
 
 scandal_pics = MediaBucket.objects.create(slug="bloom-scandal")
@@ -328,7 +325,7 @@ boring = Article.objects.create(
     headline="Nothing Happened",
     subtitle="It's Summer: Did You Expect Something Else?",
     slug="boredom",
-    category=news,
+    section=news,
     summary="Absolutely nothing happened at all. It was quite boring. So boring, "
             "to be perfectly honest, I have not a thing to say about it. That's "
             "why the text of the story is all latin and crap.",
@@ -362,20 +359,24 @@ boring.front_image = ImageFile.objects.create(slug="boring-baby",
 boring.save()
 
 
-def art(author, **keywords):
+def art(author, subsection=None, **keywords):
     keywords.setdefault('format', textile)
     keywords.setdefault('status', 'p')
     keywords.setdefault('position', 'n')
     keywords.setdefault('possible_position', 'n')
+    if subsection:
+        keywords.setdefault('section', subsection.section)
     article = Article.objects.create(**keywords)
     article.authors.add(p(author))
+    if subsection:
+        article.subsections.add(subsection)
     article.save()
     return article
 
 school = art(
     headline="Project Shingayi Plans to Construct Zimbabwean School",
     slug="project-shingayi",
-    category=students,
+    subsection=students,
     summary="Yay African schools lah lah lah.",
     text="whoa",
     author=zoe
@@ -384,7 +385,7 @@ school = art(
 poker = art(
     headline="Swat Alums Turn Poker Pros",
     slug="poker-pros",
-    category=alumni,
+    subsection=alumni,
     summary="Maybe the coolest thing ever.",
     text="double whoa",
     author=finlay
@@ -393,7 +394,7 @@ poker = art(
 paces = art(
     headline="The History Of Paces' Mural",
     slug="paces-mural",
-    category=features,
+    section=features,
     summary="It was painted by some dude.",
     text="yah",
     author=neena
@@ -402,16 +403,19 @@ paces = art(
 tarble = art(
     headline="Major Changes Planned For Tarble",
     slug="tarble-changes",
-    category=news,
+    section=news,
     summary="They be changin' stuff, yo.",
     text="",
     author=finlay
 )
 
+denglish = Subsection.objects.create(name='Honors Denglish',
+                                     slug='honors-denglish',
+                                     section=columns)
 nestbeschmutzer = art(
     headline="<i>Nestbeschmutzer</i>, Now Out of Austria",
     slug="nestbeschmutzer",
-    category=columns,
+    subsection=denglish,
     summary="whoa. german.",
     text="",
     author=lauren
@@ -421,7 +425,7 @@ facebook = art(
     headline="Under Reporting? Facebook at Swarthmore",
     short_title="Under Reporting? Swat Facebook Use",
     slug="facebook",
-    category=students,
+    subsection=students,
     summary="People use it, probably more than they admit to.",
     text="Stat 11 <3",
     author=brandon

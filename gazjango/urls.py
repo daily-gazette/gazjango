@@ -10,6 +10,8 @@ reps = {
     'name': r'(?P<name>[-\w]+)',
     'kind': r'(?P<kind>[-\w]+)',
     'bucket': r'(?P<bucket>[-\w]+)',
+    'section': r'(?P<section>[-\w]+)',
+    'subsection': r'(?P<subsection>[-\w]+)',
     
     'num': r'(?P<num>\d+)'
 }
@@ -96,10 +98,15 @@ if settings.DEBUG:
         (r'^static/images/(?P<path>.*)$', 'serve', {'document_root': path + '/images'}),
     )
 
-# category match should be last, to avoid shadowing others
+# section match should be last, to avoid shadowing others
 urlpatterns += patterns('articles.views',
-    (r'^%(slug)s/$'                            % reps, 'category', {}, 'category'),
-    (r'^%(slug)s/%(year)s/$'                   % reps, 'category'),
-    (r'^%(slug)s/%(year)s/%(month)s/$'         % reps, 'category'),
-    (r'^%(slug)s/%(year)s/%(month)s/%(day)s/$' % reps, 'category'),
+    (r'^%(section)s/$'                            % reps, 'section', {}, 'section'),
+    (r'^%(section)s/%(year)s/$'                   % reps, 'section'),
+    (r'^%(section)s/%(year)s/%(month)s/$'         % reps, 'section'),
+    (r'^%(section)s/%(year)s/%(month)s/%(day)s/$' % reps, 'section'),
+    
+    (r'^%(section)s/%(subsection)s/$'                            % reps, 'subsection', {}, 'subsection'),
+    (r'^%(section)s/%(subsection)s/%(year)s/$'                   % reps, 'subsection'),
+    (r'^%(section)s/%(subsection)s/%(year)s/%(month)s/$'         % reps, 'subsection'),
+    (r'^%(section)s/%(subsection)s/%(year)s/%(month)s/%(day)s/$' % reps, 'subsection'),
 )

@@ -1,7 +1,7 @@
 import unittest
 from django.core.exceptions     import ObjectDoesNotExist, MultipleObjectsReturned
 from django.contrib.auth.models import User
-from articles.models import Article, ArticleRevision, Category, Format
+from articles.models import Article, ArticleRevision, Section, Format
 from accounts.models import UserProfile, UserKind
 from media.models    import MediaBucket, MediaFile, ImageFile
 from datetime import date, timedelta
@@ -14,7 +14,7 @@ class ArticleTestCase(unittest.TestCase):
         self.bob.userprofile_set.add(UserProfile(kind=oh_ten))
         self.bob_profile = self.bob.get_profile()
         
-        self.news = Category.objects.create(name="News")
+        self.news = Section.objects.create(name="News")
         
         self.textile = Format.objects.create(name     = "textile",
                                              function = "textile")
@@ -24,12 +24,12 @@ class ArticleTestCase(unittest.TestCase):
         self.boring_article = Article.objects.create(headline = "...Boring",
                                                      text     = "Boring Text",
                                                      slug     = 'boring',
-                                                     category = self.news,
+                                                     section = self.news,
                                                      format   = self.html)
         self.formatted_article = Article.objects.create(headline = "Formatted!",
                                                         text     = "_Emphasis_",
                                                         slug     = "formatted",
-                                                        category = self.news,
+                                                        section = self.news,
                                                         format   = self.textile)
         
         self.bucket = MediaBucket.objects.create(slug='from-the-internets')
@@ -55,7 +55,7 @@ class ArticleTestCase(unittest.TestCase):
                  '<img src="http://wow.com/lawl" />',
             bucket=self.bucket,
             slug='lolcats',
-            category=self.news,
+            section=self.news,
             format=self.html
         )
         
@@ -63,12 +63,12 @@ class ArticleTestCase(unittest.TestCase):
             headline="Brief Test For Textile",
             text="!war-declared!",
             bucket=self.bucket2,
-            category=self.news,
+            section=self.news,
             format=self.textile
         )
     
     def tearDown(self):
-        used = (User, UserProfile, UserKind, Category, Article, ArticleRevision, Format)
+        used = (User, UserProfile, UserKind, Section, Article, ArticleRevision, Format)
         for m in used + (MediaBucket, MediaFile, ImageFile):
             m.objects.all().delete()
     
@@ -207,7 +207,7 @@ class ArticleTestCase(unittest.TestCase):
         def art(**args):
             args.setdefault('format', self.textile)
             args.setdefault('status', 'p')
-            args.setdefault('category', self.news)
+            args.setdefault('section', self.news)
             return Article.objects.create(**args)
         
         top1 = art(slug='squirrel-attack', position='t', possible_position='t')

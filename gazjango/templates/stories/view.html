@@ -35,10 +35,13 @@ function toggleLayer( whichLayer )
   <div id="headerSectionBar">
     <div id="headerSection">
       <h3>
-        {% for cat in story.category.ancestors %}
-          {% if not forloop.first %} >> {% endif %}
-          <a href="{{ cat.get_absolute_url }}">{{ cat.name }}</a>
-				{% endfor %}
+        <a href="{{ story.section.get_absolute_url }}">{{ story.section.name }}</a>
+        {% if story.subsections.count %}
+          >>
+          {% for sub in story.subsections.all %}
+            <a href="{{ sub.get_absolute_url }}">{{ sub.name }}</a>{% if not forloop.last %},{% endif %}
+          {% endfor %}
+        {% endif %}
 			</h3>
 		</div>
 		

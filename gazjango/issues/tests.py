@@ -1,21 +1,21 @@
 import unittest
-from articles.models      import Article, Category, Format
+from articles.models      import Article, Section, Format
 from issues.models        import Issue, IssueArticle
 from datetime import date, timedelta
 
 class IssueTestCase(unittest.TestCase):
     
     def setUp(self):
-        self.news     = Category.objects.create(name="News", slug="news")
-        self.features = Category.objects.create(name="Features", slug="features")
+        self.news     = Section.objects.create(name="News", slug="news")
+        self.features = Section.objects.create(name="Features", slug="features")
         self.html = Format.objects.create(name="Plain HTML", function="html")
         
         b = dict(headline="Boring", text="Text", slug="boring", 
-                 category=self.news, format=self.html)
+                 section=self.news, format=self.html)
         self.boring_article = Article.objects.create(**b)
         
         e = dict(headline="Excitement", text="Text", slug="exciting", 
-                 category=self.features, format=self.html)
+                 section=self.features, format=self.html)
         self.exciting_article = Article.objects.create(**e)
         
         self.issue_today = Issue.objects.create()
@@ -23,7 +23,7 @@ class IssueTestCase(unittest.TestCase):
         self.issue_yesterday = Issue.objects.create(date=yesterday)
     
     def tearDown(self):
-        for m in (Article, Category, Format, Issue, IssueArticle):
+        for m in (Article, Section, Format, Issue, IssueArticle):
             m.objects.all().delete()
     
     def testOrdering(self):
