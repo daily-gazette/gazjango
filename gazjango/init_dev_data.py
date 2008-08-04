@@ -7,6 +7,7 @@ setup_environ(settings)
 ### imports
 
 from datetime import date, datetime, timedelta
+import random
 
 from django.contrib.auth.models      import User, Group, Permission
 from django.contrib.sites.models     import Site
@@ -431,6 +432,22 @@ facebook = art(
     author=brandon
 )
 
+def random_art(num):
+    sec = random.choice(list(Section.objects.all()))
+    sub = random.choice(list(sec.subsections.all()) + [None])
+    sec_name = sub.name if sub else sec.name
+    return art(
+        headline="%s article #%d" % (sec_name, num),
+        slug="num_%d" % num,
+        section=sec,
+        subsection=sub,
+        summary="Random article #%d in %s" % (num, sec_name),
+        text=("%s! " % sec_name) * 10,
+        author=brandon,
+        pub_date=datetime.now() - timedelta(days=2)
+    )
+
+randoms = [random_art(n) for n in range(100)]
 
 ### Comments
 
