@@ -46,7 +46,7 @@ def articles(request, year=None, month=None, day=None, template="article_list.ht
 
 
 def homepage(request, template="index.html"):
-    tops, mids, lows = Article.published.get_stories(num_mids=2, num_lows=6)
+    tops, mids, lows = Article.published.get_stories(num_mid=2, num_low=6)
     data = {
         'topstory': tops[0],
         'midstories': mids,
@@ -104,7 +104,9 @@ def subsection(request, section, subsection, year=None, month=None, day=None, te
     
     tops, mids, lows = Article.published.get_stories(base=base,
                                          num_top=2, num_mid=3, num_low=12)
-    lowlist = [ lows[0:3], lows[3:6], lows[6:9], lows[9:12] ]
+    lowlist = [ [], [], [], [] ]
+    for i in range(len(lows)):
+        lowlist[i % 4].append(lows[i])
     
     data['topstories'] = tops
     data['midstories'] = mids
@@ -114,6 +116,14 @@ def subsection(request, section, subsection, year=None, month=None, day=None, te
     data['month'] = month
     data['day'] = day
     
+    if subsection:
+        data['comments'] = PublicComment.visible.filter(
+            article__subsections=sub
+        ).order_by('-time')
+    else:
+        data['comments'] = PublicComment.visible.filter(
+            article__section=sec
+        ).order_by('-time')
     
     rc = RequestContext(request)
     return render_to_response(template, data, context_instance=rc)
