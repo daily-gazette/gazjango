@@ -135,6 +135,23 @@ class PublicComment(models.Model):
                 score += val
         self.score = score
     
+    def is_staff(self):
+        return False if self.is_anonymous else self.user.is_staff
+    
+    def status(self):
+        if self.is_anonymous:
+            if is_from_swat(user=self.user, ip=self.ip_address):
+                return "Unregistered, Swarthmore"
+            else:
+                return "Unregistered, Non-Swarthmore"
+        else:
+            if self.user.is_staff:
+                return "Editor" if self.user.is_editor else "Staff"
+            elif is_from_swat(user=self.user, ip=self.ip_address):
+                return "Registered, Swarthmore"
+            else:
+                return "Registered, Non-Swarthmore"
+    
     def __unicode__(self):
         return u"on %s by %s" % (self.subject.slug, self.display_name)
     
