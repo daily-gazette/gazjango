@@ -61,11 +61,15 @@ class UserProfile(models.Model):
     bio  = models.TextField(blank=True, null=True)
     kind = models.ForeignKey(UserKind)
     
+    positions = models.ManyToManyField('Position', through='Holding', related_name="holdings")
+    
     name     = property(lambda self: self.user.get_full_name())
     username = property(lambda self: self.user.username)
     email    = property(lambda self: self.user.email)
+    is_staff = property(lambda self: self.user.is_staff)
     
-    positions = models.ManyToManyField('Position', through='Holding', related_name="holdings")
+    def is_editor(self):
+        return self.current_positions().filter(is_editor=True).count() > 0
     
     _from_swat = models.BooleanField(default=False)
     
@@ -99,7 +103,6 @@ class UserProfile(models.Model):
         return self.position_at(date.today())
     
     
-    
     def add_position(self, position, date_start=None, date_end=None):
         "Adds a new position for this user."
         Holding.objects.create(
@@ -126,10 +129,13 @@ class Position(models.Model):
     when there is more than one choice. For example, if John is currently both
     arts editor and a photographer, being arts editor takes precedence and will
     show up next to his name when he writes a story.
+    
+    Also marks whether this position implies editorship.
     """
     
     name = models.CharField(max_length=40, unique=True)
     rank = models.IntegerField()
+    is_editor = models.BooleanField(default=False)
     
     def __unicode__(self):
         return self.name
