@@ -8,24 +8,12 @@
 
 <link rel="stylesheet" href="{% static css page/story.css %}" type="text/css" media="screen, projection" />
 
-<script>
+<script type="text/javascript" src="{% static js jquery-1.2.1.pack.js %}"></script>
 
-function toggleLayer( whichLayer )
-{
-  var elem, vis;
-  if (document.getElementById) // this is the way the standards work
-    elem = document.getElementById(whichLayer);
-  else if (document.all) // this is the way old msie versions work
-      elem = document.all[whichLayer];
-  else if (document.layers) // this is the way nn4 works
-    elem = document.layers[whichLayer];
-  vis = elem.style;
-  // if the style.display value is blank we try to figure it out here
-  if (vis.display=='' && elem.offsetWidth!=undefined && elem.offsetHeight != undefined)
-    vis.display = (elem.offsetWidth != 0 && elem.offsetHeight != 0 ) ? 'block' : 'none';
-  vis.display = (vis.display=='' || vis.display=='block') ? 'none' : 'block';
-}
-
+<script type="text/javascript" charset="utf-8">
+  function loadComment(id) {
+    $('#c-' + id).filter('commentText').load('show-comment/' + id + '/');
+  }
 </script>
 
 {% endblock customheader %}
@@ -110,8 +98,8 @@ function toggleLayer( whichLayer )
 				<div class="box">
 					<h4>Recent Comments</h4>
 					<ul>
-						{% for comment in comments|slice:":2" %}
-							<li><a href="{{comment.get_absolute_url}}">{{ comment.article.get_title }}</a></li>
+						{% for comment in comments|slice:":4" %}
+							<li><a href="{{comment.get_absolute_url}}">{{ comment.subject.get_title }}</a></li>
 						{% endfor %}
 					</ul>
 				</div>			
@@ -119,6 +107,43 @@ function toggleLayer( whichLayer )
 		</div>
 		
 		<div id="bottomComments">
+		  <div id="commentList">
+		    {% for comment in story.comments.all %}
+          <div class='comment {% if comment.is_staff %}highlight{% else %}{% cycle "comment1" "comment2" %}{% endif %}' id="c-{{ comment.number }}">
+            
+            <p class="commentMeta">
+              <span class="commentNumber">
+                #{{ comment.number }}
+              </span>
+              |
+              <span class="commentName">
+                {% if not comment.is_anonymous and comment.user.is_staff %}
+                  <a href="{{ comment.user.get_absolute_url }}">{{ comment.display_name }}</a>
+                {% else %}
+                  {{ comment.display_name }}
+                {% endif %}
+              </span>
+              |
+              <span class="commentStatus">{{ comment.status }}</span>
+              |
+              <span class="commentTime">
+                {{ comment.time|date:"j F, Y - g:i A" }}
+              </span>
+              {% if not comment.is_visible %}
+                | [<a href="#c-{{ comment.number }}" onclick="loadComment({{ comment.number }}); return false;">show</a>]
+              {% endif %}
+            </p>
+            
+            <p class="commentText">
+              {% if comment.is_visible %}
+                {{ comment.text }}
+              {% endif %}
+            </p>
+            
+          </div>
+		    {% endfor %}
+		  </div>
+		  
 			<div id="submitComment">
 			  <h4 name="submitComment" style="display: none;">Submit a Comment</h4>
 			  <form method="post" action="comment/">
@@ -172,7 +197,7 @@ function toggleLayer( whichLayer )
 					<li>Don't threaten.</li>
 				</ul>
 					
-				<p>More details on our policies <a href="{{ site.links.policy.get_absolute_url }}">here</a>.</p>
+				<p>More details on our policies <a href="/policies/">here</a>.</p>
 				
 				<hr width="50%" color="#dddddd" size="1px" /> 
 									

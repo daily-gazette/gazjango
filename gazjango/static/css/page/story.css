@@ -225,6 +225,37 @@ STORY INCLUDES
 	font-size: 1.3em;
 }
 
+#commentList {
+    border: 1px solid black;
+    border-bottom: none;
+    margin: 5px;
+}
+
+.comment {
+    padding: 3px;
+    border-bottom: 1px solid black;
+}
+
+.comment1 {
+    background-color: #dddddd;
+}
+
+.comment2 {
+    background-color: #eeeeee;
+}
+
+.highlight {
+    background-color: #ebff8d;
+}
+
+.commentText {
+    text-indent: 1em;
+    padding-left: 1em;
+}
+
+.commentNumber {
+    font-weight: bold;
+}
 
 /**************************************
 
