@@ -1,9 +1,18 @@
 #!/usr/bin/env bash
 
+python=${1:-python}
+
 echo "This will delete ALL DATA related to Django in your database."
 echo "Are you absolutely sure this is what you want to do?"
 echo -n 'Enter "yes" to continue: '
 read resp
 [[ "$resp" != "yes" ]] && exit
 
-./manage.py reset --noinput `python -c 'import settings; print " ".join(s.split(".")[-1] for s in settings.INSTALLED_APPS if not s.endswith("misc"))'` && echo "done resetting" && ./manage.py syncdb && echo "done syncing" && ./init_dev_data.py && echo "done initting"
+$python manage.py sqlclear \
+$($python -c 'import settings; print " ".join(s.split(".")[-1] for s in settings.INSTALLED_APPS if not s.endswith("misc"))') \
+| $python manage.py dbshell && \
+echo "database cleared" && \
+$python manage.py syncdb --noinput && \
+echo "database synced" && \
+$python init_dev_data.py && \
+echo "data init'ed"
