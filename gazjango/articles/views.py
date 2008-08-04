@@ -2,6 +2,7 @@ import datetime
 
 from django.template   import RequestContext
 from django.shortcuts  import render_to_response, get_object_or_404
+from django.http       import Http404, HttpResponse
 from misc.view_helpers import get_by_date_or_404, filter_by_date
 
 from articles.models      import Article, Section, Subsection, Special, PhotoSpread
@@ -30,13 +31,20 @@ def article(request, slug, year, month, day, print_view=False, template="stories
         'story': story,
         'related': story.related_list(3),
         'topstory': Article.published.get_top_story(),
-        'comments': story.comments.all().order_by('time'),
+        'comments': story.comments.order_by('-time').exclude(article=story),
         'print_view': print_view,
         'comment_form': form
     }
     rc = RequestContext(request)
     return render_to_response(template, data, context_instance=rc)
 
+def get_comment_text(request, slug, year, month, day, num):
+    story = get_by_date_or_404(Article, year, month, day, slug=slug)
+    try:
+        comment = story.comments.get(number=num)
+        return HttpResponse(comment.text)
+    except PublicComment.DoesNotExist:
+        raise Http404
 
 def articles(request, year=None, month=None, day=None, template="article_list.html"):
     articles = filter_by_date(Article.published.all(), year, month, day)
