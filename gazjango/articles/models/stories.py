@@ -48,6 +48,7 @@ class PublishedArticlesManager(models.Manager):
         tops = list(base.filter(position='t').order_by("?"))
         if len(tops) < num_top:
             cands = base.filter(possible_position='t').order_by('-pub_date')
+            cands = cands.exclude(pk__in=[top.pk for top in tops])
             needed = num_top - len(tops)
             tops += list(cands[:needed])
             mids = []
