@@ -89,6 +89,7 @@ def make_user(username, first, last, email=None, contact={}, bio=None, kind=stud
     user.last_name  = last
     if groups:
         user.groups = groups
+    user.is_staff = True
     user.save()
     
     profile = UserProfile.objects.create(user=user, bio=bio, kind=kind)
@@ -113,6 +114,9 @@ angry = make_user('angry', 'Angry', 'Man', 'somedude@swat.net',
                  bio="I used to be in charge of this paper, but I've since moved "
                      "on to bigger and better things: complaining and nitpicking.",
                  groups=[reader_group])
+angry.is_staff = False
+angry.save()
+
 zoe = make_user('zoe', 'Zoe', 'Davis', groups=[reader_group, reporter_group])
 finlay = make_user('finlay', 'Finlay', 'Logan', groups=[reader_group, reporter_group])
 neena = make_user('neena', 'Neena', 'Cherayil', groups=[reader_group, reporter_group])
@@ -127,12 +131,12 @@ columnist       = Position.objects.create(name="Columnist",          rank=3)
 guest_writer    = Position.objects.create(name="Guest Writer",       rank=4)
 reporter        = Position.objects.create(name="Staff Reporter",     rank=5)
 photographer    = Position.objects.create(name="Staff Photographer", rank=5)
-tech_director   = Position.objects.create(name="Technical Director", rank=8)
-news_editor     = Position.objects.create(name="News Editor",        rank=9)
-arts_editor     = Position.objects.create(name="Arts Editor",        rank=9)
-features_editor = Position.objects.create(name="Features Editor",    rank=9)
-photo_editor    = Position.objects.create(name="Photography Editor", rank=9)
-bossman         = Position.objects.create(name="Editor-In-Chief",    rank=10)
+tech_director   = Position.objects.create(name="Technical Director", rank=8,  is_editor=True)
+news_editor     = Position.objects.create(name="News Editor",        rank=9,  is_editor=True)
+arts_editor     = Position.objects.create(name="Arts Editor",        rank=9,  is_editor=True)
+features_editor = Position.objects.create(name="Features Editor",    rank=9,  is_editor=True)
+photo_editor    = Position.objects.create(name="Photography Editor", rank=9,  is_editor=True)
+bossman         = Position.objects.create(name="Editor-In-Chief",    rank=10, is_editor=True)
 
 
 ### Users' having Positions
@@ -465,14 +469,14 @@ PublicComment.objects.new(
 
 PublicComment.objects.new(
     subject=scandal,
-    user=jack,
+    user=jack.get_profile(),
     text="You're crazy, Concerned. Nothing's going on!",
     time=datetime.now() - timedelta(hours=1, minutes=8)
 )
 
 PublicComment.objects.new(
     subject=scandal,
-    user=jack,
+    user=jack.get_profile(),
     name="Whoa",
     text="#1 is so right. I bet Jack McSmith figured it out the real "
          "conspiracy but doesn't want to expose it, because the conspirators "
@@ -484,9 +488,26 @@ PublicComment.objects.new(
 
 PublicComment.objects.new(
     subject=scandal,
-    user=jill,
+    user=jill.get_profile(),
     text="Our baby is being held hostage, Jack? I thought she was at your mom's!",
-    time=datetime.now()
+    time=datetime.now() - timedelta(minutes=2)
+)
+
+PublicComment.objects.new(
+    subject=scandal,
+    user=angry.get_profile(),
+    text="Lol! Typical of the trash on the Gazette!",
+    time=datetime.now() - timedelta(minutes=1, seconds=30)
+)
+
+PublicComment.objects.new(
+    subject=scandal,
+    ip_address='130.58.9.13',
+    email='hi@there.com',
+    name="Bob",
+    text="What are you talking about, #5? This is quality investigative journalism at its finest.",
+    time=datetime.now(),
+    check_spam=False
 )
 
 ### Announcements
