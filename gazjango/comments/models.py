@@ -1,6 +1,5 @@
 from django.db                          import models
-from django.db.models                   import signals, Q
-from django.dispatch                    import dispatcher
+from django.db.models                   import Q
 from django.utils.encoding              import smart_str
 from django.contrib.sites.models        import Site
 from django.contrib.contenttypes.models import ContentType
@@ -172,6 +171,12 @@ class PublicComment(models.Model):
             self.score += val
         self.save()
     
+    def linked_name(self):
+        name = self.display_name
+        if self.is_staff():
+            name = '<a href="%s">%s</a>' % (self.user.get_absolute_url, name)
+        return name
+    
     def __unicode__(self):
         return u"on %s by %s" % (self.subject.slug, self.display_name)
     
@@ -234,7 +239,8 @@ class CommentVote(models.Model):
         )
     
     def __unicode__(self):
-        vote = ("+" if self.positive else "-") + str(self.weight())
+        sign = "+" if self.positive else "-"
+        vote = str(self.weight) if self.weight else "inf"
         by = self.user.username if self.user else self.ip
-        return "%s on <comment %s> by %s" % (vote, self.comment, by)
+        return "%s%s on <comment %s> by %s" % (sign, vote, self.comment, by)
     
