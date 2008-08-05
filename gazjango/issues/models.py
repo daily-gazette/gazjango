@@ -264,7 +264,7 @@ class WeatherJoke(models.Model):
     line_three = models.CharField(max_length=100)
     
     def __unicode__(self):
-        return self.issue.date.strftime("%m/%d/%Y")
+        return self.date.strftime("%m/%d/%Y")
     
     class Meta:
         get_latest_by = "date"
