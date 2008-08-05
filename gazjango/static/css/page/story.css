@@ -143,7 +143,6 @@ STORY INCLUDES
 #continueBox {
 	width: 100%;
 	margin-top: 0px;
-	margin-bottom: 5px;
 	border-bottom: 1px solid #cccccc;
 	border-left: 1px solid #cccccc;
 	border-right: 1px solid #cccccc;
@@ -190,72 +189,68 @@ STORY INCLUDES
 	font-size: 1.3em;	
 }
 
-#bottomComments {
-	width: 100%;
-	float: left;
-	display: inline;
-	overflow:hidden;
-	height: 1%;
-}
 
-#submitComment {
-	float: left;
-	width: 425px;
-	display: inline;
-    overflow:hidden;
-}
+/**************************************
 
-#submitComment td {
-    font-size: 1.3em;
-    padding-bottom: 3px;
-}
+COMMENT STYLES
 
-#commentRules {
-	float: right;
-	display: inline;
-	overflow:hidden;
-	width: 200px;
+**************************************/
 
-}
-
-#commentRules ul {
-	list-style-type: square;
-	margin: 0px 0px 0px 15px;
-	padding: 0 0 0px 10px;
-	font-size: 1.3em;
-}
-
-#commentList {
-    border: 1px solid black;
-    border-bottom: none;
-    margin: 5px;
+#comments {
+	width: 645px;
+	margin-left: 5px;
+	border-left: 1px solid #cccccc;
+	border-right: 1px solid #cccccc;
+	background-color: #f4f4f4;
+	padding: 4px;
+	display: inline-block;
 }
 
 .comment {
-    padding: 3px;
-    border-bottom: 1px solid black;
+	padding-top: 5px;
+	display: inline-block;
 }
 
-.comment1 {
-    background-color: #dddddd;
+.commentInformation {
+	width: 75px;
+	border-right: 2px solid #cccccc;
+	float: left;
 }
 
-.comment2 {
-    background-color: #eeeeee;
+.commentContent {
+	width: 565px;
+	float: left;
+	padding-left: 3px;
+	border-top: 2px solid #cccccc;
 }
 
-.highlight {
-    background-color: #ebff8d;
+.authorDark {
+	margin: 0px;
+	font: .8em "Helvetica Neue", Arial, Helvetica, Geneva, sans-serif;
+	color: #606060;
+	display: inline;
+	overflow:hidden;
 }
 
-.commentText {
-    text-indent: 1em;
-    padding-left: 1em;
+.commentContent.staff {
+	background-color: #f3fee5;
 }
 
-.commentNumber {
-    font-weight: bold;
+.commentContent.moderate p {
+	font-style: italic;
+	color: #7c7c7c;
 }
+
+#submitComments {
+	width: 655px;
+	border: 1px solid #cccccc;
+	border-bottom: 3px solid #cccccc;
+	background-color: #f4f4f4;
+	padding: 4px;
+	display: inline-block;
+}
+
+#commentForm {	float: left;	width: 425px;	display: inline;	overflow:hidden;}#commentRules {	float: right;	display: inline;	overflow:hidden;	width: 225px;}#commentRules ul {	list-style-type: square;	margin: 0px 0px 0px 15px;	padding: 0 0 0px 10px;	font-size: 1.3em;}
 
 /**************************************
 
