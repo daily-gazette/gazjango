@@ -34,7 +34,8 @@
         </div>
 
         <div class="lightBox">
-          <h3>In Features</h3>
+          <h3>In {{ section.name }}</h3>
+          	<p><a href="#">test url</a> - wazzzz up?!</p>
             {% for special in section.specials.all|slice:":4" %}
               <p>
                 <a href="{{ special.get_target_url }}">{{ special.name }}</a>
@@ -54,7 +55,7 @@
   <div id="section">
     
     <div id="sectionHeader">
-      <h2>{{ section.title }}</h2>
+      <h2>{{ section.name }}</h2>
     </div>
     
     <div id="sectionMenu">
