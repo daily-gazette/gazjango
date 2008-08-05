@@ -12,7 +12,7 @@ $python manage.py sqlclear \
 $($python -c 'import settings; print " ".join(s.split(".")[-1] for s in settings.INSTALLED_APPS if not s.endswith("misc"))') \
 | $python manage.py dbshell && \
 echo "database cleared" && \
-$python manage.py syncdb --noinput && \
+$python manage.py syncdb --noinput --verbosity=0 && \
 echo "database synced" && \
 $python init_dev_data.py && \
 echo "data init'ed"
