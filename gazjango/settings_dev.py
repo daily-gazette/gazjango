@@ -1,7 +1,8 @@
 from settings_base import *
 
 DATABASE_ENGINE   = 'sqlite3'
-DATABASE_NAME     = './development.db'
+#For the importer to work, this needs to be an absolute path.
+DATABASE_NAME     = 'GAZJANGO/DIRECTORY/development.db'
 DATABASE_USER     = ''
 DATABASE_PASSWORD = ''
 DATABASE_HOST     = ''
