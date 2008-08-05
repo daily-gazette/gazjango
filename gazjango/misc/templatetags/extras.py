@@ -107,7 +107,7 @@ def near_future_date(date):
     like "May 12".
     """
     distance = (date - date.today()).days
-    if 0 < distance < 6:
+    if 0 <= distance < 6:
         return date.strftime("%A")
     elif 0 < distance < 20:
         return date.strftime("%A the ") + ordinal(date.day)
