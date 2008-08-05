@@ -69,6 +69,7 @@
 }
 
 .lightBox {
+	width: 225px;
 	float: left;
 	border: 2px solid #beb6ae;
 	background-color: #eee5d9;
@@ -106,7 +107,7 @@
 }
 
 .sectionMainBoxMarginLeft {
-	margin-left: 25px;
+	margin-left: 15px;
 }
 
 .sectionMainBoxMarginRight {
