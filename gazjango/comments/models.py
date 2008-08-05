@@ -59,9 +59,10 @@ class PublicComment(models.Model):
     and is treated as "anonymous," even though we know who actually posted it.
     
     Comments have a score. If that score is 0 or less, it's been modded down;
-    if that score is None, it's been permanently set as shown by an editor.
-    (If an editor permanently hides a comment, its score is unaffected but
-    is_approved is set to False.)
+    if that score is None, it's been permanently moderated by an editor.
+    Whether that moderation was positive or negative depends on the value of
+    is_super_shown; if True, it's been permanently shown, if False, it's been
+    permanently hidden. (This variable is only consulted if score is None.)
     
     Comments also have a per-article number, starting from one.
     """
@@ -88,9 +89,16 @@ class PublicComment(models.Model):
     is_approved = models.BooleanField(default=False)
     is_spam     = models.BooleanField(default=False)
     score = models.IntegerField(default=0, null=True)
+    shown_forever = models.BooleanField()
     
     def is_visible(self):
-        return self.is_approved and (self.score is None or self.score > 0)
+        if self.is_approved:
+            if self.score is None:
+                return self.shown_forever
+            else:
+                return self.score > 0
+        else:
+            return False
     
     objects = CommentsManager()
     visible = VisibleCommentsManager()
@@ -125,10 +133,8 @@ class PublicComment(models.Model):
         for vote in self.votes.all():
             val = vote.value
             if val is None:
-                if vote.positive:
-                    self.score = None
-                else:
-                    self.is_approved = False
+                self.score = None
+                self.shown_forever = vote.positive
                 self.save()
                 return
             else:
@@ -151,6 +157,20 @@ class PublicComment(models.Model):
                 return "Registered, Swarthmore"
             else:
                 return "Registered, Non-Swarthmore"
+    
+    def add_vote(self, positive, user=None, ip=None):
+        vote = self.votes.create(positive=positive, user=user, ip=ip)
+        self.register_vote(vote)
+    
+    def register_vote(self, vote):
+        vote.set_weight()
+        val = vote.value
+        if val is None:
+            self.score = None
+            self.shown_forever = vote.positive
+        else:
+            self.score += val
+        self.save()
     
     def __unicode__(self):
         return u"on %s by %s" % (self.subject.slug, self.display_name)
@@ -204,6 +224,7 @@ class CommentVote(models.Model):
         else:
             self.weight = 2
         self.save()
+        return self.weight
     
     class Meta:
         # note that null values don't count in uniqueness
@@ -217,14 +238,3 @@ class CommentVote(models.Model):
         by = self.user.username if self.user else self.ip
         return "%s on <comment %s> by %s" % (vote, self.comment, by)
     
-
-def register_vote(sender, instance):
-    instance.set_weight()
-    val = instance.value
-    if val is None:
-        instance.comment.score = None
-    else:
-        instance.comment.score += val
-    instance.comment.save()
-
-dispatcher.connect(register_vote, signal=signals.post_init, sender=CommentVote)
