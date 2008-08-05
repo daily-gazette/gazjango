@@ -372,17 +372,9 @@ scandal2 = Article.objects.create(
 scandal2.authors.add(bob_p, jack_p)
 scandal2.subsections.add(facstaff)
 scandal2.tags = "Al Bloom, Board of Managers, Daily Jolt"
-
-scandal_pics = MediaBucket.objects.create(slug="bloom-scandal-second")
 scandal2.bucket = scandal_pics
-scandal2.thumbnail = ImageFile.objects.create(data="uploads/al-bloom-thumb.png", 
-                                             slug="bloom-walking-thumb",
-                                             bucket=scandal_pics,
-                                             shape='t')
-scandal2.front_image = ImageFile.objects.create(data="uploads/al-bloom.jpg", 
-                                               slug="bloom-walking", 
-                                               bucket=scandal_pics,
-                                               shape='w')
+scandal2.thumbnail = scandal.thumbnail
+scandal2.front_image = scandal.front_image
 scandal2.save()
 
 
@@ -451,13 +443,8 @@ boring2 = Article.objects.create(
     possible_position='m'
 )
 boring2.authors.add(jack_p)
-
-internet_bucket = MediaBucket.objects.create(slug="internet2")
 boring2.bucket = internet_bucket
-boring2.front_image = ImageFile.objects.create(slug="boring-baby",
-                                              bucket = internet_bucket,
-                                              data="uploads/boring.jpg",
-                                              shape='t')
+boring2.front_image = boring.front_image
 boring2.save()
 
 
@@ -489,13 +476,8 @@ boring3 = Article.objects.create(
     possible_position='m'
 )
 boring3.authors.add(jack_p)
-
-internet_bucket = MediaBucket.objects.create(slug="internet3")
 boring3.bucket = internet_bucket
-boring3.front_image = ImageFile.objects.create(slug="boring-baby",
-                                              bucket = internet_bucket,
-                                              data="uploads/boring.jpg",
-                                              shape='t')
+boring3.front_image = boring.front_image
 boring3.save()
 
 
@@ -527,15 +509,9 @@ boring4 = Article.objects.create(
     possible_position='m'
 )
 boring4.authors.add(jack_p)
-
-internet_bucket = MediaBucket.objects.create(slug="internet4")
 boring4.bucket = internet_bucket
-boring4.front_image = ImageFile.objects.create(slug="boring-baby",
-                                              bucket = internet_bucket,
-                                              data="uploads/boring.jpg",
-                                              shape='t')
+boring4.front_image = boring.front_image
 boring4.save()
-
 
 def art(author, subsection=None, **keywords):
     keywords.setdefault('format', textile)
