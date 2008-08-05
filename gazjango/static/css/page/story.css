@@ -222,21 +222,20 @@ COMMENT STYLES
 	float: left;
 	padding-left: 3px;
 	border-top: 2px solid #cccccc;
+	text-align: justify;
 }
 
 .authorDark {
 	margin: 0px;
 	font: .8em "Helvetica Neue", Arial, Helvetica, Geneva, sans-serif;
 	color: #606060;
-	display: inline;
-	overflow:hidden;
 }
 
 .commentContent.staff {
 	background-color: #f3fee5;
 }
 
-.commentContent.moderate p {
+.commentContent.moderate .commentAuthorship {
 	font-style: italic;
 	color: #7c7c7c;
 }
@@ -250,7 +249,27 @@ COMMENT STYLES
 	display: inline-block;
 }
 
-#commentForm {	float: left;	width: 425px;	display: inline;	overflow:hidden;}#commentRules {	float: right;	display: inline;	overflow:hidden;	width: 225px;}#commentRules ul {	list-style-type: square;	margin: 0px 0px 0px 15px;	padding: 0 0 0px 10px;	font-size: 1.3em;}
+#commentForm {
+	float: left;
+	width: 425px;
+	display: inline;
+	overflow:hidden;
+}
+
+#commentRules {
+	float: right;
+	display: inline;
+	overflow:hidden;
+	width: 225px;
+
+}
+
+#commentRules ul {
+	list-style-type: square;
+	margin: 0px 0px 0px 15px;
+	padding: 0 0 0px 10px;
+	font-size: 1.3em;
+}
 
 /**************************************
 
