@@ -7,7 +7,55 @@ from announcements.models import Announcement
 from datetime import date, timedelta
 import scrapers.sharples
 import scrapers.weather
+import scrapers.events
 
+class EventManager(models.Manager):
+    def for_date(self, date, forward=timedelta(days=0)):
+        "Returns the events for a certain day."
+        left = date
+        right = date + forward
+        return self.filter(start__lte=right, end__gte=left)
+    
+    def update(self):
+        one_week = timedelta(days=7)
+        existing = self.for_date(date.today(), forward=one_week)
+        
+        a = { 'start': date.today(), 'end': date.today() + one_week }
+        scraped = scrapers.events.scrape_events_feed(**a)
+        
+        for event_dict in scraped:
+            try:
+                e = existing.get(link=event_dict['link'])
+                e.start = event_dict['start']
+                e.end = event_dict['end']
+                e.name = event_dict['name']
+                e.save()
+            except Event.DoesNotExist:
+                Event.objects.create(
+                    link=event_dict['link'],
+                    name= event_dict['name'],
+                    start= event_dict['start'],
+                    end= event_dict['end'] or event_dict['start']
+                )
+    
+
+class Event(models.Model):
+    "An event scraped from the College calendar."
+    name = models.CharField(max_length=60)
+    
+    start = models.DateTimeField()
+    end   = models.DateTimeField()
+    
+    location = models.CharField(max_length=100)
+    sponsor  = models.CharField(max_length=100)
+    
+    link = models.URLField(unique=True)
+    
+    objects = EventManager()
+    
+    def __unicode__(self):
+        return "%s (%s - %s)" % (self.name, self.start, self.end)
+    
 
 class Issue(models.Model):
     """
@@ -32,7 +80,6 @@ class Issue(models.Model):
     menu    = models.ForeignKey('Menu', null=True)
     weather = models.ForeignKey('Weather', null=True)
     joke    = models.ForeignKey('WeatherJoke', null=True)
-    events  = models.TextField(blank=True)
     
     def articles_in_order(self):
         """
@@ -45,6 +92,11 @@ class Issue(models.Model):
         """Grabs the announcements that should appear in this issue."""
         a = Announcement.community
         return a.filter(date_start__lte=self.date, date_end__gte=self.date)
+    
+    def events(self):
+        """Grabs the events that should appear in this issue."""
+        events = Event.objects.for_date(self.date, forward=timedelta(days=2))
+        return events.order_by('start')[:10]
     
     def topstory(self):
         return self.articles_in_order()[0]

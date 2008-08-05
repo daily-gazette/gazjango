@@ -21,7 +21,7 @@ from announcements.models import Announcement
 from articles.models      import Article, Section, Subsection, Format
 from articles.models      import Special, SpecialsCategory, DummySpecialTarget
 from comments.models      import PublicComment
-from issues.models        import Issue, Menu, Weather, WeatherJoke
+from issues.models        import Issue, Menu, Weather, WeatherJoke, Event
 from media.models         import ImageFile, MediaBucket
 from polls.models         import Poll, Option
 from jobs.models          import JobListing
@@ -770,8 +770,7 @@ issue_today = Issue.objects.create(
         line_one = "I don't like writing weather jokes, most of the time.",
         line_two = "And nobody's going to complain if there isn't one here.",
         line_three = "So why would I bother to write a real one?"
-    ),
-    events = "Nothing's happening."
+    )
 )
 issue_today.add_article(scandal)
 issue_today.add_article(nobody_loves_me)

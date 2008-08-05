@@ -299,14 +299,24 @@
                 </tr>
               </table>
 
-              {% for event in events %}
+              {% for event in issue.events %}
                 <table width="385" border="0" cellspacing="0" cellpadding="10">
                   <tr>
                     <td>
                       <font color="#333333" size="2" face="Georgia, Times New Roman, Times, serif">
-                        <strong>{{ event.headline }}</strong> <br />
+                        <strong>{{ event.name }}</strong> <br />
                         Where: {{ event.location }} <br />
-                        When: {{event.time }} <br />
+                        When:
+                          {{ event.start|near_future_date }}
+                          {{ event.start|date:"P" }}
+                          {% ifnotequal event.start event.end %}
+                            -
+                            {% ifnotequal event.start.day event.end.day %}
+                              {{ event.end|near_future_date }}
+                            {% endifnotequal %}
+                            {{ event.end|date:"P" }}
+                          {% endifnotequal %}
+                          <br/>
                         Sponsor: {{ event.sponsor }} <br />
                       </font>
                       <br />

@@ -7,30 +7,8 @@
 
 {% block customheader %}
 
-
-<link rel="stylesheet" href="css/page/story.css" type="text/css" media="screen, projection" />
-<link rel="stylesheet" type="text/css" href="js/ajaxtabs/ajaxtabs.css" />
-
-
-<script>
-
-function toggleLayer( whichLayer )
-{
-  var elem, vis;
-  if( document.getElementById ) // this is the way the standards work
-    elem = document.getElementById( whichLayer );
-  else if( document.all ) // this is the way old msie versions work
-      elem = document.all[whichLayer];
-  else if( document.layers ) // this is the way nn4 works
-    elem = document.layers[whichLayer];
-  vis = elem.style;
-  // if the style.display value is blank we try to figure it out here
-  if(vis.display==''&&elem.offsetWidth!=undefined&&elem.offsetHeight!=undefined)
-    vis.display = (elem.offsetWidth!=0&&elem.offsetHeight!=0)?'block':'none';
-  vis.display = (vis.display==''||vis.display=='block')?'none':'block';
-}
-
-</script>
+<link rel="stylesheet" href="{% static css page/story.css %}" type="text/css" media="screen, projection" />
+<link rel="stylesheet" type="text/css" href="{% js ajaxtabs/ajaxtabs.css %}" />
 
 <script type="text/javascript" src="js/jquery-1.2.1.pack.js"></script>
 <script type="text/javascript" src="js/ajaxtabs/ui.tabs.pack.js"></script>
