@@ -151,6 +151,8 @@
             </div>
 
           <div class="commentContent {% if comment.is_staff %}staff{% else %}{% if not comment.is_visible %}moderate{% endif %}{% endif %}">
+          
+          	<div class="commentContentInner">
             <p class="commentText">
               {% if comment.is_visible %}
                 {{ comment.text }}
@@ -175,6 +177,7 @@
                 &mdash;{{ comment.display_name }} <span class="authorDark">| {{ comment.status }}</span>
               {% endif %}
             </p>
+            </div>
           </div>
         </div>
       {% endfor %}
