@@ -12,7 +12,12 @@
 
 <script type="text/javascript" charset="utf-8">
   function loadComment(id) {
-    $('#c-' + id).filter('commentText').load('show-comment/' + id + '/');
+    $('#c-' + id).find('.commentText').load('show-comment/' + id + '/');
+    $('#show-' + id).html('hide').attr('onclick', "hideComment("+id+")");
+  }
+  function hideComment(id) {
+    $('#c-' + id).find('.commentText').html('');
+    $('#show-' + id).html('show').attr('onclick', "loadComment("+id+")")
   }
 </script>
 
@@ -130,7 +135,7 @@
                 {{ comment.time|date:"j F, Y - g:i A" }}
               </span>
               {% if not comment.is_visible %}
-                | [<a href="#c-{{ comment.number }}" onclick="loadComment({{ comment.number }}); return false;">show</a>]
+                | [<a href="#c-{{ comment.number }}" onclick="loadComment({{ comment.number }}); return false;" id="show-{{ comment.number }}">show</a>]
               {% endif %}
             </p>
             
