@@ -28,7 +28,7 @@ urlpatterns = patterns('articles.views',
     (r'^%(year)s/%(month)s/%(day)s/%(slug)s/print/$'   % reps, 'article', {'print_view': True}, 'print'),
     (r'^%(year)s/%(month)s/%(day)s/%(slug)s/email/$'   % reps, 'email_article', {}, 'email'),
     
-    (r'^%(year)s/%(month)s/%(day)s/%(slug)s/show-comment/%(num)s$' % reps, 'get_comment_text'),
+    (r'^%(year)s/%(month)s/%(day)s/%(slug)s/show-comment/%(num)s/$' % reps, 'get_comment_text'),
     
     (r'^photos/%(year)s/%(month)s/%(day)s/%(slug)s/(?:%(num)s/)?$' % reps, 'spread'),
     
