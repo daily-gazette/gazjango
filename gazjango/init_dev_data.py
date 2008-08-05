@@ -329,6 +329,63 @@ scandal.front_image = ImageFile.objects.create(data="uploads/al-bloom.jpg",
 scandal.save()
 
 
+
+scandal2 = Article.objects.create(
+    headline="Al Bloom Pressured Out By Board of Managers",
+    short_title="Al Bloom Forced Out By BoM",
+    subtitle="Allegations of Involvement with Empereror's Club VIP Surface",
+    slug="bloom-scandal-second",
+    section=news,
+    short_summary="Allegations have surfaced that Al Bloom was involved in the "
+            "Emperor's Club VIP scandal2.",
+    summary="One member of the Board of Managers has allegedly accused Al Bloom "
+            "of involvement with the Emperor's Club VIP, and has pictures to back "
+            "it up. Some say this is related to his recent resignation.",
+    long_summary="Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do "
+                 "eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim "
+                 "ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut "
+                 "aliquip ex ea commodo consequat. Duis aute irure dolor in "
+                 "reprehenderit in voluptate velit esse cillum dolore eu fugiat "
+                 "nulla pariatur. Excepteur sint occaecat cupidatat non proident, "
+                 "sunt in culpa qui officia deserunt mollit anim id est laborum.",
+    text='<div class="imgLeft"><img src="bloom-walking-thumb" /></div>\n\n'
+         "An investigation by the Gazette has uncovered connections between Al "
+         "Bloom and the Emperor's Club VIP. Photos have surfaced that show him "
+         "clearly engaging in unseemly acts with a woman who looks suspiciously "
+         "like former New York governor Spitzer's pricey prostitute.\n\n"
+         "A senior member of the Board of Managers, who refused to reveal his "
+         "actual identity in the posting, supplied these photos to the community "
+         "through an online forum and claimed that they were the true reason "
+         "behind Al Bloom's unexpected retirement.\n\n "
+         "The College and other Board members refused comment.\n\n"
+         "Some students, however, have expressed concern that the photos may be "
+         'fake: "I can tell by the pixels," claimed one rising senior, "and by '
+         "having seen a few 'shops in my time.\"\n\n"
+         "The Gazette will have more on this story as the story develops.\n\n"
+         "[source: http://dailyjolt.com]",
+    format=textile,
+    status='p',
+    pub_date=datetime.now() - timedelta(hours=3),
+    position='t',
+    possible_position='t'
+)
+scandal2.authors.add(bob_p, jack_p)
+scandal2.subsections.add(facstaff)
+scandal2.tags = "Al Bloom, Board of Managers, Daily Jolt"
+
+scandal_pics = MediaBucket.objects.create(slug="bloom-scandal-second")
+scandal2.bucket = scandal_pics
+scandal2.thumbnail = ImageFile.objects.create(data="uploads/al-bloom-thumb.png", 
+                                             slug="bloom-walking-thumb",
+                                             bucket=scandal_pics,
+                                             shape='t')
+scandal2.front_image = ImageFile.objects.create(data="uploads/al-bloom.jpg", 
+                                               slug="bloom-walking", 
+                                               bucket=scandal_pics,
+                                               shape='w')
+scandal2.save()
+
+
 boring = Article.objects.create(
     headline="Nothing Happened",
     subtitle="It's Summer: Did You Expect Something Else?",
@@ -365,6 +422,119 @@ boring.front_image = ImageFile.objects.create(slug="boring-baby",
                                               data="uploads/boring.jpg",
                                               shape='t')
 boring.save()
+
+boring2 = Article.objects.create(
+    headline="Nothing Happened",
+    subtitle="It's Summer: Did You Expect Something Else?",
+    slug="boring2",
+    section=news,
+    summary="Absolutely nothing happened at all. It was quite boring. So boring, "
+            "to be perfectly honest, I have not a thing to say about it. That's "
+            "why the text of the story is all latin and crap.",
+    text="Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod "
+         "tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim "
+         "veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea "
+         "commodo consequat. Duis aute irure dolor in reprehenderit in voluptate "
+         "velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint "
+         "occaecat cupidatat non proident, sunt in culpa qui officia deserunt "
+         "mollit anim id est laborum.\n\n"
+         "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod "
+         "tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim "
+         "veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea "
+         "commodo consequat. Duis aute irure dolor in reprehenderit in voluptate "
+         "velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint "
+         "occaecat cupidatat non proident, sunt in culpa qui officia deserunt "
+         "mollit anim id est laborum.",
+    format=textile,
+    status='p',
+    position='m',
+    possible_position='m'
+)
+boring2.authors.add(jack_p)
+
+internet_bucket = MediaBucket.objects.create(slug="internet2")
+boring2.bucket = internet_bucket
+boring2.front_image = ImageFile.objects.create(slug="boring-baby",
+                                              bucket = internet_bucket,
+                                              data="uploads/boring.jpg",
+                                              shape='t')
+boring2.save()
+
+
+boring3 = Article.objects.create(
+    headline="Nothing Happened",
+    subtitle="It's Summer: Did You Expect Something Else?",
+    slug="boring3",
+    section=news,
+    summary="Absolutely nothing happened at all. It was quite boring. So boring, "
+            "to be perfectly honest, I have not a thing to say about it. That's "
+            "why the text of the story is all latin and crap.",
+    text="Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod "
+         "tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim "
+         "veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea "
+         "commodo consequat. Duis aute irure dolor in reprehenderit in voluptate "
+         "velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint "
+         "occaecat cupidatat non proident, sunt in culpa qui officia deserunt "
+         "mollit anim id est laborum.\n\n"
+         "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod "
+         "tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim "
+         "veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea "
+         "commodo consequat. Duis aute irure dolor in reprehenderit in voluptate "
+         "velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint "
+         "occaecat cupidatat non proident, sunt in culpa qui officia deserunt "
+         "mollit anim id est laborum.",
+    format=textile,
+    status='p',
+    position='m',
+    possible_position='m'
+)
+boring3.authors.add(jack_p)
+
+internet_bucket = MediaBucket.objects.create(slug="internet3")
+boring3.bucket = internet_bucket
+boring3.front_image = ImageFile.objects.create(slug="boring-baby",
+                                              bucket = internet_bucket,
+                                              data="uploads/boring.jpg",
+                                              shape='t')
+boring3.save()
+
+
+boring4 = Article.objects.create(
+    headline="Nothing Happened",
+    subtitle="It's Summer: Did You Expect Something Else?",
+    slug="boring4",
+    section=news,
+    summary="Absolutely nothing happened at all. It was quite boring. So boring, "
+            "to be perfectly honest, I have not a thing to say about it. That's "
+            "why the text of the story is all latin and crap.",
+    text="Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod "
+         "tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim "
+         "veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea "
+         "commodo consequat. Duis aute irure dolor in reprehenderit in voluptate "
+         "velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint "
+         "occaecat cupidatat non proident, sunt in culpa qui officia deserunt "
+         "mollit anim id est laborum.\n\n"
+         "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod "
+         "tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim "
+         "veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea "
+         "commodo consequat. Duis aute irure dolor in reprehenderit in voluptate "
+         "velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint "
+         "occaecat cupidatat non proident, sunt in culpa qui officia deserunt "
+         "mollit anim id est laborum.",
+    format=textile,
+    status='p',
+    position='m',
+    possible_position='m'
+)
+boring4.authors.add(jack_p)
+
+internet_bucket = MediaBucket.objects.create(slug="internet4")
+boring4.bucket = internet_bucket
+boring4.front_image = ImageFile.objects.create(slug="boring-baby",
+                                              bucket = internet_bucket,
+                                              data="uploads/boring.jpg",
+                                              shape='t')
+boring4.save()
 
 
 def art(author, subsection=None, **keywords):
