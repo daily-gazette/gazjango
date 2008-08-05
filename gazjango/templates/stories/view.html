@@ -108,85 +108,84 @@
 						{% endfor %}
 					</ul>
 				</div>			
-			</div>
+			</div>	
+			
+			
+		</div>
+
+		
+		<div id="comments">
+		    {% for comment in story.comments.all %}
+		    
+		    	<div class="comment">
+		    	
+		    		<div class="commentInformation">
+		    			<p><strong>#{{ comment.number }}</strong><br />{{ comment.time|date:"m/j/Y - g:i A" }}
+		    		</div>
+		    	
+					<div class="commentContent {% if comment.is_staff %}staff{% else %}{% if not comment.is_visible %}moderate{% endif %}{% endif %}">
+					
+						{% if comment.is_visible %}
+						
+							<p>{{ comment.text }}</p>
+					
+							<p>&#8212;{% if not comment.is_anonymous and comment.user.is_staff %}<a href="{{ comment.user.get_absolute_url }}">{{ comment.display_name }}</a>{% else %}{{ comment.display_name }}{% endif %}, <span class="authorDark">{{ comment.status }}</span></p>
+							
+						{% else %}
+						
+							<p>This comment is under moderation.  &#8212;{{ comment.display_name }}, <span class="authorDark">{{ comment.status }}</span> <strong>[<a href="#c-{{ comment.number }}" onclick="loadComment({{ comment.number }}); return false;" id="show-{{ comment.number }}">show</a>]</strong></p>
+						
+						
+						{% endif %}
+					
+					</div>
+					
+				</div>
+				
+			{% endfor %}
+				
 		</div>
 		
-		<div id="bottomComments">
-		  <div id="commentList">
-		    {% for comment in story.comments.all %}
-          <div class='comment {% if comment.is_staff %}highlight{% else %}{% cycle "comment1" "comment2" %}{% endif %}' id="c-{{ comment.number }}">
-            
-            <p class="commentMeta">
-              <span class="commentNumber">
-                #{{ comment.number }}
-              </span>
-              |
-              <span class="commentName">
-                {% if not comment.is_anonymous and comment.user.is_staff %}
-                  <a href="{{ comment.user.get_absolute_url }}">{{ comment.display_name }}</a>
-                {% else %}
-                  {{ comment.display_name }}
-                {% endif %}
-              </span>
-              |
-              <span class="commentStatus">{{ comment.status }}</span>
-              |
-              <span class="commentTime">
-                {{ comment.time|date:"j F, Y - g:i A" }}
-              </span>
-              {% if not comment.is_visible %}
-                | [<a href="#c-{{ comment.number }}" onclick="loadComment({{ comment.number }}); return false;" id="show-{{ comment.number }}">show</a>]
-              {% endif %}
-            </p>
-            
-            <p class="commentText">
-              {% if comment.is_visible %}
-                {{ comment.text }}
-              {% endif %}
-            </p>
-            
-          </div>
-		    {% endfor %}
-		  </div>
-		  
-			<div id="submitComment">
-			  <h4 name="submitComment" style="display: none;">Submit a Comment</h4>
-			  <form method="post" action="comment/">
-          <table>
-            {% if user.is_authenticated %}
-              <tr>
-                <td>
-                  {{ comment_form.anonymous.label_tag }}
-                  {{ comment_form.anonymous }}
-                </td>
-                <td>{{ comment_form.name.label_tag }}:</td>
-                <td>{{ comment_form.name }}</td>
-              </tr>
-            {% else %}
-              <tr>
-                <td>{{ comment_form.name.label_tag }}:</td>
-                <td>{{ comment_form.name }}</td>
-                <td><a href="{% url login %}">Log in</a> to verify your identity.</td>
-              </tr>
-              <tr>
-                <td>{{ comment_form.email.label_tag }}:</td>
-                <td>{{ comment_form.email }}</td>
-                <td>Required, but will not be made public.</td>
-              </tr>
-            {% endif %}
-            <tr><td colspan="3">{{ comment_form.text }}</td></tr>
-            <tr>
-              <td></td>
-              <td></td>
-              <td>
-                <span style="float: right">
-                  <input type="submit" name="submit" value="Submit" />
-                  <input type="reset"  name="reset"  value="Cancel" />
-                </span>
-              </td>
-            </tr>
-          </table>
-			  </form>
+		<div id="submitComments">
+		
+			<div id="commentForm">
+			<h4 name="submitComment" style="display: none;">Submit a Comment</h4>
+				<form method="post" action="comment/">
+				  <table>
+					{% if user.is_authenticated %}
+					  <tr>
+						<td>
+						  {{ comment_form.anonymous.label_tag }}
+						  {{ comment_form.anonymous }}
+						</td>
+						<td>{{ comment_form.name.label_tag }}:</td>
+						<td>{{ comment_form.name }}</td>
+					  </tr>
+					{% else %}
+					  <tr>
+						<td>{{ comment_form.name.label_tag }}:</td>
+						<td>{{ comment_form.name }}</td>
+						<td><a href="{% url login %}">Log in</a> to verify your identity.</td>
+					  </tr>
+					  <tr>
+						<td>{{ comment_form.email.label_tag }}:</td>
+						<td>{{ comment_form.email }}</td>
+						<td>Required, but will not be made public.</td>
+					  </tr>
+					{% endif %}
+					<tr><td colspan="3">{{ comment_form.text }}</td></tr>
+					<tr>
+					  <td></td>
+					  <td></td>
+					  <td>
+						<span style="float: right">
+						  <input type="submit" name="submit" value="Submit" />
+						  <input type="reset"  name="reset"  value="Cancel" />
+						</span>
+					  </td>
+					</tr>
+				  </table>
+				</form>		
 			</div>
 			
 			<div id="commentRules">
@@ -216,6 +215,12 @@
 				</p>
 			</div>
 		</div>
+		
+		    
+		    
+       
+		  
+
 	</div>
 
 {% endblock content %}
