@@ -9,9 +9,10 @@ setup_environ(settings)
 from datetime import date, datetime, timedelta
 import random
 
-from django.contrib.auth.models      import User, Group, Permission
-from django.contrib.sites.models     import Site
-from django.contrib.flatpages.models import FlatPage
+from django.contrib.auth.models         import User, Group, Permission
+from django.contrib.contenttypes.models import ContentType
+from django.contrib.sites.models        import Site
+from django.contrib.flatpages.models    import FlatPage
 import tagging
 
 from accounts.models      import UserProfile, UserKind, Position
@@ -66,13 +67,15 @@ photographer_group = Group.objects.create(name="Photographers")
 editor_group       = Group.objects.create(name="Editors")
 admin_group        = Group.objects.create(name="Admins")
 
+ct = ContentType.objects.get_for_model(PublicComment)
+
 reader_group.permissions.add(
-    Permission.objects.get(
-        content_type__model='publiccomment',
-        codename='can_post_directly'
-    )
+    Permission.objects.get(content_type=ct, codename='can_post_directly')
 )
 
+ab = Permission.objects.get(content_type=ct,codename='can_moderate_absolutely')
+for g in (editor_group, admin_group):
+    g.permissions.add(ab)
 
 ### Users
 
@@ -493,10 +496,10 @@ PublicComment.objects.new(
     time=datetime.now() - timedelta(minutes=2)
 )
 
-PublicComment.objects.new(
+offensive = PublicComment.objects.new(
     subject=scandal,
     user=angry.get_profile(),
-    text="Lol! Typical of the trash on the Gazette!",
+    text="Lol! Typical of the trash on the Gazette!<br/><br/>At least since I left, that is. Back in the day, when I was running the Gazette single-handedly, I researched each and every article for a minimum of sixteen hours, getting quotes from at least nine different sources in the process. THAT's the only way to guarantee objectivity. And it happened like that for EVERY article. Even the weather. Not getting enough sources is a slippery slope, one the Gazette has begun to sled down on one of those new-fangled plastic sleds that go really really fast. You suck, Jack McSmith!",
     time=datetime.now() - timedelta(minutes=1, seconds=30)
 )
 
@@ -509,6 +512,8 @@ PublicComment.objects.new(
     time=datetime.now(),
     check_spam=False
 )
+
+offensive.add_vote(positive=False, user=jill.get_profile())
 
 ### Announcements
 
