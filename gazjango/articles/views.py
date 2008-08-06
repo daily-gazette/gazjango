@@ -24,7 +24,7 @@ def article(request, slug, year, month, day, print_view=False, template="stories
     if request.method != 'POST':
         initial = {'text': 'Have your say.'}
         if logged_in:
-            initial['name'] = request.user.name
+            initial['name'] = request.user.get_full_name()
         form = make_comment_form(logged_in=logged_in, initial=initial)
         
         return show_article(request, story, form, print_view, template)
@@ -105,7 +105,7 @@ def homepage(request, template="index.html"):
 
 
 def menu_partial(request):
-    if datetime.datetime.hour() < 21:
+    if datetime.datetime.now().hour < 21:
         menu = Menu.objects.for_today()
     else:
         menu = Menu.objects.for_tomorrow()
