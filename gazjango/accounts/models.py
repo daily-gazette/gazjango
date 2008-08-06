@@ -26,7 +26,8 @@ class UserKind(models.Model):
         unique_together = ('kind', 'year')
     
     def __unicode__(self):
-        return self.kind + (" (%s)" % self.year if self.year else "")
+        return self.get_kind_display() + \
+               (" (%s)" % self.year if self.year else "")
     
 
 class ContactMethod(models.Model):
