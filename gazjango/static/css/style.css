@@ -291,6 +291,7 @@ p {
 	background-color: #eee5d9;
 	margin-bottom: 5px;
 	position: relative;
+	overflow: hidden;
 }
 
 .headerColumnBox p {
