@@ -227,14 +227,6 @@ COMMENT STYLES
 	text-align: justify;
 }
 
-.commentContentInner {
-	width: 563px;
-	float: left;
-	display: ineline-block;
-	border: 1px solid #cccccc;
-	margin-top: 3px;
-}
-
 .authorDark {
 	margin: 0px;
 	font: .8em "Helvetica Neue", Arial, Helvetica, Geneva, sans-serif;
@@ -257,6 +249,7 @@ COMMENT STYLES
 	background-color: #f4f4f4;
 	padding: 4px;
 	display: inline-block;
+	text-align: left;
 }
 
 #commentForm {
