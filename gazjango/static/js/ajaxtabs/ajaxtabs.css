@@ -21,9 +21,9 @@ position: relative;
 z-index: 1;
 padding: 3px 7px;
 margin-right: 3px;
-border: 1px solid #778;
+border: 2px solid #beb6ae;
 color: #d;
-background: #dddddd;
+background: #eee5d9;
 }
 
 .shadetabs li a:visited{
@@ -41,7 +41,7 @@ top: 1px;
 }
 
 .shadetabs li a.selected{ /*selected main tab style */
-border-bottom-color: #dddddd;
+border-bottom-color: #eee5d9;
 }
 
 .shadetabs li a.selected:hover{ /*selected main tab style */

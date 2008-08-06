@@ -20,8 +20,8 @@
 
       <div id="headerColumn">
 
-        <div class="lightBox">
-          <h3>Comments</h3>
+        <div class="headerColumnBox">
+          <h4>Comments</h4>
           <ul class="commentList">
             {% for comment in comments %}
               <li>
@@ -33,8 +33,8 @@
           </ul>
         </div>
 
-        <div class="lightBox">
-          <h3>In {{ section.name }}</h3>
+        <div class="headerColumnBox">
+          <h4>In {{ section.name }}</h4>
           	<p><a href="#">test url</a> - wazzzz up?!</p>
             {% for special in section.specials.all|slice:":4" %}
               <p>
@@ -68,15 +68,17 @@
       </ul>
     </div>
 
+	<div id="mainBoxes">
+	
     {% for topstory in topstories %}
-      <div id="sectionMainBox" class="sectionMainBoxMarginLeft">
+      <div class="sectionMainBox sectionMainBoxMarginLeft">
         <div id="sectionMainStory">
+          <img class="{{ topstory.front_image.get_shape_display }}" src="{{ topstory.front_image.get_absolute_url }}" title="{{ topstory.headline }}" alt="" />
           <h2><a href="{{ topstory.get_absolute_url }}">{{topstory.get_title|safe}}</a></h2>
           <p class="byline">
             <span class="author">by {{ topstory.authors|join_authors }}</span>
             <span class="date">| {{ topstory.pub_date|date:"n/j/Y" }}</span>
           </p>
-          <img class="{{ topstory.front_image.get_shape_display }}" src="{{ topstory.front_image.get_absolute_url }}" title="{{ topstory.headline }}" alt="" />
           <p>
             {{ topstory.long_summary|safe }}
             <a class="readMore" href="{{ topstory.get_absolute_url }}">More</a>
@@ -84,6 +86,8 @@
         </div>
       </div>
     {% endfor %}
+    
+    </div>
 
     <div id="sectionBar">
       <ul>

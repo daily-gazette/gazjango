@@ -1,12 +1,12 @@
 #section {
 	float: left;
 	display: inline;
-	width: 100%;
+	width: 695px;
 }
 
 #sectionHeader {
 	float: left;
-	width: 80%;
+	width: 670px;
 	margin-left: 25px;
 	border-bottom: 2px solid #432c16;
 }
@@ -19,9 +19,8 @@
 
 #sectionMenu {
 	float: right;
-	display: inline;
+	display: inline-block;
 	background-color: #432c16;
-	margin-right: 250px;
 }
 
 #sectionMenu ul {
@@ -68,27 +67,6 @@
 	font-weight: bold;
 }
 
-.lightBox {
-	width: 225px;
-	float: left;
-	border: 2px solid #beb6ae;
-	background-color: #eee5d9;
-	margin-bottom: 5px;
-}
-
-.lightBox p {
-	padding: 3px;
-}
-
-.lightBox h3 {
-	background-color: #beb6ae;
-	width: 100%;
-	padding: 0;
-	margin: 0;
-	color: #ffffff;
-	padding-left: 2px;
-}
-
 #headerComments {
 	background-color: #dddddd;
 	border-style: solid;
@@ -99,7 +77,12 @@
 }
 
 
-#sectionMainBox {
+#mainBoxes {
+	display: block;
+	float: left;
+}
+
+.sectionMainBox {
 	width: 330px;
 	margin-top: 10px;
 	float: left;

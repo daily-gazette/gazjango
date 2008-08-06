@@ -186,7 +186,7 @@ p {
 	width: 100%;
 	height: 40px;
 	float: right;
-	background: url(../images/header/top-gradient.png) no-repeat fixed 350px -10px;
+	background: url(../images/header/top-gradient.png) no-repeat right top;
 	border: 1px;
 	position: relative;
 }
@@ -279,29 +279,49 @@ p {
 #headerColumn {
 	width: 225px;
 	float: right;
-	position: absolute;
-	top: 25px;
-	right: 25px;
+	margin: 25px 25px 0 0;
 	display:inline;
 } 
 
-#headerComments {
-	background-color: #dddddd;
-	border-style: solid;
-	border-width: 1px;
-	border-color: #432c16;
-	height:  150px;
-	padding: 5px;
+.headerColumnBox {
+	width: 225px;
+	height: 175px;
+	float: left;
+	border: 2px solid #beb6ae;
+	background-color: #eee5d9;
+	margin-bottom: 5px;
+	position: relative;
 }
 
-#headerComments li {
-    margin-top: 10px;
+.headerColumnBox p {
+	padding: 3px;
+
+}
+
+.headerColumnBox h4 {
+	background-color: #86807b;
+	padding: 0;
+	margin: 0;
+	color: #ffffff;
+	padding-left: 2px;
+	width: 223px;
+	display: inline-block;
+}
+
+.headerColumnBox ul {
+	padding: 5px;
+	font-size: 1.2em;
+}
+
+.headerColumnBox ul li {
+	padding-top: 5px;
 }
 
 #headerContentBox {
 	background-color: #ffffff;
 	height:  225px;
-	margin-top: 10px;
+	margin-top: 2px;
+	display: inline-block;
 }
 
 #tabs ul {
@@ -315,41 +335,6 @@ p {
 	border-bottom: none;
 }
 
-#tabs li {
-	float:left;
-	width: 65px;
-	margin: 0px;
-	padding: 0px;
-	text-align:center;
-}
-
-#tabs li a {
-	display:block;
-	height:20px;
-	background-color:#dddddd;
-	color:#000000;
-}
-
-#tabs li a:hover {
-	color:#000000;
-	background-color: #cccccc;
-}
-
-#tabs li a.active {
-	background-color: #cccccc;
-	color: #000000;
-	border-right: 1px solid #000000;
-}
-
-#extraContainer {
-	border-style: solid;
-	border-width: 1px;
-	height: 190px;
-	background-color: #dddddd;
-	padding: 5px;
-	
-	overflow: auto;
-}
 
 #menu h4 {
     font-size: 1.5em;
@@ -361,12 +346,11 @@ p {
 }
 
 #weather .weather {
-    font-size: 1.4em;
-    text-align: center;
+    font-size: 1.2em;
 }
 
 #weather .joke {
-    font-size: 1.2em;
+    font-size: 1em;
 }
 
 #weather #attrib {
@@ -381,7 +365,8 @@ p {
 }
 
 #zagette {
-	
+	display: inline-block;
+	position: relative;
 }
 
 #content {
@@ -517,7 +502,7 @@ p {
 	margin-top: 10px;
 	float: left;
 	display:inline;
-	margin-right: 250px;
+	height: ;
 }
 
 #indexPOTDbar {

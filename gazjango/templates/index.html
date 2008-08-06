@@ -43,16 +43,15 @@ jQuery(document).ready(function() {
 			</div>
 			
 			<div id="headerColumn">
-				<div id="headerComments">
+				<div class="headerColumnBox">
 					<h4>Newest Comments</h4>
 					<ul>
-					{% for comment in comments %}
+					{% for comment in comments|slice:":4" %}
 							<li>
 							  On <a href="{{comment.get_absolute_url}}">{{ comment.subject.get_title }}</a>
-							  <br/>
-							  by {{ comment.display_name }}
+							  <br/>by {{ comment.display_name }}
 							  at {{ comment.time|date:"g:i A" }}
-							  on {{ comment.time|date:"F j" }}
+							  on {{ comment.time|date:"n/j/Y" }}
 							</li>
 					{% endfor %}
 					</ul>
@@ -65,16 +64,16 @@ jQuery(document).ready(function() {
 						<li><a href="/events/" rel="extraContainer">Events</a></li>
 					</ul>
 						
-					<div id="extraContainer">
-            <div id="weather">
-              <p class="weather"><strong>Today:</strong> {{ weather.today }}</p>
-              <p class="joke">{{ joke.line_one }}</p>
-              <p class="weather"><strong>Tonight:</strong> {{ weather.tonight }}</p>
-              <p class="joke">{{ joke.line_two }}</p>
-              <p class="weather"><strong>Tomorrow:</strong> {{ weather.tomorrow }}</p>
-              <p class="joke">{{ joke.line_three }}</p>
-              <p id="attrib">Weather updated daily, courtesy of the <a href="http://weather.gov">NWS</a>.</p>
-            </div>
+					<div class="headerColumnBox">
+						<div id="weather">
+						  <p class="weather"><strong>Today:</strong> {{ weather.today }}<br />
+						  <span class="joke">{{ joke.line_one }}</span></p>
+						  <p class="weather"><strong>Tonight:</strong> {{ weather.tonight }}<br />
+						  <span class="joke">{{ joke.line_two }}</p>
+						  <p class="weather"><strong>Tomorrow:</strong> {{ weather.tomorrow }}<br />
+						  <span class="joke">{{ joke.line_three }}</p>
+						  <p id="attrib">Weather updated daily, courtesy of the <a href="http://weather.gov">NWS</a>.</p>
+						</div>
 					</div>
 						
 					<script type="text/javascript">
