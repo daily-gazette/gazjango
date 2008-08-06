@@ -41,11 +41,10 @@
       var comment = this;
       var id = comment.id.substring('2');
       
-      $(comment).find('.commentText').hide();
-      
       $(comment).find('.showLink').click(function(obj) {
         $(comment)
           .find('.commentText')
+            .hide()
             .load('show-comment/' + id + '/', function() {
               $(this).slideDown(speed);
             })
