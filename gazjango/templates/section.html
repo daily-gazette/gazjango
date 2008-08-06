@@ -23,11 +23,11 @@
         <div class="headerColumnBox">
           <h4>Comments</h4>
           <ul class="commentList">
-            {% for comment in comments %}
+            {% for comment in comments|slice:":5" %}
               <li>
                 <a href="{{ comment.get_absolute_url }}">{{ comment.subject.get_title }}</a>
                 <br />
-                Comment @ {{ comment.time|date:"F j, Y" }}
+                Comment on {{ comment.time|date:"F j, Y" }}
               </li>
             {% endfor %}
           </ul>
