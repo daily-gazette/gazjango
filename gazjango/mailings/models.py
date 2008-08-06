@@ -1,6 +1,5 @@
 from django.db        import models
 from django.db.models import signals
-from django.dispatch  import dispatcher
 from accounts.models import UserProfile, UserKind
 import random
 
@@ -71,9 +70,9 @@ class Subscriber(models.Model):
             return self.email
     
 
-def set_default_key(sender, instance):
+def set_default_key(sender, instance, **kwargs):
     if not instance.confirmation_key:
         instance.randomize_confirmation_key()
         instance.save()
 
-dispatcher.connect(set_default_key, signal=signals.post_init, sender=Subscriber)
+signals.post_init.connect(set_default_key, sender=Subscriber)
