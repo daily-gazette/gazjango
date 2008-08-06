@@ -23,7 +23,7 @@
         <div class="headerColumnBox">
           <h4>Comments</h4>
           <ul class="commentList">
-            {% for comment in comments|slice:":5" %}
+            {% for comment in comments|slice:":4" %}
               <li>
                 <a href="{{ comment.get_absolute_url }}">{{ comment.subject.get_title }}</a>
                 <br />
