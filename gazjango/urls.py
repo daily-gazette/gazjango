@@ -83,12 +83,12 @@ urlpatterns += patterns('media.views',
 )
 
 urlpatterns += patterns('',
-    (r'^accounts/login/$',    'django.contrib.auth.views.login',  {}, 'login'),
-    (r'^accounts/logout/$',   'django.contrib.auth.views.logout', {}, 'logout'),
-    (r'^accounts/manage/$',   'accounts.views.manage',            {}, 'manage'),
-    (r'^accounts/register/$', 'accounts.views.register',          {}, 'register'),
+    (r'^accounts/login/$',    'django.contrib.auth.views.login',  {},                 'login'),
+    (r'^accounts/logout/$',   'django.contrib.auth.views.logout', {'next_page': '/'}, 'logout'),
+    (r'^accounts/manage/$',   'accounts.views.manage',            {},                 'manage'),
+    (r'^accounts/register/$', 'accounts.views.register',          {},                 'register'),
     
-    (r'^users/%(name)s/$' % reps, 'accounts.views.user_details', 'user-details')
+    (r'^users/%(name)s/$' % reps, 'accounts.views.user_details', {}, 'user-details')
 )
 
 if settings.DEBUG:
