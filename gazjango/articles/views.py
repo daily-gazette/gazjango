@@ -2,13 +2,13 @@ import datetime
 
 from django.template   import RequestContext
 from django.shortcuts  import render_to_response, get_object_or_404
-from django.http       import Http404, HttpResponse
+from django.http       import Http404, HttpResponse, HttpResponseRedirect
 from misc.view_helpers import get_by_date_or_404, filter_by_date
 
 from articles.models      import Article, Section, Subsection, Special, PhotoSpread
 from announcements.models import Announcement
 from comments.models      import PublicComment
-from comments.forms       import AnonCommentForm, UserCommentForm
+from comments.forms       import CommentForm, make_comment_form
 from issues.models        import Menu, Weather, WeatherJoke
 from jobs.models          import JobListing
 
@@ -18,15 +18,41 @@ from scrapers.manual_links import manual_links, lca_links
 
 
 def article(request, slug, year, month, day, print_view=False, template="stories/view.html"):
-    story = get_by_date_or_404(Article, year, month, day, slug=slug)
+    story = get_by_date_or_404(Article, year, month, day, slug=slug)    
+    logged_in = request.user.is_authenticated()
     
-    initial = {'text': 'Have your say.'}
-    if request.user.is_authenticated():
-        initial['name'] = request.user.name
-        form = UserCommentForm(inital=initial)
+    if request.method != 'POST':
+        initial = {'text': 'Have your say.'}
+        if logged_in:
+            initial['name'] = request.user.name
+        form = make_comment_form(logged_in=logged_in, initial=initial)
+        
+        return show_article(request, story, form, print_view, template)
+    
     else:
-        form = AnonCommentForm(initial=initial)
-    
+        print request.POST
+        form = make_comment_form(data=request.POST, logged_in=logged_in)
+        if form.is_valid():
+            args = {
+                'subject': story,
+                'text': form.cleaned_data['text'].replace("\n", "<br/>"),
+                'ip_address': request.META['REMOTE_ADDR'],
+                'user_agent': request.META['HTTP_USER_AGENT']
+            }
+            
+            if logged_in:
+                args['user'] = request.user.get_profile()
+            if form.cleaned_data['anonymous']:
+                args['name']  = form.cleaned_data['name']
+                args['email'] = form.cleaned_data['email']
+            
+            comment = PublicComment.objects.new(**args)
+            return HttpResponseRedirect(comment.get_absolute_url())
+        else:
+            return show_article(request, story, form)
+
+
+def show_article(request, story, form, print_view=False, extra={}, template="stories/view.html"):
     data = {
         'story': story,
         'related': story.related_list(3),
@@ -37,6 +63,7 @@ def article(request, slug, year, month, day, print_view=False, template="stories
     }
     rc = RequestContext(request)
     return render_to_response(template, data, context_instance=rc)
+
 
 def get_comment_text(request, slug, year, month, day, num):
     story = get_by_date_or_404(Article, year, month, day, slug=slug)
@@ -93,9 +120,7 @@ def spread(request, slug, year, month, day, num=None):
     rc = RequestContext(request)
     return render_to_response("photo_spread.html", data, context_instance=rc)
 
-
 search        = lambda request, **kwargs: render_to_response("base.html", locals())
-comment       = lambda request, **kwargs: render_to_response("base.html", locals())
 email_article = lambda request, **kwargs: render_to_response("base.html", locals())
 
 
