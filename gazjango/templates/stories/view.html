@@ -11,36 +11,51 @@
 <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.2.6/jquery.min.js"></script>
 
 <script type="text/javascript" charset="utf-8">
+  var speed = 'normal';
+
   function hideFunctionFor(id) {
     return function() {
-      hideComment(id);
+      $('#c-' + id)
+        .find('.commentText').slideUp(speed).end()
+        .find('.showLink')
+          .html('show anyway')
+          .unbind('click')
+          .click(showFunctionFor(id));
       return false;
     };
   }
   function showFunctionFor(id) {
-    return function(event) {
-      loadComment(id);
+    return function() {
+      $('#c-' + id)
+        .find('.commentText').slideDown(speed).end()
+        .find('.showLink')
+          .html('hide')
+          .unbind('click')
+          .click(hideFunctionFor(id));
       return false;
     };
   }
-
-  function loadComment(id) {
-    $('#c-' + id)
-      .find('.commentText').load('show-comment/' + id + '/')
-      .end()
-      .find('.showLink').html('hide').one('click', hideFunctionFor(id));
-  }
-  function hideComment(id) {
-    $('#c-' + id)
-      .find('.commentText').html('')
-      .end()
-      .find('.showLink').html('show anyway').one('click', showFunctionFor(id));
-  }
   
-  $(function() {
+  $(document).ready(function() {
     $('.comment').each(function(i) {
-      id = this.id.substring('2');
-      $('.showLink', this).one('click', showFunctionFor(id));
+      var comment = this;
+      var id = comment.id.substring('2');
+      
+      $(comment).find('.commentText').hide();
+      
+      $(comment).find('.showLink').click(function(obj) {
+        $(comment)
+          .find('.commentText')
+            .load('show-comment/' + id + '/', function() {
+              $(this).slideDown(speed);
+            })
+            .end()
+          .find('.showLink')
+            .html('hide')
+            .unbind('click')
+            .click(hideFunctionFor(id));
+        return false;
+      });
     });
   });
 </script>
