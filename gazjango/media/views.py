@@ -8,4 +8,4 @@ def bucket(request, bucket):
 
 def file(request, bucket, slug):
     obj = get_object_or_404(MediaFile, bucket__slug=bucket, slug=slug)
-    return HttpResponseRedirect('/static/%s' % obj.data)
+    return HttpResponseRedirect('/static/uploads/%s' % obj.data)
