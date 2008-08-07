@@ -96,12 +96,12 @@ jQuery(document).ready(function() {
 		<div id="indexMainBox">
 		
 			<div id="indexMainStory">
+				<img class="{{ topstory.front_image.get_shape_display }}" src="{{ topstory.front_image.get_absolute_url }}" title="{{ topstory.headline }}" />
 				<h2><a href="{{ topstory.get_absolute_url }}">{{topstory.get_title|safe}}</a></h2>
 				<p class="byline">
 				  <span class="author">by {{ topstory.authors|join_authors }}</span>
 				  <span class="date">| {{ topstory.pub_date|date:"n/j/Y" }}</span>
 				</p>
-				<img class="{{ topstory.front_image.get_shape_display }}" src="{{ topstory.front_image.get_absolute_url }}" title="{{ topstory.headline }}" />
 				<p>
   				{{ topstory.long_summary|safe }}
   				<a class="readMore" href="{{ topstory.get_absolute_url }}">More</a>
