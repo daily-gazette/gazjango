@@ -184,6 +184,7 @@ students = sub(news, "Students", "students", "Swarthmore students and their doin
 facstaff = sub(news, "Faculty & Staff", "facstaff", "About Swarthmore faculty and staff.")
 alumni = sub(news, "Alumni", "alumni", "The crazy world after Swarthmore.")
 
+athletics = sect("Athletics", "athletics", "Swarthmore's athletes.")
 features = sect("Features", "features", "The happenings around town.")
 opinions = sect("Opinions", "opinions", "What people have to say.")
 
