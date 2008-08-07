@@ -126,6 +126,11 @@ neena = make_user('neena', 'Neena', 'Cherayil', groups=[reader_group, reporter_g
 lauren = make_user('lauren', 'Lauren', 'Stokes', groups=[reader_group, reporter_group])
 brandon = make_user('brandon', 'Brandon', 'Lee Wolff', groups=[reader_group])
 
+dougal = make_user('dougal', 'Dougal', 'Sutherland', 'dsuther1@swarthmore.edu', groups=[reader_group, admin_group])
+dougal.set_password('sha1$8b8f9$e9526bcd787b71bc9fb1f68965815e2508333a6e')
+dougal.is_superuser = True
+dougal.save()
+
 ### Positions
 
 reader          = Position.objects.create(name="Reader",             rank=0)
