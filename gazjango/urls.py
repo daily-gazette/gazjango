@@ -8,7 +8,6 @@ urlpatterns = patterns('',
     (r'^admin/(.*)', admin.site.root),
 )
 
-
 reps = {
     'year':  r'(?P<year>\d{4})',
     'month': r'(?P<month>\d{1,2})',
