@@ -1,0 +1,35 @@
+body {
+	background-color: #CCCCCC;
+}
+
+
+#login {
+	margin: 0 auto;
+	background: url(../../images/registration/background.png) no-repeat;
+	width: 350px;
+	height: 350px;
+}
+
+#login #content {
+	padding:  100px 50px 75px 50px;
+	color: #fff;
+	font-family: "Lucida Grande", Lucida, Verdana, sans-serif;
+}
+
+#login #content .form {
+	font-size: 1em;
+}
+
+#login #content .submit {
+	float: right;
+	display: inline-block;
+}
+
+#login #content .register {
+	font-size: .8em;
+	padding-top: 60px;
+}
+
+#login #content a {
+	color: #fff;
+}
