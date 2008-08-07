@@ -4,7 +4,7 @@ import datetime
 
 # the National Weather Service provides us a nice xml feed with lots of weather data
 # <3 the US government
-FEED_URL = "http://www.weather.gov/forecasts/xml/sample_products/browser_interface/ndfdBrowserClientByDay.php?format=12+hourly&lat=%(lat)s&lon=%(lon)s&numDays=2&startDate=%(date)s"
+FEED_URL = "http://www.weather.gov/forecasts/xml/sample_products/browser_interface/ndfdBrowserClientByDay.php?format=12+hourly&lat=%(lat)s&lon=%(lon)s&numDays=3&startDate=%(date)s"
 
 SWAT_LAT_LONG = {'lat': '39.903959', 'lon': '-75.35398'}
 
