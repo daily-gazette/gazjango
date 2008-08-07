@@ -104,7 +104,9 @@ if settings.DEBUG:
         (r'^static/css/(?P<path>.*)$',     'serve', {'document_root': path + '/css'}),
         (r'^static/js/(?P<path>.*)$',      'serve', {'document_root': path + '/js'}),
         (r'^static/images/(?P<path>.*)$',  'serve', {'document_root': path + '/images'}),
-        (r'^static/uploads/(?P<path>.*)$', 'serve', {'document_root': path + '/../uploads'})
+        (r'^static/uploads/(?P<path>.*)$', 'serve', {'document_root': path + '/../uploads'}),
+        
+        (r'^static/admin/(?P<path>.*)$', 'serve',  {'document_root': settings.ADMIN_MEDIA_PATH})
     )
 
 # section match should be last, to avoid shadowing others
