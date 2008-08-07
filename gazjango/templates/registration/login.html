@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% load extras %}
+
+{% block title %}Log In{% endblock %}
+
+{% block customheader %}
+  <link rel="stylesheet" href="{% static css page/login.css %}" type="text/css" media="screen,projection" />
+{% endblock customheader %}
+
+
+{% block content %}
+
+{% if form.errors %}
+  <p>Your username and password didn't match. Please try again.</p>
+  <p>If you don't have an account yet, you should <a href="{% url register %}">register one</a>.</p>
+{% endif %}
+
+
+<div id="login">
+  <form method="post" action=".">
+    <p>
+      {{ form.username.label_tag }}<br/>
+      {{ form.username }}
+    </p>
+    <p>
+      {{ form.password.label_tag }}<br/>
+      {{ form.password }}
+    </p>
+    
+    <p class="submit">
+      <input type="submit" value="Log In" />
+      <input type="hidden" name="next" value="{{ next }}" />
+    </p>
+  </form>
+</div>
+
+{% endblock %}
