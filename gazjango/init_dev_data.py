@@ -267,7 +267,7 @@ nobody_loves_me.tags = "music"
 bucket_o_bones = MediaBucket.objects.create(slug="bone-doctress")
 nobody_loves_me.bucket = bucket_o_bones
 nobody_loves_me.front_image = ImageFile.objects.create(slug="portishead",
-                                    data="uploads/portishead.jpg",
+                                    data="portishead.jpg",
                                     bucket=bucket_o_bones,
                                     shape='w')
 nobody_loves_me.save()
@@ -318,11 +318,11 @@ scandal.tags = "Al Bloom, Board of Managers, Daily Jolt"
 
 scandal_pics = MediaBucket.objects.create(slug="bloom-scandal")
 scandal.bucket = scandal_pics
-scandal.thumbnail = ImageFile.objects.create(data="uploads/al-bloom-thumb.png", 
+scandal.thumbnail = ImageFile.objects.create(data="al-bloom-thumb.png", 
                                              slug="bloom-walking-thumb",
                                              bucket=scandal_pics,
                                              shape='t')
-scandal.front_image = ImageFile.objects.create(data="uploads/al-bloom.jpg", 
+scandal.front_image = ImageFile.objects.create(data="al-bloom.jpg", 
                                                slug="bloom-walking", 
                                                bucket=scandal_pics,
                                                shape='w')
@@ -411,7 +411,7 @@ internet_bucket = MediaBucket.objects.create(slug="internet")
 boring.bucket = internet_bucket
 boring.front_image = ImageFile.objects.create(slug="boring-baby",
                                               bucket = internet_bucket,
-                                              data="uploads/boring.jpg",
+                                              data="boring.jpg",
                                               shape='t')
 boring.save()
 
@@ -766,7 +766,7 @@ nestbesch = Special.objects.create(
     category=SpecialsCategory.objects.create(name="Columns"),
     image=ImageFile.objects.create(bucket=rand, 
                                    slug="tunnel", 
-                                   data="uploads/specials/austria.png",
+                                   data="specials/austria.png",
                                    name="Crazy Austrian Tunnel")
 )
 
@@ -776,7 +776,7 @@ arts = Special.objects.create(
     category= SpecialsCategory.objects.create(name="Arts"),
     image=ImageFile.objects.create(bucket=rand,
                                    slug="artistry",
-                                   data="uploads/specials/senior-art.png",
+                                   data="specials/senior-art.png",
                                    name="Some Senior Art")
 )
 
@@ -786,7 +786,7 @@ blue_tree = Special.objects.create(
     category=SpecialsCategory.objects.create(name="Ask The Gazette"),
     image=ImageFile.objects.create(bucket=rand,
                                    slug="blue-tree",
-                                   data="uploads/specials/atg-blue-tree.png",
+                                   data="specials/atg-blue-tree.png",
                                    name="The Blue Tree")
 )
 
@@ -796,7 +796,7 @@ zagette = Special.objects.create(
     category=SpecialsCategory.objects.create(name="Specials"),
     image=ImageFile.objects.create(bucket=rand,
                                    slug="zagette",
-                                   data="uploads/specials/dining.png",
+                                   data="specials/dining.png",
                                    name="Dining")
 )
 
@@ -806,7 +806,7 @@ hiring = Special.objects.create(
     category=SpecialsCategory.objects.create(name="Gazette News"),
     image=ImageFile.objects.create(bucket=rand,
                                    slug="hiring",
-                                   data="uploads/specials/hiring.png",
+                                   data="specials/hiring.png",
                                    name="Reportin' 'n Stuff")
 )
 

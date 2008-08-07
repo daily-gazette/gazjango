@@ -94,9 +94,10 @@ urlpatterns += patterns('',
 if settings.DEBUG:
     path = settings.BASE +'/static'
     urlpatterns += patterns('django.views.static', 
-        (r'^static/css/(?P<path>.*)$',    'serve', {'document_root': path + '/css'}),
-        (r'^static/js/(?P<path>.*)$',     'serve', {'document_root': path + '/js'}),
-        (r'^static/images/(?P<path>.*)$', 'serve', {'document_root': path + '/images'}),
+        (r'^static/css/(?P<path>.*)$',     'serve', {'document_root': path + '/css'}),
+        (r'^static/js/(?P<path>.*)$',      'serve', {'document_root': path + '/js'}),
+        (r'^static/images/(?P<path>.*)$',  'serve', {'document_root': path + '/images'}),
+        (r'^static/uploads/(?P<path>.*)$', 'serve', {'document_root': path + '/../uploads'})
     )
 
 # section match should be last, to avoid shadowing others
