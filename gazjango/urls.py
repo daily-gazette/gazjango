@@ -1,5 +1,13 @@
 from django.conf.urls.defaults import *
-import settings, os
+from django.contrib import admin
+import settings
+
+admin.autodiscover()
+urlpatterns = patterns('',
+    (r'^admin/doc/', include('django.contrib.admindocs.urls')),
+    (r'^admin/(.*)', admin.site.root),
+)
+
 
 reps = {
     'year':  r'(?P<year>\d{4})',
@@ -17,7 +25,7 @@ reps = {
 }
 
 
-urlpatterns = patterns('articles.views',
+urlpatterns += patterns('articles.views',
     (r'^$', 'homepage'),
     (r'^search/$', 'search', {}, 'search'),
     

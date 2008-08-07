@@ -156,6 +156,15 @@ class AddThisNode(template.Node):
 
 @register.tag(name="add_this")
 def get_addthis_button(parser, token):
+    """
+    This will output a button for AddThis.com, with the "hover" argument
+    telling whether the button should pop-up a small window with links
+    to bookmarking services or not.
+    
+    Usage::
+    
+        {% add_this [hover|no-hover] %}
+    """
     split = token.split_contents()
     if len(split) == 1:
         tag_name = split[0]
@@ -167,7 +176,7 @@ def get_addthis_button(parser, token):
     if popup_on_hover and popup_on_hover not in ('hover', 'no-hover'):
         raise template.TemplateSyntaxError, "invalid argument to %r" % tag_name
     
-    return AddThisNode(popup_on_hover == 'hover')
+    return AddThisNode(popup_on_hover == 'hover' if popup_on_hover else True)
 
 
 
@@ -187,6 +196,19 @@ class StaticFileURLNode(template.Node):
 
 @register.tag(name="static")
 def get_static_file_link(parser, token):
+    """
+    This will link to a static file on the site, to be served by a regular
+    webserver (in production).
+    
+    Usage::
+    
+        {% static [type] [path] %}
+    
+    [type] should be one of STATIC_FILE_KINDS: css, js, images, or uploads.
+    [path] is the name of the resource. For example:
+    
+        {% static css page/story.css %}
+    """
     split = token.split_contents()
     if len(split) != 3:
         raise template.TemplateSyntaxError, "%r tag requires two arguments" % token.content.split[0]
