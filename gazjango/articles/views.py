@@ -65,14 +65,6 @@ def show_article(request, story, form, print_view=False, extra={}, template="sto
     return render_to_response(template, data, context_instance=rc)
 
 
-def get_comment_text(request, slug, year, month, day, num):
-    story = get_by_date_or_404(Article, year, month, day, slug=slug)
-    try:
-        comment = story.comments.get(number=num)
-        return HttpResponse(comment.text)
-    except PublicComment.DoesNotExist:
-        raise Http404
-
 def articles(request, year=None, month=None, day=None, template="article_list.html"):
     articles = filter_by_date(Article.published.all(), year, month, day)
     data = { 'articles': articles, 'year': year, 'month': month, 'day': day }
