@@ -1,11 +1,23 @@
 from django.conf.urls.defaults import *
 from django.contrib import admin
+from articles.feeds import MainFeed, LatestStoriesFeed, SectionFeed, SectionLatestFeed
 import settings
 
 admin.autodiscover()
 urlpatterns = patterns('',
     (r'^admin/doc/', include('django.contrib.admindocs.urls')),
     (r'^admin/(.*)', admin.site.root),
+)
+
+feeds = {
+    'main': MainFeed,
+    'latest': LatestStoriesFeed,
+    'section': SectionFeed,
+    'section-latest': SectionLatestFeed
+}
+urlpatterns += patterns('',
+    (r'^feeds/(?P<url>.*)(?:\.xml|/)$', 'django.contrib.syndication.views.feed',
+        {'feed_dict': feeds}),
 )
 
 reps = {
