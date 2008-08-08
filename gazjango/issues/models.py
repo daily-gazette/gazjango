@@ -56,6 +56,9 @@ class Event(models.Model):
     def __unicode__(self):
         return "%s (%s - %s)" % (self.name, self.start, self.end)
     
+    def get_absolute_url(self):
+        return self.link
+    
 
 class Issue(models.Model):
     """
