@@ -56,11 +56,26 @@ class ContactItem(models.Model):
         return "%s on %s" % (self.value, self.method)
     
 
+class ProfilesManager(models.Manager):
+    def create_lite_user(self, name):
+        "Creates a bare-bones user."
+        username = base = name.lower().replace(" ", "_")
+        num = 0
+        while User.objects.filter(username=username).count() > 0:
+            num += 1
+            username = base + str(num)
+        
+        user = User.objects.create_user(username, 'unkwown@nowhere.com')
+        user.first_name, user.last_name = name.split(" ", 1)
+        profile = user.userprofile_set.create()
+        return profile
+    
+
 class UserProfile(models.Model):
     "Lots of extra information about users."
     user = models.ForeignKey(User, unique=True)
     bio  = models.TextField(blank=True, null=True)
-    kind = models.ForeignKey(UserKind)
+    kind = models.ForeignKey(UserKind, null=True)
     
     positions = models.ManyToManyField('Position', through='Holding', related_name="holdings")
     
@@ -71,6 +86,8 @@ class UserProfile(models.Model):
     
     def is_editor(self):
         return self.current_positions().filter(is_editor=True).count() > 0
+    
+    objects = ProfilesManager()
     
     _from_swat = models.BooleanField(default=False)
     
