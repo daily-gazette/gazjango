@@ -16,11 +16,12 @@ class EventManager(models.Manager):
         right = date + forward
         return self.filter(start__lte=right, end__gte=left)
     
-    def update(self):
-        one_week = timedelta(days=7)
-        existing = self.for_date(date.today(), forward=one_week)
+    def update(self, forward=None):
+        if not forward:
+            forward = timedelta(days=7)
+        existing = self.for_date(date.today(), forward=forward)
         
-        a = { 'start': date.today(), 'end': date.today() + one_week }
+        a = { 'start': date.today(), 'end': date.today() + forward }
         scraped = scrapers.events.scrape_events_feed(**a)
         
         for event_dict in scraped:
