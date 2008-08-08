@@ -218,7 +218,7 @@ nobody_loves_me = Article.objects.create(
     position='m',
     possible_position='m'
 )
-nobody_loves_me.authors.add(bone_p)
+nobody_loves_me.add_author(bone_p)
 nobody_loves_me.subsections.add(bone_doctress)
 nobody_loves_me.text = """To pretend no one can find
 The fallacies of morning rose
@@ -318,7 +318,7 @@ scandal = Article.objects.create(
     position='t',
     possible_position='t'
 )
-scandal.authors.add(bob_p, jack_p)
+scandal.add_author(bob_p, jack_p)
 scandal.subsections.add(facstaff)
 scandal.tags = "Al Bloom, Board of Managers, Daily Jolt"
 
@@ -375,7 +375,7 @@ scandal2 = Article.objects.create(
     position='t',
     possible_position='t'
 )
-scandal2.authors.add(bob_p, jack_p)
+scandal2.add_author(bob_p, jack_p)
 scandal2.subsections.add(facstaff)
 scandal2.tags = "Al Bloom, Board of Managers, Daily Jolt"
 scandal2.bucket = scandal_pics
@@ -411,7 +411,7 @@ boring = Article.objects.create(
     position='m',
     possible_position='m'
 )
-boring.authors.add(jack_p)
+boring.add_author(jack_p)
 
 internet_bucket = MediaBucket.objects.create(slug="internet")
 boring.bucket = internet_bucket
@@ -448,7 +448,7 @@ boring2 = Article.objects.create(
     position='m',
     possible_position='m'
 )
-boring2.authors.add(jack_p)
+boring2.add_author(jack_p)
 boring2.bucket = internet_bucket
 boring2.front_image = boring.front_image
 boring2.save()
@@ -481,7 +481,7 @@ boring3 = Article.objects.create(
     position='m',
     possible_position='m'
 )
-boring3.authors.add(jack_p)
+boring3.add_author(jack_p)
 boring3.bucket = internet_bucket
 boring3.front_image = boring.front_image
 boring3.save()
@@ -514,7 +514,7 @@ boring4 = Article.objects.create(
     position='m',
     possible_position='m'
 )
-boring4.authors.add(jack_p)
+boring4.add_author(jack_p)
 boring4.bucket = internet_bucket
 boring4.front_image = boring.front_image
 boring4.save()
@@ -527,7 +527,7 @@ def art(author, subsection=None, **keywords):
     if subsection:
         keywords.setdefault('section', subsection.section)
     article = Article.objects.create(**keywords)
-    article.authors.add(p(author))
+    article.add_author(p(author))
     if subsection:
         article.subsections.add(subsection)
     article.save()

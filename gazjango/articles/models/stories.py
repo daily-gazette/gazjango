@@ -118,7 +118,7 @@ class Article(models.Model):
     format = models.ForeignKey('Format')
     
     pub_date = models.DateTimeField(default=datetime.now)
-    authors  = models.ManyToManyField(UserProfile, related_name="articles")
+    authors  = models.ManyToManyField(UserProfile, related_name="articles", through='Writing')
     section = models.ForeignKey('articles.Section', related_name="articles")
     subsections = models.ManyToManyField('articles.Subsection',
                                          related_name="articles")
@@ -163,6 +163,9 @@ class Article(models.Model):
         return self.authors.filter(user__pk=user.pk).count() > 0 \
             or user.has_perm('articles.change_article');
     
+    def add_author(self, *authors):
+        for author in authors:
+            Writing.objects.create(article=self, user=author)
     
     def text_at_revision(self, revision):
         """Returns the text as it was at the specified revision."""
@@ -276,6 +279,23 @@ class Article(models.Model):
         app_label = 'articles'
     
 
+class Writing(models.Model):
+    """
+    Represents an author's having written a story.
+    
+    Its main purpose is to allow for ordering the authors.
+    """
+    article = models.ForeignKey(Article)
+    user    = models.ForeignKey(UserProfile)
+    
+    class Meta:
+        order_with_respect_to = 'article'
+        unique_together = ('article', 'user')
+        app_label = 'articles'
+    
+    def __unicode__(self):
+        return "%s wrote %s" % (user.username, article.slug)
+    
 
 class ArticleRevision(models.Model):
     """
