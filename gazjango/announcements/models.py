@@ -92,7 +92,5 @@ class Announcement(models.Model):
     
     @permalink
     def get_absolute_url(self):
-        d = self.date_start
-        a = [str(x) for x in (d.year, d.month)]
-        return ('announcement', a + [self.slug])
+        return ('announcement', [str(self.date_start.year), self.slug])
     
