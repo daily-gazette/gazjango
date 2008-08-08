@@ -9,7 +9,7 @@ from articles.models      import Article, Section, Subsection, Special, PhotoSpr
 from announcements.models import Announcement
 from comments.models      import PublicComment
 from comments.forms       import CommentForm, make_comment_form
-from issues.models        import Menu, Weather, WeatherJoke
+from issues.models        import Weather, WeatherJoke
 from jobs.models          import JobListing
 
 from scrapers.bico         import get_bico_news
@@ -102,14 +102,6 @@ def homepage(request, template="index.html"):
     }
     rc = RequestContext(request)
     return render_to_response(template, data, context_instance=rc)
-
-
-def menu_partial(request):
-    if datetime.datetime.now().hour < 21:
-        menu = Menu.objects.for_today()
-    else:
-        menu = Menu.objects.for_tomorrow()
-    return render_to_response("scraped/menu.html", { 'menu': menu })
 
 
 def spread(request, slug, year, month, day, num=None):

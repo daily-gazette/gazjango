@@ -40,8 +40,6 @@ urlpatterns += patterns('articles.views',
     (r'^$', 'homepage'),
     (r'^search/$', 'search', {}, 'search'),
     
-    (r'^menu/$', 'menu_partial'),
-    
     (r'^%(year)s/%(month)s/%(day)s/%(slug)s/$'         % reps, 'article', {}, 'article'),
     (r'^%(year)s/%(month)s/%(day)s/%(slug)s/print/$'   % reps, 'article', {'print_view': True}, 'print'),
     (r'^%(year)s/%(month)s/%(day)s/%(slug)s/email/$'   % reps, 'email_article', {}, 'email'),
@@ -78,6 +76,8 @@ urlpatterns += patterns('issues.views',
     (r'^issue/%(year)s/$'                   % reps, 'issues_list'),
     (r'^issue/%(year)s/%(month)s/$'         % reps, 'issues_list'),
     (r'^issue/%(year)s/%(month)s/%(day)s/$' % reps, 'issue', {}, 'issue'),
+    
+    (r'^menu/$', 'menu_partial'),
 )
 
 urlpatterns += patterns('polls.views',
