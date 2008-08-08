@@ -2,21 +2,13 @@ from django.db                   import models
 from django.contrib.contenttypes import generic
 from accounts.models import UserProfile
 from comments.models import PublicComment
+from stories         import Article
 from media.models    import ImageFile
 from datetime import datetime
 
-class PhotoSpread(models.Model):
+class PhotoSpread(Article):
     "A photo spread, which has a bunch of pages with one photo per page."
-    title    = models.CharField(max_length=150)
-    slug     = models.SlugField(unique_for_date="pub_date")
-    creators = models.ManyToManyField(UserProfile)
-    pub_date = models.DateTimeField(default=datetime.now)
-    
     photos = models.ManyToManyField(ImageFile, through='PhotoInSpread', related_name='spreads')
-    
-    comments = generic.GenericRelation(PublicComment,
-                                       content_type_field='subject_type',
-                                       object_id_field='subject_id')
     
     def get_photo_number(self, num):
         try:
@@ -27,13 +19,7 @@ class PhotoSpread(models.Model):
     class Meta:
         app_label = 'articles'
     
-    def __unicode__(self):
-        return self.slug
-    
-    @models.permalink
-    def get_absolute_url(self):
-        return ('articles.views.spread', [self.slug])
-    
+
 
 class PhotoInSpread(models.Model):
     """
