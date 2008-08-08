@@ -68,7 +68,7 @@ class Option(models.Model):
     
     poll        = models.ForeignKey(Poll)
     name        = models.CharField(max_length=100, unique=True)
-    description = models.TextField(blank=True)
+    description = models.CharField(blank=True, max_length=100)
     votes       = models.IntegerField(blank=True, default=0)
     
     class Meta:
