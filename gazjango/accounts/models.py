@@ -66,7 +66,7 @@ class ProfilesManager(models.Manager):
             username = base + str(num)
         
         user = User.objects.create_user(username, 'unkwown@nowhere.com')
-        user.first_name, user.last_name = name.split(" ", 1
+        user.first_name, user.last_name = name.split(" ", 1)
         user.save()
         profile = user.userprofile_set.create()
         return profile
