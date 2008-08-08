@@ -357,6 +357,10 @@ p {
 #weather #attrib {
 }
 
+#events .time {
+    font-size: .8em;
+}
+
 .on {
 	
 }

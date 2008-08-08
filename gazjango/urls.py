@@ -78,6 +78,7 @@ urlpatterns += patterns('issues.views',
     (r'^issue/%(year)s/%(month)s/%(day)s/$' % reps, 'issue', {}, 'issue'),
     
     (r'^menu/$', 'menu_partial'),
+    (r'^events/$', 'events_partial')
 )
 
 urlpatterns += patterns('polls.views',

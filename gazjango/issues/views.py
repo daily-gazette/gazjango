@@ -2,7 +2,7 @@ from django.template   import RequestContext
 from django.shortcuts  import render_to_response
 from misc.view_helpers import get_by_date_or_404, filter_by_date
 
-from issues.models   import Issue, Menu
+from issues.models   import Issue, Menu, Event
 from jobs.models     import JobListing
 from comments.models import PublicComment
 
@@ -43,3 +43,8 @@ def menu_partial(request):
         menu = Menu.objects.for_tomorrow()
     return render_to_response("scraped/menu.html", { 'menu': menu })
 
+
+def events_partial(request):
+    today = datetime.date.today()
+    events = Event.objects.for_date(today, forward=datetime.timedelta(days=40))
+    return render_to_response("scraped/events.html", {'events': events})
