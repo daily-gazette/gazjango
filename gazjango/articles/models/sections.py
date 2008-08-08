@@ -26,7 +26,7 @@ class Section(models.Model):
     def get_stories(self, num_top=2, num_mid=3, num_low=12, **extra):
         "Calls Article.published.get_stories for stories in this section."
         return Article.published.get_stories(
-            base = self,
+            base = self.articles,
             num_top = num_top,
             num_mid = num_mid,
             num_low = num_low
