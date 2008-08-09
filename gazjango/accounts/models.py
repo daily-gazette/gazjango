@@ -143,7 +143,11 @@ class UserProfile(models.Model):
     def get_absolute_url(self):
         return ('accounts.views.user_details', [self.user.username])
     
-
+    class Meta:
+        permissions = (
+            ('can_access_admin', 'Can access the reporter admin.'),
+        )
+    
 
 class Position(models.Model):
     """
