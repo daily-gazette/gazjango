@@ -307,11 +307,10 @@ class ArticleRevision(models.Model):
     version 3 is stored directly with the article, and there are 
     ArticleRevisions to go from 3 to 2 and from 2 to 1.
     """
-    
-    article = models.ForeignKey('Article', related_name='revisions')
+    article = models.ForeignKey(Article, related_name='revisions')
+    reviser = models.ForeignKey(UserProfile, related_name='revisions')
     delta   = models.TextField()
     date    = models.DateTimeField(default=datetime.now)
-    active  = models.BooleanField(default=True)
     
     class Meta:
         ordering = ['-date']
