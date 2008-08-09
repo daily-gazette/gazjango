@@ -4,58 +4,68 @@ from django.db.models import permalink
 from articles.models      import Article
 from announcements.models import Announcement
 
-from datetime import date, timedelta
+import datetime
 import scrapers.sharples
 import scrapers.weather
-import scrapers.events
+from scrapers.events import scrape_events_feed
+from misc.helpers    import datetime_from_date_and_time
 
 class EventManager(models.Manager):
-    def for_date(self, date, forward=timedelta(days=0)):
+    def for_date(self, date, forward=datetime.timedelta(days=0)):
         "Returns the events for a certain day."
-        left = date
-        right = date + forward
-        return self.filter(start__lte=right, end__gte=left)
+        start = date
+        end = date + forward
+        return self.filter(start_day__lte=end, end_day__gte=start)
     
-    def update(self, forward=None):
+    def update(self, forward=None, start=None):
         if not forward:
-            forward = timedelta(days=7)
-        existing = self.for_date(date.today(), forward=forward)
+            forward = datetime.timedelta(days=7)
+        if not start:
+            start = datetime.date.today()
         
-        a = { 'start': date.today(), 'end': date.today() + forward }
-        scraped = scrapers.events.scrape_events_feed(**a)
+        existing = self.for_date(start, forward=forward)
+        scraped = scrape_events_feed(start=start, end=start+forward)
         
         for event_dict in scraped:
             try:
                 e = existing.get(link=event_dict['link'])
-                e.start = event_dict['start']
-                e.end = event_dict['end']
-                e.name = event_dict['name']
+                e.start_day  = event_dict['start_day']
+                e.start_time = event_dict['start_time']
+                e.end_day    = event_dict['end_day']
+                e.end_time   = event_dict['end_time']
+                e.name     = event_dict['name']
+                e.location = event_dict['location']
+                e.sponsor  = event_dict['sponsor']
                 e.save()
             except Event.DoesNotExist:
-                Event.objects.create(
-                    link=event_dict['link'],
-                    name= event_dict['name'],
-                    start= event_dict['start'],
-                    end= event_dict['end'] or event_dict['start']
-                )
+                Event.objects.create(**event_dict)
     
 
 class Event(models.Model):
     "An event scraped from the College calendar."
     name = models.CharField(max_length=60)
     
-    start = models.DateTimeField()
-    end   = models.DateTimeField()
+    start_day = models.DateField()
+    end_day   = models.DateField()
     
-    location = models.CharField(max_length=100)
-    sponsor  = models.CharField(max_length=100)
+    start_time = models.TimeField(blank=True, null=True)
+    end_time   = models.TimeField(blank=True, null=True)
+    
+    location = models.CharField(max_length=100, blank=True)
+    sponsor  = models.CharField(max_length=100, blank=True)
     
     link = models.URLField(unique=True)
     
     objects = EventManager()
     
+    def start(self):
+        return datetime_from_date_and_time(date=self.start_day, time=self.start_time)
+    
+    def end(self):
+        return datetime_from_date_and_time(date=self.end_day, time=self.end_time)
+    
     def __unicode__(self):
-        return "%s (%s - %s)" % (self.name, self.start, self.end)
+        return "%s (%s - %s)" % (self.name, self.start(), self.end())
     
     def get_absolute_url(self):
         return self.link
@@ -80,7 +90,7 @@ class Issue(models.Model):
                                       through='IssueArticle', 
                                       related_name='issues')
     
-    date    = models.DateField(default=date.today)
+    date    = models.DateField(default=datetime.date.today)
     menu    = models.ForeignKey('Menu', null=True)
     weather = models.ForeignKey('Weather', null=True)
     joke    = models.ForeignKey('WeatherJoke', null=True)
@@ -146,7 +156,7 @@ class MenuManager(models.Manager):
         one by scraping it from the XML feed if necessary.
         """
         try:
-            return self.get(date=date.today())
+            return self.get(date=datetime.date.today())
         except self.model.DoesNotExist:
             new = self.scrape_menu(tomorrow=False)
             new.save()
@@ -158,7 +168,7 @@ class MenuManager(models.Manager):
         one by scraping it from the XML feed if necessary.
         """
         try:
-            tomorrow = date.today() + timedelta(days=1)
+            tomorrow = datetime.date.today() + datetime.timedelta(days=1)
             return self.get(date=tomorrow)
         except self.model.DoesNotExist:
             new = self.scrape_menu(tomorrow=True)
@@ -173,7 +183,8 @@ class MenuManager(models.Manager):
         menu = scrapers.sharples.get_menu(tomorrow=tomorrow)
         
         return self.model(
-            date    = date.today() + timedelta(days=(1 if tomorrow else 0)),
+            date    = datetime.date.today() + 
+                      datetime.timedelta(days=(1 if tomorrow else 0)),
             closed  = menu['closed'],
             message = menu['message'],
             lunch   = menu['lunch']  if 'lunch'  in menu else "",
@@ -184,7 +195,7 @@ class MenuManager(models.Manager):
 class Menu(models.Model):
     """The menu at Sharples for a given day."""
     
-    date = models.DateField(default=date.today)
+    date = models.DateField(default=datetime.date.today)
     
     closed  = models.BooleanField(default=False)
     message = models.TextField(blank=True)
@@ -211,7 +222,7 @@ class WeatherManager(models.Manager):
         Returns the weather object for today/tomorrow, creating a new
         one (by parsing it from the online data feed) if necessary.
         """
-        day = date.today()
+        day = datetime.date.today()
         if tomorrow:
             day += timedelta(days=1)
         try:
@@ -241,7 +252,7 @@ class Weather(models.Model):
     Days where we don't publish will still have a Weather object.
     """
     
-    date = models.DateField(default=date.today)
+    date = models.DateField(default=datetime.date.today)
     
     today    = models.CharField(max_length=100)
     tonight  = models.CharField(max_length=100)
@@ -261,7 +272,7 @@ class WeatherJoke(models.Model):
     to forget about it. Persistent little bastard.
     """
     
-    date = models.DateField(default=date.today)
+    date = models.DateField(default=datetime.date.today)
     
     line_one   = models.CharField(max_length=100)
     line_two   = models.CharField(max_length=100)

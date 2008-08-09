@@ -37,16 +37,18 @@ def scrape_events_feed(start=None, end=None):
             
             result['name'] = d['name']
             result['link'] = entry.link
+            result['location'] = result['sponsor'] = ''
             
             ns = ('year', 'month', 'day')
             make_date = lambda d, s: date(*[int(d['%s_%s' % (n, s)]) for n in ns])
             
-            result['start'] = make_date(d, 1)
+            result['start_day'] = make_date(d, 1)
             if 'year_2' in d and d['year_2']:
-                result['end'] = make_date(d, '2')
+                result['end_day'] = make_date(d, '2')
             else:
-                result['end'] = None
+                result['end_day'] = result['start_day']
             
+            result['start_time'] = result['end_time'] = None            
             events.append(result)
         else:
             # TODO: log this error somehow
