@@ -186,7 +186,7 @@ p {
 	width: 100%;
 	height: 40px;
 	float: right;
-	background: url(../images/header/top-gradient.png) no-repeat right top;
+	background: url(/static/images/header/top-gradient.png) no-repeat right top;
 	border: 1px;
 	position: relative;
 }
