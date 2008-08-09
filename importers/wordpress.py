@@ -7,6 +7,9 @@ import os,sys,re
 sys.path.append("..")
 sys.path.append("../gazjango")
 
+# Yeah, there are more elegant ways of doing this.
+os.system("python ../gazjango/manage.py flush --noinput")
+
 import settings
 from django.core.management import setup_environ
 setup_environ(settings)
@@ -81,7 +84,6 @@ aim        = ContactMethod.objects.create(name="AIM")
 gtalk      = ContactMethod.objects.create(name="GTalk / Jabber")
 
 def make_user(username, first, last, email=None, contact={}, bio=None, kind=student, groups=None):
-    print email
     user = User.objects.create_user(username, email)
     user.first_name = first
     user.last_name  = last
@@ -105,7 +107,7 @@ while True:
     old_id, username, email, display_name = row
     
     users[int(old_id)] = defaultdict(lambda:"",
-                                     username= username,
+                                     username=username,
                                      email=email,
                                      display_name=display_name
                                      )
@@ -118,11 +120,9 @@ while True:
         break
     old_id, key, val = row
     if key == "gazette_capabilities":
-        print "lsdkglkfjgfg"
         val = capabilities_regex.findall(val)
     users[old_id][key] = val
 
-print users
 for id in users:
     u = users[id]
     groups = []
@@ -141,15 +141,73 @@ for id in users:
     contact[aim] = u['aim']
     contact[gtalk] = u['jabber']
     contact[yim] = u['yim']
-    print id,u['email']
-    make_user(username=u["username"], first=u["first_name"], last=u["last_name"], email=u['email'], contact=contact, bio=u['description'], groups=groups)
+    new_user = make_user(username=u["username"], first=u["first_name"], last=u["last_name"], email=u['email'], contact=contact, bio=u['description'], groups=groups)
+    u["new_id"] = new_user.id
 
+
+### Sections
+
+news = Section.objects.create(name="News", slug="news", description="News")
+
+### Formats
+
+html = Format.objects.create(name="Raw HTML", function="html")
+textile = Format.objects.create(name="Textile", function="textile")
 
 ### Posts
 
+def make_article(headline, slug, author_pk, date, content, excerpt, tags):
+    article = Article.objects.create(headline=headline,
+                                     short_title=headline,
+                                     slug=slug,
+                                     section=news,
+                                     summary=excerpt,
+                                     text=content,
+                                     format=html,
+                                     status="p",
+                                     pub_date=date)
+    article.add_author(User.objects.get(pk=author_pk).get_profile())
+    article.tags = tags
+    return article
+    
 posts = {}
-cursor.execute("SELECT id, post_author, post_date, post_title, post_content, post_excerpt, post_status, post_name, post_modified FROM gazette_posts")
+query = """
+SELECT id, post_author, post_date, post_title, post_content, post_excerpt, post_name
+FROM gazette_posts
+WHERE post_type='post'
+AND post_status='publish'
+"""
 
+cursor.execute(query)
+while True:
+    row = cursor.fetchone()
+    if row is None:
+        break
+    old_id, author, date, title, content, excerpt, name  = row
+    posts[int(old_id)] = defaultdict(lambda:"",
+                                     author=author,
+                                     date=date,
+                                     title=title,
+                                     content=content,
+                                     excerpt=excerpt,
+                                     name=name)
+
+cursor.execute("select post_id, meta_value from gazette_postmeta where meta_key='autometa'")
+while True:
+    row = cursor.fetchone()
+    if row is None:
+        break
+    old_id, tags = row
+    try:
+        posts[int(old_id)]["tags"] = tags
+    except KeyError:
+        pass
+
+for post_id in posts:
+    p = posts[post_id]
+    article = make_article(headline=p["title"], slug=p["name"], author_pk=users[p["author"]]["new_id"],
+                           date=p["date"], content=p["content"], excerpt=p["excerpt"], tags=p["tags"])
+    p["new_id"] = article.id
 
 cursor.close()
 conn.close()
