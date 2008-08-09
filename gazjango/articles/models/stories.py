@@ -177,11 +177,13 @@ class Article(models.Model):
             rewound = d.patch_apply(d.patch_fromText(r.delta), rewound)[0]
         return rewound
     
-    def revise_text(self, revised_text):
+    def revise_text(self, revised_text, reviser=None):
+        if reviser is None:
+            reviser = self.authors_in_order().all()[0]
         d = diff_match_patch()
         patch = d.patch_toText(d.patch_make(revised_text, self.text))
-        revision = ArticleRevision.objects.create(article=self, delta=patch)
         
+        ArticleRevision.objects.create(article=self, delta=patch, reviser=reviser)
         self.text = revised_text
         self.save()
     
@@ -264,6 +266,9 @@ class Article(models.Model):
         # TODO: improve related_list
         rel = self.section.articles.exclude(pk=self.pk).order_by('-pub_date')
         return rel[:num] if num else rel
+    
+    def authors_in_order(self):
+        return self.authors.order_by('writing___order')
     
     
     def __unicode__(self):
