@@ -173,7 +173,7 @@ class Article(models.Model):
             raise RelationshipMismatch()
         d = diff_match_patch()
         rewound = self.text
-        for r in self.revisions.filter(active=True, date__gte=revision.date):
+        for r in self.revisions.filter(date__gte=revision.date):
             rewound = d.patch_apply(d.patch_fromText(r.delta), rewound)[0]
         return rewound
     
