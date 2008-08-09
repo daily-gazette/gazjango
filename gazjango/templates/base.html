@@ -14,6 +14,9 @@
   <link rel="stylesheet" href="{% static css style.css %}" type="text/css" media="screen, projection" />
   <link rel="stylesheet" href="{% static css print.css %}" type="text/css" media="print" />
 
+  <link rel="alternate" type="application/rss+xml" title="Homepage" href="/feeds/main" />
+  <link rel="alternate" type="application/rss+xml" title="Latest Stories" href="/feeds/latest" />
+
   {% block customheader %}
   {% endblock customheader %}
 </head>
@@ -24,9 +27,15 @@
   		<div id="headerColor">
   			<div id="headerContent">
   				<div id="headerSubscribe">
-  					<p>Subscribe: <a href="">Email</a> | <a href="">News Feed [RSS]</a> | <a href="">Twitter</a> | <a href="">Facebook</a></p>
+  					<p>
+  					  Subscribe: 
+  					  <a href="">Email</a> | 
+  					  <a href="/feeds/main">News Feed [RSS]</a> | 
+  					  <a href="https://twitter.com/swatgazette">Twitter</a> | 
+  					  <a href="http://facebook.com/pages/The-Daily-Gazette/25143725092">Facebook</a></p>
   					<p>
   					  {% if user.is_authenticated %} 
+  					    {{ user.get_full_name }} |
   					    {% if user.is_staff %}
   					      <a href="/admin">Admin</a> |
   					    {% endif %}
