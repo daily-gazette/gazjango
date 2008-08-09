@@ -1,10 +1,14 @@
 <div id="events">
   <ul>
-  {% for event in events|slice:":6" %}
+  {% for event in events|slice:":7" %}
     <li>
       <a href="{{ event.get_absolute_url }}">{{ event.name }}</a>
       <span class="time">
-        ({{ event.start|date:"j N" }}{% ifnotequal event.start event.end %} - {% ifequal event.start.day event.end.day %}{{ event.end|date:"P" }}{% else %}{{ event.end|date:"j N" }}{% endifequal %}{% endifnotequal %})
+        {% if event.start_time %}
+          ({{ event.start|date:"j N P" }}{% ifnotequal event.start event.end %} - {% ifequal event.start_day event.end_day %}{{ event.end|date:"P" }}{% else %}{{ event.end|date:"j N P" }}){% endifequal %}{% endifnotequal %}
+        {% else %}
+          ({{ event.start|date:"j N" }}{% ifnotequal event.start event.end %} - {{ event.end|date:"j N" }}{% endifnotequal %})
+        {% endif %}
       </span>
     </li>
   {% endfor %}
