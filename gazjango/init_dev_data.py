@@ -6,7 +6,7 @@ setup_environ(settings)
 
 ### imports
 
-from datetime import date, datetime, timedelta
+from datetime import date, datetime, timedelta, time
 import random
 
 from django.contrib.auth.models         import User, Group, Permission
@@ -741,19 +741,35 @@ jolt_poll.vote(bone, jolt_maybe)
 
 ### Issues
 
-issue_today = Issue.objects.create(
-    menu = Menu.objects.create(closed=True, message="Sharples is closed, sucka!"),
+try:
+    menu = Menu.objects.for_today()
+except:
+    menu = Menu.objects.create(closed=True, message="Sharples is closed, sucka!")
+
+try:
+    weather = Weather.objects.for_today()
+except:
     weather = Weather.objects.create(
         today = "Very happy. High of 234.",
         tonight = "Very sad. Low of 12.",
         tomorrow = "Chance of euphoria. High of 68."
-    ),
-    joke = WeatherJoke.objects.create(
-        line_one = "I don't like writing weather jokes, most of the time.",
-        line_two = "And nobody's going to complain if there isn't one here.",
-        line_three = "So why would I bother to write a real one?"
     )
+
+try:
+    Event.objects.update(forward=timedelta(days=20))
+except:
+    Event.objects.create(name="Random ITS Thing", start_day=date.today(), end_day=date.today(), link="http://calendar.swarthmore.edu/calendar/EventList.aspx?view=EventDetails&eventidn=3270&information_id=10375&type=")
+    Event.objects.create(name="Other ITS Thing", start_day=date.today(), start_time=time(12), end_day=date.today(), end_time=time(14), link="http://calendar.swarthmore.edu/calendar/EventList.aspx?view=EventDetails&eventidn=3271&information_id=10378&type=")
+    Event.objects.create(name="Running ITS Thing", start_day=date.today(), end_day=date.today()+timedelta(days=5), link="http://calendar.swarthmore.edu/calendar/EventList.aspx?fromdate=8/27/2008&todate=8/27/2008&display=Day&type=public&eventidn=3097&view=EventDetails&information_id=9573")
+
+joke = WeatherJoke.objects.create(
+    line_one = "I don't like writing weather jokes, most of the time.",
+    line_two = "And nobody's going to complain if there isn't one here.",
+    line_three = "So why would I bother to write a real one?"
 )
+
+issue_today = Issue.objects.create(menu=menu, weather=weather, joke=joke)
+
 issue_today.add_article(scandal)
 issue_today.add_article(nobody_loves_me)
 issue_today.add_article(boring)
