@@ -37,11 +37,18 @@ class StoryConcept(models.Model):
     
     users   = models.ManyToManyField(UserProfile, related_name="assignments")
     article = models.ForeignKey(Article, null=True, unique=True,
-                                related_name="concept")
+                                related_name="concepts")
     
     objects = models.Manager()
     unpublished = UnpublishedConceptsManager()
     
     class Meta:
         app_label = 'articles'
+    
+    def notes_excerpt(self, length=60):
+        "Returns the first `length` chars of notes."
+        if len(self.notes) <= length:
+            return self.notes
+        else:
+            return self.notes[:length-3] + '...'
     
