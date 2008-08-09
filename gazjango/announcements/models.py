@@ -29,6 +29,13 @@ class CommunityAnnouncementsManager(PublishedAnnouncementsManager):
         return orig.filter(kind='c')
     
 
+class AdminAnnouncementsManager(PublishedAnnouncementsManager):
+    "A custom manager for dealing only with admin announcements."
+    def get_query_set(self):
+        orig = super(AdminAnnouncementsManager, self).get_query_set()
+        return orig.filter(kind='a')
+    
+
 class Announcement(models.Model):
     """
     An announcement. The first day it runs is date_start, and the last 
@@ -42,6 +49,7 @@ class Announcement(models.Model):
     ANNOUNCEMENT_KINDS = (
         ('s', 'Staff'),
         ('c', 'Community'),
+        ('a', 'Admin'),
     )
     kind = models.CharField(max_length=1, choices=ANNOUNCEMENT_KINDS, default='c')
     
@@ -65,6 +73,7 @@ class Announcement(models.Model):
     published = PublishedAnnouncementsManager()
     staff = StaffAnnouncementsManager()
     community = CommunityAnnouncementsManager()
+    admin = AdminAnnouncementsManager()
     
     def is_event(self):
         return (True if self.event_date else False)
