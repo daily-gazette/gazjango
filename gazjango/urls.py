@@ -111,6 +111,11 @@ urlpatterns += patterns('',
     (r'^users/%(name)s/$' % reps, 'accounts.views.user_details', {}, 'user-details')
 )
 
+urlpatterns += patterns('',
+    (r'^reporter-admin/$', 'accounts.views.admin_index', {}, 'reporter-admin')
+)
+
+
 if settings.DEBUG:
     path = settings.BASE +'/static'
     urlpatterns += patterns('django.views.static', 

@@ -1,3 +1,4 @@
+{% load extras %}
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
   "http://www.w3.org/TR/html4/loose.dtd">
 <html lang="en">
@@ -5,29 +6,27 @@
 <head>
   <title>{% block full-title %}{% block title %}{% endblock title %} :: The Daily Gazette{% endblock full-title %}</title>
 
-  <link rel="stylesheet" href="css/toolbox.css" type="text/css" media="screen, projection, print" />
-  <link rel="stylesheet" href="css/print.css" type="text/css" media="print" />
+  <link rel="stylesheet" href="{% static css toolbox.css %}" type="text/css" media="screen, projection, print" />
+  <link rel="stylesheet" href="{% static css print.css %}" type="text/css" media="print" />
 
-  <link rel="alternate" type="application/rss+xml" title="RSS 2.0" href="" />
-  <link rel="alternate" type="text/xml" title="RSS .92" href="" />
-  <link rel="alternate" type="application/atom+xml" title="Atom 0.3" href="" />
+  <link rel="stylesheet" href="{% static css page/admin.css %}" type="text/css" media="screen, projection" />
 
   {% block customheader %}
   {% endblock customheader %}
 </head>
 
-
+<body>
 <div id="container"> <!-- holds all -->
 
 	<!--HEADER-->
 	<div id="header">
-	
-		<div class="floatLeft"><h1><img src="images/header.png" /></h1></div>
-		
-		<div id="linkBox">
-			<a href="http://daily.swarthmore.edu">Visit Site</a> | <a href="{{ user.logout_url }}">Log Out</a>
+		<div class="floatLeft">
+		  <h1><img src="{% static images admin/header.png %}" alt="The Daily Gazette" /></h1>
 		</div>
-		
+		<div id="linkBox">
+			<a href="http://daily.swarthmore.edu">Visit Site</a> |
+			<a href="{% url logout %}">Log Out</a>
+		</div>
 	</div>
 	
 	<div id="subheader">
@@ -50,32 +49,45 @@
 		
 		{% block sidebar %}
 		
-		<h2>Announcements</h2>
-		
-		{{ admin.announcement }}
-		
-		<p>-<a href="{{ admin.announcement.author.url }}">{{ admin.announcement.author }}</a></p>
+		{% if announcement %}
+  		<h2>Announcements</h2>
+  		<p>{{ announcement }}</p>
+  		<p>&mdash; {{ announcement.sponsor_link }}</p>
+		{% endif %}
 		
 		<h2>Coming Up</h2>
+		
 		<h3>Yours</h3>
 		
 		<ul>
-		{% for item in user.claimed|slice:":3" %}
-			<li>{{ item.get_title }} - {{ item.get_dueDate }}<br /><span class="notes">{{ item.get_notes }}</span></li>
-		{% endfor %}
+  		{% for concept in user.get_profile.claimed|slice:":3" %}
+  			<li>
+  			  <a href="{{ concept.get_absolute_url }}">{{ concept.get_title }}</a>
+  			  - {{ concept.due|date:"D, j N" }} <br />
+  			  <span class="notes">{{ concept.notes_excerpt }}</span>
+  			</li>
+  		{% endfor %}
 		</ul>
 		
 		<h3>Unclaimed</h3>
 		<h4><a href="#">claim a story</a></h4>
 		<ul>
-		{% for item in storylist.unclaimed|slice:":3" %}
-			<li>{{ item.get_title }} - {{ item.get_dueDate }}<br /><span class="notes">{{ item.get_notes }}</span></li>
-		{% endfor %}
+  		{% for concept in unclaimed|slice:":3" %}
+  			<li>
+  			  <a href="{{ concept.get_absolute_url }}">{{ concept.name }}</a>
+  			  - {{ concept.due|date:"D, j N" }} <br />
+  			  <span class="notes">{{ concept.notes_excerpt }}</span>
+  			</li>
+  		{% endfor %}
 		</ul>
 			
 		<h3>Others</h3>
-		{% for item in storylist.claimed|slice:":3" %}
-			<li>{{ item.get_title }} - {{ item.get_claimer }} - {{ item.get_dueDate }}</li>
+  		{% for concept in others|slice:":3" %}
+  			<li>
+  			  {{ concept.name }}
+  			  - {{ concept.users|join_authors:"aptx" }}
+  			  - {{ concept.due|date:"D, j N" }}
+  			</li>
 		{% endfor %}
 		
 		{% endblock sidebar %}
@@ -86,22 +98,16 @@
 	<!--MAIN COLUMN-->
 	<div id="main">
 		<span id="mainRight">
-		<span id="mainTopRight">
-			
-		<div id="centerColumn">
-		
-			{% block content %}
-			{% endblock content %}
-		
-		</div>
-		
+  		<span id="mainTopRight">
+    		<div id="centerColumn">
+    			{% block content %}
+    			{% endblock content %}
+    		</div>
+  		</span>
 		</span>
-		</span>
-	
 	</div>
 	<!--END MAIN COLUMN-->
 	
-	
 </div>
-
-<!-- END FOOTER -->
+</body>
+</html>
