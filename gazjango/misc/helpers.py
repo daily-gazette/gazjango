@@ -1,4 +1,5 @@
 import settings
+import datetime
 
 def is_from_swat(user=None, ip=None):
     if user:
@@ -31,3 +32,14 @@ def flatten(l, ltypes=(list, tuple)):
                 l[i:i+1] = list(l[i])
         i += 1
     return l
+
+
+def datetime_from_date_and_time(date, time):
+    "Returns a datetime object constructed from `date` and `time`."
+    
+    year, month, day = (date.year, date.month, date.day)
+    if time:
+        hour, minute, second = (time.hour, time.minute, time.second)
+        return datetime.datetime(year, month, day, hour, minute, second)
+    else:
+        return datetime.datetime(year, month, day)    
