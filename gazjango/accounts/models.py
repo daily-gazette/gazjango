@@ -131,6 +131,11 @@ class UserProfile(models.Model):
             date_end   = date_end
         )
     
+    
+    def claimed(self):
+        """Returns this user's claimed story concepts."""
+        return self.concepts.exclude(status='p')
+    
     def __unicode__(self):
         return self.user.username
     
