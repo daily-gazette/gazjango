@@ -33,7 +33,7 @@ class StoryConcept(models.Model):
     name  = models.CharField(max_length=100)
     notes = models.TextField(blank=True)
     due   = models.DateField(default=date.today)
-    status = models.CharField(max_length=1, choices=STATUSES)
+    status = models.CharField(max_length=1, choices=STATUSES, default='a')
     
     users   = models.ManyToManyField(UserProfile, related_name="assignments")
     article = models.ForeignKey(Article, null=True, unique=True,
@@ -51,4 +51,7 @@ class StoryConcept(models.Model):
             return self.notes
         else:
             return self.notes[:length-3] + '...'
+    
+    def __unicode__(self):
+        return self.name
     
