@@ -38,7 +38,7 @@ class SpecialsCategory(models.Model):
 class Special(models.Model):
     "A special thing / article / whatever to be advertised on the homepage."
     
-    title    = models.CharField(max_length=100)
+    title    = models.CharField(max_length=40)
     category = models.ForeignKey(SpecialsCategory)
     date     = models.DateTimeField(default=datetime.now)
     

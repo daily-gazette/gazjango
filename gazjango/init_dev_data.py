@@ -803,7 +803,7 @@ arts = Special.objects.create(
 )
 
 blue_tree = Special.objects.create(
-    title="What Happened To The Blue Tree? (aka the Paces mural)",
+    title="What Happened To The Blue Tree?",
     target=paces,
     category=SpecialsCategory.objects.create(name="Ask The Gazette"),
     image=ImageFile.objects.create(bucket=rand,
