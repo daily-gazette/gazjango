@@ -112,9 +112,15 @@ urlpatterns += patterns('',
 )
 
 urlpatterns += patterns('',
-    (r'^reporter-admin/$', 'accounts.views.admin_index', {}, 'reporter-admin')
+    (r'^reporter-admin/$', 'accounts.views.admin_index', {}, 'reporter-admin'),
+    (r'^reporter-admin/write/$', 'articles.views.admin_write_page1', {}, 'write'),
+    (r'^reporter-admin/write/1/$', 'articles.views.admin_write_page1'),
 )
 
+urlpatterns += patterns('',
+    (r'^data/authors/$', 'accounts.views.author_completions', {}, 'author-completions'),
+    (r'^data/usernames/$', 'accounts.views.username_for_name', {}, 'get-or-make-username'),
+)
 
 if settings.DEBUG:
     path = settings.BASE +'/static'
