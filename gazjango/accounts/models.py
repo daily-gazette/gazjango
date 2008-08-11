@@ -57,16 +57,16 @@ class ContactItem(models.Model):
     
 
 class ProfilesManager(models.Manager):
-    def create_lite_user(self, name):
+    def create_lite_user(self, first, last):
         "Creates a bare-bones user."
-        username = base = name.lower().replace(" ", "_")
+        username = base = ("%s_%s" % (first, last)).lower().replace(" ", "_")
         num = 0
         while User.objects.filter(username=username).count() > 0:
             num += 1
             username = base + str(num)
         
         user = User.objects.create_user(username, 'unkwown@nowhere.com')
-        user.first_name, user.last_name = name.split(" ", 1)
+        user.first_name, user.last_name = first, last
         user.save()
         profile = user.userprofile_set.create()
         return profile
