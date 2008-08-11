@@ -201,6 +201,28 @@ textile = Format.objects.create(name="Textile", function="textile")
 html    = Format.objects.create(name="Raw HTML", function="html")
 
 
+
+### Tags
+orgs   = tagging.models.TagGroup.objects.create(name="Organizations")
+depts  = tagging.models.TagGroup.objects.create(name="Departments")
+places = tagging.models.TagGroup.objects.create(name="Places")
+people = tagging.models.TagGroup.objects.create(name="People")
+
+os = ["Amnesty International", "Anime & Manga Club", "ARC", "Ballroom & Swing Club", "Boy Meets Tractor", "Cantatrix", "Chabad", "Chaverim", "Chess Club", "Club Despertar", "College Democrats", "College Republicans", "CSC", "Cycling Club", "Daily Gazette", "Dance Forum", "Dare To Soar", "DESHI", "Drama Board", "Earthlust", "Enie", "ENLACE", "Feminist Majority", "FFS", "Folk Dance", "Free Culture", "Friends of Taiwan", "Global Health Forum", "Gospel Choir", "Grapevine", "Halcyon", "International Club", "Kitao Gallery", "Knit-Wits", "Learning For Life", "Mixed Company", "Mjumbe", "Mock Trial", "Motherpuckers", "Movie Committee", "MSA", "Multi", "Olde Club", "Outsiders", "Phoenix", "Photo Club", "Psi Phi", "Pun/ctum", "Quiz Bowl", "Rattech", "Rhythm N Motion", "Ruach", "SAC", "SAO", "SASA", "SASS", "SAVE R US", "SBA", "SBC", "SCCS", "SCF", "SCW", "SEA", "SHC", "SHIP", "Sixteen Feet", "SOCA", "Sound Machine", "SPC", "SPPC", "Spike Magazine", "SOFI", "SQU", "SSSL", "Student Council", "Swarthmore Good Food Project", "Swarthmore Massage", "Swarthmore Sudan", "Swat VOX", "Class Activists", "Van Coordinator", "Vertigo-go", "WRC", "WSRN"]
+
+for org in os:
+    orgs.tags.create(name=org)
+
+for dept in ['English', 'Linguistics', 'Math']:
+    depts.tags.create(name=dept)
+
+for place in ['Amphitheater', 'SCCS Lounge', 'Mary Lyons']:
+    places.tags.create(name=place)
+
+for name, title in [('Al Bloom', 'President'), ('Jim Larimore', 'Dean of Students'), ('Martin Warner', 'Registrar')]:
+    people.tags.create(name=name, long_name=("%s, %s" % (name, title)))
+
+
 ### Articles
 
 nobody_loves_me = Article.objects.create(

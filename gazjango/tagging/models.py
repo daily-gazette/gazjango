@@ -457,12 +457,33 @@ class TaggedItemManager(models.Manager):
 # Models #
 ##########
 
+class TagGroup(models.Model):
+    """
+    A category of tags.
+    
+    Not actually part of django-tagging, this is a custom addition.
+    """
+    name = models.CharField(max_length=60, unique=True)
+    
+    def __unicode__(self):
+        return self.name
+    
+    def active_tags(self):
+        return self.tags.filter(expired=False)
+    
+
 class Tag(models.Model):
     """
     A tag.
     """
     name = models.CharField(_('name'), max_length=50, unique=True, db_index=True, validator_list=[isTag])
-
+    
+    # custom additions
+    long_name = models.CharField(max_length=80, blank=True)
+    expired = models.BooleanField(default=False)
+    group = models.ForeignKey(TagGroup, null=True, related_name="tags")
+    # end additions
+    
     objects = TagManager()
 
     class Meta:
