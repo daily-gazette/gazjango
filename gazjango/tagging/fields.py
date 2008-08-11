@@ -29,7 +29,7 @@ class TagField(CharField):
         setattr(cls, self.name, self)
 
         # Save tags back to the database post-save
-        signals.post_save.connect(self._save, sender=cls)
+        signals.post_save.connect(self._save, cls, True)
 
     def __get__(self, instance, owner=None):
         """
@@ -73,13 +73,13 @@ class TagField(CharField):
             value = value.lower()
         self._set_instance_tag_cache(instance, value)
 
-    def _save(self, signal, sender, instance, **kwargs):
+    def _save(self, **kwargs): #signal, sender, instance):
         """
         Save tags back to the database
         """
-        tags = self._get_instance_tag_cache(instance)
+        tags = self._get_instance_tag_cache(kwargs['instance'])
         if tags is not None:
-            Tag.objects.update_tags(instance, tags)
+            Tag.objects.update_tags(kwargs['instance'], tags)
 
     def __delete__(self, instance):
         """
