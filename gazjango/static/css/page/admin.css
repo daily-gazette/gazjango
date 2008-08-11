@@ -73,7 +73,7 @@ body {
 body {
 	margin: 0;
 	padding: 0;
-	background: #ffffff url(../../administration/images/background.png) repeat-y center top;
+	background: #ffffff url(/static/images/admin/background.png) repeat-y center top;
 	font-size: 62.5%;
 }
 
@@ -151,13 +151,13 @@ p {
 #container {
 	width: 950px;
 	margin: 0 auto;
-	background: #ffffff url(../../administration/images/background.png) repeat-y center top;
+	background: #ffffff url(/static/images/admin/background.png) repeat-y center top;
 }
 
 #header {
 	width: 900px;
 	margin-left: 25px;
-	background-image: url(../../administration/images/header_bg.png);
+	background-image: url(/static/images/admin/header_bg.png);
 	display: inline-block;
 }
 
@@ -178,7 +178,7 @@ p {
 }
 
 #subheader {
-	background: #b86234 url(../../administration/images/subheader_bg_right.png) repeat-y right;
+	background: #b86234 url(/static/images/admin/subheader_bg_right.png) repeat-y right;
 	margin-left: 25px;
 	width: 600px;
 	height: 50px;
@@ -257,19 +257,19 @@ p {
 	float: left;
 	margin-left: 25px;
 	width: 600px;
-	background: #ffebb2 url(../../administration/images/body_bg_main_top.png) repeat-x top;
+	background: #ffebb2 url(/static/images/admin/body_bg_main_top.png) repeat-x top;
 }
 
 #main #mainRight {
 	float: left;
 	width: 600px;
-	background: url(../../administration/images/body_bg_main_right.png) repeat-y right;	
+	background: url(/static/images/admin/body_bg_main_right.png) repeat-y right;	
 }
 
 #main #mainTopRight {
 	float: left;
 	width: 600px;
-	background: url(../../administration/images/body_bg_main_corner.png) no-repeat right top;	
+	background: url(/static/images/admin/body_bg_main_corner.png) no-repeat right top;	
 }
 
 #centerColumn {
@@ -281,7 +281,7 @@ p {
 }
 
 #buttonBox {
-	background: #b86234 url(../../administration/images/body_bg_column_top.png) repeat-x top;
+	background: #b86234 url(/static/images/admin/body_bg_column_top.png) repeat-x top;
 	width: 500px;
 	padding: 25px;
 	padding-bottom: 0px;
