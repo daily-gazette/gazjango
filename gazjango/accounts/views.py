@@ -14,17 +14,16 @@ user_details = lambda request, **kwargs: render_to_response("base.html", locals(
 def admin_index(request, template="custom-admin/index.html"):
     user = request.user.get_profile()
     articles = user.articles.all().order_by('-pub_date')
-    
     announcements = Announcement.admin.order_by('-date_start')
     
     data = {
-        'articles': articles,
-        'announcement': announcements[0] if announcements.count() > 0 else None,
+        'announcement': announcements[0] if announcements.count() else None,
         'unclaimed': StoryConcept.unpublished.filter(users=None),
         'others': StoryConcept.unpublished.exclude(users=user),
-    
+        
+        'articles': articles,
         'revisions': ArticleRevision.objects.filter(article__in=articles).order_by('-date'),
-        'comments': PublicComment.objects.filter(article__in=articles).order_by('-time')
+        'comments': PublicComment.visible.filter(article__in=articles).order_by('-time')
     }
     
     rc = RequestContext(request)
