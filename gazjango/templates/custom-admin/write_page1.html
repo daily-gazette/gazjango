@@ -3,54 +3,138 @@
 
 {% block title %}Write{% endblock %}
 
+{% block customheader %}
+
+  <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.2.6/jquery.min.js"></script>
+
+  <script type="text/javascript" src="{% static js jquery.autocomplete.js %}"></script>
+
+  <script type="text/javascript" charset="utf-8">
+    function toggleLayer(id) {
+      $('#' + id).toggle();
+      return false;
+    }
+    
+    function addAuthor() {      
+      extra = $('#extra_author');
+      name = extra.val();
+      
+      $.ajax({
+        type: "POST",
+        url: "{% url get-or-make-username %}",
+        data: {name: name},
+        success: function(username) {
+          $('#authorsText').append(authorLinkFor(name, username));
+          var authorsInput = $('#authors');
+          authorsInput.val(authorsInput.val() + ' ' + username);
+          extra.val('');
+        },
+        error: function(request, status, errorThrown) {
+          alert("Apparently you don't have permissions to create a new author. Talk to someone who does.\n\n" + status + "\n\n" + errorThrown);
+        }
+      });
+      
+      return false;
+    }
+    
+    function authorLinkFor(name, username) {
+      return '<a href="#" id="author-' + username + '" onclick="return removeAuthor(\'' + username + '\');">' + name + '</a>';
+    }
+    
+    function addAuthorToList(name, username) {
+      $('#authorsText').append(' ' + authorLinkFor(name, username));
+      $('#authors').append(' ' + username);
+    }
+    
+    function removeAuthor(username) {
+      $('#author-' + username).remove();
+
+      authors = $('#authors');
+      split = authors.val().split(/\s+/);
+      new_authors = [];
+      for (i = 0; i < split.length; i++) {
+        if (split[i] != '' && split[i] != username) {
+          new_authors.push(split[i]);
+        }
+      }
+      authors.val(new_authors.join(' '));
+    }
+  </script>
+
+{% endblock customheader %}
+
+
 {% block content %}
 <div id="buttonBox" class="write">
 
   <table>
     <tr>
       <td width="75">
-        <label>Title:</label>
+        <label for="title">Title:</label>
       </td>
       <td width="375" colspan="2">
-        <textarea cols="50" rows="2" name="Title"></textarea>
+        <input type="text" size="50" maxlength="200" name="title" id="title" />
       </td>
     </tr>
+
     <tr>
       <td>
-        <label>Author(s):</label>
+        <label for="authors">Author(s):</label>
       </td>
       <td colspan="2">
-        <input type="text" size="50" name="AdditionalAuthors" class="text" value="" id="q10" />
+        <span id="authorsText"></span>
+        (click to remove)
+        <input type="hidden" id="authors" name="authors" value="{{ user.username }}" />
+        
+        <script type="text/javascript" charset="utf-8">
+          $(document).ready(function() {
+            $('#authorsText').append(
+              authorLinkFor("{{ user.get_full_name }}", "{{ user.username }}")
+            );
+          });
+        </script>
       </td>
     </tr>
+
     <tr>
       <td>
-        <label><em>Current:</em></label>
+        <label for="extra_author"><em>Add Author:</em></label>
       </td>
       <td colspan="2">
-        <em>Insert added authors here, Dougal</em>
+        <input type="text" size="20" name="extra_author" class="text" value="" id="extra_author" />
+        <a href="#" onclick="return addAuthor()" id="addAuthor">add this author</a>
+        
+        <script type="text/javascript" charset="utf-8">
+          function formatItem(row) {
+            return row[0] + " (" + row[1] + ")";
+          }
+          
+          $(document).ready(function() {
+            $('#extra_author').autocomplete("{% url author-completions %}",
+              { formatItem:formatItem }
+            );
+          });
+        </script>
       </td>
     </tr>
+
     <tr>
       <td>
         <label>Section:</label>
       </td>
       <td colspan="2">
-        <select class="other" name="Section">
-          <option></option>
-          <option>News</option>
-          <option>Feature</option>
-          <option>Athletics</option>
-          <option>Opinions</option>
-          <option>Columns</option>
-          <option>Multimedia</option>
-          <option>Gazette Announcements</option>
+        <select class="other" name="section">
+          {% for sect in sections %}
+            <option value="{{ sect.pk }}">{{ sect.name }}</option>
+          {% endfor %}
         </select>
       </td>
     </tr>
+
     <tr>
       <td>
         <label>Subsection:</label>
+          TODO: update based on selected section
       </td>
       <td colspan="2">
         <select class="other" name="SubSection">
@@ -65,558 +149,494 @@
         </select>
       </td>
     </tr>
+
     <tr>
       <td>
         <label>Location:</label>
       </td>
       <td colspan="2">
         <select class="other" name="Location">
-          <option></option>
-          <option>Tertiary</option>
-          <option>Secondary</option>
-          <option>Primary</option>
+          <option value="3">Tertiary</option>
+          <option value="2">Secondary</option>
+          <option value="1">Primary</option>
         </select>
       </td>
     </tr>
+
     <tr>
       <td width="75" valign=top>
         <label>Add Tags</label>
       </td>
       <td width="199">
-        <SELECT NAME="dept" SIZE=10 MULTIPLE>
-          <OPTION  VALUE="--">POSSIBLE TAGS</OPTION>
-          <OPTION VALUE="Amnesty International">&nbsp;&nbsp;Amnesty International</OPTION>
-          <OPTION VALUE="Anime & Manga Club">&nbsp;&nbsp;Anime & Manga Club</OPTION>
-          <OPTION VALUE="ARC">&nbsp;&nbsp;ARC</OPTION>
-          <OPTION VALUE="Ballroom & Swing Club">&nbsp;&nbsp;Ballroom & Swing Club</OPTION>
-          <OPTION VALUE="Boy Meets Tractor">&nbsp;&nbsp;Boy Meets Tractor</OPTION>
-          <OPTION VALUE="Cantatrix">&nbsp;&nbsp;Cantatrix</OPTION>
-          <OPTION VALUE="Chabad">&nbsp;&nbsp;Chabad</OPTION>
-          <OPTION VALUE="Chaverim">&nbsp;&nbsp;Chaverim</OPTION>
-          <OPTION VALUE="Chess Club">&nbsp;&nbsp;Chess Club</OPTION>
-          <OPTION VALUE="Club Despertar">&nbsp;&nbsp;Club Despertar</OPTION>
-          <OPTION VALUE="College Democrats">&nbsp;&nbsp;College Democrats</OPTION>
-          <OPTION VALUE="College Republicans">&nbsp;&nbsp;College Republicans</OPTION>
-          <OPTION VALUE="CSC">&nbsp;&nbsp;CSC</OPTION>
-          <OPTION VALUE="Cycling Club">&nbsp;&nbsp;Cycling Club</OPTION>
-          <OPTION VALUE="Daily Gazette">&nbsp;&nbsp;Daily Gazette</OPTION>
-          <OPTION VALUE="Dance Forum">&nbsp;&nbsp;Dance Forum</OPTION>
-          <OPTION VALUE="Dare To Soar">&nbsp;&nbsp;Dare To Soar</OPTION>
-          <OPTION VALUE="DESHI">&nbsp;&nbsp;DESHI</OPTION>
-          <OPTION VALUE="Drama Board">&nbsp;&nbsp;Drama Board</OPTION>
-          <OPTION VALUE="Earthlust">&nbsp;&nbsp;Earthlust</OPTION>
-          <OPTION VALUE="Enie">&nbsp;&nbsp;Enie</OPTION>
-          <OPTION VALUE="ENLACE">&nbsp;&nbsp;ENLACE</OPTION>
-          <OPTION VALUE="Feminist Majority">&nbsp;&nbsp;Feminist Majority</OPTION>
-          <OPTION VALUE="FFS">&nbsp;&nbsp;FFS</OPTION>
-          <OPTION VALUE="Folk Dance">&nbsp;&nbsp;Folk Dance</OPTION>
-          <OPTION VALUE="Free Culture">&nbsp;&nbsp;Free Culture</OPTION>
-          <OPTION VALUE="Friends of Taiwan">&nbsp;&nbsp;Friends of Taiwan</OPTION>
-          <OPTION VALUE="Global Health Forum">&nbsp;&nbsp;Global Health Forum</OPTION>
-          <OPTION VALUE="Gospel Choir">&nbsp;&nbsp;Gospel Choir</OPTION>
-          <OPTION VALUE="Grapevine">&nbsp;&nbsp;Grapevine</OPTION>
-          <OPTION VALUE="Halcyon">&nbsp;&nbsp;Halcyon</OPTION>
-          <OPTION VALUE="International Club">&nbsp;&nbsp;International Club</OPTION>
-          <OPTION VALUE="Kitao Gallery">&nbsp;&nbsp;Kitao Gallery</OPTION>
-          <OPTION VALUE="Knit-Wits">&nbsp;&nbsp;Knit-Wits</OPTION>
-          <OPTION VALUE="Learning For Life">&nbsp;&nbsp;Learning For Life</OPTION>
-          <OPTION VALUE="Mixed Company">&nbsp;&nbsp;Mixed Company</OPTION>
-          <OPTION VALUE="Mjumbe">&nbsp;&nbsp;Mjumbe</OPTION>
-          <OPTION VALUE="Mock Trial">&nbsp;&nbsp;Mock Trial</OPTION>
-          <OPTION VALUE="Motherpuckers">&nbsp;&nbsp;Motherpuckers</OPTION>
-          <OPTION VALUE="Movie Committee">&nbsp;&nbsp;Movie Committee</OPTION>
-          <OPTION VALUE="MSA">&nbsp;&nbsp;MSA</OPTION>
-          <OPTION VALUE="Multi">&nbsp;&nbsp;Multi</OPTION>
-          <OPTION VALUE="Olde Club">&nbsp;&nbsp;Olde Club</OPTION>
-          <OPTION VALUE="Outsiders">&nbsp;&nbsp;Outsiders</OPTION>
-          <OPTION VALUE="Phoenix">&nbsp;&nbsp;Phoenix</OPTION>
-          <OPTION VALUE="Photo Club">&nbsp;&nbsp;Photo Club</OPTION>
-          <OPTION VALUE="Psi Phi">&nbsp;&nbsp;Psi Phi</OPTION>
-          <OPTION VALUE="Pun/ctum">&nbsp;&nbsp;Pun/ctum!</OPTION>
-          <OPTION VALUE="Quiz Bowl">&nbsp;&nbsp;Quiz Bowl</OPTION>
-          <OPTION VALUE="Rattech">&nbsp;&nbsp;Rattech</OPTION>
-          <OPTION VALUE="Rhythm N Motion">&nbsp;&nbsp;Rhythm N Motion</OPTION>
-          <OPTION VALUE="Ruach">&nbsp;&nbsp;Ruach</OPTION>
-          <OPTION VALUE="SAC">&nbsp;&nbsp;SAC</OPTION>
-          <OPTION VALUE="SAO">&nbsp;&nbsp;SAO</OPTION>
-          <OPTION VALUE="SASA">&nbsp;&nbsp;SASA</OPTION>
-          <OPTION VALUE="SASS">&nbsp;&nbsp;SASS</OPTION>
-          <OPTION VALUE="SAVE R US">&nbsp;&nbsp;SAVE R US</OPTION>
-          <OPTION VALUE="SBA">&nbsp;&nbsp;SBA</OPTION>
-          <OPTION VALUE="SBC">&nbsp;&nbsp;SBC</OPTION>
-          <OPTION VALUE="SCCS">&nbsp;&nbsp;SCCS</OPTION>
-          <OPTION VALUE="SCF">&nbsp;&nbsp;SCF</OPTION>
-          <OPTION VALUE="SCW">&nbsp;&nbsp;SCW</OPTION>
-          <OPTION VALUE="SEA">&nbsp;&nbsp;SEA</OPTION>
-          <OPTION VALUE="SHC">&nbsp;&nbsp;SHC</OPTION>
-          <OPTION VALUE="SHIP">&nbsp;&nbsp;SHIP</OPTION>
-          <OPTION VALUE="Sixteen Feet">&nbsp;&nbsp;Sixteen Feet</OPTION>
-          <OPTION VALUE="SOCA">&nbsp;&nbsp;SOCA</OPTION>
-          <OPTION VALUE="Sound Machine">&nbsp;&nbsp;Sound Machine</OPTION>
-          <OPTION VALUE="SPC">&nbsp;&nbsp;SPC</OPTION>
-          <OPTION VALUE="SPPC">&nbsp;&nbsp;SPPC</OPTION>
-          <OPTION VALUE="Spike Magazine">&nbsp;&nbsp;Spike Magazine</OPTION>
-          <OPTION VALUE="SOFI">&nbsp;&nbsp;SOFI</OPTION>
-          <OPTION VALUE="SQU">&nbsp;&nbsp;SQU</OPTION>
-          <OPTION VALUE="SSSL">&nbsp;&nbsp;SSSL</OPTION>
-          <OPTION VALUE="Student Council">&nbsp;&nbsp;Student Council</OPTION>
-          <OPTION VALUE="Swarthmore Good Food Project">&nbsp;&nbsp;Swarthmore Good Food Project</OPTION>
-          <OPTION VALUE="Swarthmore Massage">&nbsp;&nbsp;Swarthmore Massage</OPTION>
-          <OPTION VALUE="Swarthmore Sudan">&nbsp;&nbsp;Swarthmore Sudan</OPTION>
-          <OPTION VALUE="Swat VOX">&nbsp;&nbsp;Swat VOX</OPTION>
-          <OPTION VALUE="Class Activists">&nbsp;&nbsp;Class Activists</OPTION>
-          <OPTION VALUE="Van Coordinator">&nbsp;&nbsp;Van Coordinator</OPTION>
-          <OPTION VALUE="Vertigo-go">&nbsp;&nbsp;Vertigo-go</OPTION>
-          <OPTION VALUE="WRC">&nbsp;&nbsp;WRC</OPTION>
-          <OPTION VALUE="WSRN">&nbsp;&nbsp;WSRN</OPTION>
-          <OPTION VALUE="--">Departments</OPTION>
-          <OPTION VALUE="English">&nbsp;&nbsp;English</OPTION>
-          <OPTION VALUE="Math">&nbsp;&nbsp;Math</OPTION>
-          <OPTION VALUE="Linguistics">&nbsp;&nbsp;Linguistics</OPTION>
-          <OPTION VALUE="--">Places</OPTION>
-          <OPTION VALUE="Amphitheater">&nbsp;&nbsp;Amphitheater</OPTION>
-          <OPTION VALUE="SCCS">&nbsp;&nbsp;SCCS</OPTION>
-          <OPTION VALUE="Mary Lyons">&nbsp;&nbsp;Mary Lyons</OPTION>
-          <OPTION VALUE="--">People</OPTION>
-          <OPTION VALUE="Al Bloom">&nbsp;&nbsp;Al Bloom, President</OPTION>
-          <OPTION VALUE="Jim Larimore">&nbsp;&nbsp;Jim Larimore, Dean of Students</OPTION>
-          <OPTION VALUE="Martin Warner">&nbsp;&nbsp;Martin Warner, Registrar</OPTION>
-        </SELECT>
+        <select name="tags" size="10" multiple>
+          {% for group in taggroups %}
+            <optgroup label="{{ group.name }}">
+              {% for tag in group.active_tags %}
+                <option value="{{ tag.pk }}">{{ tag.long_name|default:tag.name }}</option>
+              {% endfor %}
+            </optgroup>
+          {% endfor %}
+          
+          {% if loosetags %}
+            <optgroup label="Other">
+              {% for tag in loosetags %}
+                <option value="{{ tag.pk }}">{{ tag.long_name|default:tag.name }}</option>
+              {% endfor %}
+            </optgroup>
+          {% endif %}
+        </select>
       </td>
+
       <td width="199">
-        <SELECT NAME="dept" SIZE=10 MULTIPLE>
-          <OPTION  VALUE="--">SELECTED TAGS
-            <OPTION  VALUE="Martin Warner">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            </SELECT>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            &nbsp;
-          </td>
-          <td colspan="2">
-            <label>Click to add or remove a tag</label>
-          </td>
-        </tr>
-      </table>
+        <select name="selected-tags" size="10" multiple>
+          <optgroup label="Selected Tags">
+            <option value="Martin Warner">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
+          </optgroup>
+        </select>
+      </td>
+    </tr>
+    <tr>
+      <td>&nbsp;</td>
+      <td colspan="2">
+        <label>Click to add or remove a tag</label>
+      </td>
+    </tr>
+  </table>
 
-      <hr />
+  <hr />
 
-      <h4>Required Files</h4>
-      <p><em>Dougal: this should update based on the location selected</em></p>
+  <h4>Required Files</h4>
+  <p><em>TODO: this should update based on the location selected</em></p>
 
-      <table>
-        <tr>
-          <td width="100">
-            <label>Header Image <br />
-              <em>350px x 150px</em></label>
-            </td>
-            <td width="100">
-              <input type="submit" name="upload" id="header-upload" value="Upload" />
-            </td>
-            <td width="100">
-              <label>Thumbnail<br />
-                <em>50px x 75px</em></label>
+  <table>
+    <tr>
+      <td width="100">
+        <label>
+          Header Image <br />
+          <em>350px x 150px</em>
+        </label>
+      </td>
+      <td width="100">
+        <input type="submit" name="upload" id="header-upload" value="Upload" />
+      </td>
+      <td width="100">
+        <label>
+          Thumbnail<br />
+          <em>50px x 75px</em>
+        </label>
+      </td>
+      <td width="100">
+        <input type="submit" name="upload" id="thumbnail-upload" value="Upload" />
+      </td>
+    </tr>
+
+    <tr>
+      <td width="100">
+        <label>
+          Email Image<br />
+          <em>175px x 175px</em>
+        </label>
+      </td>
+      <td width="100">
+        <input type="submit" name="upload" id="email-upload" value="Upload" />
+      </td>
+    </tr>
+  </table>
+
+  <h4>Optional Files</h4>
+
+  <p>
+    <a href="#" onclick="return toggleLayer('addImage');">Image</a> |
+    <a href="#" onclick="return toggleLayer('addSlideshow');">Slideshow</a> |
+    <a href="#" onclick="return toggleLayer('addVideo');">Video</a> |
+    <a href="#" onclick="return toggleLayer('addAudio');">Audio</a> |
+    <a href="#" onclick="return toggleLayer('addDoc');">PDF / DOC</a> |
+    <a href="#" onclick="return toggleLayer('addFlash');">Flash</a>
+  </p>
+
+  <p>&nbsp;</p>
+
+  <div id="addImage">
+    <table>
+      <tr>
+        <td width="100">
+          <label>Image</label>
+        </td>
+        <td width="375">
+          <input type="text" size="33" name="image 1" class="text" value="" id="q10" />
+          <input type="submit" name="upload" id="header-upload" value="Add File" />
+          <input type="submit" name="upload" id="header-upload" value="Upload" />
+          <br />
+          <table>
+            <tr>
+              <td width="55">
+                <label>Title:</label>
               </td>
-              <td width="100">
-                <input type="submit" name="upload" id="thumbnail-upload" value="Upload" />
+              <td>
+                <input type="text" size="42" name="image 1" class="text" value="" id="q10" />
               </td>
             </tr>
-
-
             <tr>
-              <td width="100">
-                <label>Email Image<br />
-                  <em>175px x 175px</em></label>
-                </td>
-                <td width="100">
-                  <input type="submit" name="upload" id="email-upload" value="Upload" />
-                </td>
-              </tr>
-            </table>
+              <td width="55">
+                <label>Caption:</label>
+              </td>
+              <td>
+                <textarea cols="40" rows="2" name="Title"></textarea>
+              </td>
+            </tr>
+            <tr>
+              <td width="55">
+                <label>Creator:</label>
+              </td>
+              <td>
+                <input type="text" size="42" name="image 1" class="text" value="" id="q10" />
+              </td>
+            </tr>
+            <tr>
+              <td colspan="2">
+                <label>Size:</label>
+                <select class="other" name="size">
+                  <option></option>
+                  <option value="50">Big (50% column)</option>
+                  <option value="25">Small (25% column)</option>
+                </select>
 
-            <h4>Optional Files</h4>
+                <label>Location:</label>
+                <select class="other" name="size">
+                  <option></option>
+                  <option>Left</option>
+                  <option>Right</option>
+                  <option>Header</option>
+                </select>
+              </td>
+            </tr>
+          </table>
+          <br />
+          <input type="submit" name="upload" id="header-upload" value="Add another" /> 
+          <br />
+        </td>
+      </tr>
+    </table>
+  </div>
 
-            <p>
-              <a href="javascript:toggleLayer('addImage');">Image</a> | 
-              <a href="javascript:toggleLayer('addSlideshow');">Slideshow</a> | 
-              <a href="javascript:toggleLayer('addVideo');">Video</a> | 
-              <a href="javascript:toggleLayer('addAudio');">Audio</a> | 
-              <a href="javascript:toggleLayer('addDoc');">PDF / DOC</a> | 
-              <a href="javascript:toggleLayer('addFlash');">Flash</a>
-            </p>
+  <div id="addVideo">
+    <table>
+      <tr>
+        <td width="100">
+          <label>Video</label>
+        </td>
+        <td width="375">
+          <input type="text" size="33" name="image 1" class="text" value="" id="q10" />
+          <input type="submit" name="upload" id="header-upload" value="Add File" />
+          <input type="submit" name="upload" id="header-upload" value="Upload" />
+          <br />
+          <strong>OR</strong>
+          <input type="text" size="33" name="image 1" class="text" value="" id="q10" />
+          <input type="submit" name="upload" id="header-upload" value="Add URL" />
+          <br />
+          <table>
+            <tr>
+              <td width="55">
+                <label>Title:</label>
+              </td>
+              <td>
+                <input type="text" size="42" name="image 1" class="text" value="" id="q10" />
+              </td>
+            </tr>
+            <tr>
+              <td width="55">
+                <label>Caption:</label>
+              </td>
+              <td>
+                <textarea cols="40" rows="2" name="Title"></textarea>
+              </td>
+            </tr>
+            <tr>
+              <td width="55">
+                <label>Creator:</label>
+              </td>
+              <td>
+                <input type="text" size="42" name="image 1" class="text" value="" id="q10" />
+              </td>
+            </tr>
+            <tr>
+              <td colspan="2">
+                <label>Size:</label>
+                <select class="other" name="size">
+                  <option></option>
+                  <option value="big">Big (50% column)</option>
+                  <option value="small">Small (25% column)</option>
+                </select>
 
-            <p>&nbsp;</p>
+                <label>Location:</label>
+                <select class="other" name="size">
+                  <option></option>
+                  <option>Left</option>
+                  <option>Right</option>
+                  <option>Center</option>
+                </select>
+                <br />
+              </td>
+            </tr>
+          </table>
 
-            <div id="addImage">
-              <table>
-                <tr>
-                  <td width="100">
-                    <label>Image</label>
-                  </td>
-                  <td width="375">
-                    <input type="text" size="33" name="image 1" class="text" value="" id="q10" /><input type="submit" name="upload" id="header-upload" value="Add File" /><input type="submit" name="upload" id="header-upload" value="Upload" /> <br />
-                    <table>
-                      <tr>
-                        <td width="55">
-                          <label>Title:</label>
-                        </td>
-                        <td>
-                          <input type="text" size="42" name="image 1" class="text" value="" id="q10" />
-                        </td>
-                      </tr>
-                      <tr>
-                        <td width="55">
-                          <label>Caption:</label>
-                        </td>
-                        <td>
-                          <textarea cols="40" rows="2" name="Title"></textarea>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td width="55">
-                          <label>Creator:</label>
-                        </td>
-                        <td>
-                          <input type="text" size="42" name="image 1" class="text" value="" id="q10" />
-                        </td>
-                      </tr>
-                      <tr>
-                        <td colspan="2">
-                          <label>Size:</label>
-                          <select class="other" name="size">
-                            <option></option>
-                            <option>Big (50% column)</option>
-                            <option>Small (25% column)</option>
-                          </select>
-                          <label>Location:</label>
-                          <select class="other" name="size">
-                            <option></option>
-                            <option>Left</option>
-                            <option>Right</option>
-                            <option>Header</option>
-                          </select>
-                        </td>
-                      </tr>
-                    </table>
-                    <br />
-                    <input type="submit" name="upload" id="header-upload" value="Add another" /> <br />
+          <input type="submit" name="upload" id="header-upload" value="Add another video" />
 
-                  </td>
-                </tr>
-              </table>
-            </div>
+        </td>
+      </tr>
+    </table>
+  </div>
 
-            <div id="addVideo">
-              <table>	
-                <tr>
-                  <td width="100">
-                    <label>Video</label>
-                  </td>
-                  <td width="375">
-                    <input type="text" size="33" name="image 1" class="text" value="" id="q10" />
-                    <input type="submit" name="upload" id="header-upload" value="Add File" />
-                    <input type="submit" name="upload" id="header-upload" value="Upload" />
-                    <br />
-                    <strong>OR</strong>
-                    <input type="text" size="33" name="image 1" class="text" value="" id="q10" />
-                    <input type="submit" name="upload" id="header-upload" value="Add URL" />
-                    <br />
-                    <table>
-                      <tr>
-                        <td width="55">
-                          <label>Title:</label>
-                        </td>
-                        <td>
-                          <input type="text" size="42" name="image 1" class="text" value="" id="q10" />
-                        </td>
-                      </tr>
-                      <tr>
-                        <td width="55">
-                          <label>Caption:</label>
-                        </td>
-                        <td>
-                          <textarea cols="40" rows="2" name="Title"></textarea>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td width="55">
-                          <label>Creator:</label>
-                        </td>
-                        <td>
-                          <input type="text" size="42" name="image 1" class="text" value="" id="q10" />
-                        </td>
-                      </tr>
-                      <tr>
-                        <td colspan="2">
-                          <label>Size:</label>
-                          <select class="other" name="size">
-                            <option></option>
-                            <option>Big (50% column)</option>
-                            <option>Small (25% column)</option>
-                          </select>
-                          <label>Location:</label>
-                          <select class="other" name="size">
-                            <option></option>
-                            <option>Left</option>
-                            <option>Right</option>
-                            <option>Center</option>
-                          </select> <br />
-                        </td>
-                      </table>
-                      <input type="submit" name="upload" id="header-upload" value="Add another video" />
+  <div id="addAudio">
+    <table>
 
-                    </td>
-                  </tr>
+      <tr>
+        <td width="100">
+          <label>Audio</label>
+        </td>
+        <td width="375">
+          <input type="text" size="33" name="image 1" class="text" value="" id="q10" />
+          <input type="submit" name="upload" id="header-upload" value="Add File" />
+          <input type="submit" name="upload" id="header-upload" value="Upload" />
+          <br />
+          <table>
+            <tr>
+              <td width="55">
+                <label>Title:</label>
+              </td>
+              <td>
+                <input type="text" size="42" name="image 1" class="text" value="" id="q10" />
+              </td>
+            </tr>
+            <tr>
+              <td width="55">
+                <label>Caption:</label>
+              </td>
+              <td>
+                <textarea cols="40" rows="2" name="Title"></textarea>
+              </td>
+            </tr>
+            <tr>
+              <td width="55">
+                <label>Creator:</label>
+              </td>
+              <td>
+                <input type="text" size="42" name="image 1" class="text" value="" id="q10" />
+              </td>
+            </tr>
+          </table>
+          <br />
+          <input type="submit" name="upload" id="header-upload" value="Add another audio file" />
+          <br />
 
-                </table>
-              </div>
+        </td>
+      </tr>
+    </table>
+  </div>
 
-              <div id="addAudio">
-                <table>
+  <div id="addSlideshow">
+    <table>
 
-                  <tr>
-                    <td width="100">
-                      <label>Audio</label>
-                    </td>
-                    <td width="375">
-                      <input type="text" size="33" name="image 1" class="text" value="" id="q10" /><input type="submit" name="upload" id="header-upload" value="Add File" /><input type="submit" name="upload" id="header-upload" value="Upload" /> <br />
-                      <table>
-                        <tr>
-                          <td width="55">
-                            <label>Title:</label>
-                          </td>
-                          <td>
-                            <input type="text" size="42" name="image 1" class="text" value="" id="q10" />
-                          </td>
-                        </tr>
-                        <tr>
-                          <td width="55">
-                            <label>Caption:</label>
-                          </td>
-                          <td>
-                            <textarea cols="40" rows="2" name="Title"></textarea>
-                          </td>
-                        </tr>
-                        <tr>
-                          <td width="55">
-                            <label>Creator:</label>
-                          </td>
-                          <td>
-                            <input type="text" size="42" name="image 1" class="text" value="" id="q10" />
-                          </td>
-                        </tr>
-                      </table> <br />
-                      <input type="submit" name="upload" id="header-upload" value="Add another audio file" /><br />
+      <tr>
+        <td width="100">
+          <label>Slideshow</label>
+        </td>
+        <td width="375">
+          <input type="text" size="33" name="image 1" class="text" value="" id="q10" />
+          <input type="submit" name="upload" id="header-upload" value="Add File" />
+          <input type="submit" name="upload" id="header-upload" value="Upload" />
+          <br />
+          <table>
+            <tr>
+              <td width="55">
+                <label>Title:</label>
+              </td>
+              <td>
+                <input type="text" size="42" name="image 1" class="text" value="" id="q10" />
+              </td>
+            </tr>
+            <tr>
+              <td width="55">
+                <label>Caption:</label>
+              </td>
+              <td>
+                <textarea cols="40" rows="2" name="Title"></textarea>
+              </td>
+            </tr>
+            <tr>
+              <td width="55">
+                <label>Creator:</label>
+              </td>
+              <td>
+                <input type="text" size="42" name="image 1" class="text" value="" id="q10" />
+              </td>
+            </tr>
+          </table>
+          <br />
+          <input type="text" size="33" name="image 1" class="text" value="" id="q10" />
+          <input type="submit" name="upload" id="header-upload" value="Add File" />
+          <input type="submit" name="upload" id="header-upload" value="Upload" />
+          <br />
+          <table>
+            <tr>
+              <td width="55">
+                <label>Title:</label>
+              </td>
+              <td>
+                <input type="text" size="42" name="image 1" class="text" value="" id="q10" />
+              </td>
+            </tr>
+            <tr>
+              <td width="55">
+                <label>Caption:</label>
+              </td>
+              <td>
+                <textarea cols="40" rows="2" name="Title"></textarea>
+              </td>
+            </tr>
+            <tr>
+              <td width="55">
+                <label>Creator:</label>
+              </td>
+              <td>
+                <input type="text" size="42" name="image 1" class="text" value="" id="q10" />
+              </td>
+            </tr>
+          </table>
+          <input type="submit" name="upload" id="header-upload" value="Add files to this slideshow" />
+          <br />
+          <input type="submit" name="upload" id="header-upload" value="Create another slideshow" />
+          <br />
+        </td>
+      </tr>
 
+    </table>
+  </div>
 
-                    </td>
-                  </tr>
+  <div id="addDoc">
+    <table>
+      <tr>
+        <td width="100">
+          <label>Document</label>
+        </td>
+        <td width="375">
+          <input type="text" size="33" name="image 1" class="text" value="" id="q10" />
+          <input type="submit" name="upload" id="header-upload" value="Add File" />
+          <input type="submit" name="upload" id="header-upload" value="Upload" />
+          <br />
+          <table>
+            <tr>
+              <td width="55">
+                <label>Title:</label>
+              </td>
+              <td>
+                <input type="text" size="42" name="image 1" class="text" value="" id="q10" />
+              </td>
+            </tr>
+            <tr>
+              <td width="55">
+                <label>Caption:</label>
+              </td>
+              <td>
+                <textarea cols="40" rows="2" name="Title"></textarea>
+              </td>
+            </tr>
+            <tr>
+              <td width="55">
+                <label>Source:</label>
+              </td>
+              <td>
+                <input type="text" size="42" name="image 1" class="text" value="" id="q10" />
+              </td>
+            </tr>
+            <tr>
+              <td width="55">
+                <label>Display:</label>
+              </td>
+              <td>
+                <select class="other" name="size">
+                  <option></option>
+                  <option value="left">Left Box</option>
+                  <option value="right">Right Box</option>
+                  <option value="in">In-text Link</option>
+                </select>
+              </td>
+            </tr>
+          </table>
+          <input type="submit" name="upload" id="header-upload" value="Attach another document" />
+          <br />
+          &nbsp;
+        </td>
+      </tr>
 
-                </table>
-              </div>
+    </table>
+  </div>
 
+  <div id="addFlash">
+    <table>
+      <tr>
+        <td width="100">
+          <label>Flash</label>
+        </td>
+        <td width="375">
+          <table>
+            <tr>
+              <td width="55">
+                <label>Code :</label>
+              </td>
+              <td>
+                <textarea cols="40" rows="10" name="Title"></textarea>
+              </td>
+            </tr>
+            <tr>
+              <td width="55">
+                <label>Title:</label>
+              </td>
+              <td>
+                <input type="text" size="42" name="image 1" class="text" value="" id="q10" />
+              </td>
+            </tr>
+            <tr>
+              <td width="55">
+                <label>Desc. :</label>
+              </td>
+              <td>
+                <textarea cols="40" rows="2" name="Title"></textarea>
+              </td>
+            </tr>
+            <tr>
+              <td width="55">
+                <label>Creator:</label>
+              </td>
+              <td>
+                <input type="text" size="42" name="image 1" class="text" value="" id="q10" />
+              </td>
+            </tr>
+            <tr>
+              <td width="55">
+                <label>Display:</label>
+              </td>
+              <td>
+                <select class="other" name="size">
+                  <option></option>
+                  <option>Left</option>
+                  <option>Right</option>
+                  <option>Center</option>
+                </select>
+              </td>
+            </tr>
+          </table>
+          <input type="submit" name="upload" id="header-upload" value="Add another Flash file" />
+          <br />
+          &nbsp;
+        </td>
+      </tr>
+    </table>
+  </div>
 
+  <hr />
 
+  <h3 class="continue"><a href="{{ admin.write.page2.get_absolute_url }}">Save and Continue</a></h3>
 
-              <div id="addSlideshow">
-                <table>
-
-                  <tr>
-                    <td width="100">
-                      <label>Slideshow</label>
-                    </td>
-                    <td width="375">
-                      <input type="text" size="33" name="image 1" class="text" value="" id="q10" /><input type="submit" name="upload" id="header-upload" value="Add File" /><input type="submit" name="upload" id="header-upload" value="Upload" /> <br />
-                      <table>
-                        <tr>
-                          <td width="55">
-                            <label>Title:</label>
-                          </td>
-                          <td>
-                            <input type="text" size="42" name="image 1" class="text" value="" id="q10" />
-                          </td>
-                        </tr>
-                        <tr>
-                          <td width="55">
-                            <label>Caption:</label>
-                          </td>
-                          <td>
-                            <textarea cols="40" rows="2" name="Title"></textarea>
-                          </td>
-                        </tr>
-                        <tr>
-                          <td width="55">
-                            <label>Creator:</label>
-                          </td>
-                          <td>
-                            <input type="text" size="42" name="image 1" class="text" value="" id="q10" />
-                          </td>
-                        </tr>
-                      </table> <br />
-                      <input type="text" size="33" name="image 1" class="text" value="" id="q10" /><input type="submit" name="upload" id="header-upload" value="Add File" /><input type="submit" name="upload" id="header-upload" value="Upload" /> <br />
-                      <table>
-                        <tr>
-                          <td width="55">
-                            <label>Title:</label>
-                          </td>
-                          <td>
-                            <input type="text" size="42" name="image 1" class="text" value="" id="q10" />
-                          </td>
-                        </tr>
-                        <tr>
-                          <td width="55">
-                            <label>Caption:</label>
-                          </td>
-                          <td>
-                            <textarea cols="40" rows="2" name="Title"></textarea>
-                          </td>
-                        </tr>
-                        <tr>
-                          <td width="55">
-                            <label>Creator:</label>
-                          </td>
-                          <td>
-                            <input type="text" size="42" name="image 1" class="text" value="" id="q10" />
-                          </td>
-                        </tr>
-                      </table>
-                      <input type="submit" name="upload" id="header-upload" value="Add files to this slideshow" /><br />
-                      <input type="submit" name="upload" id="header-upload" value="Create another slideshow" /><br />
-
-
-                    </td>
-                  </tr>
-
-                </table>
-              </div>
-
-
-              <div id="addDoc">
-                <table>
-
-                  <tr>
-                    <td width="100">
-                      <label>Document</label>
-                    </td>
-                    <td width="375">
-                      <input type="text" size="33" name="image 1" class="text" value="" id="q10" /><input type="submit" name="upload" id="header-upload" value="Add File" /><input type="submit" name="upload" id="header-upload" value="Upload" /> <br />
-                      <table>
-                        <tr>
-                          <td width="55">
-                            <label>Title:</label>
-                          </td>
-                          <td>
-                            <input type="text" size="42" name="image 1" class="text" value="" id="q10" />
-                          </td>
-                        </tr>
-                        <tr>
-                          <td width="55">
-                            <label>Caption:</label>
-                          </td>
-                          <td>
-                            <textarea cols="40" rows="2" name="Title"></textarea>
-                          </td>
-                        </tr>
-                        <tr>
-                          <td width="55">
-                            <label>Source:</label>
-                          </td>
-                          <td>
-                            <input type="text" size="42" name="image 1" class="text" value="" id="q10" />
-                          </td>
-                        </tr>
-                        <tr>
-                          <td width="55">
-                            <label>Display:</label>
-                          </td>
-                          <td>
-                            <select class="other" name="size">
-                              <option></option>
-                              <option>Left Box</option>
-                              <option>Right Box</option>
-                              <option>In-text Link</option>
-                            </select>
-                          </td>
-                        </tr>
-                      </table>
-                      <input type="submit" name="upload" id="header-upload" value="Attach another document" /><br />
-                      &nbsp;
-                    </td>
-                  </tr>
-
-                </table>
-              </div>
-
-
-
-
-              <div id="addFlash">
-                <table>
-
-                  <tr>
-                    <td width="100">
-                      <label>Flash</label>
-                    </td>
-                    <td width="375">
-                      <table>
-                        <tr>
-                          <td width="55">
-                            <label>Code :</label>
-                          </td>
-                          <td>
-                            <textarea cols="40" rows="10" name="Title"></textarea>
-                          </td>
-                        </tr>
-                        <tr>
-                          <td width="55">
-                            <label>Title:</label>
-                          </td>
-                          <td>
-                            <input type="text" size="42" name="image 1" class="text" value="" id="q10" />
-                          </td>
-                        </tr>
-                        <tr>
-                          <td width="55">
-                            <label>Desc. :</label>
-                          </td>
-                          <td>
-                            <textarea cols="40" rows="2" name="Title"></textarea>
-                          </td>
-                        </tr>
-                        <tr>
-                          <td width="55">
-                            <label>Creator:</label>
-                          </td>
-                          <td>
-                            <input type="text" size="42" name="image 1" class="text" value="" id="q10" />
-                          </td>
-                        </tr>
-                        <tr>
-                          <td width="55">
-                            <label>Display:</label>
-                          </td>
-                          <td>
-                            <select class="other" name="size">
-                              <option></option>
-                              <option>Left</option>
-                              <option>Right</option>
-                              <option>Center</option>
-                            </select>
-                          </td>
-                        </tr>
-                      </table>
-                      <input type="submit" name="upload" id="header-upload" value="Add another Flash file" /><br />
-                      &nbsp;
-                    </td>
-                  </tr>
-
-                </table>
-              </div>
-
-              <hr />
-
-              <h3 class="continue"><a href="{{ admin.write.page2.get_absolute_url }}">Save and Continue</a></h3>
-
-            </div>
-            {% endblock content %}
+</div>
+{% endblock content %}

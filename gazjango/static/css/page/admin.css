@@ -96,7 +96,7 @@ h3 {
 	padding: 0;
 	font-family: "Helvetica Neue", Arial, Helvetica, Geneva, sans-serif;
 	font-size: 1.7em;
-	line-height: ;
+/*  line-height: ;*/
 }
 
 h4 {
@@ -108,7 +108,7 @@ h4 {
 }
 
 h5 {
-	font: Georgia, Times, "Times New Roman";
+	font-family: Georgia, Times, "Times New Roman";
 	font-size: 1.3em;
 
 }
@@ -390,4 +390,67 @@ p a {
 
 .continue a {
 	color: #ffebb2;
+}
+
+
+
+#authorsText a {
+    color: #ffebb2;
+    font-size: 1.2em;
+    padding-right: 5px;
+}
+
+#addAuthor {
+    color: #ffebb2;
+    margin-left: 3px;
+}
+
+/* autocomplete css based off Dylan Veheul's demo */
+/* http://www.dyve.net/jquery/?autocomplete */
+.ac_input {
+	width: 200px;
+}
+.ac_results {
+	padding: 0px;
+	border: 1px solid WindowFrame;
+	background-color: Window;
+	overflow: hidden;
+}
+
+.ac_results ul {
+	width: 100%;
+	list-style-position: outside;
+	list-style: none;
+	padding: 0;
+	margin: 0;
+}
+
+.ac_results iframe {
+	display:none;/*sorry for IE5*/
+	display/**/:block;/*sorry for IE5*/
+	position:absolute;
+	top:0;
+	left:0;
+	z-index:-1;
+	filter:mask();
+	width:3000px;
+	height:3000px;
+}
+
+.ac_results li {
+	margin: 0px;
+	padding: 2px 5px;
+	cursor: pointer;
+	display: block;
+	width: 100%;
+	font: menu;
+	font-size: 12px;
+	overflow: hidden;
+}
+.ac_loading {
+	background : url('/jquery/img/indicator.gif') right center no-repeat;
+}
+.ac_over {
+	background-color: Highlight;
+	color: HighlightText;
 }
