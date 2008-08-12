@@ -33,9 +33,9 @@ def get_weather(date=None):
     
     try:
         page = urllib2.urlopen(url)
-    except URLError:
+    except urllib2.URLError:
         # TODO: log this error somehow
-        return WeatherLoadError("Couldn't load the feed.")
+        raise WeatherLoadError("Couldn't load the feed.")
     
     feed = etree.parse(page)
     
