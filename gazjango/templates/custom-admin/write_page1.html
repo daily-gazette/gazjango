@@ -19,20 +19,22 @@
       extra = $('#extra_author');
       name = extra.val();
       
-      $.ajax({
-        type: "POST",
-        url: "{% url get-or-make-username %}",
-        data: {name: name},
-        success: function(username) {
-          $('#authorsText').append(authorLinkFor(name, username));
-          var authorsInput = $('#authors');
-          authorsInput.val(authorsInput.val() + ' ' + username);
-          extra.val('');
-        },
-        error: function(request, status, errorThrown) {
-          alert("Apparently you don't have permissions to create a new author. Talk to someone who does.\n\n" + status + "\n\n" + errorThrown);
-        }
-      });
+      if (name.length > 0) {
+        $.ajax({
+          type: "POST",
+          url: "{% url get-or-make-username %}",
+          data: {name: name},
+          success: function(username) {
+            $('#authorsText').append(authorLinkFor(name, username));
+            var authorsInput = $('#authors');
+            authorsInput.val(authorsInput.val() + ' ' + username);
+            extra.val('');
+          },
+          error: function(request, status, errorThrown) {
+            alert("Apparently you don't have permissions to create a new author. Talk to someone who does.");
+          }
+        });
+      }
       
       return false;
     }
