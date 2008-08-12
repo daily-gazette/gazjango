@@ -169,3 +169,13 @@ def admin_write_page1(request, template="custom-admin/write_page1.html"):
     
     rc = RequestContext(request)
     return render_to_response(template, data, context_instance=rc)
+
+
+def list_subsections(request, section):
+    """
+    Lists the subsections in a given section, in a plaintext format that
+    looks like "fac_staff | Faculty & Staff". (For AJAX requests.)
+    """
+    subs = get_object_or_404(Section, slug=section).subsections.filter(is_over=False)
+    data = ["%s | %s" % (sub.slug, sub.name) for sub in subs]
+    return HttpResponse('\n'.join(data))

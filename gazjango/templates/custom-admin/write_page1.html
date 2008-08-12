@@ -50,14 +50,30 @@
       $('#author-' + username).remove();
 
       authors = $('#authors');
-      split = authors.val().split(/\s+/);
+      split = jQuery.trim(authors.val()).split(/\s+/);
       new_authors = [];
       for (i = 0; i < split.length; i++) {
-        if (split[i] != '' && split[i] != username) {
+        if (split[i] != username) {
           new_authors.push(split[i]);
         }
       }
       authors.val(new_authors.join(' '));
+    }
+    
+    function updateSubsections() {
+      section = $('#section').val();
+      $.get("/data/subsections/" + section + '/', {}, function(data) {
+        select = $('#subsection');
+        select.empty().append("<option value=''>none</option>");
+        
+        if (data) {
+          lines = data.split("\n");
+          for (i = 0; i < lines.length; i++) {
+            arr = jQuery.map(lines[i].split("|"), jQuery.trim);
+            select.append('<option value="' + arr[0] + '">' + arr[1] + '</option>');
+          }
+        }
+      });
     }
   </script>
 
@@ -120,12 +136,12 @@
 
     <tr>
       <td>
-        <label>Section:</label>
+        <label for="section">Section:</label>
       </td>
       <td colspan="2">
-        <select class="other" name="section">
+        <select class="other" name="section" id="section" onchange="updateSubsections()">
           {% for sect in sections %}
-            <option value="{{ sect.pk }}">{{ sect.name }}</option>
+            <option value="{{ sect.slug }}">{{ sect.name }}</option>
           {% endfor %}
         </select>
       </td>
@@ -134,19 +150,14 @@
     <tr>
       <td>
         <label>Subsection:</label>
-          TODO: update based on selected section
       </td>
       <td colspan="2">
-        <select class="other" name="SubSection">
-          <option></option>
-          <option>News</option>
-          <option>Feature</option>
-          <option>Athletics</option>
-          <option>Opinions</option>
-          <option>Columns</option>
-          <option>Multimedia</option>
-          <option>Gazette Announcements</option>
+        <select class="other" name="subsection" id="subsection">
+          <option value=""></option>
         </select>
+        <script type="text/javascript" charset="utf-8">
+          $(document).ready(updateSubsections);
+        </script>
       </td>
     </tr>
 

@@ -120,6 +120,7 @@ urlpatterns += patterns('',
 urlpatterns += patterns('',
     (r'^data/authors/$', 'accounts.views.author_completions', {}, 'author-completions'),
     (r'^data/usernames/$', 'accounts.views.username_for_name', {}, 'get-or-make-username'),
+    (r'^data/subsections/%(section)s/$' % reps, 'articles.views.list_subsections', {}, 'list-subsections')
 )
 
 if settings.DEBUG:
