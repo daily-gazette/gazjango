@@ -11,3 +11,5 @@ DATABASE_PORT     = ''
 CACHE_BACKEND = 'locmem:///'
 
 ADMIN_MEDIA_PATH = '/Library/Python/2.5/site-packages/django/contrib/admin/media/'
+
+LOCAL_JQUERY = True
