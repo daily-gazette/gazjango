@@ -448,7 +448,7 @@ p a {
 	overflow: hidden;
 }
 .ac_loading {
-	background : url('/jquery/img/indicator.gif') right center no-repeat;
+	background : url('/static/images/admin/indicator.gif') right center no-repeat;
 }
 .ac_over {
 	background-color: Highlight;
