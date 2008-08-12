@@ -6,6 +6,7 @@ from django.utils.html        import conditional_escape
 from django.contrib.humanize.templatetags.humanize import ordinal
 
 from datetime import date
+import settings
 
 register = template.Library()
 
@@ -180,7 +181,6 @@ def get_addthis_button(parser, token):
 
 
 
-
 ### static file URLs: change this if/when the static serving scheme changes
 
 STATIC_FILE_KINDS = ('css', 'js', 'images', 'uploads')
@@ -216,3 +216,30 @@ def get_static_file_link(parser, token):
     if kind not in STATIC_FILE_KINDS:
         raise template.TemplatSyntaxError, "%r: invalid kind '%s'" % (tag_name, kind)
     return StaticFileURLNode(kind, path)
+
+
+
+### jquery linking tag
+
+class jQueryNode(template.Node):
+    def __init__(self):
+        if settings.LOCAL_JQUERY:
+            self.url = StaticFileURLNode('js', 'jquery-1.2.6.min.js').render(None)
+        else:
+            self.url = "http://ajax.googleapis.com/ajax/libs/jquery/%s/jquery.min.js" % version
+    
+    def render(self, context):
+        return '<script type="text/javascript" src="%s"></script>' % self.url
+    
+
+@register.tag(name='jQuery')        
+def get_jquery_link(parser, token):
+    """
+    This will output the script necessary to load the jQuery library, either
+    from Google or locally, depending on the value of settings.LOCAL_JQUERY.
+    """
+    split = token.split_contents()
+    if len(split) != 1:
+        raise template.TemplateSyntaxError, "%r tag takes no arguments." % split[0]
+    return jQueryNode()
+
