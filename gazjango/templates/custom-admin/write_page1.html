@@ -129,7 +129,7 @@
           
           $(document).ready(function() {
             $('#extra_author').autocomplete("{% url author-completions %}",
-              { formatItem:formatItem }
+              { formatItem: formatItem, onItemSelect: addAuthor }
             );
           });
         </script>
