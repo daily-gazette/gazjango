@@ -1,0 +1,25 @@
+.pollBox {
+	width: 500px;
+	border: 3px solid #aaaaaa;
+	background-color: #dddddd;
+	margin: 0 auto;
+	padding: 5px;
+}
+
+.pollBox h4 {
+	margin-top: 0px;
+	margin-bottom: 5px;
+}
+
+.pollBox.results tr {
+	margin-top: 5px;
+}
+
+td.result {
+	background-color: #eb2d16;
+	text-align: right;
+}
+
+td.blank {
+	background-color: #dddddd;
+}

@@ -1,0 +1,236 @@
+<!-- BEGIN HEADER -->
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+
+<head profile="http://gmpg.org/xfn/11">
+<title>The Daily Gazette :: Daily News for Swarthmore College</title>
+
+<meta name="generator" content="Django" />
+<link rel="stylesheet" href="../css/toolbox.css" type="text/css" media="screen, projection, print" />
+<link rel="stylesheet" href="../css/print.css" type="text/css" media="print" />
+
+
+<link rel="alternate" type="application/rss+xml" title="RSS 2.0" href="" />
+<link rel="alternate" type="text/xml" title="RSS .92" href="" />
+<link rel="alternate" type="application/atom+xml" title="Atom 0.3" href="" />
+
+<!-- ADMIN ONLY -->
+
+<link rel="stylesheet" href="../css/page/admin.css" type="text/css" media="screen, projection" />
+
+<script>
+
+function toggleLayer( whichLayer )
+{
+  var elem, vis;
+  if( document.getElementById ) // this is the way the standards work
+    elem = document.getElementById( whichLayer );
+  else if( document.all ) // this is the way old msie versions work
+      elem = document.all[whichLayer];
+  else if( document.layers ) // this is the way nn4 works
+    elem = document.layers[whichLayer];
+  vis = elem.style;
+  // if the style.display value is blank we try to figure it out here
+  if(vis.display==''&&elem.offsetWidth!=undefined&&elem.offsetHeight!=undefined)
+    vis.display = (elem.offsetWidth!=0&&elem.offsetHeight!=0)?'block':'none';
+  vis.display = (vis.display==''||vis.display=='block')?'none':'block';
+}
+
+</script>
+
+<!-- END ADMIN ONLY -->
+
+</head>
+
+
+<div id="container"> <!-- holds all -->
+
+	<!--HEADER-->
+	<div id="header">
+	
+		<div class="floatLeft"><h1><img src="images/header.png" /></h1></div>
+		
+		<div id="linkBox">
+			<a href="http://daily.swarthmore.edu">Visit Site</a> | <a href="#">Log Out</a>
+		</div>
+		
+	</div>
+	
+	<div id="subheader">
+		<center>
+		<ul>
+			<li><a href="#">Write</a></li>	
+			<li><a href="#">Manage</a></li>
+			<li><a href="#">Comments</a></li>
+		</ul>
+		</center>
+	</div>
+	<!--END HEADER-->
+	
+	<!--ARTICLE BAR-->
+	<div id="sidebar">
+			
+		<h2>Announcements</h2>
+		
+		<p>Testing! Testing this.</p>
+		<p>Miles</p>
+		
+		<h2>Coming Up</h2>
+		<h3>Yours</h3>
+		<ul>
+			<li>Story Title - Due Date <br /><span class="notes">Notes go here</span></li>
+			<li>Story Title - Due Date <br /><span class="notes">Notes go here</span></li>
+			<li>Story Title - Due Date <br /><span class="notes">Notes go here</span></li>
+		<ul>
+		<h3>Unclaimed</h3>
+		<h4><a href="#">claim a story</a></h4>
+		<ul>
+			<li>Story Title - Due Date <br /><span class="notes">Notes go here</span></li>
+			<li>Story Title - Due Date <br /><span class="notes">Notes go here</span></li>
+			<li>Story Title - Due Date <br /><span class="notes">Notes go here</span></li>
+		<ul>
+			
+		<h3>Others</h3>
+		<ul>
+			<li>Story Title - Author - Due Date <br /><span class="notes">Notes go here</span></li>
+			<li>Story Title - Author - Due Date <br /><span class="notes">Notes go here</span></li>
+			<li>Story Title - Author - Due Date <br /><span class="notes">Notes go here</span></li>
+		<ul>
+	</div>
+	<!--END ARTICLE BAR-->
+	
+	<!--MAIN COLUMN-->
+	<div id="main">
+		<span id="mainRight">
+		<span id="mainTopRight">
+			
+		<div id="centerColumn">
+		
+			<div id="manageBox" class="write">
+			
+				<table class="manageStories">
+					<tr>
+						<td width="150" class="column1 title">Title</td>
+						<td width="100" class="column2 title">Author(s)</td>
+						<td width="50" class="column1 title">Section</td>
+						<td width="100" class="column2 title">Subsection</td>
+						<td width="75" class="column1 title">Edit Date</td>
+						<td width="25" class="column2 title">Pub.?</td>
+						<td width="25" class="column1 title">Size</td>
+					</tr>
+					<tr class="column1">
+						<td width="150" class="title"><a href="#">Testing story title here! Wheeeee!</a></td>
+						<td width="100"><a href=#">Miles Skorpen</a>, <br /><a href=#">Dougal Sutherland</a></td>
+						<td width="50">Feature</td>
+						<td width="100">Ask the Gazette</td>
+						<td width="75">8/10/08 @ 4:02pm</td>
+						<td width="25"><center><strong>No</strong></center></td>
+						<td width="25"><center><strong>S</strong></center></td>
+					</tr>
+					<tr class="column2">
+						<td width="150" class="title"><a href="#">Bob Smith Answers Questions</a></td>
+						<td width="100"><a href=#">Bob Smith</a></td>
+						<td width="50">Column</td>
+						<td width="100">Dr. Bob</td>
+						<td width="75">8/02/08 @ 4:02pm</td>
+						<td width="25"><center><strong>Yes</strong></center></td>
+						<td width="25"><center><strong>M</strong></center></td>
+					</tr>
+					<tr class="column1">
+						<td width="150" class="title"><a href="#">Testing story title here! Wheeeee!</a></td>
+						<td width="100"><a href=#">Miles Skorpen</a>, <br /><a href=#">Dougal Sutherland</a></td>
+						<td width="50">Feature</td>
+						<td width="100">Ask the Gazette</td>
+						<td width="75">8/10/08 @ 4:02pm</td>
+						<td width="25"><center><strong>No</strong></center></td>
+						<td width="25"><center><strong>S</strong></center></td>
+					</tr>
+					<tr class="column2">
+						<td width="150" class="title"><a href="#">Bob Smith Answers Questions</a></td>
+						<td width="100"><a href=#">Bob Smith</a></td>
+						<td width="50">Column</td>
+						<td width="100">Dr. Bob</td>
+						<td width="75">8/02/08 @ 4:02pm</td>
+						<td width="25"><center><strong>Yes</strong></center></td>
+						<td width="25"><center><strong>M</strong></center></td>
+					</tr>
+					<tr class="column1">
+						<td width="150" class="title"><a href="#">Testing story title here! Wheeeee!</a></td>
+						<td width="100"><a href=#">Miles Skorpen</a>, <br /><a href=#">Dougal Sutherland</a></td>
+						<td width="50">Feature</td>
+						<td width="100">Ask the Gazette</td>
+						<td width="75">8/10/08 @ 4:02pm</td>
+						<td width="25"><center><strong>No</strong></center></td>
+						<td width="25"><center><strong>S</strong></center></td>
+					</tr>
+					<tr class="column2">
+						<td width="150" class="title"><a href="#">Bob Smith Answers Questions</a></td>
+						<td width="100"><a href=#">Bob Smith</a></td>
+						<td width="50">Column</td>
+						<td width="100">Dr. Bob</td>
+						<td width="75">8/02/08 @ 4:02pm</td>
+						<td width="25"><center><strong>Yes</strong></center></td>
+						<td width="25"><center><strong>M</strong></center></td>
+					</tr>
+					<tr class="column1">
+						<td width="150" class="title"><a href="#">Testing story title here! Wheeeee!</a></td>
+						<td width="100"><a href=#">Miles Skorpen</a>, <br /><a href=#">Dougal Sutherland</a></td>
+						<td width="50">Feature</td>
+						<td width="100">Ask the Gazette</td>
+						<td width="75">8/10/08 @ 4:02pm</td>
+						<td width="25"><center><strong>No</strong></center></td>
+						<td width="25"><center><strong>S</strong></center></td>
+					</tr>
+					<tr class="column2">
+						<td width="150" class="title"><a href="#">Bob Smith Answers Questions</a></td>
+						<td width="100"><a href=#">Bob Smith</a></td>
+						<td width="50">Column</td>
+						<td width="100">Dr. Bob</td>
+						<td width="75">8/02/08 @ 4:02pm</td>
+						<td width="25"><center><strong>Yes</strong></center></td>
+						<td width="25"><center><strong>M</strong></center></td>
+					</tr>
+					<tr class="column1">
+						<td width="150" class="title"><a href="#">Testing story title here! Wheeeee!</a></td>
+						<td width="100"><a href=#">Miles Skorpen</a>, <br /><a href=#">Dougal Sutherland</a></td>
+						<td width="50">Feature</td>
+						<td width="100">Ask the Gazette</td>
+						<td width="75">8/10/08 @ 4:02pm</td>
+						<td width="25"><center><strong>No</strong></center></td>
+						<td width="25"><center><strong>S</strong></center></td>
+					</tr>
+					<tr class="column2">
+						<td width="150" class="title"><a href="#">Bob Smith Answers Questions</a></td>
+						<td width="100"><a href=#">Bob Smith</a></td>
+						<td width="50">Column</td>
+						<td width="100">Dr. Bob</td>
+						<td width="75">8/02/08 @ 4:02pm</td>
+						<td width="25"><center><strong>Yes</strong></center></td>
+						<td width="25"><center><strong>M</strong></center></td>
+					</tr>
+				</table>
+				
+				<input type="submit" name="upload" id="header-upload" value="See More" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<label>Select Week:</label> <select class="other" name="size">
+							  	<option></option>
+							  	<option>Fall, 2008
+								<option>&nbsp;&nbsp;8/11-8/18</option>
+								<option>&nbsp;&nbsp;8/03-8/10</option>
+							 </select> <br />
+				<label class="bottom">Search:</label> <input type="text" size="42" name="image 1" class="text" value="" id="q10" /><input type="submit" name="upload" id="header-upload" value="Go" />
+				
+			</div>
+					
+		
+		</div>
+		
+		</span>
+		</span>
+	
+	</div>
+	<!--END MAIN COLUMN-->
+	
+	
+</div>
+
+<!-- END FOOTER -->

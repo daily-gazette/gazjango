@@ -1,0 +1,28 @@
+.storyListing {
+	display: inline-block;
+}
+
+.title {
+	font-weight: bold;
+}
+
+.link a,.link a:visited:before {
+	text-decoration: none;
+}
+
+.link a:hover {
+	text-decoration: underline;
+}
+
+.readMore {
+	font-variant: small-caps;
+	font-size: .9em;
+}
+
+.searchImage {
+	float: left;
+	padding: 0px;
+	margin: 4px;
+	display: block;
+	border: 3px solid #bbbbbb;
+}

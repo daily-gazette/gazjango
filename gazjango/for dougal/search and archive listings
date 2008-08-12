@@ -1,0 +1,15 @@
+				
+				<link rel="stylesheet" href="css/function/tables.css" type="text/css" media="screen, projection" />
+
+
+				<div class="storyListing">
+					<img src="file:///Users/arador/Files/School%20Related/2%20Clubs/Gazette/Website%20Work%202008/gazette-new/files/images/2008/05/thumbnails/al-bloom.png" class="searchImage" />
+					<p><a href="{{ story.get_absolute_url }}" class="title">{{ story.headline|safe }}</a><br />
+					<span class="byline">
+						<span class="author">by {{ story.authors|join_authors:"l" }}</span>
+						<span class="date">|
+							<a href="{{ story.pub_date|issue_url }}">{{ story.pub_date|date:"F j, Y" }}</a>
+						</span>
+					</span><br />
+					{{ story.summary|safe }} <a href="{{ story.get_absolute_url }}" class="readMore">read more</a></p>
+				</div>
