@@ -69,10 +69,11 @@ def join_authors(authors, format='', autoescape=None):
         casify = lambda s: ' '.join(x.capitalize() for x in esc(s).split())
     
     def reps(author):
+        pos = author.position()
         return {
             'url': author.get_absolute_url(),
             'name': casify(author.name),
-            'pos': casify(author.position().name) 
+            'pos': casify(pos or "Guest Writer") 
         }
     
     base = "%(name)s"
