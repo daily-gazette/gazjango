@@ -1,10 +1,10 @@
 import datetime
 
 from django.contrib.auth.decorators import permission_required
-from django.template                import RequestContext
-from django.shortcuts               import render_to_response, get_object_or_404
-from django.http                    import Http404, HttpResponse, HttpResponseRedirect
-from misc.view_helpers              import get_by_date_or_404, filter_by_date
+from django.template   import RequestContext
+from django.shortcuts  import render_to_response, get_object_or_404
+from django.http       import Http404, HttpResponse, HttpResponseRedirect
+from misc.view_helpers import get_by_date_or_404, filter_by_date, reporter_admin_data
 
 from articles.models      import Article, Section, Subsection, Special, PhotoSpread
 from articles.models      import StoryConcept
@@ -154,18 +154,10 @@ def section(request, section, year=None, month=None, day=None, template="section
 
 @permission_required('accounts.can_access_admin')
 def admin_write_page1(request, template="custom-admin/write_page1.html"):
-    user = request.user.get_profile()
-    announcements = Announcement.admin.order_by('-time')
-    
-    data = {
-        'announcement': announcements[0] if announcements.count() else None,
-        'unclaimed': StoryConcept.unpublished.filter(users=None),
-        'others': StoryConcept.unpublished.exclude(users=user),
-        
-        'sections': Section.objects.all(),
-        'taggroups': TagGroup.objects.all(),
-        'loosetags': Tag.objects.filter(group=None)
-    }
+    data = reporter_admin_data(request.user.get_profile())
+    data['sections' ] = Section.objects.all()
+    data['taggroups'] = TagGroup.objects.all()
+    data['loosetags'] = Tag.objects.filter(group=None)
     
     rc = RequestContext(request)
     return render_to_response(template, data, context_instance=rc)

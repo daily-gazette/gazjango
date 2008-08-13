@@ -3,12 +3,12 @@ from django.template import RequestContext
 from django.contrib.auth.decorators import permission_required
 from django.shortcuts import render_to_response
 from django.db.models import Q
+from misc.view_helpers import reporter_admin_data
 
 from django.contrib.auth.models import User
-from accounts.models      import UserProfile
-from announcements.models import Announcement
-from articles.models      import StoryConcept, ArticleRevision
-from comments.models      import PublicComment
+from accounts.models import UserProfile
+from articles.models import ArticleRevision
+from comments.models import PublicComment
 
 manage       = lambda request, **kwargs: render_to_response("base.html", locals())
 register     = lambda request, **kwargs: render_to_response("registration/register.html", locals())
@@ -18,17 +18,13 @@ user_details = lambda request, **kwargs: render_to_response("base.html", locals(
 def admin_index(request, template="custom-admin/index.html"):
     user = request.user.get_profile()
     articles = user.articles.all().order_by('-pub_date')
-    announcements = Announcement.admin.order_by('-date_start')
+    data = reporter_admin_data(request.user.get_profile())
     
-    data = {
-        'announcement': announcements[0] if announcements.count() else None,
-        'unclaimed': StoryConcept.unpublished.filter(users=None),
-        'others': StoryConcept.unpublished.exclude(users=user),
-        
-        'articles': articles,
-        'revisions': ArticleRevision.objects.filter(article__in=articles).order_by('-date'),
-        'comments': PublicComment.visible.filter(article__in=articles).order_by('-time')
-    }
+    data['articles'] = articles
+    data['revisions'] = ArticleRevision.objects.filter(article__in=articles) \
+                        .order_by('-date')
+    data['comments'] = PublicComment.visible.filter(article__in=articles) \
+                        .order_by('-time')
     
     rc = RequestContext(request)
     return render_to_response(template, context_instance=rc)
