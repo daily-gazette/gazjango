@@ -36,3 +36,10 @@ def flatten(l, ltypes=(list, tuple)):
 
 def get_static_path(kind, name):
     return "/static/%s/%s" % (kind, name)
+
+def get_jquery_path():
+    if settings.LOCAL_JQUERY:
+        return get_static_path('js', 'jquery-1.2.6-min.js')
+    else:
+        return "http://ajax.googleapis.com/ajax/libs/jquery/1.2/jquery.min.js"
+

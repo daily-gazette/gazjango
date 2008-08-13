@@ -4,10 +4,9 @@ from django.utils.safestring  import mark_safe
 from django.utils.html        import conditional_escape
 
 from django.contrib.humanize.templatetags.humanize import ordinal
-from misc.helpers import get_static_path
+from misc.helpers import get_static_path, get_jquery_path
 
 from datetime import date
-import settings
 
 register = template.Library()
 
@@ -225,10 +224,7 @@ def get_static_file_link(parser, token):
 
 class jQueryNode(template.Node):
     def __init__(self):
-        if settings.LOCAL_JQUERY:
-            self.url = StaticFileURLNode('js', 'jquery-1.2.6.min.js').render(None)
-        else:
-            self.url = "http://ajax.googleapis.com/ajax/libs/jquery/%s/jquery.min.js" % version
+        self.url = get_jquery_path()
     
     def render(self, context):
         return '<script type="text/javascript" src="%s"></script>' % self.url
