@@ -8,7 +8,6 @@ import datetime
 import scrapers.sharples
 import scrapers.weather
 from scrapers.events import scrape_events_feed
-from misc.helpers    import datetime_from_date_and_time
 
 class EventManager(models.Manager):
     def for_date(self, date, forward=datetime.timedelta(days=0)):
@@ -59,10 +58,10 @@ class Event(models.Model):
     objects = EventManager()
     
     def start(self):
-        return datetime_from_date_and_time(date=self.start_day, time=self.start_time)
+        return datetime.datetime.combine(self.start_day, self.start_time)
     
     def end(self):
-        return datetime_from_date_and_time(date=self.end_day, time=self.end_time)
+        return datetime.datetime.combine(self.end_day, self.end_time)
     
     def __unicode__(self):
         return "%s (%s - %s)" % (self.name, self.start(), self.end())
