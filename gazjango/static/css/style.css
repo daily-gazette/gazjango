@@ -6,7 +6,7 @@
    * Copyright (c) 2007-2008.
    * By Miles Skorpen, Class of 2009
    
-   * LAST UPDATED: 5/18/2008
+   * LAST UPDATED: 8/12/2008
    
 ----------------------------------------------------------------------- */
 
@@ -524,12 +524,12 @@ p {
 
 #indexBottom {
 	margin-left: 25px;
-	margin-right: 25px;
+	width: 900px;
 	float: left;
 	display: inline;
-	overflow:hidden;
 	padding-bottom: 15px;
 	padding-top: 15px;
+	
 }
 
 .indexBottomColumn {
@@ -557,9 +557,7 @@ p {
 			
 -----------------------------------------------------------------------*/
 
-#story a:visited:before {
-   content:  "\2713 ";
-}
+
 
 /*---------------------------------------------------------------------
 

@@ -104,6 +104,11 @@ RIGHT MENU STYLES
 	font-size: 1.3em;	
 }
 
+#commentBox ul ul {
+	font-size: 1em;
+	list-style-type: square;
+}
+
 /**************************************
 
 STORY INCLUDES

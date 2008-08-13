@@ -1,0 +1,65 @@
+#jobInfo {
+	border: 2px solid #cccccc;
+	background-color: #eeeeee;
+	padding: 5px;
+	width: 300px;
+}
+
+#jobInfoList {
+	border: 2px solid #cccccc;
+	background-color: #eeeeee;
+	padding: 5px;
+	width: 300px;
+	float: left;
+	margin-right: 5px;
+}
+
+#jobInfo p {
+	margin: 0px;
+	padding: 0px;
+}
+
+#jobColumn {
+	width: 650px;
+	float: left;
+	display: inline-block;
+}
+
+
+.description {
+	width: 200px;
+	margin-right: 10px;
+	display: inline-block;
+	float: left;
+}
+
+.left {
+	float: left;
+}
+
+.right {
+	float: right;
+}
+
+h4 {
+	display: block;
+	float: left;
+}
+
+.jobs {
+	width: 100%;
+	display: inline-block;
+	float: left;
+	margin-top: 10px;
+}
+
+.block {
+	display: block;
+	float: left;
+	border-top: 2px double #EEEEEE;
+	margin: 5px;
+}
+
+h4 {
+	margin-top: 5px;
+}

@@ -2,10 +2,15 @@ body {
 	background-color: #CCCCCC;
 }
 
+/*-----
+
+Login CSS
+
+-----*/
 
 #login {
 	margin: 0 auto;
-	background: url(../../images/registration/background.png) no-repeat;
+	background: url(../../images/registration/background-login.png) no-repeat;
 	width: 350px;
 	height: 350px;
 }
@@ -26,6 +31,43 @@ body {
 }
 
 #login #content .register {
+	font-size: .8em;
+	padding-top: 60px;
+}
+
+#login #content a {
+	color: #fff;
+}
+
+/*-----
+
+Register CSS
+
+-----*/
+
+#register {
+	margin: 0 auto;
+	background: url(../../images/registration/background-register.png) no-repeat;
+	width: 400px;
+	height: 600px;
+}
+
+#register #content {
+	padding:  100px 50px 75px 50px;
+	color: #fff;
+	font-family: "Lucida Grande", Lucida, Verdana, sans-serif;
+}
+
+#register #content .form {
+	font-size: 1em;
+}
+
+#register #content .submit {
+	float: right;
+	display: inline-block;
+}
+
+#register #content .register {
 	font-size: .8em;
 	padding-top: 60px;
 }

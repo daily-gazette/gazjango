@@ -1,28 +1,22 @@
 {% extends "base.html" %}
 {% load extras %}
 
-{% block title %}{{ flatpage.title }}{% endblock title %}
+{% block title %}Announcements{% endblock title %}
+
 
 {% block customheader %}
-  <link rel="stylesheet" href="/css/page/story.css" type="text/css" media="screen, projection" />
+
+<link rel="stylesheet" href="{% static css page/story.css %}" type="text/css" media="screen, projection" />
+<link rel="stylesheet" href="{% static css page/job.css %}" type="text/css" media="screen, projection" />
+
+{% jQuery %}
+
 {% endblock customheader %}
 
 
 {% block topbar %}
   <div id="headerSectionBar">
-    <div id="headerSection">
-      <h3>
-        <a href="{{ flatpage.parent.get_absolute_url }}">{{ flatpage.grandparent.name }}</a>
-        {% if page.parent.count %}
-          >>
-          {% for parent in page.parent.all %}
-            <a href="{{ parent.get_absolute_url }}">{{ parent.name }}</a>{% if not forloop.last %},{% endif %}
-          {% endfor %}
-        {% endif %}
-      </h3>
-    </div>
-
-    <div id="headerSearch" class="floatRight">
+    <div id="headerSearch">
       <form method="get" id="searchform" action="{% url search %}">
         Search:
         <input type="text" class="textbox" value="" name="s" id="s" />
@@ -34,23 +28,40 @@
 
 
 {% block content %}
-  <div id="storyBox">
-    <div id="story">
-      <h2>{{ flatpage.headline|safe }}</h2>
-        <p>Last revised {{ flatpage.pub_date|date:"F j, Y" }}</p>
-
-      	{{ flatpage.resolved_text|safe }}
+  <div id="commentColumn">
+    <div id="commentBox">
+      {% include "announcements/sidebar.html" %}
     </div>
   </div>
+
+  <div id="storyBox">
+    <div id="story">
+      <h2>Job Listings</h2>
+      		{% for announcement in announcements %}
+      		<div class="block">
+				  <h4><a href="{{ announcement.get_absolute_url }}">{{ announcement.title }}</a></h4> <br /><br />
+						<div id="jobInfoList">
+			<p><strong>Sponsor:</strong> {% if announcement.sponsor_url.verify_exists %}<a href="{{ announcement.sponsor_url }}">{% endif %}{{ announcement.sponsor }}{% if announcement.sponsor_url.verify_exists %}</a>{% endif %}</p>
+			{% if announcement.is_event %}<p><strong>When:</strong> {{ announcement.event_date|near_future_date }} at {{ announcement.event_time }}</p>
+            <p><strong>Where:</strong> {{ announcement.event_place }}</p>{% endif %}
+		</div>
+<p>{{ announcement.text }}</p>				  
+				  {% if not forloop.last %}
+				  {% endif %}
+				  </div>
+				{% endfor %}
+				
+
+				<p>&nbsp;</p>
+				 
+    </div>
 
     <div id="shareBox">
       <div class="right">
         <strong>Share:</strong> {% add_this hover %}
       </div>
       <p>
-        <a href="{% url print story %}"><img src="{% static images icons/print.png %}" /> Print</a>
-        &nbsp;&nbsp;
-        <a href="{% url email story %}"><img src="{% static images icons/email.png %}" /> Email</a>
+        <a href="/jobs/">Jobs Listing</a>
       </p>
     </div>
 
@@ -90,4 +101,5 @@
 
 
   </div>
+
 {% endblock content %}

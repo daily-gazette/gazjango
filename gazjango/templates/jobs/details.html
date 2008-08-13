@@ -1,10 +1,16 @@
 {% extends "base.html" %}
 {% load extras %}
 
-{% block title %}{{ flatpage.title }}{% endblock title %}
+{% block title %}{{ job.name|removetags:"em strong b i" }}{% endblock title %}
+
 
 {% block customheader %}
-  <link rel="stylesheet" href="/css/page/story.css" type="text/css" media="screen, projection" />
+
+<link rel="stylesheet" href="{% static css page/story.css %}" type="text/css" media="screen, projection" />
+<link rel="stylesheet" href="{% static css page/job.css %}" type="text/css" media="screen, projection" />
+
+{% jQuery %}
+
 {% endblock customheader %}
 
 
@@ -12,13 +18,7 @@
   <div id="headerSectionBar">
     <div id="headerSection">
       <h3>
-        <a href="{{ flatpage.parent.get_absolute_url }}">{{ flatpage.grandparent.name }}</a>
-        {% if page.parent.count %}
-          >>
-          {% for parent in page.parent.all %}
-            <a href="{{ parent.get_absolute_url }}">{{ parent.name }}</a>{% if not forloop.last %},{% endif %}
-          {% endfor %}
-        {% endif %}
+        <a href="/jobs/">Jobs Listing</a>
       </h3>
     </div>
 
@@ -34,23 +34,41 @@
 
 
 {% block content %}
-  <div id="storyBox">
-    <div id="story">
-      <h2>{{ flatpage.headline|safe }}</h2>
-        <p>Last revised {{ flatpage.pub_date|date:"F j, Y" }}</p>
-
-      	{{ flatpage.resolved_text|safe }}
+  <div id="commentColumn">
+    <div id="commentBox">
+      {% include "jobs/sidebar.html" %}
     </div>
   </div>
+
+  <div id="storyBox">
+    <div id="story">
+      <h2>{{ job.name|safe }}</h2>
+      	{% if job.is_filled %}<h3>This position has been filled.</h3>{% endif %}
+        <p>Submitted:  {{ job.pub_date|date:"F j, Y" }}</p>
+		
+		<p>{{ job.description }}</p>
+		
+		<div id="jobInfo">
+			<p><strong>Pay:</strong>
+				{% if job.is_paid %}
+					{{ job.pay }}
+				{% else %}
+					None
+				{% endif %}</p>
+			<p><strong>Hours:</strong> {{ job.hours }}</p>
+			<p><strong>When:</strong> {{ job.when }}</p>
+			<p><strong>Where:</strong> {{ job.where }}</p>
+			{% if job.needs_car %}<p>This position requires access to a car{% endif %}
+		</div>
+				 
+    </div>
 
     <div id="shareBox">
       <div class="right">
         <strong>Share:</strong> {% add_this hover %}
       </div>
       <p>
-        <a href="{% url print story %}"><img src="{% static images icons/print.png %}" /> Print</a>
-        &nbsp;&nbsp;
-        <a href="{% url email story %}"><img src="{% static images icons/email.png %}" /> Email</a>
+        <a href="/jobs/">Jobs Listing</a>
       </p>
     </div>
 
@@ -90,4 +108,5 @@
 
 
   </div>
+
 {% endblock content %}

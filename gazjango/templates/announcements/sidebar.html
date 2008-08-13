@@ -1,0 +1,17 @@
+{% load extras %}
+
+{# TODO: customize story_sidebar depending on the user #}
+
+<h4>Recent Announcements</h4>
+<br /><br />
+<ul>
+	{% for announcement in announcements %}
+		<li><a href="{{ announcement.get_absolute_url }}">{{ announcement.title }}</a></li>
+	{% endfor %}
+</ul>
+<br />
+<br />
+
+<hr width="50%" color="#ffffff" size="1px" />
+
+<h4>Share</h4>: {% add_this no-hover %}

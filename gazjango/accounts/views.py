@@ -11,7 +11,7 @@ from articles.models      import StoryConcept, ArticleRevision
 from comments.models      import PublicComment
 
 manage       = lambda request, **kwargs: render_to_response("base.html", locals())
-register     = lambda request, **kwargs: render_to_response("base.html", locals())
+register     = lambda request, **kwargs: render_to_response("registration/register.html", locals())
 user_details = lambda request, **kwargs: render_to_response("base.html", locals())
 
 @permission_required('accounts.can_access_admin')
