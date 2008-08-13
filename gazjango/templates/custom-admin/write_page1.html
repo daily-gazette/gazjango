@@ -8,6 +8,7 @@
   {% jQuery %}
 
   <script type="text/javascript" src="{% static js jquery.autocomplete.js %}"></script>
+  <script type="text/javascript" src="{% static js jquery.selso.js %}"></script>
 
   <script type="text/javascript" charset="utf-8">
     function toggleLayer(id) {
@@ -77,6 +78,39 @@
         }
       });
     }
+    
+    {# TODO: instead of adding then sorting, just add in the right position #}
+    
+    function addTags() {
+      $('#tags option:selected')
+        .attr("parent", function() {
+          return $(this).parent('optgroup').attr('id');
+        })
+        .remove()
+        .appendTo('#selected')
+        .removeAttr("selected");
+      
+      $('#selected option').selso({type: 'alpha', extract: function(obj) {
+        return $(obj).val();
+      }});
+    }
+    
+    function removeTags() {
+      $('#selected option:selected')
+        .remove()
+        .each(function() {
+          $(this).appendTo( $('#' + $(this).attr('parent')) ); 
+        })
+        .removeAttr("selected");
+      
+      $('#tags option').selso({type: 'alpha', extract: function(obj) {
+        return $(obj).val();
+      }});
+    }
+    
+    function selectAllChosenTags() {
+      $('#selected option').attr('selected', 'selected');
+    }
   </script>
 
 {% endblock customheader %}
@@ -90,7 +124,7 @@
       <td width="75">
         <label for="title">Title:</label>
       </td>
-      <td width="375" colspan="2">
+      <td width="375" colspan="3">
         <input type="text" size="50" maxlength="200" name="title" id="title" />
       </td>
     </tr>
@@ -177,33 +211,33 @@
     </tr>
 
     <tr>
-      <td width="75" valign=top>
-        <label>Add Tags</label>
+      <td width="75" valign="top">
+        <label>Tags</label>
       </td>
-      <td width="199">
-        <select name="tags" size="10" multiple>
+      <td width="199" valign="bottom">
+        <select name="tags" id="tags" size="10" multiple="multiple">
           {% for group in taggroups %}
-            <optgroup label="{{ group.name }}">
+            <optgroup label="{{ group.name }}" id="taggroup-{{ group.pk }}">
               {% for tag in group.active_tags %}
-                <option value="{{ tag.pk }}">{{ tag.long_name|default:tag.name }}</option>
+                <option value="{{ tag.name }}" id="tag-{{ tag.pk }}">{{ tag.long_name|default:tag.name }}</option>
               {% endfor %}
             </optgroup>
           {% endfor %}
           
           {% if loosetags %}
-            <optgroup label="Other">
+            <optgroup label="Other" id="taggroup-other">
               {% for tag in loosetags %}
-                <option value="{{ tag.pk }}">{{ tag.long_name|default:tag.name }}</option>
+                <option value="{{ tag.name }}" id="tag-{{ tag.pk }}">{{ tag.long_name|default:tag.name }}</option>
               {% endfor %}
             </optgroup>
           {% endif %}
         </select>
       </td>
 
-      <td width="199">
-        <select name="selected-tags" size="10" multiple>
-          <optgroup label="Selected Tags">
-            <option value="Martin Warner">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
+      <td width="199" valign="bottom">
+        <select name="selected-tags" size="10" multiple="multiple">
+          <optgroup id="selected" label="Selected Tags&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;">
+            
           </optgroup>
         </select>
       </td>
@@ -211,7 +245,7 @@
     <tr>
       <td>&nbsp;</td>
       <td colspan="2">
-        <label>Click to add or remove a tag</label>
+        <label>Click to <a href="#" onclick="addTags(); return false;">add</a> or <a href="#" onclick="removeTags(); return false;">remove</a> selected tags.</label>
       </td>
     </tr>
   </table>
