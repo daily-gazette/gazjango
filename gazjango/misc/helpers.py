@@ -32,3 +32,7 @@ def flatten(l, ltypes=(list, tuple)):
                 l[i:i+1] = list(l[i])
         i += 1
     return l
+
+
+def get_static_path(kind, name):
+    return "/static/%s/%s" % (kind, name)

@@ -4,6 +4,7 @@ from django.utils.safestring  import mark_safe
 from django.utils.html        import conditional_escape
 
 from django.contrib.humanize.templatetags.humanize import ordinal
+from misc.helpers import get_static_path
 
 from datetime import date
 import settings
@@ -192,7 +193,7 @@ class StaticFileURLNode(template.Node):
         self.name = name
     
     def render(self, context):
-        return '/static/%s/%s' % (self.kind, self.name)
+        return get_static_path(self.kind, self.name)
     
 
 @register.tag(name="static")
