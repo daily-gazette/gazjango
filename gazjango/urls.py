@@ -115,6 +115,8 @@ urlpatterns += patterns('',
     (r'^reporter-admin/$', 'accounts.views.admin_index', {}, 'reporter-admin'),
     (r'^reporter-admin/write/$', 'articles.views.admin_write_page1', {}, 'write'),
     (r'^reporter-admin/write/1/$', 'articles.views.admin_write_page1'),
+    
+    (r'^reporter-admin/comments/$', 'comments.views.manage', {}, 'manage-comments'),
 )
 
 urlpatterns += patterns('',

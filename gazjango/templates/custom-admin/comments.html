@@ -1,150 +1,44 @@
-<!-- BEGIN HEADER -->
+{% extends "custom-admin/base.html" %}
+{% load extras %}
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+{% block title %}Comments Management{% endblock %}
 
-<head profile="http://gmpg.org/xfn/11">
-<title>The Daily Gazette :: Daily News for Swarthmore College</title>
+{% block content %}		
+  <div id="manageBox" class="write">			
+  	<table class="manageStories">
+  	  <tr>
+  			<th width="125" class="column1 title">Story</th>
+				<th width="100" class="column2 title">Commenter</th>
+				<th width="50" class="column1 title">Date</th>
+				<th width="250" class="column2 title">Comment</th>
+			</tr>
+  	  
+  	  {% for comment in comments %}
+        <tr>
+          <td class="title"><a href="{{ comment.get_absolute_url }}">{{ comment.subject.get_title }}</a></td>
+          <td>{{ comment.linked_name|safe }}, {{ comment.status }}</td>
+          <td>{{ comment.time|date:"n/j/y, g:i A" }}</td>
+          <td>{{ comment.text }}</td>
+        </tr>
+  	  {% endfor %}
+  		
+			<tr class="column1">
+				<td width="150" class="title"><a href="#">Al Bloom Resigns</a></td>
+				<td width="100"><a href="#">Miles Skorpen</a>, Staff</td>
+  			<td width="50">8/10/08 @ 6:42</td>
+				<td width="250">Whatever the text of the comment is. Maybe cut off after like ... 100-150 characters?</td>
+			</tr>
+			<tr class="column2">
+				<td width="150" class="title"><a href="#">Al Bloom Resigns</a></td>
+				<td width="100"><a href="#">Miles Skorpen</a>, Staff</td>
+				<td width="50">8/10/08 @ 6:42</td>
+				<td width="250">Whatever the text of the comment is. Maybe cut off after like ... 100-150 characters?</td>
+			</tr>
+		</table>
 
-<meta name="generator" content="Django" />
-<link rel="stylesheet" href="../css/toolbox.css" type="text/css" media="screen, projection, print" />
-<link rel="stylesheet" href="../css/print.css" type="text/css" media="print" />
-
-
-<link rel="alternate" type="application/rss+xml" title="RSS 2.0" href="" />
-<link rel="alternate" type="text/xml" title="RSS .92" href="" />
-<link rel="alternate" type="application/atom+xml" title="Atom 0.3" href="" />
-
-<!-- ADMIN ONLY -->
-
-<link rel="stylesheet" href="../css/page/admin.css" type="text/css" media="screen, projection" />
-
-<script>
-
-function toggleLayer( whichLayer )
-{
-  var elem, vis;
-  if( document.getElementById ) // this is the way the standards work
-    elem = document.getElementById( whichLayer );
-  else if( document.all ) // this is the way old msie versions work
-      elem = document.all[whichLayer];
-  else if( document.layers ) // this is the way nn4 works
-    elem = document.layers[whichLayer];
-  vis = elem.style;
-  // if the style.display value is blank we try to figure it out here
-  if(vis.display==''&&elem.offsetWidth!=undefined&&elem.offsetHeight!=undefined)
-    vis.display = (elem.offsetWidth!=0&&elem.offsetHeight!=0)?'block':'none';
-  vis.display = (vis.display==''||vis.display=='block')?'none':'block';
-}
-
-</script>
-
-<!-- END ADMIN ONLY -->
-
-</head>
-
-
-<div id="container"> <!-- holds all -->
-
-	<!--HEADER-->
-	<div id="header">
-	
-		<div class="floatLeft"><h1><img src="images/header.png" /></h1></div>
-		
-		<div id="linkBox">
-			<a href="http://daily.swarthmore.edu">Visit Site</a> | <a href="#">Log Out</a>
-		</div>
-		
-	</div>
-	
-	<div id="subheader">
-		<center>
-		<ul>
-			<li><a href="#">Write</a></li>	
-			<li><a href="#">Manage</a></li>
-			<li><a href="#">Comments</a></li>
-		</ul>
-		</center>
-	</div>
-	<!--END HEADER-->
-	
-	<!--ARTICLE BAR-->
-	<div id="sidebar">
-			
-		<h2>Announcements</h2>
-		
-		<p>Testing! Testing this.</p>
-		<p>Miles</p>
-		
-		<h2>Coming Up</h2>
-		<h3>Yours</h3>
-		<ul>
-			<li>Story Title - Due Date <br /><span class="notes">Notes go here</span></li>
-			<li>Story Title - Due Date <br /><span class="notes">Notes go here</span></li>
-			<li>Story Title - Due Date <br /><span class="notes">Notes go here</span></li>
-		<ul>
-		<h3>Unclaimed</h3>
-		<h4><a href="#">claim a story</a></h4>
-		<ul>
-			<li>Story Title - Due Date <br /><span class="notes">Notes go here</span></li>
-			<li>Story Title - Due Date <br /><span class="notes">Notes go here</span></li>
-			<li>Story Title - Due Date <br /><span class="notes">Notes go here</span></li>
-		<ul>
-			
-		<h3>Others</h3>
-		<ul>
-			<li>Story Title - Author - Due Date <br /><span class="notes">Notes go here</span></li>
-			<li>Story Title - Author - Due Date <br /><span class="notes">Notes go here</span></li>
-			<li>Story Title - Author - Due Date <br /><span class="notes">Notes go here</span></li>
-		<ul>
-	</div>
-	<!--END ARTICLE BAR-->
-	
-	<!--MAIN COLUMN-->
-	<div id="main">
-		<span id="mainRight">
-		<span id="mainTopRight">
-			
-		<div id="centerColumn">
-		
-			<div id="manageBox" class="write">
-			
-				<table class="manageStories">
-					<tr>
-						<td width="150" class="column1 title">Story</td>
-						<td width="100" class="column2 title">Commenter</td>
-						<td width="50" class="column1 title">Date</td>
-						<td width="250" class="column2 title">Comment</td>
-					</tr>
-					<tr class="column1">
-						<td width="150" class="title"><a href="#">Al Bloom Resigns</a></td>
-						<td width="100"><a href=#">Miles Skorpen</a>, Staff</td>
-						<td width="50">8/10/08 @ 6:42</td>
-						<td width="250">Whatever the text of the comment is. Maybe cut off after like ... 100-150 characters?</td>
-					</tr>
-					<tr class="column2">
-						<td width="150" class="title"><a href="#">Al Bloom Resigns</a></td>
-						<td width="100"><a href=#">Miles Skorpen</a>, Staff</td>
-						<td width="50">8/10/08 @ 6:42</td>
-						<td width="250">Whatever the text of the comment is. Maybe cut off after like ... 100-150 characters?</td>
-					</tr>
-				</table>
-				<label>More Comments: </label> <a href="#">1</a> | <a href="#">2</a> | <a href="#">3</a> | <a href="#">4</a> | <a href="#">5</a> | <a href="#">6</a> | <a href="#">7</a><br />
+		<label>More Comments: </label> <a href="#">1</a> | <a href="#">2</a> | <a href="#">3</a> | <a href="#">4</a> | <a href="#">5</a> | <a href="#">6</a> | <a href="#">7</a><br />
 				
-				<label class="bottom">Search:</label> <input type="text" size="42" name="image 1" class="text" value="" id="q10" /><input type="submit" name="upload" id="header-upload" value="Go" />
+		<label class="bottom">Search:</label> <input type="text" size="42" name="image 1" class="text" value="" id="q10" /><input type="submit" name="upload" id="header-upload" value="Go" />
 				
-			</div>
-					
-		
-		</div>
-		
-		</span>
-		</span>
-	
-	</div>
-	<!--END MAIN COLUMN-->
-	
-	
-</div>
-
-<!-- END FOOTER -->
+  </div>
+{% endblock content %}
