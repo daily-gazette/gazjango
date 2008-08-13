@@ -115,7 +115,10 @@ class UserProfile(models.Model):
     
     def position_at(self, date):
         """Returns the highest-ranked of this user's Positions at date."""
-        return self.positions_at(date).order_by("-rank")[0]
+        try:
+            return self.positions_at(date).order_by("-rank")[0]
+        except IndexError:
+            return None
     
     def position(self):
         """Returns the highest-ranked of the user's Positions as of now."""
