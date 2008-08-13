@@ -24,7 +24,7 @@ class MediaBucket(models.Model):
 
 class MediaFile(models.Model):
     """
-    The abstract base for media files; associated with a MediaBucket, as well
+    The base for media files; associated with a MediaBucket, as well
     as the articles in which it is used.
     
     Include authorship and licensing details, if relevant, in the ``license``
