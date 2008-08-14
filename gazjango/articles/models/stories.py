@@ -10,7 +10,7 @@ from django.contrib.contenttypes import generic
 from accounts.models            import UserProfile
 from comments.models            import PublicComment
 from media.models               import MediaFile, ImageFile, MediaBucket
-from articles.exceptions        import RelationshipMismatch
+from misc.exceptions            import RelationshipMismatch
 import articles.formats as formats
 
 
