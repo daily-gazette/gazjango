@@ -77,7 +77,7 @@ class ArticleTestCase(unittest.TestCase):
         self.assertEquals(len(self.boring_article.authors.all()), 0)
     
     def test_article_creation(self):
-        self.bob.get_profile().articles.add(self.boring_article)
+        self.boring_article.add_author(self.bob_profile)
         self.assert_(self.boring_article in self.bob_profile.articles.all())
         self.assert_(self.bob_profile in self.boring_article.authors.all())
         self.assertTrue(self.boring_article.allow_edit(self.bob))
