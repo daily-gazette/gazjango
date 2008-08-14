@@ -355,6 +355,7 @@ p {
 
 label {
 	font: 1.2em "Lucida Grande", Lucida, Verdana, sans-serif;
+	color: white;
 }
 
 
@@ -362,17 +363,21 @@ table {
 	margin-bottom: 10px;
 }
 
-#buttonBox table {
+table {
 	color: #fff;
 }
 
-#buttonBox.write p {
+.write p {
 	color: #fff;
 }
 
 p a {
 	font-size: 1.4em;
 	color: #94f3fd;	
+}
+
+td p, td p a {
+    font-size: 1.2em;
 }
 
 #addImage, #addSlideshow, #addVideo, #addAudio, #addDoc, #addFlash {
@@ -385,13 +390,31 @@ p a {
 	margin-bottom: 25px;
 	margin-top: 10px;
 	text-transform: uppercase;
-	font-size: 2em;
+	font-size: 1.8em;
+}
+
+.revert {
+    color: #837b5c;
+    float: left;
+    margin-bottom: 25px;
+    margin-top: 10px;
+    text-transform: uppercase;
+    font-size: 1.8em;
+    font-style: italic;
 }
 
 .continue a {
 	color: #ffebb2;
 }
 
+.revert a {
+    color: #dfd29b;
+}
+
+.bottom {
+    display: inline-block;
+    margin-bottom: 25px;
+}
 
 
 #authorsText a {
@@ -405,3 +428,45 @@ p a {
     margin-left: 3px;
 }
 
+
+/*---------------------------------------------------------------------
+        Manage Elements
+---------------------------------------------------------------------*/
+
+.manageStories {
+    font-size: 1.2em;
+}
+
+.manageStories a {
+    color: #ffebb2;
+}
+
+tr.column1 {
+    background-color: #a3572d;
+    padding: 1px;
+}
+
+tr.column2 {
+    background-color: #c56a36;
+    padding: 1px;
+}
+
+td.column1.title, td.column2.title {
+    background-color: #61341a;
+    padding: 1px;
+    font-variant: small-caps;
+    font-weight: bold;
+}
+
+tr.column1:hover, tr.column2:hover {
+    background-color: #a3572d;
+}
+
+#manageBox {
+    background: #b86234 url(/static/images/admin/body_bg_column_top.png) repeat-x top;
+    width: 530px;
+    padding: 10px;
+    padding-bottom: 0px;
+    float: left;
+    margin-bottom: 25px;
+}
