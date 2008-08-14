@@ -130,15 +130,15 @@ class ForeignKeyField(forms.ChoiceField):
 
 # multiple inheritance is confusing, so we're going to avoid it
 class MultipleForeignKeyField(forms.MultipleChoiceField):
-    def __init__(self, model, show_field, group=None, group_show_field=None,
+    def __init__(self, model, display_field, group=None, group_label_field=None,
                  *args, **kwargs):
         self.model = model
-        if isinstance(show_field, (tuple, list)):
-            self.show_fields = show_field
+        if isinstance(display_field, (tuple, list)):
+            self.display_field = display_field
         else:
-            self.show_fields = (show_field,)
+            self.display_field = (display_field,)
         self.group = group
-        self.group_show_field = group_show_field
+        self.group_label_field = group_label_field
         
         kwargs['choices'] = self._find_choices()
         super(MultipleForeignKeyField, self).__init__(*args, **kwargs)
@@ -146,15 +146,15 @@ class MultipleForeignKeyField(forms.MultipleChoiceField):
     def _find_choices(self):
         if self.group:
             # how to label groups
-            if self.group_show_field:
+            if self.group_label_field:
                 label = lambda x: \
-                         x.__getattribute__(self.group_show_field) if x else x
+                         x.__getattribute__(self.group_label_field) if x else x
             else:
                 label = lambda x: unicode(x) if x else x
             
             # how to show each model
             def show(instance):
-                for field in self.show_fields:
+                for field in self.display_field:
                     if instance.__dict__[field]:
                         return instance.__dict__[field]
                 return unicode(instance)
@@ -182,17 +182,16 @@ class MultipleForeignKeyField(forms.MultipleChoiceField):
         
         else:
             return [(fields[0], _first(fields[1:])) for fields
-                    in self.model.objects.values_list('pk', *self.show_fields)]
+                    in self.model.objects.values_list('pk', *self.display_field)]
     
     def refresh_choices(self):
         self.choices = self._find_choices()
     
     def clean(self, value):
-        values = []
-        for pk in value:
+        def get_or_raise(pk):
             try:
-                values.append(self.model.objects.get(pk=pk))
+                return self.model.objects.get(pk=pk)
             except self.model.DoesNotExist:
                 raise forms.ValidationError('Invalid choice "%s".' % pk)
-        return values
+        return [get_or_raise(pk) for pk in value]
     
