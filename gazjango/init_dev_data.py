@@ -228,7 +228,6 @@ for name, title in [('Al Bloom', 'President'), ('Jim Larimore', 'Dean of Student
 nobody_loves_me = Article.objects.create(
     short_title="Nobody Loves Me",
     headline="Nobody Loves Me",
-    subtitle="It's True: Not Like You Do",
     slug='no-love',
     section=columns,
     summary="The Bone Doctress takes a break from her usual witty recountings of "
@@ -304,7 +303,6 @@ nobody_loves_me.save()
 scandal = Article.objects.create(
     headline="Al Bloom Pressured Out By Board of Managers",
     short_title="Al Bloom Forced Out By BoM",
-    subtitle="Allegations of Involvement with Empereror's Club VIP Surface",
     slug="bloom-scandal",
     section=news,
     short_summary="Allegations have surfaced that Al Bloom was involved in the "
@@ -361,7 +359,6 @@ scandal.save()
 scandal2 = Article.objects.create(
     headline="Al Bloom Pressured Out By Board of Managers",
     short_title="Al Bloom Forced Out By BoM",
-    subtitle="Allegations of Involvement with Empereror's Club VIP Surface",
     slug="bloom-scandal-second",
     section=news,
     short_summary="Allegations have surfaced that Al Bloom was involved in the "
@@ -408,7 +405,6 @@ scandal2.save()
 
 boring = Article.objects.create(
     headline="Nothing Happened",
-    subtitle="It's Summer: Did You Expect Something Else?",
     slug="boredom",
     section=news,
     summary="Absolutely nothing happened at all. It was quite boring. So boring, "
@@ -445,7 +441,6 @@ boring.save()
 
 boring2 = Article.objects.create(
     headline="Nothing Happened",
-    subtitle="It's Summer: Did You Expect Something Else?",
     slug="boring2",
     section=news,
     summary="Absolutely nothing happened at all. It was quite boring. So boring, "
@@ -478,7 +473,6 @@ boring2.save()
 
 boring3 = Article.objects.create(
     headline="Nothing Happened",
-    subtitle="It's Summer: Did You Expect Something Else?",
     slug="boring3",
     section=news,
     summary="Absolutely nothing happened at all. It was quite boring. So boring, "
@@ -511,7 +505,6 @@ boring3.save()
 
 boring4 = Article.objects.create(
     headline="Nothing Happened",
-    subtitle="It's Summer: Did You Expect Something Else?",
     slug="boring4",
     section=news,
     summary="Absolutely nothing happened at all. It was quite boring. So boring, "

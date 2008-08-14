@@ -107,7 +107,6 @@ class Article(models.Model):
     
     headline    = models.CharField(max_length=200)
     short_title = models.CharField(blank=True, max_length=100)
-    subtitle    = models.CharField(blank=True, max_length=200)
     slug        = models.SlugField(unique_for_date="pub_date")
     
     summary = models.TextField()
