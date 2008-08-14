@@ -39,6 +39,25 @@ Login CSS
 	color: #fff;
 }
 
+#errors {
+    background-color: #4D3320;;
+    width: 280px;
+    margin: 0 auto;
+    padding: 0 10px;
+    border: 5px solid white;
+    color: white;
+    text-align: center;
+}
+
+#errors a {
+    color: red;
+    text-decoration: none;
+}
+
+#errors a:hover {
+    text-decoration: underline;
+}
+
 /*-----
 
 Register CSS

@@ -17,8 +17,10 @@
 <body>
 
 {% if form.errors %}
-  <p>Your username and password didn't match. Please try again.</p>
-  <p>If you don't have an account yet, you should <a href="{% url register %}">register one</a>.</p>
+  <div id="errors">
+    <p>Sorry, your username and password didn't match our records. Please try again.</p>
+    <p>If you don't have an account yet, you should <a href="{% url register %}">register one</a>.</p>
+  </div>
 {% endif %}
 
 
@@ -38,15 +40,11 @@
 		</form>
 		
 		<p class="register">
-		
 			Don't have an account? <a href="{% url register %}">Register!</a>
-		
 		</p>
 		
 	</div>
 </div>
 
-
 </body>
-
 </html>
