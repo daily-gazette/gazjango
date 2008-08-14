@@ -82,13 +82,9 @@ urlpatterns += patterns('issues.views',
 )
 
 urlpatterns += patterns('polls.views',
-    (r'^polls/%(year)s/%(slug)s/$'                   % reps, 'poll'),
-    (r'^polls/%(year)s/%(month)s/%(slug)s/$'         % reps, 'poll'),
-    (r'^polls/%(year)s/%(month)s/%(day)s/%(slug)s/$' % reps, 'poll', {}, 'poll-details'),
+    (r'^polls/%(year)s/%(slug)s/results/$' % reps, 'poll_results', {}, 'poll-results'),
+    (r'^polls/%(year)s/%(slug)s/submit/$' % reps, 'submit_poll', {}, 'submit-poll'),
     
-    (r'^polls/%(year)s/$'                   % reps, 'polls_for_year'),
-    (r'^polls/%(year)s/%(month)s/$'         % reps, 'polls_for_month'),
-    (r'^polls/%(year)s/%(month)s/%(day)s/$' % reps, 'polls_for_day')
 )
 
 urlpatterns += patterns('jobs.views',

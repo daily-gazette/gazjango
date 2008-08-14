@@ -1,0 +1,14 @@
+<div class='poll-results'>
+  <dl class="graph">
+    {% for option in poll.options.all %}
+      <dt class='bar-title'>{{ option.name }}</dt>
+      <dd class='bar-container'>
+        <div style='width: {{ option.vote_percent|default:1 }}%;'>&nbsp;</div>
+        <strong>{{ option.vote_percent }}% / {{ option.num_votes }} votes</strong>
+      </dd>
+    {% endfor %}
+  </dl>
+  <p class="total-count">
+    Total: {{ poll.votes.count }} votes
+  </p>
+</div>

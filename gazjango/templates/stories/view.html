@@ -7,6 +7,7 @@
 {% block customheader %}
 
 <link rel="stylesheet" href="{% static css page/story.css %}" type="text/css" media="screen, projection" />
+<link rel="stylesheet" href="{% static css functions/poll.css %}" type="text/css" media="screen, projection" />
 
 {% jQuery %}
 
@@ -57,6 +58,43 @@
       });
     });
   });
+  
+  function submitPoll(num) {
+    var poll = $('#poll-' + num);
+    
+    $.post(
+      poll.find('form').attr('action'),
+      { option: poll.find('input:radio:checked').val() },
+      function(data, textStatus) {
+        if (textStatus != 'success') {
+          alert('Weird error, sorry.');
+        } else {
+          if (data == 'success') {
+            showPollResults(num);
+          } else {
+            poll.find('.poll-question')
+              .after('<div class="poll-error">'+data+'</div>');
+            showPollResults(num);
+          }
+        }
+      }
+    );
+  }
+  
+  function showPollResults(num) {
+    var poll = $('#poll-' + num);
+    var show_results = poll.find('.show-results');
+    poll.find('.other-content').hide().load(
+        show_results.find('a').attr('href'),
+        function() {
+          poll
+            .find('.poll-voting').hide('slow').end()
+            .find('.other-content').show('slow');
+          show_results.hide(0);
+        }
+    );
+  }
+  
 </script>
 
 {% endblock customheader %}
@@ -106,7 +144,42 @@
 
       {{ story.resolved_text|safe }}
     </div>
-
+    
+    {% for poll in story.polls.all %}
+      <div class="pollBox" id="poll-{{ poll.pk }}">
+        <h4>{{ poll.name }}</h4>
+        
+        <p class="poll-question">
+          {{ poll.question }} 
+          <span class="show-results">
+            [<a href="{% url poll-results poll.time_start.year,poll.slug %}" onclick="showPollResults({{ poll.pk }}); return false;">show results</a>]
+          </span>
+        </p>
+        
+        <div class="poll-voting">
+          <form method="post" 
+                action="{% url submit-poll poll.time_start.year,poll.slug %}" 
+                onsubmit="submitPoll({{ poll.pk }}); return false;">
+            <ul>
+              {% for option in poll.options.all %}
+                <li>
+                  <input type="radio" name="option" value="{{ option.pk }}" id="option-{{ option.pk }}"/>
+                  <label for="option-{{ option.pk }}">{{ option.name }}</label>
+                </li>
+              {% endfor %}
+            </ul>
+            <div class="submitBox">
+              <input type="submit" value="Submit" />
+            </div>
+          </form>
+        </div>
+        
+        <div class="other-content">
+          <!-- results get injected here -->
+        </div>
+      </div>
+    {% endfor %}
+    
     <div id="shareBox">
       <div class="right">
         <strong>Share:</strong> {% add_this hover %}

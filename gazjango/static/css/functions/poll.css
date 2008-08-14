@@ -1,25 +1,84 @@
 .pollBox {
-	width: 500px;
-	border: 3px solid #aaaaaa;
-	background-color: #dddddd;
-	margin: 0 auto;
-	padding: 5px;
+    width: 500px;
+    border: 3px solid #aaa;
+    background-color: #ddd;
+    margin: 0 auto;
+    padding: 5px;
 }
 
 .pollBox h4 {
-	margin-top: 0px;
-	margin-bottom: 5px;
+    margin-top: 0px;
+    margin-bottom: 5px;
 }
 
-.pollBox.results tr {
-	margin-top: 5px;
+
+.poll-voting {
+    background-color: #fff;
+    border: 2px solid #aaa;
+    width: 80px;
+    margin: 0 auto;
+    padding: 5px;
+    right: 0px;
 }
 
-td.result {
-	background-color: #eb2d16;
-	text-align: right;
+.poll-voting .submitBox {
+    padding-top: 5px;
+    text-align: right;
 }
 
-td.blank {
-	background-color: #dddddd;
+
+.poll-error {
+    background-color: #fff;
+    border: 2px solid #eee;
+    color: red;
+    text-align: center;
+    width: 200px;
+    margin: 0 auto;
 }
+
+.poll-results {
+    background-color: #fff;
+    border: 2px solid #aaa;
+    width: 300px;
+    margin: 0 auto;
+    padding: 5px;
+}
+.graph {
+    width: 300px;
+    position: relative;
+    right: 30px;
+    display: inline-block;
+}
+.bar-title {
+    position: relative;
+    float: left;
+    width: 104px;
+    line-height: 20px;
+    margin-right: 17px;
+    font-weight: bold;
+    text-align: right;
+    font-size: 1.2em;
+}
+.bar-container {
+    position: relative;
+    float: left;
+    width: 110px;
+    height: 10px;
+    margin: 0px 0px 15px;
+}
+
+.bar-container div {
+    background-color:#cc4400;
+    height: 20px;
+}
+.bar-container strong {
+    position: absolute;
+    right: -70px;
+    top: 3px;
+    overflow: hidden;
+}
+
+.total-count {
+    text-align: right;
+}
+
