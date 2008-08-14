@@ -14,7 +14,7 @@ class ImageForm(forms.Form):
     name   = forms.CharField(max_length=100, min_length=3)
     slug   = forms.RegexField(max_length=40, min_length=3, regex=r'[-\w]+')
     
-    bucket = ForeignKeyField(MediaBucket.objects, ('name', 'slug'))
+    bucket = ForeignKeyField(MediaBucket, ('name', 'slug'))
     
     authors = AuthorInputField(required=False, help_text="Optional: if somebody Swarthmore-related made the image, add them as an author; don't create accounts for random internet people, though.")
     
@@ -32,6 +32,10 @@ class ImageForm(forms.Form):
                     % (bucket.name or bucket.slug, slug)
                 )
         return self.cleaned_data
+    
+    def __init__(self, *args, **kwargs):
+        super(ImageForm, self).__init__(*args, **kwargs)
+        self.fields['bucket'].refresh_choices()
     
 
 class BucketForm(forms.ModelForm):

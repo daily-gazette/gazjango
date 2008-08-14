@@ -102,14 +102,27 @@ class AuthorInputField(forms.MultipleChoiceField):
 
 
 class ForeignKeyField(forms.ChoiceField):
-    def __init__(self, qset, show_field, *args, **kwargs):
-        self.qset = qset
+    def _find_choices_list(self):
+        return [(fields[0], reduce(lambda a,b: a or b, fields[1:])) for fields
+                in self.model.objects.values_list('pk', *self.show_field)]
+    
+    def _find_choices_single(self):
+        return [(pk, oth) for pk, oth
+                in self.model.objects.values_list('pk', self.show_field)]
+    
+    def refresh_choices(self):
+        self.choices = self._find_choices()
+    
+    def __init__(self, model, show_field, *args, **kwargs):
+        self.model = model
+        self.show_field = show_field
         if isinstance(show_field, (tuple, list)):
-            cs = [(fields[0], reduce(lambda a,b: a or b, fields[1:]))
-                   for fields in qset.values_list('pk', *show_field)]
+            self._find_choices = self._find_choices_list
         else:
-            cs = [(pk, oth) for pk, oth in qset.values_list('pk', show_field)]
-        super(ForeignKeyField, self).__init__(choices=cs, *args, **kwargs)
+            self._find_choices = self._find_choices_single
+        choices = self._find_choices()
+        
+        super(ForeignKeyField, self).__init__(choices=choices, *args, **kwargs)
     
     def clean(self, value):
         try:
