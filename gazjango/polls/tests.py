@@ -16,6 +16,7 @@ class PollTestCase(unittest.TestCase):
         self.john.userprofile_set.add(UserProfile(kind=oh_ten))
         
         self.anon = AnonymousUser()
+        self.anon_ip = '102.178.2.4'
         
         self.news = Section.objects.create(name="News")
 
@@ -33,8 +34,8 @@ class PollTestCase(unittest.TestCase):
             time_start = datetime.now(),
             time_stop  = datetime.now() + timedelta(days=1))
         self.options = {
-            'yes': Option.objects.create(name="yes", description="Yes", poll=p),
-            'no':  Option.objects.create(name="no",  description="No",  poll=p)
+            'yes': Option.objects.create(name="yes", poll=p),
+            'no':  Option.objects.create(name="no",  poll=p)
         }
     
     def tearDown(self):
@@ -45,7 +46,7 @@ class PollTestCase(unittest.TestCase):
     
     def test_poll_creation(self):
         p = self.exciting_poll
-        self.assertEquals(set([0]), set([o.votes for o in p.option_set.all()]))
+        self.assertEquals(set([0]), set([o.votes for o in p.options.all()]))
         self.assert_(p.voting())
         
         for val in (True, False):
@@ -58,23 +59,21 @@ class PollTestCase(unittest.TestCase):
         p = self.exciting_poll
         os = self.options
         
-        self.assert_(p.vote(self.bob, os['yes']))
-        self.assertEquals(os['yes'].votes, 1)
-        self.assertEquals(os['no'].votes,  0)
+        self.assert_(p.vote(user=self.bob, option=os['yes']))
+        self.assertEquals(os['yes'].votes(), 1)
+        self.assertEquals(os['no'].votes(),  0)
         self.assertEquals([o.pk for o in p.results()], 
                           [os['yes'].pk, os['no'].pk])
-        self.assert_(not p.can_vote(self.bob))
+        self.assert_(not p.can_vote(user=self.bob))
         
-        self.assert_(p.vote(self.john, os['no']))
-        self.assertEquals(os['yes'].votes, 1)
-        self.assertEquals(os['no'].votes,  1)
-        self.assert_(not p.can_vote(self.john))
+        self.assert_(p.vote(user=self.john, option=os['no']))
+        self.assertEquals(os['yes'].votes(), 1)
+        self.assertEquals(os['no'].votes(),  1)
+        self.assert_(not p.can_vote(user=self.john))
         
         p.allow_anon = True
-        self.assert_(p.vote(self.anon, os['yes']))
-        self.assertEquals(os['yes'].votes, 2)
-        self.assertEquals(os['no'].votes,  1)
-        self.assertEquals([o.pk for o in p.results()], 
-                          [os['yes'].pk, os['no'].pk])
+        self.assert_(p.vote(user=self.anon, ip=self.anon_ip, option=os['yes']))
+        self.assertEquals(os['yes'].votes(), 2)
+        self.assertEquals(os['no'].votes(),  1)
         
         

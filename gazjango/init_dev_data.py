@@ -330,7 +330,7 @@ scandal = Article.objects.create(
          "Some students, however, have expressed concern that the photos may be "
          'fake: "I can tell by the pixels," claimed one rising senior, "and by '
          "having seen a few 'shops in my time.\"\n\n"
-         "The Gazette will have more on this story as the story develops.\n\n"
+         "The Gazette will have more on this story as it develops.\n\n"
          "[source: http://dailyjolt.com]",
     format=textile,
     status='p',
@@ -386,7 +386,7 @@ scandal2 = Article.objects.create(
          "Some students, however, have expressed concern that the photos may be "
          'fake: "I can tell by the pixels," claimed one rising senior, "and by '
          "having seen a few 'shops in my time.\"\n\n"
-         "The Gazette will have more on this story as the story develops.\n\n"
+         "The Gazette will have more on this story as it develops.\n\n"
          "[source: http://dailyjolt.com]",
     format=textile,
     status='p',
@@ -735,23 +735,22 @@ Announcement.objects.create(
 jolt_poll = Poll.objects.create(
     name = "Is the Daily Jolt a legitimate news source?",
     slug = "is-jolt-legit",
-    question = "We got most (read: all) of our information from this article "
+    question = "We got most (read: all) of our information for this article "
                "from the Daily Jolt. Is that okay?",
     allow_anon = True,
-    article = scandal
+    article = scandal,
+    time_start=datetime.now(),
+    time_stop=datetime.now() + timedelta(weeks=1)
 )
 
-jolt_yes   = Option.objects.create(name="yes", poll=jolt_poll,
-    description = "Absolutely. Don't you know that's where CNN gets its news?")
-jolt_no    = Option.objects.create(name="no",  poll=jolt_poll,
-    description = "No way. Don't you know that's where CNN gets its news?")
-jolt_maybe = Option.objects.create(name="maybe", poll=jolt_poll,
-    description = "Critical thinking is hard. Let's go shopping!")
+jolt_yes   = Option.objects.create(name="yes", poll=jolt_poll)
+jolt_no    = Option.objects.create(name="no",  poll=jolt_poll)
+jolt_maybe = Option.objects.create(name="maybe", poll=jolt_poll)
 
-jolt_poll.vote(bob, jolt_yes)
-jolt_poll.vote(jack, jolt_yes)
-jolt_poll.vote(jill, jolt_no)
-jolt_poll.vote(bone, jolt_maybe)
+jolt_poll.vote(user=bob .get_profile(), option=jolt_yes)
+jolt_poll.vote(user=jack.get_profile(), option=jolt_yes)
+jolt_poll.vote(user=jill.get_profile(), option=jolt_no)
+jolt_poll.vote(user=bone.get_profile(), option=jolt_maybe)
 
 
 ### Issues

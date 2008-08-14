@@ -1,15 +1,13 @@
 from django.db                  import models
-from django.db.models           import permalink
 from django.contrib.auth.models import User
 from accounts.models            import UserProfile
 from articles.models            import Article
-from datetime                   import datetime
+
+from polls.exceptions import *
+from datetime         import datetime
 
 class Poll(models.Model):
-    """A poll. For now, anyone can vote in any poll."""
-    # TODO: think about a real permissions system
-    # TODO: track whether the same ip is submitted more than once
-    # TODO: figure out error handling
+    """A poll."""
     
     name       = models.CharField(max_length=150)
     question   = models.TextField(blank=True)
@@ -18,58 +16,67 @@ class Poll(models.Model):
     time_stop  = models.DateTimeField(default=datetime.now)
     allow_anon = models.BooleanField(default=True)
     
-    article = models.ForeignKey(Article)
-    voters  = models.ManyToManyField(UserProfile)
+    article = models.ForeignKey(Article, related_name="polls")
     
     def voting(self):
         "Whether this poll is open for voting."
         return self.time_start < datetime.now() < self.time_stop
     
-    def can_vote(self, user):
-        "Whether the given user is allowed to vote in this poll."
-        if user.is_authenticated():
-            return self.voters.filter(pk=user.get_profile().pk).count() == 0
+    def has_voted(self, user=None, ip=None):
+        "Whether the given user / ip has already voted."
+        if user:
+            return self.votes.filter(user=user).count() > 0
         else:
-           return self.allow_anon # we'll add an IP check later or something
+            return self.votes.filter(ip=ip).count() > 0
     
-    def vote(self, user, option):
-        """Casts a user's vote for a particular option and saves.
-        
-        Returns False if the vote failed, True on success."""
-        if not (self.voting() and self.can_vote(user) and option.poll == self):
-           return False
-        
-        option.votes += 1
-        option.save()
-        
-        if user.is_authenticated():
-            self.voters.add(user.get_profile())
+    def vote_allowed(self, user=None, ip=None):
+        """
+        Whether the user could ever vote in this poll (regardless of whether
+        they already have.)
+        """
+        return user or self.allow_anon
+    
+    def can_vote(self, user=None, ip=None):
+        "Whether the given UserProfile / ip is allowed to vote in this poll."
+        return self.vote_allowed(user, ip) and not self.has_voted(user, ip)
+    
+    def vote(self, option, user=None, ip=None):
+        "Casts a user's vote for a particular option and saves."
+        if user:
+            args = { 'user': user }
         else:
-            pass # add to IP list
-        self.save()
-        return True
-    
-    def results(self):
-        """Returns this poll's Options, sorted by votes (most to least).
+            args = { 'ip': ip }
         
-        Ties resolve as the database sees fit."""
-        return self.option_set.order_by('-votes')
+        if not self.voting():
+            raise NotVoting
+        
+        if option.poll != self:
+            raise PollMismatch
+        
+        if self.has_voted(**args):
+            raise AlreadyVoted
+        
+        if not self.vote_allowed(**args):
+            raise PermissionDenied
+        
+        return self.votes.create(option=option, **args)
     
     def __unicode__(self):
         return self.slug
     
-    @permalink
     def get_absolute_url(self):
-        return ('poll-details', [str(self.time_start.year), self.slug])
-
+        return self.article.get_absolute_url() + '#poll-' + self.pk
+    
 
 class Option(models.Model):
     """An option in a poll."""
+    poll        = models.ForeignKey(Poll, related_name="options")
+    name        = models.CharField(max_length=20, unique=True)
+    def num_votes(self):
+        return self.votes.count()
     
-    poll        = models.ForeignKey(Poll)
-    name        = models.CharField(max_length=100, unique=True)
-    description = models.CharField(blank=True, max_length=100)
-    votes       = models.IntegerField(blank=True, default=0)
+    def vote_percent(self):
+        return int(round(100 * self.num_votes() / self.poll.votes.count()))
     
     class Meta:
         order_with_respect_to = 'poll'
@@ -77,4 +84,23 @@ class Option(models.Model):
     
     def __unicode__(self):
         return self.name
+    
+
+class PollVote(models.Model):
+    poll = models.ForeignKey(Poll, related_name="votes")
+    option = models.ForeignKey(Option, related_name="votes")
+    
+    user = models.ForeignKey(UserProfile, null=True, related_name="votes")
+    ip   = models.IPAddressField(null=True, blank=True)
+    
+    class Meta:
+        # nulls don't count for unique_together
+        unique_together = (
+            ('poll', 'user'),
+            ('poll', 'ip')
+        )
+    
+    def __unicode__(self):
+        return "%s by %s" % \
+               (self.option.name, self.user.username if self.user else self.ip)
     
