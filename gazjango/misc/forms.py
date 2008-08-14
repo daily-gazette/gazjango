@@ -100,33 +100,59 @@ class AuthorInputField(forms.MultipleChoiceField):
         return ps
     
 
+def _find_choices_list(model, show_field):
+    return lambda: [(fields[0], reduce(lambda a,b: a or b, fields[1:]))
+                    for fields in model.objects.values_list('pk', *show_field)]
 
-class ForeignKeyField(forms.ChoiceField):
-    def _find_choices_list(self):
-        return [(fields[0], reduce(lambda a,b: a or b, fields[1:])) for fields
-                in self.model.objects.values_list('pk', *self.show_field)]
-    
-    def _find_choices_single(self):
-        return [(pk, oth) for pk, oth
-                in self.model.objects.values_list('pk', self.show_field)]
-    
-    def refresh_choices(self):
-        self.choices = self._find_choices()
-    
+def _find_choices_single(model, show_fields):
+    return lambda: [(pk, oth) for pk, oth 
+                    in model.objects.values_list('pk', show_field)]
+
+
+class ForeignKeyField(forms.ChoiceField):    
     def __init__(self, model, show_field, *args, **kwargs):
         self.model = model
         self.show_field = show_field
         if isinstance(show_field, (tuple, list)):
-            self._find_choices = self._find_choices_list
+            self._find_choices = _find_choices_list(model, show_field)
         else:
-            self._find_choices = self._find_choices_single
-        choices = self._find_choices()
-        
-        super(ForeignKeyField, self).__init__(choices=choices, *args, **kwargs)
+            self._find_choices = _find_choices_single(model, show_field)
+            
+        kwargs['choices'] = self._find_choices()
+        super(ForeignKeyField, self).__init__(*args, **kwargs)
+    
+    def refresh_choices(self):
+        self.choices = self._find_choices()
     
     def clean(self, value):
         try:
-            return self.qset.get(pk=value)
-        except self.qset.model.DoesNotExist:
-            raise forms.ValidationError("Invalid choice.")
+            return self.model.objects.get(pk=value)
+        except self.model.DoesNotExist:
+            raise forms.ValidationError('Invalid choice "%s".' % value)
+    
+
+# multiple inheritance is confusing, so we're going to avoid it
+class MultipleForeignKeyField(forms.MultipleChoiceField):
+    def __init__(self, model, show_field, *args, **kwargs):
+        self.model = model
+        self.show_field = show_field
+        if isinstance(show_field, (tuple, list)):
+            self._find_choices = _find_choices_list(model, show_field)
+        else:
+            self._find_choices = _find_choices_single(model, show_field)
+        
+        kwargs['choices'] = self._find_choices()
+        super(MultipleForeignKeyField, self).__init__(*args, **kwargs)
+    
+    def refresh_choices(self):
+        self.choices = self._find_choices
+    
+    def clean(self, value):
+        values = []
+        for pk in value:
+            try:
+                values.append(self.model.objects.get(pk=pk))
+            except self.model.DoesNotExist:
+                raise forms.ValidationError('Invalid choice "%s".' % pk)
+        return values
     
