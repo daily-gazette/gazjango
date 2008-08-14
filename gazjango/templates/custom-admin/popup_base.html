@@ -1,0 +1,61 @@
+{% load extras %}
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+  "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en">
+
+<head>
+  <title>{% block full-title %}{% block title %}{% endblock title %} :: The Daily Gazette{% endblock full-title %}</title>
+
+  <link rel="stylesheet" href="{% static css toolbox.css %}" type="text/css" media="screen, projection, print" />
+
+  <link rel="stylesheet" href="{% static css page/admin.css %}" type="text/css" media="screen, projection" />
+
+  {% block customheader %}
+  {% endblock customheader %}
+</head>
+
+<body>
+<div id="container"> <!-- holds all -->
+
+	<!--HEADER-->
+	<div id="header">
+		<div class="floatLeft">
+		  <h1><img src="{% static images admin/header.png %}" alt="The Daily Gazette" /></h1>
+		</div>
+		<div id="linkBox">
+			<a href="http://daily.swarthmore.edu">Visit Site</a> |
+			<a href="{% url logout %}">Log Out</a>
+		</div>
+	</div>
+	
+	<div id="subheader">
+		<center>
+		{% block subheader %}
+		
+		<ul>
+			<li><a href="{% url write %}">Write</a></li>	
+			<li><a href="#">Manage</a></li>
+			<li><a href="#">Comments</a></li>
+		</ul>
+		
+		{% endblock subheader %}
+		</center>
+	</div>
+	<!--END HEADER-->
+	
+	<!--MAIN COLUMN-->
+	<div id="main">
+		<span id="mainRight">
+  		<span id="mainTopRight">
+    		<div id="centerColumn">
+    			{% block content %}
+    			{% endblock content %}
+    		</div>
+  		</span>
+		</span>
+	</div>
+	<!--END MAIN COLUMN-->
+	
+</div>
+</body>
+</html>

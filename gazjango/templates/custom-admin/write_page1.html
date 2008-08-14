@@ -5,62 +5,18 @@
 
 {% block customheader %}
 
+  <link rel="stylesheet" href="{% static css functions/autocomplete.css %}" type="text/css" media="screen,projection" charset="utf-8"/>
+
   {% jQuery %}
 
   <script type="text/javascript" src="{% static js jquery.autocomplete.js %}"></script>
   <script type="text/javascript" src="{% static js jquery.selso.js %}"></script>
+  <script type="text/javascript" src="{% static js admin/authorField.js %}"></script>
 
   <script type="text/javascript" charset="utf-8">
     function toggleLayer(id) {
       $('#' + id).toggle();
       return false;
-    }
-    
-    function addAuthor() {      
-      extra = $('#extra_author');
-      name = extra.val();
-      
-      if (name.length > 0) {
-        $.ajax({
-          type: "POST",
-          url: "{% url get-or-make-username %}",
-          data: {name: name},
-          success: function(username) {
-            $('#authorsText').append(authorLinkFor(name, username));
-            var authorsInput = $('#authors');
-            authorsInput.val(authorsInput.val() + ' ' + username);
-            extra.val('');
-          },
-          error: function(request, status, errorThrown) {
-            alert("Apparently you don't have permissions to create a new author. Talk to someone who does.");
-          }
-        });
-      }
-      
-      return false;
-    }
-    
-    function authorLinkFor(name, username) {
-      return '<a href="#" id="author-' + username + '" onclick="return removeAuthor(\'' + username + '\');">' + name + '</a>';
-    }
-    
-    function addAuthorToList(name, username) {
-      $('#authorsText').append(' ' + authorLinkFor(name, username));
-      $('#authors').append(' ' + username);
-    }
-    
-    function removeAuthor(username) {
-      $('#author-' + username).remove();
-
-      authors = $('#authors');
-      split = jQuery.trim(authors.val()).split(/\s+/);
-      new_authors = [];
-      for (i = 0; i < split.length; i++) {
-        if (split[i] != username) {
-          new_authors.push(split[i]);
-        }
-      }
-      authors.val(new_authors.join(' '));
     }
     
     function updateSubsections() {
@@ -112,6 +68,8 @@
       $('#selected option').attr('selected', 'selected');
     }
   </script>
+  
+  <script type="text/javascript" src="{% static js admin/authorField.js %}"></script>
 
 {% endblock customheader %}
 
@@ -155,18 +113,6 @@
       <td colspan="2">
         <input type="text" size="20" name="extra_author" class="text" value="" id="extra_author" />
         <a href="#" onclick="return addAuthor()" id="addAuthor">add this author</a>
-        
-        <script type="text/javascript" charset="utf-8">
-          function formatItem(row) {
-            return row[0] + " (" + row[1] + ")";
-          }
-          
-          $(document).ready(function() {
-            $('#extra_author').autocomplete("{% url author-completions %}",
-              { formatItem: formatItem, onItemSelect: addAuthor }
-            );
-          });
-        </script>
       </td>
     </tr>
 
