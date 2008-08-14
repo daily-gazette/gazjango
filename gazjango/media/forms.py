@@ -36,6 +36,7 @@ class ImageForm(forms.Form):
     def __init__(self, *args, **kwargs):
         super(ImageForm, self).__init__(*args, **kwargs)
         self.fields['bucket'].refresh_choices()
+        self.fields['authors'].refresh_choices()
     
 
 class BucketForm(forms.ModelForm):

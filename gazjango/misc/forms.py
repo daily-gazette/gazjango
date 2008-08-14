@@ -81,8 +81,14 @@ class AuthorInputField(forms.MultipleChoiceField):
     }
     widget = AuthorInputWidget
     def __init__(self, *args, **kwargs):
-        choices = User.objects.values_list('username', flat=True)
+        choices = self._find_choices()
         super(AuthorInputField, self).__init__(choices, *args, **kwargs)
+    
+    def _find_choices(self):
+        return User.objects.values_list('username', flat=True)
+    
+    def refresh_choices(self):
+        self.choices = self._find_choices()
     
     def valid_value(self, value):
         return value in self.choices
