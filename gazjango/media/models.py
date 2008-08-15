@@ -51,9 +51,8 @@ class MediaFile(models.Model):
     def __unicode__(self):
         return "%s (in %s)" % (self.slug, self.bucket)
     
-    @permalink
     def get_absolute_url(self):
-        return ('media.views.file', [self.bucket.slug, self.slug])
+        return self.data.url
     
     class Meta:
         unique_together = ("slug", "bucket")
