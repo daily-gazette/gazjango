@@ -229,10 +229,10 @@ class WeatherManager(models.Manager):
         """
         day = datetime.date.today()
         if tomorrow:
-            day += timedelta(days=1)
+            day += datetime.timedelta(days=1)
+        
         try:
             return self.get(date=day)
-        
         except self.model.DoesNotExist:
             try:
                 weather = scrapers.weather.get_weather(date=day)
