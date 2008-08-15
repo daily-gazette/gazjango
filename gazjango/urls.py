@@ -83,7 +83,7 @@ urlpatterns += patterns('issues.views',
 
 urlpatterns += patterns('polls.views',
     (r'^polls/%(year)s/%(slug)s/results/$' % reps, 'poll_results', {}, 'poll-results'),
-    (r'^polls/%(year)s/%(slug)s/submit/$' % reps, 'submit_poll', {}, 'submit-poll'),
+    (r'^polls/%(year)s/%(slug)s/submit/$'  % reps, 'submit_poll', {}, 'submit-poll'),
     
 )
 
@@ -99,12 +99,11 @@ urlpatterns += patterns('media.views',
 )
 
 urlpatterns += patterns('',
-    (r'^accounts/login/$',    'django.contrib.auth.views.login',  {},                 'login'),
-    (r'^accounts/logout/$',   'django.contrib.auth.views.logout', {'next_page': '/'}, 'logout'),
-    (r'^accounts/manage/$',   'accounts.views.manage',            {},                 'manage'),
-    (r'^accounts/register/$', 'accounts.views.register',          {},                 'register'),
+    (r'^accounts/logout/$', 'django.contrib.auth.views.logout', {'next_page': '/'}, 'logout'),
+    (r'^accounts/manage/$', 'accounts.views.manage', {}, 'manage-user'),
+    (r'^accounts/', include('registration.urls')),
     
-    (r'^users/%(name)s/$' % reps, 'accounts.views.user_details', {}, 'user-details')
+    (r'^users/%(name)s/$' % reps, 'accounts.views.user_details', {}, 'user-details'),
 )
 
 urlpatterns += patterns('',
