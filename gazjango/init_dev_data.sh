@@ -8,11 +8,14 @@ echo -n 'Enter "yes" to continue: '
 read resp
 [[ "$resp" != "yes" ]] && exit
 
+echo -n "clearing database..." && \
 $python manage.py sqlclear \
-$($python -c 'import settings; print " ".join(s.split(".")[-1] for s in settings.INSTALLED_APPS if not s.endswith("misc"))') \
+$($python -c 'import settings; print " ".join(s.split(".")[-1] for s in settings.INSTALLED_APPS if s not in ("gazjango.misc", "django.contrib.admindocs"))') \
 | $python manage.py dbshell && \
-echo "database cleared" && \
+echo "done." && \
+echo -n "syncing database..." && \
 $python manage.py syncdb --noinput --verbosity=0 && \
-echo "database synced" && \
+echo "done." && \
+echo -n "initializing data..." && \
 $python init_dev_data.py && \
-echo "data init'ed"
+echo "done."
