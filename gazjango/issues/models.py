@@ -9,6 +9,12 @@ import scrapers.sharples
 import scrapers.weather
 from scrapers.events import scrape_events_feed
 
+def _combine_date_time(date, time=None):
+    if time:
+        return datetime.datetime.combine(date, time)
+    else:
+        return date
+
 class EventManager(models.Manager):
     def for_date(self, date, forward=datetime.timedelta(days=0)):
         "Returns the events for a certain day."
@@ -42,7 +48,7 @@ class EventManager(models.Manager):
 
 class Event(models.Model):
     "An event scraped from the College calendar."
-    name = models.CharField(max_length=60)
+    name = models.CharField(max_length=160)
     
     start_day = models.DateField()
     end_day   = models.DateField()
@@ -58,10 +64,10 @@ class Event(models.Model):
     objects = EventManager()
     
     def start(self):
-        return datetime.datetime.combine(self.start_day, self.start_time)
+        return _combine_date_time(self.start_day, self.start_time)
     
     def end(self):
-        return datetime.datetime.combine(self.end_day, self.end_time)
+        return _combine_date_time(self.end_day, self.end_time)
     
     def __unicode__(self):
         return "%s (%s - %s)" % (self.name, self.start(), self.end())
