@@ -94,3 +94,10 @@ Register CSS
 #login #content a {
 	color: #fff;
 }
+
+.errorlist {
+    font-size: .6em;
+    color: red;
+    list-style: none;
+    margin-left: -20px;
+}

@@ -1,6 +1,7 @@
 from django.conf.urls.defaults import *
 from django.contrib import admin
 from articles.feeds import MainFeed, LatestStoriesFeed, SectionFeed, SectionLatestFeed
+from misc.forms import RegistrationFormWithProfile
 import settings
 
 admin.autodiscover()
@@ -101,6 +102,8 @@ urlpatterns += patterns('media.views',
 urlpatterns += patterns('',
     (r'^accounts/logout/$', 'django.contrib.auth.views.logout', {'next_page': '/'}, 'logout'),
     (r'^accounts/manage/$', 'accounts.views.manage', {}, 'manage-user'),
+    (r'^accounts/register/$', 'registration.views.register', { 'form_class': RegistrationFormWithProfile }, 'register'),
+    
     (r'^accounts/', include('registration.urls')),
     
     (r'^users/%(name)s/$' % reps, 'accounts.views.user_details', {}, 'user-details'),

@@ -1,0 +1,20 @@
+{% load extras %}
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+  "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en">
+
+<head>
+  <title>{% block title %}{% endblock %}</title>
+
+  <link rel="stylesheet" href="{% static css toolbox.css %}" type="text/css" media="screen, projection, print" />
+  <link rel="stylesheet" href="{% static css page/login.css %}" type="text/css" media="screen,projection" />
+
+</head>
+
+<body>
+
+{% block content %}
+{% endblock %}
+
+</body>
+</html>
