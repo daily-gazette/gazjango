@@ -49,7 +49,10 @@ class PhotoInSpread(models.Model):
             return None
     
     class Meta:
-        unique_together = ('photo', 'spread')
+        unique_together = (
+            ('spread', 'photo'),
+            ('spread', 'number')
+        )
         ordering = ['spread', 'number']
         app_label = 'articles'
     
