@@ -4,6 +4,7 @@ from django.contrib.auth.decorators import permission_required
 from django.template   import RequestContext
 from django.shortcuts  import render_to_response, get_object_or_404
 from django.http       import Http404, HttpResponse, HttpResponseRedirect
+from django.utils.html import escape
 from misc.view_helpers import get_by_date_or_404, filter_by_date, reporter_admin_data
 
 from articles.models      import Article, Section, Subsection, Special, PhotoSpread
@@ -33,12 +34,12 @@ def article(request, slug, year, month, day, print_view=False, template="stories
         return show_article(request, story, form, print_view, template)
     
     else:
-        print request.POST
         form = make_comment_form(data=request.POST, logged_in=logged_in)
+        
         if form.is_valid():
             args = {
                 'subject': story,
-                'text': form.cleaned_data['text'].replace("\n", "<br/>"),
+                'text': escape(form.cleaned_data['text']).replace("\n", "<br/>"),
                 'ip_address': request.META['REMOTE_ADDR'],
                 'user_agent': request.META['HTTP_USER_AGENT']
             }
