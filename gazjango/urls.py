@@ -100,6 +100,7 @@ urlpatterns += patterns('media.views',
 )
 
 urlpatterns += patterns('',
+    (r'^accounts/login/$', 'django.contrib.auth.views.login', {}, 'login'),
     (r'^accounts/logout/$', 'django.contrib.auth.views.logout', {'next_page': '/'}, 'logout'),
     (r'^accounts/manage/$', 'accounts.views.manage', {}, 'manage-user'),
     (r'^accounts/register/$', 'registration.views.register', { 'form_class': RegistrationFormWithProfile }, 'register'),
