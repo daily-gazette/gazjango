@@ -1,0 +1,40 @@
+#profiles {
+	
+}
+
+.picture {
+	float: left;
+	padding-right: 5px;
+	height: 50px;
+	border: 2px solid #cccccc;
+	margin: 2px;
+}
+
+.title {
+	font-variant: small-caps;
+	color: #aaaaaa;
+}
+
+#description {
+	float: left;
+	width: 60%;
+	padding: 5px;
+}
+
+#history {
+	float: left;
+	width: 35%;
+	padding: 5px;
+}
+
+#topStories {
+	float: left;
+	width: 48%;
+	padding: 5px;
+}
+
+#allStories {
+	float: left;
+	width: 48%;
+	padding: 5px;
+}
