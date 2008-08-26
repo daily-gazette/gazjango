@@ -57,19 +57,18 @@ function toggleLayer( whichLayer )
 		
 	</div>
 	
-	<div id="subheader">
-		<center>
+	<div id="subheaderExpanded">
 		<ul>
 			<li><a href="#">Write</a></li>	
 			<li><a href="#">Manage</a></li>
 			<li><a href="#">Comments</a></li>
 		</ul>
-		</center>
+		
 	</div>
 	<!--END HEADER-->
 	
 	<!--ARTICLE BAR-->
-	<div id="sidebar">
+	<div id="sidebarExpanded">
 			
 		<h2>Announcements</h2>
 		
@@ -100,8 +99,9 @@ function toggleLayer( whichLayer )
 	</div>
 	<!--END ARTICLE BAR-->
 	
+	
 	<!--MAIN COLUMN-->
-	<div id="main">
+	<div id="mainExpanded">
 		<span id="mainRight">
 		<span id="mainTopRight">
 			
@@ -109,7 +109,9 @@ function toggleLayer( whichLayer )
 		
 			<div id="manageBox" class="write">
 			
-				<table class="manageStories">
+				<a href="javascript:toggleLayer('sidebarExpanded');">Show the Story List</a>
+			
+				<table class="manageStories" width="825">
 					<tr>
 						<td width="150" class="column1 title">Title</td>
 						<td width="100" class="column2 title">Author(s)</td>
