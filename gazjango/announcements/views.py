@@ -6,12 +6,17 @@ from misc.view_helpers        import filter_by_date
 from announcements.models import Announcement
 from announcements.forms  import SubmitAnnouncementForm
 from articles.models      import Article
+from comments.models      import PublicComment
 
 def announcement(request, slug, year, month=None, day=None):
     an = get_object_or_404(Announcement, slug=slug, date_start__year=year)
+    top, mids, lows = Article.published.get_stories(num_top=1, num_mid=3, num_low=0)
     data = {
         'announcement': an,
-        'topstory': Article.published.get_top_story()
+        'topstory': top[0],
+        'stories': mids,
+        'announcements': Announcement.community.order_by('-date_end')[:4],
+        'comments': PublicComment.visible.order_by('-time')[:3]
     }
     rc = RequestContext(request)
     return render_to_response("announcements/details.html", data, context_instance=rc)
