@@ -324,3 +324,22 @@ IMAGE STYLES
 .hundred {
 	width: 100%;
 }
+
+/**************************************
+
+SUBMISSION FORM STYLES
+
+**************************************/
+
+table {
+	font-size: 1.4em;
+	padding-bottom: 4px;
+}
+
+th {
+	text-align: right;
+}
+
+tr {
+	margins: 2px;
+}
