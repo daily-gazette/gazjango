@@ -43,7 +43,7 @@
 
 h4 {
 	display: block;
-	float: left;
+	margin-top: 5px;
 }
 
 .jobs {
@@ -58,8 +58,4 @@ h4 {
 	float: left;
 	border-top: 2px double #EEEEEE;
 	margin: 5px;
-}
-
-h4 {
-	margin-top: 5px;
 }

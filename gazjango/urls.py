@@ -63,11 +63,11 @@ urlpatterns += patterns('announcements.views',
     (r'^announcements/%(year)s/%(month)s/%(slug)s/$'         % reps, 'announcement'),
     (r'^announcements/%(year)s/%(month)s/%(day)s/%(slug)s/$' % reps, 'announcement'),
     
-    (r'^announcements/$', 'list_announcements', {'order': 'descending'}),
+    (r'^announcements/$', 'list_announcements', {'order': 'descending', 'kind': 'c'}),
     
-    (r'^announcements/%(year)s/$'                   % reps, 'list_announcements', {'kind': 'community'}),
-    (r'^announcements/%(year)s/%(month)s/$'         % reps, 'list_announcements', {'kind': 'community'}),
-    (r'^announcements/%(year)s/%(month)s/%(day)s/$' % reps, 'list_announcements', {'kind': 'community'}),
+    (r'^announcements/%(year)s/$'                   % reps, 'list_announcements', {'kind': 'c'}),
+    (r'^announcements/%(year)s/%(month)s/$'         % reps, 'list_announcements', {'kind': 'c'}),
+    (r'^announcements/%(year)s/%(month)s/%(day)s/$' % reps, 'list_announcements', {'kind': 'c'}),
     
     (r'^announcements/%(kind)s/$'                            % reps, 'list_announcements'),
     (r'^announcements/%(kind)s/%(year)s/$'                   % reps, 'list_announcements'),

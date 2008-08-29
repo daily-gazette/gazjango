@@ -10,12 +10,12 @@ from comments.models      import PublicComment
 
 def announcement(request, slug, year, month=None, day=None):
     an = get_object_or_404(Announcement, slug=slug, date_start__year=year)
-    top, mids, lows = Article.published.get_stories(num_top=1, num_mid=3, num_low=0)
+    tops, mids, lows = Article.published.get_stories(num_top=1, num_mid=3, num_low=0)
     data = {
         'announcement': an,
-        'topstory': top[0],
+        'topstory': tops[0],
         'stories': mids,
-        'announcements': Announcement.community.order_by('-date_end')[:4],
+        'recent_announcements': Announcement.community.order_by('-date_end')[:4],
         'comments': PublicComment.visible.order_by('-time')[:3]
     }
     rc = RequestContext(request)
@@ -31,12 +31,18 @@ def list_announcements(request, kind=None, year=None, month=None, day=None, orde
     if kind:
         qset = qset.filter(kind=kind)
     
+    tops, mids, lows = Article.published.get_stories(num_top=1, num_mid=3, num_low=0)
+    
     data = { 
         'announcements': filter_by_date(qset, year, month, day),
         'kind': kind,
         'year': year,
         'month': month,
-        'day': day
+        'day': day,
+        'topstory': tops[0],
+        'stories': mids,
+        'comments': PublicComment.visible.order_by('-time')[:3],
+        'recent_announcements': Announcement.community.order_by('-date_end')[:4],
     }
     rc = RequestContext(request)
     return render_to_response("announcements/list.html", data, context_instance=rc)

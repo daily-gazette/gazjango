@@ -13,6 +13,9 @@
 
 {% endblock customheader %}
 
+{# TODO: change if we're only showing a specific date range #}
+{# TODO: pagination #}
+
 
 {% block topbar %}
   <div id="headerSectionBar">
@@ -36,24 +39,31 @@
 
   <div id="storyBox">
     <div id="story">
-      <h2>Job Listings</h2>
-      		{% for announcement in announcements %}
-      		<div class="block">
-				  <h4><a href="{{ announcement.get_absolute_url }}">{{ announcement.title }}</a></h4> <br /><br />
-						<div id="jobInfoList">
-			<p><strong>Sponsor:</strong> {% if announcement.sponsor_url.verify_exists %}<a href="{{ announcement.sponsor_url }}">{% endif %}{{ announcement.sponsor }}{% if announcement.sponsor_url.verify_exists %}</a>{% endif %}</p>
-			{% if announcement.is_event %}<p><strong>When:</strong> {{ announcement.event_date|near_future_date }} at {{ announcement.event_time }}</p>
-            <p><strong>Where:</strong> {{ announcement.event_place }}</p>{% endif %}
-		</div>
-<p>{{ announcement.text }}</p>				  
-				  {% if not forloop.last %}
-				  {% endif %}
-				  </div>
-				{% endfor %}
-				
-
-				<p>&nbsp;</p>
-				 
+      <h2>Announcements</h2>
+        {% for announcement in announcements %}
+          <div class="block">
+            <h4><a href="{{ announcement.get_absolute_url }}">{{ announcement.title }}</a></h4>
+            <br/>
+            <div id="jobInfoList">
+              <p><strong>Sponsor:</strong> {{ announcement.sponsor_link }}</p>
+              {% if announcement.is_event %}
+                <p>
+                  <strong>When:</strong>
+                  {{ announcement.event_date|near_future_date }}
+                  {% if announcement.event_time %}
+                    at {{ announcement.event_time }}
+                  {% endif %}
+                </p>
+              {% if annnouncement.event_place %}
+                <p><strong>Where:</strong> {{ announcement.event_place }}</p>
+              {% endif %}
+            {% endif %}
+          </div>
+          <p>{{ announcement.brief_excerpt|safe }}</p>
+        </div>
+      {% endfor %}
+        
+      <p>&nbsp;</p>         
     </div>
 
     <div id="shareBox">
@@ -61,18 +71,18 @@
         <strong>Share:</strong> {% add_this hover %}
       </div>
       <p>
-        <a href="/jobs/">Jobs Listing</a>
+        <a href="/announcements/">Announcements</a>
       </p>
     </div>
 
     <div id="continueBox">
       <div id="top">
-        <a href="{{ toppage.get_absolute_url }}">
-          <img src="{{ toppage.thumbnail.get_absolute_url }}" />
+        <a href="{{ topstory.get_absolute_url }}">
+          <img src="{{ topstory.thumbnail.get_absolute_url }}" />
         </a>
         <div class="content">
-          <h4><a href="{{ toppage.get_absolute_url }}">{{ toppage.get_title }}</a></h4>
-          <p>{{ toppage.short_summary }}</p>
+          <h4><a href="{{ topstory.get_absolute_url }}">{{ topstory.get_title }}</a></h4>
+          <p>{{ topstory.short_summary }}</p>
         </div>
       </div>
 
@@ -81,7 +91,7 @@
           <h4>Top Stories</h4>
           <ul>
             {% for story in stories %}
-              <li><a href="{{rel.get_absolute_url}}">{{ rel.get_title|safe }}</a></li>
+              <li><a href="{{story.get_absolute_url}}">{{ story.get_title|safe }}</a></li>
             {% endfor %}
           </ul>
         </div>
@@ -89,17 +99,12 @@
           <h4>Recent Comments</h4>
           <ul>
             {% for comment in comments|slice:":4" %}
-              <li><a href="{{comment.get_absolute_url}}">{{ comment.subject.get_title }}</a></li>
+              <li><a href="{{comment.get_absolute_url}}">{{ comment.subject.get_title|safe }}</a></li>
             {% endfor %}
           </ul>
         </div>
       </div>
-
     </div>
-  
-
-
-
   </div>
 
 {% endblock content %}
