@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% load extras %}
 
-{% block title %}{{ announcement.title|removetags:"em strong b i" }}{% endblock title %}
+{% block title %}{{ announcement.title|striptags }}{% endblock title %}
 
 
 {% block customheader %}
