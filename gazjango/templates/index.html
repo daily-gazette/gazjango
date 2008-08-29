@@ -198,8 +198,10 @@ jQuery(document).ready(function() {
 				    <p>{{ announcement.brief_excerpt|safe }}</p>
 				  {% endif %}
 				  
-				  {% if not forloop.last %}<hr width="50%" />{% endif %}
-				{% endfor %}				
+				  <hr width="50%" />
+				{% endfor %}
+				
+				<p>You can <a href="{% url submit-announcement %}">submit your own</a> announcement, to show here and in emails.</p>
 			</div>
 			
 			<div class="indexBottomColumn floatLeft margin25">

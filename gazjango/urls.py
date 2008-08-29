@@ -56,6 +56,9 @@ urlpatterns += patterns('comments.views',
 )
 
 urlpatterns += patterns('announcements.views',
+    (r'^announcements/new/$', 'submit_announcement', {}, 'submit-announcement'),
+    (r'^announcements/new/success/$', 'announcement_success', {}, 'announcement-success'),
+
     (r'^announcements/%(year)s/%(slug)s/$'                   % reps, 'announcement', {}, 'announcement'),
     (r'^announcements/%(year)s/%(month)s/%(slug)s/$'         % reps, 'announcement'),
     (r'^announcements/%(year)s/%(month)s/%(day)s/%(slug)s/$' % reps, 'announcement'),
@@ -69,7 +72,7 @@ urlpatterns += patterns('announcements.views',
     (r'^announcements/%(kind)s/$'                            % reps, 'list_announcements'),
     (r'^announcements/%(kind)s/%(year)s/$'                   % reps, 'list_announcements'),
     (r'^announcements/%(kind)s/%(year)s/%(month)s/$'         % reps, 'list_announcements'),
-    (r'^announcements/%(kind)s/%(year)s/%(month)s/%(day)s/$' % reps, 'list_announcements')
+    (r'^announcements/%(kind)s/%(year)s/%(month)s/%(day)s/$' % reps, 'list_announcements'),
 )
 
 urlpatterns += patterns('issues.views',

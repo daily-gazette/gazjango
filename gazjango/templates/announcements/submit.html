@@ -1,0 +1,111 @@
+{% extends "base.html" %}
+{% load extras %}
+
+{% block title %}Submit Announcement{% endblock %}
+
+{% block customheader %}
+  {% jQuery %}
+  <script type="text/javascript" charset="utf-8">
+    function toggleSponsorLink() {
+      $('#sponsor-url-row')
+        .find('input').val('').end()
+        .toggle();
+      link = $('#sponsor-toggle');
+      if (link.text() == 'add a link') {
+        link.text('remove the link');
+      } else {
+        link.text('add a link');
+      }
+    }
+    
+    function toggleEventFields() {
+      $('.event-row').find('input').val('').end().toggle();
+    }
+    
+    $(document).ready(function() {
+      url_row = $('#sponsor-url-row');
+      if (url_row.find('input').val() == '') {
+        url_row.hide(0);
+        $('#sponsor-toggle').show(0);
+      } else {
+        $('#sponsor-toggle').text('remove the link').show(0);
+      }
+      
+      if ($('#{{ form.is_event.auto_id }}:checked').length == 0) {
+        $('.event-row').hide(0);
+      }
+    });
+  </script>
+{% endblock %}
+
+
+{% block content %}
+
+  {% if form.errors %}
+    <p>
+      {{ form.non_field_errors }}
+    </p>
+  {% endif %}
+  <form action="" method="post">
+    <table>
+      <tr>
+        <th>{{ form.title.label_tag }}:</th>
+        <td>{{ form.title }}</td>
+        <td>{{ form.title.errors }}</td>
+      </tr>
+      <tr>
+        <th><label for="{{ form.text.auto_id }}">Announcement Text</label>:</th>
+        <td>{{ form.text }}</td>
+        <td>{{ form.text.errors }}</td>
+      </tr>
+      <tr>
+        <th><label for="{{ form.date_start.auto_id }}">Start Date</label>:</th>
+        <td>{{ form.date_start }}</td>
+        <td>{{ form.date_start.errors }}</td>
+      </tr>
+      <tr>
+        <th><label for="{{ form.date_end.auto_id }}">End Date</label>:</th>
+        <td>{{ form.date_end }}</td>
+        <td>{{ form.date_end.errors }}</td>
+      </tr>
+      <tr>
+        <th>{{ form.sponsor.label_tag }}:</th>
+        <td>
+          {{ form.sponsor }}
+          <a href="#" id='sponsor-toggle' style="display: none;" onclick="toggleSponsorLink(); return false;">add a link</a>
+        </td>
+        <td>{{ form.sponsor.errors }}</td>
+      </tr>
+      <tr id="sponsor-url-row">
+        <th><label for="{{ form.sponsor_url.auto_id }}">Sponsor Link</label>:</th>
+        <td>{{ form.sponsor_url }}</td>
+        <td>{{ form.sponsor_url.errors }}</td>
+      </tr>
+      <tr>
+        <td colspan="2">
+          {{ form.is_event }}
+          This announcement is about a specific event.
+          (Don't worry: unlike Reserved Students Digest, we'll still let you post it!)
+        </td>
+      </tr>
+      <tr class="event-row">
+        <th>{{ form.event_date.label_tag }}:</th>
+        <td>{{ form.event_date }}</td>
+        <td>{{ form.event_date.errors }}</td>
+      </tr>
+      <tr class="event-row">
+        <th>{{ form.event_time.label_tag }}:</th>
+        <td>{{ form.event_time }}</td>
+        <td>{{ form.event_time.errors }}</td>
+      </tr>
+      <tr class="event-row">
+        <th>{{ form.event_place.label_tag }}:</th>
+        <td>{{ form.event_place }}</td>
+        <td>{{ form.event_place.errors }}</td>
+      </tr>
+    </table>
+    <p>
+      <input type="submit" value="Submit" />
+    </p>
+  </form>
+{% endblock %}

@@ -1,7 +1,10 @@
-from django.template   import RequestContext
-from django.shortcuts  import render_to_response, get_object_or_404
-from misc.view_helpers import filter_by_date
-from models               import Announcement
+from django.http     import HttpResponseRedirect
+from django.template import RequestContext
+from django.core.urlresolvers import reverse
+from django.shortcuts         import render_to_response, get_object_or_404
+from misc.view_helpers        import filter_by_date
+from announcements.models import Announcement
+from announcements.forms  import SubmitAnnouncementForm
 from articles.models      import Article
 
 def announcement(request, slug, year, month=None, day=None):
@@ -32,3 +35,20 @@ def list_announcements(request, kind=None, year=None, month=None, day=None, orde
     }
     rc = RequestContext(request)
     return render_to_response("announcements/list.html", data, context_instance=rc)
+
+def submit_announcement(request, template="announcements/submit.html"):
+    if request.method == 'POST':
+        form = SubmitAnnouncementForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect(reverse(announcement_success))
+    else:
+        form = SubmitAnnouncementForm()
+    
+    data = { 'form': form }
+    rc = RequestContext(request)
+    return render_to_response(template, data, context_instance=rc)
+
+
+def announcement_success(request, template="announcements/success.html"):
+    return render_to_response(template, {}, context_instance=RequestContext(request))

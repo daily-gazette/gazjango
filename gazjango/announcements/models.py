@@ -53,7 +53,7 @@ class Announcement(models.Model):
     )
     kind = models.CharField(max_length=1, choices=ANNOUNCEMENT_KINDS, default='c')
     
-    title = models.CharField(blank=True, max_length=100)
+    title = models.CharField(max_length=100)
     slug  = models.SlugField(unique_for_year="date_start")
     text  = models.TextField()
     
@@ -67,7 +67,7 @@ class Announcement(models.Model):
     event_time  = models.CharField(blank=True, max_length=20)
     event_place = models.CharField(blank=True, max_length=25)
     
-    is_published = models.BooleanField(default=True)
+    is_published = models.BooleanField(default=False)
     
     objects = models.Manager()
     published = PublishedAnnouncementsManager()
@@ -76,7 +76,7 @@ class Announcement(models.Model):
     admin = AdminAnnouncementsManager()
     
     def is_event(self):
-        return (True if self.event_date else False)
+        return bool(self.event_date)
     
     def brief_excerpt(self, num_chars=120, link=True):
         if len(self.text) <= num_chars:
