@@ -5,7 +5,6 @@ Forms and validation code for user registration.
 
 
 from django import forms
-from django.core.validators import alnum_re
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth.models import User
 
@@ -33,9 +32,10 @@ class RegistrationForm(forms.Form):
     ``RegistrationProfile.objects.create_inactive_user()``.
     
     """
-    username = forms.CharField(max_length=30,
-                               widget=forms.TextInput(attrs=attrs_dict),
-                               label=_(u'username'))
+    username = forms.RegexField(regex=r'^\w+$',
+                                max_length=30,
+                                widget=forms.TextInput(attrs=attrs_dict),
+                                label=_(u'username'))
     email = forms.EmailField(widget=forms.TextInput(attrs=dict(attrs_dict,
                                                                maxlength=75)),
                              label=_(u'email address'))
@@ -50,8 +50,6 @@ class RegistrationForm(forms.Form):
         in use.
         
         """
-        if not alnum_re.search(self.cleaned_data['username']):
-            raise forms.ValidationError(_(u'Usernames can only contain letters, numbers and underscores'))
         try:
             user = User.objects.get(username__iexact=self.cleaned_data['username'])
         except User.DoesNotExist:
