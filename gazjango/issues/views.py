@@ -12,7 +12,7 @@ def issue(request, year, month, day):
     issue = get_by_date_or_404(Issue, year, month, day, field='date')
     data = {
         'issue': issue,
-        'jobs': JobListing.objects.order_by('-pub_date').filter(is_filled=False)[:5],
+        'jobs': JobListing.unfilled.order_by('-pub_date')[:5],
         'comments': PublicComment.visible.order_by('-time')[:5]
     }
     rc = RequestContext(request)

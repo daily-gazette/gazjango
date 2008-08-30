@@ -89,7 +89,7 @@ def homepage(request, template="index.html"):
         
         'specials': Special.objects.order_by('-date').all()[:10],
         'announcements': Announcement.community.now_running(),
-        'jobs': JobListing.objects.order_by('-pub_date').filter(is_filled=False)[:3],
+        'jobs': JobListing.unfilled.order_by('-pub_date')[:3],
         
         'bico_news': get_bico_news(),
         'tla_links': get_tla_links(),

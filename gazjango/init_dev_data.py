@@ -860,6 +860,7 @@ kids = JobListing.objects.create(
     where="Nia Center, Chester, PA",
     at_swat=False,
     needs_car=False,
+    is_published=True,
     description="Volunteers needed to help with an arts and "
 "academics camp held from 9am-3pm, Tues-Wed-Thurs from July 7-August 7. "
 "If you are planning to be in the area and have some free time (any help "
@@ -883,6 +884,7 @@ publications = JobListing.objects.create(
     where="Publications Office",
     at_swat=True,
     needs_car=False,
+    is_published=True,
     description="Publications Office Needs Summer Student Worker. Conscientious, organized, and reliable student with an eye for accuracy needed to work in the Publications Office up to 12 hours per week during the summer. Work will include among other duties, fact checking copy using College database, Internet, and other resources; proofreading; and compiling mailing packets for Class Notes secretaries. Successful candidate must have good writing, grammar, and spelling skills, and be computer savvy. Familiarity with AP and Chicago style is a plus. Position could continue into academic year. Salary: $8.56 per hour. Please contact Susan Breen at ext. 8579 or submit resume including specific qualifications for this position to sbreen1@swarthmore.edu by April 30."
 )
 
@@ -897,5 +899,6 @@ its = JobListing.objects.create(
     where="ITS",
     at_swat=True,
     needs_car=False,
+    is_published=True,
     description="Do some stuff. More at http://www.swarthmore.edu/webintern.xml ."
 )

@@ -4,7 +4,7 @@
 
 <h4>Other Jobs</h4>
 <ul>
-	{% for job in jobListing %}
+	{% for job in other_jobs %}
 		<li><a href="{{job.get_absolute_url}}">{{ job.name|safe }}</a></li>
 	{% endfor %}
 </ul>

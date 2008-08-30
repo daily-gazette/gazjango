@@ -1,6 +1,20 @@
 from django.db import models
 from datetime  import datetime
 
+class PublishedJobsManager(models.Manager):
+    "Deals only with published job listings."
+    def get_query_set(self):
+        orig = super(PublishedJobsManager, self).get_query_set()
+        return orig.filter(is_published=True)
+    
+
+class UnfilledJobsManager(PublishedJobsManager):
+    "Deals only with published, unfilled job listings."
+    def get_query_set(self):
+        orig = super(UnfilledJobsManager, self).get_query_set()
+        return orig.filter(is_filled=False)
+    
+
 class JobListing(models.Model):
     "A job/internship/etc being advertised."
     
@@ -21,6 +35,12 @@ class JobListing(models.Model):
     
     at_swat   = models.BooleanField(default=True)
     needs_car = models.BooleanField(default=False)
+    
+    is_published = models.BooleanField(default=False)
+    
+    objects = models.Manager()
+    published = PublishedJobsManager()
+    unfilled = UnfilledJobsManager()
     
     @models.permalink
     def get_absolute_url(self):

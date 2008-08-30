@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% load extras %}
 
-{% block title %}{{ job.name|removetags:"em strong b i" }}{% endblock title %}
+{% block title %}{{ job.name|striptags }}{% endblock title %}
 
 
 {% block customheader %}
@@ -18,7 +18,7 @@
   <div id="headerSectionBar">
     <div id="headerSection">
       <h3>
-        <a href="/jobs/">Jobs Listing</a>
+        <a href="/jobs/">Job Listings</a>
       </h3>
     </div>
 
@@ -43,24 +43,18 @@
   <div id="storyBox">
     <div id="story">
       <h2>{{ job.name|safe }}</h2>
-      	{% if job.is_filled %}<h3>This position has been filled.</h3>{% endif %}
-        <p>Submitted:  {{ job.pub_date|date:"F j, Y" }}</p>
-		
-		<p>{{ job.description }}</p>
-		
-		<div id="jobInfo">
-			<p><strong>Pay:</strong>
-				{% if job.is_paid %}
-					{{ job.pay }}
-				{% else %}
-					None
-				{% endif %}</p>
-			<p><strong>Hours:</strong> {{ job.hours }}</p>
-			<p><strong>When:</strong> {{ job.when }}</p>
-			<p><strong>Where:</strong> {{ job.where }}</p>
-			{% if job.needs_car %}<p>This position requires access to a car{% endif %}
-		</div>
-				 
+      {% if job.is_filled %}<h3>This position has been filled.</h3>{% endif %}
+      <p>Submitted:  {{ job.pub_date|date:"F j, Y" }}</p>
+    
+      <p>{{ job.description|safe }}</p>
+    
+      <div id="jobInfo">
+        <p><strong>Pay:</strong>{{ job.pay|default:"None" }}</p>
+        <p><strong>Hours:</strong> {{ job.hours }}</p>
+        <p><strong>When:</strong> {{ job.when }}</p>
+        <p><strong>Where:</strong> {{ job.where }}</p>
+        {% if job.needs_car %}<p>This position requires access to a car.</p>{% endif %}
+      </div>         
     </div>
 
     <div id="shareBox">
@@ -74,12 +68,12 @@
 
     <div id="continueBox">
       <div id="top">
-        <a href="{{ toppage.get_absolute_url }}">
-          <img src="{{ toppage.thumbnail.get_absolute_url }}" />
+        <a href="{{ topstory.get_absolute_url }}" title="{{ topstory.headline|striptags }}">
+          <img src="{{ topstory.thumbnail.get_absolute_url }}" />
         </a>
         <div class="content">
-          <h4><a href="{{ toppage.get_absolute_url }}">{{ toppage.get_title }}</a></h4>
-          <p>{{ toppage.short_summary }}</p>
+          <h4><a href="{{ topstory.get_absolute_url }}">{{ topstory.get_title }}</a></h4>
+          <p>{{ topstory.short_summary }}</p>
         </div>
       </div>
 
@@ -88,7 +82,7 @@
           <h4>Top Stories</h4>
           <ul>
             {% for story in stories %}
-              <li><a href="{{rel.get_absolute_url}}">{{ rel.get_title|safe }}</a></li>
+              <li><a href="{{story.get_absolute_url}}">{{ story.get_title|safe }}</a></li>
             {% endfor %}
           </ul>
         </div>
@@ -103,9 +97,6 @@
       </div>
 
     </div>
-  
-
-
 
   </div>
 
