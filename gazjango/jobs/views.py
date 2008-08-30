@@ -34,7 +34,6 @@ def list_jobs(request, options="", default_limit=20, template="jobs/list.html"):
             conditions['needs_car'] = opt == 'needs-car'
     
     jobs = JobListing.objects.filter(**conditions)
-    
     if 'limit' in request.GET:
         lim = request.GET['limit']
         if lim.isdigit():
@@ -42,5 +41,14 @@ def list_jobs(request, options="", default_limit=20, template="jobs/list.html"):
     else:
         jobs = jobs[:default_limit]
     
+    tops, mids, lows = Article.published.get_stories(num_top=1, num_mid=3, num_low=0)
+    data = {
+        'jobs': jobs,
+        'topstory': tops[0],
+        'stories': mids,
+        'comments': PublicComment.visible.order_by('-time')[:3],
+        'other_jobs': JobListing.unfilled.order_by('-pub_date')[:3]
+    }
+    
     rc = RequestContext(request)
-    return render_to_response(template, {'jobs': jobs}, context_instance=rc)
+    return render_to_response(template, data, context_instance=rc)
