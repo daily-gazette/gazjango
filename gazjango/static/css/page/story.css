@@ -331,15 +331,15 @@ SUBMISSION FORM STYLES
 
 **************************************/
 
-.submission-form table {
+.submission {
 	font-size: 1.4em;
 	padding-bottom: 4px;
 }
 
-.submission-form th {
+.submission th {
 	text-align: right;
 }
 
-.submission-form tr {
-	margins: 2px;
+.submission tr {
+	margin: 2px;
 }
