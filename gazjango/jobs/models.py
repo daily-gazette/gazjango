@@ -18,7 +18,7 @@ class UnfilledJobsManager(PublishedJobsManager):
 class JobListing(models.Model):
     "A job/internship/etc being advertised."
     
-    name = models.CharField(blank=True, max_length=100)
+    name = models.CharField(max_length=100)
     slug = models.SlugField(unique=True)
     
     description = models.TextField()
@@ -26,15 +26,15 @@ class JobListing(models.Model):
     pub_date = models.DateTimeField(default=datetime.now)
     is_filled = models.BooleanField(default=False)
     
-    pay     = models.CharField(max_length=25)
-    is_paid = models.BooleanField(default=True)
+    pay     = models.CharField(max_length=25, blank=True)
+    is_paid = models.BooleanField(default=True, blank=True)
     
-    hours = models.CharField(max_length=25)
-    when  = models.CharField(max_length=25)
-    where = models.CharField(max_length=50)
+    hours = models.CharField(max_length=25, blank=True)
+    when  = models.CharField(max_length=25, blank=True)
+    where = models.CharField(max_length=50, blank=True)
     
-    at_swat   = models.BooleanField(default=True)
-    needs_car = models.BooleanField(default=False)
+    at_swat   = models.BooleanField(default=True, blank=True)
+    needs_car = models.BooleanField(default=False, blank=True)
     
     is_published = models.BooleanField(default=False)
     

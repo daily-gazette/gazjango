@@ -1,8 +1,11 @@
-from django.template  import RequestContext
-from django.shortcuts import render_to_response, get_object_or_404
-from jobs.models      import JobListing
-from articles.models  import Article
-from comments.models  import PublicComment
+from django.core.urlresolvers import reverse
+from django.http              import HttpResponseRedirect
+from django.template          import RequestContext
+from django.shortcuts         import render_to_response, get_object_or_404
+from jobs.models     import JobListing
+from jobs.forms      import SubmitJobForm
+from articles.models import Article
+from comments.models import PublicComment
 
 def job_details(request, slug, template="jobs/details.html"):
     job = get_object_or_404(JobListing, slug=slug)
@@ -52,3 +55,20 @@ def list_jobs(request, options="", default_limit=20, template="jobs/list.html"):
     
     rc = RequestContext(request)
     return render_to_response(template, data, context_instance=rc)
+
+
+def submit_job(request, template="jobs/submit.html"):
+    if request.method == 'POST':
+        form = SubmitJobForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect(reverse(job_success))
+    else:
+        form = SubmitJobForm()
+    
+    data = { 'form': form }
+    rc = RequestContext(request)
+    return render_to_response(template, data, context_instance=rc)
+
+def job_success(request, template="jobs/success.html"):
+    return render_to_response(template, {}, context_instance=RequestContext(request))
