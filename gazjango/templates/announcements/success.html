@@ -3,34 +3,26 @@
 {% block title %}Announcement Submitted{% endblock %}
 
 {% block customheader %}
-
-<link rel="stylesheet" href="{% static css page/story.css %}" type="text/css" media="screen, projection" />
-
+  <link rel="stylesheet" href="{% static css page/story.css %}" type="text/css" media="screen, projection" />
 {% endblock %}
 
 {% block topbar %}
-
-    <div id="headerSectionBar">
-
-      <div id="headerSearch">
-        <form method="get" id="searchform" action="{% url search %}">Search: <input type="text" class="textbox" value="" name="s" id="s" /><input type="submit" id="searchsubmit" value="Go" /></p>
-      </div>
-
+  <div id="headerSectionBar">
+    <div id="headerSearch">
+      <form method="get" id="searchform" action="{% url search %}">
+        Search: 
+        <input type="text" class="textbox" value="" name="s" id="s" />
+        <input type="submit" id="searchsubmit" value="Go" />
+      </form>
+    </div>
   </div>
-
-
+{% endblock %}
 
 {% block content %}
-
   <div id="storyBox">
     <div id="story">
       <h2>Success!</h2>
-
-  <p>
-    Thanks for submitting your announcement. An administrator will review it and, with any luck, it should show up on the Gazette site soon.
-  </p>
-  
-</div>
-</div>
-
+      <p>Thanks for submitting your announcement. An administrator will review it and, with any luck, it should show up on the Gazette site soon.</p>
+    </div>
+  </div>
 {% endblock %}
