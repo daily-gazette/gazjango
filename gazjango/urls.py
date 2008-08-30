@@ -94,6 +94,8 @@ urlpatterns += patterns('polls.views',
 urlpatterns += patterns('jobs.views',
     (r'^jobs/$', 'list_jobs', {}, 'job_list'),
     (r'^jobs/new/$', 'submit_job', {}, 'submit-job'),
+    (r'^jobs/new/success/$', 'job_success'),
+    
     (r'^jobs/list/(?P<options>(?:[\w-]+/)*)$', 'list_jobs'),
     (r'^jobs/%(slug)s/$' % reps, 'job_details')
 )
