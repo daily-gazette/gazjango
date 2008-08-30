@@ -54,7 +54,7 @@ class Announcement(models.Model):
     kind = models.CharField(max_length=1, choices=ANNOUNCEMENT_KINDS, default='c')
     
     title = models.CharField(max_length=100)
-    slug  = models.SlugField(unique_for_year="date_start")
+    slug  = models.SlugField(unique_for_year="date_start", null=True)
     text  = models.TextField()
     
     sponsor = models.CharField(max_length=50)
