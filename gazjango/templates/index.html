@@ -221,10 +221,10 @@ jQuery(document).ready(function() {
 				  <p>When: {{ job.when }}</p>
 				  <p>Where: {{ job.where }}</p>
 				  
-				  {% if not forloop.last %}
-				    <hr width="50%" />
-				  {% endif %}
+			    <hr width="50%" />
 				{% endfor %}
+				
+				<p>You can <a href="{% url submit-job %}">submit your own</a> job to the listings.</p>
 			</div>
 			
 			<div class="indexBottomColumn floatLeft" id="bico">
