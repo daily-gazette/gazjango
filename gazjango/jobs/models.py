@@ -49,3 +49,6 @@ class JobListing(models.Model):
     def __unicode__(self):
         return self.slug
     
+    def get_pay(self):
+        return self.pay if self.is_paid else 'None'
+    

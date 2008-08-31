@@ -209,14 +209,7 @@ jQuery(document).ready(function() {
 				
 				{% for job in jobs %}
 				  <h4><a href="{{ job.get_absolute_url }}">{{ job.name }}</a></h4>
-				  <p>
-				    Pay:
-				    {% if job.is_paid %}
-				      {{ job.pay }}
-				    {% else %}
-              None
-				    {% endif %}
-				  </p>
+				  <p>Pay: {{ job.get_pay }}</p>
 				  <p>Hours: {{ job.hours }}</p>
 				  <p>When: {{ job.when }}</p>
 				  <p>Where: {{ job.where }}</p>

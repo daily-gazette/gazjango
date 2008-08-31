@@ -43,7 +43,7 @@
           {% for job in jobs %}
           <h4><a href="{{ job.get_absolute_url }}">{{ job.name }}</a></h4> <br /><br />
             <div id="jobInfoList">
-              <p><strong>Pay:</strong>{{ job.pay|default:"None" }}</p>
+              <p><strong>Pay:</strong> {{ job.get_pay }}</p>
               <p><strong>Hours:</strong> {{ job.hours }}</p>
               <p><strong>When:</strong> {{ job.when }}</p>
               <p><strong>Where:</strong> {{ job.where }}</p>
