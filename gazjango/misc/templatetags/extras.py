@@ -69,12 +69,12 @@ def join_authors(authors, format='', autoescape=None):
         casify = lambda s: ' '.join(x.capitalize() for x in esc(s).split())
     
     def reps(author):
-        pos = author.position()
-        return {
-            'url': author.get_absolute_url(),
-            'name': casify(author.name),
-            'pos': casify(pos or "Guest Writer") 
-        }
+        results = { 'name': casify(author.name) }
+        if positions:
+            results['pos'] = casify(author.position() or "Guest Writer")
+        if link:
+            results['url'] = author.get_absolute_url
+        return results
     
     base = "%(name)s"
     if positions: base += ", %(pos)s"
