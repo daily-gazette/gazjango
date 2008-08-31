@@ -126,10 +126,8 @@ jQuery(document).ready(function() {
 					<ul>
 					{% for story in lowstories|slice:":3" %}
 						<li>
-						  <h4>
-						    {# TODO: show "column", etc here #}
-						    <a href="{{ story.get_absolute_url }}">{{ story.get_title|safe }}</a>
-						  </h4>
+						  <span class="type">{{ story.section.name }}:</span>
+						  <h4><a href="{{ story.get_absolute_url }}">{{ story.get_title|safe }}</a></h4>
 						  <span class="author"> | by {{ story.authors|join_authors:"1x" }}</span>
 						</li>
 					{% endfor %}
@@ -140,6 +138,7 @@ jQuery(document).ready(function() {
 					<ul>
 					{% for story in lowstories|slice:"3:6" %}
 						<li>
+						  <span class="type">{{ story.section.name }}</span>
 						  <h4><a href="{{ story.get_absolute_url }}">{{ story.get_title|safe }}</a></h4>
 						  <span class="author"> | by {{ story.authors|join_authors:"1x" }}</span>
 						</li>
