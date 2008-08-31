@@ -298,7 +298,7 @@ class Writing(models.Model):
         app_label = 'articles'
     
     def __unicode__(self):
-        return "%s wrote %s" % (user.username, article.slug)
+        return "%s wrote %s" % (self.user.username, self.article.slug)
     
 
 class ArticleRevision(models.Model):

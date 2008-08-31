@@ -17,9 +17,9 @@ register = template.Library()
 @register.filter
 def join_authors(authors, format='', autoescape=None):
     """
-    Takes an m2m manager for authors (ie story.authors) and returns a string
-    formatted for bylines: something like "JOE SCHMOE, STAFF REPORTER; JANE 
-    MCBANE, ARTS EDITOR".
+    Takes an m2m with users (eg `story.authors_in_order`) and returns
+    a string formatted for bylines: something along the lines of
+    "JOE SCHMOE, STAFF REPORTER; JANE MCBANE, ARTS EDITOR".
     
     The format argument tells the filter how to format the return value
     (surprisingly enough). This is a string, which can specify as many of the
@@ -57,7 +57,7 @@ def join_authors(authors, format='', autoescape=None):
         else:
             pass
     
-    result = list(authors.all()[:limit] if limit else authors.all())
+    result = list(authors[:limit] if limit else authors)
     
     esc = conditional_escape if autoescape else (lambda x: x)
     
@@ -80,7 +80,7 @@ def join_authors(authors, format='', autoescape=None):
     if positions: base += ", %(pos)s"
     if link: base = "<a href='%(url)s'>" + base + "</a>"
     
-    return mark_safe('; '.join([base % reps(author) for author in result]))
+    return mark_safe('; '.join(base % reps(author) for author in result))
 
 join_authors.needs_autoescape = True
 

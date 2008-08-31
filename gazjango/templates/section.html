@@ -76,7 +76,7 @@
           <img class="{{ topstory.front_image.get_shape_display }}" src="{{ topstory.front_image.get_absolute_url }}" title="{{ topstory.headline }}" alt="" />
           <h2><a href="{{ topstory.get_absolute_url }}">{{topstory.get_title|safe}}</a></h2>
           <p class="byline">
-            <span class="author">by {{ topstory.authors|join_authors }}</span>
+            <span class="author">by {{ topstory.authors_in_order|join_authors }}</span>
             <span class="date">| {{ topstory.pub_date|date:"n/j/Y" }}</span>
           </p>
           <p>
@@ -96,7 +96,7 @@
             <img src="{{ story.front_image.get_absolute_url }}" class="{{ story.front_image.get_shape_display }}" title="{{ story.headline }}" alt="" />
             <h3><a href="{{ story.get_absolute_url }}">{{ story.get_title|safe }}</a></h3>
             <p class="byline">
-              <span class="author">by {{ story.authors|join_authors }}</span>
+              <span class="author">by {{ story.authors_in_order|join_authors }}</span>
               <span class="date"> | {{ story.pub_date|date:"n/j/Y" }}</span>
             </p>
             <p>
@@ -114,7 +114,7 @@
           {% for story in lows %}
             <li>
               <h4><a href="{{ story.get_absolute_url }}">{{ story.get_title|safe }}</a></h4>
-              <span class="author">| by {{ story.authors|join_authors:"1x" }}</span>
+              <span class="author">| by {{ story.authors_in_order|join_authors:"1x" }}</span>
               <span class="date">| {{ story.pub_date|date:"n/j/Y" }}</span>
             </li>
           {% endfor %}
