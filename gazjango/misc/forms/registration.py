@@ -10,8 +10,8 @@ class RegistrationFormWithProfile(RegistrationForm):
                              label='kind of user')
     year = forms.IntegerField(required=False,
                               min_value=1900,
-                              max_value=datetime.date.today().year + 5,
-                              label='grad year')
+                              max_value=datetime.date.today().year + 6,
+                              label='Swarthmore grad year (if any)')
     
     def save(self, profile_callback=None):
         """
