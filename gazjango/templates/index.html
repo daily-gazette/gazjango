@@ -105,7 +105,11 @@ jQuery(document).ready(function() {
 		<div id="indexMainBox">
 		
 			<div id="indexMainStory">
-				<img class="{{ topstory.front_image.get_shape_display }}" src="{{ topstory.front_image.get_absolute_url }}" title="{{ topstory.headline }}" />
+			  <a href="{{ topstory.get_absolute_url }}">
+			    <img class="{{ topstory.front_image.get_shape_display }}" 
+			         src="{{ topstory.front_image.get_absolute_url }}" 
+			         title="{{ topstory.headline }}" />
+			  </a>
 				<h2><a href="{{ topstory.get_absolute_url }}">{{topstory.get_title|safe}}</a></h2>
 				<p class="byline">
 				  <span class="author">by {{ topstory.authors|join_authors }}</span>
@@ -146,8 +150,12 @@ jQuery(document).ready(function() {
 		</div>
 		
 		<div id="indexSecondary">
-			{% for story in midstories %}			
-				<img src="{{ story.front_image.get_absolute_url }}" class="{{ story.front_image.get_shape_display }}" title="{{ story.headline }}" alt="" />
+			{% for story in midstories %}
+			  <a href="{{ story.get_absolute_url }}">
+  				<img src="{{ story.front_image.get_absolute_url }}"
+  				     class="{{ story.front_image.get_shape_display }}" 
+  				     title="{{ story.headline }}" alt="" />
+  			</a>
 			  <h3><a href="{{ story.get_absolute_url }}">{{ story.get_title|safe }}</a></h3>
 			  <p class="byline">
           <span class="author">by {{ story.authors|join_authors }}</span>
