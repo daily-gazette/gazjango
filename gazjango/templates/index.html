@@ -102,163 +102,153 @@ jQuery(document).ready(function() {
 
 	
 {% block content %}
-		<div id="indexMainBox">
-		
-			<div id="indexMainStory">
-			  <a href="{{ topstory.get_absolute_url }}">
-			    <img class="{{ topstory.front_image.get_shape_display }}" 
-			         src="{{ topstory.front_image.get_absolute_url }}" 
-			         title="{{ topstory.headline }}" />
-			  </a>
-				<h2><a href="{{ topstory.get_absolute_url }}">{{topstory.get_title|safe}}</a></h2>
-				<p class="byline">
-				  <span class="author">by {{ topstory.authors|join_authors }}</span>
-				  <span class="date">| {{ topstory.pub_date|date:"n/j/Y" }}</span>
-				</p>
-				<p>
-  				{{ topstory.long_summary|safe }}
-  				<a class="readMore" href="{{ topstory.get_absolute_url }}">More</a>
-  			</p>
-			</div>
-			
-			<div id="indexHeadlines">
-				<div class="indexHeadlinesBox floatLeft">
-					<ul>
-					{% for story in lowstories|slice:":3" %}
-						<li>
-						  <span class="type">{{ story.section.name }}:</span>
-						  <h4><a href="{{ story.get_absolute_url }}">{{ story.get_title|safe }}</a></h4>
-						  <span class="author"> | by {{ story.authors|join_authors:"1x" }}</span>
-						</li>
-					{% endfor %}
-					</ul>
-				</div>
-		
-				<div class="indexHeadlinesBox floatRight">
-					<ul>
-					{% for story in lowstories|slice:"3:6" %}
-						<li>
-						  <span class="type">{{ story.section.name }}</span>
-						  <h4><a href="{{ story.get_absolute_url }}">{{ story.get_title|safe }}</a></h4>
-						  <span class="author"> | by {{ story.authors|join_authors:"1x" }}</span>
-						</li>
-					{% endfor %}
-					</ul>
-				</div>
-			</div>
+	<div id="indexMainBox">
+		<div id="indexMainStory">
+		  <a href="{{ topstory.get_absolute_url }}">
+		    <img class="{{ topstory.front_image.get_shape_display }}" 
+		         src="{{ topstory.front_image.get_absolute_url }}" 
+		         title="{{ topstory.headline }}" />
+		  </a>
+			<h2><a href="{{ topstory.get_absolute_url }}">{{topstory.get_title|safe}}</a></h2>
+			<p class="byline">
+			  <span class="author">by {{ topstory.authors|join_authors }}</span>
+			  <span class="date">| {{ topstory.pub_date|date:"n/j/Y" }}</span>
+			</p>
+			<p>
+				{{ topstory.long_summary|safe }}
+				<a class="readMore" href="{{ topstory.get_absolute_url }}">More</a>
+			</p>
 		</div>
 		
-		<div id="indexSecondary">
-			{% for story in midstories %}
-			  <a href="{{ story.get_absolute_url }}">
-  				<img src="{{ story.front_image.get_absolute_url }}"
-  				     class="{{ story.front_image.get_shape_display }}" 
-  				     title="{{ story.headline }}" alt="" />
-  			</a>
-			  <h3><a href="{{ story.get_absolute_url }}">{{ story.get_title|safe }}</a></h3>
-			  <p class="byline">
-          <span class="author">by {{ story.authors|join_authors }}</span>
-          <span class="date"> | {{ story.pub_date|date:"n/j/Y" }}</span>
-			  </p>
-			  <p>
-			   {{ story.summary|safe }}
-			   <a class="readMore" href="{{ story.get_absolute_url }}">More</a>
-			  </p>
+		<div id="indexHeadlines">
+		  <table>
+		    {% for story_pair in lowstories|in_groups_of:2 %}
+		      <tr>
+		        {% for story in story_pair %}
+			        <td>
+			          <span class="type">{{ story.section.name }}:</span>
+			          <h4><a href="{{ story.get_absolute_url }}">{{ story.get_title|safe }}</a></h4>
+  						  <span class="author">
+  						    | by {{ story.authors|join_authors:"1x" }}
+  						  </span>
+  						{% endfor %}
+						</td>
+		      </tr>
+		    {% endfor %}
+		  </table>
+		</div>
+	</div>
+	
+	<div id="indexSecondary">
+		{% for story in midstories %}
+		  <a href="{{ story.get_absolute_url }}">
+				<img src="{{ story.front_image.get_absolute_url }}"
+				     class="{{ story.front_image.get_shape_display }}" 
+				     title="{{ story.headline }}" alt="" />
+			</a>
+		  <h3><a href="{{ story.get_absolute_url }}">{{ story.get_title|safe }}</a></h3>
+		  <p class="byline">
+        <span class="author">by {{ story.authors|join_authors }}</span>
+        <span class="date"> | {{ story.pub_date|date:"n/j/Y" }}</span>
+		  </p>
+		  <p>
+		   {{ story.summary|safe }}
+		   <a class="readMore" href="{{ story.get_absolute_url }}">More</a>
+		  </p>
+		{% endfor %}
+	</div>
+	
+	<div id="indexPOTDbar">
+		<center>
+		  <hr width="900px" color="#dddddd" size=.5px />
+		
+      <ul id="mycarousel" class="jcarousel-skin-tango">
+        {% for special in specials %}
+          <li>
+            <h5>{{ special.category.name|safe }} &rsaquo;&rsaquo;</h5>
+            <a href="{{ special.get_target_url }}">
+              <img src="{{ special.image.get_absolute_url }}" width="150" height="150" alt="" />
+            </a>
+            <p><a href="{{ special.get_target_url }}">{{ special.title|safe }}</a></p>
+          </li>
+        {% endfor %}
+      </ul>
+		
+			<hr width="900px" color="#dddddd" size=.5px />
+		</center>
+	</div>
+	
+	<div id="indexBottom">
+		<div class="indexBottomColumn floatLeft margin25">
+			<h3>Announcements</h3>
+			
+			{% for announcement in announcements %}
+			  <h4>
+			    <a href="{{ announcement.get_absolute_url }}">{{ announcement.title }}</a>
+			  </h4>
+			  {% if announcement.is_event %}
+				  <p>Sponsored by {{ announcement.sponsor_link }}</p>
+          <p>When: {{ announcement.event_date|near_future_date }} at {{ announcement.event_time }}</p>
+          <p>Where: {{ announcement.event_place }}</p>
+          
+			  {% else %}
+			    <p>{{ announcement.brief_excerpt|safe }}</p>
+			  {% endif %}
+			  
+			  <hr width="50%" />
 			{% endfor %}
+			
+			<p>Have something to tell the Swarthmore-related world? <a href="{% url submit-announcement %}">Submit your own announcement</a> to show up here and in our email issues.</p>
 		</div>
 		
-		<div id="indexPOTDbar">
-			<center>
-			  <hr width="900px" color="#dddddd" size=.5px />
+		<div class="indexBottomColumn floatLeft margin25">
+			<h3>Jobs &amp; Internships</h3>
 			
-        <ul id="mycarousel" class="jcarousel-skin-tango">
-          {% for special in specials %}
-            <li>
-              <h5>{{ special.category.name|safe }} &rsaquo;&rsaquo;</h5>
-              <a href="{{ special.get_target_url }}">
-                <img src="{{ special.image.get_absolute_url }}" width="150" height="150" alt="" />
-              </a>
-              <p><a href="{{ special.get_target_url }}">{{ special.title|safe }}</a></p>
-            </li>
-          {% endfor %}
-        </ul>
+			{% for job in jobs %}
+			  <h4><a href="{{ job.get_absolute_url }}">{{ job.name }}</a></h4>
+			  <p>Pay: {{ job.get_pay }}</p>
+			  <p>Hours: {{ job.hours }}</p>
+			  <p>When: {{ job.when }}</p>
+			  <p>Where: {{ job.where }}</p>
+			  
+		    <hr width="50%" />
+			{% endfor %}
 			
-  			<hr width="900px" color="#dddddd" size=.5px />
-  		</center>
+			<p>Have a job opportunity? <a href="{% url submit-job %}">Add it</a> to the listings.</p>
 		</div>
 		
-		
-		<div id="indexBottom">
-			<div class="indexBottomColumn floatLeft margin25">
-				<h3>Announcements</h3>
-				
-				{% for announcement in announcements %}
-				  <h4>
-				    <a href="{{ announcement.get_absolute_url }}">{{ announcement.title }}</a>
-				  </h4>
-				  {% if announcement.is_event %}
-  				  <p>Sponsored by {{ announcement.sponsor_link }}</p>
-            <p>When: {{ announcement.event_date|near_future_date }} at {{ announcement.event_time }}</p>
-            <p>Where: {{ announcement.event_place }}</p>
-            
-				  {% else %}
-				    <p>{{ announcement.brief_excerpt|safe }}</p>
-				  {% endif %}
-				  
-				  <hr width="50%" />
-				{% endfor %}
-				
-				<p>Have something to tell the Swarthmore-related world? <a href="{% url submit-announcement %}">Submit your own announcement</a> to show up here and in our email issues.</p>
-			</div>
+		<div class="indexBottomColumn floatLeft" id="bico">
+			<h3>From <a href="http://www.biconews.com/"><em>The BiCo News</em></a></h3>
 			
-			<div class="indexBottomColumn floatLeft margin25">
-				<h3>Jobs &amp; Internships</h3>
-				
-				{% for job in jobs %}
-				  <h4><a href="{{ job.get_absolute_url }}">{{ job.name }}</a></h4>
-				  <p>Pay: {{ job.get_pay }}</p>
-				  <p>Hours: {{ job.hours }}</p>
-				  <p>When: {{ job.when }}</p>
-				  <p>Where: {{ job.where }}</p>
-				  
-			    <hr width="50%" />
+			{% ifequal bico_news "error" %}
+			  <p>Unfortunately, we seem to be having some technical difficulties. We're working to resolve them, but in the meantime you can get news from the BiCo at <a href="http://www.biconews.com/">biconews.com</a>.</p>
+			{% else %}
+				{% for story in bico_news %}
+				  <h4><a href="{{ story.link }}">{{ story.headline }}</a></h4>
+				  <p class="byline"><span class="author">by {{ story.author|upper }}</span></p>
 				{% endfor %}
-				
-				<p>Have a job opportunity? <a href="{% url submit-job %}">Add it</a> to the listings.</p>
-			</div>
+			{% endifequal %}
 			
-			<div class="indexBottomColumn floatLeft" id="bico">
-				<h3>From <a href="http://www.biconews.com/"><em>The BiCo News</em></a></h3>
-				
-				{% ifequal bico_news "error" %}
-				  <p>Unfortunately, we seem to be having some technical difficulties. We're working to resolve them, but in the meantime you can get news from the BiCo at <a href="http://www.biconews.com/">biconews.com</a>.</p>
-				{% else %}
-  				{% for story in bico_news %}
-  				  <h4><a href="{{ story.link }}">{{ story.headline }}</a></h4>
-  				  <p class="byline"><span class="author">by {{ story.author|upper }}</span></p>
-  				{% endfor %}
-				{% endifequal %}
-				
-				<p><a href="http://www.biconews.com/"><em>The BiCo News</em></a> is the weekly paper for Bryn Mawr and Haverford Colleges.</p>
-				
-				<hr />
-				
-				{% for text, url in manual_links %}
-				  <a href="{{ url }}">{{ text }}</a> |
-				{% endfor %}
-				
-				<!-- TLA -->
-				  {% for link in tla_links %}
-				    {{ link|safe }} |
-				  {% endfor %}
-				
-				<!-- <br /><br /> -->
-				
-				<!-- LCA  -->
-				{% for text, url in lca_links %}
-				  <a href="{{ url }}">{{ text }}</a>
-				  {% if not forloop.last %}|{% endif %}
-				{% endfor %}				
-			</div>
+			<p><a href="http://www.biconews.com/"><em>The BiCo News</em></a> is the weekly paper for Bryn Mawr and Haverford Colleges.</p>
+			
+			<hr />
+			
+			{% for text, url in manual_links %}
+			  <a href="{{ url }}">{{ text }}</a> |
+			{% endfor %}
+			
+			<!-- TLA -->
+			  {% for link in tla_links %}
+			    {{ link|safe }} |
+			  {% endfor %}
+			
+			<!-- <br /><br /> -->
+			
+			<!-- LCA  -->
+			{% for text, url in lca_links %}
+			  <a href="{{ url }}">{{ text }}</a>
+			  {% if not forloop.last %}|{% endif %}
+			{% endfor %}				
 		</div>
+	</div>
 {% endblock content %}

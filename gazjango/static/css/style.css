@@ -476,25 +476,20 @@ p {
 	font-size: 1.2em;
 }
 
-.indexHeadlinesBox {
-	width: 175px;
-	margin: 0px;
-}
-
-.indexHeadlinesBox ul {
+#indexHeadlines tr {
 	padding: 0;
 	margin: 0;
 }
-.indexHeadlinesBox ul li {
-	list-style-type: none;
-	width: 170px;
-	display: block;
+
+#indexHeadlines td {
+/*  width: 170px;*/
+/*  display: block;*/
 	margin: 0 5px 5px 5px;
 	font-size: 1.1em;
 	line-height: 1em;
 }
 
-.indexHeadlinesBox ul li span.type {
+#indexHeadlines span.type {
 	display: inline;
 	overflow:hidden;
 	font-weight: bold;
