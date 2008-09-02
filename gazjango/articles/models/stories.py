@@ -122,6 +122,8 @@ class Article(models.Model):
     subsections = models.ManyToManyField('articles.Subsection',
                                          related_name="articles")
     
+    highlighters = models.ManyToManyField(UserProfile, related_name='top_stories', through='Highlighting')
+    
     front_image = models.ForeignKey(ImageFile, null=True,
                                     related_name="articles_with_front")
     thumbnail   = models.ForeignKey(ImageFile, null=True,
@@ -299,6 +301,25 @@ class Writing(models.Model):
     
     def __unicode__(self):
         return "%s wrote %s" % (self.user.username, self.article.slug)
+    
+
+class Highlighting(models.Model):
+    """
+    Represents an author's having chosen to highlight a story on 
+    their profile page.
+    
+    Mainly to allow for ordering.
+    """
+    article = models.ForeignKey(Article)
+    user = models.ForeignKey(UserProfile)
+    
+    class Meta:
+        order_with_respect_to = 'article'
+        unique_together = ('article', 'user')
+        app_label = 'articles'
+    
+    def __unicode__(self):
+        return "%s highlited %s" % (self.user.username, self.article.slug)
     
 
 class ArticleRevision(models.Model):
