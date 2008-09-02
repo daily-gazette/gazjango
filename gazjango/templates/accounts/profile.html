@@ -16,7 +16,7 @@
   	  {% endif %}
   	  {{ author.name }}
   	</h2>
-  	<h3><span class="title">{{ author.position.name|default:"Guest Writer" }}</span></h3>
+  	<h3><span class="position-name">{{ author.position.name|default:"Guest Writer" }}</span></h3>
 	
 	  {% if author.bio %}
       <div id="description">
