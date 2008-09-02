@@ -75,9 +75,11 @@ class ProfilesManager(models.Manager):
 class UserProfile(models.Model):
     "Lots of extra information about users."
     user = models.ForeignKey(User, unique=True)
-    bio  = models.TextField(blank=True, null=True)
     kind = models.ForeignKey(UserKind, null=True)
     
+    bio     = models.TextField(blank=True, null=True)
+    awards  = models.TextField(blank=True, null=True)
+    picture = models.ForeignKey('media.ImageFile', blank=True, null=True)
     positions = models.ManyToManyField('Position', through='Holding', related_name="holdings")
     
     name     = property(lambda self: self.user.get_full_name())
@@ -191,4 +193,7 @@ class Holding(models.Model):
     def __unicode__(self):
         return "%s (by %s)" % (self.position.__unicode__(),
                                self.user_profile.__unicode__())
+    
+    class Meta:
+        ordering = ['date_start']
     
