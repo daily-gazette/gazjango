@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+{% load extras %}
+
+{% block title %}{{ author.name }}{% endblock %}
+
+{% block customheader %}
+<link rel="stylesheet" href="{% static css functions/profile.css %}" type="text/css" media="screen, projection" />
+<link rel="stylesheet" href="{% static css functions/tables.css %}" type="text/css" media="screen, projection" />
+{% endblock %}
+
+{% block content %}
+  <div id="profiles">
+  	<h2>
+      {% if author.picture %}
+        <div class="picture"><img src="{{ author.picture.get_absolute_url }}" /></div>
+  	  {% endif %}
+  	  {{ author.name }}
+  	</h2>
+  	<h3><span class="title">{{ author.position.name|default:"Guest Writer" }}</span></h3>
+	
+	  {% if author.bio %}
+      <div id="description">
+        <p>{{ author.bio }}</p>
+      </div>
+	  {% endif %}
+	
+  	<div id="history">
+  		<ul>
+  		  {% for holding in author.holding_set.reverse %}
+          <li>{{ holding.date_start.year }}-{{ holding.date_end.year|default:"Present" }}: {{ holding.position.name }}</li>
+          {# TODO: link to role description #}
+  		  {% endfor %}
+  		</ul>
+  		
+  		{% if author.awards %}
+  		  <p>{{ author.awards }}</p>
+  		{% endif %}
+  	</div>
+	
+  	<div id="topStories">
+  	  {% for story in author.top_stories.all %}
+    		<div class="storyListing">
+    			<img src="{{ story.thumbnail.get_absolute_url }}" class="searchImage" />
+    			<p>
+    			  <a href="{{ story.get_absolute_url }}" class="title">{{ story.headline|safe }}</a>
+    			  <br />
+      			<span class="byline">
+      				<span class="author">by {{ story.authors_in_order|join_authors:"l" }}</span>
+      				<span class="date">|<a href="{{ story.pub_date|issue_url }}">{{ story.pub_date|date:"F j, Y" }}</a></span>
+      			</span>
+      			<br />
+      			{{ story.summary|safe }} <a href="{{ story.get_absolute_url }}" class="readMore">read more</a>
+      		</p>
+    		</div>
+    	{% endfor %}
+  	</div>
+	
+  	<div id="allStories">
+  		<ul>
+  		  {% for story in author.articles.all %}
+  		    <li>{{ story.headline }}</li>
+  		  {% endfor %}
+  		</ul>
+  	</div>
+  	
+  </div>
+{% endblock %}

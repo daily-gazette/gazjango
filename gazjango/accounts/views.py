@@ -1,7 +1,7 @@
 from django.http import HttpResponse, Http404
 from django.template import RequestContext
 from django.contrib.auth.decorators import permission_required
-from django.shortcuts import render_to_response
+from django.shortcuts import render_to_response, get_object_or_404
 from django.db.models import Q
 from misc.view_helpers import reporter_admin_data
 
@@ -12,7 +12,13 @@ from comments.models import PublicComment
 
 manage       = lambda request, **kwargs: render_to_response("base.html", locals())
 register     = lambda request, **kwargs: render_to_response("registration/register.html", locals())
-user_details = lambda request, **kwargs: render_to_response("base.html", locals())
+
+def user_details(request, name, template="accounts/profile.html"):
+    """Shows a user's profile page."""
+    up = get_object_or_404(UserProfile, user__username=name)
+    rc = RequestContext(request)
+    return render_to_response(template, {'author': up}, context_instance=rc)
+
 
 @permission_required('accounts.can_access_admin')
 def admin_index(request, template="custom-admin/index.html"):
