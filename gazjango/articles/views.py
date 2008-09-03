@@ -69,7 +69,7 @@ def show_article(request, story, form, print_view=False, extra={}, template="sto
     return render_to_response(template, data, context_instance=rc)
 
 
-def articles(request, year=None, month=None, day=None, template="archive.html"):
+def articles(request, year=None, month=None, day=None, template="archives.html"):
     articles = filter_by_date(Article.published.all(), year, month, day)
     data = { 'articles': articles, 'year': year, 'month': month, 'day': day }
     rc = RequestContext(request)
