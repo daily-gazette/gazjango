@@ -125,7 +125,10 @@ class Article(models.Model):
     highlighters = models.ManyToManyField(UserProfile, related_name='top_stories', through='Highlighting')
     
     front_image = models.ForeignKey(ImageFile, null=True,
-                                    related_name="articles_with_front")
+                                        related_name="articles_with_front")
+    issue_image = models.ForeignKey(ImageFile, null=True,
+                                        related_name="articles_with_issue")
+                                    
     thumbnail   = models.ForeignKey(ImageFile, null=True,
                                     related_name="articles_with_thumbnail")
     media  = models.ManyToManyField(MediaFile, related_name="articles")
