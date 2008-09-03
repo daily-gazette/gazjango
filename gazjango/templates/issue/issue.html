@@ -277,8 +277,8 @@
                       {% if issue.menu.closed %}
                         {{ issue.menu.message }}
                       {% else %}
-                        <p><strong>Lunch</strong>: {{ menu.lunch }}</p>
-                        <p><strong>Dinner</strong>: {{ menu.dinner }}</p>
+                        <p><strong>Lunch</strong>: {{ issue.menu.lunch }}</p>
+                        <p><strong>Dinner</strong>: {{ issue.menu.dinner }}</p>
                       {% endif %}
                     </font>
                   </td>
@@ -305,7 +305,9 @@
                     <td>
                       <font color="#333333" size="2" face="Georgia, Times New Roman, Times, serif">
                         <strong>{{ event.name }}</strong> <br />
-                        Where: {{ event.location }} <br />
+                        {% if event.location %}
+                          Where: {{ event.location }} <br />
+                        {% endif %}
                         When:
                           {{ event.start|near_future_date }}
                           {{ event.start|date:"P" }}
@@ -317,9 +319,13 @@
                             {{ event.end|date:"P" }}
                           {% endifnotequal %}
                           <br/>
-                        Sponsor: {{ event.sponsor }} <br />
+                        {% if event.sponsor %}
+                          Where: {{ event.location }} <br />
+                        {% endif %}
                       </font>
-                      <br />
+                      {% if not forloop.last %}
+                        <br />
+                      {% endif %}
                     </td>
                   </tr>
                 </table>
@@ -364,10 +370,10 @@
               <table width="202" border="0" cellpadding="0" cellspacing="0">
                 <tr>
                   <td width="202" align="center" valign="top" bgcolor="#ffa754">
-                    {{ issue.topstory.get_issue_thumbnail }}
+                    <img src="{{ issue.topstory.issue_image.get_absolute_url }}" title="{{ issue.topstory.headline }}" alt="Photo for {{ issue.topstory.headline }}" />
                     <br />
                     <font color="#000000" size="2" face="Arial, Helvetica, sans-serif">
-                      by <em>{{ issue.topstory.photo.credit }}</em>
+                      by <em>{{ issue.topstory.issue_image.credit }}</em>
                     </font>
                   </td>
                 </tr>
