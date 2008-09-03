@@ -20,7 +20,7 @@
 	
 	  {% if author.bio %}
       <div id="description">
-        <p>{{ author.bio }}</p>
+        <p>{{ author.bio|safe }}</p>
       </div>
 	  {% endif %}
 	
@@ -33,7 +33,7 @@
   		</ul>
   		
   		{% if author.awards %}
-  		  <p>{{ author.awards }}</p>
+  		  <p>{{ author.awards|safe }}</p>
   		{% endif %}
   	</div>
 	
