@@ -114,7 +114,7 @@ class Issue(models.Model):
     
     def events(self):
         """Grabs the events that should appear in this issue."""
-        events = Event.objects.for_date(self.date, forward=timedelta(days=2))
+        events = Event.objects.for_date(self.date, forward=datetime.timedelta(days=2))
         return events.order_by('start')[:10]
     
     def topstory(self):
