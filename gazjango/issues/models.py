@@ -10,10 +10,7 @@ import scrapers.weather
 from scrapers.events import scrape_events_feed
 
 def _combine_date_time(date, time=None):
-    if time:
-        return datetime.datetime.combine(date, time)
-    else:
-        return date
+    return datetime.datetime.combine(date, time or datetime.time(0))
 
 class EventManager(models.Manager):
     def for_date(self, date, forward=datetime.timedelta(days=0)):
@@ -115,7 +112,7 @@ class Issue(models.Model):
     def events(self):
         """Grabs the events that should appear in this issue."""
         events = Event.objects.for_date(self.date, forward=datetime.timedelta(days=2))
-        return events.order_by('start')[:10]
+        return events.order_by('start_day', 'start_time')[:10]
     
     def topstory(self):
         return self.articles_in_order()[0]
