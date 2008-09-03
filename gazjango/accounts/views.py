@@ -15,7 +15,7 @@ register     = lambda request, **kwargs: render_to_response("registration/regist
 
 def user_details(request, name, template="accounts/profile.html"):
     """Shows a user's profile page."""
-    up = get_object_or_404(UserProfile, user__username=name)
+    up = get_object_or_404(UserProfile, user__username=name, user__is_staff=True)
     rc = RequestContext(request)
     return render_to_response(template, {'author': up}, context_instance=rc)
 

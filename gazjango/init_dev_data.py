@@ -85,7 +85,7 @@ cell_phone = ContactMethod.objects.create(name="Cell Phone")
 aim        = ContactMethod.objects.create(name="AIM")
 gtalk      = ContactMethod.objects.create(name="GTalk / Jabber")
 
-def make_user(username, first, last, email=None, contact={}, bio=None, kind=student, groups=None):
+def make_user(username, first, last, email=None, contact={}, bio=None, awards=None, kind=student, groups=None):
     email = email or "%s@swarthmore.edu" % username
     user = User.objects.create_user(username, email)
     user.first_name = first
@@ -95,7 +95,7 @@ def make_user(username, first, last, email=None, contact={}, bio=None, kind=stud
     user.is_staff = True
     user.save()
     
-    profile = UserProfile.objects.create(user=user, bio=bio, kind=kind)
+    profile = UserProfile.objects.create(user=user, bio=bio, kind=kind, awards=awards)
     for method in contact:
         profile.contact_items.create(method=method, value=contact[method])
     
@@ -105,7 +105,8 @@ bob  = make_user('bob', 'Bob', 'Jones', 'bob@example.com',
                  {cell_phone:'123-456-7890', aim: 'bobjones52'},
                  groups=[reader_group, editor_group])
 jack = make_user('jack', 'Jack', 'McSmith', 'jack@uppityup.com',
-                 bio="I'm pretty much the man.",
+                 bio="I'm pretty much the man.<br /><br />My awesome homepage is <a href='http://google.come'>here</a>.",
+                 awards="2008: Super-Special Awesome Gazette Award",
                  groups=[reader_group, photographer_group, editor_group])
 jill = make_user('jill', 'Jill', 'Carnegie', 'jill@thehill.com',
                  contact={gtalk: "jill@thehill.com"}, 
