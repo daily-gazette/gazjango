@@ -73,7 +73,7 @@ def join_authors(authors, format='', autoescape=None):
         if positions:
             results['pos'] = casify(author.position() or "Guest Writer")
         if link:
-            results['url'] = author.get_absolute_url
+            results['url'] = author.get_absolute_url()
         return results
     
     base = "%(name)s"
