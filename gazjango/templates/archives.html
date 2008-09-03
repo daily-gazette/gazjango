@@ -1,15 +1,13 @@
 {% extends "base.html" %}
 {% load extras %}
 
-{% block title %}Index{% endblock title %}
-
 {% block title %}Archives - {{ archives.get_headline }}{% endblock title %}
 
 
 {% block customheader %}
 
 <link rel="stylesheet" href="{% static css page/story.css %}" type="text/css" media="screen, projection" />
-<link rel="stylesheet" type="text/css" href="{% js ajaxtabs/ajaxtabs.css %}" />
+<link rel="stylesheet" type="text/css" href="{% static js ajaxtabs/ajaxtabs.css %}" />
 
 {% jQuery %}
 <script type="text/javascript" src="js/ajaxtabs/ui.tabs.pack.js"></script>
@@ -56,7 +54,7 @@
 							<li><a href="{{item.get_absolute_url}}">{{ item.get_title }}</a></li>
 						{% endfor %}
 					</ul>
-				{% endif %}
+				{% endifequal %}
 				
 				<hr width="50%" color="#ffffff" size=1px /> 
 				<h4>Share!</h4>
@@ -85,7 +83,7 @@
 				  <div id="fragment-1">
 						<h2>Recent Stories</h2>
 						
-						{% for item in storylist|slice:":15" }
+						{% for item in storylist|slice:":15" %}
 						
 							<h3><a href="{{ item.get_absolute_url }}">{{ item.get_title }}</a></h3>
 							<p class="byline">
@@ -103,7 +101,10 @@
 							  </span>
 							</p>
 							{% if item.graphic %}
-							<div class="imgLeft thirtyfive"><img src="{{ item.graphic.get_absolute_url }}" class="hundred" title="{{ item.get_title }}" /></div>{% endif %}{{ item.short }}
+							<div class="imgLeft thirtyfive"><img src="{{ item.graphic.get_absolute_url }}" class="hundred" title="{{ item.get_title }}" /></div>
+							{% endif %}
+							
+							{{ item.short }}
 						
 						{% endfor %}
 				  </div>
@@ -111,7 +112,7 @@
 				  <div id="fragment-2">
 				  		<h2>Recent Issues</h2>
 				  		
-				  		{% for item in issuelist|slice:":25" }
+				  		{% for item in issuelist|slice:":25" %}
 						
 							<h3><a href="{{ item.get_absolute_url }}">{{ item.get_title }}</a></h3>
 													
@@ -122,7 +123,7 @@
 				  <div id="fragment-3">
 				  		<h2>Popular Stories</h2>
 				  		
-				  		{% for item in popularlist|slice:":15" }
+				  		{% for item in popularlist|slice:":15" %}
 						
 							<h3><a href="{{ item.get_absolute_url }}">{{ item.get_title }}</a></h3>
 							<p class="byline">
