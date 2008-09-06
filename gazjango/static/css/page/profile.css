@@ -1,0 +1,52 @@
+#profiles {
+	display: inline-block;
+}
+
+.picture {
+	float: left;
+	padding-right: 5px;
+	height: 50px;
+	border: 2px solid #cccccc;
+	margin: 2px;
+}
+
+.position-name {
+	font-variant: small-caps;
+	color: #aaaaaa;
+}
+
+#description {
+	float: left;
+	width: 50%;
+	padding: 5px;
+}
+
+#history {
+	float: left;
+	width: 47%;
+	padding: 5px;
+	display: inline-block;
+}
+
+#history ul li {
+	font: 1.4em Georgia, "Times New Roman", Times, serif;
+	list-style-type: square;
+	margin-left: 15px;
+	text-shadow: #000000 0 0 0;
+	list-style-position: outside;
+}
+
+#history p {
+	width: 100%;
+	overflow: hidden;
+}
+
+#history h4 {
+	font: bold 1.6em "Helvetica Neue", Arial, Helvetica, Geneva, sans-serif;
+}
+
+#topStories {
+	float: right;
+	width: 47%;
+	padding: 5px;
+}
