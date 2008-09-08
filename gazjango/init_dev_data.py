@@ -358,8 +358,8 @@ scandal.save()
 
 
 scandal2 = Article.objects.create(
-    headline="Al Bloom Pressured Out By Board of Managers",
-    short_title="Al Bloom Forced Out By BoM",
+    headline="Al Bloom Pressured Out By Board of Managers 2",
+    short_title="Al Bloom Forced Out By BoM 2",
     slug="bloom-scandal-second",
     section=news,
     short_summary="Allegations have surfaced that Al Bloom was involved in the "
@@ -903,3 +903,9 @@ its = JobListing.objects.create(
     is_published=True,
     description="Do some stuff. More at http://www.swarthmore.edu/webintern.xml ."
 )
+
+
+### highlight articles
+
+jack_p.highlighting_set.create(article=scandal)
+jack_p.highlighting_set.create(article=scandal2)

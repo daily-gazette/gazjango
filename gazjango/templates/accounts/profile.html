@@ -48,7 +48,7 @@
     			  <br />
       			<span class="byline">
       				<span class="author">by {{ story.authors_in_order|join_authors:"l" }}</span>
-      				<span class="date">|<a href="{{ story.pub_date|issue_url }}">{{ story.pub_date|date:"F j, Y" }}</a></span>
+      				<span class="date">| <a href="{{ story.pub_date|issue_url }}">{{ story.pub_date|date:"F j, Y" }}</a></span>
       			</span>
       			<br />
       			{{ story.summary|safe }} <a href="{{ story.get_absolute_url }}" class="readMore">read more</a>
@@ -78,27 +78,9 @@
   		<h4>Contributions to the Gazette</h4>
   		<ul>
   		  {% for story in author.articles.all %}
-  		    <li>{{ story.headline|safe }}</li>
+  		    <li><a href="{{ story.get_absolute_url }}">{{ story.headline|safe }}</a></li>
   		  {% endfor %}
   		</ul>
-  	</div>
-	
-  	<div id="topStories">
-  	  {% for story in author.top_stories.all %}
-    		<div class="storyListing">
-    			<img src="{{ story.thumbnail.get_absolute_url }}" class="searchImage" />
-    			<p>
-    			  <a href="{{ story.get_absolute_url }}" class="title">{{ story.headline|safe }}</a>
-    			  <br />
-      			<span class="byline">
-      				<span class="author">by {{ story.authors_in_order|join_authors:"l" }}</span>
-      				<span class="date">|<a href="{{ story.pub_date|issue_url }}">{{ story.pub_date|date:"F j, Y" }}</a></span>
-      			</span>
-      			<br />
-      			{{ story.summary|safe }} <a href="{{ story.get_absolute_url }}" class="readMore">read more</a>
-      		</p>
-    		</div>
-    	{% endfor %}
   	</div>
 	
   	<div id="allStories">
