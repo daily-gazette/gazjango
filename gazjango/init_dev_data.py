@@ -12,7 +12,6 @@ import random
 from django.contrib.auth.models         import User, Group, Permission
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.sites.models        import Site
-from django.contrib.flatpages.models    import FlatPage
 import tagging
 
 from accounts.models      import UserProfile, UserKind, Position
@@ -34,25 +33,26 @@ site = Site.objects.create(name="The Daily Gazette", domain="daily.swarthmore.ed
 
 ### Flat Pages
 
-about = site.flatpage_set.create(
+about = site.page_set.create(
     url="/about/",
     title="About Us",
     content="Yo, we're the Daily Gazette!"
 )
 
-policies = site.flatpage_set.create(
+policies = site.page_set.create(
     url="/policies/",
     title="Policies",
     content="Don't suck, and we won't hate you."
 )
 
-contact = site.flatpage_set.create(
+contact = site.page_set.create(
     url="/about/contact/",
     title="Contact Us",
-    content="Email us at <span style=\"font-family: monospace;\">dailygazette at swarthmore dot edu</span>."
+    content="Email us at <span style=\"font-family: monospace;\">dailygazette at swarthmore dot edu</span>.",
+    parent=about
 )
 
-employment = site.flatpage_set.create(
+employment = site.page_set.create(
     url="/join/",
     title="Employment",
     content="If you show up to meetings, or even if you don't, you can probably write for us."
