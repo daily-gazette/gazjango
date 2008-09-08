@@ -11,91 +11,10 @@
 
 {% jQuery %}
 
-<script type="text/javascript" charset="utf-8">
-  var speed = 'normal';
-
-  function hideFunctionFor(id) {
-    return function() {
-      $('#c-' + id)
-        .find('.commentText').slideUp(speed).end()
-        .find('.showLink')
-          .html('show anyway')
-          .unbind('click')
-          .click(showFunctionFor(id));
-      return false;
-    };
-  }
-  function showFunctionFor(id) {
-    return function() {
-      $('#c-' + id)
-        .find('.commentText').slideDown(speed).end()
-        .find('.showLink')
-          .html('hide')
-          .unbind('click')
-          .click(hideFunctionFor(id));
-      return false;
-    };
-  }
-  
-  $(document).ready(function() {
-    $('.comment').each(function(i) {
-      var comment = this;
-      var id = comment.id.substring('2');
-      
-      $(comment).find('.showLink').click(function(obj) {
-        $(comment)
-          .find('.commentText')
-            .hide()
-            .load('show-comment/' + id + '/', function() {
-              $(this).slideDown(speed);
-            })
-            .end()
-          .find('.showLink')
-            .html('hide')
-            .unbind('click')
-            .click(hideFunctionFor(id));
-        return false;
-      });
-    });
-  });
-  
-  function submitPoll(num) {
-    var poll = $('#poll-' + num);
-    
-    $.post(
-      poll.find('form').attr('action'),
-      { option: poll.find('input:radio:checked').val() },
-      function(data, textStatus) {
-        if (textStatus != 'success') {
-          alert('Weird error, sorry.');
-        } else {
-          if (data == 'success') {
-            showPollResults(num);
-          } else {
-            poll.find('.poll-question')
-              .after('<div class="poll-error">'+data+'</div>');
-            showPollResults(num);
-          }
-        }
-      }
-    );
-  }
-  
-  function showPollResults(num) {
-    var poll = $('#poll-' + num);
-    var show_results = poll.find('.show-results');
-    poll.find('.other-content').hide().load(
-        show_results.find('a').attr('href'),
-        function() {
-          poll
-            .find('.poll-voting').hide('slow').end()
-            .find('.other-content').show('slow');
-          show_results.hide(0);
-        }
-    );
-  }
-  
-</script>
+<script type="text/javascript" src="{% static js comments.js %}"></script>
+{% if story.polls.count %}
+  <script type="text/javascript" src="{% static js polls.js %}"></script>
+{% endif %}
 
 {% endblock customheader %}
 
@@ -142,38 +61,7 @@
     </div>
     
     {% for poll in story.polls.all %}
-      <div class="pollBox" id="poll-{{ poll.pk }}">
-        <h4>{{ poll.name }}</h4>
-        
-        <p class="poll-question">
-          {{ poll.question }} 
-          <span class="show-results">
-            [<a href="{% url poll-results poll.time_start.year,poll.slug %}" onclick="showPollResults({{ poll.pk }}); return false;">show results</a>]
-          </span>
-        </p>
-        
-        <div class="poll-voting">
-          <form method="post" 
-                action="{% url submit-poll poll.time_start.year,poll.slug %}" 
-                onsubmit="submitPoll({{ poll.pk }}); return false;">
-            <ul>
-              {% for option in poll.options.all %}
-                <li>
-                  <input type="radio" name="option" value="{{ option.pk }}" id="option-{{ option.pk }}"/>
-                  <label for="option-{{ option.pk }}">{{ option.name }}</label>
-                </li>
-              {% endfor %}
-            </ul>
-            <div class="submitBox">
-              <input type="submit" value="Submit" />
-            </div>
-          </form>
-        </div>
-        
-        <div class="other-content">
-          <!-- results get injected here -->
-        </div>
-      </div>
+      {% include "polls/listing.html" %}
     {% endfor %}
     
     <div id="shareBox">
