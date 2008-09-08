@@ -78,7 +78,7 @@
   		<h4>Contributions to the Gazette</h4>
   		<ul>
   		  {% for story in author.articles.all %}
-  		    <li>{{ story.headline }}</li>
+  		    <li>{{ story.headline|safe }}</li>
   		  {% endfor %}
   		</ul>
   	</div>
