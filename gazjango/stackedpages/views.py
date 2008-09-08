@@ -1,10 +1,11 @@
+from django.http             import HttpResponseRedirect
 from django.shortcuts        import get_object_or_404, render_to_response
 from django.template         import loader, RequestContext
 from django.utils.safestring import mark_safe
 from stackedpages.models import Page
 from articles.models     import Article
 from comments.models     import PublicComment
-import settings
+from django.conf import settings
 
 DEFAULT_TEMPLATE = 'flatpages/default.html'
 
@@ -12,7 +13,7 @@ def page(request, url):
     'View for "stacked" pages.'
     
     if not url.endswith('/') and settings.APPEND_SLASH:
-        return HttpResponseRedirect("%s/" % request.path)
+        url += '/'
     if not url.startswith('/'):
         url = '/' + url
     
