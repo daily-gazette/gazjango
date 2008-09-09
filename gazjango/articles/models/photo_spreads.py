@@ -12,9 +12,34 @@ class PhotoSpread(Article):
     
     def get_photo_number(self, num):
         try:
-            self.pages.get(number=num)
+            return self.pages.get(number=num)
         except PhotoInSpread.DoesNotExist:
             return None
+    
+    def add_photo(self, photo, caption='', number=None):
+        """
+        Adds the given photo to this spread.
+        
+        If number is passed, rearrange other numbers so that this one
+        lands as that number (like python's insert() for lists). Note that
+        in this case we trash prior actual number attributes and preserve 
+        only the relative ordering. Otherwise, put it at the end.
+        """
+        obj = PhotoInSpread(spread=self, photo=photo, caption=caption)
+        pages = list(self.pages.order_by('number'))
+        
+        if number:
+            pages.insert(number-1, obj)
+        else:
+            pages.append(obj)
+        
+        for i in range(len(pages)):
+            page = pages[i]
+            if page.number != i + 1:
+                page.number = i + 1
+                page.save() # this should always save the new photo
+        
+        return obj
     
     class Meta:
         app_label = 'articles'
@@ -31,7 +56,7 @@ class PhotoInSpread(models.Model):
     spread = models.ForeignKey(PhotoSpread, related_name="pages")
     photo  = models.ForeignKey(ImageFile, related_name="spread_pages")
     
-    caption = models.TextField()
+    caption = models.TextField(blank=True)
     number  = models.PositiveIntegerField()
     
     def next(self):

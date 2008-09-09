@@ -17,7 +17,7 @@ import tagging
 from accounts.models      import UserProfile, UserKind, Position
 from accounts.models      import ContactMethod, ContactItem
 from announcements.models import Announcement
-from articles.models      import Article, Section, Subsection, Format
+from articles.models      import Article, Section, Subsection, Format, PhotoSpread
 from articles.models      import Special, SpecialsCategory, DummySpecialTarget
 from comments.models      import PublicComment
 from issues.models        import Issue, Menu, Weather, WeatherJoke, Event
@@ -909,3 +909,17 @@ its = JobListing.objects.create(
 
 jack_p.highlighting_set.create(article=scandal)
 jack_p.highlighting_set.create(article=scandal2)
+
+
+### photo spread of all photos :)
+
+all_photos = PhotoSpread.objects.create(
+    headline='All Photos Ever',
+    slug='all-photos',
+    summary='The most awesomest thing you ever will see. ' * 5,
+    format=html,
+    section=features
+)
+all_photos.add_author(jack_p)
+for photo in ImageFile.objects.all().order_by('?'):
+    all_photos.add_photo(photo)
