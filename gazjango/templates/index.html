@@ -122,7 +122,9 @@ jQuery(document).ready(function() {
 		      <tr>
 		        {% for story in story_pair %}
 			        <td>
-			          <span class="type">{{ story.section.name }}:</span>
+			          {% if story.section.is_special %}
+                  <span class="type">{{ story.section.name }}:</span>
+			          {% endif %}
 			          <h4><a href="{{ story.get_absolute_url }}">{{ story.get_title|safe }}</a></h4>
   						  <span class="author">
   						    | by {{ story.authors_in_order|join_authors:"1xl" }}

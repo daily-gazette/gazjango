@@ -182,7 +182,7 @@ p(brandon).add_position(guest_writer)
 
 ### Sections
 
-sect = lambda n, s, d: Section.objects.create(name=n, slug=s, description=d)
+sect = lambda n, s, d, x=False: Section.objects.create(name=n, slug=s, description=d, is_special=x)
 sub = lambda p, n, s, d: Subsection.objects.create(name=n, slug=s, description=d, section=p)
 
 news = sect("News", "news", "What's going on in the world.")
@@ -194,7 +194,7 @@ athletics = sect("Athletics", "athletics", "Swarthmore's athletes.")
 features = sect("Features", "features", "The happenings around town.")
 opinions = sect("Opinions", "opinions", "What people have to say.")
 
-columns  = sect("Columns", "columns", "Foreign countries, sex, or both.")
+columns  = sect("Columns", "columns", "Foreign countries, sex, or both.", True)
 bone_doctress = sub(columns, "The Bone Doctress", "bone_doctress", "Everyone's favorite sex column.")
 
 ### Formats

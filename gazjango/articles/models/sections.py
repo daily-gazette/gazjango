@@ -12,6 +12,9 @@ class Section(models.Model):
     name = models.CharField(max_length=40, unique=True)
     slug = models.SlugField(unique=True)
     description = models.CharField(max_length=250, blank=True)
+    is_special = models.BooleanField(blank=True, default=False,
+                   help_text="Whether articles in this section will have " \
+                              "the section name on the homepage.")
     
     class Meta:
         app_label = 'articles'
