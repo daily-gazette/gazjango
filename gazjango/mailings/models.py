@@ -32,9 +32,8 @@ class Subscriber(models.Model):
     their data around, so that we can get pretty graphs of subscription
     numbers or whatever.
     
-    The confirmation key is quasi-secret; it serves in lieu of a password
-    for management things (unsubscribing, changing preferences) as well as
-    
+    The confirmation key is quasi-secret: it serves in lieu of a password
+    for management things (unsubscribing, changing preferences).
     """    
     _name  = models.CharField(max_length=40)
     _email = models.EmailField(unique=True)
