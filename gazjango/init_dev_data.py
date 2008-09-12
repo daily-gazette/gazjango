@@ -918,7 +918,8 @@ all_photos = PhotoSpread.objects.create(
     slug='all-photos',
     summary='The most awesomest thing you ever will see. ' * 5,
     format=html,
-    section=features
+    section=features,
+    status='p',
 )
 all_photos.add_author(jack_p)
 for photo in ImageFile.objects.all().order_by('?'):
