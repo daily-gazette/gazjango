@@ -138,6 +138,8 @@ class Article(models.Model):
                                        content_type_field='subject_type',
                                        object_id_field='subject_id')
     
+    is_racy = models.BooleanField(default=False)
+    
     STATUS_CHOICES = (
         ('d', 'Draft'),
         ('e', 'Pending Review'),
