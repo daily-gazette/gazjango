@@ -50,6 +50,11 @@ class PhotoInSpread(models.Model):
     """
     One photo's being in a spread.
     
+    N.B. that ordering will only work if numbers are sequential. (This is
+    because it should always be that way, and allowing them not to be is
+    somewhat slower.) If you build up the photospread with add_photo, ordering
+    is guaranteed to work.
+    
     Note we don't use order_with_respect_to because we want explicit access
     to the number for each photo, for use in URLs and such.
     """
@@ -61,17 +66,21 @@ class PhotoInSpread(models.Model):
     
     def next(self):
         try:
-            great = self.objects.filter(spread=spread, number__gte=self.number)
-            return great.order_by('number')[0]
-        except IndexError:
+            return self.spread.pages.get(number=self.number+1)
+        except PhotoInSpread.DoesNotExist:
             return None
     
     def prev(self):
         try:
-            less = self.objects.filter(spread=spread, number__lte=self.number)
-            return less.order_by("-number")[0]
-        except IndexError:
+            return self.spread.pages.get(number=self.number-1)
+        except PhotoInSpread.DoesNotExist:
             return None
+    
+    def has_next(self):
+        return bool(self.spread.pages.filter(number=self.number + 1))
+    
+    def has_prev(self):
+        return bool(self.spread.pages.filter(number=self.number - 1))
     
     class Meta:
         unique_together = (
@@ -86,5 +95,7 @@ class PhotoInSpread(models.Model):
     
     @models.permalink
     def get_absolute_url(self):
-        return ('articles.views.spread', [self.slug, self.number])
+        a = self.spread
+        d = a.pub_date
+        return ('photospread', [d.year, d.month, d.day, a.slug, self.number])
     

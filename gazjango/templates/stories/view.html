@@ -56,8 +56,10 @@
           <a href="{{ story.pub_date|issue_url }}">{{ story.pub_date|date:"F j, Y" }}</a>
         </span>
       </p>
-
-      {{ story.resolved_text|safe }}
+      
+      {% block story-content %}
+        {{ story.resolved_text|safe }}
+      {% endblock %}
     </div>
     
     {% for poll in story.polls.all %}
