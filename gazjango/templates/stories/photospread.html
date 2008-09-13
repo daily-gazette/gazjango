@@ -1,4 +1,14 @@
 {% extends "stories/view.html" %}
+{% load extras %}
+
+{% block customheader %}
+  {{ block.super }}
+  <script type="text/javascript" charset="utf-8">
+    function showPage(url) {
+      $('#photo-block').load(url);
+    }
+  </script>
+{% endblock %}
 
 {% block story-content %}
   {% include "stories/photo.html" %}
