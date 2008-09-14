@@ -21,75 +21,52 @@ from scrapers.tla          import get_tla_links
 from scrapers.manual_links import manual_links, lca_links
 
 
-def comment_form(user):
-    logged_in = user.is_authenticated()
-    initial = {'text': 'Have your say.'}
-    if logged_in:
-        initial['name'] = user.get_full_name()
-    return make_comment_form(logged_in=logged_in, initial=initial)
-
-
-def article(request, slug, year, month, day, print_view=False, template="stories/view.html"):
+def article(request, slug, year, month, day, num=None, form=None, print_view=False):
+    "Base function to call for displaying a given article."
     story = get_by_date_or_404(Article, year, month, day, slug=slug)
+    return specific_article(request, story, num, form, print_view)
+
+def specific_article(request, story, num=None, form=None, print_view=False):
+    "Displays an article without searching the db for it."
+    
+    logged_in = request.user.is_authenticated()
+    if form is None:
+        initial = { 'text': 'Have your say.' }
+        if logged_in:
+            initial['name'] = request.user.get_full_name()
+        form = make_comment_form(logged_in=logged_in, initial=initial)
     
     try:
         photospread = story.photospread
     except PhotoSpread.DoesNotExist:
-        pass
+        return show_article(request, story, form, print_view)
     else:
-        return photospread_page(request, photospread)
+        return show_photospread_page(request, photospread, num, form)
+
+def show_article(request, story, form, print_view=False):
+    "Shows the requested article."
+    template = "stories/view.html"
+    cs = PublicComment.visible.order_by('-time').exclude(article=story)
+    context = RequestContext(request, {
+        'story': story,
+        'comments': story.comments.all(),
+        'related': story.related_list(3),
+        'topstory': Article.published.get_top_story(),
+        'other_comments': cs,
+        'print_view': print_view,
+        'comment_form': form
+    })
+    return render_to_response(template, context_instance=context)
+
+
+def show_photospread_page(request, spread, num=None, form=None, whole_page=None):
+    if num is None:
+        num = 1
     
-    logged_in = request.user.is_authenticated()
-    
-    if request.method != 'POST':
-        form = comment_form(request.user)
-        return show_article(request, story, form, print_view, template)
-    
-    else:
-        form = make_comment_form(data=request.POST, logged_in=logged_in)
-        
-        if form.is_valid():
-            args = {
-                'subject': story,
-                'text': escape(form.cleaned_data['text']).replace("\n", "<br/>"),
-                'ip_address': request.META['REMOTE_ADDR'],
-                'user_agent': request.META['HTTP_USER_AGENT']
-            }
-            
-            if logged_in:
-                args['user'] = request.user.get_profile()
-            if form.cleaned_data['anonymous']:
-                args['name']  = form.cleaned_data['name']
-                args['email'] = form.cleaned_data['email']
-            
-            comment = PublicComment.objects.new(**args)
-            return HttpResponseRedirect(comment.get_absolute_url())
-        else:
-            return show_article(request, story, form)
-
-
-def show_article(request, story, form, print_view=False, extra={}, template="stories/view.html"):
-    data = extra.copy()
-    data.update(
-        story=story,
-        related=story.related_list(3),
-        topstory=Article.published.get_top_story(),
-        comments=PublicComment.visible.order_by('-time').exclude(article=story),
-        print_view=print_view,
-        comment_form=form
-    )
-    rc = RequestContext(request)
-    return render_to_response(template, data, context_instance=rc)
-
-
-def show_photospread(request, slug, year, month, day, num=1, whole_page=None, form=None):
-    spread = get_by_date_or_404(PhotoSpread, year, month, day, slug=slug)
-    return photospread_page(request, spread, num, whole_page, form)
-
-def photospread_page(request, spread, num=1, whole_page=None, form=None):
     page = spread.get_photo_number(num)
     if not page:
-        raise Http404
+        raise Http404('This photospread does not have a photo number "%s".' % num)
+    
     data = {
         'story': spread,
         'page': page,
@@ -105,14 +82,69 @@ def photospread_page(request, spread, num=1, whole_page=None, form=None):
             related=spread.related_list(3),
             topstory=Article.published.get_top_story(),
             comments=PublicComment.visible.order_by('-time').exclude(article=spread),
-            comment_form=form or comment_form(request.user)
+            comment_form=form
         )
         template = "stories/photospread.html"
     else:
         template = "stories/photo.html"
     
-    rc = RequestContext(request)
-    return render_to_response(template, data, context_instance=rc)
+    rc = RequestContext(request, data)
+    return render_to_response(template, context_instance=rc)
+
+
+def post_comment(request, slug, year, month, day):
+    story = get_by_date_or_404(Article, year, month, day, slug=slug)
+    
+    logged_in = request.user.is_authenticated()
+    form = make_comment_form(data=request.POST, logged_in=logged_in)
+    
+    print request.POST
+    print form.errors
+    
+    if form.is_valid():
+        args = {
+            'subject': story,
+            'text': escape(form.cleaned_data['text']).replace("\n", "<br/>"),
+            'ip_address': request.META['REMOTE_ADDR'],
+            'user_agent': request.META['HTTP_USER_AGENT']
+        }
+        
+        data = form.cleaned_data
+        if logged_in:
+            args['user'] = request.user.get_profile()
+            if data['anonymous'] and data['name'] != request.user.get_full_name():
+                args['name'] = data['name']
+        else:
+            args['name']  = data['name']
+            args['email'] = data['email']
+        
+        comment = PublicComment.objects.new(**args)
+        
+        if request.is_ajax():
+            # TODO: load up the comment you just posted
+            return HttpResponse('success')
+        else:
+            return HttpResponseRedirect(comment.get_absolute_url())
+    else:
+        if request.is_ajax():
+            template = "stories/comment_form.html"
+            rc = RequestContext(request, { 'comment_form': form })
+            return render_to_response(template, context_instance=rc)
+        else:
+            return specific_article(request, story, form=form)
+
+
+def show_comments(request, slug, year, month, day, num=None):
+    """
+    Returns the comments for the specified articles, rendered as they are
+    on article view pages, starting after number `num`. Used for after
+    you've posted an AJAX comment.
+    """
+    story = get_by_date_or_404(Article, year, month, day, slug=slug)
+    comments = story.comments.filter(number__gt=num or 0)
+    rc = RequestContext(request, {'comments': comments})
+    return render_to_response("stories/comments.html", context_instance=rc)
+
 
 
 def articles(request, year=None, month=None, day=None, template="archives.html"):
@@ -145,14 +177,6 @@ def homepage(request, template="index.html"):
     rc = RequestContext(request)
     return render_to_response(template, data, context_instance=rc)
 
-
-def spread(request, slug, year, month, day, num=None):
-    spread = get_by_date_or_404(PhotoSpread, year, month, day, slug=slug)
-    data = {'spread': spread}
-    if num:
-        data['page'] = spread.get_photo_number(num)
-    rc = RequestContext(request)
-    return render_to_response("photo_spread.html", data, context_instance=rc)
 
 search        = lambda request, **kwargs: render_to_response("base.html", locals())
 email_article = lambda request, **kwargs: render_to_response("base.html", locals())

@@ -41,11 +41,12 @@ urlpatterns += patterns('articles.views',
     (r'^$', 'homepage'),
     (r'^search/$', 'search', {}, 'search'),
     
-    (r'^%(year)s/%(month)s/%(day)s/%(slug)s/$'         % reps, 'article', {}, 'article'),
-    (r'^%(year)s/%(month)s/%(day)s/%(slug)s/print/$'   % reps, 'article', {'print_view': True}, 'print'),
-    (r'^%(year)s/%(month)s/%(day)s/%(slug)s/email/$'   % reps, 'email_article', {}, 'email'),
-    (r'^%(year)s/%(month)s/%(day)s/%(slug)s/%(num)s/$' % reps, 'show_photospread', {}, 'photospread'),
-    
+    (r'^%(year)s/%(month)s/%(day)s/%(slug)s/$'                 % reps, 'article', {}, 'article'),
+    (r'^%(year)s/%(month)s/%(day)s/%(slug)s/%(num)s/$'         % reps, 'article', {}, 'photospread'),
+    (r'^%(year)s/%(month)s/%(day)s/%(slug)s/print/$'           % reps, 'article', {'print_view': True}, 'print'),
+    (r'^%(year)s/%(month)s/%(day)s/%(slug)s/email/$'           % reps, 'email_article', {}, 'email'),
+    (r'^%(year)s/%(month)s/%(day)s/%(slug)s/comment/$'         % reps, 'post_comment'),
+    (r'^%(year)s/%(month)s/%(day)s/%(slug)s/comments/(%(num)s/)?$' % reps, 'show_comments'),    
     
     (r'^archives/$', 'articles', {}, 'archives'),
     (r'^(?:archives/)?%(year)s/$'                   % reps, 'articles'),
