@@ -98,9 +98,6 @@ def post_comment(request, slug, year, month, day):
     logged_in = request.user.is_authenticated()
     form = make_comment_form(data=request.POST, logged_in=logged_in)
     
-    print request.POST
-    print form.errors
-    
     if form.is_valid():
         args = {
             'subject': story,
@@ -142,7 +139,7 @@ def show_comments(request, slug, year, month, day, num=None):
     """
     story = get_by_date_or_404(Article, year, month, day, slug=slug)
     comments = story.comments.filter(number__gt=num or 0)
-    rc = RequestContext(request, {'comments': comments})
+    rc = RequestContext(request, { 'comments': comments, 'new': True })
     return render_to_response("stories/comments.html", context_instance=rc)
 
 

@@ -1,5 +1,5 @@
 {% for comment in comments %}
-  <div class="comment" id="c-{{ comment.number }}">
+  <div class="comment {% if comment.is_visible %}shown-comment{% else %}hidden-comment{% endif %}{% if new %} new{% endif %}" id="c-{{ comment.number }}">
     <div class="commentInformation">
       <p>
         <strong>#{{ comment.number }}</strong>
@@ -20,22 +20,21 @@
       </p>
       
       <p class="commentAuthorship">
-        {% if comment.is_visible %}
-          &mdash;
-          {{ comment.linked_name|safe }}
-          <span class="authorDark">| {{ comment.status }}</span>
-        {% else %}
+        {% if not comment.is_visible %}
           {% if comment.is_approved %}
             This comment has been deemed offensive by the community or site editors.<br/>
             The Gazette does not condone its content.
           {% else %}
-            This comment has not yet been approved by a site administrator.
+            This comment has not yet been approved by a site administrator.  
           {% endif %}
-
+          
           [<a href="#" class='showLink'>show anyway</a>]
           <br/>
-          &mdash;{{ comment.display_name }} <span class="authorDark">| {{ comment.status }}</span>
         {% endif %}
+        
+        &mdash;
+        {{ comment.linked_name|safe }}
+        <span class="authorDark">| {{ comment.status }}</span>
       </p>
     </div>
   </div>
