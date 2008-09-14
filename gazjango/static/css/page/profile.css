@@ -41,7 +41,7 @@
 	overflow: hidden;
 }
 
-#history h4 {
+#history h4, #description h4 {
 	font: bold 1.6em "Helvetica Neue", Arial, Helvetica, Geneva, sans-serif;
 }
 
