@@ -81,7 +81,8 @@ def show_photospread_page(request, spread, num=None, form=None, whole_page=None)
         data.update(
             related=spread.related_list(3),
             topstory=Article.published.get_top_story(),
-            comments=PublicComment.visible.order_by('-time').exclude(article=spread),
+            comments=spread.comments.all(),
+            other_comments=PublicComment.visible.order_by('-time').exclude(article=spread),
             comment_form=form
         )
         template = "stories/photospread.html"
