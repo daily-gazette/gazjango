@@ -180,7 +180,7 @@ search        = lambda request, **kwargs: render_to_response("base.html", locals
 email_article = lambda request, **kwargs: render_to_response("base.html", locals())
 
 
-def subsection(request, section, subsection, year=None, month=None, day=None, template="subsection.html"):
+def subsection(request, section, subsection, year=None, month=None, day=None):
     data = {}
     data['section'] = sec = get_object_or_404(Section, slug=section)
     
@@ -209,16 +209,21 @@ def subsection(request, section, subsection, year=None, month=None, day=None, te
         data['comments'] = PublicComment.visible.filter(
             article__subsections=sub
         ).order_by('-time')
+        template = ("sections/sub_%s.html" % sub.slug,
+                    "sections/sub_of_%s.html" % sec.slug,
+                    "sections/subsection.html")
     else:
         data['comments'] = PublicComment.visible.filter(
             article__section=sec
         ).order_by('-time')
+        template = ("sections/sec_%s.html" % sec.slug,
+                    "sections/subsection.html")
     
     rc = RequestContext(request)
     return render_to_response(template, data, context_instance=rc)
 
 def section(request, section, year=None, month=None, day=None, template="section.html"):
-    return subsection(request, section, None, year, month, day, template)
+    return subsection(request, section, None, year, month, day)
 
 
 @permission_required('accounts.can_access_admin')
