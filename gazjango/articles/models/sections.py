@@ -50,6 +50,11 @@ class Subsection(models.Model):
     description = models.CharField(max_length=250, blank=True)
     section = models.ForeignKey(Section, related_name="subsections")
     
+    # these are really only used for columns
+    # TODO: maybe we should separate columns into a subclass of Subsection?
+    authors = models.ManyToManyField('accounts.UserProfile')
+    big_logo   = models.ForeignKey('media.ImageFile', null=True, blank=True, related_name="subsections_with_big_logo")
+    small_logo = models.ForeignKey('media.ImageFile', null=True, blank=True, related_name="subsections_with_small_logo")
     is_over = models.BooleanField(default=False)
     
     class Meta:
