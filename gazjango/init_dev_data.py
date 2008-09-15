@@ -196,6 +196,7 @@ opinions = sect("Opinions", "opinions", "What people have to say.")
 
 columns  = sect("Columns", "columns", "Foreign countries, sex, or both.", True)
 bone_doctress = sub(columns, "The Bone Doctress", "bone_doctress", "Everyone's favorite sex column.")
+bone_doctress.authors.add(bone_p)
 
 ### Formats
 textile = Format.objects.create(name="Textile", function="textile")
@@ -588,6 +589,7 @@ tarble = art(
 denglish = Subsection.objects.create(name='Honors Denglish',
                                      slug='honors-denglish',
                                      section=columns)
+denglish.authors.add(lauren.get_profile())
 nestbeschmutzer = art(
     headline="<i>Nestbeschmutzer</i>, Now Out of Austria",
     slug="nestbeschmutzer",
