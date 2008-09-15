@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% load extras %}
+
+
+{% block content %}
+this is just what the variables are, i'm too lazy to actually write a template right now
+
+column name: {{ subsection.name }}
+name(s): {{ subsection.authors.all|join_authors:"pxt" }}
+logos: {{ subsection.big_logo.get_absolute_url }}; also small_logo
+articles: {{ subsection.articles }} -- not sure what order this gives, I should maybe write an ordering filter
+{% endblock %}
