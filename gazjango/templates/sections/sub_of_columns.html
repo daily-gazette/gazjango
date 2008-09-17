@@ -1,12 +1,120 @@
 {% extends "base.html" %}
 {% load extras %}
 
+{% block title %}{{ section.name }}{% endblock title %}
+
+{% block customheader %}
+
+<link rel="stylesheet" href="{% static css page/section.css %}" type="text/css"/>
+<link rel="stylesheet" href="{% static css page/section-columns.css %}" type="text/css"/>
+
+{% endblock customheader %}
+
+
+{% block topbar %}
+
+    <div id="headerSectionBar">
+      <div id="headerSearch">
+        {% include "search_header.html" %}
+      </div>
+
+      <div id="headerColumn">
+        <div class="headerColumnBox">
+          <h4>Comments</h4>
+          <ul class="commentList">
+            {% for comment in comments|slice:":4" %}
+              <li>
+                <a href="{{ comment.get_absolute_url }}">{{ comment.subject.get_title }}</a>
+                <br />
+                Comment on {{ comment.time|date:"F j, Y" }}
+              </li>
+            {% endfor %}
+          </ul>
+        </div>
+      </div>
+      
+      <div class="headerColumnBox">
+            <h4>Column Listings</h4>
+            <p><a href="#">test url</a> - wazzzz up?!</p>
+            {% for semester in columnList %}
+                  <p><strong>{{ semester.date }}</strong></p>
+                  {% for column in semester %}
+                        <p>
+                              <a href="{{ column.get_target_url }}">{{ column.name }}</a>
+                        </p>
+                  {% end for %}
+            {% endfor %}
+      </div>
+      
+    </div>
+  </div>
+
+{% endblock topbar %}
+
+
 
 {% block content %}
-this is just what the variables are, i'm too lazy to actually write a template right now
+  <div id="section">
+    
+    <div id="sectionHeader">
+      <h2>{% block main-header %}{{ section.name }}{% endblock %}</h2>
+    </div>
 
-column name: {{ subsection.name }}
-name(s): {{ subsection.authors.all|join_authors:"pxt" }}
-logos: {{ subsection.big_logo.get_absolute_url }}; also small_logo
-articles: {{ subsection.articles }} -- not sure what order this gives, I should maybe write an ordering filter
+	<div id="columnMain">
+    {% for topstory in topstories %}
+    	<h2>{{ topstory.column_title }}: <a href="{{ topstory.get_absolute_url }}">{{topstory.get_title|safe}}</a></h2>
+    	
+    	<div id="leadImg"><img src="{{ topstory.big_logo.get_absolute_url }}" /></div><p class="byline"><span class="author">by {{ topstory.authors_in_order|join_authors }}</span><span class="date">| {{ topstory.pub_date|date:"n/j/Y" }}</span></p>
+    	
+    	<p>
+            {{ topstory.long_summary|safe }}
+            <a class="readMore" href="{{ topstory.get_absolute_url }}">More</a>
+        </p>
+    {% endfor %}
+    </div>
+    
+    <!-- OK, so if this was for one column, you'd do this for the remaining stories:
+    
+    <div id="columnList">
+		<ul>
+		{% for column in subsection %}
+          <li>
+          	<h3><a href="{{ column.get_absolute_url }}">{{ column.get_title|safe }}</a></h3>
+            <img src="{{ column.small_logo.get_absolute_url }}" title="{{ column.headline }}" alt="" />
+            <p class="byline">
+              <span class="author">by {{ column.authors_in_order|join_authors }}</span>
+              <span class="date"> | {{ column.pub_date|date:"n/j/Y" }}</span>
+            </p>
+            <p>
+              {{ column.summary|safe }}
+              <a class="readMore" href="{{ column.get_absolute_url }}">More</a>
+            </p>
+          </li>
+        {% endfor %}
+      </ul>
+    </div>
+    
+        -->
+
+	<!-- Else, for the main page, use basically the same thing, but only show the most recent entry from the active columns: -->
+	
+	<div id="columnList">
+		<ul>
+		{% for column in section %}
+          <li>
+          	<h3><a href="{{ column.get_absolute_url }}">{{ column.get_title|safe }}</a></h3>
+            <img src="{{ column.small_logo.get_absolute_url }}" title="{{ column.headline }}" alt="" />
+            <p class="byline">
+              <span class="author">by {{ column.authors_in_order|join_authors }}</span>
+              <span class="date"> | {{ column.pub_date|date:"n/j/Y" }}</span>
+            </p>
+            <p>
+              {{ column.summary|safe }}
+              <a class="readMore" href="{{ column.get_absolute_url }}">More</a>
+            </p>
+          </li>
+        {% endfor %}
+      </ul>
+    </div>
+
 {% endblock %}

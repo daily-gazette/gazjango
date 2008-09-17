@@ -1,0 +1,61 @@
+#columnMain {
+	width: 660px;
+	margin: 10px 15px 15px 0px
+	display: block;
+	float: left;
+}
+
+#columnMain h2 {
+	margin: 0px;
+	padding: 0;
+	font-size: 2em;
+	font: bold "Helvetica Neue", Arial, Helvetica, Geneva, sans-serif;
+}
+
+#columnMain h2 a {
+	color: #432c16;
+	text-decoration: none;
+}
+
+#columnMain h2 a:hover {
+	text-decoration: underline;
+}
+
+#columnMain.leadImg {
+	width: 200px;
+	float: left;
+	display: block;
+}
+
+#columnMain.leadImg img {
+	width: 100%;
+}
+
+
+/*****************************/
+
+#columnList {
+	width: 660px;
+	margin-top: 10px;
+	float: left;
+	display:inline;
+	margin-left: 25px;
+	margin-right: 25px;
+	padding-top: 10px;
+}
+
+
+#columnList ul {
+	margin: 0;
+	padding: 0;
+	list-style-type: none;
+	display: block;
+	float: left;
+}
+
+#columnList ul li {
+	display: inline;
+	float: left;
+	width:  660px;
+	padding: 10px 0px 10px 0px;
+}
