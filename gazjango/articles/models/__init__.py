@@ -1,5 +1,5 @@
 from stories       import Article, ArticleRevision, Format
-from sections      import Section, Subsection
+from sections      import Section, Subsection, Column
 from specials      import Special, SpecialsCategory
 from specials      import DummySpecialTarget, SectionSpecial
 from concepts      import StoryConcept

@@ -17,7 +17,8 @@ import tagging
 from accounts.models      import UserProfile, UserKind, Position
 from accounts.models      import ContactMethod, ContactItem
 from announcements.models import Announcement
-from articles.models      import Article, Section, Subsection, Format, PhotoSpread
+from articles.models      import Article, Format, PhotoSpread
+from articles.models      import Section, Subsection, Column
 from articles.models      import Special, SpecialsCategory, DummySpecialTarget
 from comments.models      import PublicComment
 from issues.models        import Issue, Menu, Weather, WeatherJoke, Event
@@ -195,7 +196,9 @@ features = sect("Features", "features", "The happenings around town.")
 opinions = sect("Opinions", "opinions", "What people have to say.")
 
 columns  = sect("Columns", "columns", "Foreign countries, sex, or both.", True)
-bone_doctress = sub(columns, "The Bone Doctress", "bone_doctress", "Everyone's favorite sex column.")
+bone_doctress = Column.objects.create(section=columns, name="The Bone Doctress", 
+                                      slug="bone-doctress",
+                                      description="Everyone's favorite sex column.")
 bone_doctress.authors.add(bone_p)
 
 ### Formats
@@ -586,9 +589,9 @@ tarble = art(
     author=finlay
 )
 
-denglish = Subsection.objects.create(name='Honors Denglish',
-                                     slug='honors-denglish',
-                                     section=columns)
+denglish = Column.objects.create(name='Honors Denglish',
+                                 slug='honors-denglish',
+                                 section=columns)
 denglish.authors.add(lauren.get_profile())
 nestbeschmutzer = art(
     headline="<i>Nestbeschmutzer</i>, Now Out of Austria",
