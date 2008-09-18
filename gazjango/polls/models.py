@@ -1,10 +1,10 @@
 from django.db                  import models
 from django.contrib.auth.models import User
-from accounts.models            import UserProfile
-from articles.models            import Article
+from gazjango.accounts.models   import UserProfile
+from gazjango.articles.models   import Article
 
-from polls.exceptions import *
-from datetime         import datetime
+from gazjango.polls.exceptions import *
+from datetime                  import datetime
 
 class Poll(models.Model):
     """A poll."""

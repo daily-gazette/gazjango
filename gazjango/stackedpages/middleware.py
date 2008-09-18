@@ -1,6 +1,6 @@
 from stackedpages.views import page
 from django.http import Http404
-import settings
+from django.conf import settings
 
 class StackedPageFallbackMiddleware(object):
     def process_response(self, request, response):

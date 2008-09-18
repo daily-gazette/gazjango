@@ -3,12 +3,12 @@ from django.template import RequestContext
 from django.contrib.auth.decorators import permission_required
 from django.shortcuts import render_to_response, get_object_or_404
 from django.db.models import Q
-from misc.view_helpers import reporter_admin_data
+from gazjango.misc.view_helpers import reporter_admin_data
 
 from django.contrib.auth.models import User
-from accounts.models import UserProfile
-from articles.models import ArticleRevision
-from comments.models import PublicComment
+from gazjango.accounts.models import UserProfile
+from gazjango.articles.models import ArticleRevision
+from gazjango.comments.models import PublicComment
 
 manage       = lambda request, **kwargs: render_to_response("base.html", locals())
 register     = lambda request, **kwargs: render_to_response("registration/register.html", locals())

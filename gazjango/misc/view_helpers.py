@@ -1,7 +1,7 @@
 from django.shortcuts import get_object_or_404
 
-from announcements.models import Announcement
-from articles.models      import StoryConcept
+from gazjango.announcements.models import Announcement
+from gazjango.articles.models      import StoryConcept
 
 def get_by_date_or_404(model, year, month, day, field='pub_date', **oth):
     d = oth

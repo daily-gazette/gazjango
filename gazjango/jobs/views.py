@@ -2,10 +2,10 @@ from django.core.urlresolvers import reverse
 from django.http              import HttpResponseRedirect
 from django.template          import RequestContext
 from django.shortcuts         import render_to_response, get_object_or_404
-from jobs.models     import JobListing
-from jobs.forms      import SubmitJobForm
-from articles.models import Article
-from comments.models import PublicComment
+from gazjango.jobs.models     import JobListing
+from gazjango.jobs.forms      import SubmitJobForm
+from gazjango.articles.models import Article
+from gazjango.comments.models import PublicComment
 
 def job_details(request, slug, template="jobs/details.html"):
     job = get_object_or_404(JobListing, slug=slug)

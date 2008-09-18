@@ -1,7 +1,7 @@
 import unittest
 from django.contrib.auth.models import User
-from accounts.models            import UserProfile, Position, Holding, UserKind
-from articles.models            import Article
+from gazjango.accounts.models   import UserProfile, Position, Holding, UserKind
+from gazjango.articles.models   import Article
 from datetime                   import date, datetime, timedelta
 
 class UserTestCase(unittest.TestCase):

@@ -4,7 +4,7 @@ from django.utils.safestring  import mark_safe
 from django.utils.html        import conditional_escape
 
 from django.contrib.humanize.templatetags.humanize import ordinal
-from misc.helpers import get_static_path, get_jquery_path
+from gazjango.misc.helpers import get_static_path, get_jquery_path
 
 from datetime import date
 

@@ -1,6 +1,6 @@
 from django.db        import models
 from django.db.models import signals
-from accounts.models import UserProfile, UserKind
+from gazjango.accounts.models import UserProfile, UserKind
 import random
 
 class IssueType(models.Model):

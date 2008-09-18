@@ -2,9 +2,9 @@ from django.http             import HttpResponseRedirect
 from django.shortcuts        import get_object_or_404, render_to_response
 from django.template         import loader, RequestContext
 from django.utils.safestring import mark_safe
-from stackedpages.models import Page
-from articles.models     import Article
-from comments.models     import PublicComment
+from gazjango.stackedpages.models import Page
+from gazjango.articles.models     import Article
+from gazjango.comments.models     import PublicComment
 from django.conf import settings
 
 DEFAULT_TEMPLATE = 'flatpages/default.html'

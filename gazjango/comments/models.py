@@ -5,12 +5,12 @@ from django.contrib.sites.models        import Site
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes        import generic
 
-from accounts.models import UserProfile
+from gazjango.accounts.models import UserProfile
 
 from datetime     import datetime
-from misc.helpers import is_from_swat
-from misc import akismet
-import settings
+from gazjango.misc.helpers import is_from_swat
+from gazjango.misc import akismet
+from django.conf   import settings
 
 class CommentsManager(models.Manager):
     def new(self, check_spam=True, pre_approved=False, **data):

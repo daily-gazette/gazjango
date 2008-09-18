@@ -1,7 +1,7 @@
 from datetime         import datetime
 from django.db        import models
 from django.db.models import permalink
-from accounts.models  import UserProfile
+from gazjango.accounts.models import UserProfile
 
 class MediaBucket(models.Model):
     """

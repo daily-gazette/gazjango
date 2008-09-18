@@ -1,12 +1,12 @@
 from django.contrib.auth.decorators import permission_required
-from django.http       import HttpResponse, Http404
-from django.template   import RequestContext
-from django.shortcuts  import render_to_response
-from misc.view_helpers import get_by_date_or_404, reporter_admin_data
+from django.http                import HttpResponse, Http404
+from django.template            import RequestContext
+from django.shortcuts           import render_to_response
+from gazjango.misc.view_helpers import get_by_date_or_404, reporter_admin_data
 
-from articles.models      import Article, StoryConcept
-from announcements.models import Announcement
-from comments.models      import PublicComment
+from gazjango.articles.models      import Article, StoryConcept
+from gazjango.announcements.models import Announcement
+from gazjango.comments.models      import PublicComment
 
 
 def get_comment_text(request, slug, year, month, day, num):

@@ -1,8 +1,8 @@
 from django.conf.urls.defaults import *
 from django.contrib import admin
-from articles.feeds import MainFeed, LatestStoriesFeed, SectionFeed, SectionLatestFeed
-from misc.forms import RegistrationFormWithProfile
-import settings
+from gazjango.articles.feeds import MainFeed, LatestStoriesFeed, SectionFeed, SectionLatestFeed
+from gazjango.misc.forms import RegistrationFormWithProfile
+from django.conf import settings
 
 admin.autodiscover()
 urlpatterns = patterns('',

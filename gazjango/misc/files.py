@@ -1,5 +1,5 @@
 import os
-import settings
+from django.conf import settings
 
 def handle_file_upload(f, bucket_name):
     """Save an uploaded file into the appropriate location."""

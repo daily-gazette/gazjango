@@ -1,4 +1,4 @@
-from misc.exceptions import RelationshipMismatch
+from gazjango.misc.exceptions import RelationshipMismatch
 
 class PollException(Exception):
     "Something went wrong with a poll."

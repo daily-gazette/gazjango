@@ -1,17 +1,17 @@
-from diff_match_patch.diff_match_patch import diff_match_patch
+from gazjango.diff_match_patch.diff_match_patch import diff_match_patch
 from datetime import datetime
-from scrapers.BeautifulSoup import BeautifulSoup
+from gazjango.scrapers.BeautifulSoup import BeautifulSoup
 import re
 
 from django.db                   import models
 from django.contrib.auth.models  import User
 from django.contrib.contenttypes import generic
 
-from accounts.models            import UserProfile
-from comments.models            import PublicComment
-from media.models               import MediaFile, ImageFile, MediaBucket
-from misc.exceptions            import RelationshipMismatch
-import articles.formats as formats
+from gazjango.accounts.models            import UserProfile
+from gazjango.comments.models            import PublicComment
+from gazjango.media.models               import MediaFile, ImageFile, MediaBucket
+from gazjango.misc.exceptions            import RelationshipMismatch
+import gazjango.articles.formats as formats
 
 
 class PublishedArticlesManager(models.Manager):

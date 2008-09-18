@@ -1,5 +1,5 @@
 from django.contrib import admin
-from models import Poll, Option
+from gazjango.polls.models import Poll, Option
 
 class OptionAdmin(admin.ModelAdmin):
     pass

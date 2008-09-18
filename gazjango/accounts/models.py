@@ -1,8 +1,8 @@
 from django.db                  import models
 from django.db.models           import Q, permalink
 from django.contrib.auth.models import User
-from misc.helpers import ip_from_swat
-from datetime     import datetime, date
+from gazjango.misc.helpers import ip_from_swat
+from datetime              import datetime, date
 
 class UserKind(models.Model):
     """

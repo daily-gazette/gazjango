@@ -1,8 +1,8 @@
 import unittest
 from django.contrib.auth.models import User, AnonymousUser
-from articles.models            import Article, Section, Format
-from accounts.models            import UserProfile, UserKind
-from polls.models               import Poll, Option
+from gazjango.articles.models   import Article, Section, Format
+from gazjango.accounts.models   import UserProfile, UserKind
+from gazjango.polls.models      import Poll, Option
 from datetime                   import datetime, timedelta
 
 class PollTestCase(unittest.TestCase):

@@ -3,10 +3,10 @@ from django.core.urlresolvers import reverse
 from django.http              import HttpResponseRedirect, Http404
 from django.template          import RequestContext
 from django.shortcuts         import get_object_or_404, render_to_response
-from media.models     import MediaFile, ImageFile, MediaBucket
-from media.forms      import MediaForm, ImageForm, BucketForm
-from misc.files import handle_file_upload
-import settings
+from gazjango.media.models import MediaFile, ImageFile, MediaBucket
+from gazjango.media.forms  import MediaForm, ImageForm, BucketForm
+from gazjango.misc.files   import handle_file_upload
+from django.conf import settings
 
 def _get_or_post(key, request, default=None):
     if key in request.GET:

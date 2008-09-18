@@ -1,5 +1,5 @@
 from django.contrib import admin
-from models import JobListing
+from gazjango.jobs.models import JobListing
 
 class JobAdmin(admin.ModelAdmin):
     pass

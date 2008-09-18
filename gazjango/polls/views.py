@@ -1,8 +1,8 @@
 from django.http      import HttpResponse
 from django.template  import RequestContext
 from django.shortcuts import render_to_response, get_object_or_404
-from polls.models import Poll
-import polls.exceptions
+from gazjango.polls.models import Poll
+import gazjango.polls.exceptions
 
 def poll_results(request, year, slug, template="polls/results.html"):
     poll = get_object_or_404(Poll, time_start__year=year, slug=slug)
@@ -31,11 +31,11 @@ def submit_poll(request, year=None, slug=None):
         
         try:
             poll.vote(option=option, user=user, ip=ip)
-        except polls.exceptions.NotVoting:
+        except gazjango.polls.exceptions.NotVoting:
             return HttpResponse("This poll is not accepting votes at this time.")
-        except polls.exceptions.AlreadyVoted:
+        except gazjango.polls.exceptions.AlreadyVoted:
             return HttpResponse("You've already voted in this poll.")
-        except polls.exceptions.PermissionDenied:
+        except gazjango.polls.exceptions.PermissionDenied:
             return HttpResponse("You're not allowed to vote in this poll.")
         except Exception, e:
             return HttpResponse("Unknown problem: " + repr(e))

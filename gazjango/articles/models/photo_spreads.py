@@ -1,9 +1,9 @@
 from django.db                   import models
 from django.contrib.contenttypes import generic
-from accounts.models import UserProfile
-from comments.models import PublicComment
-from stories         import Article
-from media.models    import ImageFile
+from gazjango.accounts.models         import UserProfile
+from gazjango.comments.models         import PublicComment
+from gazjango.articles.models.stories import Article
+from gazjango.media.models            import ImageFile
 from datetime import datetime
 
 class PhotoSpread(Article):

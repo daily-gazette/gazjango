@@ -1,6 +1,6 @@
 from django.contrib import admin
-from models import Article, Section, Subsection, StoryConcept, Special
-from models import Special, DummySpecialTarget, SpecialsCategory, SectionSpecial
+from gazjango.articles.models import Article, Section, Subsection, StoryConcept, Special
+from gazjango.articles.models import Special, DummySpecialTarget, SpecialsCategory, SectionSpecial
 
 class StoryAdmin(admin.ModelAdmin):
     filter_horizontal = ("subsections",)

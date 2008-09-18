@@ -1,5 +1,5 @@
 from django.contrib import admin
-from models import Issue, IssueArticle, WeatherJoke
+from gazjango.issues.models import Issue, IssueArticle, WeatherJoke
 
 class IssueAdmin(admin.ModelAdmin):
     pass

@@ -1,24 +1,24 @@
 import datetime
 
 from django.contrib.auth.decorators import permission_required
-from django.template   import RequestContext
-from django.shortcuts  import render_to_response, get_object_or_404
-from django.http       import Http404, HttpResponse, HttpResponseRedirect
-from django.utils.html import escape
-from misc.view_helpers import get_by_date_or_404, filter_by_date, reporter_admin_data
+from django.template            import RequestContext
+from django.shortcuts           import render_to_response, get_object_or_404
+from django.http                import Http404, HttpResponse, HttpResponseRedirect
+from django.utils.html          import escape
+from gazjango.misc.view_helpers import get_by_date_or_404, filter_by_date, reporter_admin_data
 
-from articles.models      import Article, Special, PhotoSpread, StoryConcept
-from articles.models      import Section, Subsection, Column
-from announcements.models import Announcement
-from comments.models      import PublicComment
-from comments.forms       import CommentForm, make_comment_form
-from issues.models        import Weather, WeatherJoke
-from jobs.models          import JobListing
-from tagging.models       import TagGroup, Tag
+from gazjango.articles.models      import Article, Special, PhotoSpread, StoryConcept
+from gazjango.articles.models      import Section, Subsection, Column
+from gazjango.announcements.models import Announcement
+from gazjango.comments.models      import PublicComment
+from gazjango.comments.forms       import CommentForm, make_comment_form
+from gazjango.issues.models        import Weather, WeatherJoke
+from gazjango.jobs.models          import JobListing
+from gazjango.tagging.models       import TagGroup, Tag
 
-from scrapers.bico         import get_bico_news
-from scrapers.tla          import get_tla_links
-from scrapers.manual_links import manual_links, lca_links
+from gazjango.scrapers.bico         import get_bico_news
+from gazjango.scrapers.tla          import get_tla_links
+from gazjango.scrapers.manual_links import manual_links, lca_links
 
 
 def article(request, slug, year, month, day, num=None, form=None, print_view=False):

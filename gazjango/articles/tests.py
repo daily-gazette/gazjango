@@ -1,9 +1,9 @@
 import unittest
 from django.core.exceptions     import ObjectDoesNotExist, MultipleObjectsReturned
 from django.contrib.auth.models import User
-from articles.models import Article, ArticleRevision, Section, Format
-from accounts.models import UserProfile, UserKind
-from media.models    import MediaBucket, MediaFile, ImageFile
+from gazjango.articles.models import Article, ArticleRevision, Section, Format
+from gazjango.accounts.models import UserProfile, UserKind
+from gazjango.media.models    import MediaBucket, MediaFile, ImageFile
 from datetime import date, timedelta
 
 class ArticleTestCase(unittest.TestCase):

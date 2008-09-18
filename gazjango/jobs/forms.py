@@ -1,5 +1,5 @@
 from django import forms
-from jobs.models import JobListing
+from gazjango.jobs.models import JobListing
 
 class SubmitJobForm(forms.ModelForm):
     description = forms.CharField(widget=forms.Textarea(attrs={'rows': 5, 'cols': 40}))

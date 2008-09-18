@@ -1,6 +1,6 @@
 from django.contrib import admin
-from models import UserKind, ContactMethod, ContactItem
-from models import UserProfile, Position, Holding
+from gazjango.accounts.models import UserKind, ContactMethod, ContactItem
+from gazjango.accounts.models import UserProfile, Position, Holding
 
 class UserKindAdmin(admin.ModelAdmin):
     pass

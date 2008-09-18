@@ -12,19 +12,19 @@ import random
 from django.contrib.auth.models         import User, Group, Permission
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.sites.models        import Site
-import tagging
+from gazjango import tagging
 
-from accounts.models      import UserProfile, UserKind, Position
-from accounts.models      import ContactMethod, ContactItem
-from announcements.models import Announcement
-from articles.models      import Article, Format, PhotoSpread
-from articles.models      import Section, Subsection, Column
-from articles.models      import Special, SpecialsCategory, DummySpecialTarget
-from comments.models      import PublicComment
-from issues.models        import Issue, Menu, Weather, WeatherJoke, Event
-from media.models         import ImageFile, MediaBucket
-from polls.models         import Poll, Option
-from jobs.models          import JobListing
+from gazjango.accounts.models      import UserProfile, UserKind, Position
+from gazjango.accounts.models      import ContactMethod, ContactItem
+from gazjango.announcements.models import Announcement
+from gazjango.articles.models      import Article, Format, PhotoSpread
+from gazjango.articles.models      import Section, Subsection, Column
+from gazjango.articles.models      import Special, SpecialsCategory, DummySpecialTarget
+from gazjango.comments.models      import PublicComment
+from gazjango.issues.models        import Issue, Menu, Weather, WeatherJoke, Event
+from gazjango.media.models         import ImageFile, MediaBucket
+from gazjango.polls.models         import Poll, Option
+from gazjango.jobs.models          import JobListing
 
 ### Site
 

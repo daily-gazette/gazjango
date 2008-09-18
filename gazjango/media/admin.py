@@ -1,5 +1,5 @@
 from django.contrib import admin
-from models import MediaFile, ImageFile, MediaBucket
+from gazjango.media.models import MediaFile, ImageFile, MediaBucket
 
 class MediaBucketAdmin(admin.ModelAdmin):
     pass

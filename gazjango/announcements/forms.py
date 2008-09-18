@@ -1,5 +1,5 @@
 from django import forms
-from announcements.models import Announcement
+from gazjango.announcements.models import Announcement
 
 class SubmitAnnouncementForm(forms.ModelForm):
     text = forms.CharField(widget=forms.Textarea(attrs={'rows': 5, 'cols': 40}))

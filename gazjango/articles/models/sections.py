@@ -1,5 +1,5 @@
 from django.db import models
-from stories   import Article
+from gazjango.articles.models.stories import Article
 import datetime
 
 class Section(models.Model):

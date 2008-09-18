@@ -1,6 +1,6 @@
 from django import forms
-from media.models import MediaFile, ImageFile, MediaBucket
-from misc.forms import AuthorInputField, ForeignKeyField
+from gazjango.media.models import MediaFile, ImageFile, MediaBucket
+from gazjango.misc.forms import AuthorInputField, ForeignKeyField
 
 class MediaForm(forms.ModelForm):
     class Meta:

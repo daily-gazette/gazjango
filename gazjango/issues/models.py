@@ -1,13 +1,13 @@
 from django.db        import models
 from django.db.models import permalink
 
-from articles.models      import Article
-from announcements.models import Announcement
+from gazjango.articles.models      import Article
+from gazjango.announcements.models import Announcement
 
 import datetime
-import scrapers.sharples
-import scrapers.weather
-from scrapers.events import scrape_events_feed
+from gazjango.scrapers import sharples
+from gazjango.scrapers import weather
+from gazjango.scrapers import events
 
 def _combine_date_time(date, time=None):
     return datetime.datetime.combine(date, time or datetime.time(0))
@@ -26,7 +26,7 @@ class EventManager(models.Manager):
             start = datetime.date.today()
         
         existing = self.for_date(start, forward=forward)
-        scraped = scrape_events_feed(start=start, end=start+forward)
+        scraped = events.scrape_events_feed(start=start, end=start+forward)
         
         for event_dict in scraped:
             try:
@@ -182,7 +182,7 @@ class MenuManager(models.Manager):
         Scrapes the XML feed for Sharples and returns a menu object for
         either today or tomorrow. Note that the menu is not saved.
         """
-        menu = scrapers.sharples.get_menu(tomorrow=tomorrow)
+        menu = sharples.get_menu(tomorrow=tomorrow)
         
         return self.model(
             date    = datetime.date.today() + 
@@ -232,8 +232,8 @@ class WeatherManager(models.Manager):
             return self.get(date=day)
         except self.model.DoesNotExist:
             try:
-                weather = scrapers.weather.get_weather(date=day)
-            except scrapers.weather.WeatherError:
+                weather = weather.get_weather(date=day)
+            except weather.WeatherError:
                 weather = { 'today': "", 'tonight': "", 'tomorrow': "" }
             
             return self.create(

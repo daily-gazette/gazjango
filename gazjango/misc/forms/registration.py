@@ -1,6 +1,6 @@
 from django import forms
 from gazjango.registration.forms import RegistrationForm
-from accounts.models import UserProfile, UserKind
+from gazjango.accounts.models import UserProfile, UserKind
 import datetime
 
 class RegistrationFormWithProfile(RegistrationForm):

@@ -1,12 +1,12 @@
 from django.http     import HttpResponseRedirect
 from django.template import RequestContext
-from django.core.urlresolvers import reverse
-from django.shortcuts         import render_to_response, get_object_or_404
-from misc.view_helpers        import filter_by_date
-from announcements.models import Announcement
-from announcements.forms  import SubmitAnnouncementForm
-from articles.models      import Article
-from comments.models      import PublicComment
+from django.core.urlresolvers   import reverse
+from django.shortcuts           import render_to_response, get_object_or_404
+from gazjango.misc.view_helpers import filter_by_date
+from gazjango.announcements.models import Announcement
+from gazjango.announcements.forms  import SubmitAnnouncementForm
+from gazjango.articles.models      import Article
+from gazjango.comments.models      import PublicComment
 
 def announcement(request, slug, year, month=None, day=None):
     an = get_object_or_404(Announcement, slug=slug, date_start__year=year)

@@ -1,10 +1,10 @@
-from django.template   import RequestContext
-from django.shortcuts  import render_to_response
-from misc.view_helpers import get_by_date_or_404, filter_by_date
+from django.template            import RequestContext
+from django.shortcuts           import render_to_response
+from gazjango.misc.view_helpers import get_by_date_or_404, filter_by_date
 
-from issues.models   import Issue, Menu, Event
-from jobs.models     import JobListing
-from comments.models import PublicComment
+from gazjango.issues.models   import Issue, Menu, Event
+from gazjango.jobs.models     import JobListing
+from gazjango.comments.models import PublicComment
 
 import datetime
 

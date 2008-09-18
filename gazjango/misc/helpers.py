@@ -1,4 +1,4 @@
-import settings
+from django.conf import settings
 import datetime
 
 def is_from_swat(user=None, ip=None):

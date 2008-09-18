@@ -3,7 +3,7 @@ from django.utils.safestring import mark_safe
 from django.forms.util import flatatt
 
 from django.contrib.auth.models import User
-from misc.helpers import get_jquery_path, get_static_path
+from gazjango.misc.helpers import get_jquery_path, get_static_path
 
 
 def _author_link_for(username):

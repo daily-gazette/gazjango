@@ -1,5 +1,5 @@
 from django.contrib import admin
-from models import Announcement
+from gazjango.announcements.models import Announcement
 
 class AnnouncementAdmin(admin.ModelAdmin):
     pass

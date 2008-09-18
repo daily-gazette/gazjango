@@ -1,7 +1,7 @@
-from django.db       import models
-from accounts.models import UserProfile
-from stories         import Article
-from datetime        import date
+from django.db import models
+from gazjango.accounts.models         import UserProfile
+from gazjango.articles.models.stories import Article
+from datetime import date
 
 class UnpublishedConceptsManager(models.Manager):
     "A manager for StoryConcepts that only deals with concepts not yet published."

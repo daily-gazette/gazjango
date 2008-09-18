@@ -1,6 +1,6 @@
 import unittest
-from articles.models      import Article, Section, Format
-from issues.models        import Issue, IssueArticle
+from gazjango.articles.models import Article, Section, Format
+from gazjango.issues.models   import Issue, IssueArticle
 from datetime import date, timedelta
 
 class IssueTestCase(unittest.TestCase):

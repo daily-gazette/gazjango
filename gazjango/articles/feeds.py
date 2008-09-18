@@ -2,9 +2,9 @@ from django.contrib.sites.models import Site
 from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.syndication.feeds import Feed, FeedDoesNotExist
 from django.utils import feedgenerator
-from misc.helpers import flatten
+from gazjango.misc.helpers import flatten
 
-from models import Article, Section
+from gazjango.articles.models import Article, Section
 
 class StoryFeed(Feed):
     title_template = 'feeds/story_headline.html'
