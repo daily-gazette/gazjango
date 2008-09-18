@@ -35,6 +35,7 @@
       
       <div class="headerColumnBox">
             <h4>Column Listings</h4>
+            <p><a href="#">test url</a> - wazzzz up?!</p>
             {% for semester in columnList %}
                   <p><strong>{{ semester.date }}</strong></p>
                   {% for column in semester %}
@@ -59,7 +60,7 @@
       <h2>{% block main-header %}{{ section.name }}{% endblock %}</h2>
     </div>
 
-    {% for story in column %}
+    {% for subsection in section %}
     	{% if i = 0 (what is the right format?) %}    	
 		  <div id="columnMain">
 				<h2>
@@ -97,6 +98,5 @@
         {% endfor %}
       </ul>
     </div>
-    
 
 {% endblock %}
