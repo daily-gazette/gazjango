@@ -119,7 +119,6 @@ def post_comment(request, slug, year, month, day):
         comment = PublicComment.objects.new(**args)
         
         if request.is_ajax():
-            # TODO: load up the comment you just posted
             return HttpResponse('success')
         else:
             return HttpResponseRedirect(comment.get_absolute_url())
