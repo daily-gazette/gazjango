@@ -61,7 +61,7 @@
     	{% if forloop.first %}
   		  <div id="columnMain">
   				<h2>
-  					{{ column.name }}: <a href="{{ column.get_absolute_url }}">{{story.get_title|safe}}</a>
+  					{{ column.name }}: <a href="{{ story.get_absolute_url }}">{{story.get_title|safe}}</a>
   				</h2>
   				<div id="leadImg">
   					<img src="{{ column.big_logo.get_absolute_url }}" />
