@@ -165,6 +165,14 @@ class Article(models.Model):
     def get_title(self):
         return (self.short_title or self.headline)
     
+    def longest_summary(self):
+        """Returns long_summary if we have it, else summary."""
+        return (self.long_summary or self.summary)
+    
+    def shortest_summary(self):
+        """Returns short_summary if we have it, else summary."""
+        return (self.short_summary or self.summary)
+    
     def allow_edit(self, user):
         return self.authors.filter(user__pk=user.pk).count() > 0 \
             or user.has_perm('articles.change_article');
