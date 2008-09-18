@@ -34,17 +34,14 @@
       </div>
       
       <div class="headerColumnBox">
-            <h4>Column Listings</h4>
-            {% for semester in columnList %}
-                  <p><strong>{{ semester.date }}</strong></p>
-                  {% for column in semester %}
-                        <p>
-                              <a href="{{ column.get_target_url }}">{{ column.name }}</a>
-                        </p>
-                  {% endfor %}
-            {% endfor %}
+        <h4>Column Listings</h4>
+        {% for column in columns %}
+          {% ifchanged %}
+            <p><strong>{{ column.semester }} {{ column.year }}</strong></p>
+          {% endifchanged %}
+          <p><a href="{{ column.get_absolute_url }}">{{ column.name }}</a></p>
+        {% endfor %}
       </div>
-      
     </div>
   </div>
 
@@ -59,44 +56,47 @@
       <h2>{% block main-header %}{{ section.name }}{% endblock %}</h2>
     </div>
 
-    {% for story in column %}
-    	{% if i = 0 (what is the right format?) %}    	
-		  <div id="columnMain">
-				<h2>
-					{{ column.column_title }}: <a href="{{ column.get_absolute_url }}">{{column.get_title|safe}}</a>
-				</h2>
-				<div id="leadImg">
-					<img src="{{ column.big_logo.get_absolute_url }}" />
-				</div>
-				<p class="byline">
-					<span class="author">by {{ column.authors_in_order|join_authors }}</span><span 	class="date">| {{ column.pub_date|date:"n/j/Y" }}</span>
-				</p>
-				<p>
-					{{ column.long_summary|safe }}
-					<a class="readMore" href="{{ column.get_absolute_url }}">More</a>
-				</p>
-			</div>
-   		{% else if i = 1 %}
+    {% for story in column.most_recent_articles %}
+    	{% if forloop.first %}
+  		  <div id="columnMain">
+  				<h2>
+  					{{ column.name }}: <a href="{{ column.get_absolute_url }}">{{story.get_title|safe}}</a>
+  				</h2>
+  				<div id="leadImg">
+  					<img src="{{ column.big_logo.get_absolute_url }}" />
+  				</div>
+  				<p class="byline">
+  					<span class="author">by {{ story.authors_in_order|join_authors }}</span>
+  					<span class="date">| {{ story.pub_date|date:"n/j/Y" }}</span>
+  				</p>
+  				<p>
+  					{{ story.longest_summary|safe }}
+  					<a class="readMore" href="{{ story.get_absolute_url }}">More</a>
+  				</p>
+  			</div>
+  		{% endif %}
+   		{% ifequal forloop.counter 1 %}
     		<div id="columnList">
-				<ul>
-		{% endif %}
-		{% if i > 0 %}
-    		       <li>
-          				<h3><a href="{{ column.get_absolute_url }}">{{ column.get_title|safe }}</a></h3>
-            			<img src="{{ column.small_logo.get_absolute_url }}" title="{{ column.headline }}" alt="" />
-            			<p class="byline">
-            			  <span class="author">by {{ column.authors_in_order|join_authors }}</span>
-            			  <span class="date"> | {{ column.pub_date|date:"n/j/Y" }}</span>
-           				</p>
-           				<p>
-          				    {{ column.summary|safe }}
-         				     <a class="readMore" href="{{ column.get_absolute_url }}">More</a>
-           				</p>
-         		 </li>
-        {% endif %}
-        {% endfor %}
-      </ul>
-    </div>
-    
-
+    			<ul>
+  		{% endifequal %}
+  		{% if not forloop.first %}
+            <li>
+              <h3><a href="{{ story.get_absolute_url }}">{{ story.get_title|safe }}</a></h3>
+              <img src="{{ column.small_logo.get_absolute_url }}" title="{{ story.headline }}" alt="" />
+              <p class="byline">
+	              <span class="author">by {{ story.authors_in_order|join_authors }}</span>
+                <span class="date"> | {{ story.pub_date|date:"n/j/Y" }}</span>
+              </p>
+	            <p>
+                {{ story.summary|safe }}
+                <a class="readMore" href="{{ column.get_absolute_url }}">More</a>
+              </p>
+            </li>
+      {% endif %}
+      {% if forloop.last and not forloop.first %}
+          </ul>
+        </div>
+      {% endif %}
+    {% endfor %}    
+  </div>
 {% endblock %}

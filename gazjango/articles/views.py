@@ -7,8 +7,8 @@ from django.http       import Http404, HttpResponse, HttpResponseRedirect
 from django.utils.html import escape
 from misc.view_helpers import get_by_date_or_404, filter_by_date, reporter_admin_data
 
-from articles.models      import Article, Section, Subsection, Special, PhotoSpread
-from articles.models      import StoryConcept
+from articles.models      import Article, Special, PhotoSpread, StoryConcept
+from articles.models      import Section, Subsection, Column
 from announcements.models import Announcement
 from comments.models      import PublicComment
 from comments.forms       import CommentForm, make_comment_form
@@ -187,6 +187,15 @@ def subsection(request, section, subsection, year=None, month=None, day=None):
     if subsection:
         sub = get_object_or_404(Subsection, section=sec, slug=subsection)
         data['subsection'] = sub
+        
+        try:
+            column = sub.column
+        except Column.DoesNotExist:
+            pass
+        else:
+            data['column'] = column
+            data['columns'] = Column.objects.order_by('-year', '-semester')
+        
         base = filter_by_date(sub.articles, year, month, day)
     else:
         base = filter_by_date(sec.articles, year, month, day)
