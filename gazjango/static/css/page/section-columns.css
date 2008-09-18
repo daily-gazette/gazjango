@@ -1,8 +1,10 @@
 #columnMain {
 	width: 660px;
-	margin: 10px 15px 15px 0px
+	margin: 10px 15px 5px 25px;
 	display: block;
 	float: left;
+	padding-bottom: 5px;
+	border-bottom: 2px solid #bbbbbb;
 }
 
 #columnMain h2 {
@@ -41,7 +43,6 @@
 	display:inline;
 	margin-left: 25px;
 	margin-right: 25px;
-	padding-top: 10px;
 }
 
 
@@ -57,5 +58,5 @@
 	display: inline;
 	float: left;
 	width:  660px;
-	padding: 10px 0px 10px 0px;
+	padding: 5px 0px 5px 0px;
 }

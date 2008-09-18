@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% load extras %}
 
-{% block title %}{{ section.name }}{% endblock title %}
+{% block title %}{{ column.name }}{% endblock title %}
 
 {% block customheader %}
 
@@ -31,7 +31,6 @@
             {% endfor %}
           </ul>
         </div>
-      </div>
       
       <div class="headerColumnBox">
         <h4>Column Listings</h4>
@@ -41,6 +40,8 @@
           {% endifchanged %}
           <p><a href="{{ column.get_absolute_url }}">{{ column.name }}</a></p>
         {% endfor %}
+      </div>
+      
       </div>
     </div>
   </div>
