@@ -37,7 +37,7 @@
         <h4>Column Listings</h4>
         {% for column in columns %}
           {% ifchanged %}
-            <p><strong>{{ column.semester }} {{ column.year }}</strong></p>
+            <p><strong>{{ column.get_semester_display }} {{ column.year }}</strong></p>
           {% endifchanged %}
           <p><a href="{{ column.get_absolute_url }}">{{ column.name }}</a></p>
         {% endfor %}
@@ -53,7 +53,7 @@
   <div id="section">
     
     <div id="sectionHeader">
-      <h2>{% block main-header %}{{ section.name }}{% endblock %}</h2>
+      <h2>{% block main-header %}{{ column.name }}{% endblock %}</h2>
     </div>
 
     {% for story in column.most_recent_articles %}
