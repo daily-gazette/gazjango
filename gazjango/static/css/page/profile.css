@@ -1,3 +1,60 @@
+/* @override http://127.0.0.1:8000/static/css/page/profile.css */
+
+/***********
+
+CORE FORMATTING
+
+************/
+
+#storyBox {
+	width: 800px;
+	margin: 0 auto;
+	position: relative;
+}
+
+#story p {
+	margin: 0;
+	padding: 0 0 10px 0px;
+	color: black;
+	text-align: justify;
+	line-height: 1.4;
+	font-size: 1.4em;
+}
+
+#story h2{
+	font-size: 200%;
+	font-family: "Helvetica Neue", Arial, Helvetica, Geneva, sans-serif;
+	color: black;
+	margin: 5px 0px 5px 0px;
+	text-align: left;
+	border-bottom: 2px solid #000000;
+	font-size: 3em;
+}
+
+#story a {
+	text-decoration: underline;
+}
+
+#story h3 {
+	font-size: 2em;
+	line-height: 1em;
+	font-family: "Helvetica Neue", Arial, Helvetica, Geneva, sans-serif;
+	color: black;
+	text-align: left;
+	padding: 2px;
+	width: 500px;
+	font-weight: bold;
+}
+
+
+/***************
+
+EXTENSIBLE FORMATTING
+
+***************/
+
+
+
 #profiles {
 	display: inline-block;
 }
@@ -19,6 +76,7 @@
 	float: left;
 	width: 50%;
 	padding: 5px;
+	display: inline-block;
 }
 
 #history {
@@ -43,10 +101,50 @@
 
 #history h4, #description h4 {
 	font: bold 1.6em "Helvetica Neue", Arial, Helvetica, Geneva, sans-serif;
+	padding-bottom: 5px;
+	display: block;
 }
 
 #topStories {
 	float: right;
 	width: 47%;
 	padding: 5px;
+}
+
+
+/***********
+
+Story Listings
+
+************/
+
+.storyListing {
+	display: block;
+	overflow: hidden;
+	float: left;
+}
+
+.title {
+	font-weight: bold;
+}
+
+.link a,.link a:visited:before {
+	text-decoration: none;
+}
+
+.link a:hover {
+	text-decoration: underline;
+}
+
+.readMore {
+	font-variant: small-caps;
+	font-size: .9em;
+}
+
+.searchImage {
+	float: left;
+	padding: 0px;
+	margin: 4px;
+	display: block;
+	border: 3px solid #bbbbbb;
 }
