@@ -152,39 +152,47 @@ class IssueArticle(models.Model):
     
 
 class MenuManager(models.Manager):
-    def for_today(self):
+    def for_today(self, ignore_cached=False):
         """
         Returns the Sharples menu object for today, creating a new
         one by scraping it from the XML feed if necessary.
         """
-        try:
-            return self.get(date=datetime.date.today())
-        except self.model.DoesNotExist:
-            new = self.scrape_menu(tomorrow=False)
-            new.save()
-            return new
+        return self._for_today_or_tomorrow(False, ignore_cached)
     
-    def for_tomorrow(self):
+    def for_tomorrow(self, ignore_cached=False):
         """
         Returns the Sharples menu object for tomorrow, creating a new
         one by scraping it from the XML feed if necessary.
         """
-        try:
-            tomorrow = datetime.date.today() + datetime.timedelta(days=1)
-            return self.get(date=tomorrow)
-        except self.model.DoesNotExist:
-            new = self.scrape_menu(tomorrow=True)
-            new.save()
-            return new
+        return self._for_today_or_tomorrow(True, ignore_cached)
     
-    def scrape_menu(self, tomorrow=False):
+    def _for_today_or_tomorrow(self, tomorrow, ignore_cached=False):
+        date = datetime.date.today() + \
+               datetime.timedelta(days=(1 if tomorrow else 0))
+        try:
+            menu = self.get(date=date)
+            if not ignore_cached:
+                return menu
+        except self.model.DoesNotExist:
+            menu = self.model()
+        
+        vals = self.scrape_menu(tomorrow, yield_dict=True)
+        for key, val in vals.iteritems():
+            menu.__setattr__(key, val)
+        menu.save()
+        return menu
+    
+    def scrape_menu(self, tomorrow=False, yield_dict=False):
         """
         Scrapes the XML feed for Sharples and returns a menu object for
         either today or tomorrow. Note that the menu is not saved.
+        
+        If `yield_dict` is passed, return a dictionary of values
+        rather than an object.
         """
         menu = sharples.get_menu(tomorrow=tomorrow)
         
-        return self.model(
+        return (dict if yield_dict else self.model)(
             date    = datetime.date.today() + 
                       datetime.timedelta(days=(1 if tomorrow else 0)),
             closed  = menu['closed'],
@@ -213,35 +221,44 @@ class Menu(models.Model):
 
 
 class WeatherManager(models.Manager):
-    def for_today(self):
-        return self.get_or_parse(tomorrow=False)
-    
-    def for_tomorrow(self):
-        return self.get_or_parse(tomorrow=True)
-    
-    def get_or_parse(self, tomorrow=False):
+    def for_today(self, ignore_cached=False):
         """
-        Returns the weather object for today/tomorrow, creating a new
+        Returns the weather object for today, creating a new
         one (by parsing it from the online data feed) if necessary.
         """
+        return self._get_or_parse(False, ignore_cached)
+    
+    def for_tomorrow(self, ignore_cached=False):
+        """
+        Returns the weather object for tomorrow, creating a new
+        one (by parsing it from the online data feed) if necessary.
+        """
+        return self._get_or_parse(True, ignore_cached)
+    
+    def _get_or_parse(self, tomorrow=False, ignore_cached=False):
         day = datetime.date.today()
         if tomorrow:
             day += datetime.timedelta(days=1)
         
         try:
-            return self.get(date=day)
+            obj = self.get(date=day)
+            if not ignore_cached:
+                return obj
         except self.model.DoesNotExist:
-            try:
-                weather = weather.get_weather(date=day)
-            except weather.WeatherError:
-                weather = { 'today': "", 'tonight': "", 'tomorrow': "" }
-            
-            return self.create(
-                date     = day,
-                today    = weather['today'],
-                tonight  = weather['tonight'],
-                tomorrow = weather['tomorrow']
-            )
+            obj = self.model()
+        
+        try:
+            data = weather.get_weather(date=day)
+        except weather.WeatherError:
+            data = { 'today': "", 'tonight': "", 'tomorrow': "" }
+        
+        obj.date     = day
+        obj.today    = data['today']
+        obj.tonight  = data['tonight']
+        obj.tomorrow = data['tomorrow']
+        obj.save()
+        
+        return obj
     
 
 class Weather(models.Model):
