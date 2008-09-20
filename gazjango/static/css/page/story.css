@@ -283,51 +283,6 @@ COMMENT STYLES
 	font-size: 1.3em;
 }
 
-/**************************************
-
-IMAGE STYLES
-
-**************************************/
-
-.imgLeft {
-	float: left;
-	display: inline;
-	overflow:hidden;
-	margin: 10px 10px 10px 0px;
-}
-
-.imgRight {
-	margin: 5px 0px 5px 5px;
-	float: right;
-}
-
-.ten {
-	width: 10%;
-}
-
-.twentyfive {
-	width: 25%;
-}
-
-.thirtyfive {
-	width: 35%;
-}
-
-.fourty {
-	width: 40%;
-}
-
-.fifty {
-	width: 50%;
-}
-
-.seventyfive {
-	width: 75%;
-}
-
-.hundred {
-	width: 100%;
-}
 
 /**************************************
 
@@ -347,3 +302,27 @@ SUBMISSION FORM STYLES
 .submission tr {
 	margin: 2px;
 }
+
+/**************************************
+
+PHOTO SPREAD STYLES
+
+**************************************/
+
+#photo-block {
+	margin: 0 auto;
+}
+
+#photo-block img {
+	
+}
+
+.nav-links a {
+	font: 1.2em "Helvetica Neue", Arial, Helvetica, Geneva, sans-serif;
+}
+
+.photo-coption {
+	width: 400px;
+	font-family: Georgia, "Times New Roman", Times, serif;
+}
+
