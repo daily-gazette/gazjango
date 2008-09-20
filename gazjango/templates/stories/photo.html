@@ -1,7 +1,9 @@
 {% load extras %}
 
 {% block story-content %}
+
   <div class="nav-links">
+  	<center>
     {% if prev %}
       <a href="{{ prev.get_absolute_url }}" onclick="showPage('{{ prev.get_absolute_url }}'); return false;"> &laquo; Previous photograph</a>
     {% endif %}
@@ -11,9 +13,11 @@
     {% if next %}
       <a href="{{ next.get_absolute_url }}" onclick="showPage('{{ next.get_absolute_url }}'); return false;">Next photograph &raquo;</a>
     {% endif %}
+    </center>
   </div>
-
+	<center>
   <img src="{{ page.photo.get_absolute_url }}" alt="" />
+  </center>
   
   {% if page.photo.caption %}
     <span class="photo-caption">
@@ -22,6 +26,7 @@
   {% endif %}
   
   <div class="nav-links">
+  	<center>
     {% if prev %}
       <a href="{{ prev.get_absolute_url }}" onclick="showPage('{{ prev.get_absolute_url }}'); return false;"> &laquo; Previous photograph</a>
     {% endif %}
@@ -31,5 +36,6 @@
     {% if next %}
       <a href="{{ next.get_absolute_url }}" onclick="showPage('{{ next.get_absolute_url }}'); return false;">Next photograph &raquo;</a>
     {% endif %}
+    </center>
   </div>
 {% endblock %}
