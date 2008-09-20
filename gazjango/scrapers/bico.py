@@ -12,6 +12,13 @@ CATEGORIES = {
     'last-word': '7'
 }
 DEFAULT_ORDER = ('news', 'features', 'sports')
+AUTHOR_REGEX = re.compile(r'^\s*<p>\s*<strong>\s*By\s+([-\w\s]+)\s*</strong>')
+
+
+def cache_item_name(order=DEFAULT_ORDER):
+    """Returns the key that will be used for the cache."""
+    return 'bico_' + '_'.join(order)
+
 
 def get_bico_news(order=DEFAULT_ORDER):
     """
@@ -28,7 +35,7 @@ def get_bico_news(order=DEFAULT_ORDER):
     # so we can use the main file w/o django...
     from django.core.cache import cache
     
-    key = 'bico_' + '_'.join(order)
+    key = cache_item_name(order)
     cached = cache.get(key)
     
     if cached:
@@ -45,6 +52,7 @@ def get_bico_news(order=DEFAULT_ORDER):
 
 
 def get_bico_news_directly(order=DEFAULT_ORDER):
+    """Gets the bico news, not doing any caching or anything."""
     # NOTE: if we can assume that the main feed will always contain
     #       enough entries of each type, we could use that, and only
     #       have to read / parse one feed. however, this is often not
@@ -57,7 +65,9 @@ def get_bico_news_directly(order=DEFAULT_ORDER):
     
     for cat in order:
         if cat in feeds:
-            feed, next = feeds[cat]
+            feed, index = feeds[cat]
+            index += 1
+            feeds[cat] = (feed, index)
         else:
             try:
                 url = urllib2.urlopen(BASE_URL + CATEGORIES[cat])
@@ -65,20 +75,21 @@ def get_bico_news_directly(order=DEFAULT_ORDER):
                 raise e
             
             feed = feedparser.parse(url)
-            next = 0
-            feeds[cat] = (feed, next)
+            index = 0
+            feeds[cat] = (feed, index)
         
-        entry = feed.entries[next]
+        entry = feed.entries[index]
         
         # awesomely enough, BiCo doesn't really set their authors; they
         # just have the first line "<p><strong>By Joe Schmoe</strong></p>"
         
         content = entry.content[0].value
-        regex = r'^\s*<p>\s*<strong>\s*By\s+([-\w\s]+)\s*</strong>'
-        match = re.match(regex, content, re.IGNORECASE)
+        
+        match = re.match(AUTHOR_REGEX, content, re.IGNORECASE)
         if match:
             author = match.group(1)
         else:
+            # TODO: log this error
             author = "the Bi-Co News"
         
         result.append({
