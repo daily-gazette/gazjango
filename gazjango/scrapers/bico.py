@@ -20,7 +20,7 @@ def cache_item_name(order=DEFAULT_ORDER):
     return 'bico_' + '_'.join(order)
 
 
-def get_bico_news(order=DEFAULT_ORDER):
+def get_bico_news(order=DEFAULT_ORDER, override_cache=False):
     """
     Caches the BiCo News feed.
     
@@ -38,7 +38,7 @@ def get_bico_news(order=DEFAULT_ORDER):
     key = cache_item_name(order)
     cached = cache.get(key)
     
-    if cached:
+    if cached and not override_cache:
         return cached
     else:
         try:
