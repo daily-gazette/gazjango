@@ -2,19 +2,23 @@ from django.core.cache import cache
 from xml.etree import cElementTree as etree
 import urllib2
 
-def get_tla_links():
-    cached = cache.get('tla_links')
-    if cached:
+CACHE_KEY = 'tla_links'
+
+def get_tla_links(override_cache=False):
+    cached = cache.get(CACHE_KEY)
+    if cached and not override_cache:
         return cached
     else:
         try:
-            return update_tla_links()
+            links = get_tla_links_directly()
+            cache.set(CACHE_KEY, links, 1 * 60 * 60)
+            return links
         except urllib2.URLError:
             # TODO: log this error
             return []
 
 
-def update_tla_links():
+def get_tla_links_directly():
     url = "http://www.text-link-ads.com/xml.php?inventory_key=N085BPUAZXJB74O3QZ06"
     feed = etree.parse(urllib2.urlopen(url))
     links = []
@@ -28,5 +32,4 @@ def update_tla_links():
         s = '%s <a href="%s">%s</a> %s' % (before, url, text, after)
         links.append(s)
     
-    cache.set('tla_links', links, 1 * 60 * 60)
     return links
