@@ -220,7 +220,7 @@ def get_static_file_link(parser, token):
     """
     split = token.split_contents()
     if len(split) != 3:
-        raise template.TemplateSyntaxError, "%r tag requires two arguments" % token.content.split[0]
+        raise template.TemplateSyntaxError, "%r tag requires two arguments" % split[0]
     tag_name, kind, path = split
     if kind not in STATIC_FILE_KINDS:
         raise template.TemplatSyntaxError, "%r: invalid kind '%s'" % (tag_name, kind)
