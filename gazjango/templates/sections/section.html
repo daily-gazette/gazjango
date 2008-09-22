@@ -80,7 +80,7 @@
             <span class="date">| {{ topstory.pub_date|date:"n/j/Y" }}</span>
           </p>
           <p>
-            {{ topstory.long_summary|safe }}
+            {{ topstory.longest_summary|safe }}
             <a class="readMore" href="{{ topstory.get_absolute_url }}">More</a>
           </p>
         </div>
