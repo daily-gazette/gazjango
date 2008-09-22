@@ -570,7 +570,6 @@ for post_id, p in posts.iteritems():
         else:
             d = p['date']
             date = datetime.date(d.year, d.month, d.day)
-            print "announcement: ", p['slug']
             Announcement.objects.create(
                 kind=('s' if is_gazette_news else 'c'),
                 title=p['title'],
