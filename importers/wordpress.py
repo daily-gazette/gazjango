@@ -574,7 +574,7 @@ for post_id, p in posts.iteritems():
                 kind=('s' if is_gazette_news else 'c'),
                 title=p['title'],
                 slug=p['slug'][:50],
-                text=p['text'],
+                text=p['content'],
                 date_start=date,
                 date_end=date,
                 is_published=True,
