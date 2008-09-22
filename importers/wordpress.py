@@ -521,7 +521,7 @@ for post_id, p in posts.iteritems():
         
         article_args = dict(
             headline=p['title'],
-            slug=p['slug'],
+            slug=p['slug'][:50], # NOTE: slugs can't be > 50 chars on articles
             section=section,
             summary=summary,
             pub_date=p['date'],
