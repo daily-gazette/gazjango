@@ -373,7 +373,7 @@ def resolve_media(url, article):
         
         media[url] = klass.objects.create(
             data="uploads/%s/%s.%s" % (bucket.slug, name, ext),
-            slug=name,
+            slug=name[:50],
             pub_date=article.pub_date,
             bucket=bucket
         )
@@ -561,7 +561,7 @@ for post_id, p in posts.iteritems():
             #       paid, on-campus, filled, etc....
             JobListing.objects.create(
                 name=p['title'],
-                slug=p['slug'],
+                slug=p['slug'][:50],
                 description=p['content'],
                 pub_date=p['date'],
                 is_filled=True, # for most of them...
@@ -570,10 +570,11 @@ for post_id, p in posts.iteritems():
         else:
             d = p['date']
             date = datetime.date(d.year, d.month, d.day)
+            print "announcement: ", p['slug']
             Announcement.objects.create(
                 kind=('s' if is_gazette_news else 'c'),
                 title=p['title'],
-                slug=p['slug'],
+                slug=p['slug'][:50],
                 text=p['text'],
                 date_start=date,
                 date_end=date,
