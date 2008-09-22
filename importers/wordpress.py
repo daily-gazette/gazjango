@@ -8,8 +8,8 @@ sys.path.append("..")
 sys.path.append("../gazjango")
 
 import settings
-from django.core.management import setup_environ
-setup_environ(settings)
+import django.core.management
+django.core.management.setup_environ(settings)
 
 import datetime
 from django.contrib.auth.models         import User, Group, Permission
@@ -31,6 +31,11 @@ from gazjango.polls.models         import Poll, Option
 from gazjango.jobs.models          import JobListing
 
 from collections import defaultdict
+
+
+# =======================
+# = Database Connection =
+# =======================
 
 parser = OptionParser()
 parser.add_option("-H", "--host",     dest="host",   help="connect to HOST",      metavar="HOST",   default="localhost")
@@ -55,11 +60,13 @@ conn = db.connect(
 
 cursor = conn.cursor()
 
+# ==========================
+# = Flush the Old Database =
+# ==========================
 
-# Yeah, there are more elegant ways of doing this.
 print "flushing database..."
-os.system("python ../gazjango/manage.py flush --noinput")
-
+u = django.core.management.ManagementUtility(['fakery', 'flush', '--noinput'])
+u.execute()
 
 # ========
 # = Site =
@@ -510,7 +517,7 @@ for post_id, p in posts.iteritems():
         if not summary:
             # wordpress just used the first 30 words, so we will too
             from django.utils.html import strip_tags
-            summary = ' '.join(strip_tags(value).split()[:30])
+            summary = ' '.join(strip_tags(content).split()[:30])
         
         article_args = dict(
             headline=p['title'],
