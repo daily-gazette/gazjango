@@ -265,7 +265,7 @@ admin.last_name  = 'Daily Gazette'
 admin.is_staff = True
 admin.is_superuser = True
 admin.save()
-admin.profile_set.create()
+admin.userprofile_set.create()
 
 # ============
 # = Sections =
