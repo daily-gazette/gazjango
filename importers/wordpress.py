@@ -264,6 +264,7 @@ admin.first_name = 'The'
 admin.last_name  = 'Daily Gazette'
 admin.is_staff = True
 admin.is_superuser = True
+admin.set_password('test')
 admin.save()
 admin.userprofile_set.create()
 
