@@ -259,7 +259,7 @@ for id in users:
 
 
 # admin user
-admin = User.objects.create_user('admin', 'dailygazette@swarthmore.edu')
+admin = User.objects.create_user('__admin__', 'dailygazette@swarthmore.edu')
 admin.first_name = 'The'
 admin.last_name  = 'Daily Gazette'
 admin.is_staff = True
