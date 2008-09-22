@@ -39,11 +39,17 @@ parser.add_option("-p", "--passwd",   dest="passwd", help="using PASSWD",       
 parser.add_option("-d", "--database", dest="db",     help="use database DB",      metavar="DB",     default="gazette_daily")
 (options, args) = parser.parse_args()
 
+if options.passwd == '-':
+    print "db password: "
+    password = raw_input()
+else:
+    password = options.passwd
+
 print "connecting to the old db..."
 conn = db.connect(
     host=options.host,
     user=options.user,
-    passwd=options.passwd,
+    passwd=password,
     db=options.db
 )
 
@@ -205,26 +211,32 @@ while True:
 for id in users:
     u = users[id]
     groups = []
-    if "administrator" in u["gazette_capabilities"]:
+    caps = u["gazette_capabilities"]
+    if "administrator" in caps:
         groups.append(admin_group)
-    if "reader" in u["gazette_capabilities"]:
+    if "reader" in caps:
         groups.append(reader_group)
-    if "photographer" in u["gazette_capabilities"]:
+    if "reporter" in caps or "reporters" in caps:
+        groups.append(reporter_group)
+    if "photographer" in caps:
         groups.append(photographer_group)
-    if "editor" in u["gazette_capabilities"]:
+    if "editor" in caps:
         groups.append(editor_group)
-    if "old_writers" in u["gazette_capabilities"]:
+    if "old_writers" in caps:
         groups.append(ex_staff_group)
-
-    contact = {}
-    contact[aim] = u['aim']
-    contact[gtalk] = u['jabber']
-    contact[yim] = u['yim']
     
     new_user = User.objects.create_user(u['username'], u['email'])
-    new_user.first_name = u['first_name']
-    new_user.last_name  = u['last_name']
+    if u['first_name'] or u['last_name']:
+        new_user.first_name = u['first_name']
+        new_user.last_name  = u['last_name']
+    else:
+        split = u['display_name'].split(None, 1)
+        if len(split) == 1:
+            split += ['']
+        new_user.first_name, new_user.last_name = split
+    new_user.is_staff = bool(set(groups).intersection(staff_groups))
     new_user.groups = groups
+    new_user.save()
     
     profile = UserProfile.objects.create(
         user=new_user,
@@ -434,7 +446,15 @@ other_types_lookup = {
 
 # these are compiled to save a bit of speed, even though it kinda sucks
 nextpage = re.compile(r'<!--\s*nextpage\s*-->')
-part_matching = re.compile(r'''^\s*<img[^>]+src=['"]([^'"]+)['"][^>]*/\s*>\s*(.*)\s*$''', re.IGNORECASE | re.DOTALL)
+empty    = re.compile(r'^\s*$')
+part_matching = re.compile(r'''
+    ^\s*                                    # start, whitespace
+    <img[^>]+src=['"]([^'"]+)['"][^>]*/\s*> # img tag -- match only the src
+    \s*                                     # probably some newlines
+    (.*?)                                   # the caption: non-greedy match, to
+                                            #           avoid ending whitespace
+    \s*$                                    # whitespace, end of string
+    ''', re.IGNORECASE | re.DOTALL | re.VERBOSE)
 
 for post_id, p in posts.iteritems():
     section = subsection = None
@@ -481,38 +501,42 @@ for post_id, p in posts.iteritems():
             elif "Today" in content and 'Tonight' in content and 'Tomorrow' in content:
                 continue # TODO: parse the weather joke
             else:
-                # this is probably a photospread? dunno
                 print "post %4s doesn't have a section" % post_id
                 continue
+        
+        # TODO: process text
+        
+        summary = p['excerpt']
+        if not summary:
+            # wordpress just used the first 30 words, so we will too
+            from django.utils.html import strip_tags
+            summary = ' '.join(strip_tags(value).split()[:30])
         
         article_args = dict(
             headline=p['title'],
             slug=p['slug'],
             section=section,
-            summary=p['excerpt'],
+            summary=summary,
             pub_date=p['date'],
             format=html,
             status='p',
         )
         
-        # this is probably a photospread
-        
-        if nextpage.search(content):
+        if not nextpage.search(content):
+            article = Article.objects.create(text=p['content'], **article_args)
+        else: # this is probably a photospread
             article = PhotoSpread.objects.create(**article_args)
             
             parts = nextpage.split(content)
             for part in parts:
-                part = part.strip()
-                if part == '':
+                if not empty.match(part):
                     continue
                 match = part_matching.match(part)
                 if not match:
                     raise "Confused by photospread (id %s): %s" % (post_id, part)
                 url, caption = match.groups()
                 photo = resolve_media(url, article)
-                article.add_photo(photo)
-        else:
-            article = Article.objects.create(text=p['content'], **article_args)
+                article.add_photo(photo=photo, caption=caption)
         
         author_id = users[p['author']]['new_id']
         article.add_author(User.objects.get(pk=author_id).get_profile())    
