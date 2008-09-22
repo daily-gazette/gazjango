@@ -16,7 +16,7 @@ import settings
 from django.core.management import setup_environ
 setup_environ(settings)
 
-
+import datetime
 from django.contrib.auth.models         import User, Group, Permission
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.sites.models        import Site
@@ -342,7 +342,7 @@ cursor.execute("SELECT gazette_terms.slug, gazette_term_taxonomy.term_taxonomy_i
                "AND gazette_terms.slug IN (%s) " % relevant +
                "ORDER BY gazette_term_taxonomy.taxonomy DESC")
 # ordering is because there's both a post_tag and a category referring to
-# the same term (18) for athletics, and we want the category, not the tag
+# the same term (#18) for athletics, and we want the category, not the tag
 while True:
     row = cursor.fetchone()
     if not row:
@@ -371,10 +371,6 @@ other_types_lookup = {
     taxonomy_ids['jobs']: 'jobs'
 }
 
-print section_lookup
-print subsection_lookup
-print tag_lookup
-
 ### not sure we necessarily want to tag based on autometa
 # cursor.execute("SELECT post_id, meta_value FROM gazette_postmeta WHERE meta_key='autometa'")
 # while True:
@@ -386,7 +382,6 @@ print tag_lookup
 #         posts[int(old_id)]["tags"] = tags
 #     except KeyError:
 #         pass
-
 
 for post_id, p in posts.iteritems():
     section = subsection = None
@@ -411,10 +406,13 @@ for post_id, p in posts.iteritems():
             result = other_types_lookup[taxo_id]
             if result == "announcement":
                 is_announcement = True
-            elif result == "gazette-news":
+            elif result == "gazette-news-announcement":
+                is_announcement = True
                 is_gazette_news = True
             elif result == "jobs":
                 is_job = True
+            else:
+                print "Unknown lookup result: %s" % result
     
     if is_article:
         content = p['content']
@@ -460,7 +458,32 @@ for post_id, p in posts.iteritems():
     
         p["new_id"] = article.id
     elif is_announcement:
-        pass # TODO: announcements
+        if is_job:
+            # NOTE: Jobs need some manual updating based on whether they're
+            #       paid, on-campus, filled, etc....
+            JobListing.objects.create(
+                name=p['title'],
+                slug=p['slug'],
+                description=p['content'],
+                pub_date=p['date'],
+                is_filled=True, # for most of them...
+                is_published=True
+            )
+        else:
+            d = p['date']
+            date = datetime.date(d.year, d.month, d.day)
+            Announcement.objects.create(
+                kind=('s' if is_gazette_news else 'c'),
+                title=p['title'],
+                slug=p['slug'],
+                text=p['text'],
+                date_start=date,
+                date_end=date,
+                is_published=True,
+                sponsor='' # no real way to get this automatically
+            )
+    else:
+        print 'unsure: skipping %s' % post_id
 
 cursor.close()
 conn.close()
