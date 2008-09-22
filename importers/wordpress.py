@@ -1,4 +1,4 @@
-# Note: run this INSTEAD of init_dev_data; do not run both as they conflict
+#!/usr/bin/env python
 
 import MySQLdb as db
 from optparse import OptionParser
@@ -6,11 +6,6 @@ import os,sys,re
 
 sys.path.append("..")
 sys.path.append("../gazjango")
-
-
-# Yeah, there are more elegant ways of doing this.
-print "flushing database..."
-os.system("python ../gazjango/manage.py flush --noinput")
 
 import settings
 from django.core.management import setup_environ
@@ -26,11 +21,12 @@ from gazjango import tagging
 from gazjango.accounts.models      import UserProfile, UserKind, Position
 from gazjango.accounts.models      import ContactMethod, ContactItem
 from gazjango.announcements.models import Announcement
-from gazjango.articles.models      import Article, Section, Subsection, Format
+from gazjango.articles.models      import Article, PhotoSpread, Format
+from gazjango.articles.models      import Section, Subsection
 from gazjango.articles.models      import Special, SpecialsCategory, DummySpecialTarget
 from gazjango.comments.models      import PublicComment
 from gazjango.issues.models        import Issue, Menu, Weather, WeatherJoke, Event
-from gazjango.media.models         import ImageFile, MediaBucket
+from gazjango.media.models         import MediaFile, ImageFile, MediaBucket
 from gazjango.polls.models         import Poll, Option
 from gazjango.jobs.models          import JobListing
 
@@ -52,6 +48,11 @@ conn = db.connect(
 )
 
 cursor = conn.cursor()
+
+
+# Yeah, there are more elegant ways of doing this.
+print "flushing database..."
+os.system("python ../gazjango/manage.py flush --noinput")
 
 
 # ========
@@ -305,13 +306,61 @@ for name, title in ppl:
     people.tags.create(name=name, long_name=("%s, %s" % (name, title)))
 
 
-# =========
-# = Posts =
-# =========
+# ===================
+# = Posts and Media =
+# ===================
 
 print "importing posts..."
 
 posts = {}
+media = {}
+
+
+def download_file(url, target_dir):
+    "Downloads the file at `url` to `target_dir` if it isn't there already."
+    filename, ext = url.split('/')[-1].split('.', 1)
+    import os.path
+    target_path = os.path.join(target_dir, "%s.%s" % (filename, ext))
+    
+    if not os.path.exists(target_path):
+        if not os.path.exists(target_dir):
+            os.makedirs(target_dir)
+        import urllib2
+        source = urllib2.urlopen(url)
+        target = file(target_path, 'wb')
+        print 'downloading %s...' % url, 
+        # read in chunks, to avoid killing memory
+        while True:
+            read = source.read(128*1024)
+            if not read:
+                break
+            target.write(read)
+        print 'done.'
+    return (filename, ext)
+
+def resolve_media(url, article):
+    """Takes a url and returns a media object for it."""
+    if url not in media:
+        slug = "old-" + article.slug
+        bucket, created = MediaBucket.objects.get_or_create(slug=article.slug,
+            defaults={'name': article.slug}
+        )
+        name, ext = download_file(url, "../gazjango/uploads/%s/" % bucket.slug)
+        
+        if re.match(r'jpe?g|png|gif', ext, re.IGNORECASE):
+            klass = ImageFile
+        else:
+            klass = MediaFile
+        
+        media[url] = klass.objects.create(
+            data="uploads/%s/%s.%s" % (bucket.slug, name, ext),
+            slug=name,
+            pub_date=article.pub_date,
+            bucket=bucket
+        )
+    return media[url]
+
+
 query = "SELECT ID, post_author, post_date, post_title, post_content, post_excerpt, post_name " \
         "FROM gazette_posts WHERE post_type='post' AND post_status='publish';"
 cursor.execute(query)
@@ -383,6 +432,10 @@ other_types_lookup = {
 #     except KeyError:
 #         pass
 
+# these are compiled to save a bit of speed, even though it kinda sucks
+nextpage = re.compile(r'<!--\s*nextpage\s*-->')
+part_matching = re.compile(r'''^\s*<img[^>]+src=['"]([^'"]+)['"][^>]*/\s*>\s*(.*)\s*$''', re.IGNORECASE | re.DOTALL)
+
 for post_id, p in posts.iteritems():
     section = subsection = None
     is_article = True
@@ -416,6 +469,7 @@ for post_id, p in posts.iteritems():
     
     if is_article:
         content = p['content']
+
         if section is None:
             if subsection:
                 section = subsection.section
@@ -428,25 +482,38 @@ for post_id, p in posts.iteritems():
                 continue # TODO: parse the weather joke
             else:
                 # this is probably a photospread? dunno
-                print "post %s doesn't have a section" % post_id
+                print "post %4s doesn't have a section" % post_id
                 continue
         
-        try:
-            article_args = dict(
-                headline=p['title'],
-                slug=p['slug'],
-                section=section,
-                summary=p['excerpt'],
-                pub_date=p['date'],
-                text=p['content'],
-                format=html,
-                status='p',
-            )
-            article = Article.objects.create(**article_args)
-        except:
-            print article_args
-            raise
-    
+        article_args = dict(
+            headline=p['title'],
+            slug=p['slug'],
+            section=section,
+            summary=p['excerpt'],
+            pub_date=p['date'],
+            format=html,
+            status='p',
+        )
+        
+        # this is probably a photospread
+        
+        if nextpage.search(content):
+            article = PhotoSpread.objects.create(**article_args)
+            
+            parts = nextpage.split(content)
+            for part in parts:
+                part = part.strip()
+                if part == '':
+                    continue
+                match = part_matching.match(part)
+                if not match:
+                    raise "Confused by photospread (id %s): %s" % (post_id, part)
+                url, caption = match.groups()
+                photo = resolve_media(url, article)
+                article.add_photo(photo)
+        else:
+            article = Article.objects.create(text=p['content'], **article_args)
+        
         author_id = users[p['author']]['new_id']
         article.add_author(User.objects.get(pk=author_id).get_profile())    
     
