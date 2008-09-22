@@ -583,5 +583,9 @@ for post_id, p in posts.iteritems():
     else:
         print 'unsure: skipping %s' % post_id
 
+
+# this is dumb
+Article.objects.update(possible_position='t')
+
 cursor.close()
 conn.close()
