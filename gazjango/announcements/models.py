@@ -14,6 +14,15 @@ class PublishedAnnouncementsManager(models.Manager):
         today = date.today()
         return self.filter(date_start__lte=today, date_end__gte=today)
     
+    def get_n(self, n=3):
+        "Returns the `n` announcements to be shown."
+        running = self.now_running()
+        if running.count() >= n:
+            return running[:n]
+        else:
+            new = self.order_by('-date_end').exclude(pk__in=[r.pk for r in running])
+            return running + new[:n - running.count()]
+    
 
 class StaffAnnouncementsManager(PublishedAnnouncementsManager):
     "A custom manager for dealing only with staff announcements."

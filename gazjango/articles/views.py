@@ -174,7 +174,7 @@ def homepage(request, template="index.html"):
         'joke': WeatherJoke.objects.latest(),
         
         'specials': Special.objects.order_by('-date').all()[:10],
-        'announcements': Announcement.community.now_running(),
+        'announcements': Announcement.community.get_n(3),
         'jobs': JobListing.unfilled.order_by('-pub_date')[:3],
         
         'bico_news': get_bico_news(),
