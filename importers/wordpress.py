@@ -45,7 +45,7 @@ parser.add_option("-d", "--database", dest="db",     help="use database DB",    
 (options, args) = parser.parse_args()
 
 if options.passwd == '-':
-    print "db password: "
+    print "db password: ",
     password = raw_input()
 else:
     password = options.passwd
