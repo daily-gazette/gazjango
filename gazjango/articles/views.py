@@ -47,12 +47,15 @@ def show_article(request, story, form, print_view=False):
     "Shows the requested article."
     
     d = story.pub_date
-    template = (
+    template = [
         "stories/view_%s_%s_%s_%s.html" % (d.year, d.month, d.day, story.slug),
-        "stories/view_from_sub_%s.html" % (story.subsection.slug),
-        "stories/view_from_sec_%s.html" % (story.section.slug),
+    ]
+    for sub in story.subsections.all():
+        template.append("stories/view_from_sub_%s.html" % sub.slug)
+    template.extend([
+        "stories/view_from_sec_%s.html" % story.section.slug,
         "stories/view.html"
-    )
+    ])
     
     cs = PublicComment.visible.order_by('-time').exclude(article=story)
     context = RequestContext(request, {
