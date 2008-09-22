@@ -536,7 +536,7 @@ for post_id, p in posts.iteritems():
             
             parts = nextpage.split(content)
             for part in parts:
-                if not empty.match(part):
+                if empty.match(part):
                     continue
                 match = part_matching.match(part)
                 if not match:
