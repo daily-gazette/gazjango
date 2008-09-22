@@ -87,7 +87,7 @@ class PublishedArticlesManager(models.Manager):
         Returns a random article with is_topstory set. (Most of the time,
         there will only be one.)
         """
-        return self.filter(position='t').order_by("?")[0]
+        return self.get_stories(num_top=1, num_mid=0, num_low=0)[0][0]
     
 
 class Article(models.Model):
