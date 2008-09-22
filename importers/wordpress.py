@@ -526,7 +526,7 @@ for post_id, p in posts.iteritems():
         if not summary:
             # wordpress just used the first 30 words, so we will too
             from django.utils.html import strip_tags
-            summary = ' '.join(strip_tags(content).split()[:30])
+            summary = ' '.join(strip_tags(content).split()[:30]) + ' [...]'
         
         article_args = dict(
             headline=p['title'],
@@ -597,7 +597,7 @@ for post_id, p in posts.iteritems():
 Article.objects.update(possible_position='t')
 WeatherJoke.objects.create(
     line_one='As the economy seems to fall endlessly,',
-    line_two='We seniors are pretty lucky—few of us aspired to work at an investment bank.',
+    line_two='We seniors are pretty lucky--few of us aspired to work at an investment bank.',
     line_three="No six-figure salaries, sure, but our industry can't vanish in the space of a month."
 )
 cursor.close()
