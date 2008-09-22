@@ -21,7 +21,7 @@ class PublishedAnnouncementsManager(models.Manager):
             return running[:n]
         else:
             new = self.order_by('-date_end').exclude(pk__in=[r.pk for r in running])
-            return running + new[:n - running.count()]
+            return list(running) + list(new[:n - running.count()])
     
 
 class StaffAnnouncementsManager(PublishedAnnouncementsManager):
