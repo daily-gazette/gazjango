@@ -258,6 +258,15 @@ for id in users:
     u["new_id"] = new_user.id
 
 
+# admin user
+admin = User.objects.create_user('admin', 'dailygazette@swarthmore.edu')
+admin.first_name = 'The'
+admin.last_name  = 'Daily Gazette'
+admin.is_staff = True
+admin.is_superuser = True
+admin.save()
+admin.profile_set.create()
+
 # ============
 # = Sections =
 # ============
