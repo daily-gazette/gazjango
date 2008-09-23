@@ -1,4 +1,4 @@
-
+/* @override http://127.0.0.1:8000/static/css/functions/functions.css */
 
 /******
 
@@ -33,7 +33,7 @@ IMAGE STYLES
 
 **************************************/
 
-#storyBox img {
+.imgLeft img,.imgRight img,.imgCenter img {
 	width: 100%;
 }
 
