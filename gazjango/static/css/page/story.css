@@ -326,3 +326,18 @@ PHOTO SPREAD STYLES
 	font-family: Georgia, "Times New Roman", Times, serif;
 }
 
+
+/**************************************
+
+COLUMN STYLES
+
+**************************************/
+
+.column h2{
+	color: black;
+	margin: 5px 0px 5px 0px;
+	text-align: left;
+	border-bottom: 0px solid #ffffff;
+	font-size: 3em;
+}
+
