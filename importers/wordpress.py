@@ -594,6 +594,48 @@ for post_id, p in posts.iteritems():
         print 'unsure: skipping %s' % post_id
 
 
+
+# ============
+# = Comments =
+# ============
+
+article_type = ContentType.objects.get_for_model(Article)
+
+cursor.execute("SELECT comment_ID, comment_post_ID, comment_author, comment_author_email, comment_author_IP, comment_agent, comment_date, comment_content, comment_approved FROM gazette_comments WHERE comment_type <> 'pingback' AND comment_approved <> 'spam' ORDER BY comment_date ASC;")
+while True:
+    row = cursor.fetchone()
+    if not row:
+        break
+    
+    comment_id, post_id, author, email, ip, ua, date, content, approved = row
+    
+    if post_id not in posts:
+        print "comment #%s is on non-imported article #%s" % (comment_id, post_id)
+        continue
+    
+    post_data = posts[post_id]
+    if 'new_id' not in post_data:
+        # this is a job or announcement, I guess
+        print "skipping comment id %s on post id %s" % (comment_id, post_id)
+        continue
+    
+    PublicComment.objects.new(
+        subject_id=post_data['new_id'],
+        subject_type=article_type,
+        
+        time=date,
+        text=content,
+        
+        name=author,
+        email=email,
+        ip_address=ip,
+        user_agent=ua,
+        
+        check_spam=False,
+        pre_approved=bool(approved),
+    )
+
+
 # this is dumb
 Article.objects.update(possible_position='t')
 WeatherJoke.objects.create(
