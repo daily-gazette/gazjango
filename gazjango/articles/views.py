@@ -169,7 +169,7 @@ def homepage(request, template="index.html"):
         'midstories': mids,
         'lowstories': lows,
         
-        'comments': PublicComment.visible.order_by('-time').all()[:4],
+        'comments': PublicComment.visible.order_by('-time').all()[:3],
         'weather': Weather.objects.for_today(),
         'joke': WeatherJoke.objects.latest(),
         

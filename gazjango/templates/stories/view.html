@@ -98,7 +98,7 @@
         <div class="box">
           <h4>Recent Comments</h4>
           <ul>
-            {% for comment in other_comments|slice:":4" %}
+            {% for comment in other_comments|slice:":3" %}
               <li><a href="{{comment.get_absolute_url}}">{{ comment.subject.get_title }}</a></li>
             {% endfor %}
           </ul>
