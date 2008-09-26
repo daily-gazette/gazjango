@@ -15,7 +15,7 @@
     
       <p class="commentText">
         {% if comment.is_visible %}
-          {{ comment.text }}
+          {{ comment.text|safe }}
         {% endif %}
       </p>
       
