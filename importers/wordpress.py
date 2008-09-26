@@ -1,5 +1,8 @@
 #!/usr/bin/env python
 
+# TODO: parse polls
+# TODO: convert div classes, etc
+
 import MySQLdb as db
 from optparse import OptionParser
 import os,sys,re
@@ -30,6 +33,7 @@ from gazjango.media.models         import MediaFile, ImageFile, MediaBucket
 from gazjango.polls.models         import Poll, Option
 from gazjango.jobs.models          import JobListing
 
+from gazjango.scrapers import BeautifulSoup
 from collections import defaultdict
 
 
@@ -473,6 +477,60 @@ part_matching = re.compile(r'''
     \s*$                                    # whitespace, end of string
     ''', re.IGNORECASE | re.DOTALL | re.VERBOSE)
 
+block_tags = "table|thead|tfoot|caption|colgroup|tbody|tr|td|th|div|dl|dd|dt|ul|ol|li|pre|select|form|map|area|blockquote|address|math|style|input|p|h[1-6]|hr"
+block_regexp = re.compile(r'\s*<\s*(%s)\b([^>]*)>' % block_tags, re.IGNORECASE)
+
+def clean_up_text(text):
+    # TODO: curly quotes, etc
+    return re.sub(r'\r\n|\r', '\n', text)
+
+def process_text(text):
+    text = clean_up_text(text)
+    paras = re.split(r'\s*\n\s*\n\s*', text)
+    output = []
+    while paras:
+        para = paras.pop(0)
+        if not para:
+            continue
+        
+        block = block_regexp.match(para)
+        if block:
+            tag = block.group(1)
+            
+            if tag.lower() == "hr":
+                output.append(para)
+                continue
+            
+            this_tag = re.compile(r'<\s*(/?)\s*%s\b[^>]*>' % tag, re.IGNORECASE)
+            corpus = '\0'.join([para] + paras)
+            tag_depth = 1
+            for match in this_tag.finditer(corpus, block.end()):
+                tag_depth += -1 if match.group(1) == '/' else 1
+                if tag_depth == 0:
+                    para = corpus[:match.end()].replace('\0', '\n\n')
+                    paras = corpus[match.end():].split('\0')
+                    
+                    if tag.lower() == "blockquote":
+                        output.append(block.group(0))
+                        
+                        offset = para.count('\n\n')
+                        new_text = para[block.end():match.start() + offset]
+                        output.append(process_text(new_text))
+                        
+                        output.append(match.group(0))
+                    else:
+                        output.append(para)
+                    
+                    break
+            
+            if tag_depth != 0:
+                raise ValueError, "unbalanced %s tags" % tag
+        else:
+            output.append("<p>%s</p>" % para)
+    
+    return '\n\n'.join(output)
+
+
 for post_id, p in posts.iteritems():
     section = subsection = None
     is_article = True
@@ -521,27 +579,35 @@ for post_id, p in posts.iteritems():
                 print "post %4s doesn't have a section" % post_id
                 continue
         
-        # TODO: process text
-        
+        # summaries:
         summary = p['excerpt']
-        if not summary:
-            # wordpress just used the first 30 words, so we will too
-            from django.utils.html import strip_tags
-            summary = ' '.join(strip_tags(content).split()[:30]) + ' [...]'
+        from django.utils.html import strip_tags
+        words = strip_tags(content).split()
+        
+        summary = summary or ' '.join(words[:30]) + ' [...]'
+        short_summary = ' '.join(words[:15]) + ' [...]'
+        long_summary = ' '.join(words[:50]) + ' [...]'
         
         article_args = dict(
             headline=p['title'],
             slug=p['slug'][:50], # NOTE: slugs can't be > 50 chars on articles
             section=section,
             summary=summary,
+            short_summary=short_summary,
+            long_summary=long_summary,
             pub_date=p['date'],
             format=html,
             status='p',
         )
         
         if not nextpage.search(content):
-            article = Article.objects.create(text=p['content'], **article_args)
+            try:
+                content = process_text(content)
+            except ValueError, e:
+                print "error with post #%s: %s" % (post_id, e.message)
+            article = Article.objects.create(text=content, **article_args)
         else: # this is probably a photospread
+            content = clean_up_text(content)
             article = PhotoSpread.objects.create(**article_args)
             
             parts = nextpage.split(content)
