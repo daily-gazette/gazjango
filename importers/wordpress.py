@@ -228,8 +228,7 @@ while True:
                                      display_name=display_name
                                      )
 
-cursor.execute("SELECT user_id, meta_key, meta_value FROM gazette_usermeta WHERE NOT meta_key IN" \
-               "('rich_editing', 'admin_color', 'closedpostboxes_post', 'gazette_autosave_draft_ids')")
+cursor.execute("SELECT user_id, meta_key, meta_value FROM gazette_usermeta WHERE NOT meta_key IN ('rich_editing', 'admin_color', 'closedpostboxes_post', 'gazette_autosave_draft_ids')")
 capabilities_regex = re.compile(r's:\d+:\"(?P<id>\w+)\";b:1;')
 while True:
     row = cursor.fetchone()
@@ -242,7 +241,7 @@ while True:
 
 for id in users:
     u = users[id]
-    groups = []
+    groups = [reader_group]
     caps = u["gazette_capabilities"]
     if "administrator" in caps:
         groups.append(admin_group)
@@ -601,7 +600,9 @@ for slug, data in columns.items():
         semester = semester,
         is_over = year == 2008 and semester == 2,
     )
-    column.authors.add(UserProfile.objects.get(user__username=author))
+    user = UserProfile.objects.get(user__username=author)
+    column.authors.add(user)
+    user.user.groups.add(columnist)
     subsection_lookup[taxonomy_ids[slug]] = column
 
 
@@ -816,7 +817,7 @@ for post_id, p in posts.iteritems():
                 text=clean_up_text(content), 
                 **article_args
             )
-            # process_article_text(article)
+            process_article_text(article)
         
         else: # this is probably a photospread
             content = clean_up_text(content)
