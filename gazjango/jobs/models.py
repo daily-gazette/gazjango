@@ -19,7 +19,7 @@ class JobListing(models.Model):
     "A job/internship/etc being advertised."
     
     name = models.CharField(max_length=100)
-    slug = models.SlugField(unique=True, null=True)
+    slug = models.SlugField(unique=True, null=True, max_length=100)
     
     description = models.TextField()
     
