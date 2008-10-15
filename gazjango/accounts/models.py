@@ -71,6 +71,39 @@ class ProfilesManager(models.Manager):
         profile = user.userprofile_set.create()
         return profile
     
+    def username_for_name(self, name, create=False):
+        """
+        Returns the username for the user whose name is `name`. If there
+        is no such user and `create` is True, make one.
+        
+        If there's more than one space, try to figure it out, but it might
+        be kind of flakey.
+        """
+        split = name.split()
+        if len(split) < 2:
+            raise User.DoesNotExist
+        elif len(split) == 2:
+            first, last = split
+        else:
+            for i in range(1, len(split)):
+                first = ' '.join(split[:i])
+                last  = ' '.join(split[i:])
+                matches = User.objects.filter(
+                    first_name__iexact=first,
+                    last_name__iexact=last
+                )
+                if matches.count():
+                    break
+        
+        try:
+            u = User.objects.get(first_name__iexact=first, last_name__iexact=last)
+            return u.username
+        except User.DoesNotExist:
+            if create:
+                return self.create_lite_user(first, last).username
+            else:
+                raise
+        
 
 class UserProfile(models.Model):
     "Lots of extra information about users."

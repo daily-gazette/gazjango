@@ -66,37 +66,12 @@ def username_for_name(request):
     it might be flakey.
     """
     try:
-        if request.method == 'POST':
-            name = request.POST['name']
-        else:
-            name = request.GET['name']
+        name = (request.POST if request.method == 'POST' else request.GET)['name']
     except KeyError:
         raise Http404
     
-    split = name.split()
-    length = len(split)
-    if length < 2:
-        raise Http404
-    elif length == 2:
-        first, last = split
-    else:
-        for i in range(1, len(split)):
-            first = ' '.join(split[:i])
-            last  = ' '.join(split[i:])
-            matches = User.objects.filter(
-                first_name__iexact=first,
-                last_name__iexact=last
-            )
-            if matches.count():
-                break
-    
     try:
-        u = User.objects.get(first_name__iexact=first, last_name__iexact=last)
-        return HttpResponse(u.username)
+        create = request.method == 'POST' and request.user.has_perm('auth.add_user')
+        username = UserProfile.objects.username_for_name(name, create=create)
     except User.DoesNotExist:
-        # if request.method == 'POST' and request.user.has_perm('auth.add_user'):
-        if request.user.has_perm('auth.add_user'):
-            u = UserProfile.objects.create_lite_user(first, last).user
-            return HttpResponse(u.username)
-        else:
-            raise Http404
+        raise Http404

@@ -752,10 +752,10 @@ jolt_poll = Poll.objects.create(
     question = "We got most (read: all) of our information for this article "
                "from the Daily Jolt. Is that okay?",
     allow_anon = True,
-    article = scandal,
     time_start=datetime.now(),
     time_stop=datetime.now() + timedelta(weeks=1)
 )
+jolt_poll.articles.add(scandal)
 
 jolt_yes   = Option.objects.create(name="yes", poll=jolt_poll)
 jolt_no    = Option.objects.create(name="no",  poll=jolt_poll)

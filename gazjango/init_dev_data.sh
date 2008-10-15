@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 
+cd $(dirname $0)
 python=${1:-python}
 
 echo "This will delete ALL DATA related to Django in your database."

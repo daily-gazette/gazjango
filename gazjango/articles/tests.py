@@ -26,6 +26,7 @@ class ArticleTestCase(unittest.TestCase):
                                                      slug     = 'boring',
                                                      section = self.news,
                                                      format   = self.html)
+        
         self.formatted_article = Article.objects.create(headline = "Formatted!",
                                                         text     = "_Emphasis_",
                                                         slug     = "formatted",
@@ -68,8 +69,8 @@ class ArticleTestCase(unittest.TestCase):
         )
     
     def tearDown(self):
-        used = (User, UserProfile, UserKind, Section, Article, ArticleRevision, Format)
-        for m in used + (MediaBucket, MediaFile, ImageFile):
+        used = (User, UserProfile, UserKind, Section, Article, ArticleRevision)
+        for m in used + (Format, MediaBucket, MediaFile, ImageFile):
             m.objects.all().delete()
     
     def test_articles_empty(self):
@@ -84,6 +85,7 @@ class ArticleTestCase(unittest.TestCase):
     
     def test_article_revision(self):
         a = self.boring_article
+        a.add_author(self.bob_profile) # needed for reviser
         strs = (a.text,
                 "Boring Text (!)", 
                 "Boring Text (with some boring revisions)",

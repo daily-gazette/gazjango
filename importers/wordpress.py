@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 
-# TODO: parse polls
-# TODO: convert div classes, etc
+# FIXME: why are <p>s all joined with just one \n?
 
 import MySQLdb as db
 from optparse import OptionParser
@@ -15,22 +14,26 @@ import django.core.management
 django.core.management.setup_environ(settings)
 
 import datetime
+import django.utils.text
+import django.utils.html
+import django.template.defaultfilters
 from django.contrib.auth.models         import User, Group, Permission
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.sites.models        import Site
 from django.contrib.flatpages.models    import FlatPage
+import django.db
 from gazjango import tagging
 
 from gazjango.accounts.models      import UserProfile, UserKind, Position
 from gazjango.accounts.models      import ContactMethod, ContactItem
 from gazjango.announcements.models import Announcement
 from gazjango.articles.models      import Article, PhotoSpread, Format
-from gazjango.articles.models      import Section, Subsection
+from gazjango.articles.models      import Section, Subsection, Column
 from gazjango.articles.models      import Special, SpecialsCategory, DummySpecialTarget
 from gazjango.comments.models      import PublicComment
 from gazjango.issues.models        import Issue, Menu, Weather, WeatherJoke, Event
 from gazjango.media.models         import MediaFile, ImageFile, MediaBucket
-from gazjango.polls.models         import Poll, Option
+from gazjango.polls.models         import Poll, Option, PollVote
 from gazjango.jobs.models          import JobListing
 
 from gazjango.scrapers import BeautifulSoup
@@ -292,6 +295,7 @@ roundup = sub(features, "Weekend Roundup", "weekend-roundup", "What's going on e
 
 athletics = sec("Athletics", "sports", "Swarthmore's athletes.")
 opinions_and_columns = sec("Opinions & Columns", "opinions", "What the community has to say.")
+editorials = sub(opinions_and_columns, "Staff Editorials", "editorials", "Opnions from the Gazette's editorial board.")
 multimedia = sec("Multimedia", "multimedia", "Pictures and videos.")
 
 misc = sec("Miscellaneous", "misc", "Miscellaneous things.")
@@ -339,6 +343,94 @@ for name, title in ppl:
     people.tags.create(name=name, long_name=("%s, %s" % (name, title)))
 
 
+# =========
+# = Polls =
+# =========
+
+print "importing polls..."
+
+polls = {}
+cursor.execute("SELECT pollq_id, pollq_question, pollq_timestamp, pollq_totalvotes, pollq_active, pollq_expiry, pollq_multiple, pollq_totalvoters FROM gazette_pollsq;")
+while True:
+    row = cursor.fetchone()
+    if not row:
+        break
+    poll_id, question, timestamp, totalvotes, active, expiry, multiple, totalvoters = row
+    polls[poll_id] = {
+        'question': question,
+        'timestamp': timestamp,
+        'totalvotes': totalvotes,
+        'active': active,
+        'expiry': expiry,
+        'multiple': multiple,
+        'totalvoters': totalvoters,
+        'answers': {}
+    }
+
+
+cursor.execute("SELECT polla_aid, polla_qid, polla_answers, polla_votes FROM gazette_pollsa;")
+while True:
+    row = cursor.fetchone()
+    if not row:
+        break
+    answer_id, poll_id, answer, votes = row
+    polls[poll_id]['answers'][int(answer_id)] = {
+        'answer': answer,
+        'votes': [],
+    }
+
+
+cursor.execute("SELECT pollip_id, pollip_qid, pollip_aid, pollip_ip, pollip_host, pollip_timestamp, pollip_user, pollip_userid FROM gazette_pollsip;")
+while True:
+    row = cursor.fetchone()
+    if not row:
+        break
+    vote_id, poll_id, answer_id, ip, hostname, timestamp, user, userid = row
+    polls[int(poll_id)]['answers'][int(answer_id)]['votes'].append({
+        'ip': ip,
+        'hostname': hostname,
+        'timestamp': timestamp,
+        'username': user,
+        'old_userid': userid
+    })
+
+
+for data in polls.values():
+    date = lambda x: datetime.datetime.fromtimestamp(float(x)) if x else None
+    poll = Poll.objects.create(
+        name = data['question'],
+        question = data['question'],
+        slug = django.template.defaultfilters.slugify(data['question']),
+        time_start = date(data['timestamp']),
+        time_stop  = date(data['expiry']) or \
+                     (None if data['active'] else datetime.datetime.now()),
+        allow_anon = True
+    )
+    data['new_id'] = poll.pk
+    for answer_id, answer in data['answers'].items():
+        option = poll.options.create(name=answer['answer'])
+        for vote in answer['votes']:
+            old_id = int(vote['old_userid']) if 'old_userid' in vote else None
+            if old_id:
+                user = User.objects.get(pk=users[old_id]['new_id']).get_profile()
+            else:
+                user = None
+            try:
+                PollVote.objects.create(
+                    poll=poll,
+                    option=option,
+                    user=user,
+                    ip=vote['ip'],
+                    hostname=vote['hostname'],
+                    time=date(vote['timestamp']),
+                    name=vote['username']
+                )
+            except django.db.IntegrityError, e:
+                print "integrity error: ", e
+                print "poll: %s, user: %s\n" % (poll, user)
+
+
+
 # ===================
 # = Posts and Media =
 # ===================
@@ -348,12 +440,19 @@ print "importing posts..."
 posts = {}
 media = {}
 
-
 def download_file(url, target_dir):
     "Downloads the file at `url` to `target_dir` if it isn't there already."
-    filename, ext = url.split('/')[-1].split('.', 1)
+    pieces = url.split('/')[-1].split('.')
+    filename = '.'.join(pieces[:-1])
+    ext = pieces[-1]
+    
     import os.path
     target_path = os.path.join(target_dir, "%s.%s" % (filename, ext))
+    
+    #########
+    print "would download %s to %s" % (url, target_path)
+    return (filename, ext)
+    #########
     
     if not os.path.exists(target_path):
         if not os.path.exists(target_dir):
@@ -368,6 +467,8 @@ def download_file(url, target_dir):
             if not read:
                 break
             target.write(read)
+        source.close()
+        target.close()
         print 'done.'
     return (filename, ext)
 
@@ -394,8 +495,7 @@ def resolve_media(url, article):
     return media[url]
 
 
-query = "SELECT ID, post_author, post_date, post_title, post_content, post_excerpt, post_name " \
-        "FROM gazette_posts WHERE post_type='post' AND post_status='publish';"
+query = "SELECT ID, post_author, post_date, post_title, post_content, post_excerpt, post_name FROM gazette_posts WHERE post_type='post' AND post_status='publish';"
 cursor.execute(query)
 while True:
     row = cursor.fetchone()
@@ -413,9 +513,19 @@ while True:
 
 # find the ids of the terms we care about
 taxonomy_ids = {}
-relevant = ('news', 'features', 'arts', 'sports', 'opinion', 'multimedia') + \
-           ('atg', 'weekend-roundup', 'editorials', 'stuco-platforms') + \
-           ('announcements', 'gazette-news', 'jobs')
+relevant = ('news', 'features', 'arts', 'sports', 'opinion', 'multimedia',
+            'atg', 'weekend-roundup', 'editorials', 'stuco-platforms',
+            'announcements', 'gazette-news', 'jobs')
+columns = { 'bone-doctor': ('The Bone Doctor',       2007, 2, 'bonedoctor'),
+            'denglish':    ('Honors Denglish',       2008, 1, 'lstokes'),
+            'argentina':   ('Argentina with Appiah', 2008, 1, 'sappiah'),
+            'deviations':  ('Standard Deviations',   2008, 1, 'm'),
+            'nautial':     ('Nautical Terminology',  2008, 2, 'galbrig'),
+            'henry':       ('Oh, Henry',             2008, 2, 'chris-green'),
+            'fringe':      ('The Fringe Moderates',  2008, 2, 'shaun-kelly-and-dustin-trabert'),
+            'lowlands':    ('Life in the Lowlands',  2008, 2, 'sgreen'),
+            'strokes':     ('Dr. Strokes',           2008, 2, 'drstrokes') }
+relevant += tuple(columns.keys())
 relevant = ', '.join("'%s'" % slug for slug in relevant)
 
 cursor.execute("SELECT gazette_terms.slug, gazette_term_taxonomy.term_taxonomy_id " +
@@ -442,7 +552,8 @@ section_lookup = {
 subsection_lookup = {
     taxonomy_ids['atg']: atg,
     taxonomy_ids['weekend-roundup']: roundup,
-    taxonomy_ids['stuco-platforms']: platforms
+    taxonomy_ids['stuco-platforms']: platforms,
+    taxonomy_ids['editorials']: editorials
 }
 tag_lookup = {
     taxonomy_ids['arts']: arts
@@ -452,6 +563,19 @@ other_types_lookup = {
     taxonomy_ids['gazette-news']: 'gazette-news-announcement',
     taxonomy_ids['jobs']: 'jobs'
 }
+
+for slug, data in columns.items():
+    name, year, semester, author = data
+    column = Column.objects.create(
+        name = name,
+        slug = slug,
+        section = opinions_and_columns,
+        year = year,
+        semester = semester,
+        is_over = year == 2008 and semester == 2,
+    )
+    subsection_lookup[slug] = column
+
 
 ### not sure we necessarily want to tag based on autometa
 # cursor.execute("SELECT post_id, meta_value FROM gazette_postmeta WHERE meta_key='autometa'")
@@ -467,7 +591,6 @@ other_types_lookup = {
 
 # these are compiled to save a bit of speed, even though it kinda sucks
 nextpage = re.compile(r'<!--\s*nextpage\s*-->')
-empty    = re.compile(r'^\s*$')
 part_matching = re.compile(r'''
     ^\s*                                    # start, whitespace
     <img[^>]+src=['"]([^'"]+)['"][^>]*/\s*> # img tag -- match only the src
@@ -480,18 +603,20 @@ part_matching = re.compile(r'''
 block_tags = "table|thead|tfoot|caption|colgroup|tbody|tr|td|th|div|dl|dd|dt|ul|ol|li|pre|select|form|map|area|blockquote|address|math|style|input|p|h[1-6]|hr"
 block_regexp = re.compile(r'\s*<\s*(%s)\b([^>]*)>' % block_tags, re.IGNORECASE)
 
+poll_regexp = re.compile(r'\[poll=(\d+)\]', re.IGNORECASE)
+
 def clean_up_text(text):
     # TODO: curly quotes, etc
-    return re.sub(r'\r\n|\r', '\n', text)
+    text = django.utils.text.normalize_newlines(text)
+    text = django.utils.html.fix_ampersands(text)
+    return text
 
-def process_text(text):
-    text = clean_up_text(text)
+def paragraphize(text):
     paras = re.split(r'\s*\n\s*\n\s*', text)
     output = []
     while paras:
         para = paras.pop(0)
-        if not para:
-            continue
+        if not para: continue
         
         block = block_regexp.match(para)
         if block:
@@ -515,12 +640,11 @@ def process_text(text):
                         
                         offset = para.count('\n\n')
                         new_text = para[block.end():match.start() + offset]
-                        output.append(process_text(new_text))
+                        output.append(paragraphize(new_text))
                         
                         output.append(match.group(0))
                     else:
                         output.append(para)
-                    
                     break
             
             if tag_depth != 0:
@@ -529,6 +653,44 @@ def process_text(text):
             output.append("<p>%s</p>" % para)
     
     return '\n\n'.join(output)
+
+def process_article_text(article):
+    text = paragraphize(article.text)
+    soup = BeautifulSoup.BeautifulSoup(text)
+    
+    # process blockquotes
+    for bq in soup.findAll('blockquote'):
+        bq.name = 'div'
+        bq.attrs = [('class', 'highlightBox center')]
+    
+    # process (div|p)s
+    reps = [
+        ('leftImage', 'imgLeft twentyfive'),
+    	('rightImage', 'imgRIght twentyfive'),
+    	('pullQuote', 'pullQuote left'),
+    	('pullQuoteRight', 'pullQuote right'),
+    	('images', 'imgRight twentyfive'),
+    	('images50', 'imgRight thirtyfive'),
+    	('imagesLeft', 'imgLeft twentyfive'),
+    	('imagesleft50', 'imgLeft thirtyfive'),
+    	('linkbar', 'linkBar'),
+    	('quote', 'pullQuote left')
+    ]
+    div_or_p = re.compile(r'p|div', re.IGNORECASE)
+    for from_class, rep_class in reps:
+        for div in soup.findAll(div_or_p, attrs={'class': from_class}):
+            div.attrs = [(name, rep_class if name == 'class' else val) 
+                         for name, val in div.attrs]
+    
+    # process images
+    for img in soup.findAll('img'):
+        source = img['src']
+        media = resolve_media(source, article)
+        img['src'] = "%s/%s" % (media.bucket, media.slug)
+        article.media.add(media)
+    
+    article.text = unicode(soup)
+    article.save()
 
 
 for post_id, p in posts.iteritems():
@@ -581,16 +743,23 @@ for post_id, p in posts.iteritems():
         
         # summaries:
         summary = p['excerpt']
-        from django.utils.html import strip_tags
-        words = strip_tags(content).split()
-        
+        words = django.utils.html.strip_tags(content).split()
         summary = summary or ' '.join(words[:30]) + ' [...]'
         short_summary = ' '.join(words[:15]) + ' [...]'
         long_summary = ' '.join(words[:50]) + ' [...]'
         
+        
+        # polls:
+        article_polls = []
+        def add_poll(match):
+            old_poll_id = int(match.group(1))
+            article_polls.append(Poll.objects.get(pk=polls[old_poll_id]['new_id']))
+            return ''
+        re.sub(poll_regexp, add_poll, content)
+        
         article_args = dict(
             headline=p['title'],
-            slug=p['slug'][:50], # NOTE: slugs can't be > 50 chars on articles
+            slug=p['slug'][:100], # NOTE: slugs can't be > 100 chars on articles
             section=section,
             summary=summary,
             short_summary=short_summary,
@@ -601,29 +770,31 @@ for post_id, p in posts.iteritems():
         )
         
         if not nextpage.search(content):
-            try:
-                content = process_text(content)
-            except ValueError, e:
-                print "error with post #%s: %s" % (post_id, e.message)
-            article = Article.objects.create(text=content, **article_args)
+            article = Article.objects.create(
+                text=clean_up_text(content), 
+                **article_args
+            )
+            process_article_text(article)
+        
         else: # this is probably a photospread
             content = clean_up_text(content)
             article = PhotoSpread.objects.create(**article_args)
             
             parts = nextpage.split(content)
             for part in parts:
-                if empty.match(part):
+                if part.strip() == '':
                     continue
                 match = part_matching.match(part)
                 if not match:
-                    raise "Confused by photospread (id %s): %s" % (post_id, part)
+                    print "Confused by photospread (id %s): %s" % (post_id, part)
                 url, caption = match.groups()
                 photo = resolve_media(url, article)
                 article.add_photo(photo=photo, caption=caption)
         
         author_id = users[p['author']]['new_id']
         article.add_author(User.objects.get(pk=author_id).get_profile())    
-    
+        article.polls = article_polls
+        
         if subsection:
             article.subsections.add(subsection)
     
@@ -637,8 +808,8 @@ for post_id, p in posts.iteritems():
             #       paid, on-campus, filled, etc....
             JobListing.objects.create(
                 name=p['title'],
-                slug=p['slug'][:50],
-                description=p['content'],
+                slug=p['slug'][:100],
+                description=clean_up_text(p['content']),
                 pub_date=p['date'],
                 is_filled=True, # for most of them...
                 is_published=True
@@ -649,8 +820,8 @@ for post_id, p in posts.iteritems():
             Announcement.objects.create(
                 kind=('s' if is_gazette_news else 'c'),
                 title=p['title'],
-                slug=p['slug'][:50],
-                text=p['content'],
+                slug=p['slug'][:100],
+                text=clean_up_text(p['content']),
                 date_start=date,
                 date_end=date,
                 is_published=True,
@@ -661,10 +832,44 @@ for post_id, p in posts.iteritems():
 
 
 
+# get front_images, for those few stories that actually use them
+cursor.execute("SELECT post_id, meta_value FROM gazette_postmeta WHERE meta_key='front_image'")
+while True:
+    row = cursor.fetchone()
+    if row is None:
+        break
+    old_id, front_image = row
+    try:
+        article = Article.objects.get(pk=posts[old_id]['new_id'])
+    except:
+        print "can't do front image for article #%s" % old_id
+    else:
+        image = resolve_media(front_image, article)
+        article.front_image = image
+        article.save()
+
+# other_authors
+cursor.execute("SELECT post_id, meta_value FROM gazette_postmeta WHERE meta_key='other_author'")
+while True:
+    row = cursor.fetchone()
+    if row is None:
+        break
+    old_id, author = row
+    try:
+        article = Article.objects.get(pk=posts[old_id]['new_id'])
+    except:
+        print "couldn't find article #%s" % old_id
+    
+    if ' ' in author:
+        author = UserProfile.objects.username_for_name(author, True)
+
+    article.add_author(UserProfile.objects.get(user__username=author))
+
+
 # ============
 # = Comments =
 # ============
-
+print "importing comments..."
 article_type = ContentType.objects.get_for_model(Article)
 
 cursor.execute("SELECT comment_ID, comment_post_ID, comment_author, comment_author_email, comment_author_IP, comment_agent, comment_date, comment_content, comment_approved FROM gazette_comments WHERE comment_type <> 'pingback' AND comment_approved <> 'spam' ORDER BY comment_date ASC;")

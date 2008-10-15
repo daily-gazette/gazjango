@@ -106,8 +106,8 @@ class Article(models.Model):
     """
     
     headline    = models.CharField(max_length=200)
-    short_title = models.CharField(blank=True, max_length=100)
-    slug        = models.SlugField(unique_for_date="pub_date")
+    short_title = models.CharField(blank=True, max_length=80)
+    slug        = models.SlugField(unique_for_date="pub_date", max_length=100)
     
     summary = models.TextField()
     short_summary = models.CharField(max_length=150)
@@ -193,7 +193,11 @@ class Article(models.Model):
     
     def revise_text(self, revised_text, reviser=None):
         if reviser is None:
-            reviser = self.authors_in_order().all()[0]
+            try:
+                reviser = self.authors_in_order().all()[0]
+            except IndexError:
+                # TODO: better error handling when there's no authors
+                reviser = None
         d = diff_match_patch()
         patch = d.patch_toText(d.patch_make(revised_text, self.text))
         

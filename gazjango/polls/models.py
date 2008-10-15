@@ -13,35 +13,42 @@ class Poll(models.Model):
     question   = models.TextField(blank=True)
     slug       = models.SlugField(unique_for_year="time_start")
     time_start = models.DateTimeField(default=datetime.now)
-    time_stop  = models.DateTimeField(default=datetime.now)
+    time_stop  = models.DateTimeField(default=datetime.now, null=True)
     allow_anon = models.BooleanField(default=True)
     
-    article = models.ForeignKey(Article, related_name="polls")
+    articles = models.ManyToManyField(Article, related_name="polls")
     
     def voting(self):
         "Whether this poll is open for voting."
-        return self.time_start < datetime.now() < self.time_stop
+        if self.time_stop:
+            return self.time_start < datetime.now() < self.time_stop
+        else:
+            return self.time_start < datetime.now()
     
     def has_voted(self, user=None, ip=None):
         "Whether the given user / ip has already voted."
         if user:
             return self.votes.filter(user=user).count() > 0
         else:
-            return self.votes.filter(ip=ip).count() > 0
+            return self.votes.filter(user=None, ip=ip).count() > 0
     
     def vote_allowed(self, user=None, ip=None):
         """
         Whether the user could ever vote in this poll (regardless of whether
         they already have.)
         """
-        return user or self.allow_anon
+        return bool(user) or self.allow_anon
     
     def can_vote(self, user=None, ip=None):
         "Whether the given UserProfile / ip is allowed to vote in this poll."
         return self.vote_allowed(user, ip) and not self.has_voted(user, ip)
     
     def vote(self, option, user=None, ip=None):
-        "Casts a user's vote for a particular option and saves."
+        """
+        Casts a user's vote for a particular option and saves.
+        
+        Note that the `user` argument should be a UserProfile.
+        """
         if user:
             args = { 'user': user }
         else:
@@ -70,8 +77,9 @@ class Poll(models.Model):
 
 class Option(models.Model):
     """An option in a poll."""
-    poll        = models.ForeignKey(Poll, related_name="options")
-    name        = models.CharField(max_length=20, unique=True)
+    poll = models.ForeignKey(Poll, related_name="options")
+    name = models.CharField(max_length=20)
+    
     def num_votes(self):
         return self.votes.count()
     
@@ -92,6 +100,10 @@ class PollVote(models.Model):
     
     user = models.ForeignKey(UserProfile, null=True, related_name="votes")
     ip   = models.IPAddressField(null=True, blank=True)
+    
+    name = models.CharField(max_length=30)
+    hostname = models.CharField(max_length=60)
+    time = models.DateTimeField(blank=True, default=datetime.now)
     
     class Meta:
         # nulls don't count for unique_together
