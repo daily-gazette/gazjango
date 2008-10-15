@@ -1,7 +1,5 @@
 #!/usr/bin/env python
 
-# FIXME: why are <p>s all joined with just one \n?
-
 import MySQLdb as db
 from optparse import OptionParser
 import os,sys,re
@@ -14,6 +12,8 @@ import django.core.management
 django.core.management.setup_environ(settings)
 
 import datetime
+import urllib2
+import django.db
 import django.utils.text
 import django.utils.html
 import django.template.defaultfilters
@@ -21,7 +21,6 @@ from django.contrib.auth.models         import User, Group, Permission
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.sites.models        import Site
 from django.contrib.flatpages.models    import FlatPage
-import django.db
 from gazjango import tagging
 
 from gazjango.accounts.models      import UserProfile, UserKind, Position
@@ -426,9 +425,7 @@ for data in polls.values():
                     name=vote['username']
                 )
             except django.db.IntegrityError, e:
-                print "integrity error: ", e
-                print "poll: %s, user: %s\n" % (poll, user)
-
+                print "duplicate vote on <%s> by <%s>" % (poll, user)
 
 
 # ===================
@@ -439,6 +436,11 @@ print "importing posts..."
 
 posts = {}
 media = {}
+
+# wikipedia, which there are a few external image links to, seems to
+# not work without this
+opener = urllib2.build_opener()
+opener.addheaders = [('User-agent', 'Mozilla/5.0')]
 
 def download_file(url, target_dir):
     "Downloads the file at `url` to `target_dir` if it isn't there already."
@@ -455,10 +457,9 @@ def download_file(url, target_dir):
     if not os.path.exists(target_path):
         if not os.path.exists(target_dir):
             os.makedirs(target_dir)
-        import urllib2
-        source = urllib2.urlopen(url)
+        print 'downloading %s...' % url,
+        source = opener.open(url)
         target = file(target_path, 'wb')
-        print 'downloading %s...' % url, 
         # read in chunks, to avoid killing memory
         while True:
             read = source.read(128*1024)
@@ -472,12 +473,22 @@ def download_file(url, target_dir):
 
 def resolve_media(url, article):
     """Takes a url and returns a media object for it."""
+    url = url.replace('swatdaily.org', 'daily.swarthmore.edu')
+    
+    if 'daily.swarthmore.edu' not in url:
+        print "downloading external image: " + url
+        # return url
+    
     if url not in media:
         slug = "old-" + article.slug
         bucket, created = MediaBucket.objects.get_or_create(slug=article.slug,
             defaults={'name': article.slug}
         )
-        name, ext = download_file(url, "../gazjango/uploads/%s/" % bucket.slug)
+        try:
+            name, ext = download_file(url, "../gazjango/uploads/%s/" % bucket.slug)
+        except urllib2.HTTPError:
+            print "error downloading <%s> for <%s>" % (url, article)
+            return url
         
         if re.match(r'jpe?g|png|gif', ext, re.IGNORECASE):
             klass = ImageFile
@@ -513,7 +524,7 @@ while True:
 taxonomy_ids = {}
 relevant = ('news', 'features', 'arts', 'sports', 'opinion', 'multimedia',
             'atg', 'weekend-roundup', 'editorials', 'stuco-platforms',
-            'announcements', 'gazette-news', 'jobs')
+            'announcements', 'gazette-news', 'jobs', 'photos')
 columns = { 'bone-doctor': ('The Bone Doctor',       2007, 2, 'bonedoctor'),
             'denglish':    ('Honors Denglish',       2008, 1, 'lstokes'),
             'argentina':   ('Argentina with Appiah', 2008, 1, 'sappiah'),
@@ -545,7 +556,8 @@ section_lookup = {
     taxonomy_ids['features']:   features,
     taxonomy_ids['sports']:     athletics,
     taxonomy_ids['opinion']:    opinions_and_columns,
-    taxonomy_ids['multimedia']: multimedia
+    taxonomy_ids['multimedia']: multimedia,
+    taxonomy_ids['photos']:     multimedia, # front-page photos belong in multimedia
 }
 subsection_lookup = {
     taxonomy_ids['atg']: atg,
@@ -591,8 +603,10 @@ for slug, data in columns.items():
 nextpage = re.compile(r'<!--\s*nextpage\s*-->')
 part_matching = re.compile(r'''
     ^\s*                                    # start, whitespace
+    (?:<div[^>]*>)?                         # optional div wrapper
     <img[^>]+src=['"]([^'"]+)['"][^>]*/\s*> # img tag -- match only the src
-    \s*                                     # probably some newlines
+    \s*(?:</div>)?                          # optional div closer
+    \s*                                     # eat up any whitespace
     (.*?)                                   # the caption: non-greedy match, to
                                             #           avoid ending whitespace
     \s*$                                    # whitespace, end of string
@@ -684,6 +698,9 @@ def process_article_text(article):
     for img in soup.findAll('img'):
         source = img['src']
         media = resolve_media(source, article)
+        if isinstance(media, (str, unicode)):
+            # print "off-site image: " + media
+            continue
         img['src'] = "%s/%s" % (media.bucket, media.slug)
         article.media.add(media)
     
