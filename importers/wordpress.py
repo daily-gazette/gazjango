@@ -39,6 +39,21 @@ from gazjango.scrapers import BeautifulSoup
 from collections import defaultdict
 
 
+
+# =========================
+# = Miscellaneous Helpers =
+# =========================
+
+def all_in(haystack, needles):
+    return all(map(lambda x: x in haystack, needles))
+
+def merge(d, oth):
+    copy = d.copy()
+    for key, val in oth.items():
+        copy[key] = val
+    return copy
+
+
 # =======================
 # = Database Connection =
 # =======================
@@ -324,6 +339,7 @@ places  = tagging.models.TagGroup.objects.create(name="Places")
 people  = tagging.models.TagGroup.objects.create(name="People")
 
 arts = special.tags.create(name="Living & Arts")
+april_fools = special.tags.create(name="April Fools")
 
 os = ("Amnesty International", "Anime & Manga Club", "ARC", "Ballroom & Swing Club", "Boy Meets Tractor", "Cantatrix", "Chabad", "Chaverim", "Chess Club", "Club Despertar", "College Democrats", "College Republicans", "CSC", "Cycling Club", "Daily Gazette", "Dance Forum", "Dare To Soar", "DESHI", "Drama Board", "Earthlust", "Enie", "ENLACE", "Feminist Majority", "FFS", "Folk Dance", "Free Culture", "Friends of Taiwan", "Global Health Forum", "Gospel Choir", "Grapevine", "Halcyon", "International Club", "Kitao Gallery", "Knit-Wits", "Learning For Life", "Mixed Company", "Mjumbe", "Mock Trial", "Motherpuckers", "Movie Committee", "MSA", "Multi", "Olde Club", "Outsiders", "Phoenix", "Photo Club", "Psi Phi", "Pun/ctum", "Quiz Bowl", "Rattech", "Rhythm N Motion", "Ruach", "SAC", "SAO", "SASA", "SASS", "SAVE R US", "SBA", "SBC", "SCCS", "SCF", "SCW", "SEA", "SHC", "SHIP", "Sixteen Feet", "SOCA", "Sound Machine", "SPC", "SPPC", "Spike Magazine", "SOFI", "SQU", "SSSL", "Student Council", "Swarthmore Good Food Project", "Swarthmore Massage", "Swarthmore Sudan", "Swat VOX", "Class Activists", "Van Coordinator", "Vertigo-go", "WRC", "WSRN")
 for org in os:
@@ -475,12 +491,7 @@ def resolve_media(url, article):
     """Takes a url and returns a media object for it."""
     url = url.replace('swatdaily.org', 'daily.swarthmore.edu')
     
-    if 'daily.swarthmore.edu' not in url:
-        print "downloading external image: " + url
-        # return url
-    
     if url not in media:
-        slug = "old-" + article.slug
         bucket, created = MediaBucket.objects.get_or_create(slug=article.slug,
             defaults={'name': article.slug}
         )
@@ -506,6 +517,7 @@ def resolve_media(url, article):
 
 query = "SELECT ID, post_author, post_date, post_title, post_content, post_excerpt, post_name FROM gazette_posts WHERE post_type='post' AND post_status='publish';"
 cursor.execute(query)
+
 while True:
     row = cursor.fetchone()
     if row is None:
@@ -524,12 +536,12 @@ while True:
 taxonomy_ids = {}
 relevant = ('news', 'features', 'arts', 'sports', 'opinion', 'multimedia',
             'atg', 'weekend-roundup', 'editorials', 'stuco-platforms',
-            'announcements', 'gazette-news', 'jobs', 'photos')
+            'announcements', 'gazette-news', 'jobs', 'photos', 'april-fools')
 columns = { 'bone-doctor': ('The Bone Doctor',       2007, 2, 'bonedoctor'),
             'denglish':    ('Honors Denglish',       2008, 1, 'lstokes'),
             'argentina':   ('Argentina with Appiah', 2008, 1, 'sappiah'),
             'deviations':  ('Standard Deviations',   2008, 1, 'm'),
-            'nautial':     ('Nautical Terminology',  2008, 2, 'galbrig'),
+            'nautical':    ('Nautical Terminology',  2008, 2, 'galbrig'),
             'henry':       ('Oh, Henry',             2008, 2, 'chris-green'),
             'fringe':      ('The Fringe Moderates',  2008, 2, 'shaun-kelly-and-dustin-trabert'),
             'lowlands':    ('Life in the Lowlands',  2008, 2, 'sgreen'),
@@ -566,7 +578,8 @@ subsection_lookup = {
     taxonomy_ids['editorials']: editorials
 }
 tag_lookup = {
-    taxonomy_ids['arts']: arts
+    taxonomy_ids['arts']: arts,
+    taxonomy_ids['april-fools']: april_fools,
 }
 other_types_lookup = {
     taxonomy_ids['announcements']: 'announcement',
@@ -584,7 +597,8 @@ for slug, data in columns.items():
         semester = semester,
         is_over = year == 2008 and semester == 2,
     )
-    subsection_lookup[slug] = column
+    column.authors.add(UserProfile.objects.get(user__username=author))
+    subsection_lookup[taxonomy_ids[slug]] = column
 
 
 ### not sure we necessarily want to tag based on autometa
@@ -666,34 +680,36 @@ def paragraphize(text):
     
     return '\n\n'.join(output)
 
+                 
+class_reps = [
+    ('leftImage', 'imgLeft twentyfive'),
+    ('rightImage', 'imgRIght twentyfive'),
+    ('pullQuote', 'pullQuote left'),
+    ('pullQuoteRight', 'pullQuote right'),
+    ('images', 'imgRight twentyfive'),
+    ('images50', 'imgRight thirtyfive'),
+    ('imagesLeft', 'imgLeft twentyfive'),
+    ('imagesleft50', 'imgLeft thirtyfive'),
+    ('linkbar', 'linkBar'),
+    ('quote', 'pullQuote left')
+]
+div_or_p = re.compile(r'p|div', re.IGNORECASE)
+                                              
 def process_article_text(article):
-    text = paragraphize(article.text)
-    soup = BeautifulSoup.BeautifulSoup(text)
-    
+    # text = paragraphize(article.text)
+    soup = BeautifulSoup.BeautifulSoup(article.text)
+
     # process blockquotes
     for bq in soup.findAll('blockquote'):
         bq.name = 'div'
         bq.attrs = [('class', 'highlightBox center')]
-    
+
     # process (div|p)s
-    reps = [
-        ('leftImage', 'imgLeft twentyfive'),
-    	('rightImage', 'imgRIght twentyfive'),
-    	('pullQuote', 'pullQuote left'),
-    	('pullQuoteRight', 'pullQuote right'),
-    	('images', 'imgRight twentyfive'),
-    	('images50', 'imgRight thirtyfive'),
-    	('imagesLeft', 'imgLeft twentyfive'),
-    	('imagesleft50', 'imgLeft thirtyfive'),
-    	('linkbar', 'linkBar'),
-    	('quote', 'pullQuote left')
-    ]
-    div_or_p = re.compile(r'p|div', re.IGNORECASE)
-    for from_class, rep_class in reps:
+    for from_class, rep_class in class_reps:
         for div in soup.findAll(div_or_p, attrs={'class': from_class}):
-            div.attrs = [(name, rep_class if name == 'class' else val) 
+            div.attrs = [(name, rep_class if name == 'class' else val)
                          for name, val in div.attrs]
-    
+
     # process images
     for img in soup.findAll('img'):
         source = img['src']
@@ -703,8 +719,8 @@ def process_article_text(article):
             continue
         img['src'] = "%s/%s" % (media.bucket, media.slug)
         article.media.add(media)
-    
-    article.text = unicode(soup)
+
+    article.text = paragraphize(unicode(soup))
     article.save()
 
 
@@ -748,9 +764,9 @@ for post_id, p in posts.iteritems():
             elif arts in tags:
                 # assume that arts articles are features
                 section = features
-            elif ("Lunch" in content and "Dinner" in content) or post_id == 1121:
+            elif all_in(content, ("Lunch", "Dinner")) or post_id == 1121:
                 continue # we're ignoring old menus for now
-            elif "Today" in content and 'Tonight' in content and 'Tomorrow' in content:
+            elif all_in(content, ("Today", "Tonight", "Tomorrow")):
                 continue # TODO: parse the weather joke
             else:
                 print "post %4s doesn't have a section" % post_id
@@ -772,9 +788,16 @@ for post_id, p in posts.iteritems():
             return ''
         re.sub(poll_regexp, add_poll, content)
         
+        # slug; some are url-escaped
+        slug = urllib2.unquote(p['slug'])
+        slug = django.template.defaultfilters.slugify(slug)
+        if len(slug) > 100:
+            print "truncating slug <%s>" % slug
+            slug = slug[:100]
+        
         article_args = dict(
             headline=p['title'],
-            slug=p['slug'][:100], # NOTE: slugs can't be > 100 chars on articles
+            slug=slug,
             section=section,
             summary=summary,
             short_summary=short_summary,
@@ -789,7 +812,7 @@ for post_id, p in posts.iteritems():
                 text=clean_up_text(content), 
                 **article_args
             )
-            process_article_text(article)
+            # process_article_text(article)
         
         else: # this is probably a photospread
             content = clean_up_text(content)
