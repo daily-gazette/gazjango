@@ -78,7 +78,7 @@ class Poll(models.Model):
 class Option(models.Model):
     """An option in a poll."""
     poll = models.ForeignKey(Poll, related_name="options")
-    name = models.CharField(max_length=20)
+    name = models.CharField(max_length=100)
     
     def num_votes(self):
         return self.votes.count()
