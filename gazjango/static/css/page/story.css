@@ -25,7 +25,7 @@
 	font-size: 3em;
 }
 
-#story a {
+#story p a {
 	text-decoration: underline;
 }
 
@@ -318,7 +318,18 @@ PHOTO SPREAD STYLES
 }
 
 .nav-links a {
-	font: 1.2em "Helvetica Neue", Arial, Helvetica, Geneva, sans-serif;
+	font: 1.4em "Helvetica Neue", Arial, Helvetica, Geneva, sans-serif;
+	font-weight:bold;
+	text-decoration: none;
+	color: #ffffff;
+}
+
+.nav-links .otherLink a {
+	color: #432c16;
+}
+
+.nav-links a:hover {
+	text-decoration: underline;
 }
 
 .photo-coption {
@@ -326,6 +337,33 @@ PHOTO SPREAD STYLES
 	font-family: Georgia, "Times New Roman", Times, serif;
 }
 
+.nav-links ul {
+	display: inline-block;
+	margin-top: 5px;
+}
+
+.nav-links ul li {
+	display: inline;
+	padding: 5px;
+	margin: 0px;
+	font-color: #FFF;
+}
+
+.current, .notCurrent {
+	border: 1px solid #000000;
+}
+
+.current {
+	background-color: #AAA;
+}
+
+.notCurrent {
+	background-color: #432c16;
+}
+
+.current:hover, .notCurrent:hover {
+	background-color: #BBB
+}
 
 /**************************************
 

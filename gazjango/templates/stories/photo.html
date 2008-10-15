@@ -14,16 +14,28 @@
   
   <div class="nav-links">
 
-  	<center>
-    {% if prev %}
-      <a href="{{ prev.get_absolute_url }}" onclick="showPage('{{ prev.get_absolute_url }}'); return false;"> &laquo; Back </a>
-    {% endif %}
-  
-    {% if next and prev %}|{% endif %}
-  
-    {% if next %}
-      <a href="{{ next.get_absolute_url }}" onclick="showPage('{{ next.get_absolute_url }}'); return false;">Next &raquo;</a>
-    {% endif %}
-    </center>
+	<center>  
+	<ul>
+	{% if prev %}
+		<li class="otherLink"><a href="{{ prev.get_absolute_url }}" onclick="showPage('{{ prev.get_absolute_url }}'); return false;"> &laquo; Back </a></li>
+	{% endif %}
+
+	{% ifequal story.photos.count 1 %}
+	{% else %}
+		{% for photo in story.photos.all %}
+			{% ifequal page.number forloop.counter %}
+				<li class="current"><a href="{{ photo.get_absolute_url }}">{{ forloop.counter }}</a></li>
+			{% else %}
+				<li class="notCurrent"><a href="{{ photo.get_absolute_url }}">{{ forloop.counter }}</a></li>
+			{% endifequal %}
+		{% endfor %}
+	{% endifequal %}
+
+	{% if next %}
+		<li class="otherLink"><a href="{{ next.get_absolute_url }}" onclick="showPage('{{ next.get_absolute_url }}'); return false;">Next &raquo;</a></li>
+	{% endif %}
+	</ul>
+	</center>
+ 
   </div>
 {% endblock %}
