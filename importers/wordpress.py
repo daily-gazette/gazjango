@@ -419,7 +419,7 @@ for data in polls.values():
     poll = Poll.objects.create(
         name = data['question'],
         question = data['question'],
-        slug = django.template.defaultfilters.slugify(data['question']),
+        slug = django.template.defaultfilters.slugify(data['question'])[:50],
         time_start = date(data['timestamp']),
         time_stop  = date(data['expiry']) or \
                      (None if data['active'] else datetime.datetime.now()),
