@@ -25,9 +25,9 @@
 	{% else %}
 		{% for photo in story.photos.all %}
 			{% ifequal page.number forloop.counter %}
-				<li class="current"><a href="{{ spread.get_absolute_url }}{{ forloop.counter }}">{{ forloop.counter }}</a></li>
+				<li class="current"><a href="{{ story.get_absolute_url }}{{ forloop.counter }}">{{ forloop.counter }}</a></li>
 			{% else %}
-				<li class="notCurrent"><a href="{{ spread.get_absolute_url }}{{ forloop.counter }}">{{ forloop.counter }}</a></li>
+				<li class="notCurrent"><a href="{{ story.get_absolute_url }}{{ forloop.counter }}">{{ forloop.counter }}</a></li>
 			{% endifequal %}
 		{% endfor %}
 	{% endifequal %}
