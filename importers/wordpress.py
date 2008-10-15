@@ -4,7 +4,12 @@ import MySQLdb as db
 from optparse import OptionParser
 import os, os.path, sys, re
 
-sys.path.extend([os.path.abspath(x) for x in ("..", "../gazjango")])
+sys.path.extend([os.path.abspath(x) for x in (
+    '..',
+    '../gazjango',
+    os.path.join(__file__, '..'),
+    os.path.join(__file__, '../gazjango'),
+)])
 
 import settings
 import django.core.management
