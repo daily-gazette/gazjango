@@ -3,6 +3,11 @@
 
 {% block customheader %}
   {{ block.super }}
+  
+  <script type="text/javascript" src="{% static js lightbox/js/lightbox-05.js %}"></script>
+  <link rel="stylesheet" href="{% static js lightbox/css/lightbox-05.css %}" type="text/css" media="screen, projection" />
+  
+  
   <script type="text/javascript" charset="utf-8">
     function showPage(url) {
       $('#photo-block').load(url);

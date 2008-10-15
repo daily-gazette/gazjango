@@ -1,9 +1,10 @@
 {% load extras %}
 
 {% block story-content %}
+<script type="text/javascript">  $(function() { $('a.lightbox').lightBox(); });  </script>
 
 	<center>
-  <div class="spreadImage"><img src="{{ page.photo.get_absolute_url }}" alt="" /></div>
+  <div class="spreadImage"><a href="{{ page.photo.get_absolute_url }}" class="lightbox"><img src="{{ page.photo.get_absolute_url }}" alt="" /></a></div>
   </center>
   
   {% if page.photo.caption %}
@@ -24,9 +25,9 @@
 	{% else %}
 		{% for photo in story.photos.all %}
 			{% ifequal page.number forloop.counter %}
-				<li class="current"><a href="{{ photo.get_absolute_url }}">{{ forloop.counter }}</a></li>
+				<li class="current"><a href="{{ spread.get_absolute_url }}{{ forloop.counter }}">{{ forloop.counter }}</a></li>
 			{% else %}
-				<li class="notCurrent"><a href="{{ photo.get_absolute_url }}">{{ forloop.counter }}</a></li>
+				<li class="notCurrent"><a href="{{ spread.get_absolute_url }}{{ forloop.counter }}">{{ forloop.counter }}</a></li>
 			{% endifequal %}
 		{% endfor %}
 	{% endifequal %}
