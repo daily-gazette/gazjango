@@ -449,10 +449,8 @@ def download_file(url, target_dir):
     import os.path
     target_path = os.path.join(target_dir, "%s.%s" % (filename, ext))
     
-    #########
-    print "would download %s to %s" % (url, target_path)
-    return (filename, ext)
-    #########
+    # print "would download %s to %s" % (url, target_path)
+    # return (filename, ext)
     
     if not os.path.exists(target_path):
         if not os.path.exists(target_dir):
