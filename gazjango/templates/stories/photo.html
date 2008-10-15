@@ -2,21 +2,8 @@
 
 {% block story-content %}
 
-  <div class="nav-links">
-  	<center>
-    {% if prev %}
-      <a href="{{ prev.get_absolute_url }}" onclick="showPage('{{ prev.get_absolute_url }}'); return false;"> &laquo; Previous photograph</a>
-    {% endif %}
-  
-    {% if next and prev %}|{% endif %}
-  
-    {% if next %}
-      <a href="{{ next.get_absolute_url }}" onclick="showPage('{{ next.get_absolute_url }}'); return false;">Next photograph &raquo;</a>
-    {% endif %}
-    </center>
-  </div>
 	<center>
-  <img src="{{ page.photo.get_absolute_url }}" alt="" />
+  <div class="spreadImage"><img src="{{ page.photo.get_absolute_url }}" alt="" /></div>
   </center>
   
   {% if page.photo.caption %}
@@ -26,15 +13,16 @@
   {% endif %}
   
   <div class="nav-links">
+
   	<center>
     {% if prev %}
-      <a href="{{ prev.get_absolute_url }}" onclick="showPage('{{ prev.get_absolute_url }}'); return false;"> &laquo; Previous photograph</a>
+      <a href="{{ prev.get_absolute_url }}" onclick="showPage('{{ prev.get_absolute_url }}'); return false;"> &laquo; Back </a>
     {% endif %}
   
     {% if next and prev %}|{% endif %}
   
     {% if next %}
-      <a href="{{ next.get_absolute_url }}" onclick="showPage('{{ next.get_absolute_url }}'); return false;">Next photograph &raquo;</a>
+      <a href="{{ next.get_absolute_url }}" onclick="showPage('{{ next.get_absolute_url }}'); return false;">Next &raquo;</a>
     {% endif %}
     </center>
   </div>
