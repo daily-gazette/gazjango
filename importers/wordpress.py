@@ -602,7 +602,7 @@ for slug, data in columns.items():
     )
     user = UserProfile.objects.get(user__username=author)
     column.authors.add(user)
-    user.user.groups.add(columnist)
+    user.add_position(columnist)
     subsection_lookup[taxonomy_ids[slug]] = column
 
 
