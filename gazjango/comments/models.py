@@ -83,7 +83,7 @@ class PublicComment(models.Model):
     text = models.TextField()
     
     ip_address = models.IPAddressField(null=True)
-    user_agent = models.CharField(max_length=100)
+    user_agent = models.CharField(max_length=300)
     
     is_approved = models.BooleanField(default=False)
     is_spam     = models.BooleanField(default=False)
