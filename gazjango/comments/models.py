@@ -73,7 +73,7 @@ class PublicComment(models.Model):
     number = models.IntegerField()
     
     user  = models.ForeignKey(UserProfile, null=True, blank=True)
-    name  = models.CharField(max_length=75, blank=True)
+    name  = models.CharField(max_length=100, blank=True)
     email = models.EmailField(null=True, blank=True)
     
     is_anonymous = property(lambda self: bool(self.name))
