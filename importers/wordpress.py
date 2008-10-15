@@ -495,8 +495,9 @@ def resolve_media(url, article):
     url = url.replace('swatdaily.org', 'daily.swarthmore.edu')
     
     if url not in media:
-        bucket, created = MediaBucket.objects.get_or_create(slug=article.slug,
-            defaults={'name': article.slug}
+        slug = ('auto-' + article.slug)[:50]
+        bucket, created = MediaBucket.objects.get_or_create(slug=slug,
+            defaults={'name': slug}
         )
         try:
             name, ext = download_file(url, "../gazjango/uploads/%s/" % bucket.slug)
