@@ -1,0 +1,7 @@
+#monthArchives {
+	float: right;
+	display: block;
+	width: 160px;
+	margin: 10px;
+	border: 1px #000;
+}
