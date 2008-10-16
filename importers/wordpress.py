@@ -919,13 +919,13 @@ while True:
 print "importing comments..."
 article_type = ContentType.objects.get_for_model(Article)
 
-cursor.execute("SELECT comment_ID, comment_post_ID, comment_author, comment_author_email, comment_author_IP, comment_agent, comment_date, comment_content, comment_approved FROM gazette_comments WHERE comment_type <> 'pingback' AND comment_approved <> 'spam' ORDER BY comment_date ASC;")
+cursor.execute("SELECT comment_ID, comment_post_ID, comment_author, user_id, comment_author_email, comment_author_IP, comment_agent, comment_date, comment_content, comment_approved FROM gazette_comments WHERE comment_type <> 'pingback' AND comment_approved <> 'spam' ORDER BY comment_date ASC;")
 while True:
     row = cursor.fetchone()
     if not row:
         break
     
-    comment_id, post_id, author, email, ip, ua, date, content, approved = row
+    comment_id, post_id, author, user_id, email, ip, ua, date, content, approved = row
     content = django.utils.text.normalize_newlines(content)
     content = content.replace('\n', '<br/>')
     
@@ -939,21 +939,26 @@ while True:
         print "skipping comment id %s on post id %s" % (comment_id, post_id)
         continue
     
-    PublicComment.objects.new(
-        subject_id=post_data['new_id'],
-        subject_type=article_type,
+    args = {
+        'subject_id': post_data['new_id'],
+        'subject_type': article_type,
         
-        time=date,
-        text=content,
+        'time': date,
+        'text': content,
         
-        name=author,
-        email=email,
-        ip_address=ip,
-        user_agent=ua,
-        
-        check_spam=False,
-        pre_approved=bool(approved),
-    )
+        'ip_address': ip,
+        'user_agent': ua,
+        'check_spam': False,
+        'pre_approved': bool(approved)
+    }
+    
+    if user_id:
+        args['user'] = User.objects.get(pk=users[user_id]['new_id']).get_profile()
+    else:
+        args['name'] = author
+        args['email'] = email
+    
+    PublicComment.objects.new(**args)
 
 
 # this is dumb
