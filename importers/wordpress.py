@@ -223,7 +223,7 @@ while True:
     old_id, username, email, display_name = row
     
     users[int(old_id)] = defaultdict(lambda:"",
-                                     username=username,
+                                     username=username.replace('-', '_'),
                                      email=email,
                                      display_name=display_name
                                      )
@@ -408,7 +408,7 @@ while True:
         'ip': ip,
         'hostname': hostname,
         'timestamp': timestamp,
-        'username': user,
+        'username': user.replace('-', '_'),
         'old_userid': userid
     })
 
@@ -601,7 +601,7 @@ for old_slug, data in columns.items():
         semester = semester,
         is_over = year == 2008 and semester == 2,
     )
-    user = UserProfile.objects.get(user__username=author)
+    user = UserProfile.objects.get(user__username=author.replace('-', '_'))
     column.authors.add(user)
     user.add_position(columnist)
     subsection_lookup[taxonomy_ids[old_slug]] = column
@@ -908,7 +908,7 @@ while True:
     if ' ' in author:
         author = UserProfile.objects.username_for_name(author, True)
 
-    article.add_author(UserProfile.objects.get(user__username=author))
+    article.add_author(UserProfile.objects.get(user__username=author.replace('-', '_')))
 
 
 # ============
