@@ -208,7 +208,7 @@ COMMENT STYLES
 	margin-left: 5px;
 	border-left: 1px solid #cccccc;
 	border-right: 1px solid #cccccc;
-	background-color: #f4f4f4;
+	background-color: #ffffff;
 	padding: 4px;
 	display: inline-block;
 }
@@ -226,7 +226,6 @@ COMMENT STYLES
 	width: 75px;
 	border-right: 2px solid #cccccc;
 	border-bottom: 2px solid #cccccc;
-	background-color: #eeeeee;
 	float: left;
 }
 
