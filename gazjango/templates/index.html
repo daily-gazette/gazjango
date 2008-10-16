@@ -42,7 +42,7 @@ jQuery(document).ready(function() {
 				<div class="headerColumnBox">
 					<h4>Newest Comments</h4>
 					<ul>
-					{% for comment in comments|slice:":3" %}
+					{% for comment in comments|slice:":4" %}
 							<li>
 							  {{ comment.display_name }} commented on <a href="{{comment.get_absolute_url}}">{{ comment.subject.get_title }}</a>.
 							</li>
