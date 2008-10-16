@@ -1,6 +1,7 @@
 from django.contrib import admin
-from gazjango.articles.models import Article, Section, Subsection, StoryConcept, Special
-from gazjango.articles.models import Special, DummySpecialTarget, SpecialsCategory, SectionSpecial
+from gazjango.articles.models import Article, Section, Subsection, Column
+from gazjango.articles.models import StoryConcept, Special, DummySpecialTarget
+from gazjango.articles.models import SpecialsCategory, SectionSpecial
 
 class StoryAdmin(admin.ModelAdmin):
     pass
@@ -14,6 +15,10 @@ admin.site.register(Section, SectionAdmin)
 class SubsectionAdmin(admin.ModelAdmin):
     pass
 admin.site.register(Subsection, SubsectionAdmin)
+
+class ColumnAdmin(admin.ModelAdmin):
+    pass
+admin.site.register(Column, ColumnAdmin)
 
 class StoryConceptAdmin(admin.ModelAdmin):
     pass
