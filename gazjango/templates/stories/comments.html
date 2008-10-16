@@ -22,7 +22,7 @@
             
             {% if comment.score|is_none %}
               {% if comment.is_visible %}
-                (&infin;)
+                (+&infin;)
               {% else %}
                 (-&infin;)
               {% endif %}
