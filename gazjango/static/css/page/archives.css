@@ -10,7 +10,8 @@
 	font-size: 1.4em;
 	border: 1px solid #AAA;
 	text-align: center;
-
+	font-weight: bold;
+	font-family: "Helvetica Neue", Arial, Helvetica, Geneva, sans-serif;
 }
 
 #monthArchives table .year {
