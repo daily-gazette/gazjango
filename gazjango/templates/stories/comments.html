@@ -3,12 +3,11 @@
 {% for comment, status in comments %}
   <div class="comment {% if comment.is_visible %}shown-comment{% else %}hidden-comment{% endif %}{% if new %} new{% endif %}" id="c-{{ comment.number }}">
     <div class="commentInformation">
-        <p>
+        <p class="floatLeft">
           <span class="commentNumber">#{{ comment.number }}</span>:
           <span class="commentTime">{{ comment.time|date:"n/j/Y" }} at {{ comment.time|date:"g:i a" }}</span>
         </p>
-        <p>
-          <span class="commentVotes">
+        <p class="floatRight">
             {% ifequal status 1 %}
               <a class="voteSelected" href="vote-comment/{{ comment.number }}/clear/">up</a>
             {% else %}
@@ -34,7 +33,6 @@
                 ({{ comment.score }})
               {% endif %}
             {% endif %}
-          </span>
         </p>
     </div>
 
