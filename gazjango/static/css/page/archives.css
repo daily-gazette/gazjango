@@ -10,3 +10,16 @@
 	line-height: 1.4;
 	font-size: 1.4em;
 }
+
+#monthArchives table year {
+	background-color: #AAA;
+	color: #FFF;
+}
+
+#monthArchives table month {
+	background-color: #CCC;
+}
+
+#monthArchives table week {
+	background-color: #EEE;
+}
