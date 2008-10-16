@@ -296,7 +296,7 @@ class Article(models.Model):
     def get_absolute_url(self):
         d = self.pub_date
         a = [str(x) for x in (d.year, d.month, d.day)]
-        return ('articles.views.article', a + [self.slug])
+        return ('article', a + [self.slug])
     
     class Meta:
         app_label = 'articles'
