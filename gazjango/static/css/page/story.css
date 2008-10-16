@@ -314,8 +314,8 @@ PHOTO SPREAD STYLES
 }
 
 #photo-block img {
-	max-width: 450px;
-	max-height: 650px;
+	max-width: 650px;
+	max-height: 450px;
 }
 
 .nav-links a {
