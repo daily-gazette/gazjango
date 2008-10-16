@@ -36,7 +36,7 @@
         <h4>Column Listings</h4>
         {% for column in columns %}
           {% ifchanged %}
-            <p><strong>{{ column.get_semester_display }} {{ column.year }}</strong></p><br />
+            <br /><p><strong>{{ column.get_semester_display }} {{ column.year }}</strong></p>
           {% endifchanged %}
           <p><a href="{{ column.get_absolute_url }}">{{ column.name }}</a></p>
         {% endfor %}
