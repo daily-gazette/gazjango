@@ -724,8 +724,9 @@ def process_article_text(article):
             # print "off-site image: " + media
             continue
         img['src'] = "%s/%s" % (media.bucket, media.slug)
-        if img['class'] in class_reps.keys():
-            img['class'] = class_reps[img['class']]
+        if 'class' in img.attrMap:
+            if img['class'] in class_reps.keys():
+                img['class'] = class_reps[img['class']]
         article.media.add(media)
 
     article.text = paragraphize(unicode(soup))
