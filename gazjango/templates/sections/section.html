@@ -19,15 +19,12 @@
       </div>
 
       <div id="headerColumn">
-
         <div class="headerColumnBox">
           <h4>Comments</h4>
           <ul class="commentList">
             {% for comment in comments|slice:":4" %}
               <li>
                 <a href="{{ comment.get_absolute_url }}">{{ comment.subject.get_title|safe }}</a>
-                <br />
-                Comment on {{ comment.time|date:"F j, Y" }}
               </li>
             {% endfor %}
           </ul>

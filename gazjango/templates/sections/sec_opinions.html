@@ -25,13 +25,10 @@
             {% for comment in comments|slice:":4" %}
               <li>
                 <a href="{{ comment.get_absolute_url }}">{{ comment.subject.get_title }}</a>
-                <br />
-                Comment on {{ comment.time|date:"F j, Y" }}
               </li>
             {% endfor %}
           </ul>
         </div>
-      </div>
       
       <div class="headerColumnBox">
         <h4>Column Listings</h4>
