@@ -1,14 +1,7 @@
 {% for comment in comments %}
   <div class="comment {% if comment.is_visible %}shown-comment{% else %}hidden-comment{% endif %}{% if new %} new{% endif %}" id="c-{{ comment.number }}">
     <div class="commentInformation">
-      <p>
-        <strong>#{{ comment.number }}</strong>
-        <br/>
-        {{ comment.time|date:"n/j/Y" }}
-        <br />
-        {{ comment.time|date:"g:i a" }}
-        <br/>
-      </p>
+        <strong>#{{ comment.number }}</strong>: {{ comment.time|date:"n/j/Y" }} at {{ comment.time|date:"g:i a" }}
     </div>
 
     <div class="commentContent {% if comment.is_staff %}staff{% else %}{% if not comment.is_visible %}moderate{% endif %}{% endif %}">
