@@ -28,9 +28,7 @@
       	{% else %}
       		{% for looped_page in story.pages.all %}
       			{% ifequal page.number looped_page.number %}
-      				<li class="current">
-      				  <a class="page-link" href="{{ looped_page.get_absolute_url }}">{{ looped_page.number }}</a>
-      				  </li>
+      				<li class="current"><a class="page-link" href="{{ looped_page.get_absolute_url }}">{{ looped_page.number }}</a></li>
       			{% else %}
       				<li class="notCurrent"><a class="page-link" href="{{ looped_page.get_absolute_url }}">{{ looped_page.number }}</a></li>
       			{% endifequal %}
