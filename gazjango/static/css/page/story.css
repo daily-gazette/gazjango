@@ -224,6 +224,7 @@ COMMENT STYLES
 
 .commentInformation {
 	width: 75px;
+	border-top: 2px solid #cccccc;
 	border-right: 2px solid #cccccc;
 	border-bottom: 2px solid #cccccc;
 	float: left;
