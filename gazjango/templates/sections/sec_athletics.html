@@ -1,0 +1,96 @@
+{% extends "base.html" %}
+{% load extras %}
+
+{% block title %}{{ section.name }}{% endblock title %}
+
+{% block customheader %}
+
+<link rel="stylesheet" href="{% static css page/section.css %}" type="text/css"/>
+<link rel="stylesheet" href="{% static css page/section-columns.css %}" type="text/css"/>
+
+{% endblock customheader %}
+
+
+{% block topbar %}
+
+    <div id="headerSectionBar">
+      <div id="headerSearch">
+        {% include "search_header.html" %}
+      </div>
+
+      <div id="headerColumn">
+        <div class="headerColumnBox">
+          <h4>Comments</h4>
+          <ul class="commentList">
+            {% for comment in comments|slice:":4" %}
+              <li>
+                <a href="{{ comment.get_absolute_url }}">{{ comment.subject.get_title }}</a>
+              </li>
+            {% endfor %}
+          </ul>
+        </div>
+      
+ <div class="headerColumnBoxListings">
+        <h4>Column Listings</h4>
+        <br/>
+        {% for column in columns %}
+          {% ifchanged %}
+            <br /><p><strong>{{ column.get_semester_display }} {{ column.year }}</strong></p>
+          {% endifchanged %}
+          <p><a href="{{ column.get_absolute_url }}">{{ column.name }}</a></p>
+        {% endfor %}
+      </div>
+
+      
+    </div>
+  </div>
+
+{% endblock topbar %}
+
+
+
+{% block content %}
+  <div id="section">
+    
+    <div id="sectionHeader">
+      <h2>{% block main-header %}{{ section.name }}{% endblock %}</h2>
+    </div>
+
+		  <div id="columnMain">
+				<h2>
+					{{ section.most_recent_article.subsection.name }}:
+					<a href="{{ section.most_recent_article.get_absolute_url }}">{{section.most_recent_article.get_title|safe}}</a>
+				</h2>
+				<div id="leadImg">
+					<img src="{{ section.most_recent_article.wide_logo_url }}" />
+				</div>
+				<p class="byline">
+					<span class="author">by {{ section.most_recent_article.authors_in_order|join_authors }}</span><span 	class="date">| {{ section.most_recent_article.pub_date|date:"n/j/Y" }}</span>
+				</p>
+				<p>
+					{{ section.most_recent_article.longest_summary|safe }}
+					<a class="readMore" href="{{ section.most_recent_article.get_absolute_url }}">More</a>
+				</p>
+			</div>
+   		
+   		
+  		<div id="columnList">
+			<h3>Current Columns</h3>
+				<ul>
+  				{% for column in curr_columns %}
+  	       	<li>
+      			<div class="imgLeft"><a href="{{ column.get_absolute_url }}"><img src="{{ column.square_logo_url }}" title="{{ column.name }}" /></a></div> <h3><a href="{{ column.get_absolute_url }}">{{ column.name|safe }}</a></h3>
+        			<p class="byline">
+        			  <span class="author">by {{ column.authors|join_authors }}</span>
+        			  <span class="date"> | {{ column.most_recent_article.pub_date|date:"n/j/Y" }}</span>
+       				</p>
+       				<p>
+    				    {{ column.description|safe }}
+                <a class="readMore" href="{{ column.get_absolute_url }}">See a list of columns.</a>
+       				</p>
+       		 	</li>
+	        {% endfor %}
+  			</ul>
+      </div>
+
+{% endblock %}
