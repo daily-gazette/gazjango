@@ -174,7 +174,7 @@ class PublicComment(models.Model):
     def linked_name(self):
         name = self.display_name
         if self.is_staff():
-            name = '<a href="%s">%s</a>' % (self.user.get_absolute_url, name)
+            name = '<a href="%s">%s</a>' % (self.user.get_absolute_url(), name)
         return name
     
     def __unicode__(self):
