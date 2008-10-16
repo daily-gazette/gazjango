@@ -26,4 +26,17 @@
 
 #monthArchives table .week {
 	background-color: #EEE;
+	font-weight: bold;
+}
+
+#monthArchives table .day {
+
+}
+
+#monthArchives table .day .empty {
+	background-color: #FFF;
+}
+
+#monthArchives table .day .content {
+	background-color: #EEE;
 }
