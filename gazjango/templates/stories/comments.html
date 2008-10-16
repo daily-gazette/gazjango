@@ -9,15 +9,15 @@
         </p>
         <p class="floatRight">
             {% ifequal status 1 %}
-              <a class="voteSelected" href="vote-comment/{{ comment.number }}/clear/"><img src="/static/images/story/up.gif" title="Vote up this comment" /></a>
+              <a class="voteSelected" href="vote-comment/{{ comment.number }}/clear/"><img src="/static/images/story/up.png" title="Vote Up" /></a>
             {% else %}
-              <a class="vote" href="vote-comment/{{ comment.number }}/up/">up</a>
+              <a class="vote" href="vote-comment/{{ comment.number }}/up/"><img src="/static/images/story/up.png" title="Vote Up" /></a>
             {% endifequal %}
             
             {% ifequal status -1 %}
-              <a class="voteSelected" href="vote-comment/{{ comment.number }}/clear/">down</a>
+              <a class="voteSelected" href="vote-comment/{{ comment.number }}/clear/"><img src="/static/images/story/down.png" title="Vote Down" /></a>
             {% else %}
-              <a class="vote" href="vote-comment/{{ comment.number }}/down/">down</a>
+              <a class="vote" href="vote-comment/{{ comment.number }}/down/"><img src="/static/images/story/down.png" title="Vote Down" /></a>
             {% endifequal %}
             
             {% if comment.score|is_none %}
