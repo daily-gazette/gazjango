@@ -1,3 +1,4 @@
+import django.db
 from django.db                          import models
 from django.db.models                   import Q
 from django.utils.encoding              import smart_str
@@ -139,6 +140,7 @@ class PublicComment(models.Model):
             else:
                 score += val
         self.score = score
+        self.save()
     
     def is_staff(self):
         return False if self.is_anonymous else self.user.is_staff
@@ -157,19 +159,50 @@ class PublicComment(models.Model):
             else:
                 return "Registered, Non-Swarthmore"
     
-    def add_vote(self, positive, user=None, ip=None):
-        vote = self.votes.create(positive=positive, user=user, ip=ip)
-        self.register_vote(vote)
+    def vote(self, positive, user=None, ip=None):
+        """
+        Casts a vote for `user` and `ip`. If a vote is already present, override
+        it; if there's a vote and `positive` is None, clear it.
+        """
+        status = self.vote_status(user=user, ip=ip)
+        if not status: # hasn't voted yet
+            if positive is not None:
+                vote = self.votes.create(positive=positive, user=user, ip=ip)
+                self.register_vote(vote)
+        else:
+            if user:
+                vote = self.votes.get(user=user)
+            else:
+                vote = self.votes.get(ip=ip)
+            if positive is None:
+                vote.delete()
+            else:
+                vote.positive = positive
+                vote.set_weight() # in case it's changed
+            self.recalculate_score()
     
     def register_vote(self, vote):
         vote.set_weight()
-        val = vote.value
-        if val is None:
+        if vote.value is None:
             self.score = None
             self.shown_forever = vote.positive
         else:
-            self.score += val
+            self.score += vote.value
         self.save()
+    
+    def vote_status(self, user=None, ip=None):
+        """
+        Returns `user`/`ip`'s vote on this comment: 1 if positive,
+        -1 if negative, None if they haven't voted.
+        """
+        try:
+            if user:
+                vote = self.votes.get(user=user)
+            else:
+                vote = self.votes.get(ip=ip)
+        except CommentVote.DoesNotExist:
+            return None
+        return 1 if vote.positive else -1
     
     def linked_name(self):
         name = self.display_name
@@ -234,8 +267,8 @@ class CommentVote(models.Model):
     class Meta:
         # note that null values don't count in uniqueness
         unique_together = (
-            ('comment', 'ip'),
-            ('comment', 'user')
+            ('comment', 'user'),
+            ('comment', 'user', 'ip'),
         )
     
     def __unicode__(self):

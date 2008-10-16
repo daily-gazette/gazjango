@@ -55,9 +55,12 @@ def show_article(request, story, form, print_view=False):
     )
     
     cs = PublicComment.visible.order_by('-time').exclude(article=story)
+    user = request.user.get_profile() if request.user.is_authenticated() else None
+    ip = request.META['REMOTE_ADDR']
     context = RequestContext(request, {
         'story': story,
-        'comments': story.comments.all(),
+        'comments': [(comment, comment.vote_status(user=user, ip=ip)) 
+                     for comment in story.comments.all().select_related(depth=1)],
         'related': story.related_list(3),
         'topstory': Article.published.get_top_story(),
         'other_comments': cs,

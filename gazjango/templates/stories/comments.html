@@ -1,7 +1,41 @@
-{% for comment in comments %}
+{% load comparisons %}
+
+{% for comment, status in comments %}
   <div class="comment {% if comment.is_visible %}shown-comment{% else %}hidden-comment{% endif %}{% if new %} new{% endif %}" id="c-{{ comment.number }}">
     <div class="commentInformation">
-        <p><strong>#{{ comment.number }}</strong>: {{ comment.time|date:"n/j/Y" }} at {{ comment.time|date:"g:i a" }}</p>
+        <p>
+          <span class="commentNumber">#{{ comment.number }}</span>:
+          <span class="commentTime">{{ comment.time|date:"n/j/Y" }} at {{ comment.time|date:"g:i a" }}</span>
+        </p>
+        <p>
+          <span class="commentVotes">
+            {% ifequal status 1 %}
+              <a class="voteSelected" href="vote-comment/{{ comment.number }}/clear/">up</a>
+            {% else %}
+              <a class="vote" href="vote-comment/{{ comment.number }}/up/">up</a>
+            {% endifequal %}
+            
+            {% ifequal status -1 %}
+              <a class="voteSelected" href="vote-comment/{{ comment.number }}/clear/">down</a>
+            {% else %}
+              <a class="vote" href="vote-comment/{{ comment.number }}/down/">down</a>
+            {% endifequal %}
+            
+            {% if comment.score|is_none %}
+              {% if comment.is_visible %}
+                (&infin;)
+              {% else %}
+                (-&infin;)
+              {% endif %}
+            {% else %}
+              {% if comment.score|gt:0 %}
+                (+{{ comment.score|default_if_none:"&infin;" }})
+              {% else %}
+                ({{ comment.score }})
+              {% endif %}
+            {% endif %}
+          </span>
+        </p>
     </div>
 
     <div class="commentContent {% if comment.is_staff %}staff{% else %}{% if not comment.is_visible %}moderate{% endif %}{% endif %}">
@@ -15,10 +49,14 @@
       <p class="commentAuthorship">
         {% if not comment.is_visible %}
           {% if comment.is_approved %}
-            This comment has been deemed offensive by the community or site editors.<br/>
-            The Gazette does not condone its content.
+            <em>
+              This comment has been deemed offensive by the community or site editors.<br/>
+              The Gazette does not condone its content.
+            </em>
           {% else %}
-            This comment has not yet been approved by a site administrator.  
+            <em>
+              This comment has not yet been approved by a site administrator.  
+            </em>
           {% endif %}
           
           [<a href="#" class='showLink'>show anyway</a>]

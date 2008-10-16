@@ -229,6 +229,16 @@ COMMENT STYLES
 	background-color: #CCC;
 }
 
+.commentInformation .commentNumber {
+    font-weight: bold;
+}
+.commentInformation .commentTime {
+    font-style: italic;
+}
+.commentInformation .commentVotes {
+    float: right;
+}
+
 .commentContent {
 	width: 640px;
 	float: left;

@@ -1,5 +1,5 @@
 from django.contrib.auth.decorators import permission_required
-from django.http                import HttpResponse, Http404
+from django.http                import HttpResponse, Http404, HttpResponseRedirect
 from django.template            import RequestContext
 from django.shortcuts           import render_to_response
 from gazjango.misc.view_helpers import get_by_date_or_404, reporter_admin_data
@@ -13,9 +13,27 @@ def get_comment_text(request, slug, year, month, day, num):
     story = get_by_date_or_404(Article, year, month, day, slug=slug)
     try:
         comment = story.comments.get(number=num)
-        return HttpResponse(comment.text)
     except PublicComment.DoesNotExist:
         raise Http404
+    return HttpResponse(comment.text)
+
+
+def vote_on_comment(request, slug, year, month, day, num, val):
+    story = get_by_date_or_404(Article, year, month, day, slug=slug)
+    positive = True if val == 'up' else (False if val == 'down' else None)
+    try:
+        comment = story.comments.get(number=num)
+    except PublicComment.DoesNotExist:
+        raise Http404
+    
+    user = request.user.get_profile() if request.user.is_authenticated() else None
+    ip = request.META['REMOTE_ADDR']
+    result = comment.vote(positive, ip=ip, user=user)
+    
+    if request.is_ajax():
+        return HttpResponse("success" if result else "failure")
+    else:
+        return HttpResponseRedirect(comment.get_absolute_url())
 
 
 @permission_required('accounts.can_access_admin')
