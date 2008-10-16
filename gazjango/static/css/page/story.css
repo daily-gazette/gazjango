@@ -224,18 +224,18 @@ COMMENT STYLES
 
 .commentInformation {
 	width: 75px;
-	border-top: 2px solid #cccccc;
-	border-right: 2px solid #cccccc;
-	border-bottom: 2px solid #cccccc;
+	border-top: 2px solid #BBB;
+	border-right: 2px solid #BBB;
+	border-bottom: 2px solid #BBB;
 	float: left;
-	background-color: #AAA;
+	background-color: #CCC;
 }
 
 .commentContent {
 	width: 565px;
 	float: left;
 	padding-left: 3px;
-	border-top: 2px solid #cccccc;
+	border-top: 2px solid #BBB;
 	text-align: justify;
 }
 
