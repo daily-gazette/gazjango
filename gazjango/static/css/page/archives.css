@@ -1,7 +1,8 @@
 #monthArchives {
 	float: right;
 	display: block;
-	padding: 2px;
+	padding: 1px;
+	margin: 5px;
 	border: 1px solid #AAA;
 }
 
