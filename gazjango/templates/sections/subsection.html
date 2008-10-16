@@ -72,41 +72,11 @@
           </p>
         </div>
       </div>
+ 	<div id="sectionBar">
+		&nbsp;
+	</div>
     {% endfor %}
     
-    </div>
-
-    <div id="sectionBar">
-      <ul>
-        {% for story in midstories %}
-          <li>
-            <img src="{{ story.front_image.get_absolute_url }}" class="{{ story.front_image.get_shape_display }}" title="{{ story.headline }}" alt="" />
-            <h3><a href="{{ story.get_absolute_url }}">{{ story.get_title|safe }}</a></h3>
-            <p class="byline">
-              <span class="author">by {{ story.authors_in_order|join_authors }}</span>
-              <span class="date"> | {{ story.pub_date|date:"n/j/Y" }}</span>
-            </p>
-            <p>
-              {{ story.summary|safe }}
-              <a class="readMore" href="{{ story.get_absolute_url }}">More</a>
-            </p>
-          </li>
-        {% endfor %}
-      </ul>
-    </div>
-
-    <div id="lowBar">
-      {% for lows in lowlist %}
-        <div class="storyColumn">
-          {% for story in lows %}
-            <li>
-              <h4><a href="{{ story.get_absolute_url }}">{{ story.get_title|safe }}</a></h4>
-              <span class="author">| by {{ story.authors_in_order|join_authors:"1x" }}</span>
-              <span class="date">| {{ story.pub_date|date:"n/j/Y" }}</span>
-            </li>
-          {% endfor %}
-        </div>
-      {% endfor %}
     </div>
 
   </div>
