@@ -210,7 +210,10 @@ def subsection(request, section, subsection, year=None, month=None, day=None):
         base = filter_by_date(sub.articles, year, month, day)
     else:
         base = filter_by_date(sec.articles, year, month, day)
-        data['columns'] = Column.objects.order_by('-year', '-semester')
+        if sec.slug == 'opinions':
+            data['columns'] = Column.objects.order_by('-year', '-semester', 'name')
+            f = data['columns'][0]
+            data['curr_columns'] = data['columns'].filter(year=f.year, semester=f.semester)
     
     tops, mids, lows = Article.published.get_stories(base=base,
                                          num_top=2, num_mid=3, num_low=12)
