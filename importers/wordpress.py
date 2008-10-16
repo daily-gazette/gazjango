@@ -591,11 +591,11 @@ other_types_lookup = {
     taxonomy_ids['jobs']: 'jobs'
 }
 
-for slug, data in columns.items():
+for old_slug, data in columns.items():
     name, year, semester, author = data
     column = Column.objects.create(
         name = name,
-        slug = slug,
+        slug = django.template.defaultfilters.slugify(name),
         section = opinions_and_columns,
         year = year,
         semester = semester,
@@ -604,7 +604,7 @@ for slug, data in columns.items():
     user = UserProfile.objects.get(user__username=author)
     column.authors.add(user)
     user.add_position(columnist)
-    subsection_lookup[taxonomy_ids[slug]] = column
+    subsection_lookup[taxonomy_ids[old_slug]] = column
 
 
 ### not sure we necessarily want to tag based on autometa
