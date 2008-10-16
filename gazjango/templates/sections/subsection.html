@@ -58,7 +58,7 @@
 
 	<div id="mainBoxes">
 	
-    {% for article in subsection.articles.all|order_by:'-pub_date'|slice:":10" %}
+    {% for article in subsection.articles.all|slice:":10" %}
       <div class="sectionMainBox sectionMainBoxMarginLeft">
         <div id="sectionMainStory">
           <h2><a href="{{ article.get_absolute_url }}">{{article.get_title|safe}}</a></h2>
