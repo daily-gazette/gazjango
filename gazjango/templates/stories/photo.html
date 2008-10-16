@@ -20,9 +20,7 @@
     	<ul>
     	  <li class="otherLink">
           {% if prev %}
-      		  <a href="{{ prev.get_absolute_url }}" onclick="showPage('{{ prev.get_absolute_url }}'); return false;">&laquo; Back</a>
-      		{% else %}
-      		  <span style="visibility: hidden;">&laquo; Back</span>
+      		  <a href="{{ prev.get_absolute_url }}" class="page-link">&laquo; Back</a>
       		{% endif %}
     		</li>
 
@@ -30,18 +28,18 @@
       	{% else %}
       		{% for looped_page in story.pages.all %}
       			{% ifequal page.number looped_page.number %}
-      				<li class="current"><a href="{{ looped_page.get_absolute_url }}">{{ looped_page.number }}</a></li>
+      				<li class="current">
+      				  <a class="page-link" href="{{ looped_page.get_absolute_url }}">{{ looped_page.number }}</a>
+      				  </li>
       			{% else %}
-      				<li class="notCurrent"><a href="{{ looped_page.get_absolute_url }}">{{ looped_page.number }}</a></li>
+      				<li class="notCurrent"><a class="page-link" href="{{ looped_page.get_absolute_url }}">{{ looped_page.number }}</a></li>
       			{% endifequal %}
       		{% endfor %}
       	{% endifequal %}
 
     		<li class="otherLink">
         	{% if next %}
-      		  <a href="{{ next.get_absolute_url }}" onclick="showPage('{{ next.get_absolute_url }}'); return false;">Next &raquo;</a>
-      		{% else %}
-      		  <span style="visibility: hidden;">Next &raquo;</span>
+      		  <a href="{{ next.get_absolute_url }}" class="page-link">Next &raquo;</a>
       		{% endif %}
     		</li>
     	</ul>

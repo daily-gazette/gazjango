@@ -26,11 +26,10 @@
     $(limitMainImage);
     
     function ajaxifyLinks() {
-      $('a[href*={{ story.get_absolute_url }}]').each(function() {
-        href = $(this).attr('href');
+      $('.page-link').each(function() {
         $(this).click(function(event) {
           event.preventDefault();
-          $('#photo-block').load(href, null, function() {
+          $('#photo-block').load($(this).attr('href'), null, function() {
             limitMainImage();
             lightboxify();
             ajaxifyLinks();
@@ -38,7 +37,7 @@
         });
       });
     }
-    // $(ajaxifyLinks);
+    $(ajaxifyLinks);
   </script>
 
 {% endblock %}
