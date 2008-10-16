@@ -154,7 +154,7 @@ STORY INCLUDES
 	border-right: 1px solid #cccccc;
 	background-color: #eeeeee;
 	padding: 4px;
-	height: 120px;	
+	float: left;
 }
 
 #continueBox #top {
@@ -193,7 +193,7 @@ STORY INCLUDES
 	list-style-type: square;
 	margin: 0px 0px 0px 15px;
 	padding: 0 0 0px 10px;
-	font-size: 1.3em;	
+	font-size: 1.3em;
 }
 
 
@@ -380,4 +380,3 @@ COLUMN STYLES
 	border-bottom: 0px solid #ffffff;
 	font-size: 3em;
 }
-
