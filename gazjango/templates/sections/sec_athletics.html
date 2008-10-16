@@ -96,25 +96,6 @@
 	</div>
     {% endfor %}
 
-{% for article in lowlist %}
-      <div class="sectionMainBox sectionMainBoxMarginLeft">
-        <div id="sectionMainStory">
-          <h2><a href="{{ article.get_absolute_url }}">{{article.get_title|safe}}</a></h2>
-          <p class="byline">
-            <span class="author">by {{ article.authors_in_order|join_authors }}</span>
-            <span class="date">| {{ article.pub_date|date:"n/j/Y" }}</span>
-          </p>
-          <p>
-            {{ article.longest_summary|safe }}
-            <a class="readMore" href="{{ article.get_absolute_url }}">More</a>
-          </p>
-        </div>
-      </div>
- 	<div id="{% cycle '' 'sectionBreak' %}">
-		&nbsp;
-	</div>
-    {% endfor %}
-
 
     
     </div>
