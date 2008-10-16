@@ -35,11 +35,9 @@
 
         <div class="headerColumnBox">
           <h4>In {{ section.name }}</h4>
-          	<p><a href="#">test url</a> - wazzzz up?!</p>
-            {% for special in section.specials.all|slice:":4" %}
+            {% for subsection in section.subsections.all %}
               <p>
-                <a href="{{ special.get_target_url }}">{{ special.name }}</a>
-                - {{ special.description }}
+                <a href="{{ subsection.get_absolute_url }}">{{ subsection.name }}</a>
               </p>
             {% endfor %}
         </div>
@@ -56,16 +54,6 @@
     
     <div id="sectionHeader">
       <h2>{% block main-header %}{{ section.name }}{% endblock %}</h2>
-    </div>
-    
-    <div id="sectionMenu">
-      <ul>
-        {% for subsection in section.subsections.all %}
-          <li>
-            <a href="{{ subsection.get_absolute_url }}">{{ subsection.name }}</a>
-          </li>
-        {% endfor %}
-      </ul>
     </div>
 
 	<div id="mainBoxes">
