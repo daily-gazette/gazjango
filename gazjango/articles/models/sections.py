@@ -1,6 +1,8 @@
 from django.db import models
 from gazjango.articles.models.stories import Article
 import datetime
+import os.path
+import settings
 
 class Section(models.Model):
     """
@@ -90,10 +92,6 @@ class Column(Subsection):
     that in any way.
     """
     authors = models.ManyToManyField('accounts.UserProfile')
-    
-    big_logo   = models.ForeignKey('media.ImageFile', null=True, blank=True, related_name="subsections_with_big_logo")
-    small_logo = models.ForeignKey('media.ImageFile', null=True, blank=True, related_name="subsections_with_small_logo")
-    
     is_over = models.BooleanField(default=False)
     
     SEMESTER_CHOICES = (
@@ -105,5 +103,13 @@ class Column(Subsection):
     
     class Meta:
         app_label = 'articles'
+    
+    def wide_logo_url(self):
+        path = '/static/images/column/%s_wide.png' % self.slug
+        return path if os.path.exists(settings.BASE + path) else None
+    
+    def square_logo_url(self):
+        path = '/static/images/column/%s_square.png' % self.slug
+        return path if os.path.exists(settings.BASE + path) else None
     
 
