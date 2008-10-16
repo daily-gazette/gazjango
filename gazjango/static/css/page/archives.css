@@ -26,12 +26,12 @@
 	font-weight: bold;
 }
 
-#monthArchives table td {
+#monthArchives table .day td {
 	border: 1px solid #CCC;
 }
 
 #monthArchives table .day {
-	border: 1px solid #CCC;
+
 }
 
 #monthArchives table .day .empty {
