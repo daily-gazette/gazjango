@@ -53,10 +53,6 @@ class Section(models.Model):
 class Subsection(models.Model):
     """
     A subsection: Ask the Gazette, College News, a specific column, whatever.
-    
-    If `is_over` is set, don't have it show up in the list in the admin. Used
-    mainly for columns that are no longer running. There's nothing app-level
-    that actually prevents new articles using it, however.
     """
     
     name = models.CharField(max_length=40)
@@ -99,8 +95,12 @@ class Column(Subsection):
     """
     A column. Adds some extra information.
     
-    This should really be in the Columns category, but we're not hardcoding
+    This should really be in the Opinions category, but we're not hardcoding
     that in any way.
+    
+    If `is_over` is set, don't have it show up in the list in the admin. Used
+    mainly for columns that are no longer running. There's nothing app-level
+    that actually prevents new articles using it, however.
     """
     authors = models.ManyToManyField('accounts.UserProfile')
     is_over = models.BooleanField(default=False)

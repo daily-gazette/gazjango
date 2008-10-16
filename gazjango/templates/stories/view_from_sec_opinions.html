@@ -22,11 +22,9 @@
     <div id="headerSection">
       <h3>
         <a href="{{ story.section.get_absolute_url }}">{{ story.section.name }}</a>
-        {% if story.subsections.count %}
-          >>
-          {% for sub in story.subsections.all %}
-            <a href="{{ sub.get_absolute_url }}">{{ sub.name }}</a>{% if not forloop.last %},{% endif %}
-          {% endfor %}
+        {% if story.subsection %}
+          &raquo;
+          <a href="{{ story.subsection.get_absolute_url }}">{{ story.subsection.name }}</a>
         {% endif %}
       </h3>
     </div>

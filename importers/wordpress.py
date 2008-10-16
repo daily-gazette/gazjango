@@ -808,6 +808,7 @@ for post_id, p in posts.iteritems():
             headline=p['title'],
             slug=slug,
             section=section,
+            subsection=subsection,
             summary=summary,
             short_summary=short_summary,
             long_summary=long_summary,
@@ -842,9 +843,6 @@ for post_id, p in posts.iteritems():
         article.add_author(User.objects.get(pk=author_id).get_profile())    
         article.polls = article_polls
         
-        if subsection:
-            article.subsections.add(subsection)
-    
         if tags:
             article.tags = ','.join('"%s"' % tag.name for tag in tags)
     

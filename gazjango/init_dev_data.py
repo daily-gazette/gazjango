@@ -245,13 +245,13 @@ nobody_loves_me = Article.objects.create(
             "sexual escapades to share with you the lyrics to a Portishead song.",
     short_summary="The Bone Doctress laments the lack of love in her life, by way of "
                   "Portishead lyrics.",
+    subsection=bone_doctress,
     format=textile,
     status='p',
     position='m',
     possible_position='m'
 )
 nobody_loves_me.add_author(bone_p)
-nobody_loves_me.subsections.add(bone_doctress)
 nobody_loves_me.text = """To pretend no one can find
 The fallacies of morning rose
 Forbidden fruit, hidden eyes
@@ -316,6 +316,7 @@ scandal = Article.objects.create(
     short_title="Al Bloom Forced Out By BoM",
     slug="bloom-scandal",
     section=news,
+    subsection=facstaff,
     short_summary="Allegations have surfaced that Al Bloom was involved in the "
             "Emperor's Club VIP scandal.",
     summary="One member of the Board of Managers has allegedly accused Al Bloom "
@@ -350,7 +351,6 @@ scandal = Article.objects.create(
     possible_position='t'
 )
 scandal.add_author(bob_p, jack_p)
-scandal.subsections.add(facstaff)
 scandal.tags = "Al Bloom, Board of Managers, Daily Jolt"
 
 scandal_pics = MediaBucket.objects.create(slug="bloom-scandal")
@@ -372,6 +372,7 @@ scandal2 = Article.objects.create(
     short_title="Al Bloom Forced Out By BoM 2",
     slug="bloom-scandal-second",
     section=news,
+    subsection=facstaff,
     short_summary="Allegations have surfaced that Al Bloom was involved in the "
             "Emperor's Club VIP scandal2.",
     summary="One member of the Board of Managers has allegedly accused Al Bloom "
@@ -406,7 +407,6 @@ scandal2 = Article.objects.create(
     possible_position='t'
 )
 scandal2.add_author(bob_p, jack_p)
-scandal2.subsections.add(facstaff)
 scandal2.tags = "Al Bloom, Board of Managers, Daily Jolt"
 scandal2.bucket = scandal_pics
 scandal2.thumbnail = scandal.thumbnail
@@ -545,17 +545,15 @@ boring4.bucket = internet_bucket
 boring4.front_image = boring.front_image
 boring4.save()
 
-def art(author, subsection=None, **keywords):
+def art(author, **keywords):
     keywords.setdefault('format', textile)
     keywords.setdefault('status', 'p')
     keywords.setdefault('position', 'n')
     keywords.setdefault('possible_position', 'n')
-    if subsection:
-        keywords.setdefault('section', subsection.section)
+    if keywords['subsection']:
+        keywords.setdefault('section', keywords['subsection'].section)
     article = Article.objects.create(**keywords)
     article.add_author(p(author))
-    if subsection:
-        article.subsections.add(subsection)
     article.save()
     return article
 

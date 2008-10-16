@@ -3,7 +3,7 @@ from gazjango.articles.models import Article, Section, Subsection, StoryConcept,
 from gazjango.articles.models import Special, DummySpecialTarget, SpecialsCategory, SectionSpecial
 
 class StoryAdmin(admin.ModelAdmin):
-    filter_horizontal = ("subsections",)
+    pass
 admin.site.register(Article, StoryAdmin)
 
 

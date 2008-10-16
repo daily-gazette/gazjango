@@ -22,9 +22,8 @@ class StoryFeed(Feed):
         return item.pub_date
     
     def item_categories(self, item):
-        subs = [sub.name for sub in item.subsections.all()]
         tags = [tag.name for tag in item.tags.all()]
-        return [item.section.name] + subs + tags
+        return [item.section.name, item.subsection.name] + tags
     
 
 class MainFeed(StoryFeed):

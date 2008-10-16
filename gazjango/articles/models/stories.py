@@ -119,8 +119,7 @@ class Article(models.Model):
     pub_date = models.DateTimeField(default=datetime.now)
     authors  = models.ManyToManyField(UserProfile, related_name="articles", through='Writing')
     section = models.ForeignKey('articles.Section', related_name="articles")
-    subsections = models.ManyToManyField('articles.Subsection',
-                                         related_name="articles")
+    subsection = models.ForeignKey('articles.Subsection', related_name="articles", null=True)
     
     highlighters = models.ManyToManyField(UserProfile, related_name='top_stories', through='Highlighting')
     
