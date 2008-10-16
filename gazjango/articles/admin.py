@@ -11,6 +11,9 @@ class SectionAdmin(admin.ModelAdmin):
     pass
 admin.site.register(Section, SectionAdmin)
 
+class SubsectionAdmin(admin.ModelAdmin):
+    pass
+admin.site.register(Subsection, SubsectionAdmin)
 
 class StoryConceptAdmin(admin.ModelAdmin):
     pass
