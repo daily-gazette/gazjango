@@ -85,6 +85,7 @@ RIGHT MENU STYLES
 	padding: 4px;
 	position: fixed;
 	background-color: #eeeeee;
+	border: 1px solid #cccccc;
 }
 
 #commentField {
