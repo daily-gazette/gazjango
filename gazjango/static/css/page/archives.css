@@ -5,3 +5,8 @@
 	margin: 10px;
 	border: 1px #000;
 }
+
+#monthArchives table {
+	line-height: 1.4;
+	font-size: 1.4em;
+}
