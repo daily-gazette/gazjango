@@ -228,6 +228,7 @@ COMMENT STYLES
 	border-right: 2px solid #cccccc;
 	border-bottom: 2px solid #cccccc;
 	float: left;
+	background-color: #AAA;
 }
 
 .commentContent {
