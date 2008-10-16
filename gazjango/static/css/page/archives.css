@@ -23,12 +23,11 @@
 }
 
 #monthArchives table .week {
-	background-color: #CCC;
 	font-weight: bold;
 }
 
 #monthArchives table .day {
-
+	border: 1px solid #CCC;
 }
 
 #monthArchives table .day .empty {
@@ -36,5 +35,5 @@
 }
 
 #monthArchives table .day .content {
-	background-color: #CCC;
+	background-color: #DDD;
 }
