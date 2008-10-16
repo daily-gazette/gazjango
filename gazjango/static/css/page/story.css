@@ -146,6 +146,7 @@ STORY INCLUDES
 }
 
 #continueBox {
+	display: block;
 	width: 100%;
 	margin-top: 0px;
 	border-bottom: 1px solid #cccccc;
@@ -180,6 +181,7 @@ STORY INCLUDES
 
 #continueBox #more {
 	float: left;
+	display: block;
 }
 
 #continueBox #more .box {
