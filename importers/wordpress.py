@@ -511,7 +511,7 @@ def resolve_media(url, article):
             klass = MediaFile
         
         media[url] = klass.objects.create(
-            data="uploads/%s/%s.%s" % (bucket.slug, name, ext),
+            data="%s/%s.%s" % (bucket.slug, name, ext),
             slug=name[:50],
             pub_date=article.pub_date,
             bucket=bucket
