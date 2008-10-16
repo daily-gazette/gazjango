@@ -243,7 +243,7 @@ def subsection(request, section, subsection, year=None, month=None, day=None):
     rc = RequestContext(request)
     return render_to_response(template, data, context_instance=rc)
 
-def section(request, section, year=None, month=None, day=None, template="section.html"):
+def section(request, section, year=None, month=None, day=None):
     return subsection(request, section, None, year, month, day)
 
 
