@@ -143,6 +143,12 @@
 	padding: 5px 20px 5px 10px;
 }
 
+#sectionBreak {
+	width: 900px;
+	float: left;
+	display:inline;
+}
+
 
 
 #lowBar {
