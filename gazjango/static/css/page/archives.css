@@ -14,18 +14,16 @@
 }
 
 #monthArchives table .year {
-	background-color: #AAA;
 	font-weight: bold;
 
 }
 
 #monthArchives table .month {
-	background-color: #CCC;
 	font-weight: bold;
 }
 
 #monthArchives table .week {
-	background-color: #EEE;
+	background-color: #CCC;
 	font-weight: bold;
 }
 
@@ -38,5 +36,5 @@
 }
 
 #monthArchives table .day .content {
-	background-color: #EEE;
+	background-color: #CCC;
 }
