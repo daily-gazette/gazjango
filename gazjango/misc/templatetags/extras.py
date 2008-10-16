@@ -65,7 +65,7 @@ def join_authors(authors, format='', autoescape=None):
         else:
             pass
     
-    result = list(authors[:limit] if limit else authors)
+    result = list(authors.all()[:limit] if limit else authors.all())
     
     esc = conditional_escape if autoescape else (lambda x: x)
     
