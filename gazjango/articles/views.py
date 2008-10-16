@@ -197,6 +197,7 @@ def subsection(request, section, subsection, year=None, month=None, day=None):
     if subsection:
         sub = get_object_or_404(Subsection, section=sec, slug=subsection)
         data['subsection'] = sub
+        data['recent_stories'] = sub.articles.all().order_by('-pub_date')[:10]
         
         try:
             column = sub.column
