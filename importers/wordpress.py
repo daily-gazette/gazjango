@@ -927,7 +927,7 @@ while True:
     
     comment_id, post_id, author, email, ip, ua, date, content, approved = row
     content = django.utils.text.normalize_newlines(content)
-    content = django.utils.html.linebreaks(content)
+    content = content.replace('\n', '<br/>')
     
     if post_id not in posts:
         print "comment #%s is on non-imported article #%s" % (comment_id, post_id)
