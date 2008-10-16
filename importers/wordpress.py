@@ -495,7 +495,7 @@ def resolve_media(url, article):
     url = url.replace('swatdaily.org', 'daily.swarthmore.edu')
     
     if url not in media:
-        slug = ('auto-' + article.slug)[:50]
+        slug = article.slug[:50]
         bucket, created = MediaBucket.objects.get_or_create(slug=slug,
             defaults={'name': slug}
         )
