@@ -229,14 +229,22 @@ COMMENT STYLES
 	background-color: #CCC;
 }
 
+
 .commentInformation .commentNumber {
     font-weight: bold;
 }
 .commentInformation .commentTime {
     font-style: italic;
 }
-.commentInformation .commentVotes {
-    float: right;
+
+.commentInformation up {
+	display:block;
+	width:10px;
+	height:10px; 
+	background:url(/static/images/story/up.png) 0 0 no-repeat; 
+	text-indent:-3000px;
+	overflow:hidden; 
+	text-decoration:none; 
 }
 
 .commentContent {
