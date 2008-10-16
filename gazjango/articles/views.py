@@ -238,7 +238,7 @@ def subsection(request, section, subsection, year=None, month=None, day=None):
             article__section=sec
         ).order_by('-time')
         template = ("sections/sec_%s.html" % sec.slug,
-                    "sections/subsection.html")
+                    "sections/section.html")
     
     rc = RequestContext(request)
     return render_to_response(template, data, context_instance=rc)
