@@ -30,8 +30,9 @@
           </ul>
         </div>
       
-      <div class="headerColumnBox">
+ <div class="headerColumnBoxListings">
         <h4>Column Listings</h4>
+        <br/>
         {% for column in columns %}
           {% ifchanged %}
             <br /><p><strong>{{ column.get_semester_display }} {{ column.year }}</strong></p>
@@ -39,6 +40,7 @@
           <p><a href="{{ column.get_absolute_url }}">{{ column.name }}</a></p>
         {% endfor %}
       </div>
+
       
     </div>
   </div>
@@ -73,11 +75,11 @@
    		
    		
   		<div id="columnList">
+			<h3>Current Columns</h3>
 				<ul>
   				{% for column in curr_columns %}
   	       	<li>
-      				<h3><a href="{{ column.get_absolute_url }}">{{ column.name|safe }}</a></h3>
-    				  <img src="{{ column.square_logo_url }}" title="{{ column.name }}" />
+      			<div class="imgLeft"><img src="{{ column.square_logo_url }}" title="{{ column.name }}" /></div> <h3><a href="{{ column.get_absolute_url }}">{{ column.name|safe }}</a></h3>
         			<p class="byline">
         			  <span class="author">by {{ column.authors|join_authors }}</span>
         			  <span class="date"> | {{ column.most_recent_article.pub_date|date:"n/j/Y" }}</span>
