@@ -232,6 +232,7 @@ COMMENT STYLES
 	width: 640px;
 	float: left;
 	text-align: justify;
+	margin-bottom: 10px;
 }
 
 .authorDark {
