@@ -687,18 +687,19 @@ def paragraphize(text):
     return '\n\n'.join(output)
 
                  
-class_reps = [
-    ('leftImage', 'imgLeft twentyfive'),
-    ('rightImage', 'imgRIght twentyfive'),
-    ('pullQuote', 'pullQuote left'),
-    ('pullQuoteRight', 'pullQuote right'),
-    ('images', 'imgRight twentyfive'),
-    ('images50', 'imgRight thirtyfive'),
-    ('imagesLeft', 'imgLeft twentyfive'),
-    ('imagesleft50', 'imgLeft thirtyfive'),
-    ('linkbar', 'linkBar'),
-    ('quote', 'pullQuote left')
-]
+class_reps = {
+    'mainimg':        'hundred',
+    'leftImage':      'imgLeft twentyfive',
+    'rightImage':     'imgRight twentyfive',
+    'pullQuote':      'pullQuote left',
+    'pullQuoteRight': 'pullQuote right',
+    'images':         'imgRight twentyfive',
+    'images50':       'imgRight thirtyfive',
+    'imagesLeft':     'imgLeft twentyfive',
+    'imagesleft50':   'imgLeft thirtyfive',
+    'linkbar':        'linkBar',
+    'quote':          'pullQuote left'
+}
 div_or_p = re.compile(r'p|div', re.IGNORECASE)
                                               
 def process_article_text(article):
@@ -708,13 +709,12 @@ def process_article_text(article):
     # process blockquotes
     for bq in soup.findAll('blockquote'):
         bq.name = 'div'
-        bq.attrs = [('class', 'highlightBox center')]
+        bq['class'] = 'highlightBox center'
 
     # process (div|p)s
-    for from_class, rep_class in class_reps:
+    for from_class, rep_class in class_reps.items():
         for div in soup.findAll(div_or_p, attrs={'class': from_class}):
-            div.attrs = [(name, rep_class if name == 'class' else val)
-                         for name, val in div.attrs]
+            div['class'] = rep_class
 
     # process images
     for img in soup.findAll('img'):
@@ -724,6 +724,8 @@ def process_article_text(article):
             # print "off-site image: " + media
             continue
         img['src'] = "%s/%s" % (media.bucket, media.slug)
+        if img['class'] in class_reps.keys():
+            img['class'] = class_reps[img['class']]
         article.media.add(media)
 
     article.text = paragraphize(unicode(soup))
