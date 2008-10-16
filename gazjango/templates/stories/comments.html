@@ -9,15 +9,15 @@
         </p>
         <ul class="floatRight">
             {% ifequal status 1 %}
-              <li class="up selected"><a class="voteSelected" href="vote-comment/{{ comment.number }}/clear/">U</a>
+              <li class="up selected"><a class="voteSelected" href="vote-comment/{{ comment.number }}/clear/">U</a></li>
             {% else %}
-              <li class="up"><a class="vote" href="vote-comment/{{ comment.number }}/up/">U</a>
+              <li class="up"><a class="vote" href="vote-comment/{{ comment.number }}/up/">U</a></li>
             {% endifequal %}
             
             {% ifequal status -1 %}
-              <li class="down selected"><a class="voteSelected" href="vote-comment/{{ comment.number }}/clear/"><img src="/static/images/story/down.png" title="Vote Down" /></a>
+              <li class="down selected"><a class="voteSelected" href="vote-comment/{{ comment.number }}/clear/"><img src="/static/images/story/down.png" title="Vote Down" /></a></li>
             {% else %}
-              <li class="down"><a class="vote" href="vote-comment/{{ comment.number }}/down/"><img src="/static/images/story/down.png" title="Vote Down" /></a>
+              <li class="down"><a class="vote" href="vote-comment/{{ comment.number }}/down/"><img src="/static/images/story/down.png" title="Vote Down" /></a></li>
             {% endifequal %}
             
             {% if comment.score|is_none %}
