@@ -501,7 +501,7 @@ def resolve_media(url, article):
         )
         try:
             name, ext = download_file(url, "../gazjango/uploads/%s/" % bucket.slug)
-        except urllib2.HTTPError:
+        except urllib2.URLError:
             print "error downloading <%s> for <%s>" % (url, article)
             return url
         
