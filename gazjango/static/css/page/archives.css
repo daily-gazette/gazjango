@@ -3,7 +3,7 @@
 	display: block;
 	width: 160px;
 	margin: 10px;
-	border: 1px #000;
+	border: 1px solid #AAA;
 }
 
 #monthArchives table {
