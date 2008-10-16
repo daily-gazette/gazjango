@@ -34,6 +34,7 @@
       
       <div class="headerColumnBoxListings">
         <h4>Column Listings</h4>
+        <br/>
         {% for column in columns %}
           {% ifchanged %}
             <br /><p><strong>{{ column.get_semester_display }} {{ column.year }}</strong></p>
@@ -54,14 +55,20 @@
   <div id="section">
     
     <div id="sectionHeader">
-      <h2>{% block main-header %}{{ column.name }}{% endblock %}</h2>
+      {% block main-header %}
+        {% if column.wide_logo_url %}
+          <img src="{{ column.wide_logo_url }}" alt="{{ column.name }}" />
+        {% else %}
+          <h2>{{ column.name }}</h2>
+        {% endif %}
+      {% endblock %}
     </div>
 
     {% for story in column.most_recent_articles %}
     	{% if forloop.first %}
   		  <div id="columnMain">
   				<h2>
-  					{{ column.name }}: <a href="{{ story.get_absolute_url }}">{{story.get_title|safe}}</a>
+  					<a href="{{ story.get_absolute_url }}">{{story.get_title|safe}}</a>
   				</h2>
   				<div id="leadImg">
   					<img src="{{ column.big_logo.get_absolute_url }}" />

@@ -34,15 +34,13 @@
       </div>
       
       <div class="headerColumnBox">
-            <h4>Column Listings</h4>
-            {% for semester in columnList %}
-                  <p><strong>{{ semester.date }}</strong></p>
-                  {% for column in semester %}
-                        <p>
-                              <a href="{{ column.get_target_url }}">{{ column.name }}</a>
-                        </p>
-                  {% endfor %}
-            {% endfor %}
+        <h4>Column Listings</h4>
+        {% for column in columns %}
+          {% ifchanged %}
+            <br /><p><strong>{{ column.get_semester_display }} {{ column.year }}</strong></p>
+          {% endifchanged %}
+          <p><a href="{{ column.get_absolute_url }}">{{ column.name }}</a></p>
+        {% endfor %}
       </div>
       
     </div>
@@ -78,7 +76,7 @@
    		
     		<div id="columnList">
 				<ul>
-				{% for subsection in section %}
+				{% for subsection in section.subsections.all %}
     		       	<li>
           				<h3><a href="{{ subsection.get_absolute_url }}">{{ subsection.get_title|safe }}</a></h3>
             			<img src="{{ subsection.small_logo.get_absolute_url }}" title="{{ subsection.headline }}" alt="" />
