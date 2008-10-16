@@ -1,10 +1,12 @@
 {% load extras %}
 
 {% block story-content %}
-<script type="text/javascript">  $(function() { $('a.lightbox').lightBox(); });  </script>
-
 	<center>
-  <div class="spreadImage"><a href="{{ page.photo.get_absolute_url }}" class="lightbox"><img src="{{ page.photo.get_absolute_url }}" alt="" /></a></div>
+    <div class="spreadImage">
+      <a href="{{ page.photo.get_absolute_url }}" class="lightbox">
+        <img src="{{ page.photo.get_absolute_url }}" alt="" />
+      </a>
+    </div>
   </center>
   
   {% if page.photo.caption %}
@@ -14,29 +16,35 @@
   {% endif %}
   
   <div class="nav-links">
+    <center>
+    	<ul>
+    	  <li class="otherLink">
+          {% if prev %}
+      		  <a href="{{ prev.get_absolute_url }}" onclick="showPage('{{ prev.get_absolute_url }}'); return false;">&laquo; Back</a>
+      		{% else %}
+      		  <span style="visibility: hidden;">&laquo; Back</span>
+      		{% endif %}
+    		</li>
 
-	<center>  
-	<ul>
-	{% if prev %}
-		<li class="otherLink"><a href="{{ prev.get_absolute_url }}" onclick="showPage('{{ prev.get_absolute_url }}'); return false;"> &laquo; Back </a></li>
-	{% endif %}
+      	{% ifequal story.photos.count 1 %}
+      	{% else %}
+      		{% for looped_page in story.pages.all %}
+      			{% ifequal page.number looped_page.number %}
+      				<li class="current"><a href="{{ looped_page.get_absolute_url }}">{{ looped_page.number }}</a></li>
+      			{% else %}
+      				<li class="notCurrent"><a href="{{ looped_page.get_absolute_url }}">{{ looped_page.number }}</a></li>
+      			{% endifequal %}
+      		{% endfor %}
+      	{% endifequal %}
 
-	{% ifequal story.photos.count 1 %}
-	{% else %}
-		{% for looped_page in story.pages.all %}
-			{% ifequal page.number looped_page.number %}
-				<li class="current"><a href="{{ looped_page.get_absolute_url }}">{{ looped_page.number }}</a></li>
-			{% else %}
-				<li class="notCurrent"><a href="{{ looped_page.get_absolute_url }}">{{ looped_page.number }}</a></li>
-			{% endifequal %}
-		{% endfor %}
-	{% endifequal %}
-
-	{% if next %}
-		<li class="otherLink"><a href="{{ next.get_absolute_url }}" onclick="showPage('{{ next.get_absolute_url }}'); return false;">Next &raquo;</a></li>
-	{% endif %}
-	</ul>
-	</center>
- 
+    		<li class="otherLink">
+        	{% if next %}
+      		  <a href="{{ next.get_absolute_url }}" onclick="showPage('{{ next.get_absolute_url }}'); return false;">Next &raquo;</a>
+      		{% else %}
+      		  <span style="visibility: hidden;">Next &raquo;</span>
+      		{% endif %}
+    		</li>
+    	</ul>
+    </center>
   </div>
 {% endblock %}

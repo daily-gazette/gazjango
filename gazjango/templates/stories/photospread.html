@@ -7,46 +7,39 @@
   <script type="text/javascript" src="{% static js lightbox/js/lightbox-05.js %}"></script>
   <link rel="stylesheet" href="{% static js lightbox/css/lightbox-05.css %}" type="text/css" media="screen, projection" />
   
-  
   <script type="text/javascript" charset="utf-8">
-    function showPage(url) {
-      $('#photo-block').load(url);
+    function lightboxify() {
+      $('.lightbox').lightBox();
     }
+    $(lightboxify);
+    
+    function limitMainImage() {
+      $('.spreadImage img').each(function() {
+        if (this['height'] > 650) {
+          this['height'] = 650;
+        }
+        if (this['width'] > 450) {
+          this['width'] = 450;
+        }
+      })
+    }
+    $(limitMainImage);
+    
+    function ajaxifyLinks() {
+      $('a[href*={{ story.get_absolute_url }}]').each(function() {
+        href = $(this).attr('href');
+        $(this).click(function(event) {
+          event.preventDefault();
+          $('#photo-block').load(href, null, function() {
+            limitMainImage();
+            lightboxify();
+            ajaxifyLinks();
+          });
+        });
+      });
+    }
+    // $(ajaxifyLinks);
   </script>
-
-<script type="text/javascript"><!--
- 
-window.onload = limitImages;
-function setLimit(imgElem,prop,lim)
-{
-	for(var i=0,limit=document.images.length; i < limit; ++i)
-	{
-		if(imgElem==document.images[i])
-		{
-			if( lim < document.images[i][prop] )
-			{
-				imgElem[prop]=lim;
-			}
-			break;
-		}
-	}
-}
-function limitImages()
-{
-	var widthLimit=650;
-	var heightLimit=450;
-	var imgs = document.getElementsByTagName("img");
- 
-	for( var i=0, limit=imgs.length; i < limit; ++i)
-	{
-		if( -1 < imgs[i].parentNode.className.indexOf("spreadImage") )
-		{
-			setLimit(imgs[i],"width",650);
-			setLimit(imgs[i],"height",450);
-		}
-	}
-}
-//--></script>
 
 {% endblock %}
 
