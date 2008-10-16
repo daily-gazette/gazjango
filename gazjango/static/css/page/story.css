@@ -247,6 +247,10 @@ COMMENT STYLES
 	text-decoration:none; 
 }
 
+.commentInformation up:hover {
+	background:url(/static/images/story/up-hover.png) 0 0 no-repeat; 
+}
+
 .commentContent {
 	width: 640px;
 	float: left;
