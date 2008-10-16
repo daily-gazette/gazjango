@@ -79,14 +79,14 @@
 				<ul>
   				{% for column in curr_columns %}
   	       	<li>
-      			<div class="imgLeft"><img src="{{ column.square_logo_url }}" title="{{ column.name }}" /></div> <h3><a href="{{ column.get_absolute_url }}">{{ column.name|safe }}</a></h3>
+      			<div class="imgLeft"><a href="{{ column.get_absolute_url }}"><img src="{{ column.square_logo_url }}" title="{{ column.name }}" /></a></div> <h3><a href="{{ column.get_absolute_url }}">{{ column.name|safe }}</a></h3>
         			<p class="byline">
         			  <span class="author">by {{ column.authors|join_authors }}</span>
         			  <span class="date"> | {{ column.most_recent_article.pub_date|date:"n/j/Y" }}</span>
        				</p>
        				<p>
     				    {{ column.description|safe }}
-                <a class="readMore" href="{{ column.get_absolute_url }}">More</a>
+                <a class="readMore" href="{{ column.get_absolute_url }}">See a list of columns.</a>
        				</p>
        		 	</li>
 	        {% endfor %}

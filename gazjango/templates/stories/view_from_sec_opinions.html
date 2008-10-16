@@ -45,7 +45,7 @@
 
   <div id="storyBox">
     <div id="story">
-    		{% for sub in story.subsections.all %}<a href="{{ sub.get_absolute_url }}"><img src="{{ sub.banner.get_absolute_url }}" title="{{ sub.name }}" /></a> {% endfor %}
+    		<a href="{{ story.subsection.get_absolute_url }}"><img src="{{ story.subsection.column.wide_logo_url }}" title="{{ story.subsection.name }}" /></a>
       		<h2>{{ story.headline|safe }}</h2>
       <p class="byline">
         <span class="author">by {{ story.authors_in_order|join_authors:"l" }}</span>
