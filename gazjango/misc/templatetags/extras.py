@@ -11,6 +11,14 @@ from datetime import date
 register = template.Library()
 
 
+### filter that should maybe go in views, but it's convenient
+
+@register.filter
+def order_by(queryset, args):
+    args = [x.strip() for x in args.split(',')]
+    return queryset.order_by(*args)
+
+
 ### various filters to ease the outputting of more human text
 
 
