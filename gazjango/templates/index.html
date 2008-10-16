@@ -42,12 +42,9 @@ jQuery(document).ready(function() {
 				<div class="headerColumnBox">
 					<h4>Newest Comments</h4>
 					<ul>
-					{% for comment in comments|slice:":4" %}
+					{% for comment in comments|slice:":3" %}
 							<li>
-							  On <a href="{{comment.get_absolute_url}}">{{ comment.subject.get_title }}</a>
-							  <br/>by {{ comment.display_name }}
-							  at {{ comment.time|date:"g:i A" }}
-							  on {{ comment.time|date:"n/j/Y" }}
+							  {{ comment.display_name }} commented on <a href="{{comment.get_absolute_url}}">{{ comment.subject.get_title }}</a>.
 							</li>
 					{% endfor %}
 					</ul>
