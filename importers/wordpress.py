@@ -310,7 +310,7 @@ features = sec("Features", "features", "The happenings around town.")
 atg     = sub(features, "Ask the Gazette", "atg",             "The Gazette answers the questions you have.")
 roundup = sub(features, "Weekend Roundup", "weekend-roundup", "What's going on each weekend.")
 
-athletics = sec("Athletics", "sports", "Swarthmore's athletes.")
+athletics = sec("Athletics", "athletics", "Swarthmore's athletes.")
 opinions_and_columns = sec("Opinions & Columns", "opinions", "What the community has to say.")
 editorials = sub(opinions_and_columns, "Staff Editorials", "editorials", "Opnions from the Gazette's editorial board.")
 multimedia = sec("Multimedia", "multimedia", "Pictures and videos.")
