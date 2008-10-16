@@ -237,17 +237,28 @@ COMMENT STYLES
     font-style: italic;
 }
 
-.commentInformation up {
+.commentInformation ul {
+
+}
+
+.commentInformation li {
+
+}
+
+.commentInformation li a:link, .commentInformation li a:visited {
 	display:block;
 	width:10px;
 	height:10px; 
-	background:url(/static/images/story/up.png) 0 0 no-repeat; 
 	text-indent:-3000px;
 	overflow:hidden; 
 	text-decoration:none; 
 }
 
-.commentInformation up:hover {
+.commentInformation .up li a:link, .commentInformation .up li a:visited {
+	background:url(/static/images/story/up.png) 0 0 no-repeat; 
+}
+
+.commentInformation .up li a:link:hover, .commentInformation .up li a:visited:hover {
 	background:url(/static/images/story/up-hover.png) 0 0 no-repeat; 
 }
 

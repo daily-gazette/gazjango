@@ -7,33 +7,33 @@
           <span class="commentNumber">#{{ comment.number }}</span>:
           <span class="commentTime">{{ comment.time|date:"n/j/Y" }} at {{ comment.time|date:"g:i a" }}</span>
         </p>
-        <p class="floatRight">
+        <ul class="floatRight">
             {% ifequal status 1 %}
-              <a class="voteSelected up" href="vote-comment/{{ comment.number }}/clear/">U</a>
+              <li><a class="voteSelected up" href="vote-comment/{{ comment.number }}/clear/">U</a>
             {% else %}
-              <a class="vote up" href="vote-comment/{{ comment.number }}/up/">U</a>
+              <li><a class="vote up" href="vote-comment/{{ comment.number }}/up/">U</a>
             {% endifequal %}
             
             {% ifequal status -1 %}
-              <a class="voteSelected down" href="vote-comment/{{ comment.number }}/clear/"><img src="/static/images/story/down.png" title="Vote Down" /></a>
+              <li><a class="voteSelected down" href="vote-comment/{{ comment.number }}/clear/"><img src="/static/images/story/down.png" title="Vote Down" /></a>
             {% else %}
-              <a class="vote down" href="vote-comment/{{ comment.number }}/down/"><img src="/static/images/story/down.png" title="Vote Down" /></a>
+              <li><a class="vote down" href="vote-comment/{{ comment.number }}/down/"><img src="/static/images/story/down.png" title="Vote Down" /></a>
             {% endifequal %}
             
             {% if comment.score|is_none %}
               {% if comment.is_visible %}
-                (+&infin;)
+                (+&infin;)</li>
               {% else %}
-                (-&infin;)
+                (-&infin;)</li>
               {% endif %}
             {% else %}
               {% if comment.score|gt:0 %}
-                (+{{ comment.score|default_if_none:"&infin;" }})
+                (+{{ comment.score|default_if_none:"&infin;" }})</li>
               {% else %}
-                ({{ comment.score }})
+                ({{ comment.score }})</li>
               {% endif %}
             {% endif %}
-        </p>
+        </ul>
     </div>
 
     <div class="commentContent {% if comment.is_staff %}staff{% else %}{% if not comment.is_visible %}moderate{% endif %}{% endif %}">
