@@ -60,3 +60,16 @@
 	width:  660px;
 	padding: 5px 0px 5px 0px;
 }
+
+
+/******************************/
+
+
+.headerColumnBoxListings {
+	width: 225px;
+	float: left;
+	border: 2px solid #beb6ae;
+	background-color: #eee5d9;
+	margin-bottom: 5px;
+	position: relative;
+}
