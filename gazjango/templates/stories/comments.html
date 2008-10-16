@@ -9,7 +9,7 @@
         </p>
         <p class="floatRight">
             {% ifequal status 1 %}
-              <a class="voteSelected" href="vote-comment/{{ comment.number }}/clear/">up</a>
+              <a class="voteSelected" href="vote-comment/{{ comment.number }}/clear/"><img src="/static/images/story/up.gif" title="Vote up this comment" /></a>
             {% else %}
               <a class="vote" href="vote-comment/{{ comment.number }}/up/">up</a>
             {% endifequal %}
