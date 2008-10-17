@@ -22,15 +22,15 @@
             
             {% if comment.score|is_none %}
               {% if comment.is_visible %}
-                (+&infin;)</li>
+                <li>(+&infin;)</li>
               {% else %}
-                (-&infin;)</li>
+                <li>(-&infin;)</li>
               {% endif %}
             {% else %}
               {% if comment.score|gt:0 %}
-                (+{{ comment.score }})</li>
+                <li>(+{{ comment.score }})</li>
               {% else %}
-                ({{ comment.score }})</li>
+                <li>({{ comment.score }})</li>
               {% endif %}
             {% endif %}
         </ul>
