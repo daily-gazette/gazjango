@@ -200,6 +200,7 @@ def subsection(request, section, subsection):
     
     if subsection:
         sub = get_object_or_404(Subsection, section=sec, slug=subsection)
+        base = sub.articles
         data['subsection'] = sub
         data['recent_stories'] = sub.articles.all().order_by('-pub_date')[:10]
         
@@ -211,6 +212,7 @@ def subsection(request, section, subsection):
             data['column'] = column
             data['columns'] = Column.objects.order_by('-year', '-semester')
     else:
+        base = sec.articles
         if sec.slug == 'opinions':
             data['columns'] = Column.objects.order_by('-year', '-semester', 'name')
             f = data['columns'][0]
