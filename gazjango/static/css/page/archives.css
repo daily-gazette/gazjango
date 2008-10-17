@@ -1,4 +1,4 @@
-#monthArchives {
+.monthArchives {
 	float: right;
 	display: block;
 	padding: 1px;
@@ -6,7 +6,7 @@
 	border: 1px solid #AAA;
 }
 
-#monthArchives table {
+.monthArchives table {
 	line-height: 1.4;
 	font-size: 1.4em;
 	border: 1px solid #AAA;
@@ -14,31 +14,31 @@
 	font-family: "Helvetica Neue", Arial, Helvetica, Geneva, sans-serif;
 }
 
-#monthArchives table .year {
+.monthArchives table .year {
 	font-weight: bold;
 
 }
 
-#monthArchives table .month {
+.monthArchives table .month {
 	font-weight: bold;
 }
 
-#monthArchives table .week {
+.monthArchives table .week {
 	font-weight: bold;
 }
 
-#monthArchives table .day td {
+.monthArchives table .day td {
 	border: 1px solid #DDD;
 }
 
-#monthArchives table .day {
+.monthArchives table .day {
 
 }
 
-#monthArchives table .day .empty {
+.monthArchives table .day .empty {
 	background-color: #FFF;
 }
 
-#monthArchives table .day .content {
+.monthArchives table .day .content {
 	background-color: #DDD;
 }

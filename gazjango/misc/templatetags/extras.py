@@ -136,6 +136,12 @@ month_name.is_safe = True
 
 
 @register.filter
+def negate(n):
+    """Returns the negative of the number."""
+    return -int(n)
+
+
+@register.filter
 def in_groups_of(lst, num=2):
     """
     Returns the list split up into groups of length `num`. For example, calling

@@ -1,157 +1,109 @@
 {% extends "base.html" %}
 {% load extras %}
+{% load comparisons %}
 
-{% block title %}Archives - {{ archives.get_headline }}{% endblock title %}
+{% block title %}Archives {% if section %}- {{ section.name }} {% if subsection %}&raquo; {{ subsection.name }}{% endif %}{% endif %} {% if year %}- {% if day %}{{ day }}{% endif %} {% if month %}{{ month|month_name }}{% endif %} {{ year }}{% endif %}{% endblock title %}
 
 
 {% block customheader %}
+	<link rel="stylesheet" href="{% static css page/story.css %}" type="text/css" media="screen, projection" />
+	<link rel="stylesheet" href="{% static css page/archives.css %}" type="text/css" media="screen, projection" />
+	<link rel="stylesheet" type="text/css" href="{% static js ajaxtabs/ajaxtabs.css %}" />
 
-<link rel="stylesheet" href="{% static css page/story.css %}" type="text/css" media="screen, projection" />
-<link rel="stylesheet" href="{% static css page/archives.css %}" type="text/css" media="screen, projection" />
-<link rel="stylesheet" type="text/css" href="{% static js ajaxtabs/ajaxtabs.css %}" />
-
-{% jQuery %}
-<script type="text/javascript" src="js/ajaxtabs/ui.tabs.pack.js"></script>
-<script type="text/javascript">
-          var $j = jQuery.noConflict();
-			$j(function() {
-			$j('#container-4 ul').tabs({ fxFade: true, fxSpeed: 'fast' });
-			$j('#container-11 ul').tabs({ event: 'mouseover' }).find('a').click(function() {
-			return false;
+	{% jQuery %}
+	<script type="text/javascript" src="js/ajaxtabs/ui.tabs.pack.js"></script>
+	<script type="text/javascript">
+		$(function() {
+			$('#container-4 ul').tabs({ fxFade: true, fxSpeed: 'fast' });
+			$('#container-11 ul').tabs({ event: 'mouseover' }).find('a').click(function() {
+				return false;
 			});
-				});
-</script>
-
-
-
+		});
+	</script>
 {% endblock customheader %}
 
-
 {% block topbar %}
-		<div id="headerSectionBar">
-		
-			<div id="headerSection">
-				<h3><a href="{{ archives.get_absolute_url }}">{{ archives.get_title }}</a></h3>
-			</div>
-		
-			<div id="headerSearch" class="floatRight">
-				<form method="get" id="searchform" action="http://www.sccs.swarthmore.edu">Search: <input type="text" class="textbox" value="" name="s" id="s" /><input type="submit" id="searchsubmit" value="Go" /></p>
-			</div>
-			
+	<div id="headerSectionBar">
+		<div id="headerSection">
+			<h3>
+				<a href="/archives/">Archives</a>
+				{% if section %}
+					- <a href="/archives/{{ section.slug }}/">{{ section.name }}</a>
+				{% endif %}
+				{% if subsection %}
+					- <a href="/archives/{{ section.slug }}/{{ subsection.slug }}/">{{ subsection.name }}</a>
+				{% endif %}
+				{% if year %}
+					- <a href="/archives/{% if section %}{{ section.slug }}/{% if subsection %}{{ subsection.slug }}/{% endif %}{% endif %}{{ year }}/">{{ year }}</a>
+					{% if month %}
+						- <a href="/archives/{% if section %}{{ section.slug }}/{% if subsection %}{{ subsection.slug }}/{% endif %}{% endif %}{{ year }}/{{ month }}/">{{ month|month_name }}</a>
+						{% if day %}
+							- <a href="/archives/{% if section %}{{ section.slug }}/{% if subsection %}{{ subsection.slug }}/{% endif %}{% endif %}{{ year }}/{{ month }}/{{ day }}/">{{ day }}</a>
+						{% endif %}
+					{% endif %}
+				{% endif %}
+			</h3>
+		</div>
+
+		<div id="headerSearch" class="floatRight">
+			{% include "search_header.html" %}
 		</div>
 	</div>
-{% endblock topbar %}
+{% endblock %}
 
 
 {% block content %}
-		<div id="commentColumn">
-			<div id="commentBox">
-				{% ifequal user currentuser %}
-					{% include user.commentBox %}
-				{% else %}
-					<h4>Related Stories</h4>
-					<ul>
-						{% for item in story.related_list|slice:":2" %}
-							<li><a href="{{item.get_absolute_url}}">{{ item.get_title }}</a></li>
-						{% endfor %}
-					</ul>
-				{% endifequal %}
-				
-				<hr width="50%" color="#ffffff" size=1px /> 
-				<h4>Share!</h4>
-				
-				<p>
-				{% for item in social_list %}
-					<a href="{{ item.url }}" alt="{{item.name}}"><img src="{{item.image_url}}" /></a> 
-				{% endfor %}
-				</p>
-							
-			</div>
-		</div>
-		
-		<div id="storyBox">
-			<div id="story">
+	<div id="storyBox">
+		<div id="story">
+  		<h2>Archives</h2>
+  		
+  		{% for year_i, month_i, month_cal in calendar %}
+  		  <div class="monthArchives">
+  		    <table width="280px">
+  		      <tr>
+  		        <td colspan="7" class="year">
+  		          <center>{{ year_i }}</center>
+  		        </td>
+  		      </tr>
+  		      <tr>
+  		        <td colspan="7" class="month">
+  		          <center>{{ month_i|month_name }}</center>
+  		        </td>
+  		      </tr>
+  		      <tr class="week">
+  		        <td width="40px">S</td>
+  		        <td width="40px">M</td>
+  		        <td width="40px">T</td>
+  		        <td width="40px">W</td>
+  		        <td width="40px">Th</td>
+  		        <td width="40px">F</td>
+  		        <td width="40px">Sa</td>
+  		      </tr>
+  		      {% for week_a in month_cal %}
+  		        <tr class="day">
+  		          {% for day in week_a %}
+  		            {% ifequal day 0 %}
+  		              <td class="empty"></td>
+  		            {% else %}
+  		              {% if day|gt:0 %}
+  		                <td class="content"><a href="{{ url_base }}/{{ year_i }}/{{ month_i }}/{{ day }}/">{{ day }}</a></td>
+  		              {% else %}
+  		                <td class="empty">{{ day|negate }}</td>
+  		              {% endif %}
+  		            {% endifequal %}
+  		          {% endfor %}
+  		        </tr>
+  		      {% endfor %}
+  		    </table>
+  		  </div>
+  		{% endfor %}
 
-				<h2>Archives</h2>
-					
-					<div id="monthArchives">
-						<table width="280px">
-						<tr>
-							<td colspan="7" class="year">
-								<center>YEAR</center>
-							</td>
-						</tr>
-						<tr>
-							<td colspan="7" class="month">
-								<center>MONTH</center>
-							</td>
-						</tr>
-						<tr class="week">
-							<td width="40px">S</td>
-							<td width="40px">M</td>
-							<td width="40px">T</td>
-							<td width="40px">W</td>
-							<td width="40px">Th</td>
-							<td width="40px">F</td>
-							<td width="40px">S</td>
-						</tr>
-						<tr class="day">
-							<td class="content">1</td>
-							<td class="content">2</td>
-							<td class="content">3</td>
-							<td class="content">4</td>
-							<td class="content">5</td>
-							<td class="content">6</td>
-							<td class="content">7</td>
-						</tr>
-						<tr class="day">
-							<td class="content">1</td>
-							<td class="empty"></td>
-							<td class="empty"></td>
-							<td class="empty"></td>
-							<td class="empty"></td>
-							<td class="empty"></td>
-							<td class="content">7</td>
-						</tr>
-						<tr class="day">
-							<td class="content">1</td>
-							<td class="empty"></td>
-							<td class="empty"></td>
-							<td class="empty"></td>
-							<td class="empty"></td>
-							<td class="empty"></td>
-							<td class="content">7</td>
-						</tr>
-						<tr class="day">
-							<td class="content">1</td>
-							<td class="empty"></td>
-							<td class="empty"></td>
-							<td class="empty"></td>
-							<td class="empty"></td>
-							<td class="empty"></td>
-							<td class="content">7</td>
-						</tr>
-						<tr class="day">
-							<td class="empty"></td>
-							<td class="empty"></td>
-							<td class="content">1</td>
-							<td class="empty"></td>
-							<td class="empty"></td>
-							<td class="empty"></td>
-							<td class="content">7</td>
-						</tr>
-					</table>
-					</div>		
-					
 					<h3>Sections</h3>
 					<p>List of sections</p>
 					<p>here</p>
 
 
 			</div>
-							
 		</div>
-
-
 
 {% endblock content %}

@@ -1,6 +1,8 @@
 import datetime
+import calendar
 
 from django.contrib.auth.decorators import permission_required
+from django.core.urlresolvers   import reverse
 from django.template            import RequestContext
 from django.shortcuts           import render_to_response, get_object_or_404
 from django.http                import Http404, HttpResponse, HttpResponseRedirect
@@ -151,16 +153,54 @@ def archives(request, section=None, subsection=None, year=None, month=None, day=
         articles = articles.filter(section=section)
     if subsection:
         subsection = get_object_or_404(Subsection, section=section, slug=subsection)
-        articles = articles.filter(subsection=subsection)
-    
-    template = (
-        'archives/for_sub_%s.html' % subsection.slug if subsection else '',
-        'archives/for_sec_%s.html' % section.slug if section else '',
-        'archives/generic.html'
-    )
+        articles = articles.filter(section=section, subsection=subsection)
+    articles = articles.order_by('pub_date')
     
     data = { 'articles': articles, 'year': year, 'month': month, 'day': day,
              'section': section, 'subsection': subsection }
+    
+    if day:
+        template = 'archives/by_day.html'
+    elif month:
+        template = 'archives/by_month.html'
+    else:
+        start_date = articles[0].pub_date
+        if year:
+            end_date = datetime.date(int(year), 12, 31)
+        else:
+            end_date = datetime.date.today()
+        
+        calendar.setfirstweekday(calendar.SUNDAY)
+        
+        year_i, month_i = (end_date.year, end_date.month)
+        cal = [ (year_i, month_i, calendar.monthcalendar(year_i, month_i)) ]
+        while year_i > start_date.year or month_i > start_date.month:
+            month_i -= 1
+            if month_i < 1:
+                month_i = 12
+                year_i -= 1
+            cal.append( (year_i, month_i, calendar.monthcalendar(year_i, month_i)) )
+        
+        pub_dates = articles.values_list('pub_date', flat=True)
+        dates = set([datetime.date(d.year, d.month, d.day) for d in pub_dates])
+        
+        weekdays = range(7)
+        for year_i, month_i, month_cal in cal:
+            for week in month_cal:
+                for i in weekdays:
+                    if week[i] and datetime.date(year_i, month_i, week[i]) not in dates:
+                        week[i] *= -1
+        
+        data['calendar'] = cal
+        
+        data['url_base'] = '/archives'
+        if section:
+            data['url_base'] += '/' + section.slug
+            if subsection:
+                data['url_base'] += '/' + subsection.slug
+        
+        template = 'archives/generic.html'
+    
     rc = RequestContext(request, data)
     
     return render_to_response(template, context_instance=rc)
