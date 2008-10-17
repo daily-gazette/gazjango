@@ -28,7 +28,7 @@
               {% endif %}
             {% else %}
               {% if comment.score|gt:0 %}
-                (+{{ comment.score|default_if_none:"&infin;" }})</li>
+                (+{{ comment.score }})</li>
               {% else %}
                 ({{ comment.score }})</li>
               {% endif %}
