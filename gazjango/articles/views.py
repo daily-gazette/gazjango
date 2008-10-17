@@ -168,6 +168,21 @@ def archives(request, section=None, subsection=None, year=None, month=None, day=
         pub_dates = articles.values_list('pub_date', flat=True)
         dates = set([datetime.date(d.year, d.month, d.day) for d in pub_dates])
         
+        if not dates:
+            args = { 'year': year, 'section': section, 'subsection': subsection }
+            if year:
+                del args['year']
+                return HttpResponseRedirect(reverse(archives, kwargs=args))
+            elif subsection:
+                del args['subsection']
+                return HttpResponseRedirect(reverse(archives, kwargs=args))
+            elif section:
+                del args['section']
+                return HttpResponseRedirect(reverse(archives, kwargs=args))
+            else:
+                # really? no articles at all?
+                raise Http404
+        
         if year:
             start_date = datetime.date(int(year), 1, 1)
             end_date = datetime.date(int(year), 12, 31)
