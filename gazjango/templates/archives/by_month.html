@@ -2,14 +2,10 @@
 {% load extras %}
 
 {% block archiveContent %}
-  <ul>
     {% for article in articles %}
       {% ifchanged %}
-        <li><h4>{{ article.pub_date|date:"l, F j, Y" }}</h4></li>
+        <h2>{{ article.pub_date|date:"l, F j, Y" }}</h2>
       {% endifchanged %}
-      <li>
-        <a href="{{ article.get_absolute_url }}">{{ article.headline }}</a> - by {{ article.authors_in_order|join_authors:"t" }}
-      </li>
+      <p><a href="{{ article.get_absolute_url }}">{{ article.headline }}</a> - by {{ article.authors_in_order|join_authors:"t" }}</p>
     {% endfor %}
-  </ul>
 {% endblock %}
