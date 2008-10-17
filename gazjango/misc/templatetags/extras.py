@@ -128,6 +128,14 @@ near_future_date.is_safe = True
 
 
 @register.filter
+def month_name(num):
+    """Returns the (full) name of the month numbered `num`."""
+    return date(2008, int(num), 1).strftime("%B")
+
+month_name.is_safe = True
+
+
+@register.filter
 def in_groups_of(lst, num=2):
     """
     Returns the list split up into groups of length `num`. For example, calling
