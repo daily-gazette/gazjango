@@ -61,6 +61,18 @@
         </table>
       </td>
     </tr>
+	{% if issue.staff_announcement %}
+	<tr>
+		<td colspan="3">
+			<font color="#000000" size="3" face="Arial, Helvetica, sans-serif">
+				<p>A Word from the Gazette ...</p>
+			</font>	
+			<font color="#333333" size="2" face="Georgia, Times New Roman, Times, serif">
+				<p>{{ issue.staff_announcement.text }}</P>
+			</font>
+		</td>
+	</tr>
+	{% endif %}
     <tr>
       <td colspan="3">
         <table width="590" cellspacing="0" cellpadding="0">

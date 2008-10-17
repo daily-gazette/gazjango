@@ -12,6 +12,10 @@ FOR: {{ issue.date|date:"F j, Y" }}<br /><br />
 
 ==========================================<br /><br />
 
+{% if issue.staff_announcement %}A Word from the Gazette ...<br /><br /><p>{{ issue.staff_announcement.text }}</p>{% endif %}
+
+==========================================<br /><br />
+
 {{ issue.topstory.headline|safe }}<br /><br />
 {{ issue.topstory.summary|safe }}<br /><br />
 

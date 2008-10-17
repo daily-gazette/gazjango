@@ -1,0 +1,92 @@
+THE RESERVED STUDENT DIGEST
+From the The Daily Gazette -- {{ issue.date|date:"F j, Y" }}
+
+
+ANNOUNCEMENTS<br /><br />
+
+			{% for announcement in issue.announcements %}
+				{{ forloop.counter }}. {{ announcement.title }}	<br />			
+			{% endfor %}
+<br />
+==============================================<br /><br />
+
+EVENTS<br /><br />
+			{% for event in issue.events %}
+				{{ forloop.counter }}. {{ event.title }}( {{ event.event_date|near_future_date }}, {{ event.event_time }} )<br />				
+			{% endfor %}
+                   <br />
+==============================================<br /><br />
+
+JOBS<br /><br />
+			{% for job in issue.jobs %}
+				{{ forloop.counter }}. {{ job.title }}<br />				
+			{% endfor %}      
+
+<br />
+
+==============================================<br /><br />
+
+FULL TEXT<br /><br />
+
+==============================================<br /><br />
+
+ANNOUNCEMENTS<br /><br />
+
+			{% for announcement in issue.announcements %}
+				{{ forloop.counter }}. {{ announcement.title }}<br />
+
+				<p>{{ announcement.long_excerpt }}</p>
+				{% if announcement.contact %}<strong>Contact:</strong> {{ announcement.contact }} <br /> {% endif %}
+
+			{% endfor %}
+
+<br />
+
+==============================================<br /><br />
+
+EVENTS<br /><br />
+
+			{% for event in issue.events %}
+				{{ forloop.counter }}. <strong>{{ event.title }}</strong><br />
+				{{ announcement.event_place }}, {{ announcement.event_date|near_future_date }}
+                          at {{ announcement.event_time }} <br />
+				 {% if announcement.text %}
+                            <p>{{ announcement.brief_excerpt|safe }}</p>
+                          {% endif %}
+
+				{% if event.sponsor %}<strong>Contact:</strong> {{ event.sponsor_link }}} <br /> {% endif %}
+
+			{% endfor %}
+
+                     <br />
+
+==============================================<br /><br />
+
+JOBS<br /><br />
+
+			{% for job in issue.jobs %}
+				{{ forloop.counter }}. <a href="{{ job.get_absolute_url }}" name="j{{ forloop.counter }}"><strong>{{ job.name }}</strong></a><br />
+				 <p><strong>Pay:</strong>{{ job.get_pay }}</p>
+        <p><strong>Hours:</strong> {{ job.hours }}</p>
+        <p><strong>When:</strong> {{ job.when }}</p>
+        <p><strong>Where:</strong> {{ job.where }}</p>
+        {% if job.needs_car %}<p>This position requires access to a car.</p>{% endif %}
+
+      <p>{{ job.description|safe }}</p>
+
+
+			{% endfor %}
+
+                  <br />
+
+==============================================<br /><br />
+
+
+The Reserved Students Digest is a compilation of announcements, events, and jobs submitted by the Swarthmore community. The RSD is managed by The Daily Gazette in conjunction with Student Council. If you have questions, comments, or complaints about the Digest, please contact dailygazette@swarthmore.edu.<br />
+                        <br />The Daily Gazette is a publication written by members of the Swarthmore College community. Funding for the Gazette is provided by the Student Budget Committee and by advertising revenue.<br /><br />
+
+
+                  To unsubscribe, change your format, or otherwise modify your mailing status, log in here: http://daily.swarthmore.edu{% url manage-user %}.
+               </body>
+
+</html>
