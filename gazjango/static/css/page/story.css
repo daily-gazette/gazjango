@@ -4,6 +4,7 @@
 	position: relative;
 	padding-left: 25px;
 	height: 400px;
+	display: block;
 }
 
 #story p {
