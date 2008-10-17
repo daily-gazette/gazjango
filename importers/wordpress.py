@@ -24,7 +24,6 @@ import django.template.defaultfilters
 from django.contrib.auth.models         import User, Group, Permission
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.sites.models        import Site
-from django.contrib.flatpages.models    import FlatPage
 from gazjango import tagging
 
 from gazjango.accounts.models      import UserProfile, UserKind, Position
