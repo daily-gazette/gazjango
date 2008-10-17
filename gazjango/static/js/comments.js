@@ -1,7 +1,17 @@
 /*
-    TODO: show links for new comments don't work
     TODO: when a comment is posted, highlight it
 */
+
+function fullSetup() {
+    setupShowLinks();
+    // setupVoteLinks();
+}
+$(fullSetup);
+
+
+// ======================
+// = hiding and showing =
+// ======================
 
 var speed = 'normal';
 
@@ -38,7 +48,7 @@ function setupShowLinks() {
     $(comment)
       .find('.showLink')
         .unbind('click')
-        .click(function(obj) {
+        .click(function() {
             $(comment)
               .find('.commentText')
                 .hide()
@@ -56,8 +66,11 @@ function setupShowLinks() {
   });
 }
 
-$(document).ready(setupShowLinks);
 
+
+// ====================
+// = posting comments =
+// ====================
 
 var default_comment_name;
 $(document).ready(function() {
@@ -74,11 +87,9 @@ function toggleNameDisabled() {
     }
 }
 
-function refreshComments() {
-    $('#comments').load('comments/', null, setupShowLinks);
-}
+function newComments() { newComments('normal'); }
 
-function newComments() {
+function newComments(speed) {
     comments = $('.comment');
     if (comments.length == 0) {
         last_num = 0;
@@ -87,17 +98,17 @@ function newComments() {
     }
     $.get('comments/' + last_num + '/', {}, function(data, textStatus) {
         $('#comments').append(data);
-        setupShowLinks();
+        fullSetup();
         
         var new_comments = $('.comment.new');
         var i = 0;
         callback = function() {
             i++;
             if (i < new_comments.length) {
-                new_comments.eq(i).slideDown('normal', callback).removeClass('new');
+                new_comments.eq(i).slideDown(speed, callback).removeClass('new');
             }
         }        
-        new_comments.eq(0).slideDown('normal', callback);
+        new_comments.eq(0).slideDown(speed, callback);
     });
 }
 
@@ -122,3 +133,22 @@ function submitComment() {
     );
     return false;
 }
+
+
+
+// ==========
+// = voting =
+// ==========
+
+// function setupVoteLinks() {
+//     $('a.vote').each(function() {
+//         $(this)
+//             .unbind('click')
+//             .click(function() {
+//                 $.post($(this).attr('href'), {}, function() {
+//                     refreshComments();
+//                 });
+//                 return false;
+//             });
+//     });
+// }

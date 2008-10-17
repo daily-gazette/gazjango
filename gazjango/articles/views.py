@@ -59,8 +59,7 @@ def show_article(request, story, form, print_view=False):
     ip = request.META['REMOTE_ADDR']
     context = RequestContext(request, {
         'story': story,
-        'comments': [(comment, comment.vote_status(user=user, ip=ip)) 
-                     for comment in story.comments.all().select_related(depth=1)],
+        'comments': PublicComment.objects.for_article(story, user, ip),
         'related': story.related_list(3),
         'topstory': Article.published.get_top_story(),
         'other_comments': cs,
@@ -88,11 +87,14 @@ def show_photospread_page(request, spread, num=None, form=None, whole_page=None)
     if whole_page is None:
         whole_page = not request.is_ajax()
     
+    user = request.user.get_profile() if user.is_authenticated() else None
+    ip = request.META['REMOTE_ADDR']
+    
     if whole_page:
         data.update(
             related=spread.related_list(3),
             topstory=Article.published.get_top_story(),
-            comments=spread.comments.all(),
+            comments=PublicComment.objects.for_article(spread, user, ip),
             other_comments=PublicComment.visible.order_by('-time').exclude(article=spread),
             comment_form=form
         )
@@ -140,18 +142,6 @@ def post_comment(request, slug, year, month, day):
             return render_to_response(template, context_instance=rc)
         else:
             return specific_article(request, story, form=form)
-
-
-def show_comments(request, slug, year, month, day, num=None):
-    """
-    Returns the comments for the specified articles, rendered as they are
-    on article view pages, starting after number `num`. Used for after
-    you've posted an AJAX comment.
-    """
-    story = get_by_date_or_404(Article, year, month, day, slug=slug)
-    comments = story.comments.filter(number__gt=num or 0)
-    rc = RequestContext(request, { 'comments': comments, 'new': True })
-    return render_to_response("stories/comments.html", context_instance=rc)
 
 
 
