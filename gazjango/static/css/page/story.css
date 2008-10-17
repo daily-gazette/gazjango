@@ -239,7 +239,7 @@ COMMENT STYLES
 
 .commentInformation ul {
 	list-style-type: none;
-	display: inline;
+	display: inline-block;
 }
 
 .commentInformation li {
@@ -249,7 +249,7 @@ COMMENT STYLES
 }
 
 .commentInformation li a:link, .commentInformation li a:visited {
-	display:block;
+	display:inline-block;
 	width: 10px;
 	height: 10px; 
 	overflow:hidden; 
