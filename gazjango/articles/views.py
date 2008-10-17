@@ -157,7 +157,8 @@ def archives(request, section=None, subsection=None, year=None, month=None, day=
     articles = articles.order_by('pub_date')
     
     data = { 'articles': articles, 'year': year, 'month': month, 'day': day,
-             'section': section, 'subsection': subsection }
+             'section': section, 'subsection': subsection,
+             'sections': Section.objects.all() }
     
     if day:
         template = 'archives/by_day.html'

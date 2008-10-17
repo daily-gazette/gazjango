@@ -1,11 +1,16 @@
 {% load extras %}
 
-{# TODO: customize story_sidebar depending on the user #}
-
 <h4>Sections</h4>
 <ul>
 	{% for section in sections %}
-		<li><a href=" href="/archives/{{section.slug}}/{% if year %}{{ year }}/{% endif %}{% if month %}{{ month }}/{% endif %}">{{ section.name }}{% if day %}{{ day }}/{% endif %}</a></li>
+		<li>
+		  <a href="/archives/{{ section.slug }}/{% if year %}{{ year }}/{% if month %}{{ month }}/{% if day %}{{ day }}/{% endif %}{% endif %}{% endif %}">{{ section.name }}</a>
+		  <ul>
+		    {% for sub in section.subsections.all %}
+		      <li><a href="/archives/{{ section.slug }}/{{ sub.slug }}/{% if year %}{{ year }}/{% if month %}{{ month }}/{% if day %}{{ day }}/{% endif %}{% endif %}{% endif %}">{{ sub.name }}</a></li>
+		    {% endfor %}
+		  </ul>
+		</li>
 	{% endfor %}
 </ul>
 
