@@ -30,8 +30,8 @@ reps = {
     'name': r'(?P<name>[-\w]+)',
     'kind': r'(?P<kind>[-\w]+)',
     'bucket': r'(?P<bucket>[-\w]+)',
-    'section': r'(?P<section>[-\w]+)',
-    'subsection': r'(?P<subsection>[-\w]+)',
+    'section': r'(?P<section>[a-zA-Z][-\w]+)',
+    'subsection': r'(?P<subsection>[a-zA-Z][-\w]+)',
     
     'num': r'(?P<num>\d+)'
 }
@@ -53,9 +53,9 @@ urlpatterns += patterns('articles.views',
     (r'^(?:archives/)?%(year)s/%(month)s/%(day)s/$' % reps, 'archives'),
     (r'^archives/%(section)s/$'                % reps, 'archives'),
     (r'^archives/%(section)s/%(subsection)s/$' % reps, 'archives'),
-    (r'^(?:archives/)?%(section)s/(?:%(subsection)s)?/%(year)s/$'                   % reps, 'archives'),
-    (r'^(?:archives/)?%(section)s/(?:%(subsection)s)?/%(year)s/%(month)s/$'         % reps, 'archives'),
-    (r'^(?:archives/)?%(section)s/(?:%(subsection)s)?/%(year)s/%(month)s/%(day)s/$' % reps, 'archives'),
+    (r'^(?:archives/)?%(section)s/(?:%(subsection)s/)?%(year)s/$'                   % reps, 'archives'),
+    (r'^(?:archives/)?%(section)s/(?:%(subsection)s/)?%(year)s/%(month)s/$'         % reps, 'archives'),
+    (r'^(?:archives/)?%(section)s/(?:%(subsection)s/)?%(year)s/%(month)s/%(day)s/$' % reps, 'archives'),
     
 )
 
