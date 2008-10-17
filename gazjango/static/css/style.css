@@ -380,6 +380,18 @@ p {
 	margin: 0 auto;
 }
 
+#footer {
+	width: 950px;
+	background-color: #ffffff;
+	margin: 0 auto;
+}
+
+#footer p {
+	margin: 2px;
+	font: normal 1.3em Georgia, "Times New Roman", Times, serif;
+	
+}
+
 /*---------------------------------------------------------------------
 
 			Index Elements 
