@@ -21,6 +21,7 @@ class Section(models.Model):
     
     class Meta:
         app_label = 'articles'
+        ordering = ('name',)
     
     def __unicode__(self):
         return self.name
@@ -62,6 +63,7 @@ class Subsection(models.Model):
     
     class Meta:
         app_label = 'articles'
+        ordering = ('name',)
     
     def __unicode__(self):
         return self.name
