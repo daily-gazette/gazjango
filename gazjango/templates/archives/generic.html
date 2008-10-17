@@ -50,43 +50,45 @@
 
 	<div id="storyBox">
 		<div id="story">
-  		<h2>Archives</h2>
+		  {% block archiveContent %}
+    		<h2>Archives</h2>
   		
-  		{% for year_i, month_i, month_cal in calendar %}
-  		  <div class="monthArchives">
-  		    <table width="280px" height="145px">
-  		      <tr>
-  		        <td colspan="7" class="month">
-  		          <center><a href="{{ url_base }}/{{ year_i }}/{{ month_i }}/">{{ month_i|month_name }} {{ year_i }}</a></center>
-  		        </td>
-  		      </tr>
-  		      <tr class="week">
-  		        <td width="40px">S</td>
-  		        <td width="40px">M</td>
-  		        <td width="40px">T</td>
-  		        <td width="40px">W</td>
-  		        <td width="40px">Th</td>
-  		        <td width="40px">F</td>
-  		        <td width="40px">Sa</td>
-  		      </tr>
-  		      {% for week_a in month_cal %}
-  		        <tr class="day">
-  		          {% for day in week_a %}
-  		            {% ifequal day 0 %}
-  		              <td class="empty"></td>
-  		            {% else %}
-  		              {% if day|gt:0 %}
-  		                <td class="content"><a href="{{ url_base }}/{{ year_i }}/{{ month_i }}/{{ day }}/">{{ day }}</a></td>
-  		              {% else %}
-  		                <td class="empty">{{ day|negate }}</td>
-  		              {% endif %}
-  		            {% endifequal %}
-  		          {% endfor %}
-  		        </tr>
-  		      {% endfor %}
-  		    </table>
-  		  </div>
-  		{% endfor %}
+    		{% for year_i, month_i, month_cal in calendar %}
+    		  <div class="monthArchives">
+    		    <table width="280px" height="145px">
+    		      <tr>
+    		        <td colspan="7" class="month">
+    		          <center><a href="{{ url_base }}/{{ year_i }}/{{ month_i }}/">{{ month_i|month_name }} {{ year_i }}</a></center>
+    		        </td>
+    		      </tr>
+    		      <tr class="week">
+    		        <td width="40px">S</td>
+    		        <td width="40px">M</td>
+    		        <td width="40px">T</td>
+    		        <td width="40px">W</td>
+    		        <td width="40px">Th</td>
+    		        <td width="40px">F</td>
+    		        <td width="40px">Sa</td>
+    		      </tr>
+    		      {% for week_a in month_cal %}
+    		        <tr class="day">
+    		          {% for day in week_a %}
+    		            {% ifequal day 0 %}
+    		              <td class="empty"></td>
+    		            {% else %}
+    		              {% if day|gt:0 %}
+    		                <td class="content"><a href="{{ url_base }}/{{ year_i }}/{{ month_i }}/{{ day }}/">{{ day }}</a></td>
+    		              {% else %}
+    		                <td class="empty">{{ day|negate }}</td>
+    		              {% endif %}
+    		            {% endifequal %}
+    		          {% endfor %}
+    		        </tr>
+    		      {% endfor %}
+    		    </table>
+    		  </div>
+    		{% endfor %}
+    	{% endblock %}
 		</div>
 	</div>
 

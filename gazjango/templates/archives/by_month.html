@@ -1,0 +1,15 @@
+{% extends "archives/generic.html" %}
+{% load extras %}
+
+{% block archiveContent %}
+  <ul>
+    {% for article in articles %}
+      {% ifchanged %}
+        <li><h4>{{ article.pub_date|date:"l, F j, Y" }}</h4></li>
+      {% endifchanged %}
+      <li>
+        <a href="{{ article.get_absolute_url }}">{{ article.headline }}</a> - by {{ article.authors_in_order|join_authors:"t" }}
+      </li>
+    {% endfor %}
+  </ul>
+{% endblock %}
