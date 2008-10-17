@@ -109,13 +109,221 @@ print "making static pages..."
 about = site.page_set.create(
     url="/about/",
     title="About Us",
-    content="Yo, we're the Daily Gazette!"
+    content="""
+The Daily Gazette is Swarthmore's only daily newspaper. The Gazette is sent out every work-day to more than 2,500 people, making it the most highly circulated paper at Swarthmore College.
+
+The paper was founded in 1996 by Sam Schulhofer-Wohl '98 with the goal of providing timely coverage of campus news and Garnet sports while maintaining complete independence from the administration and student government. The only possible way to achieve this goal was through the Internet. We have retained the distinction of being a web-only institution, which has allowed us the ability to change and remain a cutting edge publication.
+
+In Spring 2008, The Daily Gazette was named one of the top five online college news sites by the Associated Collegiate Press.
+
+<strong>Current Staff</strong>
+<strong>Editorial Board</strong>
+Miles Skorpen, Editor-in-Chief
+Lauren Stokes, Editor-in-Chief
+Ramya Gopal, News Editor
+Urooj Khan, Features Editor
+Daisy Yuhas, Arts Editor
+Carolyn Whipple, Photography Editor
+Dougal Sutherland, Technology Director
+Rio Akasaka, Business Director
+Michael May, Asst. Business Director
+
+<strong>Senior Staff</strong>
+Neena Cherayil
+Myles Dakan
+Todd Friedman
+Allison McCarthy
+David Pupkin
+Vy Vo
+
+<strong>Staff</strong>
+Gabriel Ramirez
+Kara Stoever
+Dante Fuoco
+Kimberly St. Julian
+Allie Lee
+Angela Meng
+Amelia Possanza
+Alex Friedfeld
+Kristen Allen
+Tasha Lewis
+Michelle
+Rebecca
+
+<h3>SITE INFORMATION</h3>
+
+This site is built on using <a href="http://www.djangoproject.com/">Django</a>, an open-source Python web framework designed for newspapers. The site was developed by Dougal Sutherland '11 with layout by Miles Skorpen '09 in 2008.
+
+<h3>HISTORY</h3>
+
+The Daily Gazette was organized during fall semester 1996 by Sam Schulhofer-Wohl '98. The goal: to provide timely coverage of campus news and Garnet sports while maintaining complete independence from the administration and student government. Printing the Gazette every day would have been prohibitively expensive and time-consuming, so the board of editors elected to distribute the Gazette via e-mail. At first, there was no World Wide Web edition; however, back issues were available through the web.
+
+The first Board of Editors consisted of Fred Bush '98, Kate Doty '00, Jennifer Klein '98, David Lischer '97, Eric Pakurar '97, Sylvia Weedman '97 and Sam Schulhofer-Wohl. Publication began during the first week of spring semester 1997. Midway through that semester, Rafi Dowty '98 joined the staff as weatherman after successfully lobbying for the addition of weather reports. At the end of the semester the Gazette had 512 subscribers.
+
+The milestones have flown by. In February 1998, the number of subscribers surpassed 1000 for the first time. By the beginning of Fall '00 the number had risen to nearly 1500. In 2002-2003, the Gazette undertook such projects as installing Reading Racks in campus bathrooms and chalking the entire April Fool's issue on the college sidewalks on a bitterly cold March 31st night. In 2003, Jeremy Schifeling '03 became the first Gazette Editor to receive the Drew Pearson Prize for Journalism.
+
+As the Gazette began its tenth year of publication in August of 2005, the subscriber list topped 1900 for the first time. In 2006, Managing Editor Alex Glick '06 was awarded Swarthmore's Pearson Prize. By 2007, subscriptions broke 2,300 and the Daily Gazette became the most circulated student publication at Swarthmore. Micaela Baranello '07 was awarded the Pearson Prize, the fourth Gazette staffer so honored.
+
+In Fall, 2007, Lauren Stokes '09 and Miles Skorpen '09 oversaw the Gazette's transition to its first content management system, WordPress, adding comments and columns to the website. Nearly 6,000 unique visitors come the Gazette site every week. Miles Skorpen '09 was awarded the Pearson Prize, and the Gazette was named one of the five top news sites in the nation by the Associated Collegiate Press.
+
+Throughout the Fall of 2008, Technology Director Dougal Sutherland '11 spearheaded a development team to create a custom site for the Gazette using Django. The current site is the fruit of his labors.
+
+<h3>STAFF LISTING</h3>
+
+2008-2009
+<strong>Editorial Board</strong>
+Miles Skorpen
+Lauren Stokes
+Ramya Gopal
+Urooj Khan
+Daisy Yuhas
+Carolyn Whipple
+Dougal Sutherland
+Rio Akasaka
+
+<strong>Staff</strong>
+Neena Cherayil
+Myles Dakan
+Todd Friedman
+Allison McCarthy
+David Pupkin
+Vy Vo
+Gabriel Ramirez
+Kara Stoever
+Dante Fuoco
+Kimberly St. Julian
+Allie Lee
+Angela Ming
+Amelia Possanza
+Alex Friedfeld
+
+2007-2008
+<strong>Editorial Board</strong>
+Miles Skorpen
+Lauren Stokes
+Ramya Gopal
+Urooj Khan
+Daisy Yuhas
+Carolyn Whipple
+Dougal Sutherland
+Rio Akasaka
+Myles Dakan
+
+
+<strong>Staff</strong>
+Neena Cherayil
+Todd Friedman
+Allison McCarthy
+David Pupkin
+Vy Vo
+Sara Forster
+Shilpa Boppana
+Zoe Davis
+Finlay Logan
+Mark Kharas
+
+2006-2007
+<strong>Editorial Board</strong>
+Miles Skorpen
+Lauren Stokes
+Daisy Yuhas
+Andrew Quinton
+Micaela Baranello
+
+<strong>Staff</strong>
+Neena Cherayil
+Myles Dakan
+Todd Friedman
+Allison McCarthy
+David Pupkin
+Vy Vo
+Sara Forster
+Shilpa Boppana
+Zoe Davis
+Finlay Logan
+Mark Kharas
+Urooj Khan
+"""
 )
 
 policies = site.page_set.create(
     url="/policies/",
     title="Policies",
-    content="Don't suck, and we won't hate you."
+    content="""
+<h2>Policies and Procedures</h2>
+
+<p>Last revised June 28, 2008</p>
+
+<h4>What information does the Gazette record, and what do you do with it? </h4>
+
+<p><strong>From browsing</strong>: We record the IP address, the browser, the operating system, and the origin of all those who browse our site. If you are logged in, this information will be associated with your username. In addition, we keep track of the specific pages browsed, and the path of discovery (what links did you click to get to the content), but this browsing record is <strong>not</strong> stored linked to your username. This information will not be released to non-Gazette staff except at the request of the CJC. With an IP address, the College would be able to link browsing to specific users of the Swarthmore network.<br />
+
+<strong>From comments</strong>: Every comment is associated with an IP address, and the email address of the user is visible to any member of our Editorial staff. As with browsing history, we will release this information to the Deans at the request of the CJC. With an IP address, the College can identify any user of its network within a limited time frame (currently approximately 1 month.)</p>
+
+<p>Every 30 days, we will compile our records for statistic purposes, and individual users will not be identifiable.</p>
+
+<p>We are not a business. No information collected by The Daily Gazette will be given to commerical third parties. We are 100% against spam (unsolicited commerical mail). Information on our visitors is collected solely for self-study, to help in the development of the Gazette. Only editor-level staff will have access to individualized tracking.</p>
+
+<p>If you believe you have received spam from the Gazette, let us <a href="mailto:editor@daily.swarthmore.edu">know</a>.
+
+
+<h4>How does the Gazette deal with errors and corrections?</h4>
+
+<p>For non-substantial spelling or editing corrections, the Gazette will make the change in article.<br />
+For name or title errors, the article will be corrected and a correction made at the bottom of the article.<br />
+For substanial factual errors, the Gazette will make and note the change in the article, and publish a correction.</p>
+
+
+<h4>What are the details of the Gazette's comment moderation policy? </h4>
+
+<p>The Gazette relies on user moderation to show and hide the best (and worst) comments for every story. The number of votes required to hide a story is revealed by the table below. In short, posting from a Swarthmore IP address or being logged in makes it significantly harder for your comment to be moderated.</p>
+
+<table width="340" height="134" border="0" cellpadding="0" cellspacing="0">
+  <tr>
+	<th width="66" scope="col">Votes</th>
+	<th width="97" scope="col">Swat IP</th>
+	<th width="177" scope="col">User</th>
+  </tr>
+  <tr>
+	<td align="right">3</td>
+	<td align="center" bgcolor="#FF0066"><div align="center">No</div></td>
+	<td bgcolor="#FF0066"><div align="center">No</div></td>
+  </tr>
+  <tr>
+	<td align="right">4</td>
+	<td bgcolor="#999966"><div align="center">Yes</div></td>
+	<td bgcolor="ff0066"><div align="center">No</div></td>
+  </tr>
+  <tr>
+	<td align="right">5</td>
+	<td bgcolor="ff0066"><div align="center">No</div></td>
+	<td bgcolor="999966"><div align="center">Yes</div></td>
+  </tr>
+  <tr>
+	<td align="right">6</td>
+	<td bgcolor="999966"><div align="center">Yes</div></td>
+	<td bgcolor="999966"><div align="center">Yes</div></td>
+  </tr>
+</table>
+
+<p>The number of votes given to a user also changes based on their status at the Gazette's website. Any viewer who is not logged in receives one vote. Users receive two votes, while Swarthmore-based users receive three votes. Any member of the Gazette's staff receives four votes, while all Editors can show or hide comments at will.</p>
+<p>The IP address and the username of the voter is attached to every vote. Abuse of this privilege could lead to loss of voting rights.</p>
+
+<h4>How does the Gazette's staff judge comments?</h4>
+
+<p>Our rules are fairly straightforward:</p>
+<ul>
+    <li>Be nice</li>
+	<li>Be constructive</li>
+	<li>Don't curse</li>
+	<li>Don't threaten</li>
+</ul>
+
+<p>Our first two rules are the heart of our comments policy. Comments should never be hostile to the author of a story or another commentor--but we welcome active debate, discussion, and deconstruction of our stories. We will not quash substantial comments.</p>
+
+
+<p>However, only in the most extreme cases will the Gazette delete comments. Our moderation system is designed to hide undesirable content, but not to make it absolutely inaccessible. We will only regularly delete comments if they are believed to be spam.</p>    
+"""
 )
 
 contact = site.page_set.create(
