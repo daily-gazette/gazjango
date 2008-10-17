@@ -554,13 +554,20 @@ p {
 			
 -----------------------------------------------------------------------*/
 
-#footer {
-	background-color: #cccccc;
-	display: inline-block;
-	overflow:hidden;
+#expandedBar {
+	display: block;
 	width: 950px;
 	margin: 0 auto;
 }
+
+#footer {
+	display: block;
+	width: 950px;
+	background-color: #cccccc;
+	margin: 0 auto;
+	overflow: hidden;
+}
+
 
 #footerContent {
 	width: 950px;
