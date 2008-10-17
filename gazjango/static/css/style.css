@@ -556,8 +556,8 @@ p {
 
 #expandedBar {
 	display: block;
-	width: 950px;
-	margin: 0 auto;
+	width: 900px;
+	float: left;
 }
 
 #footer {
