@@ -9,17 +9,6 @@
 	<link rel="stylesheet" href="{% static css page/story.css %}" type="text/css" media="screen, projection" />
 	<link rel="stylesheet" href="{% static css page/archives.css %}" type="text/css" media="screen, projection" />
 	<link rel="stylesheet" type="text/css" href="{% static js ajaxtabs/ajaxtabs.css %}" />
-
-	{% jQuery %}
-	<script type="text/javascript" src="js/ajaxtabs/ui.tabs.pack.js"></script>
-	<script type="text/javascript">
-		$(function() {
-			$('#container-4 ul').tabs({ fxFade: true, fxSpeed: 'fast' });
-			$('#container-11 ul').tabs({ event: 'mouseover' }).find('a').click(function() {
-				return false;
-			});
-		});
-	</script>
 {% endblock customheader %}
 
 {% block topbar %}
