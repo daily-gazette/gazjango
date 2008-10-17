@@ -554,12 +554,6 @@ p {
 			
 -----------------------------------------------------------------------*/
 
-#expandedBar {
-	display: block;
-	width: 900px;
-	float: left;
-}
-
 #footer {
 	display: block;
 	width: 950px;
