@@ -238,11 +238,11 @@ COMMENT STYLES
 }
 
 .commentInformation ul {
-
+	list-style-type: none;
 }
 
 .commentInformation li {
-
+	display: inline;
 }
 
 .commentInformation li a:link, .commentInformation li a:visited {
