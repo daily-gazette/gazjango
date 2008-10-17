@@ -25,6 +25,7 @@ from gazjango.scrapers.manual_links import manual_links, lca_links
 
 def article(request, slug, year, month, day, num=None, form=None, print_view=False):
     "Base function to call for displaying a given article."
+    slug = slug[:100] # keep links working for the few very-long slugs
     story = get_by_date_or_404(Article, year, month, day, slug=slug)
     return specific_article(request, story, num, form, print_view)
 
