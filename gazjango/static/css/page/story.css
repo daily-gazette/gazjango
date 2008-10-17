@@ -249,10 +249,6 @@ COMMENT STYLES
 	height: 10px; 
 }
 
-.commentInformation li a:link, .commentInformation li a:visited {
-
-}
-
 .commentInformation li.up a:link, .commentInformation li.up a:visited {
 	background: url(/static/images/story/up.png) 0 0 no-repeat; 
 	display:inline-block;
@@ -273,8 +269,20 @@ COMMENT STYLES
 	text-indent: -3000px;
 }
 
-.commentInformation .up li a:link:hover, .commentInformation .up li a:visited:hover {
+.commentInformation li.up.selected a:link, .commentInformation li.up. selected a:visited {
+	background:url(/static/images/story/up-selected.png) 0 0 no-repeat; 
+}
+
+.commentInformation li.down.selected a:link, .commentInformation li.down. selected a:visited {
+	background:url(/static/images/story/down-selected.png) 0 0 no-repeat; 
+}
+
+.commentInformation li.up a:link:hover, .commentInformation li.up a:visited:hover {
 	background:url(/static/images/story/up-hover.png) 0 0 no-repeat; 
+}
+
+.commentInformation li.up a:link:hover, .commentInformation li.up a:visited:hover {
+	background:url(/static/images/story/down-hover.png) 0 0 no-repeat; 
 }
 
 .commentContent {
