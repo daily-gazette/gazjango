@@ -380,18 +380,7 @@ p {
 	margin: 0 auto;
 }
 
-#footer {
-	width: 950px;
-	display: block;
-	background-color: #ffffff;
-	margin: 0 auto;
-}
 
-#footer p {
-	margin: 2px;
-	font: normal 1.3em Georgia, "Times New Roman", Times, serif;
-	
-}
 
 /*---------------------------------------------------------------------
 
@@ -574,8 +563,9 @@ p {
 
 #footer {
 	background-color: #cccccc;
-	display: inline;
+	display: inline-block;
 	overflow:hidden;
+	margin: 0 auto;
 }
 
 #footerContent {
@@ -583,6 +573,12 @@ p {
 	margin: 10px auto 0 auto;
 	padding-bottom: 10px;
 	background-color: #ffffff;
+}
+
+#footer p {
+	margin: 2px;
+	font: normal 1.3em Georgia, "Times New Roman", Times, serif;
+	
 }
 
 #footerContent p {
