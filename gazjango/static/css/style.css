@@ -565,6 +565,7 @@ p {
 	background-color: #cccccc;
 	display: inline-block;
 	overflow:hidden;
+	width: 950px;
 	margin: 0 auto;
 }
 
