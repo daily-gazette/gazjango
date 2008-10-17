@@ -165,11 +165,15 @@ def archives(request, section=None, subsection=None, year=None, month=None, day=
     elif month:
         template = 'archives/by_month.html'
     else:
-        start_date = articles[0].pub_date
+        pub_dates = articles.values_list('pub_date', flat=True)
+        dates = set([datetime.date(d.year, d.month, d.day) for d in pub_dates])
+        
         if year:
+            start_date = datetime.date(int(year), 1, 1)
             end_date = datetime.date(int(year), 12, 31)
         else:
-            end_date = datetime.date.today()
+            start_date = min(dates)
+            end_date = max(dates)
         
         calendar.setfirstweekday(calendar.SUNDAY)
         
@@ -181,9 +185,6 @@ def archives(request, section=None, subsection=None, year=None, month=None, day=
                 month_i = 12
                 year_i -= 1
             cal.append( (year_i, month_i, calendar.monthcalendar(year_i, month_i)) )
-        
-        pub_dates = articles.values_list('pub_date', flat=True)
-        dates = set([datetime.date(d.year, d.month, d.day) for d in pub_dates])
         
         weekdays = range(7)
         for year_i, month_i, month_cal in cal:
