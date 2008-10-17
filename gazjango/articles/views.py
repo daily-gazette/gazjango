@@ -144,12 +144,26 @@ def post_comment(request, slug, year, month, day):
             return specific_article(request, story, form=form)
 
 
-
-def articles(request, year=None, month=None, day=None, template="archives.html"):
-    articles = filter_by_date(Article.published.all(), year, month, day)
-    data = { 'articles': articles, 'year': year, 'month': month, 'day': day }
-    rc = RequestContext(request)
-    return render_to_response(template, data, context_instance=rc)
+def archives(request, section=None, subsection=None, year=None, month=None, day=None):
+    articles = filter_by_date(Article.published, year, month, day)
+    if section:
+        section = get_object_or_404(Section, slug=section)
+        articles = articles.filter(section=section)
+    if subsection:
+        subsection = get_object_or_404(Subsection, section=section, slug=subsection)
+        articles = articles.filter(subsection=subsection)
+    
+    template = (
+        'archives/for_sub_%s.html' % subsection.slug,
+        'archives/for_sec_%s.html' % section.slug,
+        'archives/generic.html'
+    )
+    
+    data = { 'articles': articles, 'year': year, 'month': month, 'day': day,
+             'section': section, 'subsection': subsection }
+    rc = RequestContext(request, data)
+    
+    return render_to_response(template, context_instance=rc)
 
 
 def homepage(request, template="index.html"):

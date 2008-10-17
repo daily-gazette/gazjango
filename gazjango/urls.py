@@ -47,10 +47,10 @@ urlpatterns += patterns('articles.views',
     (r'^%(year)s/%(month)s/%(day)s/%(slug)s/email/$'    % reps, 'email_article', {}, 'email'),
     (r'^%(year)s/%(month)s/%(day)s/%(slug)s/comment/$'  % reps, 'post_comment'),
     
-    (r'^archives/$', 'articles', {}, 'archives'),
-    (r'^(?:archives/)?%(year)s/$'                   % reps, 'articles'),
-    (r'^(?:archives/)?%(year)s/%(month)s/$'         % reps, 'articles'),
-    (r'^(?:archives/)?%(year)s/%(month)s/%(day)s/$' % reps, 'articles'),
+    (r'^archives/$',                                        'archives', {}, 'archives'),
+    (r'^(?:archives/)?%(year)s/$'                   % reps, 'archives'),
+    (r'^(?:archives/)?%(year)s/%(month)s/$'         % reps, 'archives'),
+    (r'^(?:archives/)?%(year)s/%(month)s/%(day)s/$' % reps, 'archives'),
 )
 
 urlpatterns += patterns('comments.views',
