@@ -10,8 +10,8 @@ def get_by_date_or_404(model, year, month, day, field='pub_date', **oth):
     d[field + '__day']   = int(day)
     return get_object_or_404(model, **d)
 
-def filter_by_date(qset, year=None, month=None, day=None, field='pub_date'):
-    args = {}
+def filter_by_date(qset, year=None, month=None, day=None, field='pub_date', **oth):
+    args = oth.copy()
     if year:
         args[field + '__year'] = int(year)
         if month:
