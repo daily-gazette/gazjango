@@ -5,6 +5,7 @@
     {% for article in articles %}
       {% ifchanged %}
         <br /><h3 class="archives">{{ article.pub_date|date:"l, F j, Y" }}</h3>
+	<p><a href="{{ pub_date|issue_url }}">See the issue.</a>
       {% endifchanged %}
       <p><a href="{{ article.get_absolute_url }}">{{ article.headline }}</a> - by {{ article.authors_in_order|join_authors:"t" }}</p>
     {% endfor %}
