@@ -15,9 +15,9 @@
             {% endifequal %}
             
             {% ifequal status -1 %}
-              <li class="down selected"><a class="voteSelected" href="vote-comment/{{ comment.number }}/clear/"><img src="/static/images/story/down.png" title="Vote Down" /></a></li>
+              <li class="down selected"><a class="voteSelected" href="vote-comment/{{ comment.number }}/clear/">D</a></li>
             {% else %}
-              <li class="down"><a class="vote" href="vote-comment/{{ comment.number }}/down/"><img src="/static/images/story/down.png" title="Vote Down" /></a></li>
+              <li class="down"><a class="vote" href="vote-comment/{{ comment.number }}/down/">D</a></li>
             {% endifequal %}
             
             {% if comment.score|is_none %}
