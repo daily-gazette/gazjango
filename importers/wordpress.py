@@ -315,7 +315,6 @@ opinions_and_columns = sec("Opinions & Columns", "opinions", "What the community
 editorials = sub(opinions_and_columns, "Staff Editorials", "editorials", "Opnions from the Gazette's editorial board.")
 multimedia = sec("Multimedia", "multimedia", "Pictures and videos.")
 
-misc = sec("Miscellaneous", "misc", "Miscellaneous things.")
 platforms = sub(features, "Student Council Platforms", "stuco-platforms", "Platforms for student council elections.")
 
 
