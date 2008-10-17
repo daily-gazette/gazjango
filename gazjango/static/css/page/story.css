@@ -253,7 +253,7 @@ COMMENT STYLES
 
 }
 
-.commentInformation .up li a:link, .commentInformation .up li a:visited {
+.commentInformation li .up a:link, .commentInformation li .up a:visited {
 	background: url(/static/images/story/up.png) 0 0 no-repeat; 
 	display:inline-block;
 	width: 10px;
@@ -263,7 +263,7 @@ COMMENT STYLES
 	text-indent: -3000px;
 }
 
-.commentInformation .down li a:link, .commentInformation .down li a:visited {
+.commentInformation li .down a:link, .commentInformation li .down a:visited {
 	background: url(/static/images/story/down.png) 0 0 no-repeat; 
 	display:inline-block;
 	width: 10px;
