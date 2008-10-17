@@ -154,8 +154,8 @@ def archives(request, section=None, subsection=None, year=None, month=None, day=
         articles = articles.filter(subsection=subsection)
     
     template = (
-        'archives/for_sub_%s.html' % subsection.slug,
-        'archives/for_sec_%s.html' % section.slug,
+        'archives/for_sub_%s.html' % subsection.slug if subsection else '',
+        'archives/for_sec_%s.html' % section.slug if section else '',
         'archives/generic.html'
     )
     
