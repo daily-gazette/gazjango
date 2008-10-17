@@ -86,10 +86,10 @@ urlpatterns += patterns('announcements.views',
 )
 
 urlpatterns += patterns('issues.views',
-    (r'^issue/$',                                   'issue_for_today'),
+    (r'^issue/$',                                   'latest_issue'),
     (r'^issue/%(year)s/$'                   % reps, 'issues_list'),
     (r'^issue/%(year)s/%(month)s/$'         % reps, 'issues_list'),
-    (r'^issue/%(year)s/%(month)s/%(day)s/$' % reps, 'issue', {}, 'issue'),
+    (r'^issue/%(year)s/%(month)s/%(day)s/$' % reps, 'issue_for_date', {}, 'issue'),
     
     (r'^menu/$', 'menu_partial'),
     (r'^events/$', 'events_partial')

@@ -141,6 +141,10 @@ class Issue(models.Model):
     def __unicode__(self):
         return self.date.strftime("%a, %d %B %Y")
     
+    class Meta:
+        get_latest_by = 'date'
+        ordering = ('-date',)
+    
     @permalink
     def get_absolute_url(self):
         a = [str(x) for x in (self.date.year, self.date.month, self.date.day)]

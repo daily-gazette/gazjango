@@ -8,21 +8,21 @@ from gazjango.comments.models import PublicComment
 
 import datetime
 
-def issue(request, year, month, day):
+def issue_for_date(request, year, month, day):
     issue = get_by_date_or_404(Issue, year, month, day, field='date')
+    return show_issue(request, issue)
+
+def latest_issue(request):
+    return show_issue(request, Issue.objects.latest())
+
+def show_issue(request, issue):
     data = {
         'issue': issue,
         'jobs': JobListing.unfilled.order_by('-pub_date')[:5],
         'comments': PublicComment.visible.order_by('-time')[:5]
     }
-    rc = RequestContext(request)
-    from django.http import HttpResponse
-    return render_to_response("issue/issue.html", data, context_instance=rc)
-
-
-def issue_for_today(request):
-    today = datetime.date.today()
-    return issue(request, today.year, today.month, today.day)
+    rc = RequestContext(request, data)
+    return render_to_response("issue/issue.html", context_instance=rc)
 
 
 def issues_list(request, year=None, month=None):
