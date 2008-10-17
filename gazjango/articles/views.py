@@ -247,7 +247,7 @@ def subsection(request, section, subsection):
         pass
     else:
         data['column'] = column
-        data['columns'] = Column.objects.order_by('-year', '-semester')
+        data['columns'] = Column.objects.order_by('-year', '-semester', 'name')
     
     template = ("sections/sub_%s.html" % sub.slug,
                 "sections/sub_of_%s.html" % sec.slug,
