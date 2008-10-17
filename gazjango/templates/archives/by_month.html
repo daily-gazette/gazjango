@@ -4,7 +4,7 @@
 {% block archiveContent %}
     {% for article in articles %}
       {% ifchanged %}
-        <br /><h3>{{ article.pub_date|date:"l, F j, Y" }}</h3>
+        <br /><h3 class="archives">{{ article.pub_date|date:"l, F j, Y" }}</h3>
       {% endifchanged %}
       <p><a href="{{ article.get_absolute_url }}">{{ article.headline }}</a> - by {{ article.authors_in_order|join_authors:"t" }}</p>
     {% endfor %}

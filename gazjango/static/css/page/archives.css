@@ -42,3 +42,8 @@
 .monthArchives table .day .content {
 	background-color: #DDD;
 }
+
+h3 .archives {
+	border-bottom: 1px solid #000;
+
+}
