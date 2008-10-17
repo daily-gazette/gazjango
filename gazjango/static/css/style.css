@@ -547,7 +547,6 @@ p {
 }
 
 
-
 /*---------------------------------------------------------------------
 
 			Footer Elements 
@@ -556,7 +555,7 @@ p {
 
 #footer {
 	background-color: #cccccc;
-	display: block;
+	display: inline-block;
 	overflow:hidden;
 	width: 950px;
 	margin: 0 auto;
