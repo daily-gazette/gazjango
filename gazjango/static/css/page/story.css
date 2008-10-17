@@ -256,11 +256,14 @@ COMMENT STYLES
 	overflow:hidden; 
 	text-decoration:none; 
 	text-indent: -3000px;
-	background:url(/static/images/story/up.png) 0 0 no-repeat; 
-
 }
 
 .commentInformation .up li a:link, .commentInformation .up li a:visited {
+	background: url(/static/images/story/up.png) 0 0 no-repeat; 
+}
+
+.commentInformation .down li a:link, .commentInformation .down li a:visited {
+	background: url(/static/images/story/down.png) 0 0 no-repeat; 
 }
 
 .commentInformation .up li a:link:hover, .commentInformation .up li a:visited:hover {
