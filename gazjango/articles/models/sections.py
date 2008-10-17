@@ -71,8 +71,8 @@ class Subsection(models.Model):
         return ('subsection', [self.section.slug, self.slug])
     
     def get_stories(self, num_top=2, num_mid=3, num_low=12):
-        "Calls Articles.published.get_stories for stories in this subsection."
-        return Articles.published.get_stories(
+        "Calls Article.published.get_stories for stories in this subsection."
+        return Article.published.get_stories(
             base = self.articles,
             num_top = num_top,
             num_mid = num_mid, 
