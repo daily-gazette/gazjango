@@ -47,10 +47,16 @@ urlpatterns += patterns('articles.views',
     (r'^%(year)s/%(month)s/%(day)s/%(slug)s/email/$'    % reps, 'email_article', {}, 'email'),
     (r'^%(year)s/%(month)s/%(day)s/%(slug)s/comment/$'  % reps, 'post_comment'),
     
-    (r'^archives/$',                                        'archives', {}, 'archives'),
+    (r'^archives/$', 'archives', {}, 'archives'),
     (r'^(?:archives/)?%(year)s/$'                   % reps, 'archives'),
     (r'^(?:archives/)?%(year)s/%(month)s/$'         % reps, 'archives'),
     (r'^(?:archives/)?%(year)s/%(month)s/%(day)s/$' % reps, 'archives'),
+    (r'^archives/%(section)s/$'                % reps, 'archives'),
+    (r'^archives/%(section)s/%(subsection)s/$' % reps, 'archives'),
+    (r'^(?:archives/)?%(section)s/(?:%(subsection)s)?/%(year)s/$'                   % reps, 'archives'),
+    (r'^(?:archives/)?%(section)s/(?:%(subsection)s)?/%(year)s/%(month)s/$'         % reps, 'archives'),
+    (r'^(?:archives/)?%(section)s/(?:%(subsection)s)?/%(year)s/%(month)s/%(day)s/$' % reps, 'archives'),
+    
 )
 
 urlpatterns += patterns('comments.views',
@@ -152,13 +158,6 @@ if settings.DEBUG:
 
 # section match should be last, to avoid shadowing others
 urlpatterns += patterns('articles.views',
-    (r'^%(section)s/$'                            % reps, 'section', {}, 'section'),
-    (r'^%(section)s/%(year)s/$'                   % reps, 'section'),
-    (r'^%(section)s/%(year)s/%(month)s/$'         % reps, 'section'),
-    (r'^%(section)s/%(year)s/%(month)s/%(day)s/$' % reps, 'section'),
-    
-    (r'^%(section)s/%(subsection)s/$'                            % reps, 'subsection', {}, 'subsection'),
-    (r'^%(section)s/%(subsection)s/%(year)s/$'                   % reps, 'subsection'),
-    (r'^%(section)s/%(subsection)s/%(year)s/%(month)s/$'         % reps, 'subsection'),
-    (r'^%(section)s/%(subsection)s/%(year)s/%(month)s/%(day)s/$' % reps, 'subsection'),
+    (r'^%(section)s/$'                % reps, 'section',    {}, 'section'),
+    (r'^%(section)s/%(subsection)s/$' % reps, 'subsection', {}, 'subsection'),
 )

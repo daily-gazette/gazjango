@@ -194,7 +194,7 @@ search        = lambda request, **kwargs: render_to_response("base.html", locals
 email_article = lambda request, **kwargs: render_to_response("base.html", locals())
 
 
-def subsection(request, section, subsection, year=None, month=None, day=None):
+def subsection(request, section, subsection):
     data = {}
     data['section'] = sec = get_object_or_404(Section, slug=section)
     
@@ -210,10 +210,7 @@ def subsection(request, section, subsection, year=None, month=None, day=None):
         else:
             data['column'] = column
             data['columns'] = Column.objects.order_by('-year', '-semester')
-        
-        base = filter_by_date(sub.articles, year, month, day)
     else:
-        base = filter_by_date(sec.articles, year, month, day)
         if sec.slug == 'opinions':
             data['columns'] = Column.objects.order_by('-year', '-semester', 'name')
             f = data['columns'][0]
@@ -228,10 +225,6 @@ def subsection(request, section, subsection, year=None, month=None, day=None):
     data['topstories'] = tops
     data['midstories'] = mids
     data['lowlist'] = lowlist
-    
-    data['year'] = year
-    data['month'] = month
-    data['day'] = day
     
     if subsection:
         data['comments'] = PublicComment.visible.filter(
@@ -250,8 +243,8 @@ def subsection(request, section, subsection, year=None, month=None, day=None):
     rc = RequestContext(request)
     return render_to_response(template, data, context_instance=rc)
 
-def section(request, section, year=None, month=None, day=None):
-    return subsection(request, section, None, year, month, day)
+def section(request, section):
+    return subsection(request, section, None)
 
 
 @permission_required('accounts.can_access_admin')
