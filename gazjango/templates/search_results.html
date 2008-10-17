@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+{% load extras %}
+
+{% block title %}{{ page.title }}{% endblock %}
+
+{% block customheader %}
+  <link rel="stylesheet" href="{% static css page/story.css %}" type="text/css" media="screen, projection" />
+{% endblock customheader %}
+
+
+{% block topbar %}
+  <div id="headerSectionBar">
+    <div id="headerSection">
+      <h3>
+        {% for ancestor in page.ancestors %}
+          <a href="{{ ancestor.get_absolute_url }}">{{ ancestor.title }}</a>
+          {% if not forloop.last %} >> {% endif %}
+        {% endfor %}
+      </h3>
+    </div>
+
+    <div id="headerSearch" class="floatRight">
+      {% include "search_header.html" %}
+    </div>
+  </div>
+{% endblock topbar %}
+
+
+{% block content %}
+  <div id="storyBox">
+    <div id="story">
+      <h2>Search is under construction</h2>
+        <p>Last revised 10/16/2008</p>
+
+      	<p>Hello! Thanks for searching the Gazette site.</p>
+      	<p>Unfortunately, our search isn't live yet, though we're working hard to get it up soon.</p>
+      	<p>In the meantime, try looking at our <a href="/archives/">archives</a> or try searching using <a href="http://www.google.com/search?hl=en&as_sitesearch=daily.swarthmore.edu">Google</a>.</p>
+    </div>
+
+  <div id="shareBox">
+    <div class="right">
+      <strong>Share:</strong> {% add_this hover %}
+    </div>
+    <p>
+      <a href="print/"><img src="{% static images icons/print.png %}" /> Print</a>
+      &nbsp;&nbsp;
+      <a href="email/"><img src="{% static images icons/email.png %}" /> Email</a>
+    </p>
+  </div>
+
+  <div id="continueBox">
+    <div id="top">
+      <a href="{{ topstory.get_absolute_url }}">
+        <img src="{{ topstory.thumbnail.get_absolute_url }}" title="{{ topstory.headline }}" alt="" />
+      </a>
+      <div class="content">
+        <h4><a href="{{ topstory.get_absolute_url }}">{{ topstory.get_title }}</a></h4>
+        <p>{{ topstory.shortest_summary }}</p>
+      </div>
+    </div>
+
+    <div id="more">
+      <div class="box">
+        <h4>Top Stories</h4>
+        <ul>
+          {% for story in stories %}
+            <li><a href="{{story.get_absolute_url}}">{{ story.get_title|safe }}</a></li>
+          {% endfor %}
+        </ul>
+      </div>
+      <div class="box">
+        <h4>Recent Comments</h4>
+        <ul>
+          {% for comment in comments|slice:":4" %}
+            <li><a href="{{ comment.get_absolute_url }}">{{ comment.subject.get_title }}</a></li>
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
+  </div>
+  </div>
+{% endblock content %}
