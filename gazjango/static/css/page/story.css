@@ -255,7 +255,9 @@ COMMENT STYLES
 	height: 10px; 
 	overflow:hidden; 
 	text-decoration:none; 
+	text-indent: -3000px;
 	background:url(/static/images/story/up.png) 0 0 no-repeat; 
+
 }
 
 .commentInformation .up li a:link, .commentInformation .up li a:visited {
