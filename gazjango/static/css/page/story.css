@@ -281,7 +281,7 @@ COMMENT STYLES
 	background:url(/static/images/story/up-hover.png) 0 0 no-repeat; 
 }
 
-.commentInformation li.up a:link:hover, .commentInformation li.up a:visited:hover {
+.commentInformation li.down a:link:hover, .commentInformation li.down a:visited:hover {
 	background:url(/static/images/story/down-hover.png) 0 0 no-repeat; 
 }
 
