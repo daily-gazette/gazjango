@@ -555,13 +555,12 @@ p {
 -----------------------------------------------------------------------*/
 
 #footer {
-	display: block;
-	width: 950px;
 	background-color: #cccccc;
+	display: inline-block;
+	overflow:hidden;
+	width: 950px;
 	margin: 0 auto;
-	overflow: hidden;
 }
-
 
 #footerContent {
 	width: 950px;
