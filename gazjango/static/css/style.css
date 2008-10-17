@@ -382,6 +382,7 @@ p {
 
 #footer {
 	width: 950px;
+	display: block;
 	background-color: #ffffff;
 	margin: 0 auto;
 }
