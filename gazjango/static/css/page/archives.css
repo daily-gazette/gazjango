@@ -43,7 +43,6 @@
 	background-color: #DDD;
 }
 
-h3 .archives {
-	border-bottom: 1px solid #000;
-
+h3.archives {
+	border-bottom: 2px solid #000;
 }
