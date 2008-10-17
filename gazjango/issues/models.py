@@ -109,6 +109,16 @@ class Issue(models.Model):
         a = Announcement.community
         return a.filter(date_start__lte=self.date, date_end__gte=self.date)
     
+    def staff_announcement(self):
+        """Gets the staff announcement for this issue, if any."""
+        try:
+            return Announcement.staff.get(date_start__lte=self.date, date_end__gte=self.date)
+        except Announcement.DoesNotExist:
+            return None
+        except Announcement.MultipleObjectsReturned:
+            # log this somehow
+            return None
+    
     def events(self):
         """Grabs the events that should appear in this issue."""
         events = Event.objects.for_date(self.date, forward=datetime.timedelta(days=2))
