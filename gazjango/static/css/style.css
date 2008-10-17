@@ -573,7 +573,6 @@ p {
 -----------------------------------------------------------------------*/
 
 #footer {
-	float: left;
 	background-color: #cccccc;
 	display: inline;
 	overflow:hidden;
@@ -581,7 +580,7 @@ p {
 
 #footerContent {
 	width: 950px;
-	margin: 10px auto;
+	margin: 10px auto 0 auto;
 	padding-bottom: 10px;
 	background-color: #ffffff;
 }
