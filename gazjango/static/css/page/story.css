@@ -240,6 +240,7 @@ COMMENT STYLES
 .commentInformation ul {
 	list-style-type: none;
 	display: inline-block;
+	margin-top: 3px;
 }
 
 .commentInformation li {
@@ -254,10 +255,10 @@ COMMENT STYLES
 	height: 10px; 
 	overflow:hidden; 
 	text-decoration:none; 
+	background:url(/static/images/story/up.png) 0 0 no-repeat; 
 }
 
 .commentInformation .up li a:link, .commentInformation .up li a:visited {
-	background:url(/static/images/story/up.png) 0 0 no-repeat; 
 }
 
 .commentInformation .up li a:link:hover, .commentInformation .up li a:visited:hover {
