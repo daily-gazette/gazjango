@@ -270,11 +270,11 @@ COMMENT STYLES
 	text-indent: -3000px;
 }
 
-.commentInformation li.up.selected a:link, .commentInformation li.up. selected a:visited {
+.commentInformation li.up.selected a:link, .commentInformation li.up.selected a:visited {
 	background:url(/static/images/story/up-selected.png) 0 0 no-repeat; 
 }
 
-.commentInformation li.down.selected a:link, .commentInformation li.down. selected a:visited {
+.commentInformation li.down.selected a:link, .commentInformation li.down.selected a:visited {
 	background:url(/static/images/story/down-selected.png) 0 0 no-repeat; 
 }
 
