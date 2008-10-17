@@ -194,59 +194,68 @@ search        = lambda request, **kwargs: render_to_response("base.html", locals
 email_article = lambda request, **kwargs: render_to_response("base.html", locals())
 
 
-def subsection(request, section, subsection):
-    data = {}
-    data['section'] = sec = get_object_or_404(Section, slug=section)
-    
-    if subsection:
-        sub = get_object_or_404(Subsection, section=sec, slug=subsection)
-        base = sub.articles
-        data['subsection'] = sub
-        data['recent_stories'] = sub.articles.all().order_by('-pub_date')[:10]
-        
-        try:
-            column = sub.column
-        except Column.DoesNotExist:
-            pass
-        else:
-            data['column'] = column
-            data['columns'] = Column.objects.order_by('-year', '-semester')
-    else:
-        base = sec.articles
-        if sec.slug == 'opinions':
-            data['columns'] = Column.objects.order_by('-year', '-semester', 'name')
-            f = data['columns'][0]
-            data['curr_columns'] = data['columns'].filter(year=f.year, semester=f.semester)
-    
-    tops, mids, lows = Article.published.get_stories(base=base,
-                                         num_top=2, num_mid=3, num_low=12)
-    lowlist = [ [], [], [], [] ]
-    for i in range(len(lows)):
-        lowlist[i % 4].append(lows[i])
-    
-    data['topstories'] = tops
-    data['midstories'] = mids
-    data['lowlist'] = lowlist
-    
-    if subsection:
-        data['comments'] = PublicComment.visible.filter(
-            article__subsection=sub
-        ).order_by('-time')
-        template = ("sections/sub_%s.html" % sub.slug,
-                    "sections/sub_of_%s.html" % sec.slug,
-                    "sections/subsection.html")
-    else:
-        data['comments'] = PublicComment.visible.filter(
-            article__section=sec
-        ).order_by('-time')
-        template = ("sections/sec_%s.html" % sec.slug,
-                    "sections/section.html")
-    
-    rc = RequestContext(request)
-    return render_to_response(template, data, context_instance=rc)
-
 def section(request, section):
-    return subsection(request, section, None)
+    sec = get_object_or_404(Section, slug=section)
+    
+    tops, mids, lows = sec.get_stories(num_top=2, num_mid=3, num_low=12)
+    num_low_lists = 4
+    lowlist = [ [] for i in range(num_low_lists) ]
+    for i in range(len(lows)):
+        lowlist[i % num_low_lists].append(lows[i])
+    
+    data = {
+        'section': sec,
+        'topstories': tops,
+        'midstories': mids,
+        'lowlist': lowlist,
+        'comments': PublicComment.visible.filter(article__section=sec).order_by('-time')
+    }
+    
+    if sec.slug == 'opinions':
+        data['columns'] = Column.objects.order_by('-year', '-semester', 'name')
+        f = data['columns'][0]
+        data['curr_columns'] = data['columns'].filter(year=f.year, semester=f.semester)
+    
+    template = ("sections/sec_%s.html" % section,
+                "sections/section.html")
+    rc = RequestContext(request, data)
+    return render_to_response(template, context_instance=rc)
+
+
+def subsection(request, section, subsection):
+    sec = get_object_or_404(Section, slug=section)
+    sub = get_object_or_404(Subsection, section=sec, slug=subsection)
+    
+    tops, mids, lows = sub.get_stories(num_top=2, num_mid=3, num_low=12)
+    num_low_lists = 4
+    lowlist = [ [] for i in range(num_low_lists) ]
+    for i in range(len(lows)):
+        lowlist[i % num_low_lists].append(lows[i])
+    
+    data = {
+        'section': sec,
+        'subsection': sub,
+        'recent_stories': sub.articles.all().order_by('-pub_date')[:10],
+        'topstories': tops,
+        'midstories': mids,
+        'lowlist': lowlist,
+        'comments': PublicComment.visible.filter(article__subsection=sub).order_by('-time')
+    }
+    try:
+        column = sub.column
+    except Column.DoesNotExist:
+        pass
+    else:
+        data['column'] = column
+        data['columns'] = Column.objects.order_by('-year', '-semester')
+    
+    template = ("sections/sub_%s.html" % sub.slug,
+                "sections/sub_of_%s.html" % sec.slug,
+                "sections/subsection.html")
+    
+    rc = RequestContext(request, data)
+    return render_to_response(template, context_instance=rc)
+
 
 
 @permission_required('accounts.can_access_admin')
