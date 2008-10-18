@@ -130,7 +130,7 @@ class Article(models.Model):
                                     
     thumbnail   = models.ForeignKey(ImageFile, null=True, blank=True,
                                     related_name="articles_with_thumbnail")
-    media  = models.ManyToManyField(MediaFile, related_name="articles")
+    media  = models.ManyToManyField(MediaFile, related_name="articles", blank=True)
     bucket = models.ForeignKey(MediaBucket, null=True, related_name="articles")
     
     comments = generic.GenericRelation(PublicComment,
