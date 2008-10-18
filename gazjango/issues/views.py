@@ -11,21 +11,31 @@ from gazjango.comments.models      import PublicComment
 
 import datetime
 
-def issue_for_date(request, year, month, day):
+def issue_for_date(request, year, month, day, plain=False):
     issue = get_by_date_or_404(Issue, year, month, day, field='date')
-    return show_issue(request, issue)
+    return show_issue(request, issue, plain)
 
-def latest_issue(request):
-    return show_issue(request, Issue.objects.latest())
+def latest_issue(request, plain=False):
+    return show_issue(request, Issue.objects.latest(), plain)
 
-def show_issue(request, issue):
+def show_issue(request, issue, plain=False):
+    tomorrow = issue.date + datetime.timedelta(days=1)
+    comments = PublicComment.visible.filter(time__lt=tomorrow).order_by('-time')
+    
+    one_week = datetime.timedelta(days=7)
+    if issue.date == datetime.date.today():
+        jobs = JobListing.unfilled.get_for_show(num=5, cutoff=one_week)
+    else:
+        jobs = JobListing.published.get_for_show(num=5, base_date=issue.date, cutoff=one_week)
+    
     data = {
         'issue': issue,
-        'jobs': JobListing.unfilled.order_by('-pub_date')[:5],
-        'comments': PublicComment.visible.order_by('-time')[:5]
+        'jobs': jobs,
+        'comments': comments[:5]
     }
     rc = RequestContext(request, data)
-    return render_to_response("issue/issue.html", context_instance=rc)
+    template = "issue/issue%s.html" % ('-plain' if plain else '')
+    return render_to_response(template, context_instance=rc)
 
 
 def issues_list(request, year=None, month=None):
@@ -50,9 +60,9 @@ def show_rsd(request, year, month, day, plain=False):
     
     one_week = datetime.timedelta(days=7)
     if date == datetime.date.today():
-        jobs = JobListing.unfilled.get_for_show(cutoff=one_week)
+        jobs = JobListing.unfilled.get_for_show(num=5, cutoff=one_week)
     else:
-        jobs = JobListing.published.get_for_show(base_date=date, cutoff=one_week)
+        jobs = JobListing.published.get_for_show(num=5, base_date=date, cutoff=one_week)
     
     tomorrow = date + datetime.timedelta(days=1)
     comments = PublicComment.visible.filter(time__lt=tomorrow).order_by('-time')

@@ -1,128 +1,77 @@
 {% load extras %}
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
-  "http://www.w3.org/TR/html4/loose.dtd">
-<html lang="en">
-<head>
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-  <title>THE DAILY GAZETTE -- {{ issue.date|date:"F j, Y" }} </title>
-</head>
+<pre>
+THE DAILY GAZETTE (Plain Text Edition)
+FOR: {{ issue.date|date:"F j, Y" }}
 
-THE DAILY GAZETTE (Plain Text Edition)<br />
-FOR: {{ issue.date|date:"F j, Y" }}<br /><br />
+{% if issue.staff_announcement %}
+==========================================
+A Word from the Gazette ...
 
-==========================================<br /><br />
+{{ issue.staff_announcement.text|striptags }}
 
-{% if issue.staff_announcement %}A Word from the Gazette ...<br /><br /><p>{{ issue.staff_announcement.text }}</p>{% endif %}
+{% endif %}
+==========================================
 
-==========================================<br /><br />
+{{ issue.topstory.headline|striptags }}
+{{ issue.topstory.summary|striptags }}
 
-{{ issue.topstory.headline|safe }}<br /><br />
-{{ issue.topstory.summary|safe }}<br /><br />
-
-Read more: {{ issue.topstory.get_absolute_url }}"><br /><br />
+By {{ issue.topstory.authors_in_order|join_authors:"ptx" }}
+Read more: {{ issue.topstory.get_absolute_url }}
                      
-==========================================<br /><br />
+==========================================
 
 {% for story in issue.midstories %}
-{{ story.headline|safe }}<br /><br />
-{{ story.summary|safe }}<br /><br />
+{{ story.headline|striptags }}
+{{ story.summary|striptags }}
 
-Read more: {{ story.get_absolute_url }}<br /><br />
+By {{ story.authors_in_order|join_authors:"ptx" }}
+Read more: {{ story.get_absolute_url }}
 
---------------------
+{% if not forloop.last %}--------------------
 
-{% endfor %}
-
-==========================================<br /><br />
-
-{% if issue.lowstories.all %}
-MORE STORIES<br /><br />
-
+{% endif %}{% endfor %}
+{% if issue.lowstories %}==========================================
+MORE STORIES
 {% for story in issue.lowstories.all %}
-{{ story.category.name }}: {{ story.headline|safe }}<br />
-Read more: {{ story.get_absolute_url }}<br />
-
+{% if story.section.is_special %}{{ story.category.name }}: {% endif %}{{ story.headline|striptags }}
+Read more: {{ story.get_absolute_url }}
 {% endfor %}
 {% endif %}
 
-==========================================<br /><br />
+==========================================
 
 ANNOUNCEMENTS
 {% for announcement in issue.announcements %}
-{{ announcement.title }}
-                        {% if announcement.is_event %}
-                          <br />{{ announcement.event_place }};
-                          {{ announcement.event_date|near_future_date }}
-                          at {{ announcement.event_time }}
-                          {% if announcement.text %}
-                            <br/><br/>
-                            {{ announcement.brief_excerpt|safe }}
-                          {% endif %}
+{{ announcement.title }}{% if announcement.is_event %}
+  {{ announcement.event_place }}; 
+  {{ announcement.event_date|near_future_date }} at {{ announcement.event_time }}
+{% endif %}
+{{ announcement.text|striptags }}{# TODO: write a filter for plaintext replacing <br /> with \n #}
 
-                        {% else %}
-                          <br/><br/>
-                          {{ announcement.long_excerpt|safe }}
-                        {% endif %}
-
-----------<br /><br />
-
-              {% endfor %}
-==========================================<br /><br />
+{% endfor %}
+==========================================
 
 WEATHER
-                      <p>Today: {{ issue.weather.today }}</p>
-                      <p>{{ issue.joke.line_one }}</p>
-                      <p>Tonight: {{ issue.weather.tonight }}</p>
-                      <p>{{ issue.joke.line_two }}</p>
-                      <p>Tomorrow: {{ issue.weather.tomorrow }}</p>
-                      <p>{{ issue.joke.line_three }}</p>
+
+Today: {{ issue.weather.today }}
+{{ issue.joke.line_one }}
+Tonight: {{ issue.weather.tonight }}
+{{ issue.joke.line_two }}
+Tomorrow: {{ issue.weather.tomorrow }}
+{{ issue.joke.line_three }}
                     
-==========================================<br /><br />
+==========================================
 
 MENUS
+{% if issue.menu.closed %}
+{{ issue.menu.message }}{% else %}
+Lunch: {{ issue.menu.lunch }}
+Dinner: {{ issue.menu.dinner }}
+{% endif %}
 
-                      {% if issue.menu.closed %}
-                        {{ issue.menu.message }}
-                      {% else %}
-                        <p>Lunch: {{ issue.menu.lunch }}</p>
-                        <p>Dinner: {{ issue.menu.dinner }}</p>
-                      {% endif %}
+==========================================
+==========================================
 
-==========================================<br /><br />
-                   
-EVENTS
-              {% for event in issue.events %}
-               {{ event.name }} <br />
-                        {% if event.location %}
-                          Where: {{ event.location }} <br />
-                        {% endif %}
-                        When:
-                          {{ event.start|near_future_date }}
-                          {{ event.start|date:"P" }}
-                          {% ifnotequal event.start event.end %}
-                            -
-                            {% ifnotequal event.start.day event.end.day %}
-                              {{ event.end|near_future_date }}
-                            {% endifnotequal %}
-                            {{ event.end|date:"P" }}
-                          {% endifnotequal %}
-                          <br/>
-                        {% if event.sponsor %}
-                          Where: {{ event.location }} <br />
-                        {% endif %}
-                      {% if not forloop.last %}
-                        <br />
-                      {% endif %}
-              {% endfor %}
-
-==========================================<br />
-==========================================<br />
-<br />
 The Daily Gazette is a publication written by members of the Swarthmore College community. The administration of Swarthmore College has no editorial control or oversight regarding the content or presentation of the Daily Gazette. Funding for the Gazette is provided by the Student Budget Committee and by advertising revenue.<br />
-                    <br />
-To change your subscription status, log in here: http://daily.swarthmore.edu{% url manage-user %}<br />
-<br />
-<br />
-</body><br />
-<br />
-</html>
+
+To change your subscription status, log in at: http://daily.swarthmore.edu{% url manage-user %}
