@@ -1,4 +1,5 @@
 {% load extras %}
+{% if not for_email %}<pre>{% endif %}
 THE RESERVED STUDENT DIGEST
 From the The Daily Gazette -- {{ date|date:"F j, Y" }}
 
@@ -80,3 +81,4 @@ by advertising revenue.
 
 To unsubscribe, change your format, or otherwise modify your mailing status, log 
 in at http://daily.swarthmore.edu{% url manage-user %} .
+{% if not for_email %}</pre>{% endif %}

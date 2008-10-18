@@ -28,10 +28,16 @@ def show_issue(request, issue, plain=False):
     else:
         jobs = JobListing.published.get_for_show(num=5, base_date=issue.date, cutoff=one_week)
     
+    if 'for_email' in request.GET:
+        for_email = request.GET['for_email'][0] in ('y', '1', 't')
+    else:
+        for_email = False
+    
     data = {
         'issue': issue,
         'jobs': jobs,
-        'comments': comments[:5]
+        'comments': comments[:5],
+        'for_email': for_email
     }
     rc = RequestContext(request, data)
     template = "issue/issue%s.html" % ('-plain' if plain else '')
@@ -70,6 +76,11 @@ def show_rsd(request, year, month, day, plain=False):
     base = Article.published.filter(pub_date__lt=tomorrow)
     t,m,l = Article.published.get_stories(num_top=3, num_mid=0, num_low=0, base=base)
     
+    if 'for_email' in request.GET:
+        for_email = request.GET['for_email'][0] in ('y', '1', 't')
+    else:
+        for_email = False
+    
     data = {
         'year': year, 'month': month, 'day': day,
         'date': date,
@@ -77,7 +88,8 @@ def show_rsd(request, year, month, day, plain=False):
         'events': current.exclude(not_event),
         'jobs': jobs,
         'comments': comments[:3],
-        'stories': t
+        'stories': t,
+        'for_email': for_email
     }
     rc = RequestContext(request, data)
     template = "issue/rsd%s.html" % ('-plain' if plain else '')

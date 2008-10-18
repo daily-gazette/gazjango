@@ -1,4 +1,5 @@
 {% load extras %}
+{% if not for_email %}<pre>{% endif %}
 THE DAILY GAZETTE (Plain Text Edition)
 FOR: {{ issue.date|date:"F j, Y" }}
 
@@ -74,3 +75,4 @@ Dinner: {{ issue.menu.dinner }}
 The Daily Gazette is a publication written by members of the Swarthmore College community. The administration of Swarthmore College has no editorial control or oversight regarding the content or presentation of the Daily Gazette. Funding for the Gazette is provided by the Student Budget Committee and by advertising revenue.<br />
 
 To change your subscription status, log in at: http://daily.swarthmore.edu{% url manage-user %}
+{% if not for_email %}</pre>{% endif %}
