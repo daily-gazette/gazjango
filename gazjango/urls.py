@@ -80,6 +80,9 @@ urlpatterns += patterns('issues.views',
     (r'^issue/%(year)s/%(month)s/$'         % reps, 'issues_list'),
     (r'^issue/%(year)s/%(month)s/%(day)s/$' % reps, 'issue_for_date', {}, 'issue'),
     
+    (r'^rsd/$',                                   'rsd_now'),
+    (r'^rsd/%(year)s/%(month)s/%(day)s/$' % reps, 'show_rsd', {}, 'rsd'),
+    
     (r'^menu/$', 'menu_partial'),
     (r'^events/$', 'events_partial')
 )

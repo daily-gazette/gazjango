@@ -1,9 +1,10 @@
+{% load extras %}
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
   "http://www.w3.org/TR/html4/loose.dtd">
 <html lang="en">
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-  <title>THE DAILY GAZETTE -- {{ issue.date|date:"F j, Y" }} </title>
+  <title>THE DAILY GAZETTE -- {{ date|date:"F j, Y" }} </title>
   <style type="text/css">
   <!--
   a { text-decoration: none; }    -->
@@ -18,7 +19,7 @@
           Problems with this email?
           <strong>
             <font color="#004484">
-              <a href="{{ issue.get_absolute_url }}">See it in your browser.</a>
+              <a href="{% url rsd year month day %}">See it in your browser.</a>
             </font>
           </strong>
         </font>
@@ -27,19 +28,17 @@
     <tr>
       <td height="80" colspan="3">
         <a href="http://www.daily.swarthmore.edu">
-          <img border="0" src='{% static images issue/header.png %}' alt="The Reserved Students Digest" src='rsd-header.png' width="590" height="80" />
+          <img border="0" src='{% static images issue/RSDheader.png %}' alt="The Reserved Students Digest" width="590" height="80" />
         </a>
       </td>
     </tr>
-    <tr>
-    </tr>
+    <tr></tr>
     <tr>
       <td colspan="3">
         <table width="590" cellspacing="0" cellpadding="0">
           <tr>
             <td width="1" bgcolor="#999999"></td>
             <td width="588" align="left" valign="top">
-
             </td>
           </tr>
         </table>
@@ -49,90 +48,95 @@
             <td width="1" bgcolor="#999999"></td>
             <td width="385" align="left" valign="top">
 
+              {% if announcements %}
+                <table width="385" height="18" border="0" cellpadding="0" cellspacing="0" bgcolor="#ffa754">
+                  <tr>
+                    <td width="10" height="18" align="left" valign="middle"></td>
+                    <td width="375" align="left" valign="middle">
+                      <strong>
+                        <font color="#000000" size="2" face="Arial, Helvetica, sans-serif">
+                          Announcements
+                        </font>
+                      </strong>
+                    </td>
+                  </tr>
+                </table>
 
-              <table width="385" height="18" border="0" cellpadding="0" cellspacing="0" bgcolor="#ffa754">
-                <tr>
-                  <td width="10" height="18" align="left" valign="middle"></td>
-                  <td width="375" align="left" valign="middle">
-                    <strong>
-                      <font color="#000000" size="2" face="Arial, Helvetica, sans-serif">
-                        Announcements
+                <table width="385" border="0" cellspacing="0" cellpadding="10">
+                  <tr>
+                    <td>
+                      <font color="#333333" size="2" face="Georgia, Times New Roman, Times, serif">
+                        {% for announcement in announcements %}
+                          {{ forloop.counter }}. <a href="#a{{ forloop.counter }}">{{ announcement.title }}</a><br />
+                        {% endfor %}
                       </font>
-                    </strong>
-                  </td>
-                </tr>
-              </table>
+                    </td>
+                  </tr>
+                </table>
+              {% endif %}
 
-              <table width="385" border="0" cellspacing="0" cellpadding="10">
-                <tr>
-                  <td>
-                    <font color="#333333" size="2" face="Georgia, Times New Roman, Times, serif">
-			{% for announcement in issue.announcements %}
-				{{ forloop.counter }}. <a href="#a{{ forloop.counter }}">{{ announcement.title }}</a><br />				
-			{% endfor %}
-                    </font>
-                  </td>
-                </tr>
-              </table>
-              
-              <table width="385" height="18" border="0" cellpadding="0" cellspacing="0" bgcolor="#ffa754">
-                <tr>
-                  <td width="10" height="18" align="left" valign="middle"></td>
-                  <td width="375" align="left" valign="middle">
-                    <strong>
-                      <font color="#000000" size="2" face="Arial, Helvetica, sans-serif">
-                        Events
+              {% if events %}
+                <table width="385" height="18" border="0" cellpadding="0" cellspacing="0" bgcolor="#ffa754">
+                  <tr>
+                    <td width="10" height="18" align="left" valign="middle"></td>
+                    <td width="375" align="left" valign="middle">
+                      <strong>
+                        <font color="#000000" size="2" face="Arial, Helvetica, sans-serif">
+                          Events
+                        </font>
+                      </strong>
+                    </td>
+                  </tr>
+                </table>
+
+                <table width="385" border="0" cellspacing="0" cellpadding="10">
+                  <tr>
+                    <td>
+                      <font color="#333333" size="2" face="Georgia, Times New Roman, Times, serif">
+                        {% for event in events %}
+                          {{ forloop.counter }}. <a href="#e{{ forloop.counter }}">{{ event.title }}</a> ( {{ event.event_date|near_future_date }}, {{ event.event_time }} )<br />
+                        {% endfor %}
                       </font>
-                    </strong>
-                  </td>
-                </tr>
-              </table>
+                    </td>
+                  </tr>
+                </table>
+              {% endif %}
 
-              <table width="385" border="0" cellspacing="0" cellpadding="10">
-                <tr>
-                  <td>
-                    <font color="#333333" size="2" face="Georgia, Times New Roman, Times, serif">
-			{% for event in issue.events %}
-				{{ forloop.counter }}. <a href="#e{{ forloop.counter }}">{{ event.title }}</a> ( {{ event.event_date|near_future_date }}, {{ event.event_time }} )<br />				
-			{% endfor %}
-                    </font>
-                  </td>
-                </tr>
-              </table>
-              
-              <table width="385" height="18" border="0" cellpadding="0" cellspacing="0" bgcolor="#ffa754">
-                <tr>
-                  <td width="10" height="18" align="left" valign="middle"></td>
-                  <td width="375" align="left" valign="middle">
-                    <strong>
-                      <font color="#000000" size="2" face="Arial, Helvetica, sans-serif">
-                        Jobs
+              {% if jobs %}
+                <table width="385" height="18" border="0" cellpadding="0" cellspacing="0" bgcolor="#ffa754">
+                  <tr>
+                    <td width="10" height="18" align="left" valign="middle"></td>
+                    <td width="375" align="left" valign="middle">
+                      <strong>
+                        <font color="#000000" size="2" face="Arial, Helvetica, sans-serif">
+                          Jobs
+                        </font>
+                      </strong>
+                    </td>
+                  </tr>
+                </table>
+
+                <table width="385" border="0" cellspacing="0" cellpadding="10">
+                  <tr>
+                    <td>
+                      <font color="#333333" size="2" face="Georgia, Times New Roman, Times, serif">
+                        {% for job in jobs %}
+                          {{ forloop.counter }}. <a href="#j{{ forloop.counter }}">{{ job.name }}</a><br />
+                        {% endfor %}
                       </font>
-                    </strong>
-                  </td>
-                </tr>
-              </table>
-
-              <table width="385" border="0" cellspacing="0" cellpadding="10">
-                <tr>
-                  <td>
-                    <font color="#333333" size="2" face="Georgia, Times New Roman, Times, serif">
-			{% for job in issue.jobs %}
-				{{ forloop.counter }}. <a href="#j{{ forloop.counter }}">{{ job.title }}</a><br />				
-			{% endfor %}                    </font>
-                  </td>
-                </tr>
-              </table>
-
+                    </td>
+                  </tr>
+                </table>
+              {% endif %}
 
               <table width="385" height="10" border="0" cellpadding="0" cellspacing="0">
                 <tr>
                   <td></td>
                 </tr>
-              </table>               
+              </table>
 
               <table width="385" height="24" border="0" cellpadding="0" cellspacing="0" bgcolor="#432c16">
-               <tr>
+                <tr>
                   <td width="10" height="24" align="left" valign="middle"></td>
                   <td width="375" align="left" valign="middle">
                     <strong>
@@ -141,99 +145,98 @@
                       </font>
                     </strong>
                   </td>
-                </tr> 
+                </tr>
               </table>
 
-                <table width="385" border="0" cellspacing="0">
+              <table width="385" border="0" cellspacing="0">
+                {% if announcements %}
                   <tr>
-                  <td width="10" height="18" align="left" valign="middle"></td>
-                  <td width="375" align="left" valign="middle">
-                    <strong>
-                      <font color="#000000" size="2" face="Arial, Helvetica, sans-serif">
-                        Announcements
-                      </font>
-                    </strong>
-                  </td>
-                </tr>
+                    <td width="10" height="18" align="left" valign="middle"></td>
+                    <td width="375" align="left" valign="middle">
+                      <strong>
+                        <font color="#000000" size="2" face="Arial, Helvetica, sans-serif">
+                          Announcements
+                        </font>
+                      </strong>
+                    </td>
+                  </tr>
                   <tr><td width="10" height="18" align="left" valign="middle"></td>
                     <td>
                       <font color="#333333" size="2" face="Georgia, Times New Roman, Times, serif">
-			{% for announcement in issue.announcements %}
-				{{ forloop.counter }}. <a href="{{ announcement.get_absolute_url }}" name="a{{ forloop.counter }}"><strong>{{ announcement.title }}</strong></a><br />
+                        {% for announcement in announcements %}
+                          {{ forloop.counter }}. <a href="{{ announcement.get_absolute_url }}" name="a{{ forloop.counter }}"><strong>{{ announcement.title }}</strong></a><br />
 
-				<p>{{ announcement.long_excerpt }}</p>
-				{% if announcement.contact %}<strong>Contact:</strong> {{ announcement.contact }} <br /> {% endif %}
-				<a href="{{ announcement.get_absolute_url }}">Comment Here</a> <br />
-
-			{% endfor %}
-
+                          <p>{{ announcement.long_excerpt }}</p>
+                          {% if announcement.contact %}<strong>Contact:</strong> {{ announcement.contact }} <br /> {% endif %}
+                          <a href="{{ announcement.get_absolute_url }}">Comment Here</a> 
+                          <br /><br/>
+                        {% endfor %}
                       </font>
                     </td>
                   </tr>
-                                    <tr>
-                  <td width="10" height="18" align="left" valign="middle"></td>
-                  <td width="375" align="left" valign="middle">
-                    <strong>
-                      <font color="#000000" size="2" face="Arial, Helvetica, sans-serif">
-                        Events
-                      </font>
-                    </strong>
-                  </td>
-                </tr>
+                {% endif %}
+                {% if events %}
+                  <tr>
+                    <td width="10" height="18" align="left" valign="middle"></td>
+                    <td width="375" align="left" valign="middle">
+                      <strong>
+                        <font color="#000000" size="2" face="Arial, Helvetica, sans-serif">
+                          Events
+                        </font>
+                      </strong>
+                    </td>
+                  </tr>
                   <tr><td width="10" height="18" align="left" valign="middle"></td>
                     <td>
                       <font color="#333333" size="2" face="Georgia, Times New Roman, Times, serif">
-			{% for event in issue.events %}
-				{{ forloop.counter }}. <a href="{{ event.get_absolute_url }}" name="e{{ forloop.counter }}"><strong>{{ event.title }}</strong></a><br />
-				{{ announcement.event_place }}, {{ announcement.event_date|near_future_date }}
+                        {% for event in events %}
+                          {{ forloop.counter }}. <a href="{{ event.get_absolute_url }}" name="e{{ forloop.counter }}"><strong>{{ event.title }}</strong></a><br />
+                          {{ announcement.event_place }}, {{ announcement.event_date|near_future_date }}
                           at {{ announcement.event_time }} <br />
-				 {% if announcement.text %}
+                          {% if announcement.text %}
                             <p>{{ announcement.brief_excerpt|safe }}</p>
                           {% endif %}
 
-				{% if event.sponsor %}<strong>Contact:</strong> {{ event.sponsor_link }}} <br /> {% endif %}
-				<a href="{{ event.get_absolute_url }}">Comment Here</a> <br />
-
-			{% endfor %}
-
+                          {% if event.sponsor %}<strong>Contact:</strong> {{ event.sponsor_link }}} <br /> {% endif %}
+                          <a href="{{ event.get_absolute_url }}">Comment Here</a> <br />
+                        {% endfor %}
                       </font>
                     </td>
                   </tr>
-
- <tr>
-                  <td width="10" height="18" align="left" valign="middle"></td>
-                  <td width="375" align="left" valign="middle">
-                    <strong>
-                      <font color="#000000" size="2" face="Arial, Helvetica, sans-serif">
-                        Jobs
-                      </font>
-                    </strong>
-                  </td>
-                </tr>
+                {% endif %}
+                {% if jobs %}
+                  <tr>
+                    <td width="10" height="18" align="left" valign="middle"></td>
+                    <td width="375" align="left" valign="middle">
+                      <strong>
+                        <font color="#000000" size="2" face="Arial, Helvetica, sans-serif">
+                          Jobs
+                        </font>
+                      </strong>
+                    </td>
+                  </tr>
                   <tr><td width="10" height="18" align="left" valign="middle"></td>
                     <td>
                       <font color="#333333" size="2" face="Georgia, Times New Roman, Times, serif">
-			{% for job in issue.jobs %}
-				{{ forloop.counter }}. <a href="{{ job.get_absolute_url }}" name="j{{ forloop.counter }}"><strong>{{ job.name }}</strong></a><br />
-				 <p><strong>Pay:</strong>{{ job.get_pay }}</p>
-        <p><strong>Hours:</strong> {{ job.hours }}</p>
-        <p><strong>When:</strong> {{ job.when }}</p>
-        <p><strong>Where:</strong> {{ job.where }}</p>
-        {% if job.needs_car %}<p>This position requires access to a car.</p>{% endif %}
+                        {% for job in jobs %}
+                          {{ forloop.counter }}. <a href="{{ job.get_absolute_url }}" name="j{{ forloop.counter }}"><strong>{{ job.name }}</strong></a><br />
+                          {% if job.pay %}<p><strong>Pay:</strong>{{ job.get_pay }}</p>{% endif %}
+                          {% if job.hours %}<p><strong>Hours:</strong> {{ job.hours }}</p>{% endif %}
+                          {% if job.when %}<p><strong>When:</strong> {{ job.when }}</p>{% endif %}
+                          {% if job.where %}<p><strong>Where:</strong> {{ job.where }}</p>{% endif %}
+                          {% if job.needs_car %}<p>This position requires access to a car.</p>{% endif %}
 
-      <p>{{ job.description|safe }}</p>
+                          <p>{{ job.description|safe }}</p>
 
-				<a href="{{ event.get_absolute_url }}">Comment Here</a> <br />
-
-			{% endfor %}
+                          <a href="{{ event.get_absolute_url }}">Comment Here</a> <br />
+                          <br/><br/>
+                        {% endfor %}
 
                       </font>
                     </td>
                   </tr>
-
-
-                </table>
-                
+                {% endif %}
+              </table>
 
               <table width="385" height="2" border="0" cellpadding="0" cellspacing="0" bgcolor="#E47629">
                 <tr>
@@ -241,21 +244,23 @@
                 </tr>
               </table>
 
-              <!-- editable text, but handled here, not in the CMS -->
               <table width="385" border="0" cellspacing="0" cellpadding="5">
                 <tr>
                   <td>
                     <p>
                       <font color="#333333" size="1" face="Arial, Helvetica, sans-serif">
-                      <small>The Reserved Students Digest is a compilation of announcements, events, and jobs submitted by the Swarthmore community. The RSD is managed by The Daily Gazette in conjunction with Student Council. If you have questions, comments, or complaints about the Digest, please contact dailygazette@swarthmore.edu.<br />
-                        <br />The Daily Gazette is a publication written by members of the Swarthmore College community. Funding for the Gazette is provided by the Student Budget Committee and by advertising revenue.
-                        <br /><br /></small>
+                        <small>
+                          The Reserved Students Digest is a compilation of announcements, events, and jobs submitted by the Swarthmore community. The RSD is managed by The Daily Gazette in conjunction with Student Council. If you have questions, comments, or complaints about the Digest, please contact dailygazette@swarthmore.edu.
+                          <br /><br />
+                          The Daily Gazette is a publication written by members of the Swarthmore College community. Funding for the Gazette is provided by the Student Budget Committee and by advertising revenue.
+                          <br /><br />
+                        </small>
                         <a href="http://daily.swarthmore.edu/about/contact/">Contact</a> |
-                        <a href="http://daily.swarthmore.edu/about/">About</a> | 
-                        <a href="http://daily.swarthmore.edu/join/">Employment</a> | 
-                        <a href="http://daily.swarthmore.edu/policies/">Policies</a> | 
-                        <a href="http://daily.swarthmore.edu/announcements/new/">Submit Events</a> | 
-                        <a href="http://daily.swarthmore.edu/announcements/new/">Submit Announcements</a> | 
+                        <a href="http://daily.swarthmore.edu/about/">About</a> |
+                        <a href="http://daily.swarthmore.edu/join/">Employment</a> |
+                        <a href="http://daily.swarthmore.edu/policies/">Policies</a> |
+                        <a href="http://daily.swarthmore.edu/announcements/new/">Submit Events</a> |
+                        <a href="http://daily.swarthmore.edu/announcements/new/">Submit Announcements</a> |
                         <a href="http://daily.swarthmore.edu/jobs/new/">Submit Jobs</a>
                       </font>
                     </p>
@@ -266,7 +271,7 @@
             </td>
 
             <td width="1" bgcolor="#999999"></td>
-            
+
             <td width="202" align="left" valign="top">
               <table width="202" border="0" cellpadding="0" cellspacing="0">
                 <tr>
@@ -274,7 +279,7 @@
                   </td>
                 </tr>
               </table>
-<table width="202" height="30" border="0" cellpadding="0" cellspacing="0" bgcolor="#432c16">
+              <table width="202" height="30" border="0" cellpadding="0" cellspacing="0" bgcolor="#432c16">
                 <tr>
                   <td width="10" align="left" valign="middle">&nbsp;</td>
                   <td align="left" valign="middle">
@@ -291,12 +296,13 @@
                 <tr>
                   <td width="10" align="left" valign="middle">&nbsp;</td>
                   <td width="170" align="left" valign="middle">
-                  <font size="2" face="Arial, Helvetica, sans-serif" color="black">
-                    <a href="http://daily.swarthmore.edu/announcements/new/">Announcements</a><br />
-                    <a href="http://daily.swarthmore.edu/announcements/new/">Events</a><br />
-                    <a href="http://daily.swarthmore.edu/jobs/new/">Jobs and Internships</a><br />
-		    <br />
-		    <a href="#">Submission Rules</a><br /><br /></font>
+                    <font size="2" face="Arial, Helvetica, sans-serif" color="black">
+                      <a href="http://daily.swarthmore.edu/announcements/new/">Announcements</a><br />
+                      <a href="http://daily.swarthmore.edu/announcements/new/">Events</a><br />
+                      <a href="http://daily.swarthmore.edu/jobs/new/">Jobs and Internships</a><br />
+                      <br />
+                      <a href="#">Submission Rules</a><br /><br />
+                    </font>
                   </td>
                 </tr>
               </table>
@@ -317,12 +323,12 @@
                 <tr>
                   <td width="10" align="left" valign="middle">&nbsp;</td>
                   <td width="170" align="left" valign="middle">
-                <font size="2" face="Arial, Helvetica, sans-serif" color="black">
+                    <font size="2" face="Arial, Helvetica, sans-serif" color="black">
                       {% for story in stories %}
                         {{ forloop.counter }}. <a href="{{story.get_absolute_url}}">{{story.title}}</a><br />
                         {% if not forloop.last %}<br/><br/>{% endif %}
                       {% endfor %}
-		</font>
+                    </font>
                   </td>
                 </tr>
               </table>
@@ -344,9 +350,9 @@
                 <tr>
                   <td width="10" align="left" valign="middle">&nbsp;</td>
                   <td width="170" align="left" valign="middle">
-                                      <font size="2" face="Arial, Helvetica, sans-serif" color="black">
+                    <font size="2" face="Arial, Helvetica, sans-serif" color="black">
                       <br />
-                       {% for comment in comments %}
+                      {% for comment in comments %}
                         On <a href="{{comment.get_absolute_url}}">{{comment.subject.get_title}}</a>
                         by {{ comment.display_name }}
                         at {{ comment.time|date:"g:i A" }},
@@ -366,7 +372,7 @@
         </table>
       </td>
     </tr>
-    
+
     <tr>
       <td height="1" colspan="3" bgcolor="#999999"></td>
     </tr>
