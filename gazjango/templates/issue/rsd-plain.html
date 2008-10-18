@@ -36,7 +36,7 @@ ANNOUNCEMENTS<br /><br />
 				{{ forloop.counter }}. {{ announcement.title }}<br />
 
 				<p>{{ announcement.long_excerpt }}</p>
-				{% if announcement.contact %}<strong>Contact:</strong> {{ announcement.contact }} <br /> {% endif %}
+				{% if announcement.contact %}Contact: {{ announcement.contact }} <br /> {% endif %}
 
 			{% endfor %}
 
@@ -47,14 +47,14 @@ ANNOUNCEMENTS<br /><br />
 EVENTS<br /><br />
 
 			{% for event in issue.events %}
-				{{ forloop.counter }}. <strong>{{ event.title }}</strong><br />
+				{{ forloop.counter }}. {{ event.title }}<br />
 				{{ announcement.event_place }}, {{ announcement.event_date|near_future_date }}
                           at {{ announcement.event_time }} <br />
 				 {% if announcement.text %}
                             <p>{{ announcement.brief_excerpt|safe }}</p>
                           {% endif %}
 
-				{% if event.sponsor %}<strong>Contact:</strong> {{ event.sponsor_link }}} <br /> {% endif %}
+				{% if event.sponsor %}Contact: {{ event.sponsor_link }}} <br /> {% endif %}
 
 			{% endfor %}
 
@@ -65,11 +65,11 @@ EVENTS<br /><br />
 JOBS<br /><br />
 
 			{% for job in issue.jobs %}
-				{{ forloop.counter }}. <a href="{{ job.get_absolute_url }}" name="j{{ forloop.counter }}"><strong>{{ job.name }}</strong></a><br />
-				 <p><strong>Pay:</strong>{{ job.get_pay }}</p>
-        <p><strong>Hours:</strong> {{ job.hours }}</p>
-        <p><strong>When:</strong> {{ job.when }}</p>
-        <p><strong>Where:</strong> {{ job.where }}</p>
+				{{ forloop.counter }}. <a href="{{ job.get_absolute_url }}" name="j{{ forloop.counter }}">{{ job.name }}</a><br />
+				 <p>Pay:{{ job.get_pay }}</p>
+        <p>Hours: {{ job.hours }}</p>
+        <p>When: {{ job.when }}</p>
+        <p>Where: {{ job.where }}</p>
         {% if job.needs_car %}<p>This position requires access to a car.</p>{% endif %}
 
       <p>{{ job.description|safe }}</p>
