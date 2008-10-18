@@ -1,11 +1,25 @@
 from django.db import models
-from datetime  import datetime
+import datetime
 
 class PublishedJobsManager(models.Manager):
     "Deals only with published job listings."
     def get_query_set(self):
         orig = super(PublishedJobsManager, self).get_query_set()
         return orig.filter(is_published=True)
+    
+    def get_for_show(self, num=5, cutoff=None):
+        """
+        Gets the `num` most recent unfilled jobs, but if there aren't
+        that many, gets filled ones. If `cutoff` is passed, exclude
+        objects older than that date / more than that timedelta since
+        now; if `num` is None or 0, don't limit the number.
+        """
+        results = self.order_by('is_filled', '-pub_date')
+        if cutoff:
+            if isinstance(cutoff, datetime.timedelta):
+                cutoff = datetime.datetime.now() - cutoff
+            results = results.filter(pub_date__gte=cutoff)
+        return results[:num] if num else results
     
 
 class UnfilledJobsManager(PublishedJobsManager):
@@ -23,7 +37,7 @@ class JobListing(models.Model):
     
     description = models.TextField()
     
-    pub_date = models.DateTimeField(default=datetime.now)
+    pub_date = models.DateTimeField(default=datetime.datetime.now)
     is_filled = models.BooleanField(default=False)
     
     pay     = models.CharField(max_length=25, blank=True)
