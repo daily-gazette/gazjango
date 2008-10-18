@@ -21,6 +21,13 @@ def filter_by_date(qset, year=None, month=None, day=None, field='pub_date', **ot
     return qset.filter(**args)
 
 
+def arg_from_get(lookup, arg):
+    """Returns whether `arg` is in `lookup` and one of 'true', '1', ...."""
+    try:
+        return lookup[arg][0].lower() in ('y', '1', 't')
+    except KeyError:
+        return None
+
 def reporter_admin_data(user):
     """
     Returns the data necessary just to render base.html of the 

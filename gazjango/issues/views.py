@@ -1,7 +1,7 @@
 from django.db.models           import Q
 from django.template            import RequestContext
 from django.shortcuts           import render_to_response
-from gazjango.misc.view_helpers import get_by_date_or_404, filter_by_date
+from gazjango.misc.view_helpers import get_by_date_or_404, filter_by_date, arg_from_get
 
 from gazjango.announcements.models import Announcement
 from gazjango.articles.models      import Article
@@ -28,16 +28,11 @@ def show_issue(request, issue, plain=False):
     else:
         jobs = JobListing.published.get_for_show(num=5, base_date=issue.date, cutoff=one_week)
     
-    if 'for_email' in request.GET:
-        for_email = request.GET['for_email'][0] in ('y', '1', 't')
-    else:
-        for_email = False
-    
     data = {
         'issue': issue,
         'jobs': jobs,
         'comments': comments[:5],
-        'for_email': for_email
+        'for_email': arg_from_get(request.GET, 'for_email')
     }
     rc = RequestContext(request, data)
     template = "issue/issue%s.html" % ('-plain' if plain else '')
@@ -73,13 +68,8 @@ def show_rsd(request, year, month, day, plain=False):
     tomorrow = date + datetime.timedelta(days=1)
     comments = PublicComment.visible.filter(time__lt=tomorrow).order_by('-time')
     
-    base = Article.published.filter(pub_date__lt=tomorrow)
+    base = Article.published.filter(pub_date__lt=tomorrow, is_racy=False)
     t,m,l = Article.published.get_stories(num_top=3, num_mid=0, num_low=0, base=base)
-    
-    if 'for_email' in request.GET:
-        for_email = request.GET['for_email'][0] in ('y', '1', 't')
-    else:
-        for_email = False
     
     data = {
         'year': year, 'month': month, 'day': day,
@@ -89,7 +79,7 @@ def show_rsd(request, year, month, day, plain=False):
         'jobs': jobs,
         'comments': comments[:3],
         'stories': t,
-        'for_email': for_email
+        'for_email': arg_from_get(request.GET, 'for_email')
     }
     rc = RequestContext(request, data)
     template = "issue/rsd%s.html" % ('-plain' if plain else '')
