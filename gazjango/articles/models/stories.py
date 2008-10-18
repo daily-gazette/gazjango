@@ -45,9 +45,9 @@ class PublishedArticlesManager(models.Manager):
         """
         base = base or self
         
-        tops = list(base.filter(position='t').order_by("?"))
+        tops = list(base.filter(position='1').order_by("?"))
         if len(tops) < num_top:
-            cands = base.filter(possible_position='t').order_by('-pub_date')
+            cands = base.filter(possible_position='1').order_by('-pub_date')
             cands = cands.exclude(pk__in=[top.pk for top in tops])
             needed = num_top - len(tops)
             tops += list(cands[:needed])
@@ -57,9 +57,9 @@ class PublishedArticlesManager(models.Manager):
             tops = tops[:num_top]
         
         exclude_pks = [top.pk for top in tops]
-        mids += list(base.filter(position='m').exclude(pk__in=exclude_pks).order_by("?"))
+        mids += list(base.filter(position='2').exclude(pk__in=exclude_pks).order_by("?"))
         if len(mids) < num_mid:
-            cands = base.filter(possible_position__in=('m', 't'))
+            cands = base.filter(possible_position__in=('1', '2'))
             
             exclude_pks += [el.pk for el in mids]
             cands = cands.exclude(pk__in=exclude_pks).order_by('-pub_date')
@@ -151,11 +151,11 @@ class Article(models.Model):
     comments_allowed = models.BooleanField(default=True)
     
     POSITION_CHOICES = (
-        ('n', 'normal'),
-        ('m', 'middle'),
-        ('t', 'top')
+        ('3', 'normal'),
+        ('2', 'middle'),
+        ('1', 'top')
     )
-    pos_args = {'max_length': 1, 'choices': POSITION_CHOICES, 'default': 'n'}
+    pos_args = {'max_length': 1, 'choices': POSITION_CHOICES, 'default': '3'}
     position = models.CharField(**pos_args)
     possible_position = models.CharField(**pos_args)
     

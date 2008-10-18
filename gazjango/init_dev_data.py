@@ -248,8 +248,8 @@ nobody_loves_me = Article.objects.create(
     subsection=bone_doctress,
     format=textile,
     status='p',
-    position='m',
-    possible_position='m'
+    position='2',
+    possible_position='2'
 )
 nobody_loves_me.add_author(bone_p)
 nobody_loves_me.text = """To pretend no one can find
@@ -347,8 +347,8 @@ scandal = Article.objects.create(
     format=textile,
     status='p',
     pub_date=datetime.now() - timedelta(hours=3),
-    position='t',
-    possible_position='t'
+    position='1',
+    possible_position='1'
 )
 scandal.add_author(bob_p, jack_p)
 scandal.tags = "Al Bloom, Board of Managers, Daily Jolt"
@@ -403,8 +403,8 @@ scandal2 = Article.objects.create(
     format=textile,
     status='p',
     pub_date=datetime.now() - timedelta(hours=3),
-    position='t',
-    possible_position='t'
+    position='1',
+    possible_position='1'
 )
 scandal2.add_author(bob_p, jack_p)
 scandal2.tags = "Al Bloom, Board of Managers, Daily Jolt"
@@ -437,8 +437,8 @@ boring = Article.objects.create(
          "mollit anim id est laborum.",
     format=textile,
     status='p',
-    position='m',
-    possible_position='m'
+    position='2',
+    possible_position='2'
 )
 boring.add_author(jack_p)
 
@@ -473,8 +473,8 @@ boring2 = Article.objects.create(
          "mollit anim id est laborum.",
     format=textile,
     status='p',
-    position='m',
-    possible_position='m'
+    position='2',
+    possible_position='2'
 )
 boring2.add_author(jack_p)
 boring2.bucket = internet_bucket
@@ -505,8 +505,8 @@ boring3 = Article.objects.create(
          "mollit anim id est laborum.",
     format=textile,
     status='p',
-    position='m',
-    possible_position='m'
+    position='2',
+    possible_position='2'
 )
 boring3.add_author(jack_p)
 boring3.bucket = internet_bucket
@@ -537,8 +537,8 @@ boring4 = Article.objects.create(
          "mollit anim id est laborum.",
     format=textile,
     status='p',
-    position='m',
-    possible_position='m'
+    position='2',
+    possible_position='2'
 )
 boring4.add_author(jack_p)
 boring4.bucket = internet_bucket
@@ -548,8 +548,8 @@ boring4.save()
 def art(author, **keywords):
     keywords.setdefault('format', textile)
     keywords.setdefault('status', 'p')
-    keywords.setdefault('position', 'n')
-    keywords.setdefault('possible_position', 'n')
+    keywords.setdefault('position', '3')
+    keywords.setdefault('possible_position', '3')
     if keywords['subsection']:
         keywords.setdefault('section', keywords['subsection'].section)
     article = Article.objects.create(**keywords)

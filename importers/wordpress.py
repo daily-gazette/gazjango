@@ -1166,7 +1166,7 @@ while True:
 
 
 # this is dumb
-Article.objects.update(possible_position='t')
+Article.objects.update(possible_position='1')
 WeatherJoke.objects.create(
     line_one='As the economy seems to fall endlessly,',
     line_two='We seniors are pretty lucky--few of us aspired to work at an investment bank.',
