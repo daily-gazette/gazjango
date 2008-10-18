@@ -1060,7 +1060,7 @@ for post_id, p in posts.iteritems():
             JobListing.objects.create(
                 name=p['title'],
                 slug=p['slug'][:100],
-                description=clean_up_text(p['content']),
+                description=django.utils.html.linebreaks(clean_up_text(p['content'])),
                 pub_date=p['date'],
                 is_filled=True, # for most of them...
                 is_published=True
@@ -1072,7 +1072,7 @@ for post_id, p in posts.iteritems():
                 kind=('s' if is_gazette_news else 'c'),
                 title=p['title'],
                 slug=p['slug'][:100],
-                text=clean_up_text(p['content']),
+                text=django.utils.html.linebreaks(clean_up_text(p['content'])),
                 date_start=date,
                 date_end=date,
                 is_published=True,
