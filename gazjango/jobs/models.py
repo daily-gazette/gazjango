@@ -7,17 +7,24 @@ class PublishedJobsManager(models.Manager):
         orig = super(PublishedJobsManager, self).get_query_set()
         return orig.filter(is_published=True)
     
-    def get_for_show(self, num=5, cutoff=None):
+    def get_for_show(self, num=5, cutoff=None, base_date=datetime.datetime.now):
         """
         Gets the `num` most recent unfilled jobs, but if there aren't
-        that many, gets filled ones. If `cutoff` is passed, exclude
-        objects older than that date / more than that timedelta since
-        now; if `num` is None or 0, don't limit the number.
+        that many, gets filled ones. 
+        
+        If `cutoff` is passed, exclude objects older than that date / 
+        more than that timedelta since now; if `num` is None or 0, don't 
+        limit the number.
+        
+        If `base_date` is passed, pretend that today is that date. (This
+        messes up the is_filled bit, obviously, at least until we decide
+        to transfer to storing when objects are filled...that's a todo.)
         """
         results = self.order_by('is_filled', '-pub_date')
+        results = results.filter(pub_date__lte=base_date)
         if cutoff:
             if isinstance(cutoff, datetime.timedelta):
-                cutoff = datetime.datetime.now() - cutoff
+                cutoff = base_date - cutoff
             results = results.filter(pub_date__gte=cutoff)
         return results[:num] if num else results
     
@@ -38,7 +45,8 @@ class JobListing(models.Model):
     description = models.TextField()
     
     pub_date = models.DateTimeField(default=datetime.datetime.now)
-    is_filled = models.BooleanField(default=False)
+    # TODO: switch joblistings to a time-filled instead of boolean
+    is_filled = models.BooleanField(default=False, blank=True)
     
     pay     = models.CharField(max_length=25, blank=True)
     is_paid = models.BooleanField(default=True, blank=True)
