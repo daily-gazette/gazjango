@@ -7,7 +7,7 @@ class PublishedJobsManager(models.Manager):
         orig = super(PublishedJobsManager, self).get_query_set()
         return orig.filter(is_published=True)
     
-    def get_for_show(self, num=5, cutoff=None, base_date=datetime.datetime.now):
+    def get_for_show(self, num=5, cutoff=None, base_date=None):
         """
         Gets the `num` most recent unfilled jobs, but if there aren't
         that many, gets filled ones. 
@@ -20,6 +20,8 @@ class PublishedJobsManager(models.Manager):
         messes up the is_filled bit, obviously, at least until we decide
         to transfer to storing when objects are filled...that's a todo.)
         """
+        if not base_date:
+            base_date = datetime.datetime.now()
         results = self.order_by('is_filled', '-pub_date')
         results = results.filter(pub_date__lte=base_date)
         if cutoff:
