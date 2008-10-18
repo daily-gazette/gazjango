@@ -164,7 +164,7 @@ class PublicComment(models.Model):
                 return "Unregistered, Non-Swarthmore"
         else:
             if self.user.is_staff:
-                return "Editor" if self.user.is_editor else "Staff"
+                return "Editor" if self.user.is_editor() else "Staff"
             elif is_from_swat(user=self.user, ip=self.ip_address):
                 return "Registered, Swarthmore"
             else:
