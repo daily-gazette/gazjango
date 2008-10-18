@@ -70,11 +70,11 @@ ANNOUNCEMENTS
 ==========================================<br /><br />
 
 WEATHER
-                      <p><strong>Today:</strong> {{ issue.weather.today }}</p>
+                      <p>Today: {{ issue.weather.today }}</p>
                       <p>{{ issue.joke.line_one }}</p>
-                      <p><strong>Tonight:</strong> {{ issue.weather.tonight }}</p>
+                      <p>Tonight: {{ issue.weather.tonight }}</p>
                       <p>{{ issue.joke.line_two }}</p>
-                      <p><strong>Tomorrow:</strong> {{ issue.weather.tomorrow }}</p>
+                      <p>Tomorrow: {{ issue.weather.tomorrow }}</p>
                       <p>{{ issue.joke.line_three }}</p>
                     
 ==========================================<br /><br />
@@ -84,15 +84,15 @@ MENUS
                       {% if issue.menu.closed %}
                         {{ issue.menu.message }}
                       {% else %}
-                        <p><strong>Lunch</strong>: {{ issue.menu.lunch }}</p>
-                        <p><strong>Dinner</strong>: {{ issue.menu.dinner }}</p>
+                        <p>Lunch: {{ issue.menu.lunch }}</p>
+                        <p>Dinner: {{ issue.menu.dinner }}</p>
                       {% endif %}
 
 ==========================================<br /><br />
                    
 EVENTS
               {% for event in issue.events %}
-               <strong>{{ event.name }}</strong> <br />
+               {{ event.name }} <br />
                         {% if event.location %}
                           Where: {{ event.location }} <br />
                         {% endif %}
