@@ -110,7 +110,7 @@ class Article(models.Model):
     slug        = models.SlugField(unique_for_date="pub_date", max_length=100)
     
     summary = models.TextField()
-    short_summary = models.CharField(max_length=150)
+    short_summary = models.CharField(max_length=150, blank=True)
     long_summary  = models.TextField(blank=True)
     
     text   = models.TextField()
@@ -119,16 +119,16 @@ class Article(models.Model):
     pub_date = models.DateTimeField(default=datetime.now)
     authors  = models.ManyToManyField(UserProfile, related_name="articles", through='Writing')
     section = models.ForeignKey('articles.Section', related_name="articles")
-    subsection = models.ForeignKey('articles.Subsection', related_name="articles", null=True)
+    subsection = models.ForeignKey('articles.Subsection', related_name="articles", null=True, blank=True)
     
     highlighters = models.ManyToManyField(UserProfile, related_name='top_stories', through='Highlighting')
     
-    front_image = models.ForeignKey(ImageFile, null=True,
+    front_image = models.ForeignKey(ImageFile, null=True, blank=True,
                                         related_name="articles_with_front")
-    issue_image = models.ForeignKey(ImageFile, null=True,
+    issue_image = models.ForeignKey(ImageFile, null=True, blank=True,
                                         related_name="articles_with_issue")
                                     
-    thumbnail   = models.ForeignKey(ImageFile, null=True,
+    thumbnail   = models.ForeignKey(ImageFile, null=True, blank=True,
                                     related_name="articles_with_thumbnail")
     media  = models.ManyToManyField(MediaFile, related_name="articles")
     bucket = models.ForeignKey(MediaBucket, null=True, related_name="articles")
