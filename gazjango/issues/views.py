@@ -39,11 +39,11 @@ def issues_list(request, year=None, month=None):
     return render_to_response("issue/issues_list.html", data, context_instance=rc)
 
 
-def rsd_now(request, template="issue/rsd.html"):
+def rsd_now(request, plain=False):
     today = datetime.date.today()
-    return show_rsd(request, today.year, today.month, today.day, template)
+    return show_rsd(request, today.year, today.month, today.day, plain)
 
-def show_rsd(request, year, month, day, template="issue/rsd.html"):
+def show_rsd(request, year, month, day, plain=False):
     date = datetime.date(int(year), int(month), int(day))
     not_event = Q(event_date=None)
     current = Announcement.community.filter(date_start__lte=date, date_end__gte=date)
@@ -62,6 +62,7 @@ def show_rsd(request, year, month, day, template="issue/rsd.html"):
     
     data = {
         'year': year, 'month': month, 'day': day,
+        'date': date,
         'announcements': current.filter(not_event),
         'events': current.exclude(not_event),
         'jobs': jobs,
@@ -69,6 +70,7 @@ def show_rsd(request, year, month, day, template="issue/rsd.html"):
         'stories': t
     }
     rc = RequestContext(request, data)
+    template = "issue/rsd%s.html" % ('-plain' if plain else '')
     return render_to_response(template, context_instance=rc)
 
 
