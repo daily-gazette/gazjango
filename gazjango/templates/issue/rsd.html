@@ -312,7 +312,7 @@
                   <td align="left" valign="middle">
                     <strong>
                       <font color="#FFFFFF" size="2" face="Arial, Helvetica, sans-serif">
-                        Top Stories
+                        Gazette Stories
                       </font>
                     </strong>
                   </td>
@@ -324,9 +324,10 @@
                   <td width="10" align="left" valign="middle">&nbsp;</td>
                   <td width="170" align="left" valign="middle">
                     <font size="2" face="Arial, Helvetica, sans-serif" color="black">
+                      <br/>
                       {% for story in stories %}
-                        {{ forloop.counter }}. <a href="{{story.get_absolute_url}}">{{story.title}}</a><br />
-                        {% if not forloop.last %}<br/><br/>{% endif %}
+                        {{ forloop.counter }}. <a href="{{story.get_absolute_url}}">{{story.get_title|safe}}</a>
+                        <br /><br/>
                       {% endfor %}
                     </font>
                   </td>
@@ -339,7 +340,7 @@
                   <td align="left" valign="middle">
                     <strong>
                       <font color="#FFFFFF" size="2" face="Arial, Helvetica, sans-serif">
-                        New Comments
+                        New Gazette Comments
                       </font>
                     </strong>
                   </td>

@@ -4,6 +4,7 @@ from django.shortcuts           import render_to_response
 from gazjango.misc.view_helpers import get_by_date_or_404, filter_by_date
 
 from gazjango.announcements.models import Announcement
+from gazjango.articles.models      import Article
 from gazjango.issues.models        import Issue, Menu, Event
 from gazjango.jobs.models          import JobListing
 from gazjango.comments.models      import PublicComment
@@ -54,15 +55,18 @@ def show_rsd(request, year, month, day, template="issue/rsd.html"):
         jobs = JobListing.published.get_for_show(base_date=date, cutoff=one_week)
     
     tomorrow = date + datetime.timedelta(days=1)
-    comments = PublicComment.visible.filter(time__lte=tomorrow).order_by('-time')
-    stories = []
+    comments = PublicComment.visible.filter(time__lt=tomorrow).order_by('-time')
+    
+    base = Article.published.filter(pub_date__lt=tomorrow)
+    t,m,l = Article.published.get_stories(num_top=3, num_mid=0, num_low=0, base=base)
+    
     data = {
         'year': year, 'month': month, 'day': day,
         'announcements': current.filter(not_event),
         'events': current.exclude(not_event),
         'jobs': jobs,
-        'comments': comments[:5],
-        'stories': stories
+        'comments': comments[:3],
+        'stories': t
     }
     rc = RequestContext(request, data)
     return render_to_response(template, context_instance=rc)
