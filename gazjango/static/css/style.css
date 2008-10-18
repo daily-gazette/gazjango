@@ -288,7 +288,8 @@ p {
 	height: 175px;
 	float: left;
 	border: 2px solid #beb6ae;
-	background-color: #eee5d9;
+	/** background-color: #eee5d9; **/
+	background-color: #432c16;
 	margin-bottom: 5px;
 	position: relative;
     overflow: hidden;
