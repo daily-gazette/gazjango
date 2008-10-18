@@ -43,7 +43,7 @@ class PublishedArticlesManager(models.Manager):
         get_stories(base=section.articles) would return stories from
         the articles in `section` (but see Section's get_stories method).
         """
-        base = base if base else self
+        base = base or self
         
         tops = list(base.filter(position='t').order_by("?"))
         if len(tops) < num_top:
@@ -56,11 +56,12 @@ class PublishedArticlesManager(models.Manager):
             mids = tops[num_top:]
             tops = tops[:num_top]
         
-        mids += list(base.filter(position='m').order_by("?"))
+        exclude_pks = [top.pk for top in tops]
+        mids += list(base.filter(position='m').exclude(pk__in=exclude_pks).order_by("?"))
         if len(mids) < num_mid:
             cands = base.filter(possible_position__in=('m', 't'))
             
-            exclude_pks = [el.pk for el in (tops + mids)]
+            exclude_pks += [el.pk for el in mids]
             cands = cands.exclude(pk__in=exclude_pks).order_by('-pub_date')
             
             needed = num_mid - len(mids)
