@@ -90,7 +90,7 @@ def show_photospread_page(request, spread, num=None, form=None, whole_page=None)
     if whole_page is None:
         whole_page = not request.is_ajax()
     
-    user = request.user.get_profile() if user.is_authenticated() else None
+    user = request.user.get_profile() if request.user.is_authenticated() else None
     ip = request.META['REMOTE_ADDR']
     
     if whole_page:
