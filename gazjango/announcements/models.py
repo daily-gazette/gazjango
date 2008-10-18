@@ -1,6 +1,7 @@
 from django.db               import models
 from django.db.models        import permalink
 from django.utils.safestring import mark_safe
+import django.utils.html
 from datetime import date
 
 class PublishedAnnouncementsManager(models.Manager):
@@ -88,13 +89,14 @@ class Announcement(models.Model):
         return bool(self.event_date)
     
     def brief_excerpt(self, num_chars=120, link=True):
-        if len(self.text) <= num_chars:
-            return self.text
+        text = django.utils.html.strip_tags(self.text)
+        if len(text) <= num_chars:
+            return text
         elif link:
             end = '... [<a href="%s">more</a>]' % self.get_absolute_url()
-            return self.text[:(num_chars-7)] + end
+            return text[:(num_chars-7)] + end
         else:
-            return self.text[:(num_chars-4)] + '...'
+            return text[:(num_chars-4)] + '...'
     
     def long_excerpt(self, num_chars=300, link=True):
         return self.brief_excerpt(num_chars=num_chars, link=link)
