@@ -22,10 +22,7 @@
   <div id="profiles">
   
   	<h2>
-      {% if author.picture %}
-        <div class="picture"><img src="{{ author.picture.get_absolute_url }}" /></div>
-  	  {% endif %}
-  	  {{ author.name }}
+      {{ author.name }}
   	</h2>
   	<h3><span class="position-name">{{ author.position.name|default:"Guest Writer" }}</span></h3>
 	
@@ -36,7 +33,7 @@
       {% endif %}
       {% if author.top_stories %}
         <br />
-        <h4>Highlighted Stories</h4>
+        {% if author.picture %}<div class="picture"><img src="{{ author.picture.get_absolute_url }}" /></div>{% endif %}<h4>Highlighted Stories</h4>
         
         {% for story in author.top_stories.all %}
     		<div class="storyListing">

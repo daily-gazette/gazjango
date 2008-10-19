@@ -1,4 +1,7 @@
-/* @override http://127.0.0.1:8000/static/css/page/profile.css */
+/* @override 
+	http://127.0.0.1:8000/static/css/page/profile.css
+	http://dailygazette.webfactional.com/static/css/page/profile.css
+*/
 
 /***********
 
@@ -61,10 +64,11 @@ EXTENSIBLE FORMATTING
 
 .picture {
 	float: left;
-	padding-right: 5px;
-	height: 50px;
+	height: 175px;
 	border: 2px solid #cccccc;
-	margin: 2px;
+	margin-right: 5px;
+	margin-bottom: 5px;
+	display: none;
 }
 
 .position-name {
