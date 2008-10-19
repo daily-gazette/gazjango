@@ -21,12 +21,23 @@ def filter_by_date(qset, year=None, month=None, day=None, field='pub_date', **ot
     return qset.filter(**args)
 
 
-def arg_from_get(lookup, arg):
-    """Returns whether `arg` is in `lookup` and one of 'true', '1', ...."""
+TRUE_VALUES = ('yes', 'y', 'true', 't', 1)
+FALSE_VALUES = ('no', 'n', 'false', 'f', 0)
+def boolean_arg(lookup, arg, default=False):
+    """
+    Casts `arg` (from `lookup`) to a boolean based on TRUE_VALUES and
+    FALSE_VALUES, returning `default` if if it's uncertain.
+    """
     try:
-        return lookup[arg][0].lower() in ('y', '1', 't')
+        val = lookup[arg].lower()
+        if val in TRUE_VALUES:
+            return True
+        elif val in FALSE_VALUES:
+            return False
+        else:
+            return default
     except KeyError:
-        return None
+        return default
 
 def reporter_admin_data(user):
     """

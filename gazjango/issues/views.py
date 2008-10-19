@@ -1,7 +1,7 @@
 from django.db.models           import Q
 from django.template            import RequestContext
 from django.shortcuts           import render_to_response
-from gazjango.misc.view_helpers import get_by_date_or_404, filter_by_date, arg_from_get
+from gazjango.misc.view_helpers import get_by_date_or_404, filter_by_date, boolean_arg
 
 from gazjango.announcements.models import Announcement
 from gazjango.articles.models      import Article
@@ -28,7 +28,7 @@ def show_issue(request, issue, plain=False):
     else:
         jobs = JobListing.published.get_for_show(num=5, base_date=issue.date, cutoff=one_week)
     
-    articles = issue.articles_in_order(racy=arg_from_get(request.GET, 'racy'))
+    articles = issue.articles_in_order(racy=boolean_arg(request.GET, 'racy', True))
     data = {
         'issue': issue,
         'topstory': articles[0],
@@ -36,11 +36,10 @@ def show_issue(request, issue, plain=False):
         'lowstories': articles[3:],
         'jobs': jobs,
         'comments': comments[:5],
-        'for_email': arg_from_get(request.GET, 'for_email')
+        'for_email': boolean_arg(request.GET, 'for_email', False)
     }
-    rc = RequestContext(request, data)
-    template = "issue/issue%s.html" % ('-plain' if plain else '')
-    return render_to_response(template, context_instance=rc)
+    template = "issue/issue." + ('txt' if plain else 'html')
+    return render_to_response(template, data)
 
 
 def issues_list(request, year=None, month=None):
@@ -83,11 +82,10 @@ def show_rsd(request, year, month, day, plain=False):
         'jobs': jobs,
         'comments': comments[:3],
         'stories': t,
-        'for_email': arg_from_get(request.GET, 'for_email')
+        'for_email': boolean_arg(request.GET, 'for_email', False)
     }
-    rc = RequestContext(request, data)
-    template = "issue/rsd%s.html" % ('-plain' if plain else '')
-    return render_to_response(template, context_instance=rc)
+    template = "issue/rsd." + ('txt' if plain else 'html')
+    return render_to_response(template, data)
 
 
 
