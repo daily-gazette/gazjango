@@ -22,7 +22,7 @@ class Subscriber(models.Model):
     for management things (unsubscribing, changing preferences).
     """
     _name  = models.CharField(max_length=40)
-    _email = models.EmailField(unique=True)
+    _email = models.EmailField(unique=True, null=True, default=None)
     _kind  = models.ForeignKey(UserKind, null=True)
     user = models.ForeignKey(UserProfile, null=True, unique=True)
     
@@ -45,7 +45,7 @@ class Subscriber(models.Model):
     
     def randomize_confirmation_key(self):
         chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
-        key = ''.join(random.choice(chars) for x in xrange(30))
+        key = ''.join(random.choice(chars) for x in xrange(15))
         self.confirmation_key = key
     
     def __unicode__(self):
@@ -58,6 +58,5 @@ class Subscriber(models.Model):
 def set_default_key(sender, instance, **kwargs):
     if not instance.confirmation_key:
         instance.randomize_confirmation_key()
-        instance.save()
 
 signals.post_init.connect(set_default_key, sender=Subscriber)
