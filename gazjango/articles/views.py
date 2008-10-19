@@ -260,6 +260,7 @@ def section(request, section):
     
     data = {
         'section': sec,
+        'stories': tops + mids + lows,
         'topstories': tops,
         'midstories': mids,
         'lowlist': lowlist,
