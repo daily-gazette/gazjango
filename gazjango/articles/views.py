@@ -245,7 +245,12 @@ def homepage(request, template="index.html"):
     return render_to_response(template, data, context_instance=rc)
 
 
-search        = lambda request, **kwargs: render_to_response("base.html", locals())
+def search(request):
+    "Temporary: redirect to Google search. :/"
+    s = request.GET['s']
+    url = "http://www.google.com/search?hl=en&q=%s+site:daily.swarthmore.edu" % s
+    return HttpResponseRedirect(url)
+
 email_article = lambda request, **kwargs: render_to_response("base.html", locals())
 
 
