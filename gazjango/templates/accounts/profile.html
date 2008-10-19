@@ -28,12 +28,12 @@
 	
 	  
       <div id="description">
-      {% if author.bio %}
+      {% if author.picture %}<div class="picture"><img src="{{ author.picture.get_absolute_url }}" /></div>{% endif %}{% if author.bio %}
         <p>{{ author.bio|safe }}</p>
       {% endif %}
       {% if author.top_stories %}
         <br />
-        {% if author.picture %}<div class="picture"><img src="{{ author.picture.get_absolute_url }}" /></div>{% endif %}<h4>Highlighted Stories</h4>
+        <h4>Highlighted Stories</h4>
         
         {% for story in author.top_stories.all %}
     		<div class="storyListing">
