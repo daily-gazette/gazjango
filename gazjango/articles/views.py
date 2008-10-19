@@ -247,7 +247,7 @@ def homepage(request, template="index.html"):
 
 def search(request):
     "Temporary: redirect to Google search. :/"
-    s = request.GET['s']
+    s = request.GET.get('s', '')
     url = "http://www.google.com/search?hl=en&q=%s+site:daily.swarthmore.edu" % s
     return HttpResponseRedirect(url)
 
