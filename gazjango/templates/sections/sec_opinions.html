@@ -54,7 +54,7 @@
 				<a href="{{ section.most_recent_article.get_absolute_url }}">{{section.most_recent_article.get_title|safe}}</a>
 			</h2>
 			<div id="leadImg">
-				<img src="{{ section.most_recent_article.wide_logo_url }}" />
+				<img src="{{ section.most_recent_article.subsection.wide_logo_url }}" />
 			</div>
 			<p class="byline">
 				<span class="author">by {{ section.most_recent_article.authors_in_order|join_authors }}</span>
