@@ -88,9 +88,7 @@ class Issue(models.Model):
     I don't think this should be a problem....
     """
     
-    articles = models.ManyToManyField(Article,
-                                      through='IssueArticle', 
-                                      related_name='issues')
+    articles = models.ManyToManyField(Article, related_name='issues')
     
     date    = models.DateField(default=datetime.date.today)
     menu    = models.ForeignKey('Menu', null=True)
@@ -102,7 +100,7 @@ class Issue(models.Model):
         Returns this issue's articles, in the order in which they should
         appear in the issue.
         """
-        return self.articles.order_by('issuearticle___order')
+        return self.articles.order_by('position', 'possible_position', '-pub_date')
     
     def announcements(self):
         """Grabs the announcements that should appear in this issue."""
@@ -133,11 +131,6 @@ class Issue(models.Model):
     def lowstories(self, skip=3):
         return self.articles_in_order()[skip:]
     
-    
-    def add_article(self, article):
-        "Appends an article to this issue."
-        IssueArticle.objects.create(issue=self, article=article)
-    
     def __unicode__(self):
         return self.date.strftime("%a, %d %B %Y")
     
@@ -149,20 +142,6 @@ class Issue(models.Model):
     def get_absolute_url(self):
         a = [str(x) for x in (self.date.year, self.date.month, self.date.day)]
         return ('issue', a)
-    
-
-class IssueArticle(models.Model):
-    "An issue's having an article. Includes position metadata."
-    
-    issue    = models.ForeignKey(Issue)
-    article  = models.ForeignKey(Article)
-    
-    class Meta:
-        order_with_respect_to = 'issue'
-        unique_together = ('issue', 'article')
-    
-    def __unicode__(self):
-        return u"%s on %s" % (self.article.slug, self.issue.date)
     
 
 class MenuManager(models.Manager):

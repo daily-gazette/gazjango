@@ -796,12 +796,12 @@ joke = WeatherJoke.objects.create(
 
 issue_today = Issue.objects.create(menu=menu, weather=weather, joke=joke)
 
-issue_today.add_article(scandal)
-issue_today.add_article(nobody_loves_me)
-issue_today.add_article(boring)
-issue_today.add_article(tarble)
-issue_today.add_article(paces)
-issue_today.add_article(nestbeschmutzer)
+issue_today.articles.add(scandal)
+issue_today.articles.add(nobody_loves_me)
+issue_today.articles.add(boring)
+issue_today.articles.add(tarble)
+issue_today.articles.add(paces)
+issue_today.articles.add(nestbeschmutzer)
 
 ### Specials
 

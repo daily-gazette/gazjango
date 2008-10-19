@@ -48,6 +48,6 @@ for article in Article.objects.all():
     issue, created = Issue.objects.get_or_create(date=date,
         defaults={ 'menu': default_menu, 'weather': default_weather, 'joke': default_joke }
     )
-    issue.add_article(article)
+    issue.articles.add(article)
 
 print 'done.'

@@ -1,6 +1,6 @@
 import unittest
 from gazjango.articles.models import Article, Section, Format
-from gazjango.issues.models   import Issue, IssueArticle
+from gazjango.issues.models   import Issue
 from datetime import date, timedelta
 
 class IssueTestCase(unittest.TestCase):
@@ -23,25 +23,26 @@ class IssueTestCase(unittest.TestCase):
         self.issue_yesterday = Issue.objects.create(date=yesterday)
     
     def tearDown(self):
-        for m in (Article, Section, Format, Issue, IssueArticle):
+        for m in (Article, Section, Format, Issue):
             m.objects.all().delete()
     
     def testOrdering(self):
-        self.issue_today.add_article(self.boring_article)
+        self.issue_today.articles.add(self.boring_article)
         self.assert_(self.issue_today.articles.count() == 1)
         self.assert_(self.issue_yesterday.articles.count() == 0)
         
-        self.issue_yesterday.add_article(self.boring_article)
+        self.issue_yesterday.articles.add(self.boring_article)
         self.assert_(self.issue_today.articles.count() == 1)
         self.assert_(self.issue_yesterday.articles.count() == 1)
         
-        fail = lambda: self.issue_today.add_article(self.boring_article)
+        fail = lambda: self.issue_today.articles.add(self.boring_article)
         self.assertRaises(Exception, fail)
         
+        # TODO: this changed and is now broken :/
         self.assertEquals(self.issue_today.get_issuearticle_order(),
                 [self.boring_article.issuearticle_set.get(issue=self.issue_today).pk])
         
-        self.issue_today.add_article(self.exciting_article)
+        self.issue_today.articles.add(self.exciting_article)
         boring_ia   = self.boring_article.issuearticle_set.get(  issue=self.issue_today)
         exciting_ia = self.exciting_article.issuearticle_set.get(issue=self.issue_today)
         
