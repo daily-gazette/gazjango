@@ -115,9 +115,9 @@ jQuery(document).ready(function() {
 		<div id="indexHeadlines">
 		  <table>
 		    {% for story_pair in lowstories|in_groups_of:2 %}
-		      <tr>
+		      <tr height="50px">
 		        {% for story in story_pair %}
-			        <td>
+			        <td width="170px">
 			          {% if story.section.is_special %}
                   <span class="type">{{ story.section.name }}:</span>
 			          {% endif %}
