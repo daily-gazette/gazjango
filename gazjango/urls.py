@@ -117,7 +117,8 @@ urlpatterns += patterns('',
     
     (r'^accounts/', include('registration.urls')),
     
-    (r'^users/%(name)s/$' % reps, 'accounts.views.user_details', {}, 'user-details'),
+    (r'^users/%(name)s/$' % reps,  'accounts.views.user_details', {}, 'user-details'),
+    (r'^author/%(name)s/$' % reps, 'accounts.views.user_details', {}, 'user-details'),
 )
 
 urlpatterns += patterns('',
