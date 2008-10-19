@@ -2,11 +2,12 @@ import datetime
 import calendar
 
 from django.contrib.auth.decorators import permission_required
-from django.core.urlresolvers   import reverse
-from django.template            import RequestContext
-from django.shortcuts           import render_to_response, get_object_or_404
-from django.http                import Http404, HttpResponse, HttpResponseRedirect
+from django.views.decorators.cache  import cache_page
+from django.template import RequestContext
+from django.http     import Http404, HttpResponse, HttpResponseRedirect
 from django.utils.html          import escape
+from django.core.urlresolvers   import reverse
+from django.shortcuts           import render_to_response, get_object_or_404
 from gazjango.misc.view_helpers import get_by_date_or_404, filter_by_date, reporter_admin_data
 
 from gazjango.articles.models      import Article, Special, PhotoSpread, StoryConcept
@@ -221,6 +222,7 @@ def archives(request, section=None, subsection=None, year=None, month=None, day=
     return render_to_response(template, context_instance=rc)
 
 
+@cache_page(60 * 5)
 def homepage(request, template="index.html"):
     tops, mids, lows = Article.published.get_stories(num_mid=2, num_low=6)
     data = {
