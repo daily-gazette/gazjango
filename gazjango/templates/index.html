@@ -113,11 +113,11 @@ jQuery(document).ready(function() {
 		</div>
 		
 		<div id="indexHeadlines">
-		  <table>
+		  <table cellspacing="5px">
 		    {% for story_pair in lowstories|in_groups_of:2 %}
 		      <tr height="50px">
 		        {% for story in story_pair %}
-			        <td width="170px">
+			        <td width="50%">
 			          {% if story.section.is_special %}
                   <span class="type">{{ story.section.name }}:</span>
 			          {% endif %}
@@ -125,8 +125,8 @@ jQuery(document).ready(function() {
   						  <span class="author">
   						    | by {{ story.authors_in_order|join_authors:"1xl" }}
   						  </span>
-  						{% endfor %}
 						</td>
+				{% endfor %}
 		      </tr>
 		    {% endfor %}
 		  </table>
