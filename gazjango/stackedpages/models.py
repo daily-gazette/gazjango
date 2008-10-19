@@ -6,7 +6,7 @@ class Page(models.Model):
     
     url    = models.CharField('URL', max_length=100, db_index=True)
     title  = models.CharField('title', max_length=200)
-    parent = models.ForeignKey('self', null=True)
+    parent = models.ForeignKey('self', null=True, blank=True)
     
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
