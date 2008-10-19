@@ -22,8 +22,10 @@ class StoryFeed(Feed):
         return item.pub_date
     
     def item_categories(self, item):
+        sec = [item.section.name]
+        sub = [item.subsection.name] if item.subsection else []
         tags = [tag.name for tag in item.tags.all()]
-        return [item.section.name, item.subsection.name] + tags
+        return sec + sub + tags
     
 
 class MainFeed(StoryFeed):
@@ -42,6 +44,7 @@ class LatestStoriesFeed(MainFeed):
     def items(self):
         return Article.published.order_by('-pub_date')[:10]
     
+
 
 class SectionFeed(StoryFeed):
     def get_object(self, bits):
