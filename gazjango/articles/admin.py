@@ -4,7 +4,9 @@ from gazjango.articles.models import StoryConcept, Special, DummySpecialTarget
 from gazjango.articles.models import SpecialsCategory, SectionSpecial
 
 class StoryAdmin(admin.ModelAdmin):
-    pass
+    date_hierarchy = 'pub_date'
+    exclude = ('media', )
+    search_fields = ('headline', 'slug', 'text',)
 admin.site.register(Article, StoryAdmin)
 
 
