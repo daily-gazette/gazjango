@@ -11,7 +11,7 @@ CATEGORIES = {
     'opinion': '6',
     'last-word': '7'
 }
-DEFAULT_ORDER = ('news', 'features', 'sports')
+DEFAULT_ORDER = ('news', 'features', 'arts', 'sports')
 AUTHOR_REGEX = re.compile(r'^\s*<p>\s*<strong>\s*By\s+([-\w\s]+)\s*</strong>')
 
 
