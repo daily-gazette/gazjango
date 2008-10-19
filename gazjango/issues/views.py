@@ -28,8 +28,12 @@ def show_issue(request, issue, plain=False):
     else:
         jobs = JobListing.published.get_for_show(num=5, base_date=issue.date, cutoff=one_week)
     
+    articles = issue.articles_in_order(racy=arg_from_get(request.GET, 'racy'))
     data = {
         'issue': issue,
+        'topstory': articles[0],
+        'midstories': articles[1:3],
+        'lowstories': articles[3:],
         'jobs': jobs,
         'comments': comments[:5],
         'for_email': arg_from_get(request.GET, 'for_email')

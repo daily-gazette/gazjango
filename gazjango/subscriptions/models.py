@@ -3,20 +3,6 @@ from django.db.models import signals
 from gazjango.accounts.models import UserProfile, UserKind
 import random
 
-class IssueType(models.Model):
-    """
-    What template should be used for this subscriber's issues.
-    
-    Include plain text, regular HTML with images, optimized-for-swatmail,
-    full-article-text.
-    """
-    name = models.CharField(max_length=60)
-    slug = models.SlugField(unique=True)
-    
-    def __unicode__(self):
-        return self.slug
-    
-
 class ActiveSubscribersManager(models.Manager):
     def get_query_set(self):
         orig = super(ActiveSubscribersManager, self).get_query_set()
@@ -34,7 +20,7 @@ class Subscriber(models.Model):
     
     The confirmation key is quasi-secret: it serves in lieu of a password
     for management things (unsubscribing, changing preferences).
-    """    
+    """
     _name  = models.CharField(max_length=40)
     _email = models.EmailField(unique=True)
     _kind  = models.ForeignKey(UserKind, null=True)
@@ -48,7 +34,7 @@ class Subscriber(models.Model):
     modified     = models.DateField(auto_now=True)
     unsubscribed = models.DateField(null=True)
     
-    issue_type   = models.ForeignKey(IssueType)
+    plain_text = models.BooleanField(default=False)
     racy_content = models.BooleanField(default=True)
     
     is_confirmed = models.BooleanField(default=False)

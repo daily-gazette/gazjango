@@ -86,7 +86,7 @@
                   <td width="375" align="left" valign="middle">
                     <strong>
                       <font color="#000000" size="3" face="Arial, Helvetica, sans-serif">
-                        {{ issue.topstory.headline|safe }}
+                        {{ topstory.headline|safe }}
                       </font>
                     </strong>
                   </td>
@@ -105,11 +105,11 @@
                 <tr>
                   <td>
                     <font color="#333333" size="2" face="Georgia, Times New Roman, Times, serif">
-                      {{ issue.topstory.summary|safe }}
+                      {{ topstory.summary|safe }}
                     </font>
                     <br />
 
-                    <a href="{{ issue.topstory.get_absolute_url }}">
+                    <a href="{{ topstory.get_absolute_url }}">
                       <font color="#004484" size="2" face="Arial, Helvetica, sans-serif">
                         <strong>&gt;&gt; Read on</strong>
                       </font>
@@ -118,7 +118,7 @@
                 </tr>
               </table>
 
-              {% for story in issue.midstories %}
+              {% for story in midstories %}
               <table width="385" height="18" border="0" cellpadding="0" cellspacing="0" bgcolor="#ffa754">
                 <tr>
                   <td width="10" height="18" align="left" valign="middle"></td>
@@ -156,7 +156,7 @@
                 </tr>
               </table>
 
-              {% if issue.lowstories.all %}
+              {% if lowstories.all %}
                 <table width="385" height="2" border="0" cellpadding="0" cellspacing="0" bgcolor="#E47629">
                   <tr>
                     <td></td>
@@ -170,7 +170,7 @@
                         MORE STORIES
                         <br /><br />
                         <font color="#004484">
-                          {% for story in issue.lowstories.all %}
+                          {% for story in lowstories.all %}
                             {% if story.section.is_special %}{{ story.section.name }}:{% endif %}
                             <a href="{{ story.get_absolute_url }}">
                               <font color="#004484" size="2" face="Arial, Helvetica, sans-serif">
@@ -383,10 +383,10 @@
               <table width="202" border="0" cellpadding="0" cellspacing="0">
                 <tr>
                   <td width="202" align="center" valign="top" bgcolor="#ffa754">
-                    <img src="{{ issue.topstory.issue_image.get_absolute_url }}" title="{{ issue.topstory.headline }}" alt="Photo for {{ issue.topstory.headline }}" />
+                    <img src="{{ topstory.issue_image.get_absolute_url }}" title="{{ topstory.headline }}" alt="Photo for {{ topstory.headline }}" />
                     <br />
                     <font color="#000000" size="2" face="Arial, Helvetica, sans-serif">
-                      by <em>{{ issue.topstory.issue_image.credit }}</em>
+                      by <em>{{ topstory.issue_image.credit }}</em>
                     </font>
                   </td>
                 </tr>

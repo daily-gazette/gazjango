@@ -95,12 +95,13 @@ class Issue(models.Model):
     weather = models.ForeignKey('Weather', null=True)
     joke    = models.ForeignKey('WeatherJoke', null=True)
     
-    def articles_in_order(self):
+    def articles_in_order(self, racy=True):
         """
         Returns this issue's articles, in the order in which they should
         appear in the issue.
         """
-        return self.articles.order_by('position', 'possible_position', '-pub_date')
+        a = self.articles.order_by('position', 'possible_position', '-pub_date')
+        return a if racy else a.filter(is_racy=False)
     
     def announcements(self):
         """Grabs the announcements that should appear in this issue."""
@@ -122,14 +123,14 @@ class Issue(models.Model):
         events = Event.objects.for_date(self.date, forward=datetime.timedelta(days=2))
         return events.order_by('start_day', 'start_time')[:10]
     
-    def topstory(self):
-        return self.articles_in_order()[0]
+    def topstory(self, racy=True):
+        return self.articles_in_order(racy)[0]
     
-    def midstories(self, num=2):
-        return self.articles_in_order()[1:1+num]
+    def midstories(self, racy=True, num=2):
+        return self.articles_in_order(racy)[1:1+num]
     
-    def lowstories(self, skip=3):
-        return self.articles_in_order()[skip:]
+    def lowstories(self, racy=True, skip=3):
+        return self.articles_in_order(racy)[skip:]
     
     def __unicode__(self):
         return self.date.strftime("%a, %d %B %Y")
