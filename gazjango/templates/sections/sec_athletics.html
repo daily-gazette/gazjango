@@ -49,7 +49,7 @@
     </div>
 
   	<div id="mainBoxes">
-      {% for article in stories %}
+      {% for article in stories|slice:":8" %}
         <div class="sectionMainBox sectionMainBoxMarginLeft">
           <div id="sectionMainStory">
             <h2><a href="{{ article.get_absolute_url }}">{{article.get_title|safe}}</a></h2>
