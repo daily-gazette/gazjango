@@ -31,7 +31,7 @@
       {% if author.picture %}<div class="picture"><img src="{{ author.picture.get_absolute_url }}" /></div>{% endif %}{% if author.bio %}
         <p>{{ author.bio|safe }}</p>
       {% endif %}
-      {% if author.top_stories %}
+      {% if author.top_stories.count %}
         <br />
         <h4>Highlighted Stories</h4>
         
@@ -50,7 +50,7 @@
       			{{ story.summary|safe }} <a href="{{ story.get_absolute_url }}" class="readMore">read more</a>
       		</p>
     		</div>
-    	{% endfor %}
+      	{% endfor %}
       {% endif %}
       </div>
 	  
