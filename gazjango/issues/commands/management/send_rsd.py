@@ -5,6 +5,8 @@ from gazjango.issues.views  import rsd_now
 import datetime
 
 RSD_LIST = 'reserved-students@sccs.swarthmore.edu'
+# FIXME: this address doesn't actually exist :)
+RSD_TEXT_LIST = 'reserved-students-text@sccs.swarthmore.edu'
 
 class Command(NoArgsCommand):
     def handle_noargs(self, **options):
@@ -22,4 +24,7 @@ class Command(NoArgsCommand):
         email = EmailMultiAlternatives(subject, text_content, from_email, [RSD_LIST])
         email.attach_alternative(html_content, 'text/html')
         email.send()
+        
+        text = EmailMessage(subject, text_content, from_email, [RSD_TEXT_LIST])
+        text.send()
     

@@ -1,11 +1,13 @@
 from django.core.management.base import NoArgsCommand
-from django.core.mail            import EmailMessage, EmailMultiAlternatives
+from django.core.mail            import EmailMessage, EmailMultiAlternatives, SMTPConnection
 from django.http                 import HttpRequest
 from gazjango.issues.views import latest_issue
 import datetime
 
-NORMAL_LIST = 'gazette-subscribers@sccs.swarthmore.edu'
-TAME_LIST   = 'gazette-nonexplicit-subscribers@sccs.swarthmore.edu'
+NORMAL_LIST      = 'gazette-subscribers@sccs.swarthmore.edu'
+NORMAL_TEXT_LIST = 'gazette-text-subscribers@sccs.swarthmore.edu'
+TAME_LIST        = 'gazette-nonexplicit-subscribers@sccs.swarthmore.edu'
+TAME_TEXT_LIST   = 'gazette-nonexplicit-text-subscribers@sccs.swarthmore.edu'
 
 class Command(NoArgsCommand):
     def handle_noargs(self, **options):
@@ -24,11 +26,14 @@ class Command(NoArgsCommand):
         
         from_email = "The Daily Gazette <dailygazette@swarthmore.edu>"
         
-        normal = EmailMultiAlternatives(subject, text_content, from_email, [NORMAL_LIST])
-        normal.attach_alternative(html_content, 'text/html')
-        normal.send()
+        html = EmailMultiAlternatives(subject, text_content, from_email, [NORMAL_LIST])
+        html.attach_alternative(html_content, 'text/html')
+        text = EmailMessage(subject, text_content, from_email, [NORMAL_TEXT_LIST])
         
-        tame = EmailMultiAlternatives(subject, tame_text_content, from_email, [TAME_LIST])
-        tame.attach_alternative(tame_html_content)
-        tame.send()
+        tame_html = EmailMultiAlternatives(subject, tame_text_content, from_email, [TAME_LIST])
+        tame_html.attach_alternative(tame_html_content)
+        tame_text = EmailMessage(subject, text_content, from_email, [TAME_TEXT_LIST])
+        
+        connection = SMTPConnection()
+        connection.send_messages([html, text, tame_html, tame_text])
     
