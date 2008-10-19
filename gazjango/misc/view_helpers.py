@@ -21,8 +21,8 @@ def filter_by_date(qset, year=None, month=None, day=None, field='pub_date', **ot
     return qset.filter(**args)
 
 
-TRUE_VALUES = ('yes', 'y', 'true', 't', 1)
-FALSE_VALUES = ('no', 'n', 'false', 'f', 0)
+TRUE_VALUES = set(('yes', 'y', 'true', 't', 1))
+FALSE_VALUES = set(('no', 'n', 'false', 'f', 0))
 def boolean_arg(lookup, arg, default=False):
     """
     Casts `arg` (from `lookup`) to a boolean based on TRUE_VALUES and
