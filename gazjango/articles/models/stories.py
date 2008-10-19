@@ -212,6 +212,8 @@ class Article(models.Model):
         return formatter(text)
     
     
+    _not_http = re.compile(r'^\s*(?!https?://)', re.IGNORECASE)
+    _img = re.compile(r'^img://', re.IGNORECASE)
     def resolved_text(self, revision=None):
         """
         Formats the text (at the revision specified by ``revision``, if
@@ -222,11 +224,10 @@ class Article(models.Model):
         if self.media.count() > 0 or re.search("<img", text, re.IGNORECASE):
             soup = BeautifulSoup(text)
             
-            reg = re.compile(r"^\s*https?://")
-            matches = lambda src: not re.match(reg, src)
-            for image in soup.findAll("img", src=matches):
+            for image in soup.findAll("img", src=self._not_http):
                 image['src'] = self.resolve_image_link(image['src'])
-            
+            for a in soup.findAll("a", href=self._img):
+                a['href'] = self.resolve_image_link(a['href'][6:])
             return unicode(soup)
         else:
             return text
