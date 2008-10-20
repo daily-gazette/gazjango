@@ -117,7 +117,7 @@ class Announcement(models.Model):
 
 def set_default_slug(sender, instance, **kwords):
     if not instance.slug:
-        import slugify from django.template.defaultfilters
+        from django.template.defaultfilters import slugify
         instance.slug = slugify(instance.title)
 
 signals.post_init.connect(set_default_slug, sender=Announcement)
