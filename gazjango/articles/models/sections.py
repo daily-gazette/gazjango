@@ -42,12 +42,12 @@ class Section(models.Model):
     def most_recent_article(self):
         "Returns the most recent story from this subsection."
         try:
-            return self.articles.order_by('-pub_date')[0]
+            return self.articles.filter(is_published=True).order_by('-pub_date')[0]
         except IndexError:
             return None
     
     def most_recent_articles(self, num=None):
-        articles = self.articles.order_by('-pub_date')
+        articles = self.articles.filter(is_published=True).order_by('-pub_date')
         return articles[:num] if num else articles
     
 
@@ -87,12 +87,12 @@ class Subsection(models.Model):
     def most_recent_article(self):
         "Returns the most recent story from this subsection."
         try:
-            return self.articles.order_by('-pub_date')[0]
+            return self.articles.filter(is_published=True).order_by('-pub_date')[0]
         except IndexError:
             return None
     
     def most_recent_articles(self, num=None):
-        articles = self.articles.order_by('-pub_date')
+        articles = self.articles.filter(is_published=True).order_by('-pub_date')
         return articles[:num] if num else articles
     
 
