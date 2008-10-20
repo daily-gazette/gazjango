@@ -33,7 +33,7 @@ class Section(models.Model):
     def get_stories(self, num_top=2, num_mid=3, num_low=12, **extra):
         "Calls Article.published.get_stories for stories in this section."
         return Article.published.get_stories(
-            base = self.articles.filter(is_published=True),
+            base = self.articles.filter(status='p'),
             num_top = num_top,
             num_mid = num_mid,
             num_low = num_low
@@ -92,7 +92,7 @@ class Subsection(models.Model):
             return None
     
     def most_recent_articles(self, num=None):
-        articles = self.articles.filter(is_published=True).order_by('-pub_date')
+        articles = self.articles.filter(status='p').order_by('-pub_date')
         return articles[:num] if num else articles
     
 
