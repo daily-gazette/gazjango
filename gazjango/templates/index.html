@@ -101,7 +101,7 @@ jQuery(document).ready(function() {
 		         src="{{ topstory.front_image.get_absolute_url }}" 
 		         title="{{ topstory.headline }}" />
 		  </a>
-			<h2><a href="{{ topstory.get_absolute_url }}">{{topstory.get_title|safe}}</a></h2>
+			<h2>{% if topstory.section_if_special %}{{ topstory.section_if_specail }}: {% endif %}<a href="{{ topstory.get_absolute_url }}">{{topstory.get_title|safe}}</a></h2>
 			<p class="byline">
 			  <span class="author">by {{ topstory.authors_in_order|join_authors:"l" }}</span>
 			  <span class="date">| {{ topstory.pub_date|date:"n/j/Y" }}</span>
@@ -118,8 +118,8 @@ jQuery(document).ready(function() {
 		      <tr height="50px">
 		        {% for story in story_pair %}
 			        <td width="50%">
-			          {% if story.section.is_special %}
-                  <span class="type">{{ story.section.name }}:</span>
+			          {% if story.section_if_special %}
+                  <span class="type">{{ story.section_if_special }}:</span>
 			          {% endif %}
 			          <h4><a href="{{ story.get_absolute_url }}">{{ story.get_title|safe }}</a></h4>
   						  <span class="author">

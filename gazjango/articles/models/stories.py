@@ -289,6 +289,18 @@ class Article(models.Model):
         return self.authors.order_by('writing___order')
     
     
+    def section_if_special(self):
+        """
+        Returns the name of the subsection if it's special, 
+        section if that's special, else None.
+        """
+        if self.subsection and self.subsection.is_special:
+            return self.subsection.name
+        elif self.section.is_special:
+            return self.section.name
+        else:
+            return None
+    
     def __unicode__(self):
         return self.slug
     

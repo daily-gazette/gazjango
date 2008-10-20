@@ -60,6 +60,9 @@ class Subsection(models.Model):
     slug = models.SlugField(unique=True)
     description = models.TextField(blank=True)
     section = models.ForeignKey(Section, related_name="subsections")
+    is_special = models.BooleanField(default=False, blank=True,
+                help_text="Whether articles in this subsection will be marked "
+                          "as such on the homepage, issues, etc.")
     
     class Meta:
         app_label = 'articles'
