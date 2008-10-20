@@ -53,7 +53,7 @@ class CommentsManager(models.Manager):
         comments = article.comments.filter(spec).select_related(depth=1)
         return [(c, c.vote_status(user=user, ip=ip)) for c in comments]
 
-class VisibleCommentsManager(models.Manager):
+class VisibleCommentsManager(CommentsManager):
     def get_query_set(self):
         orig = super(VisibleCommentsManager, self).get_query_set()
         is_visible = Q(is_approved=True) & (Q(score__gt=0) | Q(score=None))
