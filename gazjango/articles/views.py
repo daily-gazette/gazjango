@@ -3,8 +3,9 @@ import calendar
 
 from django.contrib.auth.decorators import permission_required
 from django.views.decorators.cache  import cache_page
-from django.template import RequestContext
-from django.http     import Http404, HttpResponse, HttpResponseRedirect
+from django.db.models import Q
+from django.template  import RequestContext
+from django.http      import Http404, HttpResponse, HttpResponseRedirect
 from django.utils.html          import escape
 from django.core.urlresolvers   import reverse
 from django.shortcuts           import render_to_response, get_object_or_404
@@ -59,11 +60,14 @@ def show_article(request, story, form, print_view=False):
     )
     
     cs = PublicComment.visible.order_by('-time').exclude(article=story)
+    
     user = request.user.get_profile() if request.user.is_authenticated() else None
     ip = request.META['REMOTE_ADDR']
+    comments = PublicComment.objects.for_article(story, user, ip, Q(is_spam=False))
+    
     context = RequestContext(request, {
         'story': story,
-        'comments': PublicComment.visible.for_article(story, user, ip),
+        'comments': comments,
         'related': story.related_list(3),
         'topstory': Article.published.get_top_story(),
         'other_comments': cs,
