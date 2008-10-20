@@ -46,7 +46,7 @@
             {% if job.needs_car %}<p>This position requires access to a car</p>{% endif %}
           </div>
           {% autoescape off %}
-            <p>{{ job.description|newlinesbr }}</p>
+            <p>{{ job.description|linebreaksbr }}</p>
           {% endautoescape %}
           {% if not forloop.last %}
             <hr width="50%" />
