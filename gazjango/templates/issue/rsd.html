@@ -171,7 +171,7 @@
                             {{ announcement.text|textile }}
                           {% endautoescape %}
                           {% if announcement.contact %}<strong>Contact:</strong> {{ announcement.contact }} <br /> {% endif %}
-                          <a href="http://daily.swarthmore.edu{{ announcement.get_absolute_url }}">Comment Here</a> 
+                          <a href="http://daily.swarthmore.edu{{ announcement.get_absolute_url }}">Permanent Link</a> 
                           <br /><br/>
                         {% endfor %}
                       </font>
@@ -203,7 +203,7 @@
                           {% endif %}
 
                           {% if event.sponsor %}<strong>Contact:</strong> {{ event.sponsor_link }}} <br /> {% endif %}
-                          <a href="http://daily.swarthmore.edu{{ event.get_absolute_url }}">Comment Here</a> <br />
+                          <a href="http://daily.swarthmore.edu{{ event.get_absolute_url }}">Permanent Link</a> <br />
                         {% endfor %}
                       </font>
                     </td>
@@ -237,7 +237,7 @@
                             {% endautoescape %}
                           </p>
 
-                          <a href="http://daily.swarthmore.edu{{ event.get_absolute_url }}">Comment Here</a> <br />
+                          <a href="http://daily.swarthmore.edu{{ event.get_absolute_url }}">Permanent Link</a> <br />
                           <br/><br/>
                         {% endfor %}
 
