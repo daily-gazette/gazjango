@@ -125,6 +125,13 @@
                   <td width="375" align="left" valign="middle">
                     <strong>
                       <font color="#000000" size="2" face="Arial, Helvetica, sans-serif">
+                        {% if story.section.is_special %}
+                          {% if story.subsection.column %}
+                            {{ story.subsection.name }}:
+                          {% else %}
+                            {{ story.section.name }}:
+                          {% endif %}
+                        {% endif %}
                         {{ story.headline|safe }}
                       </font>
                     </strong>
@@ -197,7 +204,8 @@
                   <td></td>
                 </tr>
               </table>
-
+              
+              {% if issue.announcements.count %}
               <table width="385" height="24" border="0" cellpadding="0" cellspacing="0" bgcolor="#432c16">
                 <tr>
                   <td width="10" height="24" align="left" valign="middle"></td>
@@ -241,6 +249,7 @@
                   </tr>
                 </table>
               {% endfor %}
+              {% endif %}
 
               <table width="385" height="24" border="0" cellpadding="0" cellspacing="0" bgcolor="#432c16">
                 <tr>
@@ -336,9 +345,6 @@
                           Where: {{ event.location }} <br />
                         {% endif %}
                       </font>
-                      {% if not forloop.last %}
-                        <br />
-                      {% endif %}
                     </td>
                   </tr>
                 </table>
@@ -391,7 +397,8 @@
                   </td>
                 </tr>
               </table>
-
+              
+              {% if jobs %}
               <table width="202" height="30" border="0" cellpadding="0" cellspacing="0" bgcolor="#432c16">
                 <tr>
                   <td width="10" align="left" valign="middle">&nbsp;</td>
@@ -420,7 +427,8 @@
                   </td>
                 </tr>
               </table>
-
+              {% endif %}
+              
               <table width="202" height="30" border="0" cellpadding="0" cellspacing="0" bgcolor="#432c16">
                 <tr>
                   <td width="10" align="left" valign="middle">&nbsp;</td>
