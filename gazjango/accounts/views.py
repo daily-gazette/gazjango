@@ -10,8 +10,9 @@ from gazjango.accounts.models import UserProfile
 from gazjango.articles.models import ArticleRevision
 from gazjango.comments.models import PublicComment
 
-manage       = lambda request, **kwargs: render_to_response("base.html", locals())
-register     = lambda request, **kwargs: render_to_response("registration/register.html", locals())
+def manage(requset):
+    raise Http404 # temporary, obviously
+
 
 def user_details(request, name, template="accounts/profile.html"):
     """Shows a user's profile page."""
