@@ -6,6 +6,7 @@
       {% ifchanged %}
         <br /><h3 class="archives">{{ article.pub_date|date:"l, F j, Y" }}</h3>
 	<p>&nbsp;&nbsp;&nbsp;See the issue <a href="{{ article.pub_date|issue_url }}">here</a>.</p>
+	<p>&nbsp;&nbsp;&nbsp;See the Reserved Student Digest <a href="{{ article.pub_date|rsd_url }}">here</a>.</p>
       {% endifchanged %}
       <p><a href="{{ article.get_absolute_url }}">{{ article.headline }}</a> - by {{ article.authors_in_order|join_authors:"t" }}</p>
     {% endfor %}
