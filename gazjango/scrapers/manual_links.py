@@ -1,7 +1,7 @@
 # this isn't really a "scraper", but whatever
 
 manual_links = [
-    ('Credit Repair', 'http://repairmycreditnow.com/Credit_Repair_Advice.htm'),
+    ('Free Flash Arcade Games', 'http://www.arcadekill.com'),
 ]
 
 lca_links = [
