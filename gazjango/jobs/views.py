@@ -36,7 +36,7 @@ def list_jobs(request, options="", default_limit=10, template="jobs/list.html"):
         elif opt in ('needs-car', 'no-car'):
             conditions['needs_car'] = opt == 'needs-car'
     
-    jobs = JobListing.published.filter(**conditions).order_by('-is_filled', '-pub_date')
+    jobs = JobListing.published.filter(**conditions).order_by('is_filled', '-pub_date')
     if 'limit' in request.GET:
         lim = request.GET['limit']
         if lim.isdigit():
