@@ -10,14 +10,14 @@ RSD_TEXT_LIST = 'reserved-text-students@sccs.swarthmore.edu'
 class Command(NoArgsCommand):
     def handle_noargs(self, **options):
         dummy_request = HttpRequest()
-        dummy_request.GET['for_email'] = True
+        dummy_request.GET['for_email'] = 'true'
         html_content = rsd_now(dummy_request).content
         text_content = rsd_now(dummy_request, plain=True).content
         
         now = datetime.datetime.now()
         time = 'Morning' if now.hour < 12 else 'Afternoon'
         subject = now.strftime("Reserved Students Digest: @@ of %A, %B !!, %Y")
-        subject = subject.replace('@@', time).replace('!!', str(today.day))
+        subject = subject.replace('@@', time).replace('!!', str(now.day))
         
         from_email = "RSD by the Daily Gazette <dailygazette@swarthmore.edu>"
         
