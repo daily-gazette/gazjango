@@ -18,6 +18,8 @@ def make_comment_form(data=None, logged_in=False, **kwargs):
             attrs={ 'display': 'none' }
         )
         form.fields['anonymous'].initial = True
+        # temporary, until we get the error handling better
+        form.fields['email'].required = False
     return form
 
 class CommentForm(forms.Form):
