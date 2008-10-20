@@ -34,9 +34,9 @@ class Subscriber(models.Model):
     for management things (unsubscribing, changing preferences).
     """
     _name  = models.CharField(max_length=40)
-    _email = models.EmailField(unique=True, null=True, default=None)
+    _email = models.EmailField(null=True, default=None)
     _kind  = models.ForeignKey(UserKind, null=True)
-    user = models.ForeignKey(UserProfile, null=True, unique=True)
+    user = models.ForeignKey(UserProfile, null=True)
     
     name  = property(lambda self: self.user.name  if self.user else self._name)
     email = property(lambda self: self.user.email if self.user else self._email)
@@ -74,6 +74,9 @@ class Subscriber(models.Model):
         else:
             return self.email
     
+    class Meta:
+        unique_together = (('receive', '_email'),
+                           ('receive', 'user'))
 
 def set_default_key(sender, instance, **kwargs):
     if not instance.confirmation_key:
