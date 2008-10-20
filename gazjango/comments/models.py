@@ -133,7 +133,7 @@ class PublicComment(models.Model):
     
     def check_with_akismet(self):
         "Checks whether the comment is spam."
-        self._akismet_framework(akismet.Akismet.comment_check)
+        return self._akismet_framework(akismet.Akismet.comment_check)
     
     def mark_as_spam(self):
         "Marks a comment which Akismet said was good as spam."
