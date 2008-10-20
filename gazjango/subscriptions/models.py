@@ -9,6 +9,18 @@ class ActiveSubscribersManager(models.Manager):
         return orig.filter(unsubscribed=None)
     
 
+class IssueSubscribersManager(ActiveSubscribersManager):
+    def get_query_set(self):
+        orig = super(IssueSubscribersManager, self).get_query_set()
+        return orig.filter(receive='i')
+    
+
+class RSDSubscribersManager(ActiveSubscribersManager):
+    def get_query_set(self):
+        orig = super(RSDSubscribersManager, self).get_query_set()
+        return orig.filter(receive='r')
+    
+
 class Subscriber(models.Model):
     """
     A subscriber, who gets issues in their inbox when we publish. Either 
@@ -30,6 +42,12 @@ class Subscriber(models.Model):
     email = property(lambda self: self.user.email if self.user else self._email)
     kind  = property(lambda self: self.user.kind  if self.user else self._kind)
     
+    RECEIVE_CHOICES = (
+        ('i', 'Issues'),
+        ('r', 'Reserved Students Digest')
+    )
+    receive = models.CharField(max_length=1, choices=RECEIVE_CHOICES, default='i')
+    
     subscribed   = models.DateField(auto_now_add=True)
     modified     = models.DateField(auto_now=True)
     unsubscribed = models.DateField(null=True)
@@ -42,6 +60,8 @@ class Subscriber(models.Model):
     
     objects = models.Manager()
     active = ActiveSubscribersManager()
+    issues = IssueSubscribersManager()
+    rsd = RSDSubscribersManager()
     
     def randomize_confirmation_key(self):
         chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"

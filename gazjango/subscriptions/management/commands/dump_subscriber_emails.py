@@ -10,13 +10,17 @@ class Command(BaseCommand):
      * text
      * tame
      * tame-text
+     * rsd
+     * rsd-text
     """
     def handle(self, *args, **kwargs):
         filters = {
-            'normal':    Q(plain_text=False, racy_content=True),
-            'text':      Q(plain_text=True,  racy_content=True),
-            'tame':      Q(plain_text=False, racy_content=False),
-            'tame-text': Q(plain_text=True,  racy_content=False),
+            'normal':    Q(receive='i', plain_text=False, racy_content=True),
+            'text':      Q(receive='i', plain_text=True,  racy_content=True),
+            'tame':      Q(receive='i', plain_text=False, racy_content=False),
+            'tame-text': Q(receive='i', plain_text=True,  racy_content=False),
+            'rsd':       Q(receive='r', plain_text=False),
+            'rsd-text':  Q(receive='r', plain_text=True),
         }
         if not args or len(args) != 1 or args[0] not in filters.keys():
             raise CommandError('Enter exactly one subscriber category.')
