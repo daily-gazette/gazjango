@@ -33,7 +33,7 @@ class Section(models.Model):
     def get_stories(self, num_top=2, num_mid=3, num_low=12, **extra):
         "Calls Article.published.get_stories for stories in this section."
         return Article.published.get_stories(
-            base = self.articles,
+            base = self.articles.filter(is_published=True),
             num_top = num_top,
             num_mid = num_mid,
             num_low = num_low
@@ -78,7 +78,7 @@ class Subsection(models.Model):
     def get_stories(self, num_top=2, num_mid=3, num_low=12):
         "Calls Article.published.get_stories for stories in this subsection."
         return Article.published.get_stories(
-            base = self.articles,
+            base = self.articles.filter(is_published=True),
             num_top = num_top,
             num_mid = num_mid, 
             num_low = num_low
