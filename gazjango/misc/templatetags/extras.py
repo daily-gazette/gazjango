@@ -101,11 +101,15 @@ def issue_url(date):
     "Returns the url for ``date``'s issue."
     d = { 'year': date.year, 'month': date.month, 'day': date.day }
     return reverse('issue', kwargs=d)
-
 issue_url.is_safe = True
 
 
-
+@register.filter
+def rsd_url(date):
+    """Returns the url for ``date``'s RSD."""
+    d = { 'year': date.year, 'month': date.month, 'day': date.day }
+    return reverse('rsd', kwargs=d)
+rsd_url.is_safe = True
 
 
 
