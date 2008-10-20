@@ -77,7 +77,6 @@
       		{% if not forloop.first %}
             <li>
               <h3><a href="{{ story.get_absolute_url }}">{{ story.get_title|safe }}</a></h3>
-              <img src="{{ column.small_logo.get_absolute_url }}" title="{{ story.headline }}" alt="" />
               <p class="byline">
 	              <span class="author">by {{ story.authors_in_order|join_authors }}</span>
                 <span class="date">| {{ story.pub_date|date:"n/j/Y" }}</span>
