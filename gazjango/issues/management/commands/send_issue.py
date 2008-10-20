@@ -18,7 +18,7 @@ class Command(NoArgsCommand):
         
         dummy_request.GET['racy'] = 'no'
         tame_html_content = latest_issue(dummy_request).content
-        tame_text_content = latest_issue(dummy_requst, plain=True).content
+        tame_text_content = latest_issue(dummy_request, plain=True).content
         
         # Thursday, October 2, 2008; not Thursday, October 02, 2008
         today = datetime.date.today()
@@ -31,7 +31,7 @@ class Command(NoArgsCommand):
         text = EmailMessage(subject, text_content, from_email, [NORMAL_TEXT_LIST])
         
         tame_html = EmailMultiAlternatives(subject, tame_text_content, from_email, [TAME_LIST])
-        tame_html.attach_alternative(tame_html_content)
+        tame_html.attach_alternative(tame_html_content, 'text/html')
         tame_text = EmailMessage(subject, text_content, from_email, [TAME_TEXT_LIST])
         
         connection = SMTPConnection()
