@@ -1,6 +1,6 @@
 from django.conf.urls.defaults import *
 from django.contrib import admin
-from gazjango.articles.feeds import MainFeed, LatestStoriesFeed, SectionFeed, SectionLatestFeed
+from gazjango.articles.feeds import MainFeed, LatestStoriesFeed, SectionFeed, SectionLatestFeed, TameFeed
 from gazjango.jobs.feeds     import JobsFeed
 from gazjango.misc.forms import RegistrationFormWithProfile
 from django.conf import settings
