@@ -71,7 +71,7 @@ class JobListing(models.Model):
         return ('jobs.views.job_details', [self.slug])
     
     def __unicode__(self):
-        return self.slug
+        return self.slug or '<no slug>'
     
     def get_pay(self):
         return self.pay if self.is_paid else 'None'
