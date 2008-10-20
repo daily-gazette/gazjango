@@ -108,7 +108,7 @@ class Announcement(models.Model):
             return mark_safe(self.sponsor)
     
     def __unicode__(self):
-        return self.slug
+        return self.slug or ''
     
     @permalink
     def get_absolute_url(self):
