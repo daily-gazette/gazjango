@@ -66,7 +66,7 @@ def show_rsd(request, year, month, day, plain=False):
     date = datetime.date(int(year), int(month), int(day))
     not_event = Q(event_date=None)
     current = Announcement.community.filter(date_start__lte=date, date_end__gte=date)
-    current = current.order_by('-date_start', '-pk')
+    current = current.order_by('-date_start', 'pk')
     
     one_week = datetime.timedelta(days=7)
     if date == datetime.date.today():
