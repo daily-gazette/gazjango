@@ -114,8 +114,7 @@ class PublicComment(models.Model):
     objects = CommentsManager()
     visible = VisibleCommentsManager()
     
-    def check_with_akismet(self):
-        "Checks whether the comment is spam."
+    def _akismet_framework(self, function):
         url = 'http://%s/' % Site.objects.get_current().domain
         akismet_api = akismet.Akismet(key=settings.AKISMET_API_KEY, blog_url=url)
         if akismet_api.verify_key():
@@ -128,9 +127,21 @@ class PublicComment(models.Model):
                 'user_agent': self.user_agent
             }
             text = smart_str(self.text)
-            return akismet_api.comment_check(text, data=akismet_data, build_data=True)
+            return function(akismet_api, text, data=akismet_data, build_data=True)
         else:
             raise akismet.APIKeyError("Invalid Akismet API key.")
+    
+    def check_with_akismet(self):
+        "Checks whether the comment is spam."
+        self._akismet_framework(akismet.Akismet.comment_check)
+    
+    def mark_as_spam(self):
+        "Marks a comment which Akismet said was good as spam."
+        self._akismet_framework(akismet.Akismet.submit_spam)
+    
+    def mark_as_ham(self):
+        "Marks a comment which Akismet said was spam as good."
+        self._akismet_framework(akismet.Akismet.submit_ham)
     
     def starting_score(self):
         from_swat = is_from_swat(user=self.user, ip=self.ip_address)
