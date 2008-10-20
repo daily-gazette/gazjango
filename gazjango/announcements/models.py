@@ -1,5 +1,5 @@
 from django.db               import models
-from django.db.models        import permalink
+from django.db.models        import permalink, signals
 from django.utils.safestring import mark_safe
 import django.utils.html
 from datetime import date
@@ -114,3 +114,10 @@ class Announcement(models.Model):
     def get_absolute_url(self):
         return ('announcement', [str(self.date_start.year), self.slug])
     
+
+def set_default_slug(sender, instance, **kwords):
+    if not instance.slug:
+        import slugify from django.template.defaultfilters
+        instance.slug = slugify(instance.title)
+
+signals.post_init.connect(set_default_slug, sender=Announcement)

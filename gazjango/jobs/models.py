@@ -1,4 +1,5 @@
 from django.db import models
+from django.db.models import signals
 import datetime
 
 class PublishedJobsManager(models.Manager):
@@ -76,3 +77,10 @@ class JobListing(models.Model):
     def get_pay(self):
         return self.pay if self.is_paid else 'None'
     
+
+def set_default_slug(sender, instance, **kwords):
+    if not instance.slug:
+        import slugify from django.template.defaultfilters
+        instance.slug = slugify(instance.name)
+
+signals.post_init.connect(set_default_slug, sender=JobListing)
