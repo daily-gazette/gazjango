@@ -4,9 +4,8 @@ from django.http                 import HttpRequest
 from gazjango.issues.views  import rsd_now
 import datetime
 
-RSD_LIST = 'reserved-students@sccs.swarthmore.edu'
-# FIXME: this address doesn't actually exist :)
-RSD_TEXT_LIST = 'reserved-students-text@sccs.swarthmore.edu'
+RSD_LIST      = 'reserved-students@sccs.swarthmore.edu'
+RSD_TEXT_LIST = 'reserved-text-students@sccs.swarthmore.edu'
 
 class Command(NoArgsCommand):
     def handle_noargs(self, **options):
