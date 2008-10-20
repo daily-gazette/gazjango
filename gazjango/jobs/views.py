@@ -21,7 +21,7 @@ def job_details(request, slug, template="jobs/details.html"):
     return render_to_response(template, data, context_instance=rc)
 
 
-def list_jobs(request, options="", default_limit=20, template="jobs/list.html"):
+def list_jobs(request, options="", default_limit=10, template="jobs/list.html"):
     opts = options.split("/")
     opts = [(opt[:-1] if opt.endswith("/") else opt).lower() for opt in opts]
     
@@ -36,7 +36,7 @@ def list_jobs(request, options="", default_limit=20, template="jobs/list.html"):
         elif opt in ('needs-car', 'no-car'):
             conditions['needs_car'] = opt == 'needs-car'
     
-    jobs = JobListing.published.filter(**conditions)
+    jobs = JobListing.published.filter(**conditions).order_by('-is_filled', 'pub_date')
     if 'limit' in request.GET:
         lim = request.GET['limit']
         if lim.isdigit():

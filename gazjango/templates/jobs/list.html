@@ -37,7 +37,7 @@
     <div id="story">
       <h2>Job Listings</h2>
           {% for job in jobs %}
-          <h4><a href="{{ job.get_absolute_url }}">{{ job.name }}</a></h4> <br /><br />
+          <h4><a href="{{ job.get_absolute_url }}">{{ job.name }}</a> {% if job.is_filled %}[filled]{% endif %}</h4> <br /><br />
           <div id="jobInfoList">
             <p><strong>Pay:</strong> {{ job.get_pay }}</p>
             <p><strong>Hours:</strong> {{ job.hours }}</p>
