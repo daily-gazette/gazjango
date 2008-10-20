@@ -38,6 +38,13 @@ class MainFeed(StoryFeed):
         return flatten(stories)
     
 
+class TameFeed(MainFeed):
+    def items(self):
+        stories = Article.published.get_stories(num_top=1, num_mid=2, num_low=7,
+                                base=Article.published.filter(is_racy=False))
+        return flatten(stories)
+    
+
 class LatestStoriesFeed(MainFeed):
     title = 'The Daily Gazette :: Latest Stories'
     

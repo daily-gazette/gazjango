@@ -17,9 +17,11 @@ feeds = {
     'section': SectionFeed,
     'section-latest': SectionLatestFeed,
     'jobs': JobsFeed,
+    'dashboard': MainFeed,
+    'faculty-dashboard': TameFeed,
 }
 urlpatterns += patterns('',
-    (r'^feeds/(?P<url>.*)(?:\.xml|/)$', 'django.contrib.syndication.views.feed',
+    (r'^feeds/(?P<url>.*)(?:\.xml|\.rss|/)$', 'django.contrib.syndication.views.feed',
         {'feed_dict': feeds}),
 )
 
