@@ -19,7 +19,7 @@
           Problems with this email?
           <strong>
             <font color="#004484">
-              <a href="{% url rsd year month day %}">See it in your browser.</a>
+              <a href="http://daily.swarthmore.edu{% url rsd year month day %}">See it in your browser.</a>
             </font>
           </strong>
         </font>
@@ -28,7 +28,7 @@
     <tr>
       <td height="80" colspan="3">
         <a href="http://www.daily.swarthmore.edu">
-          <img border="0" src='{% static images issue/RSDheader.png %}' alt="The Reserved Students Digest" width="590" height="80" />
+          <img border="0" src='http://daily.swarthmore.edu{% static images issue/RSDheader.png %}' alt="The Reserved Students Digest" width="590" height="80" />
         </a>
       </td>
     </tr>
@@ -164,13 +164,13 @@
                     <td>
                       <font color="#333333" size="2" face="Georgia, Times New Roman, Times, serif">
                         {% for announcement in announcements %}
-                          {{ forloop.counter }}. <a href="{{ announcement.get_absolute_url }}" name="a{{ forloop.counter }}"><strong>{{ announcement.title }}</strong></a><br />
+                          {{ forloop.counter }}. <a href="http://daily.swarthmore.edu{{ announcement.get_absolute_url }}" name="a{{ forloop.counter }}"><strong>{{ announcement.title }}</strong></a><br />
                           
                           {% autoescape off %}
                           <p>{{ announcement.long_excerpt|linebreaksbr }}</p>
                           {% endautoescape %}
                           {% if announcement.contact %}<strong>Contact:</strong> {{ announcement.contact }} <br /> {% endif %}
-                          <a href="{{ announcement.get_absolute_url }}">Comment Here</a> 
+                          <a href="http://daily.swarthmore.edu{{ announcement.get_absolute_url }}">Comment Here</a> 
                           <br /><br/>
                         {% endfor %}
                       </font>
@@ -192,7 +192,7 @@
                     <td>
                       <font color="#333333" size="2" face="Georgia, Times New Roman, Times, serif">
                         {% for event in events %}
-                          {{ forloop.counter }}. <a href="{{ event.get_absolute_url }}" name="e{{ forloop.counter }}"><strong>{{ event.title }}</strong></a><br />
+                          {{ forloop.counter }}. <a href="http://daily.swarthmore.edu{{ event.get_absolute_url }}" name="e{{ forloop.counter }}"><strong>{{ event.title }}</strong></a><br />
                           {{ announcement.event_place }}, {{ announcement.event_date|near_future_date }}
                           at {{ announcement.event_time }} <br />
                           {% if announcement.text %}
@@ -202,7 +202,7 @@
                           {% endif %}
 
                           {% if event.sponsor %}<strong>Contact:</strong> {{ event.sponsor_link }}} <br /> {% endif %}
-                          <a href="{{ event.get_absolute_url }}">Comment Here</a> <br />
+                          <a href="http://daily.swarthmore.edu{{ event.get_absolute_url }}">Comment Here</a> <br />
                         {% endfor %}
                       </font>
                     </td>
@@ -223,7 +223,7 @@
                     <td>
                       <font color="#333333" size="2" face="Georgia, Times New Roman, Times, serif">
                         {% for job in jobs %}
-                          {{ forloop.counter }}. <a href="{{ job.get_absolute_url }}" name="j{{ forloop.counter }}"><strong>{{ job.name }}</strong></a><br />
+                          {{ forloop.counter }}. <a href="http://daily.swarthmore.edu{{ job.get_absolute_url }}" name="j{{ forloop.counter }}"><strong>{{ job.name }}</strong></a><br />
                           {% if job.pay %}<p><strong>Pay:</strong>{{ job.get_pay }}</p>{% endif %}
                           {% if job.hours %}<p><strong>Hours:</strong> {{ job.hours }}</p>{% endif %}
                           {% if job.when %}<p><strong>When:</strong> {{ job.when }}</p>{% endif %}
@@ -236,7 +236,7 @@
                             {% endautoescape %}
                           </p>
 
-                          <a href="{{ event.get_absolute_url }}">Comment Here</a> <br />
+                          <a href="http://daily.swarthmore.edu{{ event.get_absolute_url }}">Comment Here</a> <br />
                           <br/><br/>
                         {% endfor %}
 
@@ -334,7 +334,7 @@
                     <font size="2" face="Arial, Helvetica, sans-serif" color="black">
                       <br/>
                       {% for story in stories %}
-                        {{ forloop.counter }}. <a href="{{story.get_absolute_url}}">{{story.get_title|safe}}</a>
+                        {{ forloop.counter }}. <a href="http://daily.swarthmore.edu{{story.get_absolute_url}}">{{story.get_title|safe}}</a>
                         <br /><br/>
                       {% endfor %}
                     </font>
@@ -362,7 +362,7 @@
                     <font size="2" face="Arial, Helvetica, sans-serif" color="black">
                       <br />
                       {% for comment in comments %}
-                        On <a href="{{comment.get_absolute_url}}">{{comment.subject.get_title}}</a>
+                        On <a href="http://daily.swarthmore.edu{{comment.get_absolute_url}}">{{comment.subject.get_title}}</a>
                         by {{ comment.display_name }}
                         at {{ comment.time|date:"g:i A" }},
                         {{ comment.time|date:"F j" }}

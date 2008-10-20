@@ -37,7 +37,7 @@ MORE STORIES
 Read more: http://daily.swarthmore.edu{{ story.get_absolute_url }}
 {% endfor %}
 {% endif %}
-
+{% if issue.announcements %}
 ==========================================
 
 ANNOUNCEMENTS
@@ -49,6 +49,7 @@ ANNOUNCEMENTS
 {{ announcement.text|striptags }}{# TODO: write a filter for plaintext replacing <br /> with \n #}
 
 {% endfor %}
+{% endif %}
 ==========================================
 
 WEATHER

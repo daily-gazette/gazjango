@@ -19,7 +19,7 @@
           Problems with this email?
           <strong>
             <font color="#004484">
-              <a href="{{ issue.get_absolute_url }}">See it in your browser.</a>
+              <a href="http://daily.swarthmore.edu{{ issue.get_absolute_url }}">See it in your browser.</a>
             </font>
           </strong>
         </font>
@@ -27,8 +27,8 @@
     </tr>
     <tr>
       <td height="80" colspan="3">
-        <a href="http://www.daily.swarthmore.edu">
-          <img border="0" src='{% static images issue/header.png %}' alt="The Daily Gazette" width="590" height="80" />
+        <a href="http://daily.swarthmore.edu">
+          <img border="0" src='http://daily.swarthmore.edu{% static images issue/header.png %}' alt="The Daily Gazette" width="590" height="80" />
         </a>
       </td>
     </tr>
@@ -111,7 +111,7 @@
 							</font>
 							<br />
 		
-							<a href="{{ topstory.get_absolute_url }}">
+							<a href="http://daily.swarthmore.edu{{ topstory.get_absolute_url }}">
 							  <font color="#004484" size="2" face="Arial, Helvetica, sans-serif">
 								<strong>&gt;&gt; Read on</strong>
 							  </font>
@@ -127,14 +127,8 @@
 						  <td width="375" align="left" valign="middle">
 							<strong>
 							  <font color="#000000" size="2" face="Arial, Helvetica, sans-serif">
-								{% if story.section.is_special %}
-								  {% if story.subsection.column %}
-									{{ story.subsection.name }}:
-								  {% else %}
-									{{ story.section.name }}:
-								  {% endif %}
-								{% endif %}
-								{{ story.headline|safe }}
+							    {% if story.section_if_special %}{{ story.section_if_special }}:{% endif %}
+  								{{ story.headline|safe }}
 							  </font>
 							</strong>
 						  </td>
@@ -148,7 +142,7 @@
 							  {{ story.summary|safe }}
 							</font>
 							<br />
-							<a href="{{ story.get_absolute_url }}">
+							<a href="http://daily.swarthmore.edu{{ story.get_absolute_url }}">
 							  <font color="#004484" size="2" face="Arial, Helvetica, sans-serif">
 								<strong>&gt;&gt; Read on</strong>
 							  </font>
@@ -158,14 +152,14 @@
 					  </table>
 		
 					  {% endfor %}
-		
+		        
+		        {% if lowstories.count %}
 					  <table width="385" height="10" border="0" cellpadding="0" cellspacing="0">
 						<tr>
 						  <td></td>
 						</tr>
 					  </table>
 		
-					  {% if lowstories.all %}
 						<table width="385" height="2" border="0" cellpadding="0" cellspacing="0" bgcolor="#E47629">
 						  <tr>
 							<td></td>
@@ -180,8 +174,8 @@
 								<br /><br />
 								<font color="#004484">
 								  {% for story in lowstories.all %}
-									{% if story.section.is_special %}{{ story.section.name }}:{% endif %}
-									<a href="{{ story.get_absolute_url }}">
+									{% if story.section_if_special %}{{ story.section_if_special }}:{% endif %}
+									<a href="http://daily.swarthmore.edu{{ story.get_absolute_url }}">
 									  <font color="#004484" size="2" face="Arial, Helvetica, sans-serif">
 										<strong>{{ story.headline|safe }}</strong>
 									  </font>
@@ -226,7 +220,7 @@
 						  <tr>
 							<td>
 							  <font color="#333333" size="2" face="Georgia, Times New Roman, Times, serif">
-								<a href="{{ announcement.get_absolute_url }}"><strong>{{ announcement.title }}</strong></a>
+								<a href="http://daily.swarthmore.edu{{ announcement.get_absolute_url }}"><strong>{{ announcement.title }}</strong></a>
 		
 								{% if announcement.is_event %}
 								  (Sponsored by {{ announcement.sponsor_link }})
@@ -391,7 +385,7 @@
             			<table width="202" border="0" cellpadding="5" cellspacing="0">
 						<tr>
 						  <td width="202" align="center" valign="top" bgcolor="#ffa754">
-							<img src="{{ topstory.issue_image.get_absolute_url }}" title="{{ topstory.headline }}" alt="Photo for {{ topstory.headline }}" />
+							<img src="http://daily.swarthmore.edu{{ topstory.issue_image.get_absolute_url }}" title="{{ topstory.headline }}" alt="Photo for {{ topstory.headline }}" />
 							<br />
 							<font color="#000000" size="2" face="Arial, Helvetica, sans-serif">
 							  by <em>{{ topstory.issue_image.credit }}</em>
@@ -420,7 +414,7 @@
 							<font size="2" face="Arial, Helvetica, sans-serif" color="black">
 							  <br />
 							  {% for job in jobs %}
-							  <a href="{{ job.get_absolute_url }}">{{ job.name }}</a>: 
+							  <a href="http://daily.swarthmore.edu{{ job.get_absolute_url }}">{{ job.name }}</a>: 
 							  {% if job.is_paid %}Paid, {% endif %}
 							  {{ job.where }}
 							  <br /><br/>
@@ -450,7 +444,7 @@
 							<font size="2" face="Arial, Helvetica, sans-serif" color="black">
 							  <br />
 							  {% for comment in comments %}
-								On <a href="{{comment.get_absolute_url}}">{{comment.subject.get_title}}</a>
+								On <a href="http://daily.swarthmore.edu{{comment.get_absolute_url}}">{{comment.subject.get_title}}</a>
 								by {{ comment.display_name }}
 								at {{ comment.time|date:"g:i A" }},
 								{{ comment.time|date:"F j" }}
