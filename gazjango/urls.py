@@ -1,6 +1,7 @@
 from django.conf.urls.defaults import *
 from django.contrib import admin
 from gazjango.articles.feeds import MainFeed, LatestStoriesFeed, SectionFeed, SectionLatestFeed
+from gazjango.jobs.feeds     import JobsFeed
 from gazjango.misc.forms import RegistrationFormWithProfile
 from django.conf import settings
 
@@ -14,7 +15,8 @@ feeds = {
     'main': MainFeed,
     'latest': LatestStoriesFeed,
     'section': SectionFeed,
-    'section-latest': SectionLatestFeed
+    'section-latest': SectionLatestFeed,
+    'jobs': JobsFeed,
 }
 urlpatterns += patterns('',
     (r'^feeds/(?P<url>.*)(?:\.xml|/)$', 'django.contrib.syndication.views.feed',

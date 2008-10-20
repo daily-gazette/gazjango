@@ -1,0 +1,7 @@
+{% if obj.pay %}<strong>Pay:</strong>{{ obj.get_pay }}<br/>{% endif %}
+{% if obj.hours %}<strong>Hours:</strong> {{ obj.hours }}<br/>{% endif %}
+{% if obj.when %}<strong>When:</strong> {{ obj.when }}<br/>{% endif %}
+{% if obj.where %}<strong>Where:</strong> {{ obj.where }}<br/>{% endif %}
+{% if obj.needs_car %}This position requires access to a car.<br/>{% endif %}
+
+{{ obj.description|linebreaksbr }}
