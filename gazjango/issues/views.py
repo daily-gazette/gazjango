@@ -29,6 +29,11 @@ def show_issue(request, issue, plain=False):
         jobs = JobListing.published.get_for_show(num=5, base_date=issue.date, cutoff=one_week)
     
     articles = issue.articles_in_order(racy=boolean_arg(request.GET, 'racy', True))
+    try:
+        topstory = articles[0]
+    except IndexError:
+        raise Http404
+    
     data = {
         'issue': issue,
         'topstory': articles[0],
