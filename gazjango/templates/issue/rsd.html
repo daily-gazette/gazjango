@@ -165,8 +165,10 @@
                       <font color="#333333" size="2" face="Georgia, Times New Roman, Times, serif">
                         {% for announcement in announcements %}
                           {{ forloop.counter }}. <a href="{{ announcement.get_absolute_url }}" name="a{{ forloop.counter }}"><strong>{{ announcement.title }}</strong></a><br />
-
-                          <p>{{ announcement.long_excerpt }}</p>
+                          
+                          {% autoescape off %}
+                          <p>{{ announcement.long_excerpt|linebreaksbr }}</p>
+                          {% endautoescape %}
                           {% if announcement.contact %}<strong>Contact:</strong> {{ announcement.contact }} <br /> {% endif %}
                           <a href="{{ announcement.get_absolute_url }}">Comment Here</a> 
                           <br /><br/>
@@ -194,7 +196,9 @@
                           {{ announcement.event_place }}, {{ announcement.event_date|near_future_date }}
                           at {{ announcement.event_time }} <br />
                           {% if announcement.text %}
-                            <p>{{ announcement.brief_excerpt|safe }}</p>
+                            {% autoescape off %}
+                            <p>{{ announcement.brief_excerpt|linebreaksbr }}</p>
+                            {% endautoescape %}
                           {% endif %}
 
                           {% if event.sponsor %}<strong>Contact:</strong> {{ event.sponsor_link }}} <br /> {% endif %}
@@ -226,7 +230,11 @@
                           {% if job.where %}<p><strong>Where:</strong> {{ job.where }}</p>{% endif %}
                           {% if job.needs_car %}<p>This position requires access to a car.</p>{% endif %}
 
-                          <p>{{ job.description|safe }}</p>
+                          <p>
+                            {% autoescape off %}
+                              {{ job.description|linebreaksbr }}
+                            {% endautoescape %}
+                          </p>
 
                           <a href="{{ event.get_absolute_url }}">Comment Here</a> <br />
                           <br/><br/>
