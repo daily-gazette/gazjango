@@ -12,7 +12,7 @@ CATEGORIES = {
     'last-word': '7'
 }
 DEFAULT_ORDER = ('news', 'features', 'arts', 'sports')
-AUTHOR_REGEX = re.compile(r'^\s*<p>\s*<strong>\s*By\s+([-\w\s]+)\s*</strong>')
+AUTHOR_REGEX = re.compile(r'^\s*<p>\s*<strong>\s*By\s+([-\w\s']+)\s*</strong>')
 
 
 def cache_item_name(order=DEFAULT_ORDER):
