@@ -138,10 +138,14 @@ class PublicComment(models.Model):
     def mark_as_spam(self):
         "Marks a comment which Akismet said was good as spam."
         self._akismet_framework(akismet.Akismet.submit_spam)
+        self.is_spam = True
+        self.save()
     
     def mark_as_ham(self):
         "Marks a comment which Akismet said was spam as good."
         self._akismet_framework(akismet.Akismet.submit_ham)
+        self.is_spam = False
+        self.save()
     
     def starting_score(self):
         from_swat = is_from_swat(user=self.user, ip=self.ip_address)
