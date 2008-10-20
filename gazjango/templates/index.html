@@ -175,7 +175,7 @@ jQuery(document).ready(function() {
 	
 	<div id="indexBottom">
 		<div class="indexBottomColumn floatLeft margin25">
-			<h3>Announcements</h3>
+			<h3><a href="/announcements/">Announcements</a></h3>
 			
 			{% for announcement in announcements %}
 			  <h4>
@@ -197,7 +197,7 @@ jQuery(document).ready(function() {
 		</div>
 		
 		<div class="indexBottomColumn floatLeft margin25">
-			<h3>Jobs &amp; Internships</h3>
+			<h3><a href="/jobs/">Jobs &amp; Internships</a></h3>
 			
 			{% for job in jobs %}
 			  <h4><a href="{{ job.get_absolute_url }}">{{ job.name }}</a></h4>
