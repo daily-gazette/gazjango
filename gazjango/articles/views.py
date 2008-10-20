@@ -63,7 +63,7 @@ def show_article(request, story, form, print_view=False):
     ip = request.META['REMOTE_ADDR']
     context = RequestContext(request, {
         'story': story,
-        'comments': PublicComment.objects.for_article(story, user, ip),
+        'comments': PublicComment.visible.for_article(story, user, ip),
         'related': story.related_list(3),
         'topstory': Article.published.get_top_story(),
         'other_comments': cs,
