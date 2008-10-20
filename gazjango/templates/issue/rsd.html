@@ -194,11 +194,11 @@
                       <font color="#333333" size="2" face="Georgia, Times New Roman, Times, serif">
                         {% for event in events %}
                           {{ forloop.counter }}. <a href="http://daily.swarthmore.edu{{ event.get_absolute_url }}" name="e{{ forloop.counter }}"><strong>{{ event.title }}</strong></a><br />
-                          {{ announcement.event_place }}, {{ announcement.event_date|near_future_date }}
-                          at {{ announcement.event_time }} <br />
-                          {% if announcement.text %}
+                          {{ event.event_place }}, {{ event.event_date|near_future_date }}
+                          at {{ event.event_time }} <br />
+                          {% if event.text %}
                             {% autoescape off %}
-                            <p>{{ announcement.brief_excerpt|linebreaksbr }}</p>
+                            <p>{{ event.brief_excerpt|linebreaksbr }}</p>
                             {% endautoescape %}
                           {% endif %}
 
