@@ -222,7 +222,6 @@ def archives(request, section=None, subsection=None, year=None, month=None, day=
     return render_to_response(template, context_instance=rc)
 
 
-@cache_page(60 * 5)
 def homepage(request, template="index.html"):
     tops, mids, lows = Article.published.get_stories(num_mid=2, num_low=6)
     data = {
