@@ -84,7 +84,7 @@ def show_rsd(request, year, month, day, plain=False):
         'year': year, 'month': month, 'day': day,
         'date': date,
         'announcements': current.filter(not_event),
-        'events': current.exclude(not_event),
+        'events': current.exclude(not_event).order_by('event_date', 'pk'),
         'jobs': jobs,
         'comments': comments[:3],
         'stories': t,
