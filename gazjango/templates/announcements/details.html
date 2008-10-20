@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load extras %}
+{% load markup %}
 
 {% block title %}{{ announcement.title|striptags }}{% endblock title %}
 
@@ -39,7 +40,9 @@
   <div id="storyBox">
     <div id="story">
       <h2>{{ announcement.title|safe }}</h2>
-      <p> {{ announcement.text|safe }} </p>
+      {% autoescape off %}
+      <p> {{ announcement.text|textile }} </p>
+      {% endautoescape %}
 		
 		  <div id="jobInfo">
   			<p><strong>Sponsor:</strong> {{ announcement.sponsor_link }}</p>
