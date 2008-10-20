@@ -41,7 +41,7 @@
     <div id="story">
       <h2>{{ announcement.title|safe }}</h2>
       {% autoescape off %}
-      <p> {{ announcement.text|textile }} </p>
+        {{ announcement.text|textile }}
       {% endautoescape %}
 		
 		  <div id="jobInfo">
