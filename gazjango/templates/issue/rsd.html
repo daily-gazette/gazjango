@@ -198,7 +198,7 @@
                           at {{ event.event_time }} <br />
                           {% if event.text %}
                             {% autoescape off %}
-                            <p>{{ event.brief_excerpt|linebreaksbr }}</p>
+                            <p>{{ event.text|textile }}</p>
                             {% endautoescape %}
                           {% endif %}
 
