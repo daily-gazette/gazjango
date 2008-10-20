@@ -45,19 +45,18 @@ class PublishedArticlesManager(models.Manager):
         """
         base = base or self
         
-        tops = list(base.filter(position='1').order_by("?"))
+        tops = list(base.filter(position='1').order_by('?'))
         if len(tops) < num_top:
             cands = base.filter(possible_position='1').order_by('-pub_date')
             cands = cands.exclude(pk__in=[top.pk for top in tops])
             needed = num_top - len(tops)
             tops += list(cands[:needed])
-            mids = []
         else:
-            mids = tops[num_top:]
             tops = tops[:num_top]
         
         exclude_pks = [top.pk for top in tops]
-        mids += list(base.filter(position='2').exclude(pk__in=exclude_pks).order_by("?"))
+        mids = base.filter(position__in=('1', '2')).exclude(pk__in=exclude_pks)
+        mids = list(mids.order_by('-pub_date'))
         if len(mids) < num_mid:
             cands = base.filter(possible_position__in=('1', '2'))
             
