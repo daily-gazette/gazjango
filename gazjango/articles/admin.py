@@ -8,7 +8,6 @@ class WritingInline(admin.StackedInline):
     model = Writing
     verbose_name = "Author"
     verbose_name_plural = "Authors"
-    list_display = ('user', '_order')
     extra = 1
 
 class StoryAdmin(admin.ModelAdmin):
