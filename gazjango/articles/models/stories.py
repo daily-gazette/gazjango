@@ -2,6 +2,7 @@ from gazjango.diff_match_patch.diff_match_patch import diff_match_patch
 from datetime import datetime
 from gazjango.scrapers.BeautifulSoup import BeautifulSoup
 import re
+import random
 
 from django.db                   import models
 from django.contrib.auth.models  import User
@@ -46,9 +47,10 @@ class PublishedArticlesManager(models.Manager):
         """
         base = base or self
         
-        tops = list(base.filter(position='1').order_by('?')[:3])
+        tops = list(base.filter(position='1').order_by('-pub_date')[:3])
+        tops = sorted(tops, key=lambda x: random.random())
         if len(tops) < num_top:
-            cands = base.filter(possible_position='1').order_by('-pub_date')
+            cands = base.filter(possible_position='1').order_by('position', '-pub_date')
             cands = cands.exclude(pk__in=[top.pk for top in tops])
             needed = num_top - len(tops)
             tops += list(cands[:needed])
