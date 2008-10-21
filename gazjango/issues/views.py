@@ -66,7 +66,6 @@ def show_rsd(request, year, month, day, plain=False):
     date = datetime.date(int(year), int(month), int(day))
     not_event = Q(event_date=None)
     current = Announcement.community.filter(date_start__lte=date, date_end__gte=date)
-    current = current.order_by('-date_start', 'pk')
     
     one_week = datetime.timedelta(days=7)
     if date == datetime.date.today():
@@ -83,8 +82,8 @@ def show_rsd(request, year, month, day, plain=False):
     data = {
         'year': year, 'month': month, 'day': day,
         'date': date,
-        'announcements': current.filter(not_event),
-        'events': current.exclude(not_event).order_by('event_date', 'pk'),
+        'announcements': current.filter(not_event).order_by('-date_start', 'pk'),
+        'events': current.exclude(not_event).order_by('event_date', 'event_time', 'pk'),
         'jobs': jobs,
         'comments': comments[:3],
         'stories': t,
