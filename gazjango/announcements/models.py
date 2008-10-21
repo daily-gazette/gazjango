@@ -12,8 +12,8 @@ class PublishedAnnouncementsManager(models.Manager):
     
     def now_running(self):
         "Returns published announcements which should now be shown."
-        today = date.today()
-        return self.filter(date_start__lte=today, date_end__gte=today)
+        t = date.today()
+        return self.filter(date_start__lte=t, date_end__gte=t).order_by('-date_start', 'pk')
     
     def get_n(self, n=3):
         "Returns the `n` announcements to be shown."
