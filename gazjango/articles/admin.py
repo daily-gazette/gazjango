@@ -4,10 +4,11 @@ from gazjango.articles.models import StoryConcept, Special, DummySpecialTarget
 from gazjango.articles.models import SpecialsCategory, SectionSpecial
 
 
-class WritingInline(admin.TabularInline):
+class WritingInline(admin.StackedInline):
     model = Writing
     verbose_name = "Author"
     verbose_name_plural = "Authors"
+    list_display = ('user', '_order')
     extra = 1
 
 class StoryAdmin(admin.ModelAdmin):
