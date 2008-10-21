@@ -151,7 +151,7 @@ class Article(models.Model):
     comments_allowed = models.BooleanField(default=True)
     
     POSITION_CHOICES = (
-        ('3', 'normal'),
+        ('3', 'low'),
         ('2', 'middle'),
         ('1', 'top')
     )
