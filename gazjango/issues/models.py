@@ -75,13 +75,10 @@ class Event(models.Model):
 
 
 class IssuesManager(models.Manager):
-    def populate_issue(self):
-        if datetime.datetime.now().hour > 14:
-            tomorrow = True
-            day = datetime.date.today() + datetime.timedelta(days=1)
-        else:
-            tomorrow = False
-            day = datetime.date.today()
+    def populate_issue(self, tomorrow=None):
+        if tomorrow is None:
+            tomorrow = datetime.datetime.now().hour > 14
+        day = datetime.date.today() + datetime.timedelta(days=(1 if tomorrow else 0))
         
         issue, created = self.get_or_create(date=day)
         if not issue.menu:
@@ -93,10 +90,11 @@ class IssuesManager(models.Manager):
                 issue.joke = WeatherJoke.objects.get(date=day)
             except WeatherJoke.DoesNotExist:
                 pass
+        if not issue.articles.count():
+            last_issue = issue.get_previous_by_date()
+            arts = Article.published.filter(pub_date__gte=last_issue.date, issues=None)
+            issue.articles = arts
         
-        last_issue = issue.get_previous_by_date()
-        arts = Article.published.filter(pub_date__gte=last_issue.date, issues=None)
-        issue.articles = arts
         issue.save()
         return issue
     
