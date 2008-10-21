@@ -73,6 +73,34 @@ class Event(models.Model):
         return self.link
     
 
+
+class IssuesManager(models.Manager):
+    def populate_issue(self):
+        if datetime.datetime.now().hour > 14:
+            tomorrow = True
+            day = datetime.date.today() + datetime.timedelta(days=1)
+        else:
+            tomorrow = False
+            day = datetime.date.today()
+        
+        issue, created = self.get_or_create(date=day)
+        if not issue.menu:
+            issue.menu = Menu.objects._for_today_or_tomorrow(tomorrow)
+        if not issue.weather:
+            issue.weather = Weather.objects._get_or_parse(tomorrow)
+        if not issue.joke:
+            try:
+                issue.joke = WeatherJoke.objects.get(date=day)
+            except WeatherJoke.DoesNotExist:
+                pass
+        
+        last_issue = issue.get_previous_by_date()
+        arts = Article.published.filter(pub_date__gte=last_issue.date, issues=None)
+        issue.articles = arts
+        issue.save()
+        return issue
+    
+
 class Issue(models.Model):
     """
     An issue of the paper.
@@ -94,6 +122,8 @@ class Issue(models.Model):
     menu    = models.ForeignKey('Menu', null=True)
     weather = models.ForeignKey('Weather', null=True)
     joke    = models.ForeignKey('WeatherJoke', null=True)
+    
+    objects = IssuesManager()
     
     def articles_in_order(self, racy=True):
         """
