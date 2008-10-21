@@ -236,6 +236,12 @@ class PublicComment(models.Model):
             name = '<a href="%s">%s</a>' % (self.user.get_absolute_url(), name)
         return name
     
+    def article_name(self):
+        try:
+            return self.subject.headline
+        except:
+            return "<>"
+    
     def __unicode__(self):
         return u"on %s by %s" % (self.subject.slug, self.display_name)
     
