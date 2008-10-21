@@ -7,6 +7,9 @@ class StoryAdmin(admin.ModelAdmin):
     date_hierarchy = 'pub_date'
     exclude = ('media', )
     search_fields = ('headline', 'slug', 'text',)
+    
+    list_display = ('headline', 'status', 'author_names', 'position', 'possible_position', 'is_racy')
+    list_filter = ('status', 'position', 'possible_position')
 admin.site.register(Article, StoryAdmin)
 
 

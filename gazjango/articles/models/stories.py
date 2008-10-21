@@ -12,6 +12,7 @@ from gazjango.comments.models            import PublicComment
 from gazjango.media.models               import MediaFile, ImageFile, MediaBucket
 from gazjango.misc.exceptions            import RelationshipMismatch
 import gazjango.articles.formats as formats
+from gazjango.misc.templatetags.extras import join_authors
 
 
 class PublishedArticlesManager(models.Manager):
@@ -288,6 +289,8 @@ class Article(models.Model):
     def authors_in_order(self):
         return self.authors.order_by('writing___order')
     
+    def author_names(self):
+        return join_authors(self.authors_in_order(), 'ptx')
     
     def section_if_special(self):
         """
