@@ -46,7 +46,7 @@ class PublishedArticlesManager(models.Manager):
         """
         base = base or self
         
-        tops = list(base.filter(position='1').order_by('?'))
+        tops = list(base.filter(position='1').order_by('?')[:3])
         if len(tops) < num_top:
             cands = base.filter(possible_position='1').order_by('-pub_date')
             cands = cands.exclude(pk__in=[top.pk for top in tops])
