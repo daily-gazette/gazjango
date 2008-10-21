@@ -1,7 +1,13 @@
 from django.contrib import admin
-from gazjango.articles.models import Article, Section, Subsection, Column
+from gazjango.articles.models import Article, Section, Subsection, Column, Writing
 from gazjango.articles.models import StoryConcept, Special, DummySpecialTarget
 from gazjango.articles.models import SpecialsCategory, SectionSpecial
+
+
+class WritingInline(admin.StackedInline):
+    model = Writing
+    verbose_name = "Author"
+    verbose_name_plural = "Authors"
 
 class StoryAdmin(admin.ModelAdmin):
     date_hierarchy = 'pub_date'
@@ -11,6 +17,8 @@ class StoryAdmin(admin.ModelAdmin):
     list_display = ('headline', 'status', 'author_names', 'position', 'possible_position', 'is_racy')
     list_filter = ('status', 'position', 'possible_position')
 admin.site.register(Article, StoryAdmin)
+    
+    inlines = WritingInline
 
 
 class SectionAdmin(admin.ModelAdmin):
