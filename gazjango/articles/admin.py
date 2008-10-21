@@ -17,7 +17,7 @@ class StoryAdmin(admin.ModelAdmin):
     list_display = ('headline', 'status', 'author_names', 'position', 'possible_position', 'is_racy')
     list_filter = ('status', 'position', 'possible_position')
     
-    inlines = WritingInline
+    inlines = [WritingInline]
 admin.site.register(Article, StoryAdmin)
 
 
