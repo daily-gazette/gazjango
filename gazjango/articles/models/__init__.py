@@ -1,4 +1,4 @@
-from gazjango.articles.models.stories       import Article, ArticleRevision, Format
+from gazjango.articles.models.stories       import Article, ArticleRevision, Format, Writing
 from gazjango.articles.models.sections      import Section, Subsection, Column
 from gazjango.articles.models.specials      import Special, SpecialsCategory
 from gazjango.articles.models.specials      import DummySpecialTarget, SectionSpecial
