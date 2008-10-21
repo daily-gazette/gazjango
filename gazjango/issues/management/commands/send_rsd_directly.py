@@ -1,7 +1,8 @@
 from django.core.management.base import NoArgsCommand
 from django.core.mail            import EmailMessage, EmailMultiAlternatives, SMTPConnection
 from django.http                 import HttpRequest
-from gazjango.issues.views  import rsd_now
+from gazjango.subscriptions.models import Subscriber
+from gazjango.issues.views         import rsd_now
 import datetime
 import sys
 import smtplib
