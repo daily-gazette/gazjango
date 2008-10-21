@@ -1,11 +1,10 @@
 from django.core.management.base import NoArgsCommand
-from django.core.mail            import EmailMessage, EmailMultiAlternatives
+from django.core.mail            import EmailMessage, EmailMultiAlternatives, SMTPConnection
 from django.http                 import HttpRequest
 from gazjango.issues.views  import rsd_now
 import datetime
-
-RSD_LIST      = 'reserved-students@sccs.swarthmore.edu'
-RSD_TEXT_LIST = 'reserved-text-students@sccs.swarthmore.edu'
+import sys
+import smtplib
 
 class Command(NoArgsCommand):
     def handle_noargs(self, **options):
@@ -21,15 +20,16 @@ class Command(NoArgsCommand):
         
         from_email = "RSD by the Daily Gazette <dailygazette@swarthmore.edu>"
         
-        messages = []
+        connection = SMTPConnection()
         for subscriber in Subscriber.rsd.all():
             if subscriber.plain_text:
                 msg = EmailMessage(subject, text_content, from_email, [subscriber.email])
             else:
                 msg = EmailMultiAlternatives(subject, text_content, from_email, [subscriber.email])
                 msg.attach_alternative(html_content, 'text/html')
-            messages.append(msg)
-        
-        connection = SMTPConnection()
-        connection.send(messages)
+            
+            try:
+                connection.send_messages([msg])
+            except smtplib.SMTPRecipientsRefused:
+                sys.stderr.write("recipient refused: %s" % subscriber.email)
     

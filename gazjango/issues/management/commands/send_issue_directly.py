@@ -3,6 +3,8 @@ from django.core.mail            import EmailMessage, EmailMultiAlternatives, SM
 from django.http                 import HttpRequest
 from gazjango.issues.views import latest_issue
 import datetime
+import sys
+import smtplib
 
 class Command(NoArgsCommand):
     def handle_noargs(self, **options):
@@ -21,7 +23,7 @@ class Command(NoArgsCommand):
         
         from_email = "The Daily Gazette <dailygazette@swarthmore.edu>"
         
-        messages = []
+        connection = SMTPConnection()
         for subscriber in Subscriber.issues.all():
             if subscriber.plain_text:
                 content = text_content if subscriber.racy_content else tame_text_content
@@ -31,8 +33,9 @@ class Command(NoArgsCommand):
                 html = html_content if subscriber.racy_content else tame_html_content
                 msg = EmailMultiAlternatives(subject, text, from_email, [subscriber.email])
                 msg.attach_alternative(html, 'text/html')
-            messages.append(msg)
-        
-        connection = SMTPConnection()
-        connection.send_messages(messages)
+            
+            try:
+                connection.send_messages([msg])
+            except smtplib.SMTPRecipientsRefused:
+                sys.stderr.write("recipient refused: %s" % subscriber.email)
     
