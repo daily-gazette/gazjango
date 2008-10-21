@@ -301,7 +301,7 @@ def subsection(request, section, subsection):
     data = {
         'section': sec,
         'subsection': sub,
-        'recent_stories': sub.articles.all().order_by('-pub_date')[:10],
+        'recent_stories': sub.published_articles().order_by('-pub_date')[:10],
         'topstories': tops,
         'midstories': mids,
         'lowlist': lowlist,

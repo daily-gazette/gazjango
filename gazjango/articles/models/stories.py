@@ -286,7 +286,7 @@ class Article(models.Model):
     def related_list(self, num=None):
         """Returns a QuerySet of related stories."""
         # TODO: improve related_list
-        rel = self.section.articles.exclude(pk=self.pk).order_by('-pub_date')
+        rel = self.section.published_articles().exclude(pk=self.pk).order_by('-pub_date')
         return rel[:num] if num else rel
     
     def authors_in_order(self):

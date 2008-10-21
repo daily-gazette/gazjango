@@ -33,21 +33,24 @@ class Section(models.Model):
     def get_stories(self, num_top=2, num_mid=3, num_low=12, **extra):
         "Calls Article.published.get_stories for stories in this section."
         return Article.published.get_stories(
-            base = self.articles.filter(status='p'),
+            base = self.published_articles(),
             num_top = num_top,
             num_mid = num_mid,
             num_low = num_low
         )
     
+    def published_articles(self):
+        return self.articles.filter(status='p')
+    
     def most_recent_article(self):
         "Returns the most recent story from this subsection."
         try:
-            return self.articles.filter(status='p').order_by('-pub_date')[0]
+            return self.published_articles().order_by('-pub_date')[0]
         except IndexError:
             return None
     
     def most_recent_articles(self, num=None):
-        articles = self.articles.filter(status='p').order_by('-pub_date')
+        articles = self.published_articles().order_by('-pub_date')
         return articles[:num] if num else articles
     
 
@@ -78,21 +81,24 @@ class Subsection(models.Model):
     def get_stories(self, num_top=2, num_mid=3, num_low=12):
         "Calls Article.published.get_stories for stories in this subsection."
         return Article.published.get_stories(
-            base = self.articles.filter(status='p'),
+            base = self.published_articles(),
             num_top = num_top,
             num_mid = num_mid, 
             num_low = num_low
         )
     
+    def published_articles(self):
+        return self.articles.filter(status='p')
+    
     def most_recent_article(self):
         "Returns the most recent story from this subsection."
         try:
-            return self.articles.filter(status='p').order_by('-pub_date')[0]
+            return self.published_articles().order_by('-pub_date')[0]
         except IndexError:
             return None
     
     def most_recent_articles(self, num=None):
-        articles = self.articles.filter(status='p').order_by('-pub_date')
+        articles = self.published_articles().order_by('-pub_date')
         return articles[:num] if num else articles
     
 
