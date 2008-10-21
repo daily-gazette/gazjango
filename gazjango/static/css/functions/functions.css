@@ -35,6 +35,8 @@ IMAGE STYLES
 
 .imgLeft,.imgRight,.imgCenter {
 	background-color: #EEE;
+	font-family: "Helvetica Neue", Arial, Helvetica, Geneva, sans-serif;
+	font-style: italic;
 }
 
 .imgLeft img,.imgRight img,.imgCenter img {
@@ -44,7 +46,6 @@ IMAGE STYLES
 
 .imgLeft p,.imgRight p,.imgCenter p {
 	font-family: "Helvetica Neue", Arial, Helvetica, Geneva, sans-serif;
-	padding: 3px;
 }
 
 .imgLeft {
