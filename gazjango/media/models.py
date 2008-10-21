@@ -31,7 +31,7 @@ class MediaFile(models.Model):
     field. If the file was created by one or more users, use the ``users`` m2m.
     """
     
-    data = models.FileField(upload_to="uploads/%Y/%m/%d")
+    data = models.FileField(upload_to="by_date/%Y/%m/%d")
     
     name   = models.CharField(max_length=100)
     slug   = models.SlugField()
