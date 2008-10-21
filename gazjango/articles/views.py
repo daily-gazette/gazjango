@@ -28,7 +28,7 @@ from gazjango.scrapers.manual_links import manual_links, lca_links
 def article(request, slug, year, month, day, num=None, form=None, print_view=False):
     "Base function to call for displaying a given article."
     slug = slug[:100] # keep links working for the few very-long slugs
-    story = get_by_date_or_404(Article, year, month, day, slug=slug)
+    story = get_by_date_or_404(Article, year, month, day, slug=slug, status='p')
     return specific_article(request, story, num, form, print_view)
 
 def specific_article(request, story, num=None, form=None, print_view=False):
@@ -63,7 +63,7 @@ def show_article(request, story, form, print_view=False):
     
     user = request.user.get_profile() if request.user.is_authenticated() else None
     ip = request.META['REMOTE_ADDR']
-    comments = PublicComment.objects.for_article(story, user, ip, Q(is_spam=False))
+    comments = PublicComment.objects.for_article(story, user, ip)
     
     context = RequestContext(request, {
         'story': story,

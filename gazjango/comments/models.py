@@ -41,7 +41,7 @@ class CommentsManager(models.Manager):
         comment.save()
         return comment
     
-    def for_article(self, article, user, ip, spec=models.Q()):
+    def for_article(self, article, user, ip, spec=models.Q(is_spam=False)):
         """
         Returns `article`s comments, in the format used by the comments
         template: [(comment, status)], where `status` is 1 if the viewer
