@@ -16,9 +16,9 @@ class StoryAdmin(admin.ModelAdmin):
     
     list_display = ('headline', 'status', 'author_names', 'position', 'possible_position', 'is_racy')
     list_filter = ('status', 'position', 'possible_position')
-admin.site.register(Article, StoryAdmin)
     
     inlines = WritingInline
+admin.site.register(Article, StoryAdmin)
 
 
 class SectionAdmin(admin.ModelAdmin):
