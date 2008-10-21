@@ -225,7 +225,10 @@ class Article(models.Model):
             soup = BeautifulSoup(text)
             
             for image in soup.findAll("img", src=self._not_http):
-                image['src'] = self.resolve_image_link(image['src'])
+                src = image['src']
+                if src.startswith('img://'):
+                    src = src[6:]
+                image['src'] = self.resolve_image_link(src)
             for a in soup.findAll("a", href=self._img):
                 a['href'] = self.resolve_image_link(a['href'][6:])
             return unicode(soup)
