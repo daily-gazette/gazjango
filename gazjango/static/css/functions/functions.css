@@ -33,8 +33,18 @@ IMAGE STYLES
 
 **************************************/
 
+.imgLeft,.imgRight,.imgCenter {
+	background-color: #DDD;
+}
+
 .imgLeft img,.imgRight img,.imgCenter img {
 	width: 100%;
+	border: 2px solid #000000;
+}
+
+.imgLeft p,.imgRight p,.imgCenter p {
+	font: italic "Helvetica Neue", Arial, Helvetica, Geneva, sans-serif;
+
 }
 
 .imgLeft {
