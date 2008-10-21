@@ -43,7 +43,7 @@ IMAGE STYLES
 }
 
 .imgLeft p,.imgRight p,.imgCenter p {
-	font: italic "Helvetica Neue", Arial, Helvetica, Geneva, sans-serif;
+	font-family: "Helvetica Neue", Arial, Helvetica, Geneva, sans-serif;
 	padding: 3px;
 }
 
