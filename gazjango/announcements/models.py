@@ -124,7 +124,7 @@ def set_default_slug(sender, instance, **kwords):
         slug = base_slug = slugify(instance.title)
         num = 0
         year = datetime.date.today().year
-        while Annonuncement.objects.filter(slug=slug, date_start__year=year).count():
+        while Announcement.objects.filter(slug=slug, date_start__year=year).count():
             num += 1
             slug = "%s-%s" % (base_slug, num)
         instance.slug = slug
