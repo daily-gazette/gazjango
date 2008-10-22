@@ -340,6 +340,6 @@ def list_subsections(request, section):
     Lists the subsections in a given section, in a plaintext format that
     looks like "fac_staff | Faculty & Staff". (For AJAX requests.)
     """
-    subs = get_object_or_404(Section, slug=section).subsections.filter(is_over=False)
+    subs = get_object_or_404(Section, slug=section).subsections
     data = ["%s | %s" % (sub.slug, sub.name) for sub in subs]
     return HttpResponse('\n'.join(data))
