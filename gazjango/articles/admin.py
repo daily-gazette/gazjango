@@ -15,8 +15,8 @@ class StoryAdmin(admin.ModelAdmin):
     exclude = ('media', )
     search_fields = ('headline', 'slug', 'text',)
     
-    list_display = ('headline', 'status', 'author_names', 'position', 'possible_position', 'is_racy')
-    list_filter = ('status', 'position', 'possible_position')
+    list_display = ('headline', 'status', 'author_names', 'position', 'section', 'subsection', 'is_racy')
+    list_filter = ('status', 'position', 'possible_position', 'section', 'subsection')
     
     inlines = [WritingInline]
 admin.site.register(Article, StoryAdmin)
