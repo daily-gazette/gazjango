@@ -2,7 +2,7 @@ from django.db               import models
 from django.db.models        import permalink, signals
 from django.utils.safestring import mark_safe
 import django.utils.html
-from datetime import date
+import datetime
 
 class PublishedAnnouncementsManager(models.Manager):
     "Deals only with published announcements."
@@ -12,7 +12,7 @@ class PublishedAnnouncementsManager(models.Manager):
     
     def now_running(self):
         "Returns published announcements which should now be shown."
-        t = date.today()
+        t = datetime.date.today()
         return self.filter(date_start__lte=t, date_end__gte=t).order_by('-date_start', '-date_end')
     
     def get_n(self, n=3):
@@ -70,8 +70,8 @@ class Announcement(models.Model):
     sponsor = models.CharField(max_length=50)
     sponsor_url = models.URLField(blank=True, verify_exists=True)
     
-    date_start = models.DateField(default=date.today)
-    date_end   = models.DateField(default=date.today)
+    date_start = models.DateField(default=datetime.date.today)
+    date_end   = models.DateField(default=datetime.date.today)
     
     event_date  = models.DateField(blank=True, null=True)
     event_time  = models.CharField(blank=True, max_length=20)
