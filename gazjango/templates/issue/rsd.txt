@@ -57,6 +57,7 @@ JOBS
 {% for job in jobs %}
 {{ forloop.counter }}. {{ job.name }}
   
+Contact: {{ job.contact_info }}
 {% if job.pay %}Pay: {{ job.get_pay }}
 {% endif %}{% if job.hours %}Hours: {{ job.hours }}
 {% endif %}{% if job.when %}When: {{ job.when }}

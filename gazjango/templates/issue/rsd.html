@@ -227,6 +227,7 @@
                       <font color="#333333" size="2" face="Georgia, Times New Roman, Times, serif">
                         {% for job in jobs %}
                           {{ forloop.counter }}. <a href="http://daily.swarthmore.edu{{ job.get_absolute_url }}" name="j{{ forloop.counter }}"><strong>{{ job.name }}</strong></a><br />
+                          <p>Contact: {{ job.contact_info }}</p>
                           {% if job.pay %}<p><strong>Pay:</strong>{{ job.get_pay }}</p>{% endif %}
                           {% if job.hours %}<p><strong>Hours:</strong> {{ job.hours }}</p>{% endif %}
                           {% if job.when %}<p><strong>When:</strong> {{ job.when }}</p>{% endif %}
