@@ -1,5 +1,6 @@
 from django.db import models
 from django.db.models import signals
+from django.template.defaultfilters import slugify
 import datetime
 
 class PublishedJobsManager(models.Manager):
