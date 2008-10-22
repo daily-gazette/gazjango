@@ -11,7 +11,7 @@ def get_tla_links(override_cache=False):
     else:
         try:
             links = get_tla_links_directly()
-            cache.set(CACHE_KEY, links, 1 * 60 * 60)
+            cache.set(CACHE_KEY, links, 1 * 60 * 60 + 60)
             return links
         except urllib2.URLError:
             # TODO: log this error
