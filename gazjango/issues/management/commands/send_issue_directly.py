@@ -24,6 +24,8 @@ class Command(NoArgsCommand):
         
         from_email = "The Daily Gazette <dailygazette@swarthmore.edu>"
         
+        print 'starting to send emails, ' + datetime.datetime.now().strftime("%c")
+        
         connection = SMTPConnection()
         for subscriber in Subscriber.issues.all():
             if subscriber.plain_text:
@@ -39,4 +41,6 @@ class Command(NoArgsCommand):
                 connection.send_messages([msg])
             except smtplib.SMTPRecipientsRefused:
                 sys.stderr.write("recipient refused: %s" % subscriber.email)
+        
+        print 'done sending emails, ' + datetime.datetime.now().strftime("%c")
     
