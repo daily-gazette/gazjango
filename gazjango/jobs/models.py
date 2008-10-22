@@ -46,7 +46,7 @@ class JobListing(models.Model):
     slug = models.SlugField(unique=True, null=True, max_length=100)
     
     contact_name  = models.CharField(max_length=60)
-    contact_email = models.EmailField(blank=True)
+    contact_email = models.CharField(blank=True, max_length=75)
     
     description = models.TextField()
     
