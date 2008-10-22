@@ -40,7 +40,7 @@
   					  {% if user.is_authenticated %} 
   					    {{ user.get_full_name }} |
   					    {% if user.is_staff %}
-  					      <a href="/reporter-admin/">Reporter Admin</a> |
+  					      {# <a href="/reporter-admin/">Reporter Admin</a> | #}
   					      <a href="/admin/">Management Admin</a> |
   					    {% endif %}
 			          <a href="{% url manage-user %}">Manage your Account</a> |

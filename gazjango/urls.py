@@ -125,23 +125,23 @@ urlpatterns += patterns('',
     (r'^author/%(name)s/$' % reps, 'accounts.views.user_details', {}, 'user-details'),
 )
 
-urlpatterns += patterns('',
-    (r'^reporter-admin/$', 'accounts.views.admin_index', {}, 'reporter-admin'),
-    
-    (r'^reporter-admin/write/$', 'articles.views.admin_write_page1', {}, 'write'),
-    (r'^reporter-admin/write/1/$', 'articles.views.admin_write_page1'),
-    
-    (r'^reporter-admin/comments/$', 'comments.views.manage', {}, 'manage-comments'),
-    
-    (r'^reporter-admin/upload-media/$', 'media.views.show_form', {}, 'upload-media'),
-    (r'^reporter-admin/media-bucket/$', 'media.views.show_form', {'kind': 'bucket'}, 'manage-bucket'),
-    (r'^reporter-admin/media-bucket/%(slug)s/$' % reps, 'media.views.show_form', {'kind': 'bucket'}),
-)
+# urlpatterns += patterns('',
+#     (r'^reporter-admin/$', 'accounts.views.admin_index', {}, 'reporter-admin'),
+#     
+#     (r'^reporter-admin/write/$', 'articles.views.admin_write_page1', {}, 'write'),
+#     (r'^reporter-admin/write/1/$', 'articles.views.admin_write_page1'),
+#     
+#     (r'^reporter-admin/comments/$', 'comments.views.manage', {}, 'manage-comments'),
+#     
+#     (r'^reporter-admin/upload-media/$', 'media.views.show_form', {}, 'upload-media'),
+#     (r'^reporter-admin/media-bucket/$', 'media.views.show_form', {'kind': 'bucket'}, 'manage-bucket'),
+#     (r'^reporter-admin/media-bucket/%(slug)s/$' % reps, 'media.views.show_form', {'kind': 'bucket'}),
+# )
 
 urlpatterns += patterns('',
     (r'^data/authors/$', 'accounts.views.author_completions', {}, 'author-completions'),
     (r'^data/usernames/$', 'accounts.views.username_for_name', {}, 'get-or-make-username'),
-    (r'^data/subsections/%(section)s/$' % reps, 'articles.views.list_subsections', {}, 'list-subsections')
+    # (r'^data/subsections/%(section)s/$' % reps, 'articles.views.list_subsections', {}, 'list-subsections')
 )
 
 if settings.DEBUG:
