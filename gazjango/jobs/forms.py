@@ -12,6 +12,6 @@ class SubmitJobForm(forms.ModelForm):
     
     class Meta:
         model = JobListing
-        fields  = ('name', 'description', 'is_paid', 'pay')
-        fields += ('hours', 'when', 'where', 'at_swat', 'needs_car')
+        fields  = ('name', 'contact_name', 'contact_email', 'description')
+        fields += ('is_paid', 'pay', 'hours', 'when', 'where', 'at_swat', 'needs_car')
     
