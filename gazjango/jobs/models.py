@@ -87,7 +87,10 @@ class JobListing(models.Model):
 
 def set_default_slug(sender, instance, **kwords):
     if not instance.slug:
-        from django.template.defaultfilters import slugify
-        instance.slug = slugify(instance.name)
-
+        slug = base_slug = slugify(instance.name)
+        num = 0
+        while JobListing.objects.filter(slug=slug).count():
+            num += 1
+            slug = "%s-%s" % (base_slug, num)
+        instance.slug = slug
 signals.post_init.connect(set_default_slug, sender=JobListing)

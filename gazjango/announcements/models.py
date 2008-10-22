@@ -1,8 +1,10 @@
-from django.db               import models
-from django.db.models        import permalink, signals
-from django.utils.safestring import mark_safe
+from django.db        import models
+from django.db.models import permalink, signals
+from django.utils.safestring        import mark_safe
+from django.template.defaultfilters import slugify
 import django.utils.html
 import datetime
+import re
 
 class PublishedAnnouncementsManager(models.Manager):
     "Deals only with published announcements."
@@ -116,9 +118,14 @@ class Announcement(models.Model):
         return ('announcement', [str(self.date_start.year), self.slug])
     
 
+
 def set_default_slug(sender, instance, **kwords):
     if not instance.slug:
-        from django.template.defaultfilters import slugify
-        instance.slug = slugify(instance.title)
-
+        slug = base_slug = slugify(instance.title)
+        num = 0
+        year = datetime.date.today().year
+        while Annonuncement.objects.filter(slug=slug, date_start__year=year).count():
+            num += 1
+            slug = "%s-%s" % (base_slug, num)
+        instance.slug = slug
 signals.post_init.connect(set_default_slug, sender=Announcement)
