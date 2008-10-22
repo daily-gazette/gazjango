@@ -25,7 +25,7 @@ class CommentsManager(models.Manager):
         
         if comment.is_anonymous or not user.has_perm('comments.can_post_directly'):
             comment.is_spam = check_spam and comment.check_with_akismet()
-            comment.is_approved = pre_approved or False
+            comment.is_approved = pre_approved or bool(user)
         else:
             comment.is_spam = False
             comment.is_approved = True
