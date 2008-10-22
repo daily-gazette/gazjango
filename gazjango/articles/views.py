@@ -9,7 +9,7 @@ from django.http      import Http404, HttpResponse, HttpResponseRedirect
 from django.utils.html          import escape
 from django.core.urlresolvers   import reverse
 from django.shortcuts           import render_to_response, get_object_or_404
-from gazjango.misc.view_helpers import get_by_date_or_404, filter_by_date, reporter_admin_data
+from gazjango.misc.view_helpers import get_by_date_or_404, filter_by_date, get_ip, reporter_admin_data
 
 from gazjango.articles.models      import Article, Special, PhotoSpread, StoryConcept
 from gazjango.articles.models      import Section, Subsection, Column
@@ -62,7 +62,7 @@ def show_article(request, story, form, print_view=False):
     cs = PublicComment.visible.order_by('-time').exclude(article=story)
     
     user = request.user.get_profile() if request.user.is_authenticated() else None
-    ip = request.META['REMOTE_ADDR']
+    ip = get_ip(request)
     comments = PublicComment.objects.for_article(story, user, ip)
     
     context = RequestContext(request, {
@@ -96,7 +96,7 @@ def show_photospread_page(request, spread, num=None, form=None, whole_page=None)
         whole_page = not request.is_ajax()
     
     user = request.user.get_profile() if request.user.is_authenticated() else None
-    ip = request.META['REMOTE_ADDR']
+    ip = get_ip(request)
     
     if whole_page:
         data.update(
@@ -124,8 +124,8 @@ def post_comment(request, slug, year, month, day):
         args = {
             'subject': story,
             'text': escape(form.cleaned_data['text']).replace("\n", "<br/>"),
-            'ip_address': request.META['REMOTE_ADDR'],
-            'user_agent': request.META['HTTP_USER_AGENT']
+            'ip_address': get_ip(request),
+            'user_agent': request.META.get('HTTP_USER_AGENT', '')
         }
         
         data = form.cleaned_data

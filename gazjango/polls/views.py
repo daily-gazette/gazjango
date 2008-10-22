@@ -1,7 +1,8 @@
 from django.http      import HttpResponse
 from django.template  import RequestContext
 from django.shortcuts import render_to_response, get_object_or_404
-from gazjango.polls.models import Poll
+from gazjango.polls.models      import Poll
+from gazjango.misc.view_helpers import get_ip
 import gazjango.polls.exceptions
 
 def poll_results(request, year, slug, template="polls/results.html"):
@@ -17,7 +18,7 @@ def submit_poll(request, year=None, slug=None):
         print repr(request.POST['option'])
         poll = get_object_or_404(Poll, time_start__year=year, slug=slug)
         
-        ip = request.META['REMOTE_ADDR']
+        ip = get_ip(request)
         if request.user.is_authenticated():
             user = request.user.get_profile()
         else:

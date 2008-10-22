@@ -18,7 +18,7 @@ def comments_for_article(request, slug, year, month, day, num=None):
     story = get_by_date_or_404(Article, year, month, day, slug=slug)
     
     user = request.user.get_profile() if request.user.is_authenticated() else None
-    ip = request.META['REMOTE_ADDR']
+    ip = get_ip(request)
     
     spec = Q(number__gt=num) if num else Q()
     comments = PublicComment.objects.for_article(story, user, ip, spec=spec)
@@ -45,7 +45,7 @@ def vote_on_comment(request, slug, year, month, day, num, val):
         raise Http404
     
     user = request.user.get_profile() if request.user.is_authenticated() else None
-    ip = request.META['REMOTE_ADDR']
+    ip = get_ip(request)
     result = comment.vote(positive, ip=ip, user=user)
     
     if request.is_ajax():

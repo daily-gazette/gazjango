@@ -39,6 +39,14 @@ def boolean_arg(lookup, arg, default=False):
     except KeyError:
         return default
 
+def get_ip(request):
+    if 'HTTP_X_FORWARDED_FOR' in request.META:
+        return request.META['HTTP_X_FORWARDED_FOR']
+    elif 'REMOTE_ADDR' in request.META:
+        return request.META['REMOTE_ADDR']
+    else:
+        return None
+
 def reporter_admin_data(user):
     """
     Returns the data necessary just to render base.html of the 
