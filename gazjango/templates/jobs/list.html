@@ -45,7 +45,9 @@
             <p><strong>Where:</strong> {{ job.where }}</p>
             {% if job.needs_car %}<p>This position requires access to a car</p>{% endif %}
           </div>
-          <p>Contact: {{ job.contact_info }}</p>
+          {% if job.contact_info %}
+            <p><strong>Contact:</strong> {{ job.contact_info }}</p>
+          {% endif %}
           {% autoescape off %}
             <p>{{ job.description|linebreaksbr }}</p>
           {% endautoescape %}
