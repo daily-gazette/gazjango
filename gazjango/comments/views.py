@@ -3,7 +3,7 @@ from django.contrib.auth.decorators import permission_required
 from django.http                    import HttpResponse, Http404, HttpResponseRedirect
 from django.template                import RequestContext
 from django.shortcuts               import render_to_response
-from gazjango.misc.view_helpers     import get_by_date_or_404, reporter_admin_data
+from gazjango.misc.view_helpers     import get_by_date_or_404, get_ip, reporter_admin_data
 
 from gazjango.articles.models      import Article, StoryConcept
 from gazjango.announcements.models import Announcement
