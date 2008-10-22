@@ -265,17 +265,18 @@
 						</tr>
 					  </table>
 
-					{% for announcement in issue.announcements %}
+					
 						<table width="385" border="0" cellspacing="0" cellpadding="10">
 						  <tr>
 							<td>
-							  <font color="#333333" size="2" face="Georgia, Times New Roman, Times, serif">
-								{{ forloop.counter }}. <a href="#{{ forloop.counter }}">{{ announcement.title }}</a>
-							  </font>
+							  	<font color="#333333" size="2" face="Georgia, Times New Roman, Times, serif">
+									{% for announcement in issue.announcements %}
+										{{ forloop.counter }}. <a href="#{{ forloop.counter }}">{{ announcement.title }}</a><br />
+									{% endfor %}
+							 	 </font>
 							</td>
 						  </tr>
 						</table>
-					  {% endfor %}
 
 					  <table width="385" height="2" border="0" cellpadding="0" cellspacing="0" bgcolor="#E47629">
 						<tr>
@@ -295,7 +296,7 @@
 						  <tr>
 							<td>
 							  <font color="#333333" size="2" face="Georgia, Times New Roman, Times, serif">
-								<a href="http://daily.swarthmore.edu{{ announcement.get_absolute_url }}" name="{{ forloop.counter }}"><strong>{{ announcement.title }}</strong></a>
+								{{ forloop.counter }}. <a href="http://daily.swarthmore.edu{{ announcement.get_absolute_url }}" name="{{ forloop.counter }}"><strong>{{ announcement.title }}</strong></a>
 		
 								{% if announcement.is_event %}
 								  (Sponsored by {{ announcement.sponsor_link }})
