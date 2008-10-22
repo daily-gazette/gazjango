@@ -41,6 +41,7 @@
       <h2>{{ job.name|safe }}</h2>
       {% if job.is_filled %}<h3>This position has been filled.</h3>{% endif %}
       <p>Submitted:  {{ job.pub_date|date:"F j, Y" }}</p>
+      <p>Contact: {{ job.contact_info }}</p>
     
       <p>{{ job.description|safe }}</p>
     
