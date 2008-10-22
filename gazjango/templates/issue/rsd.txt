@@ -33,7 +33,7 @@ ANNOUNCEMENTS
 {{ forloop.counter }}. {{ announcement.title }}
 
 {{ announcement.text|striptags }}
-{% if announcement.sponsor %}Contact: {{ announcement.sponsor }} {% if announcement.sponsor_url %}({{ announcement.sponsor_url }}){% endif %} {% endif %}
+{% if announcement.sponsor %}Contact: {{ announcement.sponsor }} {% if announcement.poster_email %}({{ announcement.poster_email }}){% endif %} {% if announcement.sponsor_url %}({{ announcement.sponsor_url }}){% endif %} {% endif %}
 {% if not forloop.last %}     -----------------------{% endif %}
 {% endfor %}
 ==============================================
