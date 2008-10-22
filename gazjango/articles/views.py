@@ -10,7 +10,7 @@ from django.utils.html          import escape
 from django.core.urlresolvers   import reverse
 from django.shortcuts           import render_to_response, get_object_or_404
 from gazjango.misc.view_helpers import get_by_date_or_404, filter_by_date
-from gazjango.misc.view_helpers import get_ip, get_user, reporter_admin_data
+from gazjango.misc.view_helpers import get_ip, get_user_profile, reporter_admin_data
 
 from gazjango.articles.models      import Article, Special, PhotoSpread, StoryConcept
 from gazjango.articles.models      import Section, Subsection, Column
