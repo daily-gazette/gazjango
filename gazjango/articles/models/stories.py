@@ -145,7 +145,8 @@ class Article(models.Model):
     STATUS_CHOICES = (
         ('d', 'Draft'),
         ('e', 'Pending Review'),
-        ('w', 'Scheduled'),
+        ('a', 'Edited (1)'),
+        ('b', 'Edited (2)'),
         ('p', 'Published')
     )
     status = models.CharField(max_length=1, choices=STATUS_CHOICES)
