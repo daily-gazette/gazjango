@@ -62,7 +62,7 @@ def show_article(request, story, form, print_view=False):
     
     cs = PublicComment.visible.order_by('-time').exclude(article=story)
     
-    user = get_user_profile(requset)
+    user = get_user_profile(request)
     ip = get_ip(request)
     comments = PublicComment.objects.for_article(story, user, ip)
     
