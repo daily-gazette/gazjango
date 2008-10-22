@@ -45,7 +45,7 @@ class JobListing(models.Model):
     name = models.CharField(max_length=100)
     slug = models.SlugField(unique=True, null=True, max_length=100)
     
-    contact_name  = models.CharField(max_length=60, blank=True)
+    contact_name  = models.CharField(max_length=60)
     contact_email = models.EmailField(blank=True)
     
     description = models.TextField()
@@ -79,6 +79,9 @@ class JobListing(models.Model):
     
     def get_pay(self):
         return self.pay if self.is_paid else 'None'
+    
+    def contact_info(self):
+        return self.contact_name + (' (%s)' % self.contact_email)
     
 
 def set_default_slug(sender, instance, **kwords):
