@@ -65,61 +65,64 @@
 		  <form action="" method="post">
 			<table class="submission">
 			  <tr>
-				<th width="150px">{{ form.title.label_tag }}:</th>
-				<td>{{ form.title }}</td>
-				<td>{{ form.title.errors }}</td>
+  				<th width="150px">{{ form.title.label_tag }}:</th>
+  				<td>{{ form.title }}</td>
+  				<td>{{ form.title.errors }}</td>
 			  </tr>
 			  <tr>
-				<th><label for="{{ form.text.auto_id }}">Announcement Text</label>:</th>
-				<td>{{ form.text }}</td>
-				<td>{{ form.text.errors }}</td>
+			   <th><label for="{{ form.poster_email.auto_id }}">Your Email</label>:</th>
+			   <td>{{ form.poster_email }}</td>
+			   <td>{{ form.poster_email.errors }}</td>
 			  </tr>
 			  <tr>
-				<th><label for="{{ form.date_start.auto_id }}">Start Date</label>:</th>
-				<td>{{ form.date_start }}</td>
-				<td>{{ form.date_start.errors }}</td>
+  				<th><label for="{{ form.text.auto_id }}">Announcement Text</label>:</th>
+  				<td>{{ form.text }}</td>
+  				<td>{{ form.text.errors }}</td>
 			  </tr>
 			  <tr>
-				<th><label for="{{ form.date_end.auto_id }}">End Date</label>:</th>
-				<td>{{ form.date_end }}</td>
-				<td>{{ form.date_end.errors }}</td>
+  				<th><label for="{{ form.date_start.auto_id }}">Start Date</label>:</th>
+  				<td>{{ form.date_start }}</td>
+  				<td>{{ form.date_start.errors }}</td>
 			  </tr>
 			  <tr>
-				<th>{{ form.sponsor.label_tag }}:</th>
-				<td>
-				  {{ form.sponsor }}
-				  <a href="#" id='sponsor-toggle' style="display: none;" onclick="toggleSponsorLink(); return false;">add a link</a>
-				</td>
-				<td>{{ form.sponsor.errors }}</td>
+  				<th><label for="{{ form.date_end.auto_id }}">End Date</label>:</th>
+  				<td>{{ form.date_end }}</td>
+  				<td>{{ form.date_end.errors }}</td>
+			  </tr>
+			  <tr>
+  				<th>{{ form.sponsor.label_tag }}:</th>
+  				<td>
+  				  {{ form.sponsor }}
+  				  <a href="#" id='sponsor-toggle' style="display: none;" onclick="toggleSponsorLink(); return false;">add a link</a>
+  				</td>
+  				<td>{{ form.sponsor.errors }}</td>
 			  </tr>
 			  <tr id="sponsor-url-row">
-				<th><label for="{{ form.sponsor_url.auto_id }}">Sponsor Link</label>:</th>
-				<td>{{ form.sponsor_url }}</td>
-				<td>{{ form.sponsor_url.errors }}</td>
+  				<th><label for="{{ form.sponsor_url.auto_id }}">Sponsor Link</label>:</th>
+  				<td>{{ form.sponsor_url }}</td>
+  				<td>{{ form.sponsor_url.errors }}</td>
 			  </tr>
 			  <tr>
-			  	<th>
-			  		&nbsp;
-			  	</th>
-				<td colspan="2">
-				  {{ form.is_event }}
-				  This announcement is about a specific event. (We'll still let you post it!)
-				</td>
+			  	<th> &nbsp; </th>
+  				<td colspan="2">
+  				  {{ form.is_event }}
+  				  This announcement is about a specific event. (We'll still let you post it!)
+  				</td>
 			  </tr>
 			  <tr class="event-row">
-				<th>{{ form.event_date.label_tag }}:</th>
-				<td>{{ form.event_date }}</td>
-				<td>{{ form.event_date.errors }}</td>
+  				<th>{{ form.event_date.label_tag }}:</th>
+  				<td>{{ form.event_date }}</td>
+  				<td>{{ form.event_date.errors }}</td>
 			  </tr>
 			  <tr class="event-row">
-				<th>{{ form.event_time.label_tag }}:</th>
-				<td>{{ form.event_time }}</td>
-				<td>{{ form.event_time.errors }}</td>
+  				<th>{{ form.event_time.label_tag }}:</th>
+  				<td>{{ form.event_time }}</td>
+  				<td>{{ form.event_time.errors }}</td>
 			  </tr>
 			  <tr class="event-row">
-				<th>{{ form.event_place.label_tag }}:</th>
-				<td>{{ form.event_place }}</td>
-				<td>{{ form.event_place.errors }}</td>
+  				<th>{{ form.event_place.label_tag }}:</th>
+  				<td>{{ form.event_place }}</td>
+  				<td>{{ form.event_place.errors }}</td>
 			  </tr>
 			  <tr>
 			  	<th></th>
