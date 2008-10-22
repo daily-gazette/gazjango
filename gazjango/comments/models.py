@@ -213,7 +213,8 @@ class PublicComment(models.Model):
             self.score = None
             self.shown_forever = vote.positive
         else:
-            self.score += vote.value
+            if self.score:
+                self.score += vote.value
         self.save()
     
     def vote_status(self, user=None, ip=None):
