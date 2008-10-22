@@ -81,7 +81,8 @@ class JobListing(models.Model):
         return self.pay if self.is_paid else 'None'
     
     def contact_info(self):
-        return self.contact_name + (' (%s)' % self.contact_email)
+        n = self.contact_name
+        return n + (' (%s)' % self.contact_email if self.contact_email else '')
     
 
 def set_default_slug(sender, instance, **kwords):
