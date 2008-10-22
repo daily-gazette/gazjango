@@ -7,6 +7,7 @@ from gazjango.announcements.models import Announcement
 from gazjango.announcements.forms  import SubmitAnnouncementForm
 from gazjango.articles.models      import Article
 from gazjango.comments.models      import PublicComment
+import datetime
 
 def announcement(request, slug, year, month=None, day=None):
     an = get_object_or_404(Announcement, slug=slug, date_start__year=year)
