@@ -9,7 +9,8 @@ from django.http      import Http404, HttpResponse, HttpResponseRedirect
 from django.utils.html          import escape
 from django.core.urlresolvers   import reverse
 from django.shortcuts           import render_to_response, get_object_or_404
-from gazjango.misc.view_helpers import get_by_date_or_404, filter_by_date, get_ip, reporter_admin_data
+from gazjango.misc.view_helpers import get_by_date_or_404, filter_by_date
+from gazjango.misc.view_helpers import get_ip, get_user, reporter_admin_data
 
 from gazjango.articles.models      import Article, Special, PhotoSpread, StoryConcept
 from gazjango.articles.models      import Section, Subsection, Column
@@ -61,7 +62,7 @@ def show_article(request, story, form, print_view=False):
     
     cs = PublicComment.visible.order_by('-time').exclude(article=story)
     
-    user = request.user.get_profile() if request.user.is_authenticated() else None
+    user = get_user_profile(requset)
     ip = get_ip(request)
     comments = PublicComment.objects.for_article(story, user, ip)
     
@@ -95,7 +96,7 @@ def show_photospread_page(request, spread, num=None, form=None, whole_page=None)
     if whole_page is None:
         whole_page = not request.is_ajax()
     
-    user = request.user.get_profile() if request.user.is_authenticated() else None
+    user = get_user_profile(request)
     ip = get_ip(request)
     
     if whole_page:
@@ -130,7 +131,7 @@ def post_comment(request, slug, year, month, day):
         
         data = form.cleaned_data
         if logged_in:
-            args['user'] = request.user.get_profile()
+            args['user'] = get_user_profile(request)
             if data['anonymous'] and data['name'] != request.user.get_full_name():
                 args['name'] = data['name']
         else:
@@ -326,7 +327,7 @@ def subsection(request, section, subsection):
 
 @permission_required('accounts.can_access_admin')
 def admin_write_page1(request, template="custom-admin/write_page1.html"):
-    data = reporter_admin_data(request.user.get_profile())
+    data = reporter_admin_data(get_user_profile(request))
     data['sections' ] = Section.objects.all()
     data['taggroups'] = TagGroup.objects.all()
     data['loosetags'] = Tag.objects.filter(group=None)

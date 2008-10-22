@@ -1,5 +1,6 @@
 from django.shortcuts import get_object_or_404
 
+from gazjango.accounts.models      import UserProfile
 from gazjango.announcements.models import Announcement
 from gazjango.articles.models      import StoryConcept
 
@@ -45,6 +46,12 @@ def get_ip(request):
     elif 'REMOTE_ADDR' in request.META:
         return request.META['REMOTE_ADDR']
     else:
+        return None
+
+def get_user_profile(request):
+    try:
+        return request.user.get_profile()
+    except (AttributeError, UserProfile.DoesNotExist):
         return None
 
 def reporter_admin_data(user):

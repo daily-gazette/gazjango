@@ -2,7 +2,7 @@ from django.http      import HttpResponse
 from django.template  import RequestContext
 from django.shortcuts import render_to_response, get_object_or_404
 from gazjango.polls.models      import Poll
-from gazjango.misc.view_helpers import get_ip
+from gazjango.misc.view_helpers import get_ip, get_user_profile
 import gazjango.polls.exceptions
 
 def poll_results(request, year, slug, template="polls/results.html"):
@@ -19,10 +19,7 @@ def submit_poll(request, year=None, slug=None):
         poll = get_object_or_404(Poll, time_start__year=year, slug=slug)
         
         ip = get_ip(request)
-        if request.user.is_authenticated():
-            user = request.user.get_profile()
-        else:
-            user = None
+        user = get_user_profile(request)
         
         option_pk = request.POST['option']
         try:

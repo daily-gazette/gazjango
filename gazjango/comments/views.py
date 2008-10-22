@@ -3,7 +3,8 @@ from django.contrib.auth.decorators import permission_required
 from django.http                    import HttpResponse, Http404, HttpResponseRedirect
 from django.template                import RequestContext
 from django.shortcuts               import render_to_response
-from gazjango.misc.view_helpers     import get_by_date_or_404, get_ip, reporter_admin_data
+from gazjango.misc.view_helpers     import get_by_date_or_404, reporter_admin_data
+from gazjango.misc.view_helpers     import get_ip, get_user_profile
 
 from gazjango.articles.models      import Article, StoryConcept
 from gazjango.announcements.models import Announcement
@@ -17,7 +18,7 @@ def comments_for_article(request, slug, year, month, day, num=None):
     """
     story = get_by_date_or_404(Article, year, month, day, slug=slug)
     
-    user = request.user.get_profile() if request.user.is_authenticated() else None
+    user = get_user_profile(request)
     ip = get_ip(request)
     
     spec = Q(number__gt=num) if num else Q()
@@ -44,7 +45,7 @@ def vote_on_comment(request, slug, year, month, day, num, val):
     except PublicComment.DoesNotExist:
         raise Http404
     
-    user = request.user.get_profile() if request.user.is_authenticated() else None
+    user = get_user_profile(request)
     ip = get_ip(request)
     result = comment.vote(positive, ip=ip, user=user)
     
@@ -56,7 +57,7 @@ def vote_on_comment(request, slug, year, month, day, num, val):
 
 @permission_required('accounts.can_access_admin')
 def manage(request, template="custom-admin/comments.html"):
-    data = reporter_admin_data(request.user.get_profile())
+    data = reporter_admin_data(get_user_profile(request))
     data['comments'] = PublicComment.objects.order_by('-time')
     
     rc = RequestContext(request)
