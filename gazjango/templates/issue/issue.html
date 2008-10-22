@@ -189,65 +189,7 @@
 						</table>
 					  {% endif %}
 		
-					  <table width="385" height="2" border="0" cellpadding="0" cellspacing="0" bgcolor="#E47629">
-						<tr>
-						  <td></td>
-						</tr>
-					  </table>
-		
-					  <table width="385" height="10" border="0" cellpadding="0" cellspacing="0">
-						<tr>
-						  <td></td>
-						</tr>
-					  </table>
-					  
-					  {% if issue.announcements.count %}
-					  <table width="385" height="24" border="0" cellpadding="0" cellspacing="0" bgcolor="#432c16">
-						<tr>
-						  <td width="10" height="24" align="left" valign="middle"></td>
-						  <td width="375" align="left" valign="middle">
-							<strong>
-							  <font color="#ffffff" size="3" face="Arial, Helvetica, sans-serif">
-								Announcements
-							  </font>
-							</strong>
-						  </td>
-						</tr>
-					  </table>
-		
-					  {% for announcement in issue.announcements %}
-						<table width="385" border="0" cellspacing="0" cellpadding="10">
-						  <tr>
-							<td>
-							  <font color="#333333" size="2" face="Georgia, Times New Roman, Times, serif">
-								<a href="http://daily.swarthmore.edu{{ announcement.get_absolute_url }}"><strong>{{ announcement.title }}</strong></a>
-		
-								{% if announcement.is_event %}
-								  (Sponsored by {{ announcement.sponsor_link }})
-								  <br/>
-								  {{ announcement.event_place }};
-								  {{ announcement.event_date|near_future_date }}
-								  at {{ announcement.event_time }}
-								  {% if announcement.text %}
-									<br/><br/>
-									{{ announcement.brief_excerpt|safe }}
-								  {% endif %}
-		
-								{% else %}
-								  {% if announcement.sponsor %}
-									({{ announcement.sponsor_link }})
-								  {% endif %}
-								  <br/><br/>
-								  {{ announcement.long_excerpt|safe }}
-								{% endif %}
-							  </font>
-							</td>
-						  </tr>
-						</table>
-					  {% endfor %}
-					  {% endif %}
-		
-					  <table width="385" height="24" border="0" cellpadding="0" cellspacing="0" bgcolor="#432c16">
+<table width="385" height="24" border="0" cellpadding="0" cellspacing="0" bgcolor="#432c16">
 						<tr>
 						  <td width="10" height="24" align="left" valign="middle"></td>
 						  <td width="375" align="left" valign="middle">
@@ -302,7 +244,59 @@
 						  </td>
 						</tr>
 					  </table>
+
+					  <table width="385" height="10" border="0" cellpadding="0" cellspacing="0">
+						<tr>
+						  <td></td>
+						</tr>
+					  </table>
+					  
+					  {% if issue.announcements.count %}
+					  <table width="385" height="24" border="0" cellpadding="0" cellspacing="0" bgcolor="#432c16">
+						<tr>
+						  <td width="10" height="24" align="left" valign="middle"></td>
+						  <td width="375" align="left" valign="middle">
+							<strong>
+							  <font color="#ffffff" size="3" face="Arial, Helvetica, sans-serif">
+								Announcements
+							  </font>
+							</strong>
+						  </td>
+						</tr>
+					  </table>
 		
+					  {% for announcement in issue.announcements %}
+						<table width="385" border="0" cellspacing="0" cellpadding="10">
+						  <tr>
+							<td>
+							  <font color="#333333" size="2" face="Georgia, Times New Roman, Times, serif">
+								<a href="http://daily.swarthmore.edu{{ announcement.get_absolute_url }}"><strong>{{ announcement.title }}</strong></a>
+		
+								{% if announcement.is_event %}
+								  (Sponsored by {{ announcement.sponsor_link }})
+								  <br/>
+								  {{ announcement.event_place }};
+								  {{ announcement.event_date|near_future_date }}
+								  at {{ announcement.event_time }}
+								  {% if announcement.text %}
+									<br/><br/>
+									{{ announcement.brief_excerpt|safe }}
+								  {% endif %}
+		
+								{% else %}
+								  {% if announcement.sponsor %}
+									({{ announcement.sponsor_link }})
+								  {% endif %}
+								  <br/><br/>
+								  {{ announcement.long_excerpt|safe }}
+								{% endif %}
+							  </font>
+							</td>
+						  </tr>
+						</table>
+					  {% endfor %}
+					  {% endif %}
+				
 		        {% comment %}
 					  <table width="385" height="24" border="0" cellpadding="0" cellspacing="0" bgcolor="#432c16">
 						<tr>

@@ -44,10 +44,6 @@ IMAGE STYLES
 	border: 2px solid #000000;
 }
 
-.imgLeft p,.imgRight p,.imgCenter p {
-	font-family: "Helvetica Neue", Arial, Helvetica, Geneva, sans-serif;
-}
-
 .imgLeft {
 	float: left;
 	display: inline;
