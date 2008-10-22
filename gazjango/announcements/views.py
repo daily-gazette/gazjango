@@ -22,11 +22,16 @@ def announcement(request, slug, year, month=None, day=None):
     return render_to_response("announcements/details.html", data, context_instance=rc)
 
 
-def list_announcements(request, kind=None, year=None, month=None, day=None, order='a'):
+def list_announcements(request, kind=None, year=None, month=None, day=None, order='d'):
     if (request.GET.get('order', None) or order).startswith('d'):
-        qset = Announcement.published.order_by('-date_end', '-date_start')
+        qset = Announcement.community.order_by('-date_end', '-date_start')
     else:
-        qset = Announcement.published.order_by('date_end', 'date_start')
+        qset = Announcement.community.order_by('date_end', 'date_start')
+    
+    if year:
+        qset = filter_by_date(qset, year, month, day)
+    else:
+        qset = qset.exclude(date_start__gt=datetime.date.today())
     
     if kind:
         qset = qset.filter(kind=kind)
@@ -34,7 +39,7 @@ def list_announcements(request, kind=None, year=None, month=None, day=None, orde
     tops, mids, lows = Article.published.get_stories(num_top=1, num_mid=3, num_low=0)
     
     data = { 
-        'announcements': filter_by_date(qset, year, month, day),
+        'announcements': qset,
         'kind': kind,
         'year': year,
         'month': month,

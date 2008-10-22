@@ -13,7 +13,7 @@ class PublishedAnnouncementsManager(models.Manager):
     def now_running(self):
         "Returns published announcements which should now be shown."
         t = date.today()
-        return self.filter(date_start__lte=t, date_end__gte=t).order_by('-date_start', 'pk')
+        return self.filter(date_start__lte=t, date_end__gte=t).order_by('-date_start', '-date_end')
     
     def get_n(self, n=3):
         "Returns the `n` announcements to be shown."
@@ -21,7 +21,7 @@ class PublishedAnnouncementsManager(models.Manager):
         if running.count() >= n:
             return running[:n]
         else:
-            new = self.order_by('-date_end').exclude(pk__in=[r.pk for r in running])
+            new = self.order_by('date_end', 'date').exclude(pk__in=[r.pk for r in running])
             return list(running) + list(new[:n - running.count()])
     
 
