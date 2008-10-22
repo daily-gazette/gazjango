@@ -80,7 +80,7 @@
   				<td>{{ form.text.errors }}</td>
 			  </tr>
 			  <tr>
-  				<th><label for="{{ form.date_start.auto_id }}">First Day in Digest:</label>:</th>
+  				<th><label for="{{ form.date_start.auto_id }}">First Day in Digest</label>:</th>
   				<td>{{ form.date_start }}</td>
   				<td>{{ form.date_start.errors }}</td>
 			  </tr>
@@ -90,7 +90,7 @@
   				<td>{{ form.date_end.errors }}</td>
 			  </tr>
 			  <tr>
-  				<th>{{ form.sponsor.label_tag }}: <small>(group if there is one, otherwise you)</small></th>
+  				<th>{{ form.sponsor.label_tag }}: <br /><small>(group if there is one, otherwise you)</small></th>
   				<td>
   				  {{ form.sponsor }}
   				  <a href="#" id='sponsor-toggle' style="display: none;" onclick="toggleSponsorLink(); return false;">add a link</a>
