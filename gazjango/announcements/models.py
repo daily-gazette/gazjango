@@ -59,7 +59,7 @@ class Announcement(models.Model):
     """
     
     ANNOUNCEMENT_KINDS = (
-        ('s', 'Staff'),
+        ('s', 'Gazette Staff'),
         ('c', 'Community'),
         ('a', 'Admin'),
     )
