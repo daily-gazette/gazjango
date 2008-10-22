@@ -171,7 +171,7 @@
                           {% autoescape off %}
                             {{ announcement.text|textile }}
                           {% endautoescape %}
-                          {% if announcement.poster_email %}Posted by {{ announcement.poster_email }}{% endif %}&mdash; <a href="http://daily.swarthmore.edu{{ announcement.get_absolute_url }}">Permanent Link</a> 
+                          {% if announcement.poster_email %}Posted by {{ announcement.poster_email }} &mdash;{% endif %} <a href="http://daily.swarthmore.edu{{ announcement.get_absolute_url }}">Permanent Link</a> 
                           <br /><br/>
                         {% endfor %}
                       </font>
