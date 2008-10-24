@@ -100,7 +100,8 @@ class Article(models.Model):
     
     headline    = models.CharField(max_length=200,help_text="(Main headline.)")
     short_title = models.CharField(blank=True, max_length=80,help_text="(Only needed for top stories, used in article footers.)")
-    slug        = models.SlugField(unique_for_date="pub_date", max_length=100,help_text="(Part of the URL: /2008/<month>/<slug>/ .)")
+    slug        = models.SlugField(unique_for_date="pub_date", max_length=100,
+                  help_text="(Part of the URL: /2008/month/day/slug/. Should generally be lowercase and hyphenated, like global-neighbors or strong-endowment-in-recession.)")
     
     summary = models.TextField()
     short_summary = models.CharField(max_length=150, blank=True,help_text="(Only needed for top stories, used in article footers.)")
