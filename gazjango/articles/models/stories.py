@@ -248,11 +248,15 @@ class Article(models.Model):
             try:
                 image = ImageFile.objects.get(bucket__slug=bucket_slug, slug=slug)
                 self.media.add(image)
-            except ImageFile.DoesNotExist, e:
-                if complain:
-                    raise
-                else:
-                    return ""
+            except ImageFile.DoesNotExist:
+                try:
+                    image = ImageFile.objects.get(bucket__slug='articles', slug=slug)
+                    self.media.add(image)
+                except ImageFile.DoesNotExist:
+                    if complain:
+                        raise
+                    else:
+                        return ""
         return image.get_absolute_url()
     
     
