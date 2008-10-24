@@ -20,7 +20,7 @@ def page(request, url):
     page = get_object_or_404(Page, url__exact=url, sites__id__exact=settings.SITE_ID)
     
     page.title = mark_safe(page.title)
-    page.content = mark_safe(page.content)
+    page.content = mark_safe(page.formatted_content())
     
     if page.template_name:
         template = (f.template_name, DEFAULT_TEMPLATE)
