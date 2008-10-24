@@ -36,22 +36,20 @@
   <div id="storyBox">
     <div id="story">
       <h2>Announcements</h2>
-        {% for announcement in announcements %}
+        {% for announcement in announcements|slice:":15" %}
           <div class="block">
             <h4><a href="{{ announcement.get_absolute_url }}">{{ announcement.title }}</a></h4>
             <br/>
             <div id="jobInfoList">
-              <p><strong>Sponsor:</strong> {{ announcement.sponsor_link }}</p>
+              <p><strong>Sponsor:</strong> {{ announcement.sponsor_link }}<br />
               {% if announcement.is_event %}
-                <p>
                   <strong>When:</strong>
                   {{ announcement.event_date|near_future_date }}
                   {% if announcement.event_time %}
                     at {{ announcement.event_time }}
-                  {% endif %}
-                </p>
+                  {% endif %}<br />
               {% if annnouncement.event_place %}
-                <p><strong>Where:</strong> {{ announcement.event_place }}</p>
+                <strong>Where:</strong> {{ announcement.event_place }}<br />
               {% endif %}
             {% endif %}
           </div>

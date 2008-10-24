@@ -1,3 +1,5 @@
+/* @override http://daily.swarthmore.edu/static/css/page/job.css */
+
 #jobInfo {
 	border: 2px solid #cccccc;
 	background-color: #eeeeee;
@@ -13,6 +15,10 @@
 	float: right;
 	margin-left: 5px;
 	display: block;
+}
+
+#jobInfoList p {
+	width: 250px;
 }
 
 #jobInfo p {
