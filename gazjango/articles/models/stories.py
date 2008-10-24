@@ -98,12 +98,12 @@ class Article(models.Model):
     to these revisions.
     """
     
-    headline    = models.CharField(max_length=200)
-    short_title = models.CharField(blank=True, max_length=80)
-    slug        = models.SlugField(unique_for_date="pub_date", max_length=100)
+    headline    = models.CharField(max_length=200,help_text="(Main headline.)")
+    short_title = models.CharField(blank=True, max_length=80,help_text="(Only needed for top stories, used in article footers.)")
+    slug        = models.SlugField(unique_for_date="pub_date", max_length=100,help_text="(Part of the URL: /2008/<month>/<slug>/ .)")
     
     summary = models.TextField()
-    short_summary = models.CharField(max_length=150, blank=True)
+    short_summary = models.CharField(max_length=150, blank=True,help_text="(Only needed for top stories, used in article footers.)")
     long_summary  = models.TextField(blank=True)
     
     text   = models.TextField()
@@ -117,20 +117,20 @@ class Article(models.Model):
     highlighters = models.ManyToManyField(UserProfile, related_name='top_stories', through='Highlighting')
     
     front_image = models.ForeignKey(ImageFile, null=True, blank=True,
-                                        related_name="articles_with_front")
+                                        related_name="articles_with_front",help_text="(Required for mid and top stories.)")
     issue_image = models.ForeignKey(ImageFile, null=True, blank=True,
-                                        related_name="articles_with_issue")
+                                        related_name="articles_with_issue",help_text="(Square image in issues. Requried for top stories.)")
                                     
     thumbnail   = models.ForeignKey(ImageFile, null=True, blank=True,
-                                    related_name="articles_with_thumbnail")
+                                    related_name="articles_with_thumbnail",help_text="(Small image in article footers. Required for top stories.)")
     media  = models.ManyToManyField(MediaFile, related_name="articles", blank=True)
-    bucket = models.ForeignKey(MediaBucket, null=True, related_name="articles")
+    bucket = models.ForeignKey(MediaBucket, null=True, related_name="articles",help_text="(Irrelevent. Select a random one.)")
     
     comments = generic.GenericRelation(PublicComment,
                                        content_type_field='subject_type',
                                        object_id_field='subject_id')
     
-    is_racy = models.BooleanField(default=False)
+    is_racy = models.BooleanField(default=False,help_text="(If checked, will not appear on the faculty dashboard.)")
     
     STATUS_CHOICES = (
         ('d', 'Draft'),
