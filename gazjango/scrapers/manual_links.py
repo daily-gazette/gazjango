@@ -2,6 +2,7 @@
 
 manual_links = [
     ('Free Flash Arcade Games', 'http://www.arcadekill.com'),
+    ('Credit Repair', 'http://repairmycreditnow.com/Credit_Repair_Advice.htm'),
 ]
 
 lca_links = [
