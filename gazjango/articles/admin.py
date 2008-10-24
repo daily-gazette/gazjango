@@ -25,11 +25,12 @@ admin.site.register(Article, StoryAdmin)
 
 class PhotoInSpreadInline(admin.StackedInline):
     model = PhotoInSpread
-    extra = 1
+    extra = 3
 
 class PhotoSpreadAdmin(admin.ModelAdmin):
     inlines = [PhotoInSpreadInline]
     list_display = ('headline', 'status', 'author_names', 'position', 'section', 'subsection')
+    exclude = ('media', 'text')
     
 admin.site.register(PhotoSpread, PhotoSpreadAdmin)
 
