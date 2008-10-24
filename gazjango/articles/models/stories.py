@@ -204,8 +204,7 @@ class Article(models.Model):
         return formatter(text)
     
     
-    _not_http = re.compile(r'^\s*(?!https?://)', re.IGNORECASE)
-    _img = re.compile(r'^img://', re.IGNORECASE)
+    _img_link = re.compile(r'^(img://)?([-\w]+)/([-\w]+)$', re.IGNORECASE)
     def resolved_text(self, revision=None):
         """
         Formats the text (at the revision specified by ``revision``, if
@@ -216,16 +215,15 @@ class Article(models.Model):
         if self.media.count() > 0 or re.search("<img", text, re.IGNORECASE):
             soup = BeautifulSoup(text)
             
-            for image in soup.findAll("img", src=self._not_http):
-                if image['src'].count('/') == 1:
-                    image['src'] = self.resolve_image_link(image['src'])
-            for a in soup.findAll("a", href=self._img):
-                a['href'] = self.resolve_image_link(a['href'])
+            for image in soup.findAll("img", src=self._img_link):
+                image['src'] = self.resolve_image_link(image['src'])
+            for a in soup.findAll("a", href=self._img_link):
+                a['href'] = self.resolve_image_link(a['href'], required_scheme=True)
             return unicode(soup)
         else:
             return text
     
-    def resolve_image_link(self, image_path, complain=False):
+    def resolve_image_link(self, image_path, complain=False, required_scheme=False):
         """
         Turns relative image links in articles into absolute URLs. For
         example, if an article has "<img src='some-bucket/cool-pic'/>",
@@ -235,9 +233,13 @@ class Article(models.Model):
         We can also use "img://bucket/slug"; this is the required format
         for links to images (<a href="...">).
         """
-        if image_path.startswith('img://'):
-            image_path = image_path[6:]
-        bucket_slug, slug = image_path.split("/", 1)
+        match = self._img_link.match(image_path)
+        if not match:
+            return image_path
+        
+        scheme, bucket_slug, slug = match.groups()
+        if required_scheme and not scheme:
+            return image_path
         
         try: # self.media should be cached, so we try it first
             image = self.media.get(bucket__slug=bucket_slug, slug=slug)
