@@ -124,7 +124,6 @@ class Article(models.Model):
     thumbnail   = models.ForeignKey(ImageFile, null=True, blank=True,
                                     related_name="articles_with_thumbnail",help_text="(Small image in article footers. Required for top stories.)")
     media  = models.ManyToManyField(MediaFile, related_name="articles", blank=True)
-    bucket = models.ForeignKey(MediaBucket, null=True, related_name="articles",help_text="(Irrelevent. Select a random one.)")
     
     comments = generic.GenericRelation(PublicComment,
                                        content_type_field='subject_type',
@@ -218,12 +217,10 @@ class Article(models.Model):
             soup = BeautifulSoup(text)
             
             for image in soup.findAll("img", src=self._not_http):
-                src = image['src']
-                if src.startswith('img://'):
-                    src = src[6:]
-                image['src'] = self.resolve_image_link(src)
+                if image['src'].count('/') == 1:
+                    image['src'] = self.resolve_image_link(image['src'])
             for a in soup.findAll("a", href=self._img):
-                a['href'] = self.resolve_image_link(a['href'][6:])
+                a['href'] = self.resolve_image_link(a['href'])
             return unicode(soup)
         else:
             return text
@@ -231,48 +228,28 @@ class Article(models.Model):
     def resolve_image_link(self, image_path, complain=False):
         """
         Turns relative image links in articles into absolute URLs. For
-        example, if an article's text includes "<img src='cool-pic'/>",
+        example, if an article has "<img src='some-bucket/cool-pic'/>",
         ``resolved_text`` will call this function to replace 'cool-pic' with
         '/files/some-bucket/cool-pic'.
         
-        If the path in the image includes a '/', it's parsed as 
-        'bucket-slug/image-slug'. Otherwise, we first check the media files
-        that are explicitly associated with this article, and then this
-        article's bucket. This can potentially cause confusion if the
-        article is associated with 'lame-bucket', 'awesome-bucket/cool-pic'
-        is in the article's media m2m, and 'lame-bucket' has a file called 
-        'cool-pic'. In this case, we use 'awesome-bucket/cool-pic'.
-        
-        This function will throw a MediaFile.MultipleObjectsReturned
-        error, or return "[ambiguous reference to (slug)]", depending on the
-        value of ``complain``, if article.media has more than one file (in
-        different buckets) with the same slug, and the bucket slug is not
-        explicit. Don't let this happen. The UI for setting associated media
-        should either not allow this, or give stern warnings.
+        We can also use "img://bucket/slug"; this is the required format
+        for links to images (<a href="...">).
         """
-        if "/" in image_path:
-            bucket_slug, slug = image_path.split("/", 1)
-            args = {'bucket__slug': bucket_slug, 'slug': slug}
-        else:
-            args = {'slug': image_path}
-        
-        if complain:
-            def error(exception, message): raise exception
-        else:
-            def error(exception, message): return message
+        if image_path.startswith('img://'):
+            image_path = image_path[6:]
+        bucket_slug, slug = image_path.split("/", 1)
         
         try: # self.media should be cached, so we try it first
-            image = self.media.get(**args)
+            image = self.media.get(bucket__slug=bucket_slug, slug=slug)
         except MediaFile.DoesNotExist:
             try:
-                args.setdefault('bucket__slug', self.bucket.slug)
-                image = ImageFile.objects.get(**args)
+                image = ImageFile.objects.get(bucket__slug=bucket_slug, slug=slug)
                 self.media.add(image)
             except ImageFile.DoesNotExist, e:
-                return error(e, "")
-        except MediaFile.MultipleObjectsReturned, e:
-            return error(e, "[ambiguous reference to '%s']" % image_path)
-        
+                if complain:
+                    raise
+                else:
+                    return ""
         return image.get_absolute_url()
     
     

@@ -49,12 +49,11 @@ class ArticleTestCase(unittest.TestCase):
             text="Here's an example: "
                  '<img width="10" src="from-the-internets/kitteh"/>.\n\n'
                  'Some see them as similar to the so-called "o rly?" owls: '
-                 '<img src="o-rly" />.\n\n'
+                 '<img src="from-the-internets/o-rly" />.\n\n'
                  'In far more serious news, Canada declared war on Mexico. '
                  '<img src="from-the-newspapers/war-declared" /> '
                  "Here's another image, just for kicks: "
                  '<img src="http://wow.com/lawl" />',
-            bucket=self.bucket,
             slug='lolcats',
             section=self.news,
             format=self.html
@@ -62,8 +61,7 @@ class ArticleTestCase(unittest.TestCase):
         
         self.textile_images_article = Article.objects.create(
             headline="Brief Test For Textile",
-            text="!war-declared!",
-            bucket=self.bucket2,
+            text="!from-the-newspapers/war-declared!",
             section=self.news,
             format=self.textile
         )
@@ -116,54 +114,27 @@ class ArticleTestCase(unittest.TestCase):
         owl_url = self.owl.get_absolute_url()
         lolcat_url = self.lolcat.get_absolute_url()
         war_url = self.war.get_absolute_url()
-        
-        # by slug only, default bucket, not in media
-        self.assert_(not is_in_media(self.owl))
-        self.assertEquals(resolve('o-rly'), owl_url)
-        self.assert_(is_in_media(self.owl))
-        
-        # by bucket/slug, default bucket, not in media
+                
+        # not in media
         self.assert_(not is_in_media(self.lolcat))
         self.assertEquals(resolve('from-the-internets/kitteh'), lolcat_url)
         self.assert_(is_in_media(self.lolcat))
         
-        # by slug only, different bucket, not in media
-        self.assert_(not is_in_media(self.war))
-        self.assertRaises(ObjectDoesNotExist, 
-                          lambda: resolve('war-declared', complain=True))
-        self.assertEquals(resolve('war-declared', complain=False), '')
-        
-        # by bucket/slug, different bucket, not in media
+        # different bucket, not in media
         self.assert_(not is_in_media(self.war))
         self.assertEquals(resolve('from-the-newspapers/war-declared'), war_url)
         self.assert_(is_in_media(self.war))
         
-        # by slug only, default bucket, in media
-        self.assertEquals(resolve('kitteh'), lolcat_url)
-        
-        # by bucket/slug, default bucket, in media
+        # first bucket, in media
         self.assertEquals(resolve('from-the-internets/o-rly'), owl_url)
         
-        # by slug only, other bucket, in media
-        self.assertEquals(resolve('war-declared'), war_url)
-        
-        # by bucket/slug, other bucket, in media
+        # other bucket, in media
         self.assertEquals(resolve('from-the-newspapers/war-declared'), war_url)
         
-        # by bucket/slug, non-existant file
+        # non-existant file
         self.assertRaises(ObjectDoesNotExist,
                           lambda: resolve('fake-bucket/fakery', complain=True))
-        self.assertEquals(resolve('fake-bucket/fakery', complain=False), "")
-        
-        # by slug with a duplicate in media
-        bucket = MediaBucket.objects.create(slug='trickster')
-        self.images_article.media.create(slug="kitteh", bucket=bucket, data="")
-        
-        self.assertRaises(MultipleObjectsReturned, 
-                          lambda: resolve("kitteh", complain=True))
-        self.assertEquals(resolve('kitteh', complain=False),
-                          "[ambiguous reference to 'kitteh']")
-    
+        self.assertEquals(resolve('fake-bucket/fakery', complain=False), "")    
     
     def test_resolved_text(self):
         resolved = self.images_article.resolved_text()
