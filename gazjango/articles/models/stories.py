@@ -60,9 +60,9 @@ class PublishedArticlesManager(models.Manager):
         exclude_pks = [top.pk for top in tops]
         mids = base.filter(position__in=('1', '2')).exclude(pk__in=exclude_pks)
         mids = list(mids.order_by('-pub_date'))
-        exclude_pks += [el.pk for el in mids]
         if len(mids) < num_mid:
             cands = base.filter(possible_position__in=('1', '2'))
+            exclude_pks += [mid.pk for mid in mids]
             cands = cands.exclude(pk__in=exclude_pks).order_by('-pub_date')
             
             needed = num_mid - len(mids)
@@ -70,6 +70,7 @@ class PublishedArticlesManager(models.Manager):
         else:    
             mids = mids[:num_mid]
         
+        exclude_pks = [el.pk for el in (tops + mids)]
         lows = list(base.exclude(pk__in=exclude_pks).order_by('-pub_date')[:num_low])
         return [tops, mids, lows]
     
