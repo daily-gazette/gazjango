@@ -13,7 +13,7 @@
 	padding: 5px;
 	width: 250px;
 	float: right;
-	margin-left: 5px;
+	margin-left: 10px;
 	display: block;
 }
 
@@ -63,6 +63,6 @@ h4 {
 .block {
 	display: block;
 	float: left;
-	border-top: 2px double #EEEEEE;
+	border-bottom: 2px double #EEEEEE;
 	margin: 5px;
 }
