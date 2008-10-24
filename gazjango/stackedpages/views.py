@@ -1,7 +1,8 @@
-from django.http             import HttpResponseRedirect
+from django.http             import HttpResponseRedirect, Http404
 from django.shortcuts        import get_object_or_404, render_to_response
 from django.template         import loader, RequestContext
 from django.utils.safestring import mark_safe
+from gazjango.misc.view_helpers   import get_user_profile
 from gazjango.stackedpages.models import Page
 from gazjango.articles.models     import Article
 from gazjango.comments.models     import PublicComment
@@ -18,6 +19,11 @@ def page(request, url):
         url = '/' + url
     
     page = get_object_or_404(Page, url__exact=url, sites__id__exact=settings.SITE_ID)
+    
+    if page.staff_only:
+        user = get_user_profile(request)
+        if not user.is_staff:
+            raise Http404
     
     page.title = mark_safe(page.title)
     page.content = mark_safe(page.formatted_content())

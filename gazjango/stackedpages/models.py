@@ -19,6 +19,8 @@ class Page(models.Model):
         help_text="Example: 'flatpages/contact_page.html'. If this isn't provided, the system will use 'flatpages/default.html'.")
     sites = models.ManyToManyField(Site)
     
+    staff_only = models.BooleanField(default=False)
+    
     class Meta:
         verbose_name = 'stacked page'
         verbose_name_plural = 'stacked pages'
