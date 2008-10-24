@@ -36,23 +36,20 @@
   <div id="storyBox">
     <div id="story">
       <h2>Announcements</h2>
-        {% for announcement in announcements|slice:":15" %}
+        {% for announcement in announcements|slice:":10" %}
           <div class="block">
-            <h4><a href="{{ announcement.get_absolute_url }}">{{ announcement.title }}</a></h4>
+            <h4><a href="{{ announcement.get_absolute_url }}">{{ announcement.title }}</a> (Sponsor: {{ announcement.sponsor_link }})</h4>
             <br/>
-            <div id="jobInfoList">
-              <p><strong>Sponsor:</strong> {{ announcement.sponsor_link }}<br />
-              {% if announcement.is_event %}
-                  <strong>When:</strong>
+            {% if announcement.is_event %}<div id="jobInfoList">
+                  <p><strong>When:</strong>
                   {{ announcement.event_date|near_future_date }}
                   {% if announcement.event_time %}
                     at {{ announcement.event_time }}
-                  {% endif %}<br />
+                  
               {% if annnouncement.event_place %}
-                <strong>Where:</strong> {{ announcement.event_place }}<br />
-              {% endif %}
-            {% endif %}
-          </div>
+                <br /><strong>Where:</strong> {{ announcement.event_place }}
+              {% endif %}</p>
+          </div>{% endif %}
           <p>{{ announcement.brief_excerpt|safe }}</p>
         </div>
       {% endfor %}
