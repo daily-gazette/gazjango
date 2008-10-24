@@ -40,16 +40,18 @@
           <div class="block">
             <h4><a href="{{ announcement.get_absolute_url }}">{{ announcement.title }}</a> (Sponsor: {{ announcement.sponsor_link }})</h4>
             <br/>
-            {% if announcement.is_event %}<div id="jobInfoList">
+            
+            {% if announcement.is_event %}
+            <div id="jobInfoList">
                   <p><strong>When:</strong>
                   {{ announcement.event_date|near_future_date }}
-                  {% if announcement.event_time %}
-                    at {{ announcement.event_time }}
+                  {% if announcement.event_time %} at {{ announcement.event_time }}{% endif %}
                   
               {% if annnouncement.event_place %}
                 <br /><strong>Where:</strong> {{ announcement.event_place }}
               {% endif %}</p>
-          </div>{% endif %}
+          </div>
+          
           <p>{{ announcement.brief_excerpt|safe }}</p>
         </div>
       {% endfor %}
