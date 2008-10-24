@@ -2,6 +2,7 @@ from django.contrib import admin
 from gazjango.articles.models import Article, Section, Subsection, Column, Writing
 from gazjango.articles.models import StoryConcept, Special, DummySpecialTarget
 from gazjango.articles.models import SpecialsCategory, SectionSpecial
+from gazjango.articles.models import PhotoSpread, PhotoInSpread
 
 
 class WritingInline(admin.StackedInline):
@@ -15,11 +16,25 @@ class StoryAdmin(admin.ModelAdmin):
     exclude = ('media', )
     search_fields = ('headline', 'slug', 'text',)
     
-    list_display = ('headline', 'status', 'author_names', 'position', 'section', 'subsection', 'is_racy')
+    list_display = ('headline', 'status', 'author_names', 'pub_date', 'position', 'section', 'subsection')
     list_filter = ('status', 'position', 'possible_position', 'section', 'subsection')
     
     inlines = [WritingInline]
 admin.site.register(Article, StoryAdmin)
+
+
+class PhotoInSpreadInline(admin.StackedInline):
+    model = PhotoInSpread
+    extra = 1
+
+class PhotoSpreadAdmin(admin.ModelAdmin):
+    inlines = [PhotoInSpreadInline]
+    list_display = ('headline', 'status', 'author_names', 'position', 'section', 'subsection')
+    
+admin.site.register(PhotoSpread, PhotoSpreadAdmin)
+
+
+
 
 
 class SectionAdmin(admin.ModelAdmin):
