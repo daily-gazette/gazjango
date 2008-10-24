@@ -28,7 +28,7 @@ class PhotoInSpreadInline(admin.StackedInline):
     extra = 3
 
 class PhotoSpreadAdmin(admin.ModelAdmin):
-    inlines = [PhotoInSpreadInline]
+    inlines = [PhotoInSpreadInline, WritingInline]
     list_display = ('headline', 'status', 'author_names', 'position', 'section', 'subsection')
     exclude = ('media', 'text')
     
