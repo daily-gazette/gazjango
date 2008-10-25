@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+{% load extras %}
+
+{% block full-title %}
+The Daily Gazette :: Swarthmore College's Daily Paper
+{% endblock full-title %}
+
+
+{% block customheader %}
+
+{% jQuery %}
+
+{% endblock customheader %}
+
+
+{% block topbar %}
+	<div id="headerSectionBar">
+			<div id="headerSearch">
+				{% include "search_header.html" %}
+			</div>
+			
+			<div id="headerColumn">
+				<div class="headerColumnBox">
+					<h4>Manage Your Account</h4>
+					<ul>
+							<li><a href="/admin/accounts/userprofile/add/">Edit your Profile</a></li>
+							<li><a href="/admin/password_change/">Change your Password</a></li>
+							<li><a href="/admin/accounts/contactitem/add/">Add Contact Information</a></li>
+					</ul>
+				</div>
+			
+				<div class="headerColumnBox">
+					<h4>Other Information</h4>
+					<ul>
+							<li><a href="/archives/">Archives</a></li>
+							<li><a href="{{ user.get_absolute_url }}">Your Profile</a></li>
+					</ul>
+				</div>
+			
+			</div>
+		</div>
+{% endblock topbar %}
+
+	
+{% block content %}
+	<div id="indexMainBox">
+		<div id="indexMainStory">
+		  <h2>Your Stories</h2>
+		  {% for story in user.stories %}
+			<p>
+				<strong>{{ story.title }}</strong>, due {{ story.due_date }}<br />
+				{{ story.description }}<br />
+				Finished the story? Mark it <a href="/admin/articles/storyconcept/{{ story.number }}/">here</a>.<br />
+				<em>Have questions? Contact {{ story.editor }} at <a href="mailto: {{ story.editor.email }}">{{ story.editor.email }}</a></em>
+			</p>
+		  {% endfor %}
+		  
+		  <h3>Other Stories</h3>
+		  {% for date in claimed %}
+		  	{{ date.name }}
+		  	<ul>
+		  		{% for story in date %}
+		  			<li><a href="/admin/articles/storyconcept/{{ story.number }}/">{{ story.title }}</a>, by {{ story.author }}</li>
+		  		{% endfor %}
+		  	</ul>
+		  {% endfor %}
+		</div>
+	</div>
+	
+	<div id="indexSecondary">
+		<h3>Unclaimed Stories</h3>
+		{% for story in unclaimed %}
+			<p>
+				<strong>{{ story.title }}</strong>, due {{ story.due_date }}<br />
+				{{ story.brief_description }}<br />
+				Claim the story or see more information <a href="/admin/articles/storyconcept/{{ story.number }}/"> here.</a>
+			</p>
+		{% endfor %}
+		
+	</div>
+	
+{% endblock content %}
