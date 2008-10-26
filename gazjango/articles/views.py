@@ -249,6 +249,16 @@ def homepage(request, template="index.html"):
     }
     rc = RequestContext(request)
     return render_to_response(template, data, context_instance=rc)
+    
+def staff(request,  template="staff/index.html"):
+	users, claimed, unclaimed = StoryConcept.unpublished.get_stories(num_claimed=2,num_unclaimed=6)
+	data = {
+		'users': users,
+		'claimed': claimed,
+		'unclaimed': unclaimed
+	}
+	rc = RequestContext(request)
+    return render_to_response(template, data, context_instance=rc)
 
 
 def search(request):

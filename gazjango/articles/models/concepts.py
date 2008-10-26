@@ -8,6 +8,21 @@ class UnpublishedConceptsManager(models.Manager):
     def get_query_set(self):
         orig = super(UnpublishedConceptsManager, self).get_query_set()
         return orig.filter(status='p')
+        
+    def get_stories(self, num_users=1, num_claimed=2, num_unclaimed=6, base=None):
+        """
+        Returns story concepts, ordered by their status and then by their due date.
+        """
+        
+        base = base or self
+        
+        users = list(base.filter(position='1').order_by('-due'))
+        
+        exclude_pks = [user.pk for user in users]
+        claimed = list(base.filter(position='2').order_by('-due'))
+        
+        exclude [el.pk for el in (users + claimed)]
+        unclaimed = list(base.filter(position='3').order_by('-due'))
     
 
 class StoryConcept(models.Model):
@@ -37,10 +52,21 @@ class StoryConcept(models.Model):
     
     users   = models.ManyToManyField(UserProfile, related_name="assignments")
     
+    
+    """
+    // editor   = models.ManyToManyField(UserProfile, related_name="overseer")
+    I'd like to be able to call an editor's email address too, from contact information.
+    
+    Also ... is there any way to get the story's number, so that the whole page can be linked into the admin?
+    """
+    
+ 
     article = models.ForeignKey(Article, null=True, unique=True,
                                 related_name="concepts")
     
     objects = models.Manager()
+    unpublished = UnpublishedConceptsManager()
+    
     unpublished = UnpublishedConceptsManager()
     
     class Meta:
