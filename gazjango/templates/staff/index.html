@@ -60,7 +60,7 @@ The Daily Gazette :: Swarthmore College's Daily Paper
 		  	{{ date.name }}
 		  	<ul>
 		  		{% for story in date %}
-		  			<li><a href="/admin/articles/storyconcept/{{ story.number }}/">{{ story.title }}</a>, by {{ story.author }}</li>
+		  			<li><a href="/admin/articles/storyconcept/{{ story.number }}/">{{ story.title }}</a>, by {{ story.author }} for {{ story.editor }}</li>
 		  		{% endfor %}
 		  	</ul>
 		  {% endfor %}
