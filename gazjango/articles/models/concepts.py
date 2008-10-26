@@ -67,8 +67,6 @@ class StoryConcept(models.Model):
     objects = models.Manager()
     unpublished = UnpublishedConceptsManager()
     
-    unpublished = UnpublishedConceptsManager()
-    
     class Meta:
         app_label = 'articles'
     
