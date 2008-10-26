@@ -251,12 +251,15 @@ def homepage(request, template="index.html"):
     return render_to_response(template, data, context_instance=rc)
     
 def staff(request,  template="staff/index.html"):
-	concepts = StoryConcept.unpublished.get_concepts()
-	curr_user = get_user_profile(request),
+	user = get_user_profile(request),
+	
+	personal = StoryConcept.unpublished.get_concepts(users='user.username_for_name()')
+	unclaimed = StoryConcept.unpublished.get_concepts(users='')
+	claimed = StoryConcept.unpublished.get_concepts(users!='' or users!='user.username_for_name()')
 	data = {
-		'personal': concepts(users='username_for_name'),
-		'unclaimed': concepts(users=''),
-		'claimed': concepts(users!='' or users!='username_for_name')
+		'personal': personal,
+		'unclaimed': unclaimed,
+		'claimed': claimed
 	}
 	rc = RequestContext(request)
     return render_to_response(template, data, context_instance=rc)
