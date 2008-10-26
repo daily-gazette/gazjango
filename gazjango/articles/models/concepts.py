@@ -36,7 +36,7 @@ class StoryConcept(models.Model):
     status = models.CharField(max_length=1, choices=STATUSES, default='a')
     
     users   = models.ManyToManyField(UserProfile, related_name="assignments")
-	editors   = models.ManyToManyField(UserProfile, related_name="editing")
+	overseer   = models.ManyToManyField(UserProfile, related_name="overseeing")
     article = models.ForeignKey(Article, null=True, unique=True,
                                 related_name="concepts")
     
