@@ -50,6 +50,8 @@ urlpatterns += patterns('articles.views',
     (r'^%(year)s/%(month)s/%(day)s/%(slug)s/print/$'    % reps, 'article', {'print_view': True}, 'print'),
     (r'^%(year)s/%(month)s/%(day)s/%(slug)s/email/$'    % reps, 'email_article', {}, 'email'),
     (r'^%(year)s/%(month)s/%(day)s/%(slug)s/comment/$'  % reps, 'post_comment'),
+    
+    (r'^staff/$', 'staff'),
 )
 
 urlpatterns += patterns('comments.views',
