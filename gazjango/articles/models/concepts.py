@@ -48,7 +48,7 @@ class StoryConcept(models.Model):
     due   = models.DateField(default=date.today)
     status = models.CharField(max_length=1, choices=STATUSES, default='a')
     
-    users   = models.ManyToManyField(UserProfile, related_name="assignments")
+    users   = models.ManyToManyField(UserProfile, blank=True, related_name="assignments")
     
     
     """

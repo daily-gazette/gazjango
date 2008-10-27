@@ -50,8 +50,6 @@ The Daily Gazette :: Swarthmore College's Daily Paper
 			<p>
 				<strong>{{ story.name }}</strong>, due {{ story.due }}<br />
 				{{ story.notes }}<br />
-				Finished the story? Mark it <a href="/admin/articles/storyconcept/{{ story.number }}/">here</a>.<br />
-				<em>Have questions? Contact {{ story.editor }} at <a href="mailto: {{ story.editor.email }}">{{ story.editor.email }}</a></em>
 			</p>
 		  {% endfor %}
 		  
