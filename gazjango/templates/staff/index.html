@@ -48,8 +48,8 @@ The Daily Gazette :: Swarthmore College's Daily Paper
 		  <h2>Your Stories</h2>
 		  {% for story in personal %}
 			<p>
-				<strong>{{ story.title }}</strong>, due {{ story.due_date }}<br />
-				{{ story.description }}<br />
+				<strong>{{ story.name }}</strong>, due {{ story.due }}<br />
+				{{ story.notes }}<br />
 				Finished the story? Mark it <a href="/admin/articles/storyconcept/{{ story.number }}/">here</a>.<br />
 				<em>Have questions? Contact {{ story.editor }} at <a href="mailto: {{ story.editor.email }}">{{ story.editor.email }}</a></em>
 			</p>
