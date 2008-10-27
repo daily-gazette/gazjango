@@ -59,7 +59,7 @@ class StoryConcept(models.Model):
     """
     
  
-    article = models.ForeignKey(Article, null=True, unique=True,
+    article = models.ForeignKey(Article, null=True, blank=True, unique=True,
                                 related_name="concepts")
     
     objects = models.Manager()
