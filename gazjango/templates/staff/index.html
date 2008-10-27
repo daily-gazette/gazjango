@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends "staff/base.html" %}
 {% load extras %}
 
 {% block full-title %}
@@ -46,7 +46,7 @@ The Daily Gazette :: Swarthmore College's Daily Paper
 	<div id="indexMainBox">
 		<div id="indexMainStory">
 		  <h2>Your Stories</h2>
-		  {% for story in user.stories %}
+		  {% for story in personal %}
 			<p>
 				<strong>{{ story.title }}</strong>, due {{ story.due_date }}<br />
 				{{ story.description }}<br />
