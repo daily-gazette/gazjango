@@ -84,7 +84,7 @@
                     <td width="375" align="left" valign="middle">
                       <strong>
                         <font color="#000000" size="2" face="Arial, Helvetica, sans-serif">
-                          Events
+                          Events (Organized by Date)
                         </font>
                       </strong>
                     </td>
@@ -96,7 +96,7 @@
                     <td>
                       <font color="#333333" size="2" face="Georgia, Times New Roman, Times, serif">
                         {% for event in events %}
-                          {{ forloop.counter }}. <a href="#e{{ forloop.counter }}">{{ event.title }}</a> ({{ event.event_date|near_future_date }}, {{ event.event_time }})<br />
+                          {{ forloop.counter }}. {{ event.event_date|near_future_date }} {% if event.event_time %} @ {{ event.event_time }} {% endif %}: <a href="#e{{ forloop.counter }}">{{ event.title }}</a><br />
                         {% endfor %}
                       </font>
                     </td>
@@ -152,7 +152,7 @@
 
               <table width="385" border="0" cellspacing="0">
                 {% if announcements %}
-                  <tr>
+                  <tr bgcolor="#ffa754">
                     <td width="10" height="18" align="left" valign="middle"></td>
                     <td width="375" align="left" valign="middle">
                       <strong>
@@ -179,7 +179,7 @@
                   </tr>
                 {% endif %}
                 {% if events %}
-                  <tr>
+                  <tr bgcolor="#ffa754">
                     <td width="10" height="18" align="left" valign="middle"></td>
                     <td width="375" align="left" valign="middle">
                       <strong>
@@ -211,7 +211,7 @@
                   </tr>
                 {% endif %}
                 {% if jobs %}
-                  <tr>
+                  <tr bgcolor="#ffa754">
                     <td width="10" height="18" align="left" valign="middle"></td>
                     <td width="375" align="left" valign="middle">
                       <strong>
