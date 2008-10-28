@@ -18,6 +18,7 @@ class StoryAdmin(admin.ModelAdmin):
     
     list_display = ('headline', 'status', 'author_names', 'pub_date', 'position', 'section', 'subsection')
     list_filter = ('status', 'position', 'possible_position', 'section', 'subsection')
+    ordering = ('-pub_date',)
     
     inlines = [WritingInline]
 admin.site.register(Article, StoryAdmin)
@@ -51,7 +52,7 @@ class ColumnAdmin(admin.ModelAdmin):
 admin.site.register(Column, ColumnAdmin)
 
 class StoryConceptAdmin(admin.ModelAdmin):
-    pass
+    filter_horizontal = 'users'
 admin.site.register(StoryConcept, StoryConceptAdmin)
 
 
