@@ -1,3 +1,5 @@
+/* @override http://daily.swarthmore.edu/static/css/page/story.css */
+
 #storyBox {
 	width: 655px;
 	margin: 0 0 25px 0;
@@ -13,7 +15,7 @@
 	text-align: justify;
 	line-height: 1.4;
 	font-size: 1.4em;
-	width: 650px;
+	width: 655px;
 }
 
 #story h2{
