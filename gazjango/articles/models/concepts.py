@@ -19,8 +19,8 @@ class UnpublishedConceptsManager(models.Manager):
         base = base or self
         
         users = base.filter(users=user).order_by('due')
+        others = base.exclude(users=user).exclude(users=None).order_by('due')
         unclaimed = base.filter(users=None).order_by('due')
-        others = base.exclude(users=user).order_by('due')
         
         return [users, others, unclaimed]
     
@@ -75,20 +75,6 @@ class StoryConcept(models.Model):
             return self.notes
         else:
             return self.notes[:length-3] + '...'
-
-	def get_name(self):
-		"""Returns the name of the story concept"""
-		return self.name
-	
-	def get_notes(self):
-		"""Returns the story notes"""
-		return self.notes
-		
-	def date_due(self):
-		return self.due
-		
-	def status(self):
-		return self.status
 		
 	def users_in_order(self):
 		return self.users

@@ -53,21 +53,22 @@ The Daily Gazette :: Swarthmore College's Daily Paper
 			</p>
 		  {% endfor %}
 		  
-		  <h3 class="bottomBorder">Other Stories</h3>
-		  {% for concept in claimed %}
-		  			<p>{{ concept.due }} by {{ concept.user_names }}: {{ concept.name }}</p>
-		  {% endfor %}
-		</div>
-	</div>
-	
-	<div id="indexSecondary">
-		<h3 class="bottomBorder">Unclaimed Stories</h3>
+		  <h3 class="bottomBorder">Unclaimed Stories</h3>
 		{% for concept in unclaimed %}
 			<p>
 				<strong>{{ concept.name }}</strong>, due {{ concept.due }}<br />
 				{% if concept.notes_excerpt %}{{ concept.notes_excerpt }}<br />{% endif %}<br />
 			</p>
 		{% endfor %}
+		
+		</div>
+	</div>
+	
+	<div id="indexSecondary">
+		<h3 class="bottomBorder">Other Stories</h3>
+		  {% for concept in claimed %}
+		  			<p>{{ concept.due }} by {{ concept.user_names }}: {{ concept.name }}</p>
+		  {% endfor %}
 		
 	</div>
 	
