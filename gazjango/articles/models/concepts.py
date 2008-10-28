@@ -18,12 +18,12 @@ class UnpublishedConceptsManager(models.Manager):
         
         base = base or self
         
-        users = list(base.filter(users=user).order_by('-due'))
+        users = list(base.filter(users=user).order_by('due'))
 
-        unclaimed = list(base.filter(users=None).order_by('-due'))
+        unclaimed = list(base.filter(users=None).order_by('due'))
 
         others = base.exclude(users=user).exclude(users=None)
-		others = list(others.order_by('-due'))
+		others = list(others.order_by('due'))
 		
         
         return [users, others, unclaimed]
