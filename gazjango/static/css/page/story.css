@@ -29,6 +29,13 @@
 	text-decoration: underline;
 }
 
+#story ul {
+	list-style-type: square;
+	margin: 0px 0px 10px 25px;
+	padding: 0 0 0px 0px;
+	font-size: 1.4em;
+}
+
 .leftImage {
 	float: left;
 	margin: 10px 10px 10px 0px;
