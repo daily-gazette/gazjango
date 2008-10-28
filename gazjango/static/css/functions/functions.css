@@ -45,14 +45,14 @@ IMAGE STYLES
 
 .imgLeft {
 	float: left;
-	display: inline;
-	overflow:hidden;
+	display: inline-block;
 	margin: 10px 10px 10px 0px;
 }
 
 .imgRight {
 	margin: 5px 0px 5px 5px;
 	float: right;
+	display: inline-block;
 }
 
 .imgCenter {
@@ -172,7 +172,7 @@ Organization of Text
 
 *******************/
 
-h2.underline,h3.underline {
+h2.bottomBorder,h3.bottomBorder {
 	width: 100%;
-	border: 2px solid #000;
+	border-bottom: 2px solid #000;
 }
