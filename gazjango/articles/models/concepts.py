@@ -9,7 +9,7 @@ class UnpublishedConceptsManager(models.Manager):
     "A manager for StoryConcepts that only deals with concepts not yet published."
     def get_query_set(self):
         orig = super(UnpublishedConceptsManager, self).get_query_set()
-        return orig.filter(status='p')
+        return orig.exclude(status='p')
         
     def get_concepts(self, user, base=None):
         """
