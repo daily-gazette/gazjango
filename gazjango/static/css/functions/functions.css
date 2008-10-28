@@ -37,6 +37,8 @@ IMAGE STYLES
 	background-color: #EEE;
 	font-family: "Helvetica Neue", Arial, Helvetica, Geneva, sans-serif;
 	font-style: italic;
+	font-size: small;
+	font-style: italic;
 }
 
 .imgLeft img,.imgRight img,.imgCenter img {
