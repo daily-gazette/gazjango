@@ -41,7 +41,6 @@ IMAGE STYLES
 
 .imgLeft img,.imgRight img,.imgCenter img {
 	width: 100%;
-	border: 2px solid #000000;
 }
 
 .imgLeft {
@@ -70,12 +69,28 @@ IMAGE STYLES
 	font-variant: small-caps;
 }
 
+.five {
+	width: 5%;
+}
+
 .ten {
 	width: 10%;
 }
 
+.fifteen {
+	width: 15%;
+}
+
+.twenty {
+	width: 20%;
+}
+
 .twentyfive {
 	width: 25%;
+}
+
+.thirty {
+	width: 30%;
 }
 
 .thirtyfive {
