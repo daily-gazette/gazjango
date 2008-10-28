@@ -49,7 +49,7 @@ The Daily Gazette :: Swarthmore College's Daily Paper
 		  {% for concept in personal %}
 			<p>
 				<strong>{{ concept.name }}</strong>, due {{ concept.due }}<br />
-				{{ concept.notes }}<br /><br />
+				{% if concept.notes %}{{ concept.notes }}<br />{% endif %}<br />
 			</p>
 		  {% endfor %}
 		  
