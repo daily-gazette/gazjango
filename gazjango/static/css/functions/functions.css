@@ -45,14 +45,14 @@ IMAGE STYLES
 
 .imgLeft {
 	float: left;
-	display: inline-block;
+	display: block;
 	margin: 10px 10px 10px 0px;
 }
 
 .imgRight {
 	margin: 5px 0px 5px 5px;
 	float: right;
-	display: inline-block;
+	display: block;
 }
 
 .imgCenter {
