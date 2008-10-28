@@ -49,7 +49,7 @@ The Daily Gazette :: Swarthmore College's Daily Paper
 		  {% for concept in personal %}
 			<p>
 				<strong>{{ concept.name }}</strong>, due {{ concept.due }}<br />
-				{% if concept.notes %}{{ concept.notes }}<br />{% endif %}<br />
+				{% if concept.notes %}{{ concept.notes }}<br />{% endif %}g<br />
 			</p>
 		  {% endfor %}
 		  
@@ -65,8 +65,7 @@ The Daily Gazette :: Swarthmore College's Daily Paper
 		{% for concept in unclaimed %}
 			<p>
 				<strong>{{ concept.name }}</strong>, due {{ concept.due }}<br />
-				{{ concept.notes_excerpt }}<br />
-				Claim the story or see more information in the admin.
+				{% if concept.notes_excerpt %}{{ concept.notes_excerpt }}<br />{% endif %}<br />
 			</p>
 		{% endfor %}
 		
