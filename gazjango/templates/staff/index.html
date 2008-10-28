@@ -48,8 +48,8 @@ The Daily Gazette :: Swarthmore College's Daily Paper
 		  <h2 class="bottomBorder">Your Stories</h2>
 		  {% for concept in personal %}
 			<p>
-				<strong>{{ concept.name }}</strong>, due {{ concept.due }}<br />
-				{% if concept.notes %}{{ concept.notes }}<br />{% endif %}<br />
+				<strong>{{ concept.name }}</strong> is due {{ concept.due }}<br />
+				{% if concept.notes %}Notes: {{ concept.notes }}<br />{% endif %}<br />
 			</p>
 		  {% endfor %}
 		  
@@ -70,7 +70,7 @@ The Daily Gazette :: Swarthmore College's Daily Paper
 		  	{% ifchanged %}
 		  		<br /><p><strong>{{ concept.due }}</p>
 		  	{% endifchanged %}
-		  			<p>{% if concept.user_names %}{{ concept.user_names }}:{% endif %} {{ concept.name }}</p>
+		  			<p>&nbsp;&nbsp;&nbsp;{% if concept.user_names %}{{ concept.user_names }}:{% endif %} {{ concept.name }}</p>
 		  {% endfor %}
 		
 	</div>
