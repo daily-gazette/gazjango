@@ -49,17 +49,17 @@ The Daily Gazette :: Swarthmore College's Daily Paper
 		  {% for concept in personal %}
 			<p>
 				<strong>{{ concept.name }}</strong>, due {{ concept.due }}<br />
-				{% if concept.notes %}{{ concept.notes }}<br />{% endif %}g<br />
+				{% if concept.notes %}{{ concept.notes }}<br />{% endif %}<br />
 			</p>
 		  {% endfor %}
 		  
 		  <h3 class="bottomBorder">Unclaimed Stories</h3>
-		{% for concept in unclaimed %}
+			{% for concept in unclaimed %}
 			<p>
 				<strong>{{ concept.name }}</strong>, due {{ concept.due }}<br />
 				{% if concept.notes_excerpt %}{{ concept.notes_excerpt }}<br />{% endif %}<br />
 			</p>
-		{% endfor %}
+			{% endfor %}
 		
 		</div>
 	</div>
