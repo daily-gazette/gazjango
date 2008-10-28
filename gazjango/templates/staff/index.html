@@ -46,17 +46,17 @@ The Daily Gazette :: Swarthmore College's Daily Paper
 	<div id="indexMainBox">
 		<div id="indexMainStory">
 		  <h2>Your Stories</h2>
-		  {% for story in personal %}
+		  {% for concept in personal %}
 			<p>
-				<strong>{{ story.get_name() }}</strong>, due {{ story.date_due }}<br />
-				{{ story.get_notes }}<br />
+				<strong>{{ concept.get_name }}</strong>, due {{ concept.date_due }}<br />
+				{{ concept.get_notes }}<br />
 			</p>
 		  {% endfor %}
 		  
 		  <h3>Other Stories</h3>
 		  	<ul>
-		  {% for story in claimed %}
-		  			<li><strong>{{ story.user_names }}</strong>{{ story.get_name }}, <strong>DUE:</strong> {{ story.date_due }}</li>
+		  {% for concept in claimed %}
+		  			<li><strong>{{ concept.user_names }}</strong>{{ concept.get_name }}, <strong>DUE:</strong> {{ concept.date_due }}</li>
 		  {% endfor %}
 		  	</ul>
 		</div>
@@ -64,10 +64,10 @@ The Daily Gazette :: Swarthmore College's Daily Paper
 	
 	<div id="indexSecondary">
 		<h3>Unclaimed Stories</h3>
-		{% for story in unclaimed %}
+		{% for concept in unclaimed %}
 			<p>
-				<strong>{{ story.get_name }}</strong>, due {{ story.date_due }}<br />
-				{{ story.notes_excerpt }}<br />
+				<strong>{{ concept.get_name }}</strong>, due {{ concept.date_due }}<br />
+				{{ concept.notes_excerpt }}<br />
 				Claim the story or see more information in the admin.
 			</p>
 		{% endfor %}
