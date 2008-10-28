@@ -48,15 +48,15 @@ The Daily Gazette :: Swarthmore College's Daily Paper
 		  <h2>Your Stories</h2>
 		  {% for concept in personal %}
 			<p>
-				<strong>{{ concept.get_name }}</strong>, due {{ concept.date_due }}<br />
-				{{ concept.get_notes }}<br />
+				<strong>{{ concept.name }}</strong>, due {{ concept.due }}<br />
+				{{ concept.notes }}<br />
 			</p>
 		  {% endfor %}
 		  
 		  <h3>Other Stories</h3>
 		  	<ul>
 		  {% for concept in claimed %}
-		  			<li><strong>{{ concept.user_names }}</strong>{{ concept.get_name }}, <strong>DUE:</strong> {{ concept.date_due }}</li>
+		  			<li><strong>{{ concept.user_names }}</strong>{{ concept.name }}, <strong>DUE:</strong> {{ concept.due }}</li>
 		  {% endfor %}
 		  	</ul>
 		</div>
@@ -66,7 +66,7 @@ The Daily Gazette :: Swarthmore College's Daily Paper
 		<h3>Unclaimed Stories</h3>
 		{% for concept in unclaimed %}
 			<p>
-				<strong>{{ concept.get_name }}</strong>, due {{ concept.date_due }}<br />
+				<strong>{{ concept.name }}</strong>, due {{ concept.due }}<br />
 				{{ concept.notes_excerpt }}<br />
 				Claim the story or see more information in the admin.
 			</p>
