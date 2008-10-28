@@ -48,20 +48,17 @@ The Daily Gazette :: Swarthmore College's Daily Paper
 		  <h2>Your Stories</h2>
 		  {% for story in personal %}
 			<p>
-				<strong>{{ story.name }}</strong>, due {{ story.due }}<br />
-				{{ story.notes }}<br />
+				<strong>{{ story.get_name }}</strong>, due {{ story.date_due }}<br />
+				{{ story.get_notes }}<br />
 			</p>
 		  {% endfor %}
 		  
 		  <h3>Other Stories</h3>
-		  {% for date in claimed %}
-		  	{{ date.name }}
 		  	<ul>
-		  		{% for story in date %}
+		  {% for story in claimed %}
 		  			<li><a href="/admin/articles/storyconcept/{{ story.number }}/">{{ story.title }}</a>, by {{ story.author }} for {{ story.editor }}</li>
-		  		{% endfor %}
-		  	</ul>
 		  {% endfor %}
+		  	</ul>
 		</div>
 	</div>
 	
@@ -69,7 +66,7 @@ The Daily Gazette :: Swarthmore College's Daily Paper
 		<h3>Unclaimed Stories</h3>
 		{% for story in unclaimed %}
 			<p>
-				<strong>{{ story.title }}</strong>, due {{ story.due_date }}<br />
+				<strong>{{ story.title }}</strong>, due {{ story.date_due_date }}<br />
 				{{ story.brief_description }}<br />
 				Claim the story or see more information <a href="/admin/articles/storyconcept/{{ story.number }}/"> here.</a>
 			</p>

@@ -2,6 +2,8 @@ from django.db import models
 from gazjango.accounts.models         import UserProfile
 from gazjango.articles.models.stories import Article
 from datetime import date
+from gazjango.misc.templatetags.extras import join_authors
+
 
 class UnpublishedConceptsManager(models.Manager):
     "A manager for StoryConcepts that only deals with concepts not yet published."
@@ -57,8 +59,7 @@ class StoryConcept(models.Model):
     
     Also ... is there any way to get the story's number, so that the whole page can be linked into the admin?
     """
-    
- 
+
     article = models.ForeignKey(Article, null=True, blank=True, unique=True,
                                 related_name="concepts")
     
@@ -74,6 +75,26 @@ class StoryConcept(models.Model):
             return self.notes
         else:
             return self.notes[:length-3] + '...'
+
+	def get_name(self):
+		"""Returns the name of the story concept"""
+		return (self.name)
+	
+	def get_notes(self):
+		"""Returns the story notes"""
+		return (self.notes)
+		
+	def date_due(self):
+		return (self.due)
+		
+	def status(self):
+		return (self.status)
+		
+	def users_in_order(self):
+		return self.users
+	
+	def user_names(self):
+		return join_authors(self.users_in_order(), 'ptx')
     
     def __unicode__(self):
         return self.name
