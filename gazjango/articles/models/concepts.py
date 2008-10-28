@@ -78,17 +78,17 @@ class StoryConcept(models.Model):
 
 	def get_name(self):
 		"""Returns the name of the story concept"""
-		return (self.name)
+		return self.name
 	
 	def get_notes(self):
 		"""Returns the story notes"""
-		return (self.notes)
+		return self.notes
 		
 	def date_due(self):
-		return (self.due)
+		return self.due
 		
 	def status(self):
-		return (self.status)
+		return self.status
 		
 	def users_in_order(self):
 		return self.users
