@@ -67,7 +67,9 @@ The Daily Gazette :: Swarthmore College's Daily Paper
 	<div id="indexSecondary">
 		<h3 class="bottomBorder">Other Stories</h3>
 		  {% for concept in claimed %}
-
+		  	{% ifchanged %}
+		  		<br /><p><strong>{{ concept.due }}</p>
+		  	{% endifchanged %}
 		  			<p>{% if concept.user_names %}{{ concept.user_names }}:{% endif %} {{ concept.name }}</p>
 		  {% endfor %}
 		
