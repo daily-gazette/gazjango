@@ -45,15 +45,15 @@ The Daily Gazette :: Swarthmore College's Daily Paper
 {% block content %}
 	<div id="indexMainBox">
 		<div id="indexMainStory">
-		  <h2>Your Stories</h2>
+		  <h2 class="underline">Your Stories</h2>
 		  {% for concept in personal %}
 			<p>
 				<strong>{{ concept.name }}</strong>, due {{ concept.due }}<br />
-				{{ concept.notes }}<br />
+				{{ concept.notes }}<br /><br />
 			</p>
 		  {% endfor %}
 		  
-		  <h3>Other Stories</h3>
+		  <h3 class="underline">Other Stories</h3>
 		  {% for concept in claimed %}
 		  			<p>{{ concept.due }} by {{ concept.user_names }}: {{ concept.name }}</p>
 		  {% endfor %}

@@ -171,3 +171,8 @@ Locate Text Boxes
 Organization of Text
 
 *******************/
+
+h2.underline,h3.underline {
+	width: 100%;
+	border: 2px solid #000;
+}
