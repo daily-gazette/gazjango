@@ -54,11 +54,9 @@ The Daily Gazette :: Swarthmore College's Daily Paper
 		  {% endfor %}
 		  
 		  <h3>Other Stories</h3>
-		  	<ul>
 		  {% for concept in claimed %}
-		  			<li><strong>{{ concept.user_names }}</strong>{{ concept.name }}, <strong>DUE:</strong> {{ concept.due }}</li>
+		  			<p><strong>{{ concept.user_names }}</strong>{{ concept.name }}, <strong>DUE:</strong> {{ concept.due }}</p>
 		  {% endfor %}
-		  	</ul>
 		</div>
 	</div>
 	
