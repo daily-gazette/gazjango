@@ -29,7 +29,7 @@ from gazjango.scrapers.manual_links import manual_links, lca_links
 def article(request, slug, year, month, day, num=None, form=None, print_view=False):
     "Base function to call for displaying a given article."
     kwargs = { 'slug': slug[:100] } # for very-long old slugs
-    if not request.user.is_staff():
+    if not request.user.is_staff:
         kwargs['status'] = 'p' # allow previews for staff
     story = get_by_date_or_404(Article, year, month, day, **kwargs)
     return specific_article(request, story, num, form, print_view)
