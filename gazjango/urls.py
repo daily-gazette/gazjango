@@ -86,6 +86,9 @@ urlpatterns += patterns('issues.views',
     (r'^issue/%(year)s/%(month)s/%(day)s/$'       % reps, 'issue_for_date', {}, 'issue'),
     (r'^issue/%(year)s/%(month)s/%(day)s/plain/$' % reps, 'issue_for_date', {'plain': True}),
     
+    (r'^issue/preview/$',       'preview_issue'),
+    (r'^issue/preview/plain/$', 'preview_issue', {'plain': True}),
+    
     (r'^rsd/$',                                         'rsd_now'),
     (r'^rsd/plain/$',                                   'rsd_now', {'plain': True}),
     (r'^rsd/%(year)s/%(month)s/%(day)s/$'       % reps, 'show_rsd', {}, 'rsd'),

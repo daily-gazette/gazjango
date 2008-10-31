@@ -96,7 +96,7 @@ class IssuesManager(models.Manager):
             issue.articles = arts
         
         issue.save()
-        return issue
+        return (issue, created)
     
 
 class Issue(models.Model):
