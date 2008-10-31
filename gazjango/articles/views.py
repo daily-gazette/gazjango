@@ -9,7 +9,7 @@ from django.http      import Http404, HttpResponse, HttpResponseRedirect
 from django.utils.html          import escape
 from django.core.urlresolvers   import reverse
 from django.shortcuts           import render_to_response, get_object_or_404
-from gazjango.misc.view_helpers import get_by_date_or_404, filter_by_date
+from gazjango.misc.view_helpers import get_by_date_or_404, filter_by_date, staff_required
 from gazjango.misc.view_helpers import get_ip, get_user_profile, reporter_admin_data
 
 from gazjango.articles.models      import Article, Special, PhotoSpread, StoryConcept
@@ -28,8 +28,10 @@ from gazjango.scrapers.manual_links import manual_links, lca_links
 
 def article(request, slug, year, month, day, num=None, form=None, print_view=False):
     "Base function to call for displaying a given article."
-    slug = slug[:100] # keep links working for the few very-long slugs
-    story = get_by_date_or_404(Article, year, month, day, slug=slug, status='p')
+    kwargs = { 'slug': slug[:100] } # for very-long old slugs
+    if not request.user.is_staff():
+        kwargs['status'] = 'p' # allow previews for staff
+    story = get_by_date_or_404(Article, year, month, day, **kwargs)
     return specific_article(request, story, num, form, print_view)
 
 def specific_article(request, story, num=None, form=None, print_view=False):
@@ -249,7 +251,8 @@ def homepage(request, template="index.html"):
     }
     rc = RequestContext(request)
     return render_to_response(template, data, context_instance=rc)
-    
+
+@staff_required    
 def staff(request,  template="staff/index.html"):
     user = get_user_profile(request)
     personal, claimed, unclaimed = StoryConcept.unpublished.get_concepts(user=user)
