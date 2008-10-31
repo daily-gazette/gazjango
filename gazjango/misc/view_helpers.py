@@ -1,8 +1,13 @@
-from django.shortcuts import get_object_or_404
+from django.contrib.auth import decorators
+from django.shortcuts    import get_object_or_404
 
 from gazjango.accounts.models      import UserProfile
 from gazjango.announcements.models import Announcement
 from gazjango.articles.models      import StoryConcept
+
+# =======================================
+# = model getting / filtering functions =
+# =======================================
 
 def get_by_date_or_404(model, year, month, day, field='pub_date', **oth):
     d = oth
@@ -21,6 +26,10 @@ def filter_by_date(qset, year=None, month=None, day=None, field='pub_date', **ot
                 args[field + '__day'] = int(day)
     return qset.filter(**args)
 
+
+# ===============================
+# = getting stuff from requests =
+# ===============================
 
 TRUE_VALUES = set(('yes', 'y', 'true', 't', 1))
 FALSE_VALUES = set(('no', 'n', 'false', 'f', 0))
@@ -53,6 +62,18 @@ def get_user_profile(request):
         return request.user.get_profile()
     except (AttributeError, UserProfile.DoesNotExist):
         return None
+
+
+# ===============
+# = login stuff =
+# ===============
+
+staff_required = decorators.user_passes_test(lambda u: u.is_staff)
+
+
+# ==============
+# = miscellany =
+# ==============
 
 def reporter_admin_data(user):
     """
