@@ -52,7 +52,7 @@ class ColumnAdmin(admin.ModelAdmin):
 admin.site.register(Column, ColumnAdmin)
 
 class StoryConceptAdmin(admin.ModelAdmin):
-    filter_horizontal = 'users'
+    filter_horizontal = ('users',)
 admin.site.register(StoryConcept, StoryConceptAdmin)
 
 
