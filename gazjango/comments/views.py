@@ -4,7 +4,7 @@ from django.http                    import HttpResponse, Http404, HttpResponseRe
 from django.template                import RequestContext
 from django.shortcuts               import render_to_response
 from gazjango.misc.view_helpers     import get_by_date_or_404, reporter_admin_data
-from gazjango.misc.view_helpers     import get_ip, get_user_profile
+from gazjango.misc.view_helpers     import get_ip, get_user_profile, is_robot
 
 from gazjango.articles.models      import Article, StoryConcept
 from gazjango.announcements.models import Announcement
@@ -39,12 +39,15 @@ def get_comment_text(request, slug, year, month, day, num):
 
 def vote_on_comment(request, slug, year, month, day, num, val):
     story = get_by_date_or_404(Article, year, month, day, slug=slug)
-    positive = True if val == 'up' else (False if val == 'down' else None)
     try:
         comment = story.comments.get(number=num)
     except PublicComment.DoesNotExist:
         raise Http404
     
+    if is_robot(request):
+        return HttpResponse('sorry, you seem to be a robot, no voting for you!')
+    
+    positive = (val == 'up') if val in ('up', 'down') else None
     user = get_user_profile(request)
     ip = get_ip(request)
     result = comment.vote(positive, ip=ip, user=user)
