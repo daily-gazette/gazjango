@@ -40,7 +40,7 @@ class Command(NoArgsCommand):
             try:
                 connection.send_messages([msg])
             except smtplib.SMTPRecipientsRefused:
-                sys.stderr.write("recipient refused: %s" % subscriber.email)
+                sys.stderr.write("recipient refused: %s\n" % subscriber.email)
         
         print 'done sending emails, ' + datetime.datetime.now().strftime("%c")
     
