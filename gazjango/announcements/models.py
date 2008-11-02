@@ -23,7 +23,7 @@ class PublishedAnnouncementsManager(models.Manager):
         if running.count() >= n:
             return running[:n]
         else:
-            new = self.order_by('date_end', 'date').exclude(pk__in=[r.pk for r in running])
+            new = self.order_by('date_end', 'date_start').exclude(pk__in=[r.pk for r in running])
             return list(running) + list(new[:n - running.count()])
     
 
