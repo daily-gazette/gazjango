@@ -37,7 +37,9 @@ reps = {
     'section': r'(?P<section>[a-zA-Z][-\w]+)',
     'subsection': r'(?P<subsection>[a-zA-Z][-\w]+)',
     
-    'num': r'(?P<num>\d+)'
+    'num': r'(?P<num>\d+)',
+    'uid': r'(?P<uidb36>[a-z0-9]+)',
+    'token': r'(?P<token>\w+-\w+)',
 }
 
 
@@ -118,16 +120,23 @@ urlpatterns += patterns('media.views',
     (r'^files/%(bucket)s/%(slug)s/$' % reps, 'file')
 )
 
+urlpatterns += patterns('django.contrib.auth.views',
+    (r'^accounts/login/$',  'login', {}, 'login'),
+    (r'^accounts/logout/$', 'logout', {'next_page': '/'}, 'logout'),
+    
+    (r'^accounts/reset-password/$',      'password_reset', {}, 'password-reset'),
+    (r'^accounts/reset-password/sent/$', 'password_reset_done'),
+    (r'^accounts/reset-password/%(uid)s-%(token)s/$' % reps, 'password_reset_confirm', {}, 'password-reset-confirm'),
+    (r'^accounts/reset-password/complete/$',                 'password_reset_complete'),
+)
 urlpatterns += patterns('',
-    (r'^accounts/login/$', 'django.contrib.auth.views.login', {}, 'login'),
-    (r'^accounts/logout/$', 'django.contrib.auth.views.logout', {'next_page': '/'}, 'logout'),
     (r'^accounts/manage/$', 'accounts.views.manage', {}, 'manage-user'),
     (r'^accounts/register/$', 'registration.views.register', { 'form_class': RegistrationFormWithProfile }, 'register'),
     
     (r'^accounts/', include('registration.urls')),
     
-    (r'^users/%(name)s/$' % reps,  'accounts.views.user_details', {}, 'user-details'),
-    (r'^author/%(name)s/$' % reps, 'accounts.views.user_details', {}, 'user-details'),
+    (r'^users/%(name)s/$'  % reps, 'accounts.views.user_details', {}, 'user-details'),
+    (r'^author/%(name)s/$' % reps, 'accounts.views.user_details')
 )
 
 # urlpatterns += patterns('',
