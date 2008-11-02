@@ -21,9 +21,10 @@ class CommentsManager(models.Manager):
         and `check_spam` is not set to False.
         """
         comment = PublicComment(**data)
+        anon = comment.is_anonymous
         user = comment.user.user if comment.user else None
         
-        if comment.is_anonymous or not user.has_perm('comments.can_post_directly'):
+        if anon or (user and not user.has_perm('comments.can_post_directly')):
             comment.is_spam = check_spam and comment.check_with_akismet()
             comment.is_approved = pre_approved
         else:
@@ -58,8 +59,7 @@ class CommentsManager(models.Manager):
 class VisibleCommentsManager(CommentsManager):
     def get_query_set(self):
         orig = super(VisibleCommentsManager, self).get_query_set()
-        is_visible = Q(is_approved=True) & (Q(score__gt=0) | Q(score=None))
-        return orig.filter(is_visible)
+        return orig.filter(is_approved=True, is_spam=False, score__gt=0)
     
 
 class PublicComment(models.Model):
@@ -91,7 +91,7 @@ class PublicComment(models.Model):
     email = models.EmailField(null=True, blank=True)
     
     is_anonymous = property(lambda self: bool(self.name))
-    display_name = property(lambda self: self.name if self.name else self.user.name)
+    display_name = property(lambda self: self.name or self.user.name)
     
     time = models.DateTimeField(default=datetime.now)
     text = models.TextField()
@@ -102,16 +102,9 @@ class PublicComment(models.Model):
     is_approved = models.BooleanField(default=False)
     is_spam     = models.BooleanField(default=False)
     score = models.IntegerField(default=0, null=True)
-    shown_forever = models.BooleanField()
     
     def is_visible(self):
-        if self.is_approved:
-            if self.score is None:
-                return self.shown_forever
-            else:
-                return self.score > 0
-        else:
-            return False
+        return self.is_approved and not self.is_spam and self.score > 0
     
     objects = CommentsManager()
     visible = VisibleCommentsManager()
@@ -123,7 +116,7 @@ class PublicComment(models.Model):
             akismet_data = {
                 'comment_type': 'comment',
                 'comment_author': self.name or self.user.name,
-                'comment_author_email': self.email or self.user.email,
+                'comment_author_email': self.user.email if self.user else self.email,
                 'permalink': url[:-1] + self.get_absolute_url(),
                 'user_ip': self.ip_address,
                 'user_agent': self.user_agent
@@ -151,23 +144,15 @@ class PublicComment(models.Model):
     
     def starting_score(self):
         from_swat = is_from_swat(user=self.user, ip=self.ip_address)
-        if self.user and self.user.user.has_perm('comments.can_post_directly'):
+        directly = self.user and self.user.user.has_perm('comments.can_post_directly')
+        if not self.is_anonymous and directly:
             return 6 if from_swat else 5
         else:
             return 4 if from_swat else 3
     
     def recalculate_score(self):
-        score = self.starting_score()
-        for vote in self.votes.all():
-            val = vote.value
-            if val is None:
-                self.score = None
-                self.shown_forever = vote.positive
-                self.save()
-                return
-            else:
-                score += val
-        self.score = score
+        self.score = self.starting_score()
+        self.score += sum(vote.value for vote in self.votes.all())
         self.save()
     
     def is_staff(self):
@@ -187,51 +172,53 @@ class PublicComment(models.Model):
             else:
                 return "Registered, Non-Swarthmore"
     
+    def get_vote(self, user=None, ip=None):
+        try:
+            if user is not None:
+                return self.votes.get(user=user)
+            else:
+                return self.votes.get(ip=ip, user=None)
+        except CommentVote.DoesNotExist:
+            return None
+    
     def vote(self, positive, user=None, ip=None):
         """
         Casts a vote for `user` and `ip`. If a vote is already present, override
-        it; if there's a vote and `positive` is None, clear it.
+        it; if there's a vote and `positive` is None, clear it. If the voter is
+        an editor, update their custom_weight.
         """
         status = self.vote_status(user=user, ip=ip)
-        if not status: # hasn't voted yet
+        if status is None: # hasn't voted yet
             if positive is not None:
                 vote = self.votes.create(positive=positive, user=user, ip=ip)
                 self.register_vote(vote)
         else:
-            if user:
-                vote = self.votes.get(user=user)
-            else:
-                vote = self.votes.get(ip=ip)
+            vote = self.get_vote(user=user, ip=ip)
+                        
             if positive is None:
                 vote.delete()
             else:
-                vote.positive = positive
-                vote.set_weight() # in case it's changed
+                if user and user.user.has_perm('comments.can_moderate_absolutely'):
+                    vote.custom_value = vote.custom_value or vote.value
+                    vote.custom_value += (1 if positive else -1) * 2
+                    vote.save()
+                else:
+                    vote.positive = positive
+                    vote.set_weight() # in case it's changed
             self.recalculate_score()
     
     def register_vote(self, vote):
         vote.set_weight()
-        if vote.value is None:
-            self.score = None
-            self.shown_forever = vote.positive
-        else:
-            if self.score:
-                self.score += vote.value
+        self.score += vote.value
         self.save()
     
     def vote_status(self, user=None, ip=None):
         """
-        Returns `user`/`ip`'s vote on this comment: 1 if positive,
-        -1 if negative, None if they haven't voted.
+        Returns `user`/`ip`'s vote on this comment: None if they haven't
+        voted, otherwise the value.
         """
-        try:
-            if user:
-                vote = self.votes.get(user=user)
-            else:
-                vote = self.votes.get(ip=ip)
-        except CommentVote.DoesNotExist:
-            return None
-        return 1 if vote.positive else -1
+        vote = self.get_vote(user=user, ip=ip)
+        return vote.value if vote else None
     
     def linked_name(self):
         name = self.display_name
@@ -262,34 +249,37 @@ class PublicComment(models.Model):
 
 class CommentVote(models.Model):
     """
-    Represent's a user / IP's vote for or against a given comment.
+    Represents a user / IP's vote for or against a given comment.
     """
     comment = models.ForeignKey(PublicComment, related_name="votes")
-    positive = models.BooleanField()
     
     user = models.ForeignKey(UserProfile, null=True)
     ip   = models.IPAddressField(blank=True, null=True)
     
-    weight = models.IntegerField(null=True, default=1)
+    positive = models.BooleanField()
+    weight   = models.IntegerField(default=1)
+    custom_value = models.IntegerField(null=True, default=None,
+                   help_text="Overrides the vote's weight if set; used for editors.")
     
     def _value(self):
-        if self.weight is None:
-            return None
+        if self.custom_value is not None:
+            return self.custom_value
         else:
             return (1 if self.positive else -1) * self.weight
-    
     value = property(_value)
     
     def set_weight(self):
         """
         Sets the weight of this vote. Anonymous voters get 1, regular
-        users get 2, Swat users get 3, staff get 4. Editors get override
-        power, aka null. :)
+        users get 2, Swat users get 3, staff get 4. Editors get however
+        many points they want. :)
         """ 
         if not self.user:
             self.weight = 1
         elif self.user.user.has_perm('comments.can_moderate_absolutely'):
-            self.weight = None
+            # don't bother with weight
+            if self.custom_value is None:
+                self.custom_value = (1 if self.positive else -1) * 4
         elif self.user.user.is_staff:
             self.weight = 4
         elif self.user.is_from_swat(ip=self.ip):
@@ -297,7 +287,6 @@ class CommentVote(models.Model):
         else:
             self.weight = 2
         self.save()
-        return self.weight
     
     class Meta:
         # note that null values don't count in uniqueness
@@ -307,8 +296,6 @@ class CommentVote(models.Model):
         )
     
     def __unicode__(self):
-        sign = "+" if self.positive else "-"
-        vote = str(self.weight) if self.weight else "inf"
         by = self.user.username if self.user else self.ip
-        return "%s%s on <comment %s> by %s" % (sign, vote, self.comment, by)
+        return "%+d on <comment %s> by %s" % (self.value, self.comment, by)
     

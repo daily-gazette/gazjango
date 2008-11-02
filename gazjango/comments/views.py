@@ -48,9 +48,7 @@ def vote_on_comment(request, slug, year, month, day, num, val):
         return HttpResponse('sorry, you seem to be a robot, no voting for you!')
     
     positive = (val == 'up') if val in ('up', 'down') else None
-    user = get_user_profile(request)
-    ip = get_ip(request)
-    result = comment.vote(positive, ip=ip, user=user)
+    result = comment.vote(positive, ip=get_ip(request), user=get_user_profile(request))
     
     if request.is_ajax():
         return HttpResponse("success" if result else "failure")
