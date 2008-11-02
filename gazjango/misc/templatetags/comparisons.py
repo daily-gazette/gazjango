@@ -11,7 +11,7 @@ def gt(value, arg):
 @register.filter
 def lt(value, arg):
     "Returns a boolean of whether the value is less than the argument."
-    return value < int(arg)
+    return value is not None and value < int(arg)
 
 @register.filter
 def gte(value, arg):
@@ -21,7 +21,7 @@ def gte(value, arg):
 @register.filter
 def lte(value, arg):
     "Returns a boolean of whether the value is less than or equal to the argument."
-    return value <= int(arg)
+    return value is not None and value <= int(arg)
 
 @register.filter
 def length_gt(value, arg):
