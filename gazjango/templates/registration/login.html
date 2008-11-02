@@ -8,9 +8,8 @@
       <p>Sorry, your username and password didn't match our records. Please try again.</p>
       <p>If you don't have an account yet, you should <a href="{% url registration_register %}">register one</a>.</p>
     {% else %}
-      <p>We're sorry -- accounts from the old site are not able to log in right now.</p>
-      <p>For technical reasons, we are unable to transfer your old password to the new site.</p>
-      <p>We should have a password recovery feature up shortly.</p>
+      <p>We're sorry: if you had an account on the old site, we were unable to transfer your password to the new one, for technical reasons.</p>
+      <p>You should use the <a href="{% url password-reset %}">password recovery feature</a> to set a new password.</p>
     {% endif %}
   </div>
 
@@ -29,7 +28,8 @@
   		</form>
 		
   		<p class="register">
-  			Don't have an account? <a href="{% url registration_register %}">Register!</a>
+  			Don't have an account? <a href="{% url registration_register %}">Register!</a><br/>
+  			Forgot your password? <a href="{% url password-reset %}">Set a new one</a>.
   		</p>
 		
   	</div>
