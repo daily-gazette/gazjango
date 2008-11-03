@@ -103,14 +103,14 @@
 		<div class="teamColumnBox">
 		
 			<div id="teamColumn">
-				<p class="gameHeader">{{ team.gender }} {{ team.sport }} vs. {{ game.opponent }}</p>
+				<p class="gameHeader">{{ team.get_gender_display }} {{ team.sport }} vs. {{ game.opponent }}</p>
 				<p>This
 					{% if game.home %} was a home game, 
 					{% else %} was an away game, {% endif %}
 					{% if game.in_conference %}in the Centennial Conference, {% endif %}
 					Played on {{ game.date }}</p>
 					
-				{% if outcome %}
+				{% if not team.ranked %}
 					<p>Results: <br />
 					{% ifequal outcome w %}
 						<strong>Swarthmore: {{ game.swat_score}}</strong><br />
