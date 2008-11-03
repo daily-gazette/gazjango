@@ -43,10 +43,10 @@
 								<td class="cellContent">&nbsp;{{ team.all_time_scores.0 }}</td>
 							
 								<td class="cellHeader">Losses:&nbsp;</td>
-								<td class="cellContent">&nbsp;{{ team.all_time.scores.1 }}</td>
+								<td class="cellContent">&nbsp;{{ team.all_time_scores.1 }}</td>
 							
 								<td class="cellHeader">Draws:&nbsp;</td>
-								<td class="cellContent">&nbsp;{{ team.all_time.scores.2 }}</td>
+								<td class="cellContent">&nbsp;{{ team.all_time_scores.2 }}</td>
 							
 								<td class="cellHeader readMore"><a href="{% url athletics_team team.slug %}" >Read More</a>&nbsp;</td>
 	
@@ -104,7 +104,7 @@
 		</div>
 		
 		
-		{% for game in games_for_trimester %}
+		{% for game in team.games_for_trimester %}
 		<div class="teamColumnBox">
 		
 			<div id="teamColumn">

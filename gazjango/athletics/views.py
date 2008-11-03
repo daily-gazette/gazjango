@@ -26,9 +26,6 @@ def team(request, slug):
     'View for "athletic" team pages.'
     
     team = get_object_or_404(Team, slug=slug)
-        
-    games_list = Team.games_for_semester(False)
-    
     
     rc = RequestContext(request, { 'team': team })
     return render_to_response('athletics/team.html', context_instance=rc)
