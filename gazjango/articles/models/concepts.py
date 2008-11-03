@@ -18,7 +18,7 @@ class UnpublishedConceptsManager(models.Manager):
         
         base = base or self
         
-        users = base.filter(users=user).exclude(due<date.today).order_by('due')
+        users = base.filter(users=user).exclude(due__lt=date.today).order_by('due')
         others = base.exclude(users=user).order_by('due')
         unclaimed = base.filter(users=None).order_by('due')
         
