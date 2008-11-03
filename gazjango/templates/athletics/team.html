@@ -31,7 +31,7 @@
 					<table width="300px" class="overview">
 					
 						<tr>
-							<td colspan="7" class="cellTop">
+							<td colspan="6" class="cellTop">
 								All-Time Scores
 							</td>
 						</tr>
@@ -47,13 +47,11 @@
 							
 								<td class="cellHeader">Draws:&nbsp;</td>
 								<td class="cellContent">&nbsp;{{ team.all_time_scores.2 }}</td>
-							
-								<td class="cellHeader readMore"><a href="{% url athletics_team team.slug %}" >Read More</a>&nbsp;</td>
 	
 							
 							{% else %}
 						
-							<td class="cellContent" colspan="7">Wins and losses are not available for this team.</td>
+							<td class="cellContent" colspan="6">Wins and losses are not available for this team.</td>
 							
 							{% endif %}
 	
@@ -69,7 +67,7 @@
 					<table width="300px" class="overview">
 					
 						<tr>
-							<td colspan="7" class="cellTop">
+							<td colspan="6" class="cellTop">
 								Season Scores
 							</td>
 						</tr>
@@ -84,14 +82,11 @@
 								<td class="cellContent">&nbsp;{{ team.scores.1 }}</td>
 							
 								<td class="cellHeader">Draws:&nbsp;</td>
-								<td class="cellContent">&nbsp;{{ team.scores.2 }}</td>
-							
-								<td class="cellHeader readMore"><a href="{% url athletics_team team.slug %}" >Read More</a>&nbsp;</td>
-	
+								<td class="cellContent">&nbsp;{{ team.scores.2 }}</td>	
 							
 							{% else %}
 						
-								<td class="cellContent" colspan="7">Wins and losses are not available for this team.</td>
+								<td class="cellContent" colspan="6">Wins and losses are not available for this team.</td>
 
 							{% endif %}
 	

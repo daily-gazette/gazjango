@@ -141,12 +141,13 @@ h4 a:hover {
 /***** TEAM PAGES *****/
 
 .teamColumnBox {
-    display: inline;
+    display: block;
     float: left;
+	margin-left: 25px;
 }
 
 .teamColumn {
-    display: inline;
+    display: inline-block;
     float: left;
     width: 400px;
     margin-left: 25px;
