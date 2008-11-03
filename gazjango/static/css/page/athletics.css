@@ -55,9 +55,9 @@
 }
 
 h3 {
-	width: 200px
-	padding-bottom: 10px;
-	display: inline-block;
+	width: 200px;
+	margin-bottom: 10px;
+	display: block;
 }
 
 .team {
@@ -135,7 +135,7 @@ h4 a:hover {
 	color: black;
 	text-align: justify;
 	line-height: 1.4;
-	font-size: 1em;
+	font-size: 1.4em;
 }
 
 /***** TEAM PAGES *****/
