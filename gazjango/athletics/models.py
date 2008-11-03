@@ -47,9 +47,7 @@ class Team(models.Model):
           
      def all_time_scores(self):
         return self.scores(True)
-        
-     def 
-          
+                  
      def games_for_trimester(self,all_time=False,year=None):
           if all_time:
                return self.games

@@ -96,7 +96,11 @@
                     <td>
                       <font color="#333333" size="2" face="Georgia, Times New Roman, Times, serif">
                         {% for event in events %}
-                          {{ forloop.counter }}. {{ event.event_date|near_future_date }} {% if event.event_time %} @ {{ event.event_time }} {% endif %}: <a href="#e{{ forloop.counter }}">{{ event.title }}</a><br />
+                        {% ifchanged %}
+		  					<br /><strong>{{ event.event_date|near_future_date }}</strong><br />
+		  				{% endifchanged %}
+                        
+                          {{ forloop.counter }}. <a href="#e{{ forloop.counter }}">{{ event.title }}</a>{% if event.event_time %} at {{ event.event_time }} {% endif %}<br />
                         {% endfor %}
                       </font>
                     </td>
