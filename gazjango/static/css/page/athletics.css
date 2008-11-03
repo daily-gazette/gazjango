@@ -1,0 +1,154 @@
+#athletics {
+	width: 950px;
+	float: left;
+	display: inline;
+}
+
+#athleticsContent {
+	width: 100%
+	padding-left: 25px;
+	padding-right: 25px;
+	float: left;
+	display: inline;
+}
+
+#athleticsHeader {
+	margin-left: 25px;
+	float: left;
+	width: 900px;
+	border-bottom: 2px solid #432c16;
+}
+
+#athleticsHeader h2 {
+	font-weight: bold;
+	font-size: 3em;
+}
+
+#athleticsColumnLeft {
+	width: 545px;
+	float: left;
+	display: inline;
+	margin-top: 10px;
+	margin-left: 25px;
+}
+
+.teamGame,.teamOverview {
+	float: left;
+	display: inline;
+}
+
+.teamGame {
+    margin-left: 10px;
+	font: 1.7em "Helvetica Neue", Arial, Helvetica, Geneva, sans-serif;
+}
+
+.score {
+    text-align: center;
+    font-size: 1.9em;
+}
+
+#athleticsColumnRight {
+	width: 350px;
+	float: left;
+	display: inline;
+	margin-top: 10px;
+}
+
+h3 {
+	width: 200px
+	margin-bottom: 10px;
+	display: block;
+}
+
+.team {
+	margin-left: 25px;
+}
+
+
+/******* TABLE STYLE *******/
+
+table.overview {
+	border: 1px solid #3E0010;
+}
+
+.cellHeader, .cellContent {
+	font-size: 1.4em;
+	color: #333;
+}
+
+.cellTop {
+	background-color: #3E0010;
+	color: #FFF;
+}
+
+.cellHeader {
+	text-align: right;
+	font-weight: bold;
+}
+
+td .cellContent {
+	color: #FFF;
+}
+.cellHeader a,.cellTop a {
+	color: #FFF;
+	font: 1.8em "Helvetica Neue", Arial, Helvetica, Geneva, sans-serif;
+}
+
+
+
+.cellContent {
+	text-align: left;
+}
+
+.readMore {
+	text-align: right;
+}
+
+.readMore a {
+	color: #3E0010;
+	font: 1em "Helvetica Neue", Arial, Helvetica, Geneva, sans-serif;
+}
+
+
+
+/******** Story Sidebar Styling **********/
+
+h4 {
+	margin: 0px;
+	padding: 0;
+	font-size: 1.6em;
+	font: bold "Helvetica Neue", Arial, Helvetica, Geneva, sans-serif;
+}
+
+h4 a {
+	color: #432c16;
+	text-decoration: none;
+}
+
+h4 a:hover {
+	text-decoration: underline;
+}
+
+#athleticsColumnRight p {
+	margin: 0;
+	padding: 0 0 10px 0px;
+	color: black;
+	text-align: justify;
+	line-height: 1.4;
+	font-size: 1em;
+}
+
+/***** TEAM PAGES *****/
+
+.teamColumnBox {
+    display: inline;
+    float: left;
+}
+
+.teamColumn {
+    display: inline;
+    float: left;
+    width: 400px;
+    margin-left: 25px;
+    margin-top: 10px;    
+}
