@@ -120,10 +120,12 @@
 					{% ifequal outcome w %}
 						<strong>Swarthmore: {{ game.swat_score}}</strong><br />
 						{{ game.opponent }}: {{ game.opponent_score }}</p>
+					{% else %}
 					{% ifequal outcome l %}
 						Swarthmore: {{ game.swat_score}}<br />
 						<strong>{{ game.opponent }}: {{ game.opponent_score }}</strong></p>
-					{% endif %}
+					{% endifequal %}
+					{% endifequal %}
 				{% else %}
 					<p>Swarthmore's Ranking: #{{ game.rank }}
 				{% endif %}
