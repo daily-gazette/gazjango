@@ -16,7 +16,7 @@ class Command(NoArgsCommand):
         
         now = datetime.datetime.now()
         time = 'Morning' if now.hour < 12 else 'Afternoon'
-        subject = now.strftime("Reserved Students Digest: @@ of %A, %B !!, %Y")
+        subject = now.strftime("@@ of %A, %B !!, %Y")
         subject = subject.replace('@@', time).replace('!!', str(now.day))
         
         from_email = "RSD by the Daily Gazette <dailygazette@swarthmore.edu>"
