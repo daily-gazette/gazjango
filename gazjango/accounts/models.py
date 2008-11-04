@@ -185,7 +185,7 @@ class UserProfile(models.Model):
         permissions = (
             ('can_access_admin', 'Can access the reporter admin.'),
         )
-        ordering = ('user__last_name', 'user__first_name', 'user__username')
+        ordering = ('user__is_staff', 'user__last_name', 'user__first_name', 'user__username')
     
 
 class Position(models.Model):
