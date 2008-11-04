@@ -104,6 +104,9 @@ class Announcement(models.Model):
     def long_excerpt(self, num_chars=300, link=True):
         return self.brief_excerpt(num_chars=num_chars, link=link)
     
+    def unlinked_excerpt(self, num_chars=120):
+        return self.brief_excerpt(num_chars)
+    
     def sponsor_link(self):
         if self.sponsor_url:
             return mark_safe('<a href="%s">%s</a>' % (self.sponsor_url, self.sponsor))
