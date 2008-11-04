@@ -1,4 +1,5 @@
 from django.db.models           import Q
+from django.http                import Http404
 from django.template            import RequestContext
 from django.shortcuts           import render_to_response
 from gazjango.misc.view_helpers import get_by_date_or_404, filter_by_date
