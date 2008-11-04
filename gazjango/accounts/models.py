@@ -175,7 +175,7 @@ class UserProfile(models.Model):
         return self.concepts.exclude(status='p')
     
     def __unicode__(self):
-        return self.name or self.username
+        return "%s (%s)" % (self.name, self.username)
     
     @permalink
     def get_absolute_url(self):
@@ -185,7 +185,7 @@ class UserProfile(models.Model):
         permissions = (
             ('can_access_admin', 'Can access the reporter admin.'),
         )
-        ordering = ('user__is_staff', 'user__last_name', 'user__first_name', 'user__username')
+        ordering = ('-user__is_staff', 'user__last_name', 'user__first_name', 'user__username')
     
 
 class Position(models.Model):
