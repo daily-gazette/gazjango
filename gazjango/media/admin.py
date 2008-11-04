@@ -6,10 +6,12 @@ class MediaBucketAdmin(admin.ModelAdmin):
 admin.site.register(MediaBucket, MediaBucketAdmin)
 
 class MediaFileAdmin(admin.ModelAdmin):
-    pass
+    list_display = ('name', 'slug', 'bucket')
+    filter_horizontal = ('users',)
 admin.site.register(MediaFile, MediaFileAdmin)
 
 class ImageFileAdmin(admin.ModelAdmin):
-    pass
+    list_display = ('name', 'slug', 'bucket')
+    filter_horizontal = ('users',)
 admin.site.register(ImageFile, ImageFileAdmin)
 
