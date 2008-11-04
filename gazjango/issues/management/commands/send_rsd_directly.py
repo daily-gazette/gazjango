@@ -24,7 +24,13 @@ class Command(NoArgsCommand):
         print 'starting to send emails, ' + datetime.datetime.now().strftime("%c")
         
         connection = SMTPConnection()
-        for subscriber in Subscriber.rsd.all():
+        to_send = [(subscriber, 0) for subscriber in Subscriber.rsd.all()]
+        while to_send:
+            subscriber, count = to_send.pop(0)
+            if count > 5:
+                sys.stderr.write('giving up on %s\n' % subscriber.email)
+                continue
+            
             if subscriber.plain_text:
                 msg = EmailMessage(subject, text_content, from_email, [subscriber.email])
             else:
@@ -35,5 +41,13 @@ class Command(NoArgsCommand):
                 connection.send_messages([msg])
             except smtplib.SMTPRecipientsRefused:
                 sys.stderr.write("recipient refused: %s" % subscriber.email)
+            except Exception, e:
+                sys.stderr.write("%s: error sending to %s\n%s: %s\n%s\n\n" % 
+                        (datetime.datetime.now().strftime("%c"),
+                         subscriber,
+                         e.__class__.__name__,
+                         e.message,
+                         traceback.format_exc()))
+                to_send.append((subscriber, count + 1))
         
         print 'done sending emails, ' + datetime.datetime.now().strftime("%c")
