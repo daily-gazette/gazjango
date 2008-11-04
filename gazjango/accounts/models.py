@@ -175,7 +175,7 @@ class UserProfile(models.Model):
         return self.concepts.exclude(status='p')
     
     def __unicode__(self):
-        return self.user.username
+        return self.name or self.username
     
     @permalink
     def get_absolute_url(self):
