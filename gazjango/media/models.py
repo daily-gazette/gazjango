@@ -37,6 +37,7 @@ class MediaFile(models.Model):
     slug   = models.SlugField()
     bucket = models.ForeignKey(MediaBucket, related_name="files")
     
+    author_name = models.CharField(max_length=100)
     users = models.ManyToManyField(UserProfile, related_name="media", blank=True)
     
     description = models.TextField(blank=True)
@@ -45,8 +46,11 @@ class MediaFile(models.Model):
     pub_date = models.DateTimeField(blank=True, default=datetime.now)
     
     def credit(self):
-        authors = self.users.order_by('user__last_name').all()
-        return ', '.join(user.name for user in authors)
+        if self.author_name:
+            return self.author_name
+        else:
+            authors = self.users.order_by('user__last_name').all()
+            return ', '.join(user.name for user in authors)
     
     def __unicode__(self):
         return "%s (in %s)" % (self.slug, self.bucket)
