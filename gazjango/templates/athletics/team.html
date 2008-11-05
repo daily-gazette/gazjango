@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% load extras %}
 
-{% block title %}{{ team.gender }} {{ team.sport }}{% endblock title %}
+{% block title %}{{ team.get_gender_display }} {{ team.sport }}{% endblock title %}
 
 {% block customheader %}
   <link rel="stylesheet" href="{% static css page/section.css %}" type="text/css"/>
