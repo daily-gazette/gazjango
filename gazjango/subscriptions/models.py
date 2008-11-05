@@ -55,7 +55,8 @@ class Subscriber(models.Model):
     plain_text = models.BooleanField(default=False)
     racy_content = models.BooleanField(default=True)
     
-    is_confirmed = models.BooleanField(default=False)
+    is_confirmed = models.BooleanField(default=True,
+                   help_text="Whether this person's email has been confirmed.")
     confirmation_key = models.CharField(max_length=15)
     
     objects = models.Manager()
