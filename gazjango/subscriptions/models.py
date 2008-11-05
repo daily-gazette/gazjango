@@ -33,10 +33,12 @@ class Subscriber(models.Model):
     The confirmation key is quasi-secret: it serves in lieu of a password
     for management things (unsubscribing, changing preferences).
     """
-    _name  = models.CharField(max_length=40)
-    _email = models.EmailField(null=True, default=None)
-    _kind  = models.ForeignKey(UserKind, null=True)
-    user = models.ForeignKey(UserProfile, null=True)
+    _name  = models.CharField(max_length=40, blank=True)
+    _email = models.EmailField(null=True, default=None, blank=True)
+    _kind  = models.ForeignKey(UserKind, null=True, blank=True)
+    user = models.ForeignKey(UserProfile, null=True, blank=True,
+           help_text="A user to link this subscription to. If this is set, *don't* " \
+                     "set name/email/kind; they're inherited from the user.")
     
     name  = property(lambda self: self.user.name  if self.user else self._name)
     email = property(lambda self: self.user.email if self.user else self._email)
@@ -50,10 +52,12 @@ class Subscriber(models.Model):
     
     subscribed   = models.DateField(auto_now_add=True)
     modified     = models.DateField(auto_now=True)
-    unsubscribed = models.DateField(null=True)
+    unsubscribed = models.DateField(null=True, blank=True, 
+                   help_text='When this user unsubscribed (if they have).')
     
     plain_text = models.BooleanField(default=False)
-    racy_content = models.BooleanField(default=True)
+    racy_content = models.BooleanField(default=True,
+                   help_text='Whether this user should receive sex columns and the like.')
     
     is_confirmed = models.BooleanField(default=True,
                    help_text="Whether this person's email has been confirmed.")
