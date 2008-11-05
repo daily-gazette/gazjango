@@ -91,7 +91,7 @@ class PublicComment(models.Model):
     email = models.EmailField(null=True, blank=True)
     
     is_anonymous = property(lambda self: bool(self.name))
-    display_name = property(lambda self: self.name or self.user.name)
+    display_name = property(lambda self: self.name or (self.user.name if self.user else ''))
     
     time = models.DateTimeField(default=datetime.now)
     text = models.TextField()
