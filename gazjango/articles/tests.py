@@ -106,7 +106,7 @@ class ArticleTestCase(unittest.TestCase):
     
     
     def test_link_resolution(self):
-        resolve = self.images_article.resolve_image_link
+        resolve = self.images_article.resolve_media_link
         
         is_in_media = lambda obj: \
             self.images_article.media.filter(pk=obj.pk).count() == 1

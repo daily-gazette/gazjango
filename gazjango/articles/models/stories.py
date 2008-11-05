@@ -205,7 +205,7 @@ class Article(models.Model):
         return formatter(text)
     
     
-    _img_link = re.compile(r'^(img://)?([-\w]+)/([-\w]+)$', re.IGNORECASE)
+    _img_link = re.compile(r'^((?:img|media)://)?([-\w]+)/([-\w]+)$', re.IGNORECASE)
     def resolved_text(self, revision=None):
         """
         Formats the text (at the revision specified by ``revision``, if
@@ -217,14 +217,14 @@ class Article(models.Model):
             soup = BeautifulSoup(text)
             
             for image in soup.findAll("img", src=self._img_link):
-                image['src'] = self.resolve_image_link(image['src'])
+                image['src'] = self.resolve_media_link(image['src'])
             for a in soup.findAll("a", href=self._img_link):
-                a['href'] = self.resolve_image_link(a['href'], required_scheme=True)
+                a['href'] = self.resolve_media_link(a['href'], required_scheme=True)
             return unicode(soup)
         else:
             return text
     
-    def resolve_image_link(self, image_path, complain=False, required_scheme=False):
+    def resolve_media_link(self, path, complain=False, required_scheme=False):
         """
         Turns relative image links in articles into absolute URLs. For
         example, if an article has "<img src='some-bucket/cool-pic'/>",
@@ -232,32 +232,32 @@ class Article(models.Model):
         '/files/some-bucket/cool-pic'.
         
         We can also use "img://bucket/slug"; this is the required format
-        for links to images (<a href="...">).
+        for links to images (<a href="...">). "media://" is a valid format too.
         """
         match = self._img_link.match(image_path)
         if not match:
-            return image_path
+            return path
         
         scheme, bucket_slug, slug = match.groups()
         if required_scheme and not scheme:
-            return image_path
+            return path
         
         try: # self.media should be cached, so we try it first
-            image = self.media.get(bucket__slug=bucket_slug, slug=slug)
+            media = self.media.get(bucket__slug=bucket_slug, slug=slug)
         except MediaFile.DoesNotExist:
             try:
-                image = ImageFile.objects.get(bucket__slug=bucket_slug, slug=slug)
-                self.media.add(image)
+                media = MediaFile.objects.get(bucket__slug=bucket_slug, slug=slug)
+                self.media.add(media)
             except ImageFile.DoesNotExist:
                 try:
-                    image = ImageFile.objects.get(bucket__slug='articles', slug=slug)
+                    media = MediaFile.objects.get(bucket__slug='articles', slug=slug)
                     self.media.add(image)
-                except ImageFile.DoesNotExist:
+                except MediaFile.DoesNotExist:
                     if complain:
                         raise
                     else:
                         return ""
-        return image.get_absolute_url()
+        return media.get_absolute_url()
     
     
     def related_list(self, num=None):
