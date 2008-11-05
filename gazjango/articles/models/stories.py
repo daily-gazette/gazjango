@@ -234,7 +234,7 @@ class Article(models.Model):
         We can also use "img://bucket/slug"; this is the required format
         for links to images (<a href="...">). "media://" is a valid format too.
         """
-        match = self._img_link.match(image_path)
+        match = self._img_link.match(path)
         if not match:
             return path
         
@@ -251,7 +251,7 @@ class Article(models.Model):
             except ImageFile.DoesNotExist:
                 try:
                     media = MediaFile.objects.get(bucket__slug='articles', slug=slug)
-                    self.media.add(image)
+                    self.media.add(media)
                 except MediaFile.DoesNotExist:
                     if complain:
                         raise
