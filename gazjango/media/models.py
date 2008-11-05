@@ -43,6 +43,17 @@ class MediaFile(models.Model):
     description = models.TextField(blank=True)
     license     = models.TextField(blank=True)
     
+    source_url = models.URLField(blank=True, verify_exists=False)
+    
+    LICENSE_CHOICES = (
+        ('g', 'Created by the Gazette'),
+        ('c', 'Creative Commons'),
+        ('f', 'Free for Public Use'),
+        ('o', 'Other (note in description)'),
+    )
+    license_type = models.CharField(max_length=1, choices=LICENSE_CHOICES, blank=True,
+                        help_text='Why is it okay for us to use this picture?')
+    
     pub_date = models.DateTimeField(blank=True, default=datetime.now)
     
     def credit(self):
