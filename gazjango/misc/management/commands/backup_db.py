@@ -18,11 +18,11 @@ class Command(NoArgsCommand):
             'pwd' : settings.DATABASE_PASSWORD,
         }
         
-        cmd = "mysqldump --host='%(host)s' --port='%(port)s' --user='%(user)s' " +
+        cmd = "mysqldump --host='%(host)s' --port='%(port)s' --user='%(user)s' " + \
               "--password='%(pwd)s' %(name)s"
         filename = datetime.datetime.now().strftime(DUMP_PATTERN)
         process = Popen(cmd % args,
-                        stdout=file(outfile), 
-                        stderr=file(outfile + '.errors'))
+                        stdout=file(filename), 
+                        stderr=file(filename + '.errors'))
         process.wait()
     
