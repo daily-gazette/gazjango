@@ -22,7 +22,7 @@ class Command(NoArgsCommand):
               "--password='%(pwd)s' %(name)s"
         filename = datetime.datetime.now().strftime(DUMP_PATTERN)
         process = Popen(cmd % args,
-                        stdout=file(filename), 
-                        stderr=file(filename + '.errors'))
+                        stdout=open(filename, 'w'),
+                        stderr=open(filename + '.errors', 'w'))
         process.wait()
     
