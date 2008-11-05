@@ -24,7 +24,7 @@ class UserKind(models.Model):
     
     class Meta:
         unique_together = ('kind', 'year')
-        ordering = ('kind', 'year')
+        ordering = ('kind', '-year')
     
     def __unicode__(self):
         return self.get_kind_display() + \
