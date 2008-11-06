@@ -42,7 +42,11 @@
 	padding: 5px;
 }
 
-.personalConcept.dueDate {
+.personalConcept .name {
+	float: left;
+	display: inline-block;
+}
+.personalConcept .dueDate {
 	font-variant: small-caps;
 	font-style: italic;
 	float: right;
