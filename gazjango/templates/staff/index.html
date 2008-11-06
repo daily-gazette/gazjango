@@ -70,13 +70,13 @@
             <div id="profileBox">
                     <div class="picture">
                          {% if author.picture %}
-                            <img src="{{ author.picture.get_absolute_url }}" /> [<a href="http://daily.swarthmore.edu/admin/accounts/userprofile/{{ author.pk }}/">Edit</a>]
+                            <img src="{{ author.picture.get_absolute_url }}" /> [<a href="http://daily.swarthmore.edu/admin/accounts/userprofile/{{ author.pk }}/">Edit your photo</a>]
                         {% else %}
                             [<a href="http://daily.swarthmore.edu/admin/accounts/userprofile/{{ author.pk }}/">Add a picture of yourself</a>]
                         {% endif %}
                     </div>
-                <p>Position: {{ author.position.name }}</p>
-                <p>Biography: {{ author.bio|safe }}  [<a href="http://daily.swarthmore.edu/admin/accounts/userprofile/{{ author.pk }}/">Edit</a>]</p>
+                <p><strong>Position:</strong> {{ author.position.name }}</p>
+                <p><strong>Biography:</strong> {{ author.bio|safe }}  [<a href="http://daily.swarthmore.edu/admin/accounts/userprofile/{{ author.pk }}/">Edit</a>]</p>
                 <ul>
                     {% for holding in author.holding_set.reverse %}
                     <li>{{ holding.date_start.year }}-{{ holding.date_end.year|default:"Present" }}: {{ holding.position.name }}</li>
