@@ -65,6 +65,29 @@
                     <a href="">Add Weather Joke</a>
                 </div>
                     
+                    
+                <div id="unclaimedStories">
+                    <div class="unclaimedDate">
+                        <h3>Unclaimed Stories</h3>
+                    </div>
+                    {% for concept in unclaimed %}
+                        {% ifchanged %}
+                            <div class="unclaimedDate">
+                                {{ concept.due }}
+                            </div>
+                        {% endifchanged %}
+                        <div class="unclaimedStory">
+                            <p><a href="http://daily.swarthmore.edu/admin/articles/storyconcept/{{ concept.pk }}/">{{ concept.name }}</a> — <a href="#" class='showLink'>[ See More ]</a></p>
+                            <div class="collapsed">
+                                <p>{% if concept.notes_excerpt %}{{ concept.notes_excerpt }} --{% endif %} <a href="http://daily.swarthmore.edu/admin/articles/storyconcept/{{ concept.pk }}/">Claim this story</a>
+                            </div>
+                        </div>
+                        {% endfor %}
+
+                </div>        
+                    
+                    
+                    
             </div>  
             
             <div id="profileBox">
@@ -91,28 +114,8 @@
                     <p><strong>Awards:</strong> {{ author.awards|safe }} </p>
                 {% endif %}
                     
-            </div>
-                
-            
-            <div id="unclaimedStories">
-                <div class="unclaimedDate">
-                    <h3>Unclaimed Stories</h3>
-                </div>
-                {% for concept in unclaimed %}
-                    {% ifchanged %}
-                        <div class="unclaimedDate">
-                            {{ concept.due }}
-                        </div>
-                    {% endifchanged %}
-                    <div class="unclaimedStory">
-                        <p><a href="http://daily.swarthmore.edu/admin/articles/storyconcept/{{ concept.pk }}/">{{ concept.name }}</a> — <a href="#" class='showLink'>[ See More ]</a></p>
-                        <div class="collapsed">
-                            <p>{% if concept.notes_excerpt %}{{ concept.notes_excerpt }} --{% endif %} <a href="http://daily.swarthmore.edu/admin/articles/storyconcept/{{ concept.pk }}/">Claim this story</a>
-                        </div>
-                    </div>
-                    {% endfor %}
-                    
-            </div>
+            </div>  
+        
             
         </div>
         
