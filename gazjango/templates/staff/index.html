@@ -68,13 +68,14 @@
             </div>  
             
             <div id="profileBox">
-                
-                <h2>{{ author.name }}</h2>
-                {% if author.picture %}
                     <div class="picture">
+                         {% if author.picture %}
                             <img src="{{ author.picture.get_absolute_url }}" /> [<a href="http://daily.swarthmore.edu/admin/accounts/userprofile/{{ author.pk }}/">Edit</a>]
+                        {% else %}
+                            [<a href="http://daily.swarthmore.edu/admin/accounts/userprofile/{{ author.pk }}/">Add a picture of yourself</a>]
+                        {% else %}
+                        {% endif %}
                     </div>
-                {% endif %}
                 <p>Position: {{ author.position.name }}</p>
                 <p>Biography: {{ author.bio|safe }}  [<a href="http://daily.swarthmore.edu/admin/accounts/userprofile/{{ author.pk }}/">Edit</a>]</p>
                 <ul>
