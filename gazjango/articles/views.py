@@ -259,7 +259,8 @@ def staff(request,  template="staff/index.html"):
     data = {
         'personal': personal,
         'unclaimed': unclaimed,
-        'claimed': claimed
+        'claimed': claimed,
+		'author': up
     }
     rc = RequestContext(request)
     return render_to_response(template, data, context_instance=rc)
