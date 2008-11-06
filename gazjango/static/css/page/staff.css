@@ -1,3 +1,5 @@
+/* @override http://daily.swarthmore.edu/static/css/staff.css */
+
 #container {
 	width: 970px;
 }
@@ -17,29 +19,34 @@
 
 
 #yourStories {
-	padding: 10px;
-	width: 100%;
+	margin-left: 10px;
+	margin-right: 10px;
+	width: 690px;
+	float: left;
+	display: box;
 }
 
 #yourStories p,#yourStories a {
 	color: #E6E3C3;
 }
 
-.personalConcept {
-	background-color: #A35A28;
-	margin-bottom: 10px;
-	display: block;
+#yourStories a {
+	font-weight: bold;
 }
 
-.personalConcept.name {
-	font-weight: bold;
+.personalConcept {
+	background-color: #A35A28;
+	margin: 5px;
+	width: 680px;
+	display: inline-block;
+	padding: 5px;
 }
 
 .personalConcept.dueDate {
 	font-variant: small-caps;
 	font-style: italic;
 	float: right;
-	display: inline;
+	display: inline-block;
 }
 
 .personalConcept.collapsed {

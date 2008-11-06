@@ -31,9 +31,9 @@
                 {% for concept in personal %}
                 
                     <div class="personalConcept">
-                        <span class="name"><a href="http://daily.swarthmore.edu/admin/articles/storyconcept/{{ concept.pk }}/">{{ concept.name }}</a></span>
-                        <span class="dueDate">{{ concept.due }}</span>
-                        <a href="#" class='showLink'><img src="{% static images staff/expand.png %}" /></a>
+                        <div class="name"><a href="http://daily.swarthmore.edu/admin/articles/storyconcept/{{ concept.pk }}/">{{ concept.name }}</a></div>
+                        <div class="dueDate">{{ concept.due }}
+                        &nbsp;&nbsp;<a href="#" class='showLink'><img src="{% static images staff/expand.png %}" /></a></div>
                         {% if concept.notes_excerpt %}
                             <div class="collapsed">
                                 <p>{{ concept.notes_excerpt }}</p>
@@ -48,7 +48,7 @@
                 {% for concept in unclaimed %}
                     {% ifchanged %}
                         <div class="unclaimedDate">
-                            <span class="dueDate">{{ concept.due }}</span>
+                            {{ concept.due }}
                         </div>
                     {% endifchanged %}
                     <div class="unclaimedStory">
@@ -107,7 +107,7 @@
             {% for concept in unclaimed %}
                 {% ifchanged %}
                     <div class="claimedDate">
-                        <span class="dueDate">{{ concept.due }}</span>
+                        {{ concept.due }}
                     </div>
                 {% endifchanged %}
                 <div class="claimedStory">
