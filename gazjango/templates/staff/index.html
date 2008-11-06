@@ -81,10 +81,14 @@
                     <li>{{ holding.date_start.year }}-{{ holding.date_end.year|default:"Present" }}: {{ holding.position.name }}</li>
                     {% endfor %}
                 </ul>
-                <p><strong>Biography:</strong> {{ author.bio|safe }}  [<a href="http://daily.swarthmore.edu/admin/accounts/userprofile/{{ author.pk }}/">Edit</a>]</p>
+                {% if author.bio %}
+                    <p><strong>Biography:</strong> {{ author.bio|safe }}  [<a href="http://daily.swarthmore.edu/admin/accounts/userprofile/{{ author.pk }}/">Edit Your Profile</a>]</p>
+                {% else %}
+                    <p>[<a href="http://daily.swarthmore.edu/admin/accounts/userprofile/{{ author.pk }}/">Create a Profile</a>]</p>
+                {% endif %}
         
                 {% if author.awards %}
-                    <p>Awards: {{ author.awards|safe }} </p>
+                    <p><strong>Awards:</strong> {{ author.awards|safe }} </p>
                 {% endif %}
                     
             </div>
