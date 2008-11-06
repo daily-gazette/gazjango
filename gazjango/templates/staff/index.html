@@ -76,12 +76,12 @@
                         {% endif %}
                     </div>
                 <p><strong>Position:</strong> {{ author.position.name }}</p>
-                <p><strong>Biography:</strong> {{ author.bio|safe }}  [<a href="http://daily.swarthmore.edu/admin/accounts/userprofile/{{ author.pk }}/">Edit</a>]</p>
                 <ul>
                     {% for holding in author.holding_set.reverse %}
                     <li>{{ holding.date_start.year }}-{{ holding.date_end.year|default:"Present" }}: {{ holding.position.name }}</li>
                     {% endfor %}
                 </ul>
+                <p><strong>Biography:</strong> {{ author.bio|safe }}  [<a href="http://daily.swarthmore.edu/admin/accounts/userprofile/{{ author.pk }}/">Edit</a>]</p>
         
                 {% if author.awards %}
                     <p>Awards: {{ author.awards|safe }} </p>
