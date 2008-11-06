@@ -1,8 +1,7 @@
 from django.core.management.base import NoArgsCommand, CommandError
 from django.conf import settings
-from subprocess import Popen
 import datetime
-import sys
+import sys, os, os.path
 
 DUMP_PATTERN = "/home/dailygazette/db-backups/dump_%Y-%m-%d_%H-%M.sql.bz2"
 
@@ -10,19 +9,23 @@ class Command(NoArgsCommand):
     def handle_noargs(self, **options):
         if settings.DATABASE_ENGINE != 'mysql':
             raise CommandError("This command requires a mysql database.")
-        args = {
-            'host': settings.DATABASE_HOST,
-            'port': settings.DATABASE_PORT,
-            'name': settings.DATABASE_NAME,
-            'user': settings.DATABASE_USER,
-            'pwd' : settings.DATABASE_PASSWORD,
-        }
         
-        cmd = "mysqldump --host='%(host)s' --port='%(port)s' --user='%(user)s' " + \
-              "--password='%(pwd)s' %(name)s"
+        args = []
+        if settings.DATABASE_HOST:
+            args.append('--host=%s' % settings.DATABASE_HOST)
+        if settings.DATABASE_PORT:
+            args.append('--port=%s' % settings.DATABASE_PORT)
+        if settings.DATABASE_USER:
+            args.append('--user=%s' % settings.DATABASE_USER)
+        if settings.DATABASE_PASSWORD:
+            args.append('--password=%s' % settings.DATABASE_PASSWORD)
+        args.append(settings.DATABASE_NAME)
+        
         filename = datetime.datetime.now().strftime(DUMP_PATTERN)
-        process = Popen(cmd % args,
-                        stdout=open(filename, 'w'),
-                        stderr=open(filename + '.errors', 'w'))
-        process.wait()
+        backup_dir = os.path.dirname(filename)
+        if not os.path.exists(backup_dir):
+            os.path.makedirs(backup_dir)
+        
+        print "Backing up %s to %s" % (args[-1], filename)
+        os.system('mysqldump %s > %s' % (' '.join(args), filename))
     
