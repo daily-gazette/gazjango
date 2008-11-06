@@ -57,6 +57,7 @@
                             <p>{% if concept.notes_excerpt %}{{ concept.notes_excerpt }} --{% endif %} <a href="http://daily.swarthmore.edu/admin/articles/storyconcept/{{ concept.pk }}/">Claim this story</a>
                         </div>
                     </div>
+                    {% endfor %}
                     
             </div>
             
@@ -116,6 +117,7 @@
                         <p>{% if concept.notes_excerpt %}{{ concept.notes_excerpt }} --{% endif %} <a href="http://daily.swarthmore.edu/admin/articles/storyconcept/{{ concept.pk }}/">Edit Story Status</a>
                     </div>
                 </div>
+            {% endfor %}
         </div>
     </div>
 </body>
