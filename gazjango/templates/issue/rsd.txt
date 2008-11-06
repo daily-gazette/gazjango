@@ -16,6 +16,12 @@ EVENTS
   {{ forloop.counter }}. {{ event.title }} ({{ event.event_date|near_future_date }}, {{ event.event_time }}){% endfor %}
 
 ==============================================
+{% endif %}{% if lost_and_found %}
+LOST & FOUND
+{% for announcement in lost_and_found %}
+  {{ forloop.counter }}. {{ announcement.title }} ({{ announcement.sponsor }} -- {{ announcement.poster_email }}){% endfor %}
+
+==============================================
 {% endif %}{% if jobs %}
 JOBS
 {% for job in jobs %}
@@ -50,6 +56,17 @@ EVENTS
 {% if not forloop.last %}     -----------------------{% endif %}
 {% endfor %}
 
+==============================================
+{% endif %}{% if lost_and_found %}
+LOST & FOUND
+
+{% for announcement in lost_and_found %}
+{{ forloop.counter }}. {{ announcement.title }}
+
+{{ announcement.text|striptags }}
+{% if announcement.sponsor %}Contact: {{ announcement.sponsor }} {% if announcement.poster_email %}({{ announcement.poster_email }}){% endif %} {% if announcement.sponsor_url %}({{ announcement.sponsor_url }}){% endif %} {% endif %}
+{% if not forloop.last %}     -----------------------{% endif %}
+{% endfor %}
 ==============================================
 {% endif %}{% if jobs %}
 JOBS

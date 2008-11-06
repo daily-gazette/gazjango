@@ -11,8 +11,10 @@ class SubmitAnnouncementForm(forms.ModelForm):
     
     class Meta:
         model = Announcement
-        fields  = ('title', 'text', 'date_start', 'date_end', 'poster_email',)
-        fields += ('sponsor', 'sponsor_url', 'event_date', 'event_time', 'event_place')
+        fields  = ('title', 'text', 'date_start', 'date_end',
+                   'poster_email', 'sponsor', 'sponsor_url',
+                   'is_lost_and_found',
+                   'event_date', 'event_time', 'event_place')
     
     def clean(self):
         super(SubmitAnnouncementForm, self).clean()

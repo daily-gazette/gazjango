@@ -75,8 +75,11 @@ def rsd_now(request, plain=False):
 
 def show_rsd(request, year, month, day, plain=False):
     date = datetime.date(int(year), int(month), int(day))
-    not_event = Q(event_date=None)
     current = Announcement.community.filter(date_start__lte=date, date_end__gte=date)
+    
+    regular = current.filter(is_lost_and_found=False, event_date=None)
+    events = current.exclude(event_date=None)
+    lost_and_found = current.filter(is_lost_and_found=True)
     
     one_week = datetime.timedelta(days=7)
     if date == datetime.date.today():
@@ -93,8 +96,9 @@ def show_rsd(request, year, month, day, plain=False):
     data = {
         'year': year, 'month': month, 'day': day,
         'date': date,
-        'announcements': current.filter(not_event).order_by('-date_start', 'pk'),
-        'events': current.exclude(not_event).order_by('event_date', 'event_time', 'pk'),
+        'announcements': regular.order_by('-date_start', 'pk'),
+        'events': events.order_by('event_date', 'event_time', 'pk'),
+        'lost_and_found': lost_and_found.order_by('-date_start', 'pk'),
         'jobs': jobs,
         'comments': comments[:3],
         'stories': t,

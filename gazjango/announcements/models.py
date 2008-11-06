@@ -76,6 +76,8 @@ class Announcement(models.Model):
     date_start = models.DateField(default=datetime.date.today)
     date_end   = models.DateField(default=datetime.date.today)
     
+    is_lost_and_found = models.BooleanField(blank=True, default=False)
+    
     event_date  = models.DateField(blank=True, null=True)
     event_time  = models.CharField(blank=True, max_length=20)
     event_place = models.CharField(blank=True, max_length=25)
