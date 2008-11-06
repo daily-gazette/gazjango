@@ -80,15 +80,14 @@ def join_authors(authors, format='', autoescape=None):
         results = { 'name': casify(author.name) }
         if positions:
             pos = author.position()
-            if pos:
-                results['pos'] = casify(pos)
+            results['pos'] = ', ' + casify(pos) if pos else ''
         if link:
             results['url'] = author.get_absolute_url()
         return results
     
     base = "%(name)s"
-    if 'pos' in results: base += ", %(pos)s"
-    if 'url' in results: base = "<a href='%(url)s'>" + base + "</a>"
+    if positions: base += "%(pos)s"
+    if link:      base = "<a href='%(url)s'>" + base + "</a>"
     
     return mark_safe('; '.join(base % reps(author) for author in result))
 
