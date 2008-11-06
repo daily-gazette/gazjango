@@ -73,7 +73,6 @@
                             <img src="{{ author.picture.get_absolute_url }}" /> [<a href="http://daily.swarthmore.edu/admin/accounts/userprofile/{{ author.pk }}/">Edit</a>]
                         {% else %}
                             [<a href="http://daily.swarthmore.edu/admin/accounts/userprofile/{{ author.pk }}/">Add a picture of yourself</a>]
-                        {% else %}
                         {% endif %}
                     </div>
                 <p>Position: {{ author.position.name }}</p>
