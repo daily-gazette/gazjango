@@ -69,22 +69,22 @@
             
             <div id="profileBox">
                 
-                <h2>{{ user.name }}</h2>
-                {% if user.picture %}
+                <h2>{{ author.name }}</h2>
+                {% if author.picture %}
                     <div class="picture">
-                            <img src="{{ user.picture.get_absolute_url }}" /> [<a href="http://daily.swarthmore.edu/admin/accounts/userprofile/{{ user.pk }}/">Edit</a>]
+                            <img src="{{ author.picture.get_absolute_url }}" /> [<a href="http://daily.swarthmore.edu/admin/accounts/userprofile/{{ author.pk }}/">Edit</a>]
                     </div>
                 {% endif %}
-                <p>Position: {{ user.position.name }}</p>
-                <p>Biography: {{ user.bio|safe }}  [<a href="http://daily.swarthmore.edu/admin/accounts/userprofile/{{ user.pk }}/">Edit</a>]</p>
+                <p>Position: {{ author.position.name }}</p>
+                <p>Biography: {{ author.bio|safe }}  [<a href="http://daily.swarthmore.edu/admin/accounts/userprofile/{{ author.pk }}/">Edit</a>]</p>
                 <ul>
-                    {% for holding in user.holding_set.reverse %}
+                    {% for holding in author.holding_set.reverse %}
                     <li>{{ holding.date_start.year }}-{{ holding.date_end.year|default:"Present" }}: {{ holding.position.name }}</li>
                     {% endfor %}
                 </ul>
         
-                {% if user.awards %}
-                    <p>Awards: {{ user.awards|safe }} </p>
+                {% if author.awards %}
+                    <p>Awards: {{ author.awards|safe }} </p>
                 {% endif %}
                     
             </div>
