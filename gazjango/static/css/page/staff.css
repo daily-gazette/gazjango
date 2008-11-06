@@ -83,7 +83,12 @@ body {
 /**********| UNCLAIMED STORIES |**********/
 
 #unclaimedStories {
-	// Contains the list of unclaimed stories
+	margin-left: 10px;
+	margin-right: 5px;
+	width: 254px;
+	float: left;
+	display: box;
+	padding-left: 5px;
 	
 }
 
@@ -124,6 +129,7 @@ body {
 	background-color: #572B0D;
 	padding: 5px;
 	margin-right: 5px;
+	margin-top: 10px;
 	width: 240px;
 	float: left;
 	display: inline-box;
