@@ -79,7 +79,9 @@ def join_authors(authors, format='', autoescape=None):
     def reps(author):
         results = { 'name': casify(author.name) }
         if positions:
-            results['pos'] = casify(author.position() or "Guest Writer")
+            pos = author.position() or "Guest Writer"
+            if pos != '__none__':
+                results['pos'] = casify(pos)
         if link:
             results['url'] = author.get_absolute_url()
         return results
