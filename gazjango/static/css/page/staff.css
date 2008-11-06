@@ -46,11 +46,15 @@
 	float: left;
 	display: inline-block;
 }
+
 .personalConcept .dueDate {
 	font-variant: small-caps;
-	font-style: italic;
 	float: right;
 	display: inline-block;
+}
+
+.personalConcept .dueDate a {
+	font-size: .8em;
 }
 
 .personalConcept.collapsed {
