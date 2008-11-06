@@ -3,7 +3,7 @@ from django.conf import settings
 import datetime
 import sys, os, os.path
 
-DUMP_PATTERN = "/home/dailygazette/db-backups/dump_%Y-%m-%d_%H-%M.sql"
+DUMP_PATTERN = "/home/dailygazette/db-backups/dump_%Y-%m-%d_%H-%M.sql.bz2"
 
 class Command(NoArgsCommand):
     def handle_noargs(self, **options):
