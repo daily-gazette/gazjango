@@ -1,0 +1,137 @@
+#container {
+	width: 970px;
+}
+
+#main {
+	width: 710px;
+	background: #E6E3C3 url(http://daily.swarthmore.edu/static/images/staff/bg_col_left.png) repeat-y 0 0;
+}
+
+#header {
+	// Contains the header image
+	
+}
+
+
+/**********| YOUR STORIES |**********/
+
+
+#yourStories {
+	padding: 10px;
+	width: 100%;
+}
+
+#yourStories p,#yourStories a {
+	color: #E6E3C3;
+}
+
+.personalConcept {
+	background-color: #A35A28;
+	margin-bottom: 10px;
+	display: block;
+}
+
+.personalConcept.name {
+	font-weight: bold;
+}
+
+.personalConcept.dueDate {
+	font-variant: small-caps;
+	font-style: italic;
+	float: right;
+	display: inline;
+}
+
+.personalConcept.collapsed {
+	visibility: collapse;
+}
+
+
+/**********| UNCLAIMED STORIES |**********/
+
+#unclaimedStories {
+	// Contains the list of unclaimed stories
+	
+}
+
+#unclaimedStories p {
+	
+}
+
+.unclaimedDate {
+	// For each day of unclaimed stories
+	
+}
+
+.unclaimedStory {
+	// For each unclaimed story
+
+}
+
+.unclaimedStory.collapsed {
+	
+}
+
+/**********| ADMIN LINK BAR |**********/
+
+#linkBox {
+	// List of publication links into the administration
+	
+}
+
+#bigLink {
+	// The main link going in
+}
+
+.smallLink {
+	// One of a series of small links going in
+	
+}
+
+/**********| PROFILE BOX |**********/
+
+#profileBox {
+	
+}
+
+.picture {
+	
+}
+
+#profileBox ul {
+	
+}
+
+#profileBox ul li {
+	
+}
+
+#profileBox p {
+	
+}
+
+/**********| ALL STORIES LIST |**********/
+
+
+#sideBar {
+	width: 260px;
+	background: #9Eb5A0 url(http://daily.swarthmore.edu/static/images/staff/bg_col_right.png) repeat-y 100% 0;
+
+
+}
+
+#sideBar p {
+	
+}
+
+.claimedDate {
+	
+}
+
+.claimedStory {
+	
+}
+
+.claimedStory.collapsed {
+	
+}
