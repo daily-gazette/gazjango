@@ -5,6 +5,7 @@ from gazjango.subscriptions.models import Subscriber
 from gazjango.issues.views         import rsd_now
 import datetime
 import sys
+import traceback
 import smtplib
 
 class Command(NoArgsCommand):
