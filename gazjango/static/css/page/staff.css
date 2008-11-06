@@ -84,13 +84,9 @@ body {
 /**********| UNCLAIMED STORIES |**********/
 
 #unclaimedStories {
-	margin-left: 10px;
-	margin-right: 5px;
-	width: 254px;
 	float: left;
 	display: box;
-	padding-left: 5px;
-	
+	padding-top: 10px;	
 }
 
 #unclaimedStories p {
@@ -98,13 +94,26 @@ body {
 }
 
 .unclaimedDate {
-	// For each day of unclaimed stories
-	
+	padding: 5px;
+	margin: 0px;
+	background-color: #572B0D;
+	width: 240px;
+	float: left;
+	display: inline-block;
+}
+
+.unclaimedDate h3 {
+	color: #E6E3C3;
+	margin: 0px;
 }
 
 .unclaimedStory {
-	// For each unclaimed story
-
+	background-color: #A35A28;
+	padding: 5px;
+	margin: 0px;
+	width: 240px;
+	float: left;
+	display: inline-block;
 }
 
 .unclaimedStory.collapsed {
