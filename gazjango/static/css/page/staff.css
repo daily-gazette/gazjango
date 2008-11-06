@@ -1,12 +1,24 @@
 /* @override http://daily.swarthmore.edu/static/css/staff.css */
 
+
+
+/**********| MAIN STUFF |**********/
+
+body {
+	padding: 0px;
+	margin: 0px;
+}
 #container {
 	width: 970px;
+	margin: 0 auto;
 }
 
 #main {
 	width: 710px;
 	background: #E6E3C3 url(http://daily.swarthmore.edu/static/images/staff/bg_col_left.png) repeat-y 0 0;
+	display: block;
+	float: left;
+	padding-bottom: 50px;
 }
 
 #header {
@@ -96,19 +108,51 @@
 /**********| ADMIN LINK BAR |**********/
 
 #linkBox {
-	// List of publication links into the administration
-	
+	margin-left: 10px;
+	margin-right: 5px;
+	width: 254px;
+	float: left;
+	display: box;
+	padding-left: 5px;
+}
+
+#linkBox a {
+	color: #E6E3C3;
 }
 
 #bigLink {
-	// The main link going in
+	background-color: #572B0D;
+	padding: 5px;
+	margin-right: 5px;
+	width: 240px;
+	float: left;
+	display: inline-box;
+	text-align: center;
 }
 
+#bigLink a {
+	font: bold 1.4em "Helvetica Neue", Arial, Helvetica, Geneva, sans-serif;
+	text-decoration: none;
+}
+
+#bigLink a:hover {
+	text-decoration: underline;
+}
 .smallLink {
-	// One of a series of small links going in
-	
+	background-color: #A35018;
+	margin-top: 2px;
+	margin-right: 5px;
+	padding: 5px;
+	width: 112px;
+	float: left;
+	display: inline-box;
+	text-align: center;
 }
 
+.smallLink a {
+	font: bold .7em "Helvetica Neue", Arial, Helvetica, Geneva, sans-serif;
+	text-decoration: none;
+}
 /**********| PROFILE BOX |**********/
 
 #profileBox {
