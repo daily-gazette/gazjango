@@ -26,6 +26,11 @@
 	display: box;
 }
 
+#yourStories h2 {
+	color: #E6E3C3;
+	margin: 0px;
+}
+
 #yourStories p,#yourStories a {
 	color: #E6E3C3;
 }
@@ -37,6 +42,7 @@
 .personalConcept {
 	background-color: #A35A28;
 	margin: 5px;
+	margin-top: 0px;
 	width: 680px;
 	display: inline-block;
 	padding: 5px;
