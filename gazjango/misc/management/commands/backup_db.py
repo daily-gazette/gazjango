@@ -3,7 +3,7 @@ from django.conf import settings
 import datetime
 import sys, os, os.path
 
-DUMP_PATTERN = "/home/dailygazette/db-backups/dump_%Y-%m-%d_%H-%M.sql.bz2"
+DUMP_PATTERN = "/home/dailygazette/db-backups/dump_%Y-%m-%d_%H-%M.sql"
 
 class Command(NoArgsCommand):
     def handle_noargs(self, **options):
@@ -27,5 +27,5 @@ class Command(NoArgsCommand):
             os.path.makedirs(backup_dir)
         
         print "Backing up %s to %s" % (args[-1], filename)
-        os.system('mysqldump %s > %s' % (' '.join(args), filename))
+        os.system('mysqldump %s | bzip2 > %s' % (' '.join(args), filename))
     
