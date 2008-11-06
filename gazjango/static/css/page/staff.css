@@ -1,6 +1,7 @@
-/* @override http://daily.swarthmore.edu/static/css/staff.css */
-
-
+/* @override 
+	http://daily.swarthmore.edu/static/css/staff.css
+	http://daily.swarthmore.edu/static/css/page/staff.css
+*/
 
 /**********| MAIN STUFF |**********/
 
@@ -162,7 +163,14 @@ body {
 /**********| PROFILE BOX |**********/
 
 #profileBox {
-	
+	width: 430px;
+	float: left;
+	margin-top: 10px;
+}
+
+#profileBox p {
+	margin-top: 0px;
+	padding-top: 0px;
 }
 
 .picture {
@@ -187,6 +195,8 @@ body {
 #sideBar {
 	width: 260px;
 	background: #9Eb5A0 url(http://daily.swarthmore.edu/static/images/staff/bg_col_right.png) repeat-y 100% 0;
+	float: left;
+	display: inline-block;
 
 
 }

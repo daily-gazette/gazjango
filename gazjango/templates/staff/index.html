@@ -69,22 +69,22 @@
             
             <div id="profileBox">
                 
-                <h2>{{ author.name }}</h2>
-                {% if author.picture %}
+                <h2>{{ user.name }}</h2>
+                {% if user.picture %}
                     <div class="picture">
-                            <img src="{{ author.picture.get_absolute_url }}" /> [<a href="http://daily.swarthmore.edu/admin/accounts/userprofile/{{ user.pk }}/">Edit</a>]
+                            <img src="{{ user.picture.get_absolute_url }}" /> [<a href="http://daily.swarthmore.edu/admin/accounts/userprofile/{{ user.pk }}/">Edit</a>]
                     </div>
                 {% endif %}
-                <p>Position: {{ author.position.name }}</p>
-                <p>Biography: {{ author.bio|safe }}  [<a href="http://daily.swarthmore.edu/admin/accounts/userprofile/{{ author.pk }}/">Edit</a>]</p>
+                <p>Position: {{ user.position.name }}</p>
+                <p>Biography: {{ user.bio|safe }}  [<a href="http://daily.swarthmore.edu/admin/accounts/userprofile/{{ user.pk }}/">Edit</a>]</p>
                 <ul>
-                    {% for holding in author.holding_set.reverse %}
+                    {% for holding in user.holding_set.reverse %}
                     <li>{{ holding.date_start.year }}-{{ holding.date_end.year|default:"Present" }}: {{ holding.position.name }}</li>
                     {% endfor %}
                 </ul>
         
-                {% if author.awards %}
-                    <p>Awards: {{ author.awards|safe }} </p>
+                {% if user.awards %}
+                    <p>Awards: {{ user.awards|safe }} </p>
                 {% endif %}
                     
             </div>
@@ -113,6 +113,7 @@
         </div>
         
         <div id="siderBar">
+            <h3>Story List</h3>
             {% for concept in unclaimed %}
                 {% ifchanged %}
                     <div class="claimedDate">
