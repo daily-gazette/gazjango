@@ -6,7 +6,7 @@ import random
 class ActiveSubscribersManager(models.Manager):
     def get_query_set(self):
         orig = super(ActiveSubscribersManager, self).get_query_set()
-        return orig.filter(unsubscribed=None)
+        return orig.filter(unsubscribed=None, is_confirmed=True)
     
 
 class IssueSubscribersManager(ActiveSubscribersManager):
@@ -54,6 +54,9 @@ class Subscriber(models.Model):
     modified     = models.DateField(auto_now=True)
     unsubscribed = models.DateField(null=True, blank=True, 
                    help_text='When this user unsubscribed (if they have).')
+    last_sent    = models.CharField(max_length=12, blank=True,
+                   help_text="The last time an email was successfully sent to this subscriber. " \
+                             "For issues, like 2008-11-07; for RSD, like 2008-11-07-1 (for morning).")
     
     plain_text = models.BooleanField(default=False)
     racy_content = models.BooleanField(default=True,
