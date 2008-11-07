@@ -121,7 +121,7 @@
         
         <div id="sideBar">
             <h3>Story List</h3>
-            {% for concept in unclaimed %}
+            {% for concept in claimed %}
                 {% ifchanged %}
                     <div class="claimedDate">
                         {{ concept.due }}
