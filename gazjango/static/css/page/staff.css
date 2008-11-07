@@ -272,11 +272,11 @@ p {
 	margin: 0px;
 	padding-top: 5px;
 	color: #E6E3C3;
-
+	font: .7em "Helvetica Neue", Arial, Helvetica, Geneva, sans-serif;
 }
 
 #sideBar a {
-	font: bold .7em "Helvetica Neue", Arial, Helvetica, Geneva, sans-serif;
+	font: bold "Helvetica Neue", Arial, Helvetica, Geneva, sans-serif;
 	text-decoration: none;
 	color: #E6E3C3;
 
