@@ -101,6 +101,7 @@ p {
 .unclaimedHeader {
 	padding: 5px;
 	margin: 0px;
+	margin-top: 5px;
 	background-color: #572B0D;
 	width: 240px;
 	float: left;
