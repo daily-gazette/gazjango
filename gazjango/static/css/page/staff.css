@@ -224,10 +224,13 @@ body {
 }
 
 .claimedStory {
+	width: 230px;
 	float: left;
 	display: inline-block;
 }
 
-.claimedStory .collapsed {
+#sidebar .collapsed {
+	float: left;
+	width:  230px;
 	visibility: hidden;
 }
