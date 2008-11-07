@@ -84,6 +84,19 @@
                         </div>
                         {% endfor %}
 
+                        <div class="unclaimedDate">
+                            <h3>Unpublished Stories</h3>
+                        </div>
+                        {% for story in unpublished_stories %}
+                            <div class="unclaimedStory">
+                                <p><a href="http://daily.swarthmore.edu/admin/articles/article/{{ story.pk }}/">{{ story.headline }}</a></p>
+                                <div class="collapsed">
+                                    <p>Current Status: {{ story.status }}  | Author: {{ story.authors_in_order|join_authors:"l" }}
+                                </div>
+                            </div>
+                        {% endfor %}
+                            
+                            
                 </div>        
                     
                     
@@ -132,7 +145,7 @@
                 </div>
                 <div class="collapsed">
                     {% if concept.user_names %}<p>{{ concept.user_names }}</p>{% endif %}
-                    <p>{% if concept.notes_excerpt %}{{ concept.notes_excerpt }} — {% endif %} <a href="http://daily.swarthmore.edu/admin/articles/storyconcept/{{ concept.pk }}/">Take Story</a>
+                    <p>{% if concept.notes_excerpt %}{{ concept.notes_excerpt }} — {% endif %} <a href="http://daily.swarthmore.edu/admin/articles/storyconcept/{{ concept.pk }}/">Change Status</a>
                 </div>
             {% endfor %}
         </div>
