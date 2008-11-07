@@ -91,7 +91,7 @@
                             <div class="unclaimedStory">
                                 <p><a href="http://daily.swarthmore.edu/admin/articles/article/{{ story.pk }}/">{{ story.headline }}</a></p>
                                 <div class="collapsed">
-                                    <p>Current Status: {{ story.status }}  | Author: {{ story.authors_in_order|join_authors:"l" }}
+                                    <p>Current Status: {{ story.get_status_display }}  | Author: {{ story.authors_in_order|join_authors:"l" }}
                                 </div>
                             </div>
                         {% endfor %}
