@@ -12,6 +12,7 @@ body {
 #container {
 	width: 970px;
 	margin: 0 auto;
+	background: #E6E3C3 url(http://daily.swarthmore.edu/static/images/staff/bg.png) repeat-y 0 0;
 }
 
 #main {
@@ -23,7 +24,6 @@ body {
 }
 
 #header {
-	// Contains the header image
 	
 }
 
