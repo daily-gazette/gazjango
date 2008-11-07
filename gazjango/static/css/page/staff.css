@@ -277,7 +277,7 @@ p {
 }
 
 #sideBar a {
-	text-decoration: none;
+	text-decoration: underline;
 	color: #fff;
 	font-family: "Helvetica Neue", Arial, Helvetica, Geneva, sans-serif;
 	font-weight: normal;
