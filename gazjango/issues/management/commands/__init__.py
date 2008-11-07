@@ -59,10 +59,10 @@ class SendingOutCommand(NoArgsCommand):
             self.add_error(subscriber, 'generic error')
     
     def add_error(self, subscriber, key):
-        self.errors.setdefault(subscriber, {})
-        self.errors[subscriber].setdefault(key, [])
+        self.errors.setdefault(subscriber.email, {})
+        self.errors[subscriber.email].setdefault(key, [])
         exc_type, exc_val, exc_trace = sys.exc_info()
-        self.errors[subscriber][key].append({
+        self.errors[subscriber.email][key].append({
             'type': exc_type,
             'val': exc_val,
             'traceback': ''.join(traceback.format_exception(exc_type, exc_val, exc_trace)),
@@ -98,7 +98,7 @@ class SendingOutCommand(NoArgsCommand):
         error_output = []
         for sub in self.subscriber_base.exclude(last_sent=self.sent_str):
             errors = [ '%d %s' % (len(data), kind) for kind, data 
-                       in self.errors[sub].items() ]
+                       in self.errors[sub.email].items() ]
             error_output.append('errors with %s: %s' % (sub.email, '\t'.join(errors)))
         
         if error_output:
