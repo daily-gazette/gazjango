@@ -12,12 +12,16 @@ body {
 #container {
 	width: 970px;
 	margin: 0 auto;
-	background: #E6E3C3 url(http://daily.swarthmore.edu/static/images/staff/bg.png) repeat-y 0 0;
+}
+
+#container2 {
+	width: 970px;
+	background: http://daily.swarthmore.edu/static/images/staff/bg.png;
+	display: inline-block;
 }
 
 #main {
 	width: 710px;
-	background: #E6E3C3 url(http://daily.swarthmore.edu/static/images/staff/bg_col_left.png) repeat-y 0 0;
 	display: block;
 	float: left;
 	padding-bottom: 50px;
@@ -226,7 +230,6 @@ p {
 	padding-left: 10px;
 	padding-right: 20px;
 	width: 230px;
-	background: #9Eb5A0 url(http://daily.swarthmore.edu/static/images/staff/bg_col_right.png) repeat-y 100% 0;
 	float: left;
 	display: inline-block;
 
