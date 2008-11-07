@@ -68,6 +68,9 @@ class Subscriber(models.Model):
     issues = IssueSubscribersManager()
     rsd = RSDSubscribersManager()
     
+    def is_active(self):
+        return self.is_confirmed and not self.unsubscribed
+    
     def randomize_confirmation_key(self):
         chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
         key = ''.join(random.choice(chars) for x in xrange(15))
