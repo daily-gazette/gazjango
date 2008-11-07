@@ -219,7 +219,9 @@ body {
 }
 
 .claimedDate {
-	
+	font: small-caps 1em "Helvetica Neue", Arial, Helvetica, Geneva, sans-serif;
+	width: 230px;
+	border-bottom: 1px solid #000000;
 }
 
 .claimedStory {
