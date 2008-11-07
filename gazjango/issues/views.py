@@ -87,6 +87,9 @@ def show_rsd(request, year, month, day, plain=False):
     else:
         jobs = JobListing.published.get_for_show(num=5, base_date=date, cutoff=one_week)
     
+    if not current.count() and not jobs.count():
+        raise Http404
+    
     tomorrow = date + datetime.timedelta(days=1)
     comments = PublicComment.visible.filter(time__lt=tomorrow).order_by('-time')
     
