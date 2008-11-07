@@ -27,6 +27,11 @@ body {
 	
 }
 
+p {
+	padding: 0px;
+	margin: 0px;
+}
+
 
 /**********| YOUR STORIES |**********/
 
@@ -90,16 +95,18 @@ body {
 }
 
 #unclaimedStories p {
-	
+	color: #E6E3C3;
 }
 
 .unclaimedDate {
 	padding: 5px;
 	margin: 0px;
+	margin-top: 5px;
 	background-color: #572B0D;
 	width: 240px;
 	float: left;
 	display: inline-block;
+	color: #E6E3C3;
 }
 
 .unclaimedDate h3 {
@@ -190,11 +197,12 @@ body {
 }
 
 #profileBox ul {
-	
-}
+	width: 250px;
+	padding-left: 200px;
+	}
 
 #profileBox ul li {
-	
+
 }
 
 #profileBox p {
@@ -214,11 +222,9 @@ body {
 
 }
 
-#sideBar p {
-	
-}
-
 .claimedDate {
+	margin-top: 10px;
+	float: left;
 	font: small-caps 1em "Helvetica Neue", Arial, Helvetica, Geneva, sans-serif;
 	width: 230px;
 	border-bottom: 1px solid #000000;
@@ -231,7 +237,24 @@ body {
 }
 
 .collapsed {
+	padding-top: 0px;
+	margin-top: 0px;
 	float: left;
 	width:  230px;
-	visibility: collapse;
+	display: block;
+	clear: none;
+}
+
+.collapsed p {
+	font: .7em "Helvetica Neue", Arial, Helvetica, Geneva, sans-serif;
+}
+
+#sideBar p {
+	margin: 0px;
+	padding-top: 5px;
+}
+
+#sideBar a {
+	font: bold .7em "Helvetica Neue", Arial, Helvetica, Geneva, sans-serif;
+	text-decoration: none;
 }
