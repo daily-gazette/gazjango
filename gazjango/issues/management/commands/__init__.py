@@ -35,13 +35,7 @@ class SendingOutCommand(NoArgsCommand):
             msg.multipart_subtype = 'alternative'
             msg.attach(content=html_content, mimetype='text/html')
         
-        # self.connection.send_messages([msg])
-        import random
-        n = random.randint(1, 100)
-        if n > 80:
-            raise smtplib.SMTPRecipientsRefused(msg.to)
-        elif n > 60:
-            1 / 0
+        self.connection.send_messages([msg])
         
         # if it didn't just crash, sending was successful :)
         subscriber.last_sent = self.sent_str
