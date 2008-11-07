@@ -232,15 +232,21 @@ p {
 	width: 230px;
 	float: left;
 	display: inline-block;
-
+	color: #E6E3C3;
 }
 
+#sideBar h3 {
+	font: 1.5em "Helvetica Neue", Arial, Helvetica, Geneva, sans-serif;
+	margin-bottom: 0px;
+
+}
 .claimedDate {
 	margin-top: 10px;
 	float: left;
 	font: small-caps 1em "Helvetica Neue", Arial, Helvetica, Geneva, sans-serif;
 	width: 230px;
 	border-bottom: 1px solid #000000;
+	color: #E6E3C3;
 }
 
 .claimedStory {
@@ -265,9 +271,13 @@ p {
 #sideBar p {
 	margin: 0px;
 	padding-top: 5px;
+	color: #E6E3C3;
+
 }
 
 #sideBar a {
 	font: bold .7em "Helvetica Neue", Arial, Helvetica, Geneva, sans-serif;
 	text-decoration: none;
+	color: #E6E3C3;
+
 }
