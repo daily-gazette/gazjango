@@ -224,9 +224,10 @@ body {
 }
 
 .claimedStory {
-	
+	float: left;
+	display: inline-block;
 }
 
-.claimedStory.collapsed {
-	
+.claimedStory .collapsed {
+	visibility: hidden;
 }

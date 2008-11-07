@@ -129,10 +129,10 @@
                 {% endifchanged %}
                 <div class="claimedStory">
                     <p><a href="http://daily.swarthmore.edu/admin/articles/storyconcept/{{ concept.pk }}/">{{ concept.name }}</a> — <a href="#" class='showLink'>[ See More ]</a></p>
-                    <div class="collapsed">
-                        <p>{% if concept.user_names %}{{ concept.user_names }}{% endif %}</p>
-                        <p>{% if concept.notes_excerpt %}{{ concept.notes_excerpt }} --{% endif %} <a href="http://daily.swarthmore.edu/admin/articles/storyconcept/{{ concept.pk }}/">Edit Story Status</a>
-                    </div>
+                </div>
+                <div class="collapsed">
+                    <p>{% if concept.user_names %}{{ concept.user_names }}{% endif %}</p>
+                    <p>{% if concept.notes_excerpt %}{{ concept.notes_excerpt }} --{% endif %} <a href="http://daily.swarthmore.edu/admin/articles/storyconcept/{{ concept.pk }}/">Edit Story Status</a>
                 </div>
             {% endfor %}
         </div>
