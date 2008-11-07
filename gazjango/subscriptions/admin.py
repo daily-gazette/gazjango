@@ -5,7 +5,8 @@ class SubscriberAdmin(admin.ModelAdmin):
     exclude = ('confirmation_key',)
     list_display = ('email', 'name', 'kind', 'receive', 'is_active', 'racy_content')
     list_filter = ('receive', 'racy_content')
-    search_fields = ('_email', '_name', 'user__email', 'user__name')
+    search_fields = ('_email', 'user__user__email',
+                     '_name', 'user__user__first_name', 'user__user__last_name')
 admin.site.register(Subscriber, SubscriberAdmin)
 
 
