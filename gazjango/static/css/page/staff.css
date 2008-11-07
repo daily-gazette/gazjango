@@ -98,10 +98,9 @@ p {
 	color: #E6E3C3;
 }
 
-.unclaimedDate {
+.unclaimedHeader {
 	padding: 5px;
 	margin: 0px;
-	margin-top: 5px;
 	background-color: #572B0D;
 	width: 240px;
 	float: left;
@@ -109,9 +108,19 @@ p {
 	color: #E6E3C3;
 }
 
-.unclaimedDate h3 {
+.unclaimedHeader h3 {
 	color: #E6E3C3;
 	margin: 0px;
+}
+
+.unclaimedDate {
+	padding: 5px;
+	margin: 0px;
+	background-color: #6E250B;
+	width: 240px;
+	float: left;
+	display: inline-block;
+	color: #E6E3C3;
 }
 
 .unclaimedStory {
