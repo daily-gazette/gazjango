@@ -16,7 +16,7 @@ body {
 
 #container2 {
 	width: 970px;
-	background: http://daily.swarthmore.edu/static/images/staff/bg.png;
+	background: url(http://daily.swarthmore.edu/static/images/staff/bg.png);
 	display: inline-block;
 }
 
