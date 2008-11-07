@@ -69,7 +69,7 @@ class Subscriber(models.Model):
     rsd = RSDSubscribersManager()
     
     def is_active(self):
-        return self.is_confirmed and not self.unsubscribed
+        return bool(self.is_confirmed) and not(self.unsubscribed)
     
     def randomize_confirmation_key(self):
         chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
