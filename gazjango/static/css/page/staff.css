@@ -212,7 +212,6 @@ body {
 	float: left;
 	display: inline-block;
 
-
 }
 
 #sideBar p {
@@ -229,8 +228,8 @@ body {
 	display: inline-block;
 }
 
-#sidebar .collapsed {
+.collapsed {
 	float: left;
 	width:  230px;
-	visibility: hidden;
+	visibility: collapse;
 }
