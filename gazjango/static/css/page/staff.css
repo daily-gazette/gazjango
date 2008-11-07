@@ -255,6 +255,10 @@ p {
 	display: inline-block;
 }
 
+.claimedStory p {
+	font: .9em "Helvetica Neue", Arial, Helvetica, Geneva, sans-serif;
+}
+
 .collapsed {
 	padding-top: 0px;
 	margin-top: 0px;
@@ -264,20 +268,18 @@ p {
 	clear: none;
 }
 
-.collapsed p {
-	font: .7em "Helvetica Neue", Arial, Helvetica, Geneva, sans-serif;
-}
 
 #sideBar p {
 	margin: 0px;
 	padding-top: 5px;
-	color: #E6E3C3;
-	font: .7em "Helvetica Neue", Arial, Helvetica, Geneva, sans-serif;
+	color: #fff;
+	font: italic .8em "Helvetica Neue", Arial, Helvetica, Geneva, sans-serif;
 }
 
 #sideBar a {
-	font: bold "Helvetica Neue", Arial, Helvetica, Geneva, sans-serif;
 	text-decoration: none;
-	color: #E6E3C3;
-
+	color: #fff;
+	font-family: "Helvetica Neue", Arial, Helvetica, Geneva, sans-serif;
+	font-weight: normal;
+	font-style: normal;
 }
