@@ -80,7 +80,7 @@
 		<div id="athleticsColumnRight">
 			<h3>News</h3>
 			
-			{% for article in article_list|slice:":8" %}
+			{% for article in article_list|slice:":4" %}
 			    <div class="athleticsStory">
 				    <h4><a href="{{ article.get_absolute_url }}">{{article.get_title|safe}}</a></h4>
     				<p class="byline">

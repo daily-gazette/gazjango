@@ -27,7 +27,7 @@
 }
 
 #athleticsColumnLeft {
-	width: 345px;
+	width: 415px;
 	float: left;
 	display: inline;
 	margin-top: 10px;
@@ -50,7 +50,7 @@
 }
 
 #athleticsColumnRight {
-	width: 550px;
+	width: 485px;
 	float: left;
 	display: inline;
 	margin-top: 10px;
@@ -67,7 +67,7 @@ h3 {
 }
 
 .athleticsStory {
-	padding-bottom: 5px;
+	padding-bottom: 20px;
 }
 
 
@@ -135,7 +135,7 @@ h4 a:hover {
 
 #athleticsColumnRight p {
 	margin: 0;
-	padding: 0 0 10px 0px;
+	padding: 0 0 0px 0px;
 	color: black;
 	text-align: justify;
 	line-height: 1.4;
