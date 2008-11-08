@@ -100,11 +100,10 @@
 		
 		
 		{% for game in team.games_for_trimester %}
-		<div class="teamColumnBox">
-		
+		<div class="teamColumnBox borderBottom">
 			<div class="teamColumn">
 				<div class="teamOverview">
-    				<p class="gameHeader">{{ team.get_gender_display }} {{ team.sport }} vs. {{ game.opponent }}</p>
+    				<h4>{{ team.get_gender_display }} {{ team.sport }} vs. {{ game.opponent }}</h4>
     				<p>This
     					{% if game.home %} was a home game, 
     					{% else %} was an away game, {% endif %}
