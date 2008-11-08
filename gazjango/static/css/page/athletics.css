@@ -27,7 +27,7 @@
 }
 
 #athleticsColumnLeft {
-	width: 545px;
+	width: 345px;
 	float: left;
 	display: inline;
 	margin-top: 10px;
@@ -50,7 +50,7 @@
 }
 
 #athleticsColumnRight {
-	width: 350px;
+	width: 550px;
 	float: left;
 	display: inline;
 	margin-top: 10px;
@@ -64,6 +64,10 @@ h3 {
 
 .team {
 	margin-left: 25px;
+}
+
+.athleticsStory {
+	padding-bottom: 5px;
 }
 
 

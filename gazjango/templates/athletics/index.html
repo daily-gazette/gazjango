@@ -26,7 +26,6 @@
   		</div>
   		
 		<div id="athleticsColumnLeft">
-			<h3>Scores</h3>
 			{% for team in trimester %}
 			<div class="teamOverview">
 				<table width="300px" class="overview">
@@ -82,17 +81,17 @@
 			<h3>News</h3>
 			
 			{% for article in article_list|slice:":8" %}
-			
-				<h4><a href="{{ article.get_absolute_url }}">{{article.get_title|safe}}</a></h4>
-				<p class="byline">
-				  <span class="author">by {{ article.authors_in_order|join_authors }}</span>
-				  <span class="date">| {{ article.pub_date|date:"n/j/Y" }}</span>
-				</p>
-				<p>
-				  {{ article.longest_summary|safe }}
-				  <a class="readMore" href="{{ article.get_absolute_url }}">More</a>
-				</p>
-				
+			    <div class="athleticsStory">
+				    <h4><a href="{{ article.get_absolute_url }}">{{article.get_title|safe}}</a></h4>
+    				<p class="byline">
+    				  <span class="author">by {{ article.authors_in_order|join_authors }}</span>
+    				  <span class="date">| {{ article.pub_date|date:"n/j/Y" }}</span>
+    				</p>
+    				<p>
+    				  {{ article.longest_summary|safe }}
+    				  <a class="readMore" href="{{ article.get_absolute_url }}">More</a>
+    				</p>
+				</div>
 			{% endfor %}
 			
 		</div>
