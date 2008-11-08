@@ -26,7 +26,7 @@
   		</div>
   		
 		<div class="teamTopBox">
-			<div class="teamColumn">
+			<div class="topColumn">
 				<div class="teamOverview">
 					<table width="300px" class="overview">
 					
@@ -62,7 +62,7 @@
 				</div>
 			</div>
 			
-			<div class="teamColumn">			
+			<div class="topColumn">			
 				<div class="teamOverview">
 					<table width="300px" class="overview">
 					
@@ -109,10 +109,9 @@
 				played on {{ game.date }}
 			</p>
 				
-			<div class="teamColumn">
+			<div class="scoreColumn">
 				<div class="teamOverview">
     				{% if not team.ranked %}
-    					<p>Results: <br />
     					{% ifequal outcome w %}
     						<strong>Swarthmore: {{ game.swat_score}}</strong><br />
     						{{ game.opponent }}: {{ game.opponent_score }}</p>
@@ -128,7 +127,7 @@
 				</div>
 			</div>
 			
-			<div class="teamColumn">
+			<div class="notesColumn">
 				<div class="teamOverview">				
 				{% if game.game_notes %}
     					<p><strong>Game Notes</strong></p>

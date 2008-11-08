@@ -160,13 +160,28 @@ h4 a:hover {
 	margin: 0px;
 }
 
-.teamColumn {
+.topColumn {
     display: inline-block;
     float: left;
     width: 400px;
     margin-left: 0px;
 }
 
+.scoreColumn {
+    display: inline-block;
+    float: left;
+    width: 200px;
+    margin-left: 0px;
+}
+
+.notesColumn {
+    display: inline-block;
+    float: left;
+    width: 600px;
+    margin-left: 0px;
+}
+
 .borderBottom {
 	border-bottom: 2px solid #cccccc;
 }
+
