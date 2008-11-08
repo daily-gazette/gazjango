@@ -85,6 +85,7 @@ table.overview {
 .cellTop {
 	background-color: #3E0010;
 	color: #FFF;
+	font: 1.8em "Helvetica Neue", Arial, Helvetica, Geneva, sans-serif;
 }
 
 .cellHeader {
@@ -97,7 +98,7 @@ td .cellContent {
 }
 .cellHeader a,.cellTop a {
 	color: #FFF;
-	font: 1.8em "Helvetica Neue", Arial, Helvetica, Geneva, sans-serif;
+	font: "Helvetica Neue", Arial, Helvetica, Geneva, sans-serif;
 }
 
 .cellContent {

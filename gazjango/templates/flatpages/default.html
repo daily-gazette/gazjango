@@ -46,35 +46,5 @@
     </p>
   </div>
 
-  <div id="continueBox">
-    <div id="top">
-      <a href="{{ topstory.get_absolute_url }}">
-        <img src="{{ topstory.thumbnail.get_absolute_url }}" title="{{ topstory.headline }}" alt="" />
-      </a>
-      <div class="content">
-        <h4><a href="{{ topstory.get_absolute_url }}">{{ topstory.get_title }}</a></h4>
-        <p>{{ topstory.shortest_summary }}</p>
-      </div>
-    </div>
-
-    <div id="more">
-      <div class="box">
-        <h4>Top Stories</h4>
-        <ul>
-          {% for story in stories %}
-            <li><a href="{{story.get_absolute_url}}">{{ story.get_title|safe }}</a></li>
-          {% endfor %}
-        </ul>
-      </div>
-      <div class="box">
-        <h4>Recent Comments</h4>
-        <ul>
-          {% for comment in comments|slice:":4" %}
-            <li><a href="{{ comment.get_absolute_url }}">{{ comment.subject.get_title }}</a></li>
-          {% endfor %}
-        </ul>
-      </div>
-    </div>
-  </div>
-  </div>
+</div>
 {% endblock content %}
