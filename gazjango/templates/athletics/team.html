@@ -101,22 +101,23 @@
 		
 		{% for game in team.games_for_trimester %}
 		<div class="teamColumnBox borderBottom">
+		    <h4>{{ team.get_gender_display }} {{ team.sport }} vs. {{ game.opponent }}</h4>
+			<p>This
+				{% if game.home %} was a home game, 
+				{% else %} was an away game, {% endif %}
+				{% if game.in_conference %}in the Centennial Conference, {% endif %}
+				Played on {{ game.date }}
+			</p>
+				
 			<div class="teamColumn">
 				<div class="teamOverview">
-    				<h4>{{ team.get_gender_display }} {{ team.sport }} vs. {{ game.opponent }}</h4>
-    				<p>This
-    					{% if game.home %} was a home game, 
-    					{% else %} was an away game, {% endif %}
-    					{% if game.in_conference %}in the Centennial Conference, {% endif %}
-    					Played on {{ game.date }}</p>
-					
     				{% if not team.ranked %}
     					<p>Results: <br />
-    					{% ifequal outcome l %}
+    					{% ifequal outcome w %}
     						<strong>Swarthmore: {{ game.swat_score}}</strong><br />
     						{{ game.opponent }}: {{ game.opponent_score }}</p>
     					{% else %}
-    					    {% ifequal outcome w %}
+    					    {% ifequal outcome l %}
     					    	Swarthmore: {{ game.swat_score}}<br />
         						<strong>{{ game.opponent }}: {{ game.opponent_score }}</strong></p>
     					    {% endifequal %}
