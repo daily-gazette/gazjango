@@ -25,7 +25,7 @@
   			<h2>{{ team.get_gender_display }} {{ team.sport }}</h2>
   		</div>
   		
-		<div class="teamColumnBox">
+		<div class="teamTopBox">
 			<div class="teamColumn">
 				<div class="teamOverview">
 					<table width="300px" class="overview">
@@ -106,7 +106,7 @@
 				{% if game.home %} was a home game, 
 				{% else %} was an away game, {% endif %}
 				{% if game.in_conference %}in the Centennial Conference, {% endif %}
-				Played on {{ game.date }}
+				played on {{ game.date }}
 			</p>
 				
 			<div class="teamColumn">

@@ -140,21 +140,33 @@ h4 a:hover {
 
 /***** TEAM PAGES *****/
 
+.teamTopBox {
+    display: block;
+    float: left;
+	margin-left: 25px;
+	margin-top: 5px;
+}
+
 .teamColumnBox {
     display: block;
     float: left;
 	margin-left: 25px;
+	margin-bottom: 15px;
+	padding-bottom: 5px;
+}
+
+.teamColumnBox p {
+	padding: 0px;
+	margin: 0px;
 }
 
 .teamColumn {
     display: inline-block;
     float: left;
     width: 400px;
-    margin-left: 25px;
-    margin-top: 10px;    
+    margin-left: 0px;
 }
 
 .borderBottom {
-	border-bottom-style: solid;
-	border-bottom-color: #cccccc;
+	border-bottom: 2px solid #cccccc;
 }
