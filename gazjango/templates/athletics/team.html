@@ -22,7 +22,7 @@
   <div id="athletics">
   	<div id="athleticsContent">
   		<div id="athleticsHeader">
-  			<h2>{{ team.gender }} {{ team.sport }}</h2>
+  			<h2>{{ team.get_gender_display }} {{ team.sport }}</h2>
   		</div>
   		
 		<div class="teamColumnBox">
@@ -102,44 +102,44 @@
 		{% for game in team.games_for_trimester %}
 		<div class="teamColumnBox">
 		
-			<div id="teamColumn">
-				<p class="gameHeader">{{ team.get_gender_display }} {{ team.sport }} vs. {{ game.opponent }}</p>
-				<p>This
-					{% if game.home %} was a home game, 
-					{% else %} was an away game, {% endif %}
-					{% if game.in_conference %}in the Centennial Conference, {% endif %}
-					Played on {{ game.date }}</p>
+			<div class="teamColumn">
+				<div class="teamOverview">
+    				<p class="gameHeader">{{ team.get_gender_display }} {{ team.sport }} vs. {{ game.opponent }}</p>
+    				<p>This
+    					{% if game.home %} was a home game, 
+    					{% else %} was an away game, {% endif %}
+    					{% if game.in_conference %}in the Centennial Conference, {% endif %}
+    					Played on {{ game.date }}</p>
 					
-				{% if not team.ranked %}
-					<p>Results: <br />
-					{% ifequal outcome w %}
-						<strong>Swarthmore: {{ game.swat_score}}</strong><br />
-						{{ game.opponent }}: {{ game.opponent_score }}</p>
-					{% else %}
-					{% ifequal outcome l %}
-						Swarthmore: {{ game.swat_score}}<br />
-						<strong>{{ game.opponent }}: {{ game.opponent_score }}</strong></p>
-					{% endifequal %}
-					{% endifequal %}
-				{% else %}
-					<p>Swarthmore's Ranking: #{{ game.rank }}
-				{% endif %}
-					
+    				{% if not team.ranked %}
+    					<p>Results: <br />
+    					{% ifequal outcome w %}
+    						<strong>Swarthmore: {{ game.swat_score}}</strong><br />
+    						{{ game.opponent }}: {{ game.opponent_score }}</p>
+    					{% else %}
+    					{% ifequal outcome l %}
+    						Swarthmore: {{ game.swat_score}}<br />
+    						<strong>{{ game.opponent }}: {{ game.opponent_score }}</strong></p>
+    					{% endifequal %}
+    					{% endifequal %}
+    				{% else %}
+    					<p>Swarthmore's Ranking: #{{ game.rank }}
+    				{% endif %}
+				</div>
 			</div>
 			
-			<div id="teamColumn">
-				
+			<div class="teamColumn">
+				<div class="teamOverview">				
 				{% if game.game_notes %}
-					<p><strong>Game Notes</strong></p>
-					<p>{{ game.game_notes }}</p>
-				{% endif %}
+    					<p><strong>Game Notes</strong></p>
+    					<p>{{ game.game_notes }}</p>
+    				{% endif %}
 				
-				{% if game.link_list %}
-					<p><strong>Related Links</strong></p>
-					<p>{{ game.link_list }}</p>
-				{% endif %}
-					
-				
+    				{% if game.link_list %}
+    					<p><strong>Related Links</strong></p>
+    					<p>{{ game.link_list }}</p>
+    				{% endif %}
+				</div>
 			</div>
 		
 		</div>
