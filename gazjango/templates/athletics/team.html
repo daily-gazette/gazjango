@@ -112,7 +112,7 @@
 			<div class="scoreColumn">
 				<div class="teamOverview">
     				{% if not team.ranked %}
-    					{% ifequal outcome w %}
+    					<p>{% ifequal outcome w %}
     						<strong>Swarthmore: {{ game.swat_score}}</strong><br />
     						{{ game.opponent }}: {{ game.opponent_score }}</p>
     					{% else %}
@@ -120,9 +120,9 @@
     					    	Swarthmore: {{ game.swat_score}}<br />
         						<strong>{{ game.opponent }}: {{ game.opponent_score }}</strong></p>
     					    {% endifequal %}
-    					{% endifequal %}
+    					{% endifequal %}</p>
     				{% else %}
-    					<p>Swarthmore's Ranking: #{{ game.rank }}
+    					<p>Swarthmore's Ranking: #{{ game.rank }}</p>
     				{% endif %}
 				</div>
 			</div>
