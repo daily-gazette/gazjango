@@ -113,14 +113,14 @@
 					
     				{% if not team.ranked %}
     					<p>Results: <br />
-    					{% ifequal outcome w %}
+    					{% ifequal outcome l %}
     						<strong>Swarthmore: {{ game.swat_score}}</strong><br />
     						{{ game.opponent }}: {{ game.opponent_score }}</p>
     					{% else %}
-    					{% ifequal outcome l %}
-    						Swarthmore: {{ game.swat_score}}<br />
-    						<strong>{{ game.opponent }}: {{ game.opponent_score }}</strong></p>
-    					{% endifequal %}
+    					    {% ifequal outcome w %}
+    					    	Swarthmore: {{ game.swat_score}}<br />
+        						<strong>{{ game.opponent }}: {{ game.opponent_score }}</strong></p>
+    					    {% endifequal %}
     					{% endifequal %}
     				{% else %}
     					<p>Swarthmore's Ranking: #{{ game.rank }}
