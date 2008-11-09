@@ -99,5 +99,5 @@ class Game(models.Model):
     def __unicode__(self):
         return "%s vs %s on %s" % (self.team.full_team_name(), 
                                    self.opponent, 
-                                   self.date.strftime("%Y-%m-%d")
+                                   self.date.strftime("%Y-%m-%d"))
     
