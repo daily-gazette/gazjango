@@ -276,7 +276,7 @@
                             <p>{{ announcement.text|textile }}</p>
                           {% endautoescape %}
 
-                          {% if announcement.sponsor %}<strong>Contact:</strong> {{ announcement.sponsor_link }} <br /> {% endif %}
+                          {% if announcement.sponsor %}<strong>Contact:</strong> {{ announcement.sponsor_link }} {% if announcement.poster_email %}({{ announcement.poster_email }}){% endif %} <br /> {% endif %}
                           <a href="http://daily.swarthmore.edu{{ announcement.get_absolute_url }}">Permanent Link</a> <br />
                           <br/>
                         {% endfor %}
