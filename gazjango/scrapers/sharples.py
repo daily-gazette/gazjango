@@ -30,11 +30,11 @@ def get_menu(url=FEED_URL, tomorrow=False, die_on_closed=False):
                   "Dashboard or the Sharples website."
         return { 'closed': True, 'message': message }
 
-    feed = BeautifulStoneSoup(urllib2.urlopen(url), selfClosingTags=['closed'])
+    feed = BeautifulStoneSoup(page, selfClosingTags=['closed'])
     data = {}
     
     data['closed'] = feed.closed['value'] == "1"
-    data['message'] = feed.message.string
+    data['message'] = feed.message.string or ""
     if data['closed'] and die_on_closed:
         return data
     
