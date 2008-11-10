@@ -228,8 +228,8 @@ jQuery(document).ready(function() {
 			
 			<hr />
 			
-			{% for text, url in manual_links %}
-			  <a href="{{ url }}">{{ text }}</a> |
+			{% for link in manual_links %}
+			  {{ link|safe }} |
 			{% endfor %}
 			
 			<!-- TLA -->

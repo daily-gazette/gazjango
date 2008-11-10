@@ -1,8 +1,9 @@
 # this isn't really a "scraper", but whatever
 
 manual_links = [
-    ('Free Flash Arcade Games', 'http://www.arcadekill.com'),
-    ('Credit Repair', 'http://repairmycreditnow.com/Credit_Repair_Advice.htm'),
+    '<a href="http://www.studentcreditcards.com/">student credit cards</a><br> www.studentcreditcards.com/ - student credit cards.com features informative weekly articles on credit as well as a studentcredit card comparison.',
+    '<a href="http://ww.arcadekill.com">Free Flash Arcade Games</a>',
+    '<a href="http://repairmycreditnow.com/Credit_Repair_Advice.htm">Credit Repair</a>',
 ]
 
 lca_links = [
