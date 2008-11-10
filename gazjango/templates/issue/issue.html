@@ -408,9 +408,11 @@
 						  <td width="202" align="center" valign="top" bgcolor="#ffa754">
 							<img src="http://daily.swarthmore.edu{{ topstory.issue_image.get_absolute_url }}" title="{{ topstory.headline }}" alt="Photo for {{ topstory.headline }}" />
 							<br />
-							<font color="#000000" size="2" face="Arial, Helvetica, sans-serif">
-							  by <em>{{ topstory.issue_image.credit }}</em>
-							</font>
+							{% if topstory.issue_image.credit %}
+  							<font color="#000000" size="2" face="Arial, Helvetica, sans-serif">
+  							  by <em>{{ topstory.issue_image.credit }}</em>
+  							</font>
+  						{% endif %}
 						  </td>
 						</tr>
 					  </table>
