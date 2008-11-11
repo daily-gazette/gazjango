@@ -5,6 +5,7 @@ import datetime
 import time
 import sys
 import smtplib
+import socket
 import traceback
 import pickle
 
@@ -41,6 +42,15 @@ class SendingOutCommand(NoArgsCommand):
         subscriber.last_sent = self.sent_str
         subscriber.save()
     
+    def renew_connection(self):
+        # close the old one
+        self.connection.fail_silently = True
+        self.connection.close()
+        
+        # get a new one
+        self.connection = SMTPConnection()
+        self.connection.open()
+    
     def try_sending_to_subscriber(self, subscriber, repeat_index=0, max_repeats=2):
         if repeat_index >= max_repeats:
             return
@@ -51,7 +61,11 @@ class SendingOutCommand(NoArgsCommand):
             self.add_error(subscriber, 'recipient refused')
         except smtplib.SMTPServerDisconnected:
             self.add_error(subscriber, 'server disconnected')
-            self.connection.open()
+            self.renew_connection()
+            self.try_sending_to_subscriber(subscriber, repeat_index + 1, max_repeats)
+        except socket.sslerror:
+            self.add_error(subscriber, 'ssl error') # probably timeout
+            self.renew_connection()
             self.try_sending_to_subscriber(subscriber, repeat_index + 1, max_repeats)
         except smtplib.SMTPException:
             self.add_error(subscriber, 'smtp error')
