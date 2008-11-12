@@ -35,7 +35,9 @@
 {% block content %}  
   <div id="storyBox">
     <div id="story">
-      <p>These are Student Council platforms from {{ latest.pub_date|date:"F Y" }}. To see platforms from older elections, <a href="/archives/{{ section.slug }}/{{ subsection.slug }}">check the archives</a>.</p>
+      <p>These are Student Council platforms from {{ latest.pub_date|date:"F Y" }}.</p>
+      <p>To see platforms from past elections, <a href="/archives/{{ section.slug }}/{{ subsection.slug }}/">check the archives</a>.</p>
+      
       {% for position, name, article in platforms %}
         {% ifchanged position %}<h3>{{ position }}</h3>{% endifchanged %}
         <p><a href="{{ article.get_absolute_url }}">{{ name }}</a></p>
