@@ -1,5 +1,6 @@
 import datetime
 import calendar
+import re
 
 from django.contrib.auth.decorators import permission_required
 from django.views.decorators.cache  import cache_page
@@ -309,36 +310,63 @@ def subsection(request, section, subsection):
     sec = get_object_or_404(Section, slug=section)
     sub = get_object_or_404(Subsection, section=sec, slug=subsection)
     
-    tops, mids, lows = sub.get_stories(num_top=2, num_mid=3, num_low=12)
-    num_low_lists = 4
-    lowlist = [ [] for i in range(num_low_lists) ]
-    for i in range(len(lows)):
-        lowlist[i % num_low_lists].append(lows[i])
+    if sub.slug == 'stuco-platforms':
+        articles = sub.published_articles()
+        latest = articles.latest()
+        cutoff = latest.pub_date - datetime.timedelta(days=7)
+        
+        # there shouldn't be too many and we're showing them all: do some processing
+        current = []
+        sep = re.compile(r',|:')
+        for art in articles.filter(pub_date__gte=cutoff):
+            pos, name = [x.strip() for x in sep.split(art.headline + ',', 1)]
+            if name.endswith(','):
+                name = name[:-1]
+            current.append( (pos, name, art) )
+        # sort by position then last name
+        current.sort(key=lambda t: (t[0], t[1].split(None, 1)[1]))
+        
+        data = {
+            'section': sec,
+            'subsection': sub,
+            'platforms': current,
+            'latest': latest,
+            'comments': PublicComment.visible.filter(article__subsection=sub).order_by('-time')
+        }
+        return render_to_response('sections/sub_stuco-platforms.html',
+                                  context_instance=RequestContext(request, data))
     
-    data = {
-        'section': sec,
-        'subsection': sub,
-        'recent_stories': sub.published_articles().order_by('-pub_date')[:10],
-        'topstories': tops,
-        'midstories': mids,
-        'lowlist': lowlist,
-        'comments': PublicComment.visible.filter(article__subsection=sub).order_by('-time')
-    }
-    try:
-        column = sub.column
-    except Column.DoesNotExist:
-        pass
     else:
-        data['column'] = column
-        data['columns'] = Column.objects.order_by('-year', '-semester', 'name')
+        tops, mids, lows = sub.get_stories(num_top=2, num_mid=3, num_low=12)
+        num_low_lists = 4
+        lowlist = [ [] for i in range(num_low_lists) ]
+        for i in range(len(lows)):
+            lowlist[i % num_low_lists].append(lows[i])
     
-    template = ("sections/sub_%s.html" % sub.slug,
-                "sections/sub_of_%s.html" % sec.slug,
-                "sections/subsection.html")
-    
-    rc = RequestContext(request, data)
-    return render_to_response(template, context_instance=rc)
-
+        comments = PublicComment.visible.filter(article__subsection=sub)
+        data = {
+            'section': sec,
+            'subsection': sub,
+            'recent_stories': sub.published_articles().order_by('-pub_date')[:10],
+            'topstories': tops,
+            'midstories': mids,
+            'lowlist': lowlist,
+            'comments': comments.order_by('-time')
+        }
+        try:
+            column = sub.column
+        except Column.DoesNotExist:
+            pass
+        else:
+            data['column'] = column
+            data['columns'] = Column.objects.order_by('-year', '-semester', 'name')
+        
+        template = ("sections/sub_%s.html" % sub.slug,
+                    "sections/sub_of_%s.html" % sec.slug,
+                    "sections/subsection.html")
+        
+        rc = RequestContext(request, data)
+        return render_to_response(template, context_instance=rc)
 
 
 @permission_required('accounts.can_access_admin')
