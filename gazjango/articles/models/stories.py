@@ -295,6 +295,7 @@ class Article(models.Model):
     
     class Meta:
         app_label = 'articles'
+        get_latest_by = 'pub_date'
     
 
 class Writing(models.Model):
