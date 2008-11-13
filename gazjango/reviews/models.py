@@ -27,20 +27,45 @@ class Establishment(models.Model):
     ACCESS_CHOICES = (
         ('w',"Walking")
         ('d',"Driving")
-        ('b',"Bus")
-        ('t',"Train")
+        ('p',"Public Transportation")
     )
     access = models.CharField(max_length=1,choices=ACCESS_CHOICES,blank=False)
-    
-    rating = models.IntegerField(blank=True, null=True)
-    cost = models.IntegerField(blank=True, null=True)
     
     phone = models.CharField(max_length=100, blank=True)
     link = models.CharField(max_length=100, blank=True)
     
     other_info = models.TextField(blank=True)
-    
-    review_link = models.ForeignKey(Article, null=True, blank=True, unique=True,related_name="review_link")
-    
+        
     def __unicode__(self):
         return self.name()
+        
+class Review(models.Model):
+    "represents the review of an establishment"
+    slug = models.SlugField()
+    
+    establishment = models.ForeignKey(Establishment,related_name="reviews")
+    
+    COST_CHOICES = (
+        ('1',"$"),
+        ('2',"$$"),
+        ('3',"$$$"),
+        ('4',"$$$$")
+    )
+    cost = models.CharField(max_length=1,choices=COST_CHOICES,blank=False)
+    
+    RATING_CHOICES = (
+        ('1',"*"),
+        ('2',"**"),
+        ('3',"***"),
+        ('4',"****"),
+        ('5',"*****")
+    )
+    rating = models.CharField(max_length=1,choices=RATING_CHOICES,blank=False)
+    
+    reviewer = models.ManyToManyField(UserProfile, blank=True, related_name="reviews")
+    
+    review_summary = models.TextField(blank=True) 
+    review_text = models.TextField(blank=True)   
+
+    def __unicode__(self):
+        return self.slug
