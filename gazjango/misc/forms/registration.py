@@ -27,8 +27,8 @@ class RegistrationFormWithProfile(RegistrationForm):
             user.save()
             
             kind_args = { 'kind': self.cleaned_data['kind'] }
-            if kind_args['kind'] in ('s', 'a') and self.cleaned_data['year']:
-                kind_args['year'] = self.cleaned_data['year']
+            if kind_args['kind'] in ('s', 'a'):
+                kind_args['year'] = self.cleaned_data['year'] or None
             kind = UserKind.objects.get_or_create(**kind_args)[0]
             
             profile = user.userprofile_set.create(kind=kind)
