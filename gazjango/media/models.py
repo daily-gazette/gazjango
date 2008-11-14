@@ -41,7 +41,6 @@ class MediaFile(models.Model):
     users = models.ManyToManyField(UserProfile, related_name="media", blank=True)
     
     description = models.TextField(blank=True)
-    license     = models.TextField(blank=True)
     
     source_url = models.URLField(blank=True, verify_exists=False)
     
