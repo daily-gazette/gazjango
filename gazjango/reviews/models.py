@@ -16,6 +16,7 @@ class Establishment(models.Model):
         ('g',"Gift")
         ('h',"Hotel")
         ('b',"Big Box")
+        ('h',"Barbers and Salons")
         ('m',"Mailing")
     )
     establishment_type = models.CharField(max_length=1,choices=TYPE_CHOICES,blank=False)
@@ -36,6 +37,12 @@ class Establishment(models.Model):
     
     other_info = models.TextField(blank=True)
         
+    def avg_cost(self):
+        return sum(self.reviews.filter(cost=str(i)).count() for i in range(1, 6) / self.reviews.count()
+        
+    def avg_rating(self):
+        return sum(self.reviews.filter(rating=str(i)).count() for i in range(1, 6) / self.reviews.count()
+    
     def __unicode__(self):
         return self.name()
         
