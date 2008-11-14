@@ -138,6 +138,9 @@ class UserProfile(models.Model):
         else:
             return False
     
+    def published_articles(self):
+        return self.articles.filter(status='p')
+    
     def positions_at(self, date):
         """Returns the Positions the user had at the given date."""
         null_end = Q(holding__date_end__isnull = True)

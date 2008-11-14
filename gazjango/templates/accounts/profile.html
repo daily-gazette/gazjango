@@ -73,7 +73,7 @@
   		
   		<h4>Contributions to the Gazette</h4>
   		<ul>
-  		  {% for story in author.articles.all %}
+  		  {% for story in author.published_articles %}
   		    <li><a href="{{ story.get_absolute_url }}">{{ story.headline|safe }}</a></li>
   		  {% endfor %}
   		</ul>
