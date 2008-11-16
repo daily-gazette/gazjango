@@ -67,6 +67,10 @@ class SendingOutCommand(NoArgsCommand):
             self.add_error(subscriber, 'ssl error') # probably timeout
             self.renew_connection()
             self.try_sending_to_subscriber(subscriber, repeat_index + 1, max_repeats)
+        except socket.timeout:
+            self.add_error(subscriber, 'timeout')
+            self.renew_connection()
+            self.try_sending_to_subscriber(subscriber, repeat_index + 1, max_repeats)
         except smtplib.SMTPException:
             self.add_error(subscriber, 'smtp error')
         except Exception:
