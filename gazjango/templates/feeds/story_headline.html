@@ -1,1 +1,2 @@
-{% if obj.section_if_special %}{{ obj.section_if_special }}: {% endif %}{{ obj.headline|safe }}
+{% load extras %}
+{% if obj.section_if_special %}{{ obj.section_if_special }}: {% endif %}{{ obj.headline|plain_text }}

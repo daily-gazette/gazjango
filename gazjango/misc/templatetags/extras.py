@@ -1,7 +1,7 @@
 from django import template
 from django.core.urlresolvers import reverse
 from django.utils.safestring  import mark_safe
-from django.utils.html        import conditional_escape
+from django.utils.html        import conditional_escape, strip_tags
 
 from django.contrib.humanize.templatetags.humanize import ordinal
 from gazjango.misc.helpers import get_static_path, get_jquery_path
@@ -9,6 +9,13 @@ from gazjango.misc.helpers import get_static_path, get_jquery_path
 from datetime import date
 
 register = template.Library()
+
+
+### curly-quotes removal
+
+@register.filter
+def plain_text(str):
+    return strip_tags(str).replace(u'\u201c', '"').replace(u'\u201d', '"')
 
 
 ### filter that should maybe go in views, but it's convenient
