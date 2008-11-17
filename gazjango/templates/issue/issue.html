@@ -209,7 +209,7 @@
   						<tr>
   						  <td>
     						  <font color="#333333" size="2" face="Georgia, Times New Roman, Times, serif">
-    						     {% if not team.ranked %}
+    						     {% if not game.team.ranked %}
     						     <strong>{{ game.team.get_gender_display }} {{ game.team.sport }} vs. {{ game.opponent }}</strong><br />
     						     <em>
                    					{% ifequal outcome w %}
