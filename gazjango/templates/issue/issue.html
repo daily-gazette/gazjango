@@ -210,7 +210,7 @@
   						  <td>
     						  <font color="#333333" size="2" face="Georgia, Times New Roman, Times, serif">
     						     <strong>{{ game.team.get_gender_display }} {{ game.team.sport }} vs. {{ game.opponent }}</strong><br />
-    						     {% if not team.ranked %}
+    						     <em>{% if not team.ranked %}
                    					{% ifequal outcome w %}
                    						<strong>Swarthmore: {{ game.swat_score}}</strong> | {{ game.opponent }}: {{ game.opponent_score }}
                    					{% else %}
@@ -222,9 +222,9 @@
                    					{% endifequal %}
                    				{% else %}
                    					Swarthmore's Ranking: #{{ game.rank }}<br />
-                   				{% endif %}
+                   				{% endif %}</em>
                    				
-                   				[ <a href="{{ team.get_absolute_url }}">Read More</a> ]
+                   				 [<a href="{{ team.get_absolute_url }}">Read More</a>]
                    				
     						  </font>
   						  </td>
