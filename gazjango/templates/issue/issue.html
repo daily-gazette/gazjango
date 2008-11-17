@@ -4,7 +4,7 @@
 <html lang="en">
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-  <title>The Daily Gazette -- {{ issue.date|date:"l F j, Y" }} </title>
+  <title>The Daily Gazette -- {{ issue.date|date:"l, F j, Y" }} </title>
   <style type="text/css">
   <!--
   a { text-decoration: none; }    -->
@@ -47,7 +47,7 @@
             </td>
             <td width="405" height="30" align="right" valign="middle" bgcolor="#ffffff">
               <font color="#432c16" size="2" face="Arial, Helvetica, sans-serif">
-                {{ issue.date|date:"l F j, Y" }}
+                {{ issue.date|date:"l, F j, Y" }}
               </font>
               &nbsp;&nbsp;&nbsp;
             </td>
