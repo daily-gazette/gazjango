@@ -95,7 +95,7 @@ class Game(models.Model):
     
     class Meta:
         get_latest_by = "date"
-        ordering = ("date", "team")
+        ordering = ("-date", "team")
     
     def __unicode__(self):
         return "%s vs %s on %s" % (self.team.full_team_name(), 
