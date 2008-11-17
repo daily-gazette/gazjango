@@ -212,10 +212,10 @@
     						     {% if not game.team.ranked %}
     						     <strong>{{ game.team.full_team_name }} vs. {{ game.opponent }}</strong><br />
     						     <em>
-                   					{% ifequal outcome w %}
+                   					{% ifequal game.outcome "w" %}
                    						<strong>Swarthmore: {{ game.swat_score}}</strong> | {{ game.opponent }}: {{ game.opponent_score }}
                    					{% else %}
-                   					    {% ifequal outcome l %}
+                   					    {% ifequal game.outcome "l" %}
                    					        Swarthmore: {{ game.swat_score}} |	<strong>{{ game.opponent }}: {{ game.opponent_score }}</strong>
                    					    {% else %}
                					            Swarthmore: {{ game.swat_score}} | {{ game.opponent }}: {{ game.opponent_score }}
