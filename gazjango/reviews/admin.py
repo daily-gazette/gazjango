@@ -1,14 +1,14 @@
 from django.contrib import admin
-from gazjango.athletics.models import Team, Game
+from gazjango.reviews.models import Establishment, Review
 
-class TeamAdmin(admin.ModelAdmin):
-    list_display = ('sport', 'gender','trimester')
-    list_filter = ('sport', 'gender','trimester')
+class EstablishmentAdmin(admin.ModelAdmin):
+    list_display = ('name', 'establishment_type')
+    list_filter = ('name', 'establishment_type')
 
-admin.site.register(Team, TeamAdmin)
+admin.site.register(Establishment, EstablishmentAdmin)
 
-class GameAdmin(admin.ModelAdmin):
-    list_display = ('team', 'opponent','outcome','rank')
-    list_filter = ('team', 'opponent','outcome','rank')    
-    
-admin.site.register(Game, GameAdmin)
+class ReviewAdmin(admin.ModelAdmin):
+    list_display = ('slug', 'establishment')
+    list_filter = ('slug', 'establishment')
+
+admin.site.register(Review, ReviewAdmin)

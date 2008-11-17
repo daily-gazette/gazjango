@@ -2,7 +2,7 @@ from django.shortcuts       import get_object_or_404, render_to_response
 from django.template        import RequestContext
 
 from gazjango.articles.models  import Section
-from gazjango.dining.models    import Establishment, Review
+from gazjango.reviews.models    import Establishment, Review
 
 def reviews(request):
     'View for "establishment review" page.'

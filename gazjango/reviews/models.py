@@ -1,5 +1,6 @@
 from django.db                         import models
 from django.contrib.sites.models       import Site
+from gazjango.accounts.models          import UserProfile
 from gazjango.articles.models.stories  import Article
 from gazjango.misc.templatetags.extras import join_authors
 import datetime
@@ -11,12 +12,12 @@ class Establishment(models.Model):
     "Basic Information"
     name = models.CharField(max_length=100, blank=True)
     TYPE_CHOICES = (
-        ('r',"Restaurant")
-        ('t',"Theatre")
-        ('g',"Gift")
-        ('h',"Hotel")
-        ('b',"Big Box")
-        ('h',"Barbers and Salons")
+        ('r',"Restaurant"),
+        ('t',"Theatre"),
+        ('g',"Gift"),
+        ('h',"Hotel"),
+        ('b',"Big Box"),
+        ('h',"Barbers and Salons"),
         ('m',"Mailing")
     )
     establishment_type = models.CharField(max_length=1,choices=TYPE_CHOICES,blank=False)
@@ -26,8 +27,8 @@ class Establishment(models.Model):
     zip_code = models.CharField(max_length=100, blank=True)
     
     ACCESS_CHOICES = (
-        ('w',"Walking")
-        ('d',"Driving")
+        ('w',"Walking"),
+        ('d',"Driving"),
         ('p',"Public Transportation")
     )
     access = models.CharField(max_length=1,choices=ACCESS_CHOICES,blank=False)
@@ -38,13 +39,13 @@ class Establishment(models.Model):
     other_info = models.TextField(blank=True)
         
     def avg_cost(self):
-        return sum(self.reviews.filter(cost=str(i)).count() for i in range(1, 6) / self.reviews.count()
+        return sum(self.reviews.filter(cost=str(i)).count() for i in range(1, 6)) / self.reviews.count()
         
     def avg_rating(self):
-        return sum(self.reviews.filter(rating=str(i)).count() for i in range(1, 6) / self.reviews.count()
+        return sum(self.reviews.filter(rating=str(i)).count() for i in range(1, 6)) / self.reviews.count()
     
     def __unicode__(self):
-        return self.name()
+        return self.name
         
 class Review(models.Model):
     "represents the review of an establishment"

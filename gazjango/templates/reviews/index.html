@@ -58,7 +58,7 @@
                         <td>{{ establishment.city }}</td>
                         <td>{{ establishment.access }}</td>
                         <td>Tags go here.</td>
-                        <td>{% for review in establishment %}
+                        <td>{% for review in establishment.reviews %}
                                 <a href="{{ establishment.get_absolute_url }}#{{ review.slug }}">{{ review.reviewer }}</a><br />
                             {% endfor %}</td>
                         <td>{{ establishment.other_info }}</td>

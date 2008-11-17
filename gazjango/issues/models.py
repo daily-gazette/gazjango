@@ -3,6 +3,7 @@ from django.db.models import permalink
 
 from gazjango.articles.models      import Article
 from gazjango.announcements.models import Announcement
+from gazjango.athletics.models     import Team, Game
 
 import datetime
 from gazjango.scrapers import sharples
@@ -135,6 +136,11 @@ class Issue(models.Model):
         """Grabs the announcements that should appear in this issue."""
         a = Announcement.community
         return a.filter(date_start__lte=self.date, date_end__gte=self.date)
+        
+    def games(self):
+        """Grabs the games that should appear in this issue."""
+        g = Game.objects
+        return g.filter(date__gte=self.get_previous_by_date(), date__lt=self.date)
     
     def staff_announcement(self):
         """Gets the staff announcement for this issue, if any."""

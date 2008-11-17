@@ -174,6 +174,10 @@ urlpatterns += patterns('athletics.views',
     (r'^athletics/%(slug)s/$'   % reps, 'team',{},'athletics_team')
 )
 
+urlpatterns += patterns('reviews.views',
+    (r'^reviews/$',                   'reviews')
+)
+
 # section match should be last, to avoid shadowing others
 urlpatterns += patterns('articles.views',
     (r'^archives/$', 'archives', {}, 'archives'),
