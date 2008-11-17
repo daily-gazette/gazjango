@@ -38,9 +38,9 @@ class Team(models.Model):
     def scores(self,all_time=False):
         base = self.games_for_trimester(all_time)
         return [
-            base.filter(outcome='W').count(),
-            base.filter(outcome='L').count(),
-            base.filter(outcome='D').count()
+            base.filter(outcome='w').count(),
+            base.filter(outcome='l').count(),
+            base.filter(outcome='d').count()
         ]
     
     def all_time_scores(self):
