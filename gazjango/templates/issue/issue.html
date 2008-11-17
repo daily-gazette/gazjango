@@ -188,8 +188,60 @@
 						  </tr>
 						</table>
 					  {% endif %}
-		
-<table width="385" height="24" border="0" cellpadding="0" cellspacing="0" bgcolor="#432c16">
+					  
+					  {% if issue.games %}
+				      <table width="385" height="24" border="0" cellpadding="0" cellspacing="0" bgcolor="#432c16">
+  						<tr>
+  						  <td width="10" height="24" align="left" valign="middle"></td>
+  						  <td width="375" align="left" valign="middle">
+  							<strong>
+  							  <font color="#ffffff" size="3" face="Arial, Helvetica, sans-serif">
+  								Recent Games
+  							  </font>
+  							</strong>
+  						  </td>
+  						</tr>
+  					  </table>
+  					  
+  					  {% for game in issue.games %}
+  					  
+  					  <table width="385" border="0" cellspacing="0" cellpadding="10">
+  						<tr>
+  						  <td>
+    						  <font color="#333333" size="2" face="Georgia, Times New Roman, Times, serif">
+    						     <strong>{{ game.team.get_gender_display }} {{ game.team.sport }} vs. {{ game.opponent }}</strong><br />
+    						     <em>This {% if game.home %} was a home game,{% else %} was an away game, {% endif %}{% if game.in_conference %}in the Centennial Conference, {% endif %}.</em><br />
+    						     {% if not team.ranked %}
+                   					{% ifequal outcome w %}
+                   						<strong>Swarthmore: {{ game.swat_score}}</strong> | {{ game.opponent }}: {{ game.opponent_score }}<br />
+                   					{% else %}
+                   					    {% ifequal outcome l %}
+                   					        Swarthmore: {{ game.swat_score}} |	<strong>{{ game.opponent }}: {{ game.opponent_score }}</strong><br />
+                   					    {% else %}
+               					            Swarthmore: {{ game.swat_score}} | {{ game.opponent }}: {{ game.opponent_score }}<br />
+                   					    {% endifequal %}
+                   					{% endifequal %}<br />
+                   				{% else %}
+                   					Swarthmore's Ranking: #{{ game.rank }}<br />
+                   				{% endif %}
+    						    
+    						    {% if game.game_notes %}
+                      					<strong>Game Notes:</strong> {{ game.game_notes }}<br />
+                      			{% endif %}
+                      			{% if game.link_list %}
+                      					<strong>Related Links:</strong> {{ game.link_list }}<br />
+                      			{% endif %}
+    						    
+    						  </font>
+  						  </td>
+  						</tr>
+  					  </table>
+  					  
+  					  {% endfor %}
+  					  
+  					  {% endif %}
+				    
+                    <table width="385" height="24" border="0" cellpadding="0" cellspacing="0" bgcolor="#432c16">
 						<tr>
 						  <td width="10" height="24" align="left" valign="middle"></td>
 						  <td width="375" align="left" valign="middle">
