@@ -5,6 +5,7 @@ from django.shortcuts           import render_to_response
 from gazjango.misc.view_helpers import get_by_date_or_404, filter_by_date
 from gazjango.misc.view_helpers import staff_required, boolean_arg
 
+from gazjango.athletics.models     import Team, Game
 from gazjango.announcements.models import Announcement
 from gazjango.articles.models      import Article
 from gazjango.issues.models        import Issue, Menu, Event

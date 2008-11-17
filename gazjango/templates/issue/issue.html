@@ -210,28 +210,22 @@
   						  <td>
     						  <font color="#333333" size="2" face="Georgia, Times New Roman, Times, serif">
     						     <strong>{{ game.team.get_gender_display }} {{ game.team.sport }} vs. {{ game.opponent }}</strong><br />
-    						     <em>This {% if game.home %} was a home game,{% else %} was an away game, {% endif %}{% if game.in_conference %}in the Centennial Conference{% endif %}.</em><br />
     						     {% if not team.ranked %}
                    					{% ifequal outcome w %}
-                   						<strong>Swarthmore: {{ game.swat_score}}</strong> | {{ game.opponent }}: {{ game.opponent_score }}<br />
+                   						<strong>Swarthmore: {{ game.swat_score}}</strong> | {{ game.opponent }}: {{ game.opponent_score }}
                    					{% else %}
                    					    {% ifequal outcome l %}
-                   					        Swarthmore: {{ game.swat_score}} |	<strong>{{ game.opponent }}: {{ game.opponent_score }}</strong><br />
+                   					        Swarthmore: {{ game.swat_score}} |	<strong>{{ game.opponent }}: {{ game.opponent_score }}</strong>
                    					    {% else %}
-               					            Swarthmore: {{ game.swat_score}} | {{ game.opponent }}: {{ game.opponent_score }}<br />
+               					            Swarthmore: {{ game.swat_score}} | {{ game.opponent }}: {{ game.opponent_score }}
                    					    {% endifequal %}
                    					{% endifequal %}
                    				{% else %}
                    					Swarthmore's Ranking: #{{ game.rank }}<br />
                    				{% endif %}
-    						    
-    						    {% if game.game_notes %}
-                      					<strong>Game Notes:</strong> {{ game.game_notes }}<br />
-                      			{% endif %}
-                      			{% if game.link_list %}
-                      					<strong>Related Links:</strong> {{ game.link_list }}<br />
-                      			{% endif %}
-    						    
+                   				
+                   				[ <a href="{{ team.get_absolute_url }}">Read More</a> ]
+                   				
     						  </font>
   						  </td>
   						</tr>
