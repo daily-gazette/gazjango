@@ -7,6 +7,6 @@ class TeamAdmin(admin.ModelAdmin):
 admin.site.register(Team, TeamAdmin)
 
 class GameAdmin(admin.ModelAdmin):
-    list_display = ('team', 'opponent', 'outcome', 'rank')
-    list_filter  = ('team', 'opponent', 'outcome', 'rank')
+    list_display = ('date', 'team', 'opponent', 'outcome', 'rank', 'home')
+    list_filter  = ('date', 'team', 'opponent', 'outcome')
 admin.site.register(Game, GameAdmin)
