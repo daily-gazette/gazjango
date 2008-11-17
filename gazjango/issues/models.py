@@ -140,7 +140,7 @@ class Issue(models.Model):
     def games(self):
         """Grabs the games that should appear in this issue."""
         g = Game.objects
-        return g.filter(date__gte=self.get_previous_by_date(), date__lt=self.date)
+        return g.filter(date__gte=self.get_previous_by_date().date, date__lt=self.date)
     
     def staff_announcement(self):
         """Gets the staff announcement for this issue, if any."""
