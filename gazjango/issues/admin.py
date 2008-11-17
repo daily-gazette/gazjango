@@ -3,7 +3,7 @@ from gazjango.issues.models import Issue, WeatherJoke
 
 class IssueAdmin(admin.ModelAdmin):
     date_hierarchy = 'date'
-    filter_horizontal = ('articles')
+    filter_horizontal = ('articles',)
 admin.site.register(Issue, IssueAdmin)
 
 class WeatherJokeAdmin(admin.ModelAdmin):
