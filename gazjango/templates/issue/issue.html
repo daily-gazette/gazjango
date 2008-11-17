@@ -67,13 +67,19 @@
 			<table width="590" height="30" border="0" cellpadding="0" cellspacing="0">
               <tr>
                 <td width="1" bgcolor="#999999"></td>
-                <td width="588" height="30" cellpadding="5">
-                    <font color="#000000" size="3" face="Arial, Helvetica, sans-serif">
-        				<p>A Word from the Gazette ...</p>
-        			</font>	
-        			<font color="#333333" size="2" face="Georgia, Times New Roman, Times, serif">
-        				<p>{{ issue.staff_announcement.text|safe }}</P>
-        			</font>
+                <td width="588" height="30">
+                    <table width="586" border="0" cellspacing="0" cellpadding="5">
+					<tr>
+					  <td>
+						  <font color="#000000" size="3" face="Arial, Helvetica, sans-serif">
+              				<p>A Word from the Gazette ...</p>
+              			</font>	
+              			<font color="#333333" size="2" face="Georgia, Times New Roman, Times, serif">
+              				<p>{{ issue.staff_announcement.text|safe }}</P>
+              			</font>
+					  </td>
+					</tr>
+				  </table>
                 </td>
                 <td width="1" bgcolor="#999999"></td>
               </tr>
