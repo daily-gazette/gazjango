@@ -14,7 +14,7 @@ admin.site.register(ContactMethod, ContactMethodAdmin)
 class HoldingInline(admin.TabularInline):
     model = Holding
 
-class ContactItemInline(admin.ModelAdmin):
+class ContactItemInline(admin.TabularInline):
     model = ContactItem
 
 class UserProfileAdmin(admin.ModelAdmin):
