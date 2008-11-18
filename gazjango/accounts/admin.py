@@ -10,18 +10,19 @@ class ContactMethodAdmin(admin.ModelAdmin):
     pass
 admin.site.register(ContactMethod, ContactMethodAdmin)
 
-class ContactItemAdmin(admin.ModelAdmin):
-    pass
-admin.site.register(ContactItem, ContactItemAdmin)
 
 class HoldingInline(admin.TabularInline):
     model = Holding
 
+class ContactItemInline(admin.ModelAdmin):
+    model = ContactItem
+
 class UserProfileAdmin(admin.ModelAdmin):
     list_display = ('username', 'name', 'is_staff', 'position')
     search_fields = ['^user__username', '^user__first_name', '^user__last_name', '^user__email']
-    inlines = [ HoldingInline ]
+    inlines = [ HoldingInline, ContactItemInline ]
 admin.site.register(UserProfile, UserProfileAdmin)
+
 
 class PositionAdmin(admin.ModelAdmin):
     pass
