@@ -18,9 +18,8 @@ class HoldingInline(admin.TabularInline):
     model = Holding
 
 class UserProfileAdmin(admin.ModelAdmin):
-    inlines = [
-        HoldingInline
-    ]
+    list_display = ('user__username', 'user__first_name', 'user__last_name', 'user__is_staff', 'position')
+    inlines = [ HoldingInline ]
 admin.site.register(UserProfile, UserProfileAdmin)
 
 class PositionAdmin(admin.ModelAdmin):
