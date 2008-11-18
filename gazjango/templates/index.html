@@ -59,17 +59,17 @@ jQuery(document).ready(function() {
 					<div class="headerColumnBox" id="sideContainer">
 						<div id="weather">
 						  <p class="weather">
-						    <strong>{{ weather.today.date|time:"D" }}:</strong> {{ weather.today }}<br/>
+						    <strong>Today:</strong> {{ weather.today }}<br/>
 						    <span class="joke">{{ joke.line_one }}</span>
 						  </p>
 						  
 						  <p class="weather">
-						    <strong>{{ weather.tonight.date|time:"D" }} night:</strong> {{ weather.tonight }}<br />
+						    <strong>Tonight:</strong> {{ weather.tonight }}<br />
   						  <span class="joke">{{ joke.line_two }}
   						</p>
 						  
 						  <p class="weather">
-						    <strong>{{ weather.tomorrow.date|time:"D" }}:</strong> {{ weather.tomorrow }}<br />
+						    <strong>Tomorrow:</strong> {{ weather.tomorrow }}<br />
   						  <span class="joke">{{ joke.line_three }}
   						</p>
 						  
