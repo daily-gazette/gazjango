@@ -53,6 +53,8 @@ admin.site.register(Column, ColumnAdmin)
 
 class StoryConceptAdmin(admin.ModelAdmin):
     filter_horizontal = ('users',)
+    list_display = ('name', 'due', 'status', 'user_names')
+    list_filter = ('due', 'status')
 admin.site.register(StoryConcept, StoryConceptAdmin)
 
 

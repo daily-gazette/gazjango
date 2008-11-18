@@ -75,12 +75,9 @@ class StoryConcept(models.Model):
             return self.notes
         else:
             return self.notes[:length-3] + '...'
-		
-	def users_in_order(self):
-		return self.users
 	
 	def user_names(self):
-		return join_authors(self.users_in_order(), 'ptx')
+		return join_authors(self.users, 'ptx')
     
     def __unicode__(self):
         return self.name
