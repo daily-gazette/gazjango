@@ -63,9 +63,9 @@ class StoryConcept(models.Model):
             return self.notes
         else:
             return self.notes[:length-3] + '...'
-	
-	def user_names(self):
-		return join_authors(self.users, 'ptx')
+    
+    def user_names(self):
+        return join_authors(self.users, 'ptx')
     
     def __unicode__(self):
         return self.name
