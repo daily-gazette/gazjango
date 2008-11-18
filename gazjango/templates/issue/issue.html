@@ -104,7 +104,7 @@
                   <td width="375" align="left" valign="middle">
                     <strong>
                       <font color="#000000" size="3" face="Arial, Helvetica, sans-serif">
-                        {{ topstory.headline|safe }}
+                        {{ topstory.section_if_special|follow:": " }}{{ topstory.headline|safe }}
                       </font>
                     </strong>
                   </td>
@@ -145,7 +145,7 @@
 						  <td width="375" align="left" valign="middle">
 							<strong>
 							  <font color="#000000" size="2" face="Arial, Helvetica, sans-serif">
-							    {% if story.section_if_special %}{{ story.section_if_special }}:{% endif %}
+							    {{ story.section_if_special|follow:": " }}
   								{{ story.headline|safe }}
 							  </font>
 							</strong>
@@ -192,7 +192,7 @@
 								<br /><br />
 								<font color="#004484">
 								  {% for story in lowstories.all %}
-									{% if story.section_if_special %}{{ story.section_if_special }}:{% endif %}
+									{{ story.section_if_special|follow:": " }}
 									<a href="http://daily.swarthmore.edu{{ story.get_absolute_url }}">
 									  <font color="#004484" size="2" face="Arial, Helvetica, sans-serif">
 										<strong>{{ story.headline|safe }}</strong>

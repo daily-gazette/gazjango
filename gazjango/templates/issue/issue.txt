@@ -12,7 +12,7 @@ A Word from the Gazette ...
 {% endif %}
 ==========================================
 
-{{ issue.topstory.headline|striptags }}
+{{ issue.topstory.section_if_special|follow:": " }}{{ issue.topstory.headline|striptags }}
 {{ issue.topstory.summary|striptags }}
 
 By {{ issue.topstory.authors_in_order|join_authors:"ptx" }}
@@ -21,7 +21,7 @@ Read more: http://daily.swarthmore.edu{{ issue.topstory.get_absolute_url }}
 ==========================================
 
 {% for story in issue.midstories %}
-{{ story.headline|striptags }}
+{{ story.section_if_special|follow:": " }}{{ story.headline|striptags }}
 {{ story.summary|striptags }}
 
 By {{ story.authors_in_order|join_authors:"ptx" }}
@@ -33,7 +33,7 @@ Read more: http://daily.swarthmore.edu{{ story.get_absolute_url }}
 {% if issue.lowstories %}==========================================
 MORE STORIES
 {% for story in issue.lowstories.all %}
-{% if story.section_if_special %}{{ story.section_if_special }}: {% endif %}{{ story.headline|striptags }}
+{{ story.section_if_special|follow:": " }}{{ story.headline|striptags }}
 Read more: http://daily.swarthmore.edu{{ story.get_absolute_url }}
 {% endfor %}
 {% endif %}
