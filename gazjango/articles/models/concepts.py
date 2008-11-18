@@ -10,18 +10,16 @@ class UnpublishedConceptsManager(models.Manager):
     def get_query_set(self):
         orig = super(UnpublishedConceptsManager, self).get_query_set()
         return orig.exclude(status='p')
-        
+    
     def get_concepts(self, user, base=None):
         """
         Returns story concepts, ordered by their status and then by their due date.
-        """
-        
+        """    
         base = base or self
         
         users = base.filter(users=user).exclude(due__lt=date.today).order_by('due')
         others = base.exclude(users=user).order_by('due')
         unclaimed = base.filter(users=None).order_by('due')
-        
         return [users, others, unclaimed]
     
 
@@ -51,23 +49,13 @@ class StoryConcept(models.Model):
     status = models.CharField(max_length=1, choices=STATUSES, default='a')
     
     users   = models.ManyToManyField(UserProfile, blank=True, related_name="assignments")
+    # editors = models.ManyToManyFiled(UserProfile, related_name="concepts_overseen")
     
-    
-    """
-    // editor   = models.ManyToManyField(UserProfile, related_name="overseer")
-    I'd like to be able to call an editor's email address too, from contact information.
-    
-    Also ... is there any way to get the story's number, so that the whole page can be linked into the admin?
-    """
-
     article = models.ForeignKey(Article, null=True, blank=True, unique=True,
                                 related_name="concepts")
     
     objects = models.Manager()
     unpublished = UnpublishedConceptsManager()
-    
-    class Meta:
-        app_label = 'articles'
     
     def notes_excerpt(self, length=60):
         "Returns the first `length` chars of notes."
@@ -81,4 +69,7 @@ class StoryConcept(models.Model):
     
     def __unicode__(self):
         return self.name
+    
+    class Meta:
+        app_label = 'articles'
     
