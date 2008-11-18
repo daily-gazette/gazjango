@@ -19,6 +19,7 @@ class HoldingInline(admin.TabularInline):
 
 class UserProfileAdmin(admin.ModelAdmin):
     list_display = ('username', 'name', 'is_staff', 'position')
+    search_fields = ['^user__username', '^user__first_name', '^user__last_name', '^user__email']
     inlines = [ HoldingInline ]
 admin.site.register(UserProfile, UserProfileAdmin)
 
