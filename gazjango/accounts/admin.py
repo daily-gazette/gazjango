@@ -14,15 +14,15 @@ class ContactItemAdmin(admin.ModelAdmin):
     pass
 admin.site.register(ContactItem, ContactItemAdmin)
 
+class HoldingInline(admin.TabularInline):
+    model = Holding
+
 class UserProfileAdmin(admin.ModelAdmin):
-    pass
+    inlines = [
+        HoldingInline
+    ]
 admin.site.register(UserProfile, UserProfileAdmin)
 
 class PositionAdmin(admin.ModelAdmin):
     pass
 admin.site.register(Position, PositionAdmin)
-
-class HoldingAdmin(admin.ModelAdmin):
-    pass
-admin.site.register(Holding, HoldingAdmin)
-
