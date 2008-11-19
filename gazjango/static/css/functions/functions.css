@@ -136,6 +136,10 @@ TEXT BOX STYLES
 	padding-right: 2px;
 }
 
+.linkBar p {
+    margin-left: 5px;
+}
+
 .highlightBox {
 	width: 80%;
 	background-color: #a1e5ee;
