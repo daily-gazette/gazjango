@@ -164,7 +164,7 @@ def in_groups_of(lst, num=2):
 
 @register.filter
 def follow(arg, suffix):
-    return arg and arg + suffix
+    return arg + suffix if arg else ''
 
 
 ### stuff related to the AddThis button
