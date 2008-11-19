@@ -131,9 +131,8 @@ TEXT BOX STYLES
 	border-top: 2px solid #bbb;
 	border-bottom: 2px solid #bbb;
 	
-	float: left;
-	margin-right: 1em;
-	padding-right: 2px;
+	margin: 0 1em;
+	padding: 0 2px;
 }
 
 .linkBar p {
