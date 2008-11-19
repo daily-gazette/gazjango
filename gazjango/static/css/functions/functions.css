@@ -130,6 +130,9 @@ TEXT BOX STYLES
 	background-color: #eeeeee;
 	border-top: 2px solid #bbb;
 	border-bottom: 2px solid #bbb;
+	
+	float: left;
+	margin-right: 1em;
 }
 
 .highlightBox {
