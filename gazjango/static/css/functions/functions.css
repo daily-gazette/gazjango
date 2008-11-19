@@ -137,7 +137,7 @@ TEXT BOX STYLES
 }
 
 .linkBar p {
-    margin-left: 5px;
+    padding-left: 5px;
 }
 
 .highlightBox {
