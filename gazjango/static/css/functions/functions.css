@@ -133,6 +133,7 @@ TEXT BOX STYLES
 	
 	float: left;
 	margin-right: 1em;
+	padding-right: 2px;
 }
 
 .highlightBox {
