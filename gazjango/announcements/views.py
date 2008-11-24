@@ -30,7 +30,7 @@ def list_announcements(request, kind=None, year=None, month=None, day=None, orde
         qset = Announcement.community.order_by('date_end', 'date_start')
     
     if year:
-        qset = filter_by_date(qset, year, month, day)
+        qset = filter_by_date(qset, year, month, day, field='date_start')
     else:
         qset = qset.exclude(date_start__gt=datetime.date.today())
     
