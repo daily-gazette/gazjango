@@ -16,19 +16,29 @@ from django.conf   import settings
 class CommentsManager(models.Manager):
     def new(self, check_spam=True, pre_approved=False, **data):
         """
-        Makes a new comment, checking it for spam if necessary -- that is,
-        the user doesn't have the `comments.can_post_directly` permission,
-        and `check_spam` is not set to False.
+        Makes a new comment, dealing with spam checking and pre-approval
+        as necessary.
+        
+        Comments from Swarthmore IPs or registered users are not spam-checked.
+        
+        Comments from Swat IPs and non-anonymous users who haven't lost the
+        can_post_directly permission are pre-approved (as per `pre_approved`).
         """
         comment = PublicComment(**data)
+        
         anon = comment.is_anonymous
         user = comment.user.user if comment.user else None
+        needs_moderation = user and not user.has_perm('comments.can_post_directly')
+        from_swat = is_from_swat(user=comment.user, ip=comment.ip_address)
         
-        if anon or (user and not user.has_perm('comments.can_post_directly')):
+        if not from_swat and not user:
             comment.is_spam = check_spam and comment.check_with_akismet()
-            comment.is_approved = pre_approved
         else:
             comment.is_spam = False
+        
+        if needs_moderation or (anon and not from_swat):
+            comment.is_approved = pre_approved
+        else:
             comment.is_approved = True
         
         previous = PublicComment.objects.filter(subject_id=comment.subject.pk,
@@ -39,8 +49,6 @@ class CommentsManager(models.Manager):
             comment.number = 1
         
         comment.score = comment.starting_score()
-        if not comment.is_approved and comment.score >= 4:
-            comment.is_approved = True
         comment.save()
         return comment
     
