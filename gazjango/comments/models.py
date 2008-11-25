@@ -59,7 +59,8 @@ class CommentsManager(models.Manager):
         has voted that comment up, 0 if he hasn't voted on it, and -1 if
         he's voted it down.
         
-        The comments can optionally be filtered by `spec`.
+        The comments can optionally be filtered by `spec`, which defaults
+        to excluding comments marked as spam.
         """
         comments = article.comments.filter(spec).select_related(depth=1)
         return [(c, c.vote_status(user=user, ip=ip)) for c in comments]
