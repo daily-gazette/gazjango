@@ -1,6 +1,9 @@
 from django.core.cache import cache
-from xml.etree import cElementTree as etree
 import urllib2
+try:
+    from xml.etree import cElementTree as etree
+except ImportError:
+    from xml.etree import ElementTree as etree
 
 CACHE_KEY = 'tla_links'
 
@@ -15,6 +18,10 @@ def get_tla_links(override_cache=False):
             return links
         except urllib2.URLError:
             # TODO: log this error
+            return []
+        except SyntaxError:
+            # etree is kind of silly in raising syntax errors, I feel
+            # this usually means that the returned response was blank
             return []
 
 
