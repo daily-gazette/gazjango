@@ -3,7 +3,8 @@ from django.conf import settings
 import datetime
 import sys, os, os.path
 
-DUMP_PATTERN = "/home/dailygazette/db-backups/dump_%Y-%m-%d_%H-%M.sql.bz2"
+DUMP_DIRECTORY = os.path.expanduser("~/db-backups/")
+DUMP_PATTERN = "gazjango_%Y-%m-%d_%H-%M.sql.bz2"
 
 class Command(NoArgsCommand):
     def handle_noargs(self, **options):
@@ -21,11 +22,11 @@ class Command(NoArgsCommand):
             args.append('--password=%s' % settings.DATABASE_PASSWORD)
         args.append(settings.DATABASE_NAME)
         
+        if not os.path.exists(DUMP_DIRECTORY):
+            os.path.makedirs(DUMP_DIRECTORY)
         filename = datetime.datetime.now().strftime(DUMP_PATTERN)
-        backup_dir = os.path.dirname(filename)
-        if not os.path.exists(backup_dir):
-            os.path.makedirs(backup_dir)
+        filepath = os.path.join(DUMP_DIRECTORY, filename)
         
-        print "Backing up %s to %s" % (args[-1], filename)
-        os.system('mysqldump %s | bzip2 > %s' % (' '.join(args), filename))
+        print "Backing up %s to %s" % (args[-1], filepath)
+        os.system('mysqldump %s | bzip2 > %s' % (' '.join(args), filepath))
     
