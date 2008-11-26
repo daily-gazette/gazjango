@@ -2,7 +2,7 @@ from django.core.management.base                 import NoArgsCommand
 from gazjango.misc.management.commands.backup_db import DUMP_DIRECTORY, DUMP_PATTERN
 import os, re
 
-DUMP_MATCHER = re.compile(r"^%s$" % re.sub(r'%[a-zA-Z]',
+DUMP_MATCHER = re.compile(r"^%s$" % re.sub(r'\\%[a-zA-Z]',
                                            r'.+', 
                                            re.escape(DUMP_PATTERN)))
 NUM_TO_SAVE = 8
@@ -13,6 +13,7 @@ class Command(NoArgsCommand):
         dumps.sort(reverse=True)
         
         for f in dumps[NUM_TO_SAVE:]:
-            print "removing %s" % f
+            if options['verbosity'] == 2:
+                print "removing %s" % f
             os.remove(os.path.join(DUMP_DIRECTORY, f))
     
