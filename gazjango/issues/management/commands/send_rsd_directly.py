@@ -9,8 +9,11 @@ class Command(SendingOutCommand):
     subscriber_base = Subscriber.rsd
     
     def set_content(self, dummy_request):
-        html_response = rsd_now(dummy_request)
-        if html_response.status_code == 404:
+        try:
+            html_response = rsd_now(dummy_request)
+            if html_response.status_code == 404:
+                raise Http404
+        except Http404:
             print "No content, so not sending out."
             raise CommandError('no content')
         
