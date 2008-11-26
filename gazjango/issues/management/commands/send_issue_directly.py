@@ -1,6 +1,7 @@
 from gazjango.issues.management.commands import SendingOutCommand
 from django.core.management.base         import CommandError
 from django.core.mail                    import mail_admins
+from django.http                         import Http404
 
 from gazjango.subscriptions.models import Subscriber
 from gazjango.issues.views         import latest_issue
@@ -11,10 +12,14 @@ class Command(SendingOutCommand):
     subscriber_base = Subscriber.issues
     
     def set_content(self, dummy_request):
-        html_response = latest_issue(dummy_request)
-        if html_response.status_code == 404:
+        try:
+            html_response = latest_issue(dummy_request)
+            if html_response.status_code == 404:
+                raise Http404
+        except Http404:
             print "No issue, so not sending it."
-            mail_admins('ERROR IN SENDING GAZETTE ISSUE', "so it didn't get sent")
+            mail_admins('ERROR IN SENDING GAZETTE ISSUE',
+                        "so it didn't get sent. probably no articles.")
             return
         
         self.html_content = html_response.content
