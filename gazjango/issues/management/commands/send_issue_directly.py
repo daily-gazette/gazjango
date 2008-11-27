@@ -17,10 +17,10 @@ class Command(SendingOutCommand):
             if html_response.status_code == 404:
                 raise Http404
         except Http404:
-            print "No issue, so not sending it."
-            mail_admins('ERROR IN SENDING GAZETTE ISSUE',
+            mail_admins('ERROR IN SENDING GAZETTE ISSUE FOR '+
+                        datetime.date.today().strftime('%A, %B %d, %Y'),
                         "so it didn't get sent. probably no articles.")
-            return
+            raise CommandError('No issue, so not sending it.')
         
         self.html_content = html_response.content
         self.text_content = latest_issue(dummy_request, plain=True).content
