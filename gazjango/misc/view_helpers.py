@@ -65,7 +65,7 @@ def get_user_profile(request):
 
 ROBOT_UAS = ('Googlebot', 'Yahoo! Slurp', 'msnbot')
 def is_robot(request):
-    ua = request.META['HTTP_USER_AGENT']
+    ua = request.META.get('HTTP_USER_AGENT', '')
     for robot in ROBOT_UAS:
         if robot in ua:
             return robot
