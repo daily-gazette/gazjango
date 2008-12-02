@@ -1,4 +1,5 @@
 from django import forms
+from django.contrib.auth.models import Group
 from gazjango.registration.forms import RegistrationForm
 from gazjango.accounts.models import UserProfile, UserKind
 import datetime
@@ -24,6 +25,10 @@ class RegistrationFormWithProfile(RegistrationForm):
         def callback(user):
             names = (self.cleaned_data['name'] + ' ').split(' ', 1)
             user.first_name, user.last_name = names
+            try:
+                user.groups.add(Group.objects.get(name='Readers'))
+            except Group.DoesNotExist:
+                pass # oops
             user.save()
             
             kind_args = { 'kind': self.cleaned_data['kind'] }
