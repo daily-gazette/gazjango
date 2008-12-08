@@ -120,6 +120,8 @@ def show_photospread_page(request, spread, num=None, form=None, whole_page=None)
 
 def post_comment(request, slug, year, month, day):
     story = get_by_date_or_404(Article, year, month, day, slug=slug)
+    if not story.comments_allowed:
+        raise Http404 # semantically incorrect, but whatever
     
     logged_in = request.user.is_authenticated()
     form = make_comment_form(data=request.POST, logged_in=logged_in)

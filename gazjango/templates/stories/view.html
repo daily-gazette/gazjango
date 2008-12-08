@@ -129,33 +129,35 @@
         <h4 name="submitComment" style="display: none;">Submit a Comment</h4>
         {% include "stories/comment_form.html" %}
       </div>
+      
+      {% if story.allow_comments %}
+        <div id="commentRules">
+          <p>Comments posted anonymously must be approved by Gazette staff before they are published.</p>
 
-      <div id="commentRules">
-        <p>Comments posted anonymously must be approved by Gazette staff before they are published.</p>
+          <hr width="50%" color="#dddddd" size="1px">
 
-        <hr width="50%" color="#dddddd" size="1px">
+          <h4>Discussion Rules</h4>
+          <ul>
+            <li>Be nice.</li>
+            <li>Be constructive.</li>
+            <li>Don't curse.</li>
+            <li>Don't threaten.</li>
+          </ul>
 
-        <h4>Discussion Rules</h4>
-        <ul>
-          <li>Be nice.</li>
-          <li>Be constructive.</li>
-          <li>Don't curse.</li>
-          <li>Don't threaten.</li>
-        </ul>
+          <p>More details on our policies <a href="/policies/">here</a>.</p>
 
-        <p>More details on our policies <a href="/policies/">here</a>.</p>
+          <hr width="50%" color="#dddddd" size="1px" />
 
-        <hr width="50%" color="#dddddd" size="1px" />
-
-        <p>
-          {% if user.is_authenticated %}
-            <a href="{{ user.manage_url }}">Manage your Account</a>
-          {% else %}
-            <a href="{{ user.register_url }}">Register an Account</a> |
-            <a href="{{ user.login_url }}">Login</a>
-          {% endif %}
-        </p>
-      </div>
+          <p>
+            {% if user.is_authenticated %}
+              <a href="{{ user.manage_url }}">Manage your Account</a>
+            {% else %}
+              <a href="{{ user.register_url }}">Register an Account</a> |
+              <a href="{{ user.login_url }}">Login</a>
+            {% endif %}
+          </p>
+        </div>
+      {% endif %}
     </div>
 
   </div>
