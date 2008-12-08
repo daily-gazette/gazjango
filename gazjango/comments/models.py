@@ -64,7 +64,8 @@ class CommentsManager(models.Manager):
         Spam comments are excluded by default; `allow_spam` changes this
         behavior.
         """
-        spec &= models.Q(is_spam=False)
+        if not allow_spam:
+            spec &= models.Q(is_spam=False)
         comments = article.comments.filter(spec).select_related(depth=1)
         return [(c, c.vote_status(user=user, ip=ip)) for c in comments]
 
