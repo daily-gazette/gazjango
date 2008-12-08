@@ -119,10 +119,12 @@
       </div>
 
     </div>
-
+    
+    {% if story.comments_allowed or story.comments.count %}
     <div id="comments">
       {% include "stories/comments.html" %}
     </div>
+    {% endif %}
 
     {% if story.comments_allowed %}
       <div id="submitComments">
