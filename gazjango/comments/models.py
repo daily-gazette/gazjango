@@ -52,16 +52,19 @@ class CommentsManager(models.Manager):
         comment.save()
         return comment
     
-    def for_article(self, article, user, ip, spec=models.Q(is_spam=False)):
+    def for_article(self, article, user, ip, allow_spam=False, spec=models.Q()):
         """
         Returns `article`s comments, in the format used by the comments
         template: [(comment, status)], where `status` is 1 if the viewer
         has voted that comment up, 0 if he hasn't voted on it, and -1 if
         he's voted it down.
         
-        The comments can optionally be filtered by `spec`, which defaults
-        to excluding comments marked as spam.
+        The comments can optionally be filtered by `spec`.
+        
+        Spam comments are excluded by default; `allow_spam` changes this
+        behavior.
         """
+        spec &= models.Q(is_spam=False)
         comments = article.comments.filter(spec).select_related(depth=1)
         return [(c, c.vote_status(user=user, ip=ip)) for c in comments]
 
