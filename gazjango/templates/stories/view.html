@@ -124,13 +124,12 @@
       {% include "stories/comments.html" %}
     </div>
 
-    <div id="submitComments">
-      <div id="commentForm">
-        <h4 name="submitComment" style="display: none;">Submit a Comment</h4>
-        {% include "stories/comment_form.html" %}
-      </div>
-      
-      {% if story.comments_allowed %}
+    {% if story.comments_allowed %}
+      <div id="submitComments">
+        <div id="commentForm">
+          <h4 name="submitComment" style="display: none;">Submit a Comment</h4>
+          {% include "stories/comment_form.html" %}
+        </div>
         <div id="commentRules">
           <p>Comments posted anonymously must be approved by Gazette staff before they are published.</p>
 
@@ -157,9 +156,8 @@
             {% endif %}
           </p>
         </div>
-      {% endif %}
-    </div>
-
+      </div>
+    {% endif %}
   </div>
 
 {% endblock content %}
