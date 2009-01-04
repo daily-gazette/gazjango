@@ -1,152 +1,112 @@
 {% load extras %}
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
-  "http://www.w3.org/TR/html4/loose.dtd">
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head profile="http://gmpg.org/xfn/11">
 
-<head>
-  <title>
-    The Daily Gazette :: Staff Section
-  </title>
+	<title>The Daily Gazette :: Staff Center</title>
 
-  <link rel="stylesheet" href="{% static css page/staff.css %}" type="text/css" media="screen, projection, print" />
-  <link rel="icon" type="image/x-icon" href="/static/images/favicon.ico" />
-
-  <link rel="alternate" type="application/rss+xml" title="Homepage" href="/feeds/main" />
-  <link rel="alternate" type="application/rss+xml" title="Latest Stories" href="/feeds/latest" />
-
-    {% jQuery %}
-    <script type="text/javascript" src="{% static js comments.js %}"></script>
-
-
-</head>
+    <link rel="stylesheet" href="{% static css page/staff-style.css %}" type="text/css" media="screen, projection, print" />
+    </head>
 
 <body>
-    <div id="container"><div id="container2">
-        <div id="main">
-            <div id="header">
-                <center><h1><a href="/"><img src="{% static images staff/header.png %}" alt="The Daily Gazette" /></a></h1></center>
-            </div>
+<div id="wrap">
+    <div id="container">
+        <div id="header">
+        	<div id="caption">
+        		<h1 id="title">The Gazette Staff Center</a></h1>
+        		<div id="tagline">Making it easy to manage, edit, and write</div>
+        	</div>
+        	<!-- navigation START -->
+        	<div id="navigation">
+        		<ul id="menus">
+        			<li class="current_page_item"><a class="home" title="Home" href="index.html">Home</a></li>
+        			<li><a href="profile.html">Your Profile</a></li>
+        			<li><a class="lastmenu" href="javascript:void(0);"></a></li>
+        		</ul>
+        		<div class="fixed"></div>
+        	</div>
+        	<!-- navigation END -->
+        	<div class="fixed"></div>
+        </div>
+        <!-- content START -->
+        <div id="content">
+        	<!-- main START -->
+        	<div id="main">
+        		<div class="post">
+        			<h2>Your Stories</h2>
+        			<div class="content">
+        			    <ul>
+        			        {% for concept in personal %}
+        			        <li><strong>Story:</strong> {{ concept.name }}</a><br />
+        			            <strong>Due:</strong> {{ concept.due }}
+        			            {% if concept.notes_excerpt %}<br /><strong>Notes: </strong>{{ concept.notes }}{% endif %}</li>
+        			        {% endfor %}
+        			    </ul>
+        				<div class="fixed"></div>
+        			</div>
+        		</div>
+        		
+        		<div class="post">
+        			<h2>Unclaimed Stories</h2>
+        			<div class="content">
+        			    <ul>
+        			        {% for concept in unclaimed %}
+        			            {% ifchanged %}
+        			                </li>
+        			                <li><strong>{{ concept.due }}</strong><br />
+        			            {% endifchanged %}
+        			            <a href="http://daily.swarthmore.edu/admin/articles/storyconcept/{{ concept.pk }}/">{{ concept.name }}</a><br />
+        			            {% if concept.notes_excerpt %}<br /><strong>Notes: </strong>{{ concept }}{% endif %}<br />
+        			        {% endfor %}
+        			    </ul>
+        				<div class="fixed"></div>
+        			</div>
+        		</div>
+        		
+        	</div>
+        	<!-- main END -->
+            <!-- sidebar START -->
+            <div id="sidebar">
+            <!-- sidebar north START -->
+            <div id="northsidebar" class="sidebar">
+                <div class="widget widget_categories">
+                    <h3>Important Links</h3>
+                    <ul>
+                        <li>
+                    </ul>
+                </div>
         
-            <div id="yourStories">
-                
-                <div class="personalConcept">
-                    <h2>Your Stories</h2>
-                </div>
-                
-                {% for concept in personal %}
-                
-                    <div class="personalConcept">
-                        <div class="name"><a href="http://daily.swarthmore.edu/admin/articles/storyconcept/{{ concept.pk }}/">{{ concept.name }}</a></div>
-                        <div class="dueDate">{{ concept.due }}
-                        &nbsp;&nbsp;<a href="#" class='showLink'>[ See More ]</a></div>
-                        {% if concept.notes_excerpt %}
-                            <div class="collapsed">
-                                <p>{{ concept.notes_excerpt }}</p>
-                            </div>
-                        {% endif %}
-                    </div>
-                
-                {% endfor %}
-            </div>
-            <div id="linkBox">
-                <div id="bigLink">
-                    <a href="">Add Article</a>
-                </div>
-                <div class="smallLink">
-                    <a href="">Add Image</a>
-                </div>
-                <div class="smallLink">
-                    <a href="">Add Poll</a>
-                </div>
-                <div class="smallLink">
-                    <a href="">Add Photo Spread</a>
-                </div>
-                <div class="smallLink">
-                    <a href="">Add Weather Joke</a>
-                </div>
-                    
-                    
-                <div id="unclaimedStories">
-                    <div class="unclaimedHeader">
-                        <h3>Unclaimed Stories</h3>
-                    </div>
-                    {% for concept in unclaimed %}
-                        {% ifchanged %}
-                            <div class="unclaimedDate">
-                                {{ concept.due }}
-                            </div>
-                        {% endifchanged %}
-                        <div class="unclaimedStory">
-                            <p><a href="http://daily.swarthmore.edu/admin/articles/storyconcept/{{ concept.pk }}/">{{ concept.name }}</a> — <a href="#" class='showLink'>[ See More ]</a></p>
-                            <div class="collapsed">
-                                <p>{% if concept.notes_excerpt %}{{ concept.notes_excerpt }} --{% endif %} <a href="http://daily.swarthmore.edu/admin/articles/storyconcept/{{ concept.pk }}/">Claim this story</a>
-                            </div>
-                        </div>
-                        {% endfor %}
-
-                        <div class="unclaimedHeader">
-                            <h3>Unpublished Stories</h3>
-                        </div>
+                <div class="widget widget_categories">
+                    <h3>Unpublished Stories</h3>
+                    <ul>
                         {% for story in unpublished_stories %}
-                            <div class="unclaimedStory">
-                                <p><a href="http://daily.swarthmore.edu/admin/articles/article/{{ story.pk }}/">{{ story.headline }}</a></p>
-                                <div class="collapsed">
-                                    <p>Current Status: {{ story.get_status_display }}</p>
-                                    <p>Author: {{ story.authors_in_order|join_authors:"l" }}
-                                </div>
-                            </div>
+                        <li><a href="http://daily.swarthmore.edu/admin/articles/article/{{ story.pk }}/">{{ story.headline }}</a> (<em>Status: {{ story.get_status_display }}</em> )</li>
                         {% endfor %}
-                            
-                            
-                </div>        
+                    </ul>        
                     
-                    
-                    
-            </div>  
-            
-            <div id="profileBox">
-                    <div class="picture">
-                         {% if author.picture %}
-                            <img src="{{ author.picture.get_absolute_url }}" /> [<a href="http://daily.swarthmore.edu/admin/accounts/userprofile/{{ author.pk }}/">Edit your photo</a>]
-                        {% else %}
-                            [<a href="http://daily.swarthmore.edu/admin/accounts/userprofile/{{ author.pk }}/">Add a picture of yourself</a>]
-                        {% endif %}
-                    </div>
-                <p><strong>Position:</strong> {{ author.position.name }}</p>
-                <ul>
-                    {% for holding in author.holding_set.reverse %}
-                    <li>{{ holding.date_start.year }}-{{ holding.date_end.year|default:"Present" }}: {{ holding.position.name }}</li>
-                    {% endfor %}
-                </ul>
-                {% if author.bio %}
-                    <p><strong>Biography:</strong> {{ author.bio|safe }}  [<a href="http://daily.swarthmore.edu/admin/accounts/userprofile/{{ author.pk }}/">Edit Your Profile</a>]</p>
-                {% else %}
-                    <p>[<a href="http://daily.swarthmore.edu/admin/accounts/userprofile/{{ author.pk }}/">Create a Profile</a>]</p>
-                {% endif %}
-        
-                {% if author.awards %}
-                    <p><strong>Awards:</strong> {{ author.awards|safe }} </p>
-                {% endif %}
-                    
-            </div>  
-        
-            
-        </div>
-        
-        <div id="sideBar">
-            <h3>Story List</h3>
-            {% for concept in claimed %}
-                {% ifchanged %}
-                    <div class="claimedDate">
-                        {{ concept.due }}
-                    </div>
-                {% endifchanged %}
-                <div class="claimedStory">
-                    <p><a href="http://daily.swarthmore.edu/admin/articles/storyconcept/{{ concept.pk }}/">{{ concept.name }}</a>{% if concept.user_names %} — {{ concept.user_names }}{% endif %}{% if concept.notes_excerpt %} — {{ concept.notes_excerpt }}{% endif %}</p>
                 </div>
-            {% endfor %}
+            </div>
+            <!-- sidebar north END -->
+            </div>
+            <!-- sidebar END -->
+        	<div class="fixed"></div>
         </div>
-    </div></div>
-</body>
+        <!-- content END -->
+        <!-- footer START -->
+        <div id="footer">
+        	<a id="gotop" href="#" onclick="MGJS.goTop();return false;">Top</a>
+        	<div id="copyright">
+        		Copyright &copy; 2009-2011 The Daily Gazette
+        	</div>
+        	<div id="themeinfo">
+        		&nbsp;
+        	</div>
+        </div>
+        <!-- footer END -->
+    </div>
+    <!-- container END -->
+</div>
+<!-- wrap END -->
 
+</body>
 </html>
