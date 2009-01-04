@@ -49,12 +49,13 @@
         		<div class="post">
         			<h2>Unclaimed Stories</h2>
         			<div class="content">
-        			    <ul>
-        			        {% for concept in unclaimed %}
-        			            {% ifchanged %}
-        			                </li>
-        			                <li><strong>{{ concept.due }}</strong><br />{% endifchanged %}<a href="http://daily.swarthmore.edu/admin/articles/storyconcept/{{ concept.pk }}/">{{ concept.name }}</a><br />{% if concept.notes_excerpt %}<br /><strong>Notes: </strong>{{ concept }}{% endif %}<br />{% endfor %}
-        			    </ul>
+    			        {% for concept in unclaimed %}
+    			            {% ifchanged %}
+    			               <p><strong>{{ concept.due }}</strong><br />
+    			            {% endifchanged %}
+    			            <a href="http://daily.swarthmore.edu/admin/articles/storyconcept/{{ concept.pk }}/">{{ concept.name }}</a><br />
+    			            {% if concept.notes_excerpt %}<br /><strong>Notes: </strong>{{ concept }}{% endif %}<br />
+    			        {% endfor %}
         				<div class="fixed"></div>
         			</div>
         		</div>
