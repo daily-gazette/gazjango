@@ -54,7 +54,7 @@
     			               <p><strong>{{ concept.due }}</strong><br />
     			            {% endifchanged %}
     			            <a href="http://daily.swarthmore.edu/admin/articles/storyconcept/{{ concept.pk }}/">{{ concept.name }}</a><br />
-    			            {% if concept.notes_excerpt %}<br /><strong>Notes: </strong>{{ concept }}{% endif %}<br />
+    			            {% if concept.notes_excerpt %}<strong>Notes: </strong>{{ concept }}<br />{% endif %}
     			        {% endfor %}
         				<div class="fixed"></div>
         			</div>
