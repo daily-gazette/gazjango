@@ -53,8 +53,7 @@
         			        {% for concept in unclaimed %}
         			            {% ifchanged %}
         			                </li>
-        			                <li><strong>{{ concept.due }}</strong><br /><a href="http://daily.swarthmore.edu/admin/articles/storyconcept/{{ concept.pk }}/">{{ concept.name }}</a><br />{% if concept.notes_excerpt %}<br /><strong>Notes: </strong>{{ concept }}{% endif %}<br />
-        			        {% endfor %}
+        			                <li><strong>{{ concept.due }}</strong><br />{% endifchanged %}<a href="http://daily.swarthmore.edu/admin/articles/storyconcept/{{ concept.pk }}/">{{ concept.name }}</a><br />{% if concept.notes_excerpt %}<br /><strong>Notes: </strong>{{ concept }}{% endif %}<br />{% endfor %}
         			    </ul>
         				<div class="fixed"></div>
         			</div>
