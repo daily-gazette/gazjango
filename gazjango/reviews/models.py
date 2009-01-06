@@ -4,6 +4,7 @@ from django.contrib.localflavor.us.models import PhoneNumberField
 from django.db.models.signals             import pre_save
 from gazjango.accounts.models          import UserProfile
 from gazjango.articles.models.stories  import Article
+from gazjango.misc.helpers             import avg
 from gazjango.misc.templatetags.extras import join_authors
 import datetime
 import urllib
@@ -51,16 +52,14 @@ class Establishment(models.Model):
        request = "http://maps.google.com/maps/geo?q=%s&output=csv&key=%s" % (location, settings.GMAPS_API_KEY)
        data = urllib2.urlopen(request).read()
        response_code, accuracy, latitude, longitude = data.split(',')
-       # latitude = 10.000
-       # longitude = 10.000
        self.latitude = latitude
        self.longitude = longitude
         
     def avg_cost(self):
-        return sum(self.reviews.filter(cost=str(i)).count() for i in range(1, 6)) / self.reviews.count()
-        
+        return avg(self.reviews.values_list('cost', flat=True))
+    
     def avg_rating(self):
-        return sum(self.reviews.filter(rating=str(i)).count() for i in range(1, 6)) / self.reviews.count()
+        return avg(self.reviews.values_list('rating', flat=True))
     
     def __unicode__(self):
         return self.name

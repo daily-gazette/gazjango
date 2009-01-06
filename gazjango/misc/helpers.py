@@ -34,6 +34,13 @@ def flatten(l, ltypes=(list, tuple)):
     return l
 
 
+def avg(iterable):
+    "Returns the average of an iterable of numerics, or None if not defined."
+    _c = sum(complex(val, 1) for val in iterable)
+    total = _c.real; count = _c.imag
+    return total / count if count > 0 else None
+
+
 def get_static_path(kind, name):
     return "/static/%s/%s" % (kind, name)
 
