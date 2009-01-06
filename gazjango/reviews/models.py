@@ -1,6 +1,7 @@
-from django.db                         import models
-from django.contrib.sites.models       import Site
-from django.db.models.signals          import pre_save
+from django.db                            import models
+from django.contrib.sites.models          import Site
+from django.contrib.localflavor.us.models import PhoneNumberField
+from django.db.models.signals             import pre_save
 from gazjango.accounts.models          import UserProfile
 from gazjango.articles.models.stories  import Article
 from gazjango.misc.templatetags.extras import join_authors
@@ -37,7 +38,7 @@ class Establishment(models.Model):
     )
     access = models.CharField(max_length=1,choices=ACCESS_CHOICES,blank=False)
     
-    phone = models.CharField(max_length=100, blank=True)
+    phone = PhoneNumberField(blank=True)
     link = models.CharField(max_length=100, blank=True)
     
     other_info = models.TextField(blank=True)
@@ -49,11 +50,11 @@ class Establishment(models.Model):
        location = urllib.quote_plus(",".join([self.street_address, self.city, self.zip_code]))
        request = "http://maps.google.com/maps/geo?q=%s&output=csv&key=%s" % (location, settings.GMAPS_API_KEY)
        data = urllib2.urlopen(request).read()
-       response_code, accuracy, latitude_, longitude_ = data.split(',')
-       # latitude_ = 10.000
-       # longitude_ = 10.000
-       self.latitude = latitude_
-       self.longitude = longitude_
+       response_code, accuracy, latitude, longitude = data.split(',')
+       # latitude = 10.000
+       # longitude = 10.000
+       self.latitude = latitude
+       self.longitude = longitude
         
     def avg_cost(self):
         return sum(self.reviews.filter(cost=str(i)).count() for i in range(1, 6)) / self.reviews.count()
@@ -66,8 +67,6 @@ class Establishment(models.Model):
 
 def set_lat_long(sender, instance, **kwargs):
         instance.set_lat_long()
-        instance.save()
-        
 models.signals.pre_save.connect(set_lat_long, sender=Establishment)
         
 class Review(models.Model):
