@@ -64,10 +64,10 @@ class Establishment(models.Model):
        self.longitude = longitude
         
     def avg_cost(self):
-        return avg(self.reviews.values_list('cost', flat=True))
+        return avg(int(v) for v in self.reviews.values_list('cost', flat=True))
     
     def avg_rating(self):
-        return avg(self.reviews.values_list('rating', flat=True))
+        return avg(int(v) for v in self.reviews.values_list('rating', flat=True))
     
     def __unicode__(self):
         return self.name
