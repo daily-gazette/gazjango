@@ -17,7 +17,7 @@ format_from_db = lambda type, val: OPTION_TYPES[type][1](val)
 format_for_db  = lambda type, val: OPTION_TYPES[type][2](val)
 
 class Option(models.Model):
-    name = models.CharField(max_length=100, unique=True)
+    name = models.CharField(max_length=100, unique=True, db_index=True)
     type = models.CharField(max_length=1, choices=OPTION_CHOICES)
     _value = models.CharField(blank=True, max_length=100)
     
