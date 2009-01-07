@@ -2,7 +2,7 @@ import unittest
 from django.contrib.auth.models import User, AnonymousUser
 from gazjango.articles.models   import Article, Section, Format
 from gazjango.accounts.models   import UserProfile, UserKind
-from gazjango.polls.models      import Poll, Option
+from gazjango.polls.models      import Poll, PollOption
 from datetime                   import datetime, timedelta
 
 class PollTestCase(unittest.TestCase):
@@ -35,12 +35,12 @@ class PollTestCase(unittest.TestCase):
             time_stop  = datetime.now() + timedelta(days=1))
         p.articles.add(self.boring_article)
         self.options = {
-            'yes': Option.objects.create(name="yes", poll=p),
-            'no':  Option.objects.create(name="no",  poll=p)
+            'yes': PollOption.objects.create(name="yes", poll=p),
+            'no':  PollOption.objects.create(name="no",  poll=p)
         }
     
     def tearDown(self):
-        for m in (User, UserProfile, UserKind, Section, Article, Format, Poll, Option):
+        for m in (User, UserProfile, UserKind, Section, Article, Format, Poll, PollOption):
             m.objects.all().delete()
         
     

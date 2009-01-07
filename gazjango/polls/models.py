@@ -75,7 +75,7 @@ class Poll(models.Model):
         return self.article.get_absolute_url() + '#poll-' + self.pk
     
 
-class Option(models.Model):
+class PollOption(models.Model):
     """An option in a poll."""
     poll = models.ForeignKey(Poll, related_name="options")
     name = models.CharField(max_length=100)
@@ -96,7 +96,7 @@ class Option(models.Model):
 
 class PollVote(models.Model):
     poll = models.ForeignKey(Poll, related_name="votes")
-    option = models.ForeignKey(Option, related_name="votes")
+    option = models.ForeignKey(PollOption, related_name="votes")
     
     user = models.ForeignKey(UserProfile, null=True, related_name="votes")
     ip   = models.IPAddressField(null=True, blank=True)

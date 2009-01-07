@@ -1,13 +1,13 @@
 from django.contrib import admin
-from gazjango.polls.models import Poll, Option
+from gazjango.polls.models import Poll, PollOption
 
-class OptionAdmin(admin.ModelAdmin):
+class PollOptionAdmin(admin.ModelAdmin):
     pass
-admin.site.register(Option, OptionAdmin)
+admin.site.register(PollOption, PollOptionAdmin)
 
-class OptionInline(admin.StackedInline):
-    model = Option
+class PollOptionInline(admin.StackedInline):
+    model = PollOption
 
 class PollAdmin(admin.ModelAdmin):
-    inlines = [OptionInline]
+    inlines = [PollOptionInline]
 admin.site.register(Poll, PollAdmin)
