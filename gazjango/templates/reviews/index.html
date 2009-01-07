@@ -78,52 +78,53 @@
 
 {% block content %}
 <div id="reviews">
-    <h2>A Community Guide</h2>
-    <div id="topBlock">
-        <div id="sideBar">
+  <h2>A Community Guide</h2>
+  <div id="topBlock">
+    <div id="sideBar">
             
-        </div>
-        <div id="mapBlock">
-            <div id="map" class="jmap"></div>
-        </div>
     </div>
-    <div id="listings">
-        <table id="review-listings" cellpadding="0" cellspacing="0" border="0" class="sortable-onload-5-6r rowstyle-alt colstyle-alt no-arrow">
-            <caption>Reviews from the Swarthmore Area</caption>
-            <thead>
-              <tr>
-                <th class="sortable">Type</th>
-                <th class="sortable">Name</th>
-                <th class="sortable">Rating</th>
-                <th class="sortable">Cost</th>
-                <th class="sortable">City</th>
-                <th class="sortable">Access</th>
-                <th class="sortable">Tags</th>
-                <th class="sortable">Reviews</th>
-                <th>Notes</th>
-              </tr>
-            </thead>
-            <tbody>
-              {% for establishment in establishments %}
-                <tr>
-                  <td>{{ establishment.get_establishment_type_display }}</td>
-                  <td><a href="{{ establishment.get_absolute_url }}">{{ establishment.name }}</a></td>
-                  <td>{{ establishment.avg_rating }}</td>
-                  <td>{{ establishment.avg_cost }}</td>
-                  <td>{{ establishment.city }}</td>
-                  <td>{{ establishment.access }}</td>
-                  <td>Tags go here.</td>
-                  <td>
-                    {% for review in establishment.reviews.all %}
-                      <a href="{{ establishment.get_absolute_url }}#{{ review.slug }}">{{ review.reviewer }}</a><br />
-                    {% endfor %}
-                  </td>
-                  <td>{{ establishment.other_info }}</td>
-                </tr>
-              {% endfor %}
-            </tbody>
-        </table>
+    <div id="mapBlock">
+      <div id="map" class="jmap"></div>
     </div>
-</div>
+  </div>
 
+  <div id="listings">
+    <table id="review-listings" cellpadding="0" cellspacing="0" border="0" class="sortable-onload-5-6r rowstyle-alt colstyle-alt no-arrow">
+      <caption>Reviews from the Swarthmore Area</caption>
+      <thead>
+        <tr>
+          <th class="sortable">Type</th>
+          <th class="sortable">Name</th>
+          <th class="sortable">Rating</th>
+          <th class="sortable">Cost</th>
+          <th class="sortable">City</th>
+          <th class="sortable">Access</th>
+          <th class="sortable">Tags</th>
+          <th class="sortable">Reviews</th>
+          <th>Notes</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for establishment in establishments %}
+          <tr>
+            <td>{{ establishment.get_establishment_type_display }}</td>
+            <td><a href="{{ establishment.get_absolute_url }}">{{ establishment.name }}</a></td>
+            <td>{{ establishment.avg_rating }}</td>
+            <td>{{ establishment.avg_cost }}</td>
+            <td>{{ establishment.city }}</td>
+            <td>{{ establishment.get_access_display }}</td>
+            <td>Tags go here.</td>
+            <td>
+              {% for review in establishment.reviews.all %}
+                <a href="{{ establishment.get_absolute_url }}#{{ review.slug }}">{{ review.reviewer }}</a>
+                <br />
+              {% endfor %}
+            </td>
+            <td>{{ establishment.other_info }}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
 {% endblock content %}

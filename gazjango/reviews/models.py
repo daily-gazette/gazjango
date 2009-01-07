@@ -16,7 +16,7 @@ class Establishment(models.Model):
     slug = models.SlugField()
 
     "Basic Information"
-    name = models.CharField(max_length=100, blank=True)
+    name = models.CharField(max_length=100)
     TYPE_CHOICES = (
         ('r',"Restaurant"),
         ('t',"Theatre"),
@@ -31,16 +31,17 @@ class Establishment(models.Model):
     street_address = models.CharField(max_length=100, blank=True)
     city = models.CharField(max_length=100, blank=True)
     zip_code = models.CharField(max_length=100, blank=True)
+    # TODO: make this use localflavor.us.forms.USZipCodeField
     
     ACCESS_CHOICES = (
         ('w',"Walking"),
+        ('p',"Public Transportation"),
         ('d',"Driving"),
-        ('p',"Public Transportation")
     )
     access = models.CharField(max_length=1,choices=ACCESS_CHOICES,blank=False)
     
     phone = PhoneNumberField(blank=True)
-    link = models.CharField(max_length=100, blank=True)
+    link = models.URLField(blank=True)
     
     other_info = models.TextField(blank=True)
 
