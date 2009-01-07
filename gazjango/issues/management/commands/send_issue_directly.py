@@ -5,6 +5,7 @@ from django.http                         import Http404
 
 from gazjango.subscriptions.models import Subscriber
 from gazjango.issues.views         import latest_issue
+from gazjango.options.helpers      import is_publishing
 
 import datetime
 
@@ -12,6 +13,9 @@ class Command(SendingOutCommand):
     subscriber_base = Subscriber.issues
     
     def set_content(self, dummy_request):
+        if not is_publishing():
+            raise CommandError('Not in publishing mode.')
+        
         try:
             html_response = latest_issue(dummy_request)
             if html_response.status_code == 404:
