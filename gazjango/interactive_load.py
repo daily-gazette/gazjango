@@ -7,10 +7,14 @@ from django.http import *
 
 import settings
 for app in settings.INSTALLED_APPS:
-    exec('import %s' % app)
+    if app.startswith('gazjango.'):
+        exec('from gazjango import %s' % app[len('gazjango.'):])
+    else:
+        exec('import %s' % app)
     try:
         exec('from %s.models import *' % app)
     except ImportError:
         pass
 from gazjango.misc.helpers import *
 from gazjango.misc.view_helpers import *
+from gazjango.options.helpers import *
