@@ -6,6 +6,8 @@ from gazjango.accounts.models          import UserProfile
 from gazjango.articles.models.stories  import Article
 from gazjango.misc.helpers             import avg
 from gazjango.misc.templatetags.extras import join_authors
+from gazjango import tagging
+import tagging.fields
 import datetime
 import urllib
 import urllib2
@@ -33,6 +35,8 @@ class Establishment(models.Model):
     zip_code = models.CharField(max_length=100, blank=True)
     # TODO: make this use localflavor.us.forms.USZipCodeField
     
+    tags = tagging.fields.TagField()
+    
     ACCESS_CHOICES = (
         ('w',"Walking"),
         ('p',"Public Transportation"),
@@ -45,10 +49,13 @@ class Establishment(models.Model):
     
     other_info = models.TextField(blank=True)
 
+    auto_geocode = models.BooleanField(default=True, blank=True,
+        help_text="Automatically derive the latitude/longitude from the address above. "
+                  "Note that this overrides any manual setting.")
     latitude = models.CharField(max_length=100, blank=True)
     longitude = models.CharField(max_length=100, blank=True)
-
-    def set_lat_long(self):
+    
+    def geocode(self):
        location = urllib.quote_plus(",".join([self.street_address, self.city, self.zip_code]))
        request = "http://maps.google.com/maps/geo?q=%s&output=csv&key=%s" % (location, settings.GMAPS_API_KEY)
        data = urllib2.urlopen(request).read()
@@ -64,13 +71,16 @@ class Establishment(models.Model):
     
     def __unicode__(self):
         return self.name
+tagging.register(Establishment)
 
-def set_lat_long(sender, instance, **kwargs):
-        instance.set_lat_long()
-models.signals.pre_save.connect(set_lat_long, sender=Establishment)
-        
+def geocode(sender, instance, **kwargs):
+    if instance.auto_geocode:
+        instance.geocode()
+models.signals.pre_save.connect(geocode, sender=Establishment)
+
+
 class Review(models.Model):
-    "represents the review of an establishment"
+    "Represents the review of an establishment."
     slug = models.SlugField()
     
     establishment = models.ForeignKey(Establishment,related_name="reviews")
@@ -92,10 +102,11 @@ class Review(models.Model):
     )
     rating = models.CharField(max_length=1,choices=RATING_CHOICES,blank=False)
     
-    reviewer = models.ManyToManyField(UserProfile, blank=True, related_name="reviews")
+    reviewer = models.ForeignKey(UserProfile, related_name="reviews")
     
     review_summary = models.TextField(blank=True) 
     review_text = models.TextField(blank=True)   
 
     def __unicode__(self):
         return self.slug
+    

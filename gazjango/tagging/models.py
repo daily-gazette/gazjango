@@ -467,7 +467,7 @@ class Tag(models.Model):
     # custom additions
     long_name = models.CharField(blank=True, max_length=80)
     expired = models.BooleanField(default=False)
-    group = models.ForeignKey(TagGroup, null=True, related_name="tags")
+    group = models.ForeignKey(TagGroup, blank=True, null=True, related_name="tags")
     
     def longest_name(self):
         return self.long_name or self.name

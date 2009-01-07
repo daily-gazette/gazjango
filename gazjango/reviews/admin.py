@@ -3,18 +3,17 @@ from gazjango.reviews.models import Establishment, Review
 
 class EstablishmentAdmin(admin.ModelAdmin):
     prepopulated_fields = { 'slug': ('name',) }
-    exclude = ('latitude', 'longitude')
     
     fieldsets = (
         (None, {
-            'fields': ('name', 'establishment_type', 'access', 'phone', 'link')
+            'fields': ('name', 'establishment_type', 'access', 'phone', 'link', 'tags')
         }),
         ('Address', {
             'fields': ('street_address', 'city', 'zip_code')
         }),
         ('Advanced', {
             'classes': ('collapse',),
-            'fields': ('slug', 'other_info')
+            'fields': ('slug', 'auto_geocode', 'latitude', 'longitude', 'other_info')
         }),
     )
     
