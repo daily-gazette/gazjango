@@ -1,5 +1,6 @@
 from gazjango.issues.management.commands import SendingOutCommand
 from django.core.management.base         import CommandError
+from django.http                         import Http404
 from gazjango.issues.views         import rsd_now
 from gazjango.subscriptions.models import Subscriber
 import datetime
