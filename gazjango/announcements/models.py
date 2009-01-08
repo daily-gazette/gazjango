@@ -122,6 +122,8 @@ class Announcement(models.Model):
     def get_absolute_url(self):
         return ('announcement', [str(self.date_start.year), self.slug])
     
+    class Meta:
+        get_latest_by = 'date_start'
 
 
 def set_default_slug(sender, instance, **kwords):
