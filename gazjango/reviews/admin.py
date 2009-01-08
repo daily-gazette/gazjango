@@ -6,7 +6,7 @@ class EstablishmentAdmin(admin.ModelAdmin):
     
     fieldsets = (
         (None, {
-            'fields': ('name', 'establishment_type', 'access', 'phone', 'link')
+            'fields': ('name', 'establishment_type', 'access', 'phone', 'link', 'tags')
         }),
         ('Address', {
             'fields': ('street_address', 'city', 'zip_code')
@@ -16,9 +16,10 @@ class EstablishmentAdmin(admin.ModelAdmin):
             'fields': ('slug', 'auto_geocode', 'latitude', 'longitude', 'other_info')
         }),
     )
+    filter_horizontal = ('tags',)
     
     list_display = ('name', 'establishment_type')
-    list_filter = ('name', 'establishment_type')
+    list_filter = ('establishment_type',)
     
 admin.site.register(Establishment, EstablishmentAdmin)
 

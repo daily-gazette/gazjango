@@ -113,7 +113,7 @@
             <td>{{ establishment.avg_cost }}</td>
             <td>{{ establishment.city }}</td>
             <td>{{ establishment.get_access_display }}</td>
-            <td>Tags go here.</td>
+            <td>{{ establishment.tag_names }}</td>
             <td>
               {% for review in establishment.reviews.all %}
                 <a href="{{ establishment.get_absolute_url }}#{{ review.slug }}">{{ review.reviewer }}</a>
