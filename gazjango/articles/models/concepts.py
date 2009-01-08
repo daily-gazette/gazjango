@@ -1,8 +1,9 @@
-from django.db import models
-from gazjango.accounts.models         import UserProfile
-from gazjango.articles.models.stories import Article
-from datetime import date
+from django.db                         import models
+from gazjango.accounts.models          import UserProfile
+from gazjango.articles.models.stories  import Article
+from datetime                          import date
 from gazjango.misc.templatetags.extras import join_authors
+from gazjango.announcements.models     import Announcement
 
 
 class UnpublishedConceptsManager(models.Manager):

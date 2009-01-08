@@ -5,7 +5,7 @@
 
 	<title>The Daily Gazette :: Staff Center</title>
 
-    <link rel="stylesheet" href="{% static css page/staff-style.css %}" type="text/css" media="screen, projection, print" />
+    <link rel="stylesheet" href="{% static css page/staff.css %}" type="text/css" media="screen, projection, print" />
     </head>
 
 <body>
@@ -19,9 +19,10 @@
         	<!-- navigation START -->
         	<div id="navigation">
         		<ul id="menus">
-        			<li class="current_page_item"><a class="home" title="Home" href="index.html">Home</a></li>
-        			<li><a href="profile.html">Your Profile</a></li>
-        			<li><a class="lastmenu" href="javascript:void(0);"></a></li>
+        		    <li><a href="profile.html">Dashboard</a></li>
+        			<li><a href="profile.html">Edit Profile</a></li>
+        			<li><a href="profile.html">Write a Story</a></li>
+        			<li><a href="profile.html">Add Media</a></li>
         		</ul>
         		<div class="fixed"></div>
         	</div>
@@ -35,7 +36,7 @@
         	    <div class="post">
         			<h2>Announcements &amp; Minutes</h2>
         			<div class="content">
-        			    <p>The minutes should go here</p>
+        			    <p>{{ minutes.text|safe }}</p>
         				<div class="fixed"></div>
         			</div>
         		</div>
@@ -74,15 +75,10 @@
             <div id="sidebar">
             <!-- sidebar north START -->
             <div id="northsidebar" class="sidebar">
+                    
                 <div class="widget widget_categories">
-                    <h3>Important Links</h3>
-                    <ul>
-                        <li>
-                    </ul>
-                </div>
-        
-                <div class="widget widget_categories">
-                    <h3>Unpublished Stories</h3>
+                    <h2>Welcome {{ user.get_full_name }}!</h2>
+                    <h3>Claimed Stories</h3>
                     <ul>
                         {% for story in unpublished_stories %}
                         <li><a href="http://daily.swarthmore.edu/admin/articles/article/{{ story.pk }}/">{{ story.headline }}</a> (<em>Status: {{ story.get_status_display }}</em> )</li>
