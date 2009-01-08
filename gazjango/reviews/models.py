@@ -46,7 +46,7 @@ class Establishment(models.Model):
     
     phone = PhoneNumberField(blank=True)
     link = models.URLField(blank=True)
-    tags = models.ManyToManyField(Tag)
+    tags = models.ManyToManyField(Tag, blank=True)
     other_info = models.TextField(blank=True)
     
     auto_geocode = models.BooleanField(default=True, blank=True,
