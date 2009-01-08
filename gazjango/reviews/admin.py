@@ -6,7 +6,7 @@ class EstablishmentAdmin(admin.ModelAdmin):
     
     fieldsets = (
         (None, {
-            'fields': ('name', 'establishment_type', 'access', 'phone', 'link', 'tags')
+            'fields': ('name', 'establishment_type', 'access', 'phone', 'link')
         }),
         ('Address', {
             'fields': ('street_address', 'city', 'zip_code')

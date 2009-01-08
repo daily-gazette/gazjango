@@ -6,8 +6,6 @@ from gazjango.accounts.models          import UserProfile
 from gazjango.articles.models.stories  import Article
 from gazjango.misc.helpers             import avg
 from gazjango.misc.templatetags.extras import join_authors
-from gazjango import tagging
-import tagging.fields
 import datetime
 import urllib
 import urllib2
@@ -34,8 +32,6 @@ class Establishment(models.Model):
     city = models.CharField(max_length=100, blank=True)
     zip_code = models.CharField(max_length=100, blank=True)
     # TODO: make this use localflavor.us.forms.USZipCodeField
-    
-    tags = tagging.fields.TagField()
     
     ACCESS_CHOICES = (
         ('w',"Walking"),
@@ -71,7 +67,6 @@ class Establishment(models.Model):
     
     def __unicode__(self):
         return self.name
-tagging.register(Establishment)
 
 def geocode(sender, instance, **kwargs):
     if instance.auto_geocode:

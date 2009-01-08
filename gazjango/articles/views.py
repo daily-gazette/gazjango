@@ -20,7 +20,6 @@ from gazjango.comments.models      import PublicComment
 from gazjango.comments.forms       import CommentForm, make_comment_form
 from gazjango.issues.models        import Weather, WeatherJoke
 from gazjango.jobs.models          import JobListing
-from gazjango.tagging.models       import TagGroup, Tag
 
 from gazjango.scrapers.bico         import get_bico_news
 from gazjango.scrapers.tla          import get_tla_links
@@ -369,17 +368,6 @@ def subsection(request, section, subsection):
         
         rc = RequestContext(request, data)
         return render_to_response(template, context_instance=rc)
-
-
-@permission_required('accounts.can_access_admin')
-def admin_write_page1(request, template="custom-admin/write_page1.html"):
-    data = reporter_admin_data(get_user_profile(request))
-    data['sections' ] = Section.objects.all()
-    data['taggroups'] = TagGroup.objects.all()
-    data['loosetags'] = Tag.objects.filter(group=None)
-    
-    rc = RequestContext(request)
-    return render_to_response(template, data, context_instance=rc)
 
 
 def list_subsections(request, section):

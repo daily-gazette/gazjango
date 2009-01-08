@@ -24,8 +24,8 @@ class StoryFeed(Feed):
     def item_categories(self, item):
         sec = [item.section.name]
         sub = [item.subsection.name] if item.subsection else []
-        tags = [tag.name for tag in item.tags.all()]
-        return sec + sub + tags
+        # tags = [tag.name for tag in item.tags.all()]
+        return sec + sub # + tags
     
 
 class MainFeed(StoryFeed):
