@@ -51,12 +51,13 @@ urlpatterns += patterns('articles.views',
     (r'^%(year)s/%(month)s/%(day)s/%(slug)s/%(num)s/$'  % reps, 'article', {}, 'photospread'),
     (r'^%(year)s/%(month)s/%(day)s/%(slug)s/print/$'    % reps, 'article', {'print_view': True}, 'print'),
     (r'^%(year)s/%(month)s/%(day)s/%(slug)s/email/$'    % reps, 'email_article', {}, 'email'),
-    (r'^%(year)s/%(month)s/%(day)s/%(slug)s/comment/$'  % reps, 'post_comment'),
     
     (r'^staff/$', 'staff'),
 )
 
 urlpatterns += patterns('comments.views',
+    (r'^%(year)s/%(month)s/%(day)s/%(slug)s/comment/$'         % reps, 'post_comment'),
+    (r'^%(year)s/%(month)s/%(day)s/%(slug)s/comment/captcha/$' % reps, 'show_captcha'),
     (r'^%(year)s/%(month)s/%(day)s/%(slug)s/comments/(%(num)s/)?$'                         % reps, 'comments_for_article'),
     (r'^%(year)s/%(month)s/%(day)s/%(slug)s/show-comment/%(num)s/$'                        % reps, 'get_comment_text'),
     (r'^%(year)s/%(month)s/%(day)s/%(slug)s/vote-comment/%(num)s/(?P<val>up|down|clear)/$' % reps, 'vote_on_comment'),

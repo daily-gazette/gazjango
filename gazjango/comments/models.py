@@ -13,11 +13,23 @@ from gazjango.misc.helpers import is_from_swat
 from gazjango.misc import akismet
 from django.conf   import settings
 
+class CommentError(Exception):
+    pass
+
+class CommentIsSpam(CommentError):
+    def __init__(self, comment):
+        self.comment = comment
+    
+
 class CommentsManager(models.Manager):
     def new(self, check_spam=True, pre_approved=False, **data):
         """
         Makes a new comment, dealing with spam checking and pre-approval
         as necessary.
+        
+        If spam, raise a CommentIsSpam error, with the unsaved comment in its 
+        .comment attribute. This comment is all ready to go; it just needs to 
+        be saved, should it be decided that it's not actually spam.
         
         Comments from Swarthmore IPs or registered users are not spam-checked.
         
@@ -31,28 +43,28 @@ class CommentsManager(models.Manager):
         needs_moderation = user and not user.has_perm('comments.can_post_directly')
         from_swat = is_from_swat(user=comment.user, ip=comment.ip_address)
         
-        if not from_swat and not user:
-            comment.is_spam = check_spam and comment.check_with_akismet()
-        else:
-            comment.is_spam = False
-        
         if needs_moderation or (anon and not from_swat):
             comment.is_approved = pre_approved
         else:
             comment.is_approved = True
         
-        previous = PublicComment.objects.filter(subject_id=comment.subject.pk,
+        try:
+            prev = PublicComment.objects.filter(subject_id=comment.subject_id,
                                                 subject_type=comment.subject_type)
-        if previous.count() > 0:
-            comment.number = previous.order_by('-number')[0].number + 1
-        else:
+            comment.number = prev.order_by('-number')[0].number + 1
+        except IndexError:
             comment.number = 1
         
         comment.score = comment.starting_score()
+        
+        if check_spam and not from_swat and not user:
+            if comment.check_for_spam():
+                raise CommentIsSpam(comment)
+        
         comment.save()
         return comment
     
-    def for_article(self, article, user, ip, allow_spam=False, spec=models.Q()):
+    def for_article(self, article, user, ip, spec=models.Q()):
         """
         Returns `article`s comments, in the format used by the comments
         template: [(comment, status)], where `status` is 1 if the viewer
@@ -60,19 +72,14 @@ class CommentsManager(models.Manager):
         he's voted it down.
         
         The comments can optionally be filtered by `spec`.
-        
-        Spam comments are excluded by default; `allow_spam` changes this
-        behavior.
         """
-        if not allow_spam:
-            spec &= models.Q(is_spam=False)
         comments = article.comments.filter(spec).select_related(depth=1)
         return [(c, c.vote_status(user=user, ip=ip)) for c in comments]
 
 class VisibleCommentsManager(CommentsManager):
     def get_query_set(self):
         orig = super(VisibleCommentsManager, self).get_query_set()
-        return orig.filter(is_approved=True, is_spam=False, score__gt=0)
+        return orig.filter(is_approved=True, score__gt=0)
     
 
 class PublicComment(models.Model):
@@ -113,11 +120,10 @@ class PublicComment(models.Model):
     user_agent = models.CharField(max_length=300)
     
     is_approved = models.BooleanField(default=False)
-    is_spam     = models.BooleanField(default=False)
     score = models.IntegerField(default=0, null=True)
     
     def is_visible(self):
-        return self.is_approved and not self.is_spam and self.score > 0
+        return self.is_approved and self.score > 0
     
     objects = CommentsManager()
     visible = VisibleCommentsManager()
@@ -128,7 +134,7 @@ class PublicComment(models.Model):
         if akismet_api.verify_key():
             akismet_data = {
                 'comment_type': 'comment',
-                'comment_author': self.name or self.user.name,
+                'comment_author': self.display_name,
                 'comment_author_email': self.user.email if self.user else self.email,
                 'permalink': url[:-1] + self.get_absolute_url(),
                 'user_ip': self.ip_address,
@@ -139,21 +145,18 @@ class PublicComment(models.Model):
         else:
             raise akismet.APIKeyError("Invalid Akismet API key.")
     
-    def check_with_akismet(self):
+    def check_for_spam(self):
         "Checks whether the comment is spam."
         return self._akismet_framework(akismet.Akismet.comment_check)
     
     def mark_as_spam(self):
-        "Marks a comment which Akismet said was good as spam."
+        "Marks a comment which Akismet said was good as spam, then delete it."
         self._akismet_framework(akismet.Akismet.submit_spam)
-        self.is_spam = True
-        self.save()
+        self.delete()
     
     def mark_as_ham(self):
         "Marks a comment which Akismet said was spam as good."
         self._akismet_framework(akismet.Akismet.submit_ham)
-        self.is_spam = False
-        self.save()
     
     def starting_score(self):
         from_swat = is_from_swat(user=self.user, ip=self.ip_address)

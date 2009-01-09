@@ -113,6 +113,10 @@ function newComments(speed) {
 }
 
 
+function strStartsWith(start, str) {
+    return str.substr(0, start.length) == start;
+}
+
 function submitComment() {
     data = {};
     $('#commentForm :input').each(function() {
@@ -124,6 +128,8 @@ function submitComment() {
            if (resp == 'success') {
                newComments();
                $('#commentForm input[type=reset]').click();
+           } else if (strStartsWith('redirect: ', resp)) {
+               window.location = resp.substr('redirect: '.length)
            } else {
                // it's okay to kill the <h4>, since it's unlikely that
                // many people will have javascript on but css off :)

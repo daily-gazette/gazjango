@@ -7,7 +7,6 @@ from django.views.decorators.cache  import cache_page
 from django.db.models import Q
 from django.template  import RequestContext
 from django.http      import Http404, HttpResponse, HttpResponseRedirect
-from django.utils.html          import escape
 from django.core.urlresolvers   import reverse
 from django.shortcuts           import render_to_response, get_object_or_404
 from gazjango.misc.view_helpers import get_by_date_or_404, filter_by_date, staff_required
@@ -17,7 +16,7 @@ from gazjango.articles.models      import Article, Special, PhotoSpread, StoryCo
 from gazjango.articles.models      import Section, Subsection, Column
 from gazjango.announcements.models import Announcement
 from gazjango.comments.models      import PublicComment
-from gazjango.comments.forms       import CommentForm, make_comment_form
+from gazjango.comments.forms       import make_comment_form
 from gazjango.issues.models        import Weather, WeatherJoke
 from gazjango.jobs.models          import JobListing
 
@@ -115,46 +114,6 @@ def show_photospread_page(request, spread, num=None, form=None, whole_page=None)
     
     rc = RequestContext(request, data)
     return render_to_response(template, context_instance=rc)
-
-
-def post_comment(request, slug, year, month, day):
-    story = get_by_date_or_404(Article, year, month, day, slug=slug)
-    if not story.comments_allowed:
-        raise Http404 # semantically incorrect, but whatever
-    
-    logged_in = request.user.is_authenticated()
-    form = make_comment_form(data=request.POST, logged_in=logged_in)
-    
-    if form.is_valid():
-        args = {
-            'subject': story,
-            'text': escape(form.cleaned_data['text']).replace("\n", "<br/>"),
-            'ip_address': get_ip(request),
-            'user_agent': request.META.get('HTTP_USER_AGENT', '')
-        }
-        
-        data = form.cleaned_data
-        if logged_in:
-            args['user'] = get_user_profile(request)
-            if data['anonymous'] and data['name'] != request.user.get_full_name():
-                args['name'] = data['name']
-        else:
-            args['name']  = data['name']
-            args['email'] = data['email']
-        
-        comment = PublicComment.objects.new(**args)
-        
-        if request.is_ajax():
-            return HttpResponse('success')
-        else:
-            return HttpResponseRedirect(comment.get_absolute_url())
-    else:
-        if request.is_ajax():
-            template = "stories/comment_form.html"
-            rc = RequestContext(request, { 'comment_form': form })
-            return render_to_response(template, context_instance=rc)
-        else:
-            return specific_article(request, story, form=form)
 
 
 def archives(request, section=None, subsection=None, year=None, month=None, day=None):
