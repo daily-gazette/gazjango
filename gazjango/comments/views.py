@@ -3,7 +3,7 @@ from django.contrib.auth.decorators import permission_required
 from django.http                    import HttpResponse, Http404, HttpResponseRedirect
 from django.template                import RequestContext
 from django.shortcuts               import render_to_response
-from gazjango.misc.view_helpers     import get_by_date_or_404, reporter_admin_data
+from gazjango.misc.view_helpers     import get_by_date_or_404
 from gazjango.misc.view_helpers     import get_ip, get_user_profile, is_robot
 
 from gazjango.articles.models      import Article, StoryConcept
@@ -54,12 +54,3 @@ def vote_on_comment(request, slug, year, month, day, num, val):
         return HttpResponse("success" if result else "failure")
     else:
         return HttpResponseRedirect(comment.get_absolute_url())
-
-
-@permission_required('accounts.can_access_admin')
-def manage(request, template="custom-admin/comments.html"):
-    data = reporter_admin_data(get_user_profile(request))
-    data['comments'] = PublicComment.objects.order_by('-time')
-    
-    rc = RequestContext(request)
-    return render_to_response(template, data, context_instance=rc)

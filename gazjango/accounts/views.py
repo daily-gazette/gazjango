@@ -3,7 +3,7 @@ from django.template import RequestContext
 from django.contrib.auth.decorators import permission_required
 from django.shortcuts import render_to_response, get_object_or_404
 from django.db.models import Q
-from gazjango.misc.view_helpers import reporter_admin_data, get_user_profile
+from gazjango.misc.view_helpers import get_user_profile
 
 from django.contrib.auth.models import User
 from gazjango.accounts.models import UserProfile
@@ -19,22 +19,6 @@ def user_details(request, name, template="accounts/profile.html"):
     up = get_object_or_404(UserProfile, user__username=name, user__is_staff=True)
     rc = RequestContext(request)
     return render_to_response(template, {'author': up}, context_instance=rc)
-
-
-@permission_required('accounts.can_access_admin')
-def admin_index(request, template="custom-admin/index.html"):
-    user = get_user_profile(request)
-    articles = user.articles.all().order_by('-pub_date')
-    data = reporter_admin_data(user)
-    
-    data['articles'] = articles
-    data['revisions'] = ArticleRevision.objects.filter(article__in=articles) \
-                        .order_by('-date')
-    data['comments'] = PublicComment.visible.filter(article__in=articles) \
-                        .order_by('-time')
-    
-    rc = RequestContext(request)
-    return render_to_response(template, context_instance=rc)
 
 
 def author_completions(request):

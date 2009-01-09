@@ -77,22 +77,3 @@ def is_robot(request):
 # ===============
 
 staff_required = decorators.user_passes_test(lambda u: u.is_staff)
-
-
-# ==============
-# = miscellany =
-# ==============
-
-def reporter_admin_data(user):
-    """
-    Returns the data necessary just to render base.html of the 
-    reporter admin.
-    """
-    articles = user.articles.all().order_by('-pub_date')
-    announcements = Announcement.admin.order_by('-date_start')
-    
-    return {
-        'announcement': announcements[0] if announcements.count() else None,
-        'unclaimed': StoryConcept.unpublished.filter(users=None),
-        'others': StoryConcept.unpublished.exclude(users=user).exclude(users=None)
-    }
