@@ -290,8 +290,12 @@ class Article(models.Model):
     @models.permalink
     def get_absolute_url(self):
         d = self.pub_date
-        a = [str(x) for x in (d.year, d.month, d.day)]
-        return ('article', a + [self.slug])
+        return ('article', None, {
+            'year':  str(d.year),
+            'month': str(d.month),
+            'day':   str(d.day),
+            'slug':  self.slug
+        })
     
     class Meta:
         app_label = 'articles'
