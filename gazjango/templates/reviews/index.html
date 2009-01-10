@@ -8,60 +8,26 @@
   <link rel="stylesheet" href="{% static css page/reviews.css %}" type="text/css"/>
   
   <script type="text/javascript" src="{% static js tablesort.js %}"></script>
-  <script type="text/javascript" src="{% static js jquery.jmap-r64.js %}"></script>
   <script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=ABQIAAAA__HcO8eeRwet5zvnoNmWOBRi_j0U6kJrkFvY4-OX2XYmEAa76BR3_-DW8mZq_Cio0OE_2C5MsfnlBg" type="text/javascript"></script>
   
- 
   <script type="text/javascript">
-      //<![CDATA[
-      function load() {
-        if (GBrowserIsCompatible()) {
-          var map = new GMap2(document.getElementById("map"));
-          map.setCenter(new GLatLng(39.9034, -75.3529), 13);
-          map.setMapType(G_HYBRID_MAP);
-          
-          // Add establishment markers to the map
-          var bounds = map.getBounds();
-          var southWest = bounds.getSouthWest();
-          var northEast = bounds.getNorthEast();
-          var lngSpan = northEast.lng() - southWest.lng();
-          var latSpan = northEast.lat() - southWest.lat();
-          
-          {% for establishment in establishments %}
-              var point = new GLatLng(establishment.latitude,establishment.longitude);
-              var marker = new GMarker(point);
-              map.addOverlay(marker);
-              GEvent.addListener(marker,'click', function() {
-                marker.openInfoWindow('{{ establishment.get_establishment_type_display }}: <strong><a href="#{{ establishment.name }}">{{ establishment.name }}</a></strong>', { maxWidth: 200});
-              });
-          {% endfor %}
-          
-          
-          jQuery(document).ready(function(){
-
-          	var streetMapCenter = [39.9034,-75.3529];
-
-          	jQuery('.add-streetview').click(function(){
-          		jQuery('#map').jmap('CreateStreetviewPanorama', {
-          			'latlng':streetMapCenter
-          		}, function (view, options){
-          			jQuery('.remove-streetview').click(function(){
-          				jQuery('#map').jmap('RemoveStreetviewPanorama', view);
-          				jQuery('#map').jmap('init', {'mapType':'hybrid','mapCenter': streetMapCenter});
-          				return false;
-          			});
-          		});
-          		return false;
-          	});
-          });
-          
-          
-          
-        }
-      }
-      //]]>
-  </script>
   
+  function initialize() {
+    if (GBrowserIsCompatible()) {
+      // Init map
+      var map = new GMap2(document.getElementById("map"));
+      map.setCenter(new GLatLng(39.9034, -75.3529), 13);
+      
+      // place establishments
+      {% for establishment in establishments %}      
+        var point{{ establishment.pk }} = new GLatLng({{ establishment.latitude }},{{ establishment.longitude }});
+        map.addOverlay(new GMarker(point{{ establishment.pk }}));
+      {% endfor %}
+      
+    }
+  }
+
+  </script>  
   
   
 {% endblock customheader %}
@@ -83,7 +49,7 @@
     <div id="sideBar">
             
     </div>
-    <div id="mapBlock">
+    <div id="mapBlock" onload="initialize()" onunload="GUnload()">
       <div id="map" class="jmap"></div>
     </div>
   </div>
