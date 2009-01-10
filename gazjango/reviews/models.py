@@ -83,9 +83,12 @@ class Establishment(models.Model):
 # limit us to tags in valid groups
 # we can't do this in the model definition, as Establishment isn't yet defined
 # NOTE: this is kind of monkeypatchy and might break in future djangos
-Establishment.tags.field.rel.limit_choices_to = { 
-    'group__content_type': ContentType.objects.get_for_model(Establishment)
-}
+
+# FIXME: this breaks syncdb from a blank database, since ContentType doesn't have
+#        a table yet
+# Establishment.tags.field.rel.limit_choices_to = { 
+#     'group__content_type': ContentType.objects.get_for_model(Establishment)
+# }
 
 def geocode(sender, instance, **kwargs):
     if instance.auto_geocode:
