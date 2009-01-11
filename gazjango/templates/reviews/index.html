@@ -22,7 +22,7 @@ var info = new Array();
 {% for short, long in TYPE_CHOICES %}
 var icon{{ short }} = new GIcon(); 
     icon{{ short }}.image = '/static/images/reviews/map-markers/{{ short }}.png';
-    icon{{ short }}.shadow = '/static/images/{{ short }}-shadow.png';
+    icon{{ short }}.shadow = '/static/images/reviews/map-markers/{{ short }}-shadow.png';
     icon{{ short }}.iconSize = new GSize(32, 32);
     icon{{ short }}.shadowSize = new GSize(59, 32);
     icon{{ short }}.iconAnchor = new GPoint(16, 32);
