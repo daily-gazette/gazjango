@@ -7,7 +7,7 @@ from django.http import *
 
 def _try_import(*app):
     try:
-        exec('from %s.models import *' % '.'.join(app))
+        exec('from %s import *' % '.'.join(app))
     except ImportError:
         pass
 
