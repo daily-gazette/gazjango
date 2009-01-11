@@ -165,7 +165,7 @@ $(function() {
             <td>{{ establishment.tag_names }}</td>
             <td>
               {% for review in establishment.reviews.all %}
-                <a href="{{ review.get_absolute_url }}">{{ review.reviewer }}</a>
+                <a href="{{ review.get_absolute_url }}">{{ review.reviewer.name }}</a>
                 {% if not forloop.last %}<br />{% endif %}
               {% endfor %}
             </td>
