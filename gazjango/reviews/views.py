@@ -6,7 +6,7 @@ from django.template          import RequestContext
 from gazjango.articles.models             import Section
 from gazjango.reviews.models              import Establishment, Review
 from gazjango.reviews.forms               import SubmitEstablishmentForm
-from gazjango.tagging.models              import Tag
+from gazjango.tagging.models              import Tag, TagGroup
 from django.contrib.contenttypes.models   import ContentType
 
 
