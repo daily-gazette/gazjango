@@ -6,14 +6,18 @@ class EstablishmentAdmin(admin.ModelAdmin):
     
     fieldsets = (
         (None, {
-            'fields': ('name', 'establishment_type', 'access', 'phone', 'link', 'tags')
+            'fields': ('name', 'establishment_type', 'tags', 'is_published')
         }),
         ('Address', {
-            'fields': ('street_address', 'city', 'zip_code')
+            'fields': ('street_address', 'city', 'zip_code', 'access')
+        }),
+        ('Extra Info', {
+            'classes': ('collapse',),
+            'fields': ('phone', 'link', 'other_info')
         }),
         ('Advanced', {
             'classes': ('collapse',),
-            'fields': ('slug', 'auto_geocode', 'latitude', 'longitude', 'other_info')
+            'fields': ('slug', 'auto_geocode', 'latitude', 'longitude')
         }),
     )
     filter_horizontal = ('tags',)

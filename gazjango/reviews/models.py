@@ -3,6 +3,7 @@ from django.contrib.contenttypes.models   import ContentType
 from django.contrib.sites.models          import Site
 from django.contrib.localflavor.us.models import PhoneNumberField
 from django.db.models.signals             import pre_save
+from django.template.defaultfilters       import slugify
 from gazjango.accounts.models          import UserProfile
 from gazjango.articles.models.stories  import Article
 from gazjango.misc.helpers             import avg
@@ -15,11 +16,18 @@ import settings
 
 GEOCODE_REQUEST_URL = "http://maps.google.com/maps/geo?q=%(req)s&output=csv&key=%(key)s"
 
+class PublishedEstablishmentManager(models.Manager):
+    def get_query_set(self):
+        reg = super(PublishedEstablishmentManager, self).get_query_set()
+        return reg.filter(is_published=True)
+    
+
 class Establishment(models.Model):
     "Represents a business in the Swarthmore area, or that caters to Swarthmore students."
     slug = models.SlugField()
+    is_published = models.BooleanField(blank=True, default=False,
+        help_text="Whether this establishment has been approved to show up on the site.")
     
-    "Basic Information"
     name = models.CharField(max_length=100)
     TYPE_CHOICES = (
         ('r',"Restaurant"),
@@ -30,10 +38,10 @@ class Establishment(models.Model):
         ('m',"Mailing"),
         ('b',"Bars") 
     )
-    establishment_type = models.CharField(max_length=1, choices=TYPE_CHOICES, blank=False)
+    establishment_type = models.CharField(max_length=1, choices=TYPE_CHOICES)
     
-    street_address = models.CharField(max_length=100, blank=True)
-    city = models.CharField(max_length=100, blank=True)
+    street_address = models.CharField(max_length=100)
+    city = models.CharField(max_length=100)
     zip_code = models.CharField(max_length=100, blank=True)
     # TODO: make this use localflavor.us.forms.USZipCodeField
     
@@ -54,6 +62,9 @@ class Establishment(models.Model):
                   "Note that this overrides any manual setting.")
     latitude = models.CharField(max_length=100, blank=True)
     longitude = models.CharField(max_length=100, blank=True)
+    
+    objects = models.Manager()
+    published = PublishedEstablishmentManager()
     
     def geocode(self):
         if self.street_address:
@@ -79,6 +90,18 @@ class Establishment(models.Model):
     def __unicode__(self):
         return self.name
     
+
+def set_default_slug(sender, instance, **kwords):
+    if not instance.slug:
+        slug = base = slugify(instance.name)
+        existing = sender.objects.filter(slug__icontains=base)
+        num = 0
+        while slug in existing:
+            num += 1
+            slug = "%s-%s" % (base, num)
+        instance.slug = slug
+models.signals.post_init.connect(set_default_slug, sender=Establishment)
+
 
 # limit us to tags in valid groups
 # we can't do this in the model definition, as Establishment isn't yet defined

@@ -41,6 +41,10 @@ body.sort-active *
 	display: inline-block;
 }
 
+#submitted-thanks {
+    text-align: center;
+}
+
 h2 span
         {
         font-variant:small-caps;

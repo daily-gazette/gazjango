@@ -11,49 +11,48 @@
   <script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key={{ GMAPS_API_KEY }}" type="text/javascript"></script>
   
   <script type="text/javascript">
-  
-  var markerGroups = { {% for short, long in TYPE_CHOICES %}"{{short}}": []{% if not forloop.last %}, {% endif %}{% endfor %}  }
-  
-  {% for short, long in TYPE_CHOICES %}
-  var icon{{ short }} = new GIcon(); 
-      icon{{ short }}.image = '/static/images/reviews/map-markers/{{ short }}.png';
-      icon{{ short }}.shadow = '/static/images/{{ short }}-shadow.png';
-      icon{{ short }}.iconSize = new GSize(32, 32);
-      icon{{ short }}.shadowSize = new GSize(59, 32);
-      icon{{ short }}.iconAnchor = new GPoint(16, 32);
-      icon{{ short }}.infoWindowAnchor = new GPoint(5, 1);
-  {% endfor %}
-  
-  
-  function initialize() {
-    if (GBrowserIsCompatible()) {
-      // Init map
-      var map = new GMap2(document.getElementById("map"));
-      map.setCenter(new GLatLng(39.9034, -75.3529), 15);
-            
-      // place establishments
-      {% for establishment in establishments %}      
-        var point{{ establishment.pk }} = new GMarker(new GLatLng({{ establishment.latitude }},{{ establishment.longitude }}),icon{{ establishment.establishment_type }});
-        map.addOverlay(point{{ establishment.pk }});
-        markerGroups['{{ establishment.establishment_type }}'].push(point{{ establishment.pk }})
-      {% endfor %}
-    
+var markerGroups = { {% for short, long in TYPE_CHOICES %}"{{short}}": []{% if not forloop.last %}, {% endif %}{% endfor %} }
 
+{% for short, long in TYPE_CHOICES %}
+var icon{{ short }} = new GIcon(); 
+    icon{{ short }}.image = '/static/images/reviews/map-markers/{{ short }}.png';
+    icon{{ short }}.shadow = '/static/images/{{ short }}-shadow.png';
+    icon{{ short }}.iconSize = new GSize(32, 32);
+    icon{{ short }}.shadowSize = new GSize(59, 32);
+    icon{{ short }}.iconAnchor = new GPoint(16, 32);
+    icon{{ short }}.infoWindowAnchor = new GPoint(5, 1);
+
+{% endfor %}
+
+function initialize() {
+  if (GBrowserIsCompatible()) {
+    // Init map
+    var map = new GMap2(document.getElementById("map"));
+    map.setCenter(new GLatLng(39.9034, -75.3529), 15);
+          
+    // place establishments
+    {% for establishment in establishments %}      
+      var marker = new GMarker(
+        new GLatLng({{ establishment.latitude }}, {{ establishment.longitude }}),
+        icon{{ establishment.establishment_type }}
+      );
+      map.addOverlay(marker);
+      markerGroups['{{ establishment.establishment_type }}'].push(marker)
+    {% endfor %}
+  }
+}
+
+function toggleGroup(type) {
+  for (i = 0; i < markerGroups[type].length; i++) {
+    var marker = markerGroups[type][i];
+    if (marker.isHidden()) {
+      marker.show();
+    } else {
+      marker.hide();
     }
   }
-  
-  function toggleGroup(type) {
-      for (var i = 0; i < markerGroups[type].length; i++) {
-        var marker = markerGroups[type][i];
-        if (marker.isHidden()) {
-          marker.show();
-        } else {
-          marker.hide();
-        }
-      }
-    }
-
-  </script>  
+}
+  </script>
 
 {% endblock customheader %}
 
@@ -71,88 +70,31 @@
 {% block content %}
 <div id="reviews">
   <h2>The Zagette</h2>
+  {% if submitted_name %}
+    <p id="submitted-thanks">Thanks for letting us know about {{ submitted_name }}. Once we've verified the information you gave us, it'll show up here.</p>
+  {% endif %}
   <div id="topBlock">
     <div id="sideBar">
-            
     </div>
-    <div id="mapBlock" onload="initialize()" onunload="GUnload()">
-                
+    <div id="mapBlock">
       <div id="map-menu">
-          <h3>Categories</h3>
-          {% for short, long in TYPE_CHOICES %}
-                <p><input type="checkbox" id="{{ short }}Checkbox" onclick="toggleGroup('{{ short }}')" CHECKED /> {{ long }} </p>
-          {% endfor %}
-          <h4>We missing something? Let us know.</h4>
-              <form>
-              <table width="250px" cellspacing="0px" cellpadding="0px" border="0px">
-                  <tr height="10px">
-                      <td width="25%">
-                          Name:
-                      </td>
-                      <td>
-                          <input id="id_name" type="text" class="vTextField" name="name" maxlength="100" />
-                      </td>
-                  </tr>
-                  <tr>
-                      <td>
-                          Type:
-                      </td>
-                      <td>
-                          <select name="establishment_type" id="id_establishment_type">
-                            <option value="" selected="selected">---------</option>
-                            <option value="r">Restaurant</option>
-                            <option value="a">Arts</option>
-                            <option value="g">Grocery</option>
-                            <option value="h">Hotel</option>
-                            <option value="s">Barbers and Salons</option>
-                            <option value="m">Mailing</option>
-                            <option value="b">Bars</option>
-                          </select>
-                      </td>
-                  </tr>
-                  <tr>
-                      <td>
-                          Access:
-                      </td>
-                      <td>
-                          <select name="access" id="id_access">
-                            <option value="" selected="selected">---------</option>
-                            <option value="w">Walking</option>
-                            <option value="p">Public Transportation</option>
-                            <option value="d">Driving</option>
-                          </select>
-                      </td>
-                  </tr>
-                  <tr>
-                      <td>
-                          Address:
-                      </td>
-                      <td>
-                          <input id="id_street_address" type="text" class="vTextField" name="street_address" maxlength="100" />
-                      </td>
-                  </tr>
-                  <tr>
-                      <td>
-                          City:
-                      </td>
-                      <td>
-                          <input id="id_city" type="text" class="vTextField" name="city" maxlength="100" />
-                      </td>
-                  </tr>
-                  <tr>
-                      <td>
-                          Zip Code:
-                      </td>
-                      <td>
-                          <input id="id_zip_code" type="text" class="vTextField" name="zip_code" maxlength="5" />
-                      </td>
-                  </tr>
-                  <tr>
-                      <td></td>
-                      <td><input type="submit" value="Submit" class="default" name="_save" /></td>
-              </table>
-              </form>
+        <h3>Categories</h3>
+        {% for short, long in TYPE_CHOICES %}
+          <p><input type="checkbox" id="{{ short }}Checkbox" onclick="toggleGroup('{{ short }}')" CHECKED /> {{ long }} </p>
+        {% endfor %}
+        
+        <h4>We missing something{% if submitted_name %} else{% endif %}? Let us know.</h4>
+        <form method="post" action=".">
+          <table width="250px" cellspacing="0px" cellpadding="0px" border="0px">
+            {{ submit_form.as_table }}
+            <tr>
+              <td></td>
+              <td><input type="submit" value="Submit" class="default" name="_save" /></td>
+            </tr>
+          </table>
+        </form>
       </div>
+      
       <div id="map" class="jmap"></div>
     </div>
   </div>
