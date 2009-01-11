@@ -128,9 +128,9 @@ $(function() {
         
         <h3>Tags</h3>
         <table>
-            {% for tags in tags|in_groups_of:2 %}
+            {% for tagGroups in tags|in_groups_of:2 %}
                 <tr>
-                    {% for tag in tags %}
+                    {% for tag in tagGroups %}
                     <td>
                         <p><input type="checkbox" id="checkbox-{{ tag.name }}" onclick="toggleGroup('{{ tag.name }}')" CHECKED /> {{ tag.longest_name }} </p>
                     </td>
