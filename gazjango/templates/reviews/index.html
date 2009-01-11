@@ -17,7 +17,6 @@
 var markerGroups = { {% for short, long in TYPE_CHOICES %}"{{short}}": []{% if not forloop.last %}, {% endif %}{% endfor %} }
 var points = new Array();
 var info = new Array();
-var map = new GMap2();
 
 {% for short, long in TYPE_CHOICES %}
 var icon{{ short }} = new GIcon(); 
