@@ -3,9 +3,13 @@ from django.http              import HttpResponseRedirect
 from django.shortcuts         import get_object_or_404, render_to_response
 from django.template          import RequestContext
 
-from gazjango.articles.models import Section
-from gazjango.reviews.models  import Establishment, Review
-from gazjango.reviews.forms   import SubmitEstablishmentForm
+from gazjango.articles.models             import Section
+from gazjango.reviews.models              import Establishment, Review
+from gazjango.reviews.forms               import SubmitEstablishmentForm
+from gazjango.tagging.models              import Tag
+from django.contrib.contenttypes.models   import ContentType
+
+
 import urllib
 import settings
 
