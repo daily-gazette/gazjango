@@ -56,15 +56,13 @@ function initialize() {
 function createMarker(point, info_box, type) {
     var marker = new google.maps.Marker(point,type);
 
-    GEvent.addListener(marker, 'click', function(){
-        map.openInfoWindowHtml(point, info_box);
-        });
+    GEvent.addListener(marker, 'click', function(){ map.openInfoWindowHtml(point, '<strong>test</strong>'); });
 
     return marker;
 }
 
 function openInfo(num) {
-    map.openInfoWindowHtml(points[num], info[num]);
+    map.openInfoWindowHtml(points[num], '<strong>test2</strong>');
 }
 
 // TODO: the table isn't highlighted properly when there are groups hidden
