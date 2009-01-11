@@ -45,7 +45,14 @@ function initialize() {
         points[{{ forloop.counter }}] = point;
         info[{{ forloop.counter }}] = info_box;
         
-        var point{{ establishment.pk }} = createMarker(point,info_box,icon);
+        
+            var marker = new GMarker(point,icon);
+
+            GEvent.addListener(marker, 'click', function(point,info_box){
+                map.openInfoWindowHtml(point, info_box);
+            });
+        
+        var point{{ establishment.pk }} = marker;
         map.addOverlay(point{{ establishment.pk }});
         markerGroups['{{ establishment.establishment_type }}'].push(point{{ establishment.pk }})
       {% endfor %}
@@ -53,7 +60,7 @@ function initialize() {
 }
 
 function createMarker(point, info_box, type) {
-    var marker = new google.maps.Marker(point,type);
+    var marker = new GMarker(point,type);
 
     GEvent.addListener(marker, 'click', function(point,info_box){
         map.openInfoWindowHtml(point, info_box);
