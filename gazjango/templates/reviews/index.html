@@ -111,15 +111,22 @@ $(function() {
     <p id="submitted-thanks">Thanks for letting us know about {{ submitted_name }}. Once we've verified the information you gave us, it'll show up here.</p>
   {% endif %}
   <div id="topBlock">
-    <div id="sideBar">
-    </div>
     <div id="mapBlock">
       <div id="map-menu">
         <h3>Categories</h3>
-        {% for short, long in TYPE_CHOICES %}
-          <p><input type="checkbox" id="checkbox-{{ short }}" onclick="toggleGroup('{{ short }}')" CHECKED /> {{ long }} </p>
-        {% endfor %}
-        
+        <table>
+            {% for type1, type2 in TYPE_CHOICES|in_groups:2 %}
+                <tr>
+                    <td>
+                        <p><input type="checkbox" id="checkbox-{{ type1.short }}" onclick="toggleGroup('{{ type1.short }}')" CHECKED /> {{ type1.long }} </p>
+                    </td>
+                    <td>
+                        <p><input type="checkbox" id="checkbox-{{ type2.short }}" onclick="toggleGroup('{{ type2.short }}')" CHECKED /> {{ type2.long }} </p>
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+            
         <h4>We missing something{% if submitted_name %} else{% endif %}? Let us know.</h4>
         <form method="post" action=".">
           <table width="250px" cellspacing="0px" cellpadding="0px" border="0px">
@@ -131,14 +138,17 @@ $(function() {
           </table>
         </form>
       </div>
-      
-      <div id="map" class="jmap"></div>
+      <div id="map" class="jmap">
+        
+        <!-- Map inserted here -->
+        
+      </div>
     </div>
   </div>
 
   <div id="listings">
     <table id="review-listings" cellpadding="0" cellspacing="0" border="0" class="sortable-onload-4-5r rowstyle-alt colstyle-alt no-arrow">
-      <caption>Reviews from the Swarthmore Area</caption>
+      <caption>Reviews for and by the Swarthmore Community</caption>
       <thead>
         <tr>
           <th class="sortable" width="70px">Type</th>
