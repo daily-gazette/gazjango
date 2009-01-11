@@ -52,7 +52,7 @@ function initialize() {
       
       '{{ e.establishment_type }}',
       {{ e.pk }},
-      [{% for tag in establishment.tags.all %}'{{ tag.name }}'{% if not forloop.last %}, {% endif %}{% endfor %}]
+      [{% for tag in e.tags.all %}'{{ tag.name }}'{% if not forloop.last %}, {% endif %}{% endfor %}]
     );
     {% endfor %}
   }
@@ -68,7 +68,7 @@ function addMarker(point, info_box, type, num, tags) {
   points[num] = point;
   info[num] = info_box;
   markerGroups[type].push(marker);
-  jQuery.each(tags, function() {  tagGroups[this].push(marker) } );
+  jQuery.each(tags, function() { tagGroups[this].push(marker) } );
 }
 
 function openInfo(num) {
