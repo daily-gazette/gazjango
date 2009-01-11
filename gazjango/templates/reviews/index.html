@@ -115,7 +115,7 @@ $(function() {
       <div id="map-menu">
         <h3>Categories</h3>
         <table>
-            {% for type1, type2 in TYPE_CHOICES|in_groups:2 %}
+            {% for type1, type2 in TYPE_CHOICES|in_groups_of:2 %}
                 <tr>
                     <td>
                         <p><input type="checkbox" id="checkbox-{{ type1.short }}" onclick="toggleGroup('{{ type1.short }}')" CHECKED /> {{ type1.long }} </p>
