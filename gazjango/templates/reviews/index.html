@@ -12,6 +12,7 @@
   
   {% jQuery %}
   
+
   <script type="text/javascript">
 var markerGroups = { {% for short, long in TYPE_CHOICES %}"{{short}}": []{% if not forloop.last %}, {% endif %}{% endfor %} }
 
@@ -33,14 +34,17 @@ function initialize() {
     map.setCenter(new GLatLng(39.9034, -75.3529), 15);
           
     // place establishments
-    {% for establishment in establishments %}      
-      var marker = new GMarker(
-        new GLatLng({{ establishment.latitude }}, {{ establishment.longitude }}),
-        icon{{ establishment.establishment_type }}
-      );
-      map.addOverlay(marker);
-      markerGroups['{{ establishment.establishment_type }}'].push(marker)
-    {% endfor %}
+      {% for establishment in establishments %}      
+        var point{{ establishment.pk }} = new GMarker(
+            new GLatLng({{ establishment.latitude }},{{ establishment.longitude }}),
+            icon{{ establishment.establishment_type }},
+            info(
+                <large><strong>{{ establishment.name }}</strong></large>. Average Rating of {{ establishment.avg_rating }} and cost of {{ establishment.avg_cost }}. Phone: {{ establishment.phone }}. Read more at the <a href="#">establishment page</a>.
+            )
+        );
+        map.addOverlay(point{{ establishment.pk }});
+        markerGroups['{{ establishment.establishment_type }}'].push(point{{ establishment.pk }})
+      {% endfor %}
   }
 }
 
@@ -128,7 +132,7 @@ $(function() {
         {% for establishment in establishments %}
           <tr class="row-{{ establishment.establishment_type }}">
             <td>{{ establishment.get_establishment_type_display }}</td>
-            <td><a href="{{ establishment.get_absolute_url }}">{{ establishment.name }}</a></td>
+            <td><a href="#" onclick='openInfo(point{{ establishment.pk }}); return false'>{{ establishment.name }}</a></td>
             <td>{{ establishment.avg_rating }}</td>
             <td>{{ establishment.avg_cost }}</td>
             <td>{{ establishment.city }}</td>
