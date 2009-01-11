@@ -10,6 +10,8 @@
   <script type="text/javascript" src="{% static js tablesort.js %}"></script>
   <script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key={{ GMAPS_API_KEY }}" type="text/javascript"></script>
   
+  {% jQuery %}
+  
   <script type="text/javascript">
 var markerGroups = { {% for short, long in TYPE_CHOICES %}"{{short}}": []{% if not forloop.last %}, {% endif %}{% endfor %} }
 
@@ -42,16 +44,23 @@ function initialize() {
   }
 }
 
+// TODO: the table isn't highlighted properly when there are groups hidden
 function toggleGroup(type) {
-  for (i = 0; i < markerGroups[type].length; i++) {
-    var marker = markerGroups[type][i];
-    if (marker.isHidden()) {
-      marker.show();
-    } else {
-      marker.hide();
-    }
-  }
+  jQuery.each(markerGroups[type], function() {
+    this.isHidden() ? this.show() : this.hide();
+  });
+  $('#review-listings .row-' + type).toggle();
 }
+
+// after reload, checkboxes aren't always checked
+$(function() {
+  $('#map-menu p :checkbox').each(function() { 
+    prefix = 'checkbox-'
+    if (this.id.substring(0, prefix.length) == prefix && !this.checked) {
+      toggleGroup(this.id.substring(prefix.length));
+    }
+  });
+});
   </script>
 
 {% endblock customheader %}
@@ -80,7 +89,7 @@ function toggleGroup(type) {
       <div id="map-menu">
         <h3>Categories</h3>
         {% for short, long in TYPE_CHOICES %}
-          <p><input type="checkbox" id="{{ short }}Checkbox" onclick="toggleGroup('{{ short }}')" CHECKED /> {{ long }} </p>
+          <p><input type="checkbox" id="checkbox-{{ short }}" onclick="toggleGroup('{{ short }}')" CHECKED /> {{ long }} </p>
         {% endfor %}
         
         <h4>We missing something{% if submitted_name %} else{% endif %}? Let us know.</h4>
@@ -117,7 +126,7 @@ function toggleGroup(type) {
       </thead>
       <tbody>
         {% for establishment in establishments %}
-          <tr>
+          <tr class="row-{{ establishment.establishment_type }}">
             <td>{{ establishment.get_establishment_type_display }}</td>
             <td><a href="{{ establishment.get_absolute_url }}">{{ establishment.name }}</a></td>
             <td>{{ establishment.avg_rating }}</td>
