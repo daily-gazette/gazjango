@@ -51,13 +51,14 @@ function initialize() {
       '<a href="{{ e.get_absolute_url }}">Read more</a>',
       
       '{{ e.establishment_type }}',
-      {{ e.pk }}
+      {{ e.pk }},
+      [{% for tag in establishment.tags.all %}'{{ tag.name }}'{% if not forloop.last %}, {% endif %}{% endfor %}]
     );
     {% endfor %}
   }
 }
 
-function addMarker(point, info_box, type, num) {
+function addMarker(point, info_box, type, num, tagGroups) {
   var marker = new GMarker(point, icons[type]);
   GEvent.addListener(marker, 'click', function() {
     map.openInfoWindowHtml(point, info_box);
@@ -67,7 +68,7 @@ function addMarker(point, info_box, type, num) {
   points[num] = point;
   info[num] = info_box;
   markerGroups[type].push(marker);
-  {% for tag in establishment.tags.all %} tagGroups[{{ tag.name }}].push(marker); {% endfor %}
+  jQuery.each(tags, function() {  tagGroups[this].push(marker) } );
 }
 
 function openInfo(num) {
