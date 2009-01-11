@@ -125,6 +125,19 @@ $(function() {
                 </tr>
             {% endfor %}
         </table>
+        
+        <h3>Tags</h3>
+        <table>
+            {% for tags in tags|in_groups_of:2 %}
+                <tr>
+                    {% for tag in tags %}
+                    <td>
+                        <p><input type="checkbox" id="checkbox-{{ tag.name }}" onclick="toggleGroup('{{ tag.name }}')" CHECKED /> {{ tag.longest_name }} </p>
+                    </td>
+                    {% endfor %}
+                </tr>
+            {% endfor %}
+        </table>
             
         <h4>We missing something{% if submitted_name %} else{% endif %}? Let us know.</h4>
         <form method="post" action=".">
