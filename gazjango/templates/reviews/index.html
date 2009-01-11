@@ -30,19 +30,6 @@ var icon{{ short }} = new GIcon();
 
 {% endfor %}
 
-function createMarker(point, info_box, type) {
-    var marker = new google.maps.Marker(point,type);
-
-    google.maps.Event.addListener(marker, 'click', function() {
-        map.openInfoWindowHtml(point, info_box);
-        });
-
-    return marker;
-}
-
-function openInfo(num) {
-    map.openInfoWindowHtml(points[num], info[num]);
-}
 
 function initialize() {
   if (GBrowserIsCompatible()) {
@@ -56,13 +43,28 @@ function initialize() {
         var info_box = '<large><strong>{{ establishment.name }}</strong></large>. Average Rating of {{ establishment.avg_rating }} and cost of {{ establishment.avg_cost }}. Phone: {{ establishment.phone }}. Read more at the <a href="#">establishment page</a>.'
         var icon = icon{{ establishment.establishment_type }}
         
+        points[{{ forloop.counter }}] = point;
+        info[{{ forloop.counter }}] = info_box;
+        
         var point{{ establishment.pk }} = createMarker(point,info_box,icon);
         map.addOverlay(point{{ establishment.pk }});
         markerGroups['{{ establishment.establishment_type }}'].push(point{{ establishment.pk }})
-        points[{{ forloop.counter }}] = point;
-        info[{{ forloop.counter }}] = info_box;
       {% endfor %}
   }
+}
+
+function createMarker(point, info_box, type) {
+    var marker = new google.maps.Marker(point,type);
+
+    google.maps.Event.addListener(marker, 'click', function() {
+        map.openInfoWindowHtml(point, info_box);
+        });
+
+    return marker;
+}
+
+function openInfo(num) {
+    map.openInfoWindowHtml(points[num], info[num]);
 }
 
 // TODO: the table isn't highlighted properly when there are groups hidden
