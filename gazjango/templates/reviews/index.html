@@ -152,7 +152,7 @@ $(function() {
         {% for establishment in establishments %}
           <tr class="row-{{ establishment.establishment_type }}">
             <td>{{ establishment.get_establishment_type_display }}</td>
-            <td><a href="#" onclick='openInfo(point{{ establishment.pk }}); return false'>{{ establishment.name }}</a></td>
+            <td><a href="#" onclick='openInfo({{ forloop.counter }}); return false'>{{ establishment.name }}</a></td>
             <td>{{ establishment.avg_rating }}</td>
             <td>{{ establishment.avg_cost }}</td>
             <td>{{ establishment.city }}</td>
