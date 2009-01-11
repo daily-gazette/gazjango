@@ -39,7 +39,7 @@ function initialize() {
     // place establishments
       {% for establishment in establishments %}
         var point = new GLatLng({{ establishment.latitude }},{{ establishment.longitude }});
-        var info_box = "<large><strong>{{ establishment.name }}</strong></large>. Average Rating of {{ establishment.avg_rating }} and cost of {{ establishment.avg_cost }}. Phone: {{ establishment.phone }}. Read more at the <a href="#">establishment page</a>."
+        var info_box = '<large><strong>{{ establishment.name }}</strong></large>. Average Rating of {{ establishment.avg_rating }} and cost of {{ establishment.avg_cost }}. Phone: {{ establishment.phone }}. Read more at the <a href="#">establishment page</a>.'
         var icon = icon{{ establishment.establishment_type }}
         
         points[{{ forloop.counter }}] = point;
