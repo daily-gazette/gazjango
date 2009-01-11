@@ -54,10 +54,10 @@
     }
 
   </script>  
-  
-  
+
 {% endblock customheader %}
 
+{% block body-args %}onload="initialize()" onunload="GUnload()"{% endblock %}
 
 {% block topbar %}
   <div id="headerSectionBar">
