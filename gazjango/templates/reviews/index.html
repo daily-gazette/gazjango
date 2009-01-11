@@ -14,53 +14,61 @@
   
 
   <script type="text/javascript">
-var markerGroups = { {% for short, long in TYPE_CHOICES %}"{{short}}": []{% if not forloop.last %}, {% endif %}{% endfor %} }
-var points = new Array();
-var info = new Array();
+var map;
+var points = {};
+var info = {};
 
+var markerGroups = { {% for short, long in TYPE_CHOICES %}"{{ short }}": []{% if not forloop.last %}, {% endif %}{% endfor %} }
+
+var icons = {};
 {% for short, long in TYPE_CHOICES %}
-var icon{{ short }} = new GIcon(); 
-    icon{{ short }}.image = '/static/images/reviews/map-markers/{{ short }}.png';
-    icon{{ short }}.shadow = '/static/images/reviews/map-markers/{{ short }}-shadow.png';
-    icon{{ short }}.iconSize = new GSize(32, 32);
-    icon{{ short }}.shadowSize = new GSize(59, 32);
-    icon{{ short }}.iconAnchor = new GPoint(16, 32);
-    icon{{ short }}.infoWindowAnchor = new GPoint(5, 1);
-
+icons['{{ short }}'] = new GIcon();
+icons['{{ short }}'].image = '/static/images/reviews/map-markers/{{ short }}.png';
+icons['{{ short }}'].shadow = '/static/images/reviews/map-markers/{{ short }}-shadow.png';
+icons['{{ short }}'].iconSize = new GSize(32, 32);
+icons['{{ short }}'].shadowSize = new GSize(59, 32);
+icons['{{ short }}'].iconAnchor = new GPoint(16, 32);
+icons['{{ short }}'].infoWindowAnchor = new GPoint(5, 1);
 {% endfor %}
-
 
 function initialize() {
   if (GBrowserIsCompatible()) {
     // Init map
-    var map = new GMap2(document.getElementById("map"));
+    map = new GMap2(document.getElementById("map"));
     map.setCenter(new GLatLng(39.9034, -75.3529), 15);
           
     // place establishments
-      {% for establishment in establishments %}
-        var point = new GLatLng({{ establishment.latitude }},{{ establishment.longitude }});
-        var info_box = '<large><strong>{{ establishment.name }}</strong></large>. Average Rating of {{ establishment.avg_rating }} and cost of {{ establishment.avg_cost }}. Phone: {{ establishment.phone }}. Read more at the <a href="#">establishment page</a>.'
-        var icon = icon{{ establishment.establishment_type }}
-        
-        points[{{ forloop.counter }}] = point;
-        info[{{ forloop.counter }}] = info_box;
-        
-        
-        var marker = new GMarker(point,icon);
-
-        GEvent.addListener(marker, 'click', function(point,info_box){
-            map.openInfoWindowHtml(point, info_box);
-        });
-        
-        var point{{ establishment.pk }} = marker;
-        map.addOverlay(point{{ establishment.pk }});
-        markerGroups['{{ establishment.establishment_type }}'].push(point{{ establishment.pk }})
-      {% endfor %}
+    {% for e in establishments %}
+    addMarker(
+      new GLatLng({{ e.latitude }}, {{ e.longitude }}),
+      
+      '<large><strong>{{ e.name }}</strong></large><br/>' + 
+      'Average Rating: {{ e.avg_rating|default_if_none:"-" }}<br/>' +
+      'Average Cost: {{ e.avg_cost|default_if_none:"-" }}<br/>' +
+      {% if e.phone %}'Phone: {{ e.phone }}<br/>' + {% endif %}
+      '<a href="{{ e.get_absolute_url }}">Read more</a>',
+      
+      '{{ e.establishment_type }}',
+      {{ e.pk }}
+    );
+    {% endfor %}
   }
 }
 
+function addMarker(point, info_box, type, num) {
+  var marker = new GMarker(point, icons[type]);
+  GEvent.addListener(marker, 'click', function() {
+    map.openInfoWindowHtml(point, info_box);
+  });
+  map.addOverlay(marker);
+
+  points[num] = point;
+  info[num] = info_box;
+  markerGroups[type].push(marker);
+}
+
 function openInfo(num) {
-    map.openInfoWindowHtml(points[num], info[num]);
+  map.openInfoWindowHtml(points[num], info[num]);
 }
 
 // TODO: the table isn't highlighted properly when there are groups hidden
@@ -148,16 +156,16 @@ $(function() {
         {% for establishment in establishments %}
           <tr class="row-{{ establishment.establishment_type }}">
             <td>{{ establishment.get_establishment_type_display }}</td>
-            <td><a href="#" onclick='openInfo({{ forloop.counter }}); return false'>{{ establishment.name }}</a></td>
-            <td>{{ establishment.avg_rating }}</td>
-            <td>{{ establishment.avg_cost }}</td>
+            <td><a href="#" onclick='openInfo({{ establishment.pk }}); return false'>{{ establishment.name }}</a></td>
+            <td>{{ establishment.avg_rating|default_if_none:"" }}</td>
+            <td>{{ establishment.avg_cost|default_if_none:"" }}</td>
             <td>{{ establishment.city }}</td>
             <td>{{ establishment.get_access_display }}</td>
             <td>{{ establishment.tag_names }}</td>
             <td>
               {% for review in establishment.reviews.all %}
                 <a href="{{ review.get_absolute_url }}">{{ review.reviewer }}</a>
-                <br />
+                {% if not forloop.last %}<br />{% endif %}
               {% endfor %}
             </td>
             <td>{{ establishment.other_info }}</td>
