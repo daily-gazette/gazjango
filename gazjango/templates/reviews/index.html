@@ -147,9 +147,9 @@ $(function() {
           <th class="sortable">Cost</th>
           <th class="sortable">City</th>
           <th class="sortable">Access</th>
+          <th class="sortable">Phone</th>
           <th class="sortable">Tags</th>
           <th class="sortable">Reviews</th>
-          <th>Notes</th>
         </tr>
       </thead>
       <tbody>
@@ -161,6 +161,7 @@ $(function() {
             <td>{{ establishment.avg_cost|default_if_none:"" }}</td>
             <td>{{ establishment.city }}</td>
             <td>{{ establishment.get_access_display }}</td>
+            <td>{{ establishment.phone }}</td>
             <td>{{ establishment.tag_names }}</td>
             <td>
               {% for review in establishment.reviews.all %}
