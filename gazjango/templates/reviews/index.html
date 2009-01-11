@@ -121,7 +121,9 @@ $(function() {
                         <p><input type="checkbox" id="checkbox-{{ type1.0 }}" onclick="toggleGroup('{{ type1.0 }}')" CHECKED /> {{ type1.1 }} </p>
                     </td>
                     <td>
+                        {% if type2 %}
                         <p><input type="checkbox" id="checkbox-{{ type2.0 }}" onclick="toggleGroup('{{ type2.0 }}')" CHECKED /> {{ type2.1 }} </p>
+                        {% endif %}
                     </td>
                 </tr>
             {% endfor %}
