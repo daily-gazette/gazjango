@@ -149,7 +149,7 @@ $(function() {
                 <tr>
                     {% for tag in tagGroups %}
                     <td>
-                        <p><input type="checkbox" id="checkbox-{{ tag.name }}" onclick="this.checked? hideTag({{ tag.name }}): showTag({{ tag.name }})" CHECKED /> {{ tag.longest_name }} </p>
+                        <p><input type="checkbox" id="checkbox-{{ tag.name }}" onclick="this.checked? hideTag('{{ tag.name }}'): showTag('{{ tag.name }}')" CHECKED /> {{ tag.longest_name }} </p>
                     </td>
                     {% endfor %}
                 </tr>
