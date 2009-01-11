@@ -35,13 +35,7 @@ function initialize() {
           
     // place establishments
       {% for establishment in establishments %}      
-        var point{{ establishment.pk }} = new GMarker(
-            new GLatLng({{ establishment.latitude }},{{ establishment.longitude }}),
-            icon{{ establishment.establishment_type }},
-            info(
-                <large><strong>{{ establishment.name }}</strong></large>. Average Rating of {{ establishment.avg_rating }} and cost of {{ establishment.avg_cost }}. Phone: {{ establishment.phone }}. Read more at the <a href="#">establishment page</a>.
-            )
-        );
+        var point{{ establishment.pk }} = new GMarker(new GLatLng({{ establishment.latitude }},{{ establishment.longitude }}),icon{{ establishment.establishment_type }},info(<large><strong>{{ establishment.name }}</strong></large>. Average Rating of {{ establishment.avg_rating }} and cost of {{ establishment.avg_cost }}. Phone: {{ establishment.phone }}. Read more at the <a href="#">establishment page</a>.));
         map.addOverlay(point{{ establishment.pk }});
         markerGroups['{{ establishment.establishment_type }}'].push(point{{ establishment.pk }})
       {% endfor %}
