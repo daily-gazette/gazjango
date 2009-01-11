@@ -13,6 +13,6 @@ def reviews(request):
     rc = RequestContext(request, { 
         'establishments': establishments,
         'GMAPS_API_KEY': settings.GMAPS_API_KEY,
-        'TYPE_CHOICES':TYPE_CHOICES,
+        'TYPE_CHOICES': Establishment.TYPE_CHOICES,
     })
     return render_to_response('reviews/index.html', context_instance=rc)
