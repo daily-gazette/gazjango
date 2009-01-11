@@ -31,10 +31,10 @@ class Establishment(models.Model):
     name = models.CharField(max_length=100)
     TYPE_CHOICES = (
         ('r',"Restaurant"),
-        ('a',"Arts"),
+        ('a',"Attractions"),
         ('g',"Grocery"),
         ('h',"Hotel"), 
-        ('s',"Barbers and Salons"),
+        ('s',"Hair Care"),
         ('m',"Mailing"),
         ('b',"Bars") 
     )
@@ -128,7 +128,8 @@ class Review(models.Model):
         ('1',"$"),
         ('2',"$$"),
         ('3',"$$$"),
-        ('4',"$$$$")
+        ('4',"$$$$"),
+        ('5',"$$$$$")
     )
     cost = models.CharField(max_length=1, choices=COST_CHOICES)
     

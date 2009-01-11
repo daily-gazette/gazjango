@@ -35,3 +35,11 @@ def reviews(request):
         'submitted_name': submitted_name,
     })
     return render_to_response('reviews/index.html', context_instance=rc)
+    
+def establishment(request,slug):
+    'View for "establishment" pages with reviews.'
+    
+    establishment = get_object_or_404(Establishment, slug=slug)
+    
+    rc = RequestContext(request, { 'establishment': establishment })
+    return render_to_response('reviews/establishment.html', context_instance=rc)
