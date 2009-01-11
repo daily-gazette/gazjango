@@ -122,7 +122,6 @@ models.signals.pre_save.connect(geocode, sender=Establishment)
 class Review(models.Model):
     "Represents the review of an establishment."
     slug = models.SlugField()
-    
     establishment = models.ForeignKey(Establishment,related_name="reviews")
     
     COST_CHOICES = (
@@ -150,3 +149,5 @@ class Review(models.Model):
     def __unicode__(self):
         return self.slug
     
+    def get_absolute_url(self):
+        return "%s#%s" % (self.establishment.get_absolute_url, self.slug)

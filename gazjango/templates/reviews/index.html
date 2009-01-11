@@ -127,7 +127,7 @@ function toggleGroup(type) {
             <td>{{ establishment.tag_names }}</td>
             <td>
               {% for review in establishment.reviews.all %}
-                <a href="{{ establishment.get_absolute_url }}#{{ review.slug }}">{{ review.reviewer }}</a>
+                <a href="{{ review.get_absolute_url }}">{{ review.reviewer }}</a>
                 <br />
               {% endfor %}
             </td>
