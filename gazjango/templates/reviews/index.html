@@ -118,10 +118,10 @@ $(function() {
             {% for type1, type2 in TYPE_CHOICES|in_groups_of:2 %}
                 <tr>
                     <td>
-                        <p><input type="checkbox" id="checkbox-{{ type1.short }}" onclick="toggleGroup('{{ type1.short }}')" CHECKED /> {{ type1.long }} </p>
+                        <p><input type="checkbox" id="checkbox-{{ type1.0 }}" onclick="toggleGroup('{{ type1.0 }}')" CHECKED /> {{ type1.1 }} </p>
                     </td>
                     <td>
-                        <p><input type="checkbox" id="checkbox-{{ type2.short }}" onclick="toggleGroup('{{ type2.short }}')" CHECKED /> {{ type2.long }} </p>
+                        <p><input type="checkbox" id="checkbox-{{ type2.0 }}" onclick="toggleGroup('{{ type2.0 }}')" CHECKED /> {{ type2.1 }} </p>
                     </td>
                 </tr>
             {% endfor %}
