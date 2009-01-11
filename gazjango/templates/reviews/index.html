@@ -86,14 +86,12 @@ function hideTag(tag) {
   jQuery.each(tagGroups[tag], function() {
     this.hide();
   });
-  $('#review-listings .row-' + type).toggle();
 }
 
 function showTag(tag) {
   jQuery.each(tagGroups[tag], function() {
     this.show();
   });
-  $('#review-listings .row-' + type).toggle();
 }
 
 // after reload, checkboxes aren't always checked
