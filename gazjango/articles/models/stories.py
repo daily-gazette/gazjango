@@ -12,6 +12,7 @@ from gazjango.accounts.models            import UserProfile
 from gazjango.comments.models            import PublicComment
 from gazjango.media.models               import MediaFile, ImageFile, MediaBucket
 from gazjango.misc.exceptions            import RelationshipMismatch
+from gazjango.articles.models.concepts   import StoryConcept
 import gazjango.articles.formats as formats
 from gazjango.misc.templatetags.extras import join_authors
 
@@ -102,6 +103,9 @@ class Article(models.Model):
     short_title = models.CharField(blank=True, max_length=80,help_text="(Only needed for top stories, used in article footers.)")
     slug        = models.SlugField(unique_for_date="pub_date", max_length=100,
                   help_text="(Part of the URL: /2008/month/day/slug/. Should generally be lowercase and hyphenated, like global-neighbors or strong-endowment-in-recession.)")
+    
+    concept = models.ForeignKey(StoryConcept, null=True, blank=True, unique=True,related_name="articles",
+              help_text="(If this story was assigned via a Story Concept, pick which one so we know you've started work on it.)")
     
     summary = models.TextField()
     short_summary = models.CharField(max_length=150, blank=True,help_text="(Only needed for top stories, used in article footers.)")

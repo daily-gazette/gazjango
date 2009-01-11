@@ -1,6 +1,5 @@
 from django.db                         import models
 from gazjango.accounts.models          import UserProfile
-from gazjango.articles.models.stories  import Article
 from datetime                          import date
 from gazjango.misc.templatetags.extras import join_authors
 from gazjango.announcements.models     import Announcement
@@ -51,9 +50,6 @@ class StoryConcept(models.Model):
     
     users   = models.ManyToManyField(UserProfile, blank=True, related_name="assignments")
     # editors = models.ManyToManyFiled(UserProfile, related_name="concepts_overseen")
-    
-    article = models.ForeignKey(Article, null=True, blank=True, unique=True,
-                                related_name="concepts")
     
     objects = models.Manager()
     unpublished = UnpublishedConceptsManager()
