@@ -5,16 +5,21 @@ from django.core.mail import *
 from django.core.urlresolvers import reverse
 from django.http import *
 
+def _try_import(*app):
+    try:
+        exec('from %s.models import *' % '.'.join(app))
+    except ImportError:
+        pass
+
 import settings
 for app in settings.INSTALLED_APPS:
     if app.startswith('gazjango.'):
         exec('from gazjango import %s' % app[len('gazjango.'):])
     else:
         exec('import %s' % app)
-    try:
-        exec('from %s.models import *' % app)
-    except ImportError:
-        pass
+    _try_import(app, 'models')
+    _try_import(app, 'forms')
+
 from gazjango.misc.helpers import *
 from gazjango.misc.view_helpers import *
 from gazjango.options.helpers import *
