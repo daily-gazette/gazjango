@@ -16,18 +16,22 @@ def reviews(request):
         form = SubmitEstablishmentForm(request.POST)
         if form.is_valid():
             form.save()
-            return HttpResponseRedirect(reverse(reviews) + 
-                        '?name=' + urllib.quote_plus(form.cleaned_data['name']))
+            request.session['submitted_name'] = form.cleaned_data['name']
+            return HttpResponseRedirect(reverse(reviews))
     else:
         form = SubmitEstablishmentForm()
     
     establishments = Establishment.published.order_by("establishment_type", "name")    
+    
+    submitted_name = request.session.get('submitted_name', None)
+    if submitted_name:
+        del request.session['submitted_name']
     
     rc = RequestContext(request, { 
         'establishments': establishments,
         'GMAPS_API_KEY': settings.GMAPS_API_KEY,
         'TYPE_CHOICES': Establishment.TYPE_CHOICES,
         'submit_form': form,
-        'submitted_name': request.GET.get('name', None),
+        'submitted_name': submitted_name,
     })
     return render_to_response('reviews/index.html', context_instance=rc)
