@@ -1,5 +1,7 @@
 from __future__ import division
 from django.conf import settings
+from django.db.models import signals
+from django.template.defaultfilters import slugify
 import datetime
 
 def is_from_swat(user=None, ip=None):
@@ -51,3 +53,29 @@ def get_jquery_path():
     else:
         return "http://ajax.googleapis.com/ajax/libs/jquery/1.2/jquery.min.js"
 
+
+def set_default_slug(namer, extra_limits=lambda x: {}):
+    """
+    Returns a function to automatically set a default slug after creation.
+    
+    The base field is defined by the function ``namer``:
+        lambda instance: instance.name
+    
+    If slugs only need to be unique per-year, or some other limitation like
+    this, then the function ``extra_limits`` can set that -- for example:
+        lambda x: { 'pub_date__year': x.pub_date.year }
+    """
+    def _func(sender, instance, **kwords):
+        if not instance.slug:
+            base = slugify(namer(instance))
+            existing = sender.objects \
+                       .filter(slug__contains=base, **extra_limits(instance)) \
+                       .values_list('slug', flat=True)
+            slug = base
+            num = 0
+            while slug in existing:
+                num += 1
+                slug = "%s-%s" % (base, num)
+            instance.slug = slug
+    
+    return _func

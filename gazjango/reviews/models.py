@@ -6,7 +6,7 @@ from django.db.models.signals             import pre_save
 from django.template.defaultfilters       import slugify
 from gazjango.accounts.models          import UserProfile
 from gazjango.articles.models.stories  import Article
-from gazjango.misc.helpers             import avg
+from gazjango.misc.helpers             import avg, set_default_slug
 from gazjango.misc.templatetags.extras import join_authors
 from gazjango.tagging.models           import Tag
 import datetime
@@ -91,17 +91,8 @@ class Establishment(models.Model):
         return self.name
     
 
-def set_default_slug(sender, instance, **kwords):
-    if not instance.slug:
-        slug = base = slugify(instance.name)
-        existing = sender.objects.filter(slug__icontains=base)
-        num = 0
-        while slug in existing:
-            num += 1
-            slug = "%s-%s" % (base, num)
-        instance.slug = slug
-models.signals.post_init.connect(set_default_slug, sender=Establishment)
-
+_slugger = set_default_slug(lambda x: x.name)
+models.signals.pre_save.connect(_slugger, sender=Establishment)
 
 # limit us to tags in valid groups
 # we can't do this in the model definition, as Establishment isn't yet defined

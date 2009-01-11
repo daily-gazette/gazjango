@@ -1,7 +1,6 @@
-from django.db        import models
-from django.db.models import permalink, signals
-from django.utils.safestring        import mark_safe
-from django.template.defaultfilters import slugify
+from django.db               import models
+from django.utils.safestring import mark_safe
+from gazjango.misc.helpers import set_default_slug
 import django.utils.html
 import datetime
 import re
@@ -118,7 +117,7 @@ class Announcement(models.Model):
     def __unicode__(self):
         return self.slug or '<no slug>'
     
-    @permalink
+    @models.permalink
     def get_absolute_url(self):
         return ('announcement', [str(self.date_start.year), self.slug])
     
@@ -126,13 +125,7 @@ class Announcement(models.Model):
         get_latest_by = 'date_start'
 
 
-def set_default_slug(sender, instance, **kwords):
-    if not instance.slug:
-        slug = base_slug = slugify(instance.title)
-        num = 0
-        year = datetime.date.today().year
-        while Announcement.objects.filter(slug=slug, date_start__year=year).count():
-            num += 1
-            slug = "%s-%s" % (base_slug, num)
-        instance.slug = slug
-signals.post_init.connect(set_default_slug, sender=Announcement)
+_slugger = set_default_slug(lambda x: x.title,
+                            lambda x: { 'date_start__year': x.date_start.year })
+models.signals.pre_save.connect(_slugger, sender=Announcement)
+

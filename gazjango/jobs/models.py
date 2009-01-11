@@ -1,6 +1,7 @@
 from django.db import models
 from django.db.models import signals
 from django.template.defaultfilters import slugify
+from gazjango.misc.helpers import set_default_slug
 import datetime
 
 class PublishedJobsManager(models.Manager):
@@ -86,12 +87,5 @@ class JobListing(models.Model):
         return n + (' (%s)' % self.contact_email if self.contact_email else '')
     
 
-def set_default_slug(sender, instance, **kwords):
-    if not instance.slug:
-        slug = base_slug = slugify(instance.name)
-        num = 0
-        while JobListing.objects.filter(slug=slug).count():
-            num += 1
-            slug = "%s-%s" % (base_slug, num)
-        instance.slug = slug
-signals.post_init.connect(set_default_slug, sender=JobListing)
+_slugger = set_default_slug(lambda x: x.name)
+signals.post_init.connect(_slugger, sender=JobListing)
