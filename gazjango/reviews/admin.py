@@ -22,8 +22,8 @@ class EstablishmentAdmin(admin.ModelAdmin):
     )
     filter_horizontal = ('tags',)
     
-    list_display = ('name', 'establishment_type')
-    list_filter = ('establishment_type',)
+    list_display = ('name', 'establishment_type', 'city', 'tag_names', 'is_published')
+    list_filter = ('establishment_type', 'access')
     
 admin.site.register(Establishment, EstablishmentAdmin)
 
