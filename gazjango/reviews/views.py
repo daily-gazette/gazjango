@@ -23,6 +23,9 @@ def reviews(request):
     
     establishments = Establishment.published.order_by("establishment_type", "name")    
     
+    groups = TagGroup.objects.filter(content_type=ContentType.objects.for_model(Establishment))
+    tags = Tag.objects.filter(group__in=groups)
+    
     submitted_name = request.session.get('submitted_name', None)
     if submitted_name:
         del request.session['submitted_name']
@@ -33,6 +36,7 @@ def reviews(request):
         'TYPE_CHOICES': Establishment.TYPE_CHOICES,
         'submit_form': form,
         'submitted_name': submitted_name,
+        'tags': tags
     })
     return render_to_response('reviews/index.html', context_instance=rc)
     
