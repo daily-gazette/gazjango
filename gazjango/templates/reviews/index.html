@@ -40,22 +40,8 @@ function initialize() {
     // place establishments
       {% for establishment in establishments %}
         var point = new GLatLng({{ establishment.latitude }},{{ establishment.longitude }});
-        
-            $str  = "<large><strong>{{ establishment.name }}</strong></large>";
-
-            $str .= " ({{ establishment.get_establishment_type_display }}";
-            $str .= ")<br/>";
-
-            $str .= "<small>";
-            $str .= "{{ establishment.city }}";
-            $str .= " &mdash; {{ establishment.phone }}";
-            $str .= "</small>";
-        
-            $str = str_replace(array("\r\n", "\n", "\r"), "", $str);
-            $str = str_replace("'", "\\'", $str);
-        
-        var info_box = $str;
-        var icon = icon{{ establishment.establishment_type }};
+        var info_box = '<large><strong>{{ establishment.name }}</strong></large>. Average Rating of {{ establishment.avg_rating }} and cost of {{ establishment.avg_cost }}. Phone: {{ establishment.phone }}. Read more at the <a href="#">establishment page</a>.'
+        var icon = icon{{ establishment.establishment_type }}
         
         points[{{ forloop.counter }}] = point;
         info[{{ forloop.counter }}] = info_box;
