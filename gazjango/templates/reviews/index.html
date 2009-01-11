@@ -40,7 +40,7 @@ function initialize() {
     // place establishments
       {% for establishment in establishments %}
         var point = new GLatLng({{ establishment.latitude }},{{ establishment.longitude }});
-        var info_box = createInfoBox();
+        var info_box = createInfoBox({{ establishment.name }},{{ establishment.get_establishment_type_display }},{{ establishment.city }},{{ establishment.phone }});
         var icon = icon{{ establishment.establishment_type }};
         
         points[{{ forloop.counter }}] = point;
@@ -53,15 +53,15 @@ function initialize() {
   }
 }
 
-function createInfoBox() {
-        $str  = "<large><strong>{{ establishment.name }}</strong></large>";
+function createInfoBox($name,$type,$city,$phone) {
+        $str  = "<large><strong>$name</strong></large>";
 
-        $str .= " ({{ establishment.get_establishment_type_display }}";
+        $str .= " ($type";
         $str .= ")<br/>";
 
         $str .= "<small>";
-        $str .= "{{ establishment.city }}";
-        $str .= " &mdash; {{ establishment.phone }}";
+        $str .= "$city";
+        $str .= " &mdash; $phone";
         $str .= "</small>";
         
         $str = str_replace(array("\r\n", "\n", "\r"), "", $str);
