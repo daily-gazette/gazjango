@@ -23,12 +23,12 @@ class Establishment(models.Model):
     name = models.CharField(max_length=100)
     TYPE_CHOICES = (
         ('r',"Restaurant"),
-        ('t',"Theatre"),
-        ('g',"Gift"),
-        ('h',"Hotel"),
-        ('b',"Big Box"),
-        ('h',"Barbers and Salons"),
-        ('m',"Mailing")
+        ('a',"Arts"),
+        ('g',"Grocery"),
+        ('h',"Hotel"), 
+        ('s',"Barbers and Salons"),
+        ('m',"Mailing"),
+        ('b',"Bars") 
     )
     establishment_type = models.CharField(max_length=1, choices=TYPE_CHOICES, blank=False)
     
