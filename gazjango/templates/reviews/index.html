@@ -56,7 +56,7 @@ function initialize() {
 function createMarker(point, info_box, type) {
     var marker = new google.maps.Marker(point,type);
 
-    google.maps.Event.addListener(marker, 'click', function() {
+    GEvent.addListener(marker, 'click', function(){
         map.openInfoWindowHtml(point, info_box);
         });
 
