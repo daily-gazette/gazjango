@@ -19,6 +19,8 @@ var points = {};
 var info = {};
 
 var markerGroups = { {% for short, long in TYPE_CHOICES %}"{{ short }}": []{% if not forloop.last %}, {% endif %}{% endfor %} }
+var tagGroups = { {% for tag in tags %}"{{ tag.name }}": []{% if not forloop.last %}, {% endif %}{% endfor %} }
+    
 
 var icons = {};
 {% for short, long in TYPE_CHOICES %}
@@ -65,6 +67,7 @@ function addMarker(point, info_box, type, num) {
   points[num] = point;
   info[num] = info_box;
   markerGroups[type].push(marker);
+  {% for tag in establishment.tags.all %} tagGroups[{{ tag.name }}].push(marker); {% endfor %}
 }
 
 function openInfo(num) {
@@ -75,6 +78,20 @@ function openInfo(num) {
 function toggleGroup(type) {
   jQuery.each(markerGroups[type], function() {
     this.isHidden() ? this.show() : this.hide();
+  });
+  $('#review-listings .row-' + type).toggle();
+}
+
+function hideTag(tag) {
+  jQuery.each(tagGroup[tag], function() {
+    this.hide();
+  });
+  $('#review-listings .row-' + type).toggle();
+}
+
+function showTag(tag) {
+  jQuery.each(tagGroup[tag], function() {
+    this.show();
   });
   $('#review-listings .row-' + type).toggle();
 }
@@ -132,7 +149,7 @@ $(function() {
                 <tr>
                     {% for tag in tagGroups %}
                     <td>
-                        <p><input type="checkbox" id="checkbox-{{ tag.name }}" onclick="toggleGroup('{{ tag.name }}')" CHECKED /> {{ tag.longest_name }} </p>
+                        <p><input type="checkbox" id="checkbox-{{ tag.name }}" onclick="this.checked? hideTag({{ tag.name }}): showTag({{ tag.name }})" CHECKED /> {{ tag.longest_name }} </p>
                     </td>
                     {% endfor %}
                 </tr>
