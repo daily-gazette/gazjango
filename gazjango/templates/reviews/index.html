@@ -19,7 +19,7 @@ var points = {};
 var info = {};
 
 var markerGroups = { {% for short, long in TYPE_CHOICES %}"{{ short }}": []{% if not forloop.last %}, {% endif %}{% endfor %} }
-var tagGroups = { {% for tag in tags %}"{{ tag.name }}": []{% if not forloop.last %}, {% endif %}{% endfor %} }
+var tagGroups = { {{% for tag in tags %}}"{{ tag.name }}": []{% if not forloop.last %}, {% endif %}{% endfor %} }
     
 
 var icons = {};
