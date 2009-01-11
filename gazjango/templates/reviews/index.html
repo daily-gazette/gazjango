@@ -16,7 +16,7 @@
   <script type="text/javascript">
 var markerGroups = { {% for short, long in TYPE_CHOICES %}"{{short}}": []{% if not forloop.last %}, {% endif %}{% endfor %} }
 
-var markers = new Array();
+var points = new Array();
 var info = new Array();
 
 {% for short, long in TYPE_CHOICES %}
@@ -40,6 +40,9 @@ function createMarker(point, info_box, type) {
     return marker;
 }
 
+function openInfo(num) {
+    map.openInfoWindowHtml(points[num], info[num]);
+}
 
 function initialize() {
   if (GBrowserIsCompatible()) {
@@ -56,6 +59,8 @@ function initialize() {
         var point{{ establishment.pk }} = createMarker(point,info_box,icon);
         map.addOverlay(point{{ establishment.pk }});
         markerGroups['{{ establishment.establishment_type }}'].push(point{{ establishment.pk }})
+        points[{{ forloop.counter }}] = point;
+        info[{{ forloop.counter }}] = info_box;
       {% endfor %}
   }
 }
@@ -77,6 +82,7 @@ $(function() {
     }
   });
 });
+
   </script>
 
 {% endblock customheader %}
