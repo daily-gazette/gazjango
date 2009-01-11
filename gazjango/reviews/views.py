@@ -26,9 +26,7 @@ def reviews(request):
         form = SubmitEstablishmentForm()
     
     establishments = Establishment.published.order_by("establishment_type", "name")    
-    
-    groups = TagGroup.objects.filter(content_type=ContentType.objects.for_model(Establishment))
-    tags = Tag.objects.filter(group__in=groups)
+    tags = Tag.objects.filter(group__content_type=ContentType.objects.get_for_model(Establishment))
     
     submitted_name = request.session.get('submitted_name', None)
     if submitted_name:
