@@ -41,26 +41,9 @@ body.sort-active *
 	display: inline-block;
 }
 
-
-
-body
-        {
-        padding:0;
-        border:0;
-        margin:0;
-        text-align:center;
-        font-family: verdana,arial,sans-serif;
-        color:#545454;
-        min-width: 800px;
-        }
 h2 span
         {
         font-variant:small-caps;
-        }
-p a
-        {
-        font-weight:normal;
-        outline:none;
         }
 p a:link,
 p a:visited
@@ -83,15 +66,6 @@ code
         {
         font-family:'andale mono','lucida console','courier new',monospace;
         font-size:1em;
-        }
-h1
-        {
-        font-weight:lighter;
-        font-family:georgia, times new roman, times, georgia, palatino, serif;
-        text-align:center;
-        margin-top:0.6em;
-        color:#000;
-        font-size:2em;
         }
 h2
         {
