@@ -1,3 +1,5 @@
+/* @override http://127.0.0.1:8000/static/css/page/reviews.css */
+
 /*
    Add the following to your CSS file should you wish the cursor to
    "wait" while the script is processing the sort
@@ -8,13 +10,45 @@ body.sort-active *
         }
 */
 
+
+#map.jmap {
+	width: 620px;
+	height: 400px;
+	border: 3px solid #4f6b72;
+	float: right;
+	display: inline-block;
+	margin-top: 20px;
+	margin-right: 20px;
+}
+
+#listings {
+	float: left;
+	width: 100%;
+	padding-top: 20px;
+}
+
+#map-menu {
+	width: 275px;
+	height: 300px;
+	float: left;
+	margin-left: 20px;
+	margin-top: 20px;
+	text-align: left;
+}
+
+#map-menu h4 {
+	padding-top: 15px;
+	display: inline-block;
+}
+
+
+
 body
         {
         padding:0;
         border:0;
         margin:0;
         text-align:center;
-        font-size:12px;
         font-family: verdana,arial,sans-serif;
         color:#545454;
         min-width: 800px;
@@ -50,11 +84,6 @@ code
         font-family:'andale mono','lucida console','courier new',monospace;
         font-size:1em;
         }
-p
-        {
-        line-height:1.6em;
-        margin:0 0 1em 0;
-        }
 h1
         {
         font-weight:lighter;
@@ -69,18 +98,18 @@ h2
         font-weight:lighter;
         font-family:verdana,arial,sans-serif;
         text-align:center;
-        margin-top:1em;
+        margin-top:15px;
         color:#333;
         text-transform:uppercase;
         letter-spacing:1px;
-        font-size:1.2em;
+        font-size:3em;
         }
 h2 span
         {
         font-variant:small-caps;
         text-transform:none;
         }
-table
+#listings table
         {
         width: auto;
         padding: 0;
@@ -110,7 +139,7 @@ caption
         font: italic 11px "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
         text-align: right;
         }
-th
+#listings th
         {
         font: bold 10px/22px "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
         color: #4f6b72;
@@ -124,7 +153,7 @@ th
         background: #CAE8EA url(../media/bg_header.jpg) no-repeat;
         vertical-align:middle;
         }
-td.total
+#listings td.total
         {
         border-top: 0;
         border-left: 0;
@@ -135,37 +164,37 @@ td.total
         text-transform:uppercase;
         letter-spacing:1px;
         }
-th.sortable,
-th.sortable-text,
-th.sortable-date,
-th.sortable-keep,
-th.sortable-date-dmy,
-th.sortable-numeric,
-th.sortable-currency,
-th.sortable-sortByTwelveHourTimestamp,
-th.sortable-sortIPAddress,
-th.sortable-sortEnglishLonghandDateFormat,
-th.sortable-sortScientificNotation,
-th.sortable-sortImage,
-th.sortable-sortFileSize,
-th.sortable-sortAlphaNumeric,
-th.sortable-sortEnglishDateTime
+#listings th.sortable,
+#listings th.sortable-text,
+#listings th.sortable-date,
+#listings th.sortable-keep,
+#listings th.sortable-date-dmy,
+#listings th.sortable-numeric,
+#listings th.sortable-currency,
+#listings th.sortable-sortByTwelveHourTimestamp,
+#listings th.sortable-sortIPAddress,
+#listings th.sortable-sortEnglishLonghandDateFormat,
+#listings th.sortable-sortScientificNotation,
+#listings th.sortable-sortImage,
+#listings th.sortable-sortFileSize,
+#listings th.sortable-sortAlphaNumeric,
+#listings th.sortable-sortEnglishDateTime
 
         {
         cursor:pointer;
         background: #CAE8EA url(../media/bg_header_sortable.jpg) no-repeat;
         padding: 8px 12px 4px 16px;
         }
-th.forwardSort
+#listings th.forwardSort
         {
         background:#CAE8EA url(../media/bg_header_down.jpg) no-repeat 0 0;
         }
-th.reverseSort
+#listings th.reverseSort
         {
         background:#CAE8EA url(../media/bg_header_up.jpg) no-repeat 0 0;
         }
-table thead th.forwardSort a,
-table thead th.reverseSort a
+#listings table thead th.forwardSort a,
+#listings table thead th.reverseSort a
         {
         color:#000;
         text-decoration:none;
@@ -183,30 +212,30 @@ th.sort-active a
         cursor:wait;
         }
 */
-th a
+#listings th a
         {
         text-decoration:none;
         color: #4f6b72;
         background:transparent;
         }
-td a
+#listings td a
         {
         text-decoration:none;
         color:#239;
         background:transparent;
         }
-td img
+#listings td img
         {
         margin:0 auto;
         border:3px solid #ddd;
         }
-td a:hover
+#listings td a:hover
         {
         color:#a84444;
         border-bottom:1px dotted #a80000;
         background:transparent;
         }
-td
+#listings td
         {
         font: normal 11px "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
         border-right: 1px solid #C1DAD7;

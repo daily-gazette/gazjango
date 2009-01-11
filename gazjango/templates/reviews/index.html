@@ -8,24 +8,54 @@
   <link rel="stylesheet" href="{% static css page/reviews.css %}" type="text/css"/>
   
   <script type="text/javascript" src="{% static js tablesort.js %}"></script>
+<<<<<<< .mine
+  <script src="http://maps.google.com/maps?file=api&amp;v=2.x&amp;key=ABQIAAAA__HcO8eeRwet5zvnoNmWOBRi_j0U6kJrkFvY4-OX2XYmEAa76BR3_-DW8mZq_Cio0OE_2C5MsfnlBg" type="text/javascript"></script>
+=======
   <script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key={{ GMAPS_API_KEY }}" type="text/javascript"></script>
+>>>>>>> .r1360
   
   <script type="text/javascript">
+  
+  var markerGroups = { {% for short, long in TYPE_CHOICES %}"{{short}}": []{% if not forloop.last %}, {% endif %}{% endfor %}  }
+  
+  {% for short, long in TYPE_CHOICES %}
+  var icon{{ short }} = new GIcon(); 
+      icon{{ short }}.image = '/static/images/reviews/map-markers/{{ short }}.png';
+      icon{{ short }}.shadow = '/static/images/{{ short }}-shadow.png';
+      icon{{ short }}.iconSize = new GSize(32, 32);
+      icon{{ short }}.shadowSize = new GSize(59, 32);
+      icon{{ short }}.iconAnchor = new GPoint(16, 32);
+      icon{{ short }}.infoWindowAnchor = new GPoint(5, 1);
+  {% endfor %}
+  
   
   function initialize() {
     if (GBrowserIsCompatible()) {
       // Init map
       var map = new GMap2(document.getElementById("map"));
       map.setCenter(new GLatLng(39.9034, -75.3529), 13);
-      
+            
       // place establishments
       {% for establishment in establishments %}      
-        var point{{ establishment.pk }} = new GLatLng({{ establishment.latitude }},{{ establishment.longitude }});
-        map.addOverlay(new GMarker(point{{ establishment.pk }}));
+        var point{{ establishment.pk }} = new GMarker(new GLatLng({{ establishment.latitude }},{{ establishment.longitude }}),icon{{ establishment.establishment_type }});
+        map.addOverlay(point{{ establishment.pk }});
+        markerGroups['{{ establishment.establishment_type }}'].push(point{{ establishment.pk }})
       {% endfor %}
-      
+    
+
     }
   }
+  
+  function toggleGroup(type) {
+      for (var i = 0; i < markerGroups[type].length; i++) {
+        var marker = markerGroups[type][i];
+        if (marker.isHidden()) {
+          marker.show();
+        } else {
+          marker.hide();
+        }
+      }
+    }
 
   </script>  
   
@@ -44,12 +74,89 @@
 
 {% block content %}
 <div id="reviews">
-  <h2>A Community Guide</h2>
+  <h2>The Zagette</h2>
   <div id="topBlock">
     <div id="sideBar">
             
     </div>
     <div id="mapBlock" onload="initialize()" onunload="GUnload()">
+                
+      <div id="map-menu">
+          <h3>Categories</h3>
+          {% for short, long in TYPE_CHOICES %}
+                <p><input type="checkbox" id="{{ short }}Checkbox" onclick="toggleGroup('{{ short }}')" CHECKED /> {{ long }} </p>
+          {% endfor %}
+          <h4>We missing something? Let us know.</h4>
+              <form>
+              <table width="250px" cellspacing="0px" cellpadding="0px" border="0px">
+                  <tr height="10px">
+                      <td width="25%">
+                          Name:
+                      </td>
+                      <td>
+                          <input id="id_name" type="text" class="vTextField" name="name" maxlength="100" />
+                      </td>
+                  </tr>
+                  <tr>
+                      <td>
+                          Type:
+                      </td>
+                      <td>
+                          <select name="establishment_type" id="id_establishment_type">
+                            <option value="" selected="selected">---------</option>
+                            <option value="r">Restaurant</option>
+                            <option value="a">Arts</option>
+                            <option value="g">Grocery</option>
+                            <option value="h">Hotel</option>
+                            <option value="s">Barbers and Salons</option>
+                            <option value="m">Mailing</option>
+                            <option value="b">Bars</option>
+                          </select>
+                      </td>
+                  </tr>
+                  <tr>
+                      <td>
+                          Access:
+                      </td>
+                      <td>
+                          <select name="access" id="id_access">
+                            <option value="" selected="selected">---------</option>
+                            <option value="w">Walking</option>
+                            <option value="p">Public Transportation</option>
+                            <option value="d">Driving</option>
+                          </select>
+                      </td>
+                  </tr>
+                  <tr>
+                      <td>
+                          Address:
+                      </td>
+                      <td>
+                          <input id="id_street_address" type="text" class="vTextField" name="street_address" maxlength="100" />
+                      </td>
+                  </tr>
+                  <tr>
+                      <td>
+                          City:
+                      </td>
+                      <td>
+                          <input id="id_city" type="text" class="vTextField" name="city" maxlength="100" />
+                      </td>
+                  </tr>
+                  <tr>
+                      <td>
+                          Zip Code:
+                      </td>
+                      <td>
+                          <input id="id_zip_code" type="text" class="vTextField" name="zip_code" maxlength="5" />
+                      </td>
+                  </tr>
+                  <tr>
+                      <td></td>
+                      <td><input type="submit" value="Submit" class="default" name="_save" /></td>
+              </table>
+              </form>
+      </div>
       <div id="map" class="jmap"></div>
     </div>
   </div>
