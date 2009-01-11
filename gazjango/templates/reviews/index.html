@@ -17,7 +17,7 @@
 var markerGroups = { {% for short, long in TYPE_CHOICES %}"{{short}}": []{% if not forloop.last %}, {% endif %}{% endfor %} }
 var points = new Array();
 var info = new Array();
-var map = new GMap2(document.getElementById("map"));
+var map = new GMap2();
 
 {% for short, long in TYPE_CHOICES %}
 var icon{{ short }} = new GIcon(); 
@@ -34,6 +34,7 @@ var icon{{ short }} = new GIcon();
 function initialize() {
   if (GBrowserIsCompatible()) {
     // Init map
+    var map = new GMap2(document.getElementById("map"));
     map.setCenter(new GLatLng(39.9034, -75.3529), 15);
           
     // place establishments
