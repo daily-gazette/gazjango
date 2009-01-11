@@ -39,34 +39,24 @@ function initialize() {
     // place establishments
       {% for establishment in establishments %}
         var point = new GLatLng({{ establishment.latitude }},{{ establishment.longitude }});
-        var info_box = '<large><strong>{{ establishment.name }}</strong></large>. Average Rating of {{ establishment.avg_rating }} and cost of {{ establishment.avg_cost }}. Phone: {{ establishment.phone }}. Read more at the <a href="#">establishment page</a>.'
-        var icon = icon{{ establishment.establishment_type }}
+        var info_box = "<large><strong>{{ establishment.name }}</strong></large>. Average Rating of {{ establishment.avg_rating }} and cost of {{ establishment.avg_cost }}. Phone: {{ establishment.phone }}. Read more at the <a href="#">establishment page</a>.";
+        var icon = icon{{ establishment.establishment_type }};
         
         points[{{ forloop.counter }}] = point;
         info[{{ forloop.counter }}] = info_box;
         
         
-            var marker = new GMarker(point,icon);
+        var marker = new GMarker(point,icon);
 
-            GEvent.addListener(marker, 'click', function(point,info_box){
-                map.openInfoWindowHtml(point, info_box);
-            });
+        GEvent.addListener(marker, 'click', function(point,info_box){
+            map.openInfoWindowHtml(point, info_box);
+        });
         
         var point{{ establishment.pk }} = marker;
         map.addOverlay(point{{ establishment.pk }});
         markerGroups['{{ establishment.establishment_type }}'].push(point{{ establishment.pk }})
       {% endfor %}
   }
-}
-
-function createMarker(point, info_box, type) {
-    var marker = new GMarker(point,type);
-
-    GEvent.addListener(marker, 'click', function(point,info_box){
-        map.openInfoWindowHtml(point, info_box);
-    });
-
-    return marker;
 }
 
 function openInfo(num) {
