@@ -4,11 +4,11 @@ from django.shortcuts         import get_object_or_404, render_to_response
 from django.template          import RequestContext
 
 from gazjango.articles.models             import Section
+from gazjango.misc.helpers                import get_static_path
 from gazjango.reviews.models              import Establishment, Review
 from gazjango.reviews.forms               import SubmitEstablishmentForm
-from gazjango.tagging.models              import Tag, TagGroup
+from gazjango.tagging.models              import Tag
 from django.contrib.contenttypes.models   import ContentType
-
 
 import urllib
 import settings
@@ -32,10 +32,17 @@ def reviews(request):
     if submitted_name:
         del request.session['submitted_name']
     
+    type_icons = [ (
+        short,
+        get_static_path('images', 'reviews/map-markers/%s.png' % short),
+        get_static_path('images', 'reviews/map-markers/%s-shadow.png' % short)
+    ) for short, long in Establishment.TYPE_CHOICES ]
+    
     rc = RequestContext(request, { 
         'establishments': establishments,
         'GMAPS_API_KEY': settings.GMAPS_API_KEY,
         'TYPE_CHOICES': Establishment.TYPE_CHOICES,
+        'icons': type_icons,
         'submit_form': form,
         'submitted_name': submitted_name,
         'tags': tags
