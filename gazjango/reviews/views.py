@@ -16,8 +16,9 @@ import settings
 def reviews(request):
     'View for "establishment review" page.'
     
-    establishments = Establishment.published.order_by("establishment_type", "name")  
-    ct = ContentType.objects.get_for_model(Establishment)  
+    establishments = Establishment.published.all()
+    
+    ct = ContentType.objects.get_for_model(Establishment)
     tags = Tag.objects.filter(group__content_type=ct)
     
     submitted_name = request.session.get('submitted_name', None)
@@ -34,7 +35,7 @@ def reviews(request):
                    values_list('city', flat=True).order_by('city').distinct()))
     
     rc = RequestContext(request, { 
-        'establishments': establishments,
+        'establishments': establishments.order_by(), # sorted client-side anyway
         'GMAPS_API_KEY': settings.GMAPS_API_KEY,
         'TYPE_CHOICES': Establishment.TYPE_CHOICES,
         'icons': type_icons,
