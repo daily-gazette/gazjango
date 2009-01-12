@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% load extras %}
+
+{% block title %}Submit Establishment{% endblock %}
+
+{% block customheader %}
+  <link rel="stylesheet" href="{% static css page/story.css %}" type="text/css" media="screen, projection" />
+{% endblock %}
+
+{% block topbar %}
+  <div id="headerSectionBar">
+    <div id="headerSearch">
+      {% include "search_header.html" %}
+    </div>
+  </div>
+{% endblock topbar %}
+
+{% block content %}
+  <div id="storyBox">
+    <div id="story">
+      <h2>Submit an Establishment</h2>
+      
+      <form action="" method="post">
+        <table class="submission">
+          {{ form.as_table }}
+          
+          <tr>
+            <td></td>
+            <td><input type="submit" value="Submit" /></td>
+          </tr>
+        </table>
+      </form>
+    </div>
+  </div>
+{% endblock %}
