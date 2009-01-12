@@ -55,7 +55,7 @@ function synchronizeCheckboxes() {
 
 // TODO: the table isn't properly highlighted when things are hidden
 
-Array.prototype.delete = function(el) {
+Array.prototype.deleteAll = function(el) {
     for (i = 0; i < this.length; i++) {
         if (this[i] == el) {
             this.splice(i, 1);
@@ -90,7 +90,7 @@ function hideTag(tag) {
 function showTag(tag) {
     jQuery.each(estabsByTag[tag], function() {
         var establishment = establishments[this];
-        establishment.tagHiders.delete(tag);
+        establishment.tagHiders.deleteAll(tag);
         if (establishment.tagHiders.length == 0) {
             showEstablishment(establishment);
         }
