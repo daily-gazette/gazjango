@@ -1,15 +1,61 @@
 from django.db import models
+from django.contrib.contenttypes.models import ContentType
+import re
 
+# booleans
 FALSE_VALUES = set(['0', 'false', 'no', 'off'])
-def make_bool(string):
-    return not (string.lower() in FALSE_VALUES)
+make_bool = lambda string: not (string.lower() in FALSE_VALUES)
+
+# str lists
+STR_LIST_SEP = '|'
+STR_LIST_ESC = '\\'
+UNESCAPED_STR_LIST_SEP = re.compile('(?<!%s)%s' % 
+                         (re.escape(STR_LIST_ESC), re.escape(STR_LIST_SEP)))
+ESCAPED_STR_LIST_SEP = re.compile(re.escape(STR_LIST_ESC) + re.escape(STR_LIST_SEP))
+
+str_list_escape = lambda s: UNESCAPED_STR_LIST_SEP.sub(STR_LIST_ESC + STR_LIST_SEP, s)
+str_list_unescape = lambda s: ESCAPED_STR_LIST_SEP.sub(STR_LIST_SEP, s)
+
+def read_str_list(string):
+    return [str_list_unescape(el) for el in string.split(STR_LIST_SEP)]
+
+def render_str_list(strlist):
+    return STR_LIST_SEP.join(str_list_escape(el) for el in strlist)
+
+
+# many-fks -- stored as content_type_pk | pk1 | pk2 | ...
+# only works with models where instance.pk==1 => model.objects.get(pk='1')==instance
+class NotSameModel(Exception):
+    pass
+
+def read_manyfks(string):
+    bits = read_str_list(string)
+    if len(bits) < 2:
+        return []
+    model = ContentType.objects.get_for_id(bits[0]).model_class()
+    return model._default_manager.filter(pk__in=bits[1:])
+
+def render_manyfks(instances):
+    model = None # stick to straight iterable methods
+    pks = []
+    for instance in instances:
+        if not model:
+            model = instance.__class__
+        elif instance.__class__ != model:
+            raise NotSameModel
+        pks.append(str(instance.pk))
+    ct = str(ContentType.objects.get_for_model(model).pk)
+    return render_str_list([ct] + pks)
+
 
 OPTION_TYPES = {
-#   db    name       db->python, python->db
-    'b': ('boolean', make_bool,  str),
-    's': ('string',  str,        str),
-    'i': ('int',     int,        str),
-    'f': ('float',   float,      str),
+#   db    name       db->python,    python->db
+    'b': ('boolean', make_bool,     str),
+    's': ('string',  str,           str),
+    'i': ('int',     int,           str),
+    'f': ('float',   float,         str),
+    'l': ('strlist', read_str_list, render_str_list),
+    'm': ('manyfks', read_manyfks,  render_manyfks),
 }
 OPTION_CHOICES = [(db, name) for db, (name, dbtopy, pytodb) in OPTION_TYPES.items()]
 
