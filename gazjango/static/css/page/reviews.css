@@ -48,6 +48,16 @@ body.sort-active *
     text-align: center;
 }
 
+
+h3 .checkbox-links {
+    margin-left: 0.3em;
+}
+
+h3 .checkbox-links a {
+    font-size: 0.7em;
+    padding-left: 0.2em;
+}
+
 h2 span
         {
         font-variant:small-caps;

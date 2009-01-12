@@ -89,28 +89,34 @@ function initialize() {
   <div id="topBlock">
     <div id="mapBlock">
       <div id="map-menu">
-        <h3>Categories</h3>
-        <p>
-          <a href="#" onclick="setAll('type', true); return false;">all</a>
-          <a href="#" onclick="setAll('type', false); return false;">none</a>
-        </p>
+        <h3>
+          Categories
+          <span class="checkbox-links">
+            -
+            <a href="#" onclick="setAll('type', true); return false;">all</a>
+            <a href="#" onclick="setAll('type', false); return false;">none</a>
+          </span>
+        </h3>
         <table>
-            {% for types in TYPE_CHOICES|in_groups_of:2 %}
-                <tr>
-                    {% for short, long in types %}
-                    <td>
-                        <p><input type="checkbox" class="type-checkbox" id="type-checkbox-{{ short }}" onclick="setType('{{ short }}', this.checked);" CHECKED /> {{ long }} </p>
-                    </td>
-                    {% endfor %}
-                </tr>
-            {% endfor %}
+          {% for types in TYPE_CHOICES|in_groups_of:2 %}
+            <tr>
+              {% for short, long in types %}
+                <td>
+                  <p><input type="checkbox" class="type-checkbox" id="type-checkbox-{{ short }}" onclick="setType('{{ short }}', this.checked);" CHECKED /> {{ long }} </p>
+                </td>
+              {% endfor %}
+            </tr>
+          {% endfor %}
         </table>
         
-        <h3>Locations</h3>
-        <p>
-          <a href="#" onclick="setAll('loc', true); return false;">all</a>
-          <a href="#" onclick="setAll('loc', false); return false;">none</a>
-        </p>
+        <h3>
+          Locations
+          <span class="checkbox-links">
+            -
+            <a href="#" onclick="setAll('loc', true); return false;">all</a>
+            <a href="#" onclick="setAll('loc', false); return false;">none</a>
+          </span>
+        </h3>
         <table>
           {% for locations in locations|in_groups_of:2 %}
             <tr>
@@ -123,11 +129,14 @@ function initialize() {
           {% endfor %}
         </table>
         
-        <h3>Tags</h3>
-        <p>
-          <a href="#" onclick="setAll('tag', true); return false;">all</a>
-          <a href="#" onclick="setAll('tag', false); return false;">none</a>
-        </p>
+        <h3>
+          Tags
+          <span class="checkbox-links">
+            -
+            <a href="#" onclick="setAll('tag', true); return false;">all</a>
+            <a href="#" onclick="setAll('tag', false); return false;">none</a>
+          </span>
+        </h3>
         <table>
             {% for tagGroups in tags|in_groups_of:2 %}
                 <tr>
