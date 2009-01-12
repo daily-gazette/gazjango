@@ -49,8 +49,8 @@ def reviews(request):
     })
     return render_to_response('reviews/index.html', context_instance=rc)
     
-def establishment(request,slug):
-    'View for "establishment" pages with reviews.'
+def establishment(request, slug):
+    'View for "establishment" pages.'
     
     establishment = get_object_or_404(Establishment, slug=slug)
     

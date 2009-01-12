@@ -163,7 +163,8 @@ urlpatterns += patterns('athletics.views',
 )
 
 urlpatterns += patterns('reviews.views',
-    (r'^reviews/$',                   'reviews')
+    (r'^reviews/$',                 'reviews'),
+    (r'^reviews/%(slug)s/$' % reps, 'establishment'),
 )
 
 # section match should be last, to avoid shadowing others

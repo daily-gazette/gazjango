@@ -90,6 +90,10 @@ class Establishment(models.Model):
     def __unicode__(self):
         return self.name
     
+    @models.permalink
+    def get_absolute_url(self):
+        return ('reviews.views.establishment', None, {'slug': self.slug})
+    
 
 _slugger = set_default_slug(lambda x: x.name)
 models.signals.pre_save.connect(_slugger, sender=Establishment)
@@ -142,4 +146,4 @@ class Review(models.Model):
         return self.slug
     
     def get_absolute_url(self):
-        return "%s#%s" % (self.establishment.get_absolute_url, self.slug)
+        return "%s#%s" % (self.establishment.get_absolute_url(), self.slug)
