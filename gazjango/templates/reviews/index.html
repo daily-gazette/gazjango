@@ -28,6 +28,10 @@ function initialize() {
     icons['{{ short }}'].infoWindowAnchor = new GPoint(5, 1);
     {% endfor %}
     
+    {% for short, long in TYPE_CHOICES %}
+      estabsByType['{{ short }}'] = [];
+    {% endfor %}
+    
     // establishments
     // TODO: load establishments with ajax?
     {% for e in establishments %}

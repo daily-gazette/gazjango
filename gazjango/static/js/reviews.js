@@ -35,18 +35,12 @@ function addMarker(num, point, info_box, type, tags) {
     (estabsByType[type] || (estabsByType[type] = [])).push(num);
     jQuery.each(tags, function() {
         (estabsByTag[this] || (estabsByTag[this] = [])).push(num);
-    })
+    });
 }
 
 function synchronizeCheckboxes() {
-    $('.type-checkbox').each(function() {
-        if (!this.checked) { doTypeCheckbox(this); }
-        else if (on_start) { doTypeCheckbox(this); }
-    });
-    $('.tag-checkbox').each(function(){ 
-        if (!this.checked) { doTagCheckbox(this); }
-        else if (on_start) { doTagCheckbox(this); }
-    });
+    $('.type-checkbox').each(function() { doTypeCheckbox(this); });
+    $('.tag-checkbox').each(function(){ doTagCheckbox(this); });
 }
 
 // ====================
