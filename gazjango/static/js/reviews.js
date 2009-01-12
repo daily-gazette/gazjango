@@ -12,9 +12,11 @@ var establishments = {}; // estab_id => { 'num': estab_id,
                          //               'tags': [1, 5, 9],
                          //               'tagHiders': [1, 9] }
 var estabsByType = {}; // type => [estab_id, estab_id, ...]
-var estabsByTag  = {}; // tag_id => [estab_id, estab_id]
+var establishment_nums = []; // list of all estab_ids
 
-var typeHidden = {}; // type => true or false/undefined
+var typeShown = {}; // type => true|false
+var tagChecked = {}; // tag_id => true|false
+var showAllTags = true;
 
 function initializeMap(element) {
     map = new GMap2(element);
@@ -33,14 +35,20 @@ function addMarker(num, point, info_box, type, tags) {
     establishments[num] = { 'num': num, 'marker': marker, 'info': info_box, 
                             'type': type, 'tags': tags, 'tagHiders': [] };
     (estabsByType[type] || (estabsByType[type] = [])).push(num);
-    jQuery.each(tags, function() {
-        (estabsByTag[this] || (estabsByTag[this] = [])).push(num);
-    });
+    establishment_nums.push(num);
 }
 
 function synchronizeCheckboxes() {
-    $('.type-checkbox').each(function() { doTypeCheckbox(this); });
-    $('.tag-checkbox').each(function(){ doTagCheckbox(this); });
+    $('.type-checkbox').each(function() {
+        type = this.id.substring('type-checkbox-'.length);
+        typeShown[type] = this.checked;
+    });
+    $('.tag-checkbox').each(function() { 
+        tag = parseInt(this.id.substring('tag-checkbox-'.length));
+        tagChecked[tag] = this.checked;
+    });
+    updateShowAllTags();
+    updateEstablishments(establishment_nums);
 }
 
 // ====================
@@ -49,46 +57,41 @@ function synchronizeCheckboxes() {
 
 // TODO: the table isn't properly highlighted when things are hidden
 
-Array.prototype.deleteAll = function(el) {
-    for (i = 0; i < this.length; i++) {
-        if (this[i] == el) {
-            this.splice(i, 1);
-        }
-    }
+function setType(type, value) {
+    typeShown[type] = value;
+    updateEstablishments(estabsByType[type]);
+}
+function setTag(tag, value) {
+    tagChecked[tag] = value;
+    updateShowAllTags();
+    updateEstablishments(establishment_nums);
 }
 
-function hideType(type) {
-    typeHidden[type] = true;
-    jQuery.each(estabsByType[type], function() {
-        var establishment = establishments[this];
-        hideEstablishment(establishment);
-    });
-}
-function showType(type) {
-    typeHidden[type] = false;
-    jQuery.each(estabsByType[type], function() {
-        var establishment = establishments[this];
-        if (establishment.tagHiders.length == 0) {
-            showEstablishment(establishment);
+function updateShowAllTags() {
+    showAllTags = true;
+    jQuery.each(tagChecked, function(tag, checked) {
+        if (checked) {
+            showAllTags = false;
+            return false; // break from each()
         }
     });
 }
-
-function hideTag(tag) {
-    jQuery.each(estabsByTag[tag], function() {
-       var establishment = establishments[this];
-       establishment.tagHiders.push(tag);
-       hideEstablishment(establishment);
-    });
+// doesn't account for showAllTags
+function shouldShowWithTags(tags) {
+    for (i = 0; i < tags.length; i++)
+        if (tagChecked[tags[i]])
+            return true;
+    return false;
 }
-function showTag(tag) {
-    jQuery.each(estabsByTag[tag], function() {
-        var establishment = establishments[this];
-        establishment.tagHiders.deleteAll(tag);
-        if (establishment.tagHiders.length == 0) {
-            showEstablishment(establishment);
+function updateEstablishments(list) {
+    jQuery.each(list, function() {
+        var est = establishments[this];
+        if (typeShown[est.type] && (showAllTags || shouldShowWithTags(est.tags))) {
+            showEstablishment(est);
+        } else {
+            hideEstablishment(est);
         }
-    });
+    })
 }
 
 function showEstablishment(establishment) {
@@ -100,18 +103,6 @@ function hideEstablishment(establishment) {
     $('#establishment-' + establishment.num).hide();
 }
 
-function doTypeCheckbox(checkbox) {
-    type = checkbox.id.substring('type-checkbox-'.length);
-    doType(type, checkbox.checked);
-}
-function doTagCheckbox(checkbox) {
-    tag = parseInt(checkbox.id.substring('tag-checkbox-'.length));
-    doTag(tag, checkbox.checked);
-}
-
-function doType(type, checked) { checked ? showType(type) : hideType(type)}
-function doTag(tag, checked) { checked ? showTag(tag) : hideTag(tag); }
-
 // ===============
 // = Other Stuff =
 // ===============
@@ -119,4 +110,9 @@ function doTag(tag, checked) { checked ? showTag(tag) : hideTag(tag); }
 function openInfo(num) {
     var est = establishments[num];
     est.marker.openInfoWindowHtml(est.info);
+}
+
+function setAll(kind, val) {
+    $('.' + kind + '-checkbox').attr('checked', val);
+    synchronizeCheckboxes();
 }

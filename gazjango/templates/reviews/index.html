@@ -28,8 +28,14 @@ function initialize() {
     icons['{{ short }}'].infoWindowAnchor = new GPoint(5, 1);
     {% endfor %}
     
+    // variables that it's easier to init here
     {% for short, long in TYPE_CHOICES %}
+      typeShown['{{ short }}'] = true;
       estabsByType['{{ short }}'] = [];
+    {% endfor %}
+    
+    {% for tag in tags %}
+      tagChecked[{{ tag.pk }}] = false;
     {% endfor %}
     
     // establishments
@@ -77,12 +83,16 @@ function initialize() {
     <div id="mapBlock">
       <div id="map-menu">
         <h3>Categories</h3>
+        <p>
+          <a href="#" onclick="setAll('type', true); return false;">all</a>
+          <a href="#" onclick="setAll('type', false); return false;">none</a>
+        </p>
         <table>
             {% for types in TYPE_CHOICES|in_groups_of:2 %}
                 <tr>
                     {% for short, long in types %}
                     <td>
-                        <p><input type="checkbox" class="type-checkbox" id="type-checkbox-{{ short }}" onclick="doType('{{ short }}', this.checked);" CHECKED /> {{ long }} </p>
+                        <p><input type="checkbox" class="type-checkbox" id="type-checkbox-{{ short }}" onclick="setType('{{ short }}', this.checked);" CHECKED /> {{ long }} </p>
                     </td>
                     {% endfor %}
                 </tr>
@@ -90,12 +100,16 @@ function initialize() {
         </table>
         
         <h3>Tags</h3>
+        <p>
+          <a href="#" onclick="setAll('tag', true); return false;">all</a>
+          <a href="#" onclick="setAll('tag', false); return false;">none</a>
+        </p>
         <table>
             {% for tagGroups in tags|in_groups_of:2 %}
                 <tr>
                     {% for tag in tagGroups %}
                     <td>
-                        <p><input type="checkbox" class="tag-checkbox" id="tag-checkbox-{{ tag.pk }}" onclick="doTag({{ tag.pk }}, this.checked);" CHECKED /> {{ tag.longest_name }} </p>
+                        <p><input type="checkbox" class="tag-checkbox" id="tag-checkbox-{{ tag.pk }}" onclick="setTag({{ tag.pk }}, this.checked);" /> {{ tag.longest_name }} </p>
                     </td>
                     {% endfor %}
                 </tr>
