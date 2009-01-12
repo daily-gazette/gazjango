@@ -34,6 +34,11 @@ function initialize() {
       estabsByType['{{ short }}'] = [];
     {% endfor %}
     
+    {% for num, loc in locations %}
+      locShown[{{ num }}] = true;
+      estabsByLoc[{{ num }}] = [];
+    {% endfor %}
+    
     {% for tag in tags %}
       tagChecked[{{ tag.pk }}] = false;
     {% endfor %}
@@ -52,6 +57,8 @@ function initialize() {
       '<a href="{{ e.get_absolute_url }}">Read more</a>',
       
       '{{ e.establishment_type }}',
+      {# NOTE: ugly as all hell #}
+      {% for num, loc in locations %}{% ifequal loc e.city %}{{ num }}{% endifequal %}{% endfor %},
       [ {% for tag in e.tags.all %}{{ tag.pk }}{% if not forloop.last %}, {% endif %}{% endfor %} ]
     );
     {% endfor %}
@@ -97,6 +104,23 @@ function initialize() {
                     {% endfor %}
                 </tr>
             {% endfor %}
+        </table>
+        
+        <h3>Locations</h3>
+        <p>
+          <a href="#" onclick="setAll('loc', true); return false;">all</a>
+          <a href="#" onclick="setAll('loc', false); return false;">none</a>
+        </p>
+        <table>
+          {% for locations in locations|in_groups_of:2 %}
+            <tr>
+              {% for num, loc in locations %}
+                <td>
+                  <p><input type="checkbox" class="loc-checkbox" id="loc-checkbox-{{ num }}" onclick="setLoc({{ num }}, this.checked);" CHECKED /> {{ loc }}</p>
+                </td>
+              {% endfor %}
+            </tr>
+          {% endfor %}
         </table>
         
         <h3>Tags</h3>

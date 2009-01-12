@@ -30,13 +30,17 @@ def reviews(request):
         get_static_path('images', 'reviews/map-markers/%s-shadow.png' % short)
     ) for short, long in Establishment.TYPE_CHOICES ]
     
+    locations = list(enumerate(establishments.
+                   values_list('city', flat=True).order_by('city').distinct()))
+    
     rc = RequestContext(request, { 
         'establishments': establishments,
         'GMAPS_API_KEY': settings.GMAPS_API_KEY,
         'TYPE_CHOICES': Establishment.TYPE_CHOICES,
         'icons': type_icons,
         'submitted_name': submitted_name,
-        'tags': tags
+        'tags': tags,
+        'locations': locations,
     })
     return render_to_response('reviews/index.html', context_instance=rc)
 
