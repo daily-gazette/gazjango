@@ -42,6 +42,7 @@ def reviews(request):
         'submitted_name': submitted_name,
         'tags': tags,
         'locations': locations,
+        'loc_dict': dict(reversed(x) for x in locations),
     })
     return render_to_response('reviews/index.html', context_instance=rc)
 

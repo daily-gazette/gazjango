@@ -134,3 +134,14 @@ function setAll(kind, val) {
     $('.' + kind + '-checkbox').attr('checked', val);
     synchronizeCheckboxes();
 }
+
+function setCheckbox(kind, key, val) {
+    $('#' + kind + '-checkbox-' + key).attr('checked', val);
+    synchronizeCheckboxes();
+}
+function toggleCheckbox(kind, key) { $('#' + kind + '-checkbox-' + key).click(); }
+function showOnly(kind, key) {
+    $('.' + kind + '-checkbox').attr('checked', false);
+    $('#' + kind + '-checkbox-' + key).attr('checked', true);
+    synchronizeCheckboxes();
+}

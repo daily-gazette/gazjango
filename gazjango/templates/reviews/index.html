@@ -178,14 +178,18 @@ function initialize() {
       <tbody>
         {% for establishment in establishments %}
           <tr id="establishment-{{ establishment.pk }}">
-            <td>{{ establishment.get_establishment_type_display }}</td>
+            <td><a onclick="showOnly('type', '{{ establishment.establishment_type }}');">{{ establishment.get_establishment_type_display }}</a></td>
             <td><a href="{{ establishment.get_absolute_url }}" onclick='openInfo({{ establishment.pk }}); return false'>{{ establishment.name }}</a></td>
             <td>{{ establishment.avg_rating|default_if_none:"" }}</td>
             <td>{{ establishment.avg_cost|default_if_none:"" }}</td>
-            <td>{{ establishment.city }}</td>
+            <td><a onclick="showOnly('loc', {{ loc_dict|dict_lookup:establishment.city }})">{{ establishment.city }}</a></td>
             <td>{{ establishment.get_access_display }}</td>
             <td>{{ establishment.phone }}</td>
-            <td>{{ establishment.tag_names }}</td>
+            <td>
+              {% for tag in establishment.tags.all %}
+                <a onclick="setCheckbox('tag', {{ tag.pk }}, true);">{{ tag.name }}</a>{% if not forloop.last %}, {% endif %}
+              {% endfor %}
+            </td>
             <td>
               {% for review in establishment.reviews.all %}
                 <a href="{{ review.get_absolute_url }}">{{ review.reviewer.name }}</a>

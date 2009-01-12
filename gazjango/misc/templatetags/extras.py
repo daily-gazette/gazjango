@@ -167,6 +167,10 @@ def follow(arg, suffix):
     return arg + suffix if arg else ''
 
 
+@register.filter
+def dict_lookup(dictionary, key):
+    return dictionary[key]
+
 ### stuff related to the AddThis button
 
 
