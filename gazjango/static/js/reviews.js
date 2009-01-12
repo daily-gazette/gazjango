@@ -19,6 +19,8 @@ var typeHidden = {}; // type => true or false/undefined
 function initializeMap(element) {
     map = new GMap2(element);
     map.setCenter(new GLatLng(39.9034, -75.3529), 15);
+    map.addControl(new GMapTypeControl());
+    map.addControl(new GLargeMapControl());
 }
 
 function addMarker(num, point, info_box, type, tags) {
@@ -36,7 +38,7 @@ function addMarker(num, point, info_box, type, tags) {
     })
 }
 
-function synchronizeCheckboxes(on_start) {
+function synchronizeCheckboxes() {
     $('.type-checkbox').each(function() {
         if (!this.checked) { doTypeCheckbox(this); }
         else if (on_start) { doTypeCheckbox(this); }
@@ -106,7 +108,7 @@ function hideEstablishment(establishment) {
 
 function doTypeCheckbox(checkbox) {
     type = checkbox.id.substring('type-checkbox-'.length);
-    doType(type, checkbox.checked)
+    doType(type, checkbox.checked);
 }
 function doTagCheckbox(checkbox) {
     tag = parseInt(checkbox.id.substring('tag-checkbox-'.length));
