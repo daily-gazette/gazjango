@@ -118,5 +118,5 @@ function doTag(tag, checked) { checked ? showTag(tag) : hideTag(tag); }
 
 function openInfo(num) {
     var est = establishments[num];
-    map.openInfoWindowHtml(est.marker, est.info);
+    est.marker.openInfoWindowHtml(est.info);
 }
