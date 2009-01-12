@@ -8,5 +8,6 @@ class SubmitEstablishmentForm(forms.ModelForm):
     class Meta:
         model = Establishment
         fields = ('name', 'establishment_type', 'access', 
-                  'street_address', 'city', 'zip_code')
+                  'street_address', 'city', 'zip_code',
+                  'phone', 'link')
     

@@ -16,17 +16,9 @@ import settings
 def reviews(request):
     'View for "establishment review" page.'
     
-    if request.method == 'POST':
-        form = SubmitEstablishmentForm(request.POST)
-        if form.is_valid():
-            form.save()
-            request.session['submitted_name'] = form.cleaned_data['name']
-            return HttpResponseRedirect(reverse(reviews))
-    else:
-        form = SubmitEstablishmentForm()
-    
-    establishments = Establishment.published.order_by("establishment_type", "name")    
-    tags = Tag.objects.filter(group__content_type=ContentType.objects.get_for_model(Establishment))
+    establishments = Establishment.published.order_by("establishment_type", "name")  
+    ct = ContentType.objects.get_for_model(Establishment)  
+    tags = Tag.objects.filter(group__content_type=ct)
     
     submitted_name = request.session.get('submitted_name', None)
     if submitted_name:
@@ -43,12 +35,25 @@ def reviews(request):
         'GMAPS_API_KEY': settings.GMAPS_API_KEY,
         'TYPE_CHOICES': Establishment.TYPE_CHOICES,
         'icons': type_icons,
-        'submit_form': form,
         'submitted_name': submitted_name,
         'tags': tags
     })
     return render_to_response('reviews/index.html', context_instance=rc)
+
+def submit_review(request):
+    if request.method == 'POST':
+        form = SubmitEstablishmentForm(request.POST)
+        if form.is_valid():
+            form.save()
+            request.session['submitted_name'] = form.cleaned_data['name']
+            return HttpResponseRedirect(reverse(reviews))
+    else:
+        form = SubmitEstablishmentForm()
     
+    rc = RequestContext(request, { 'form': form })
+    return render_to_response('reviews/submit.html', context_instance=rc)
+
+
 def establishment(request, slug):
     'View for "establishment" pages.'
     

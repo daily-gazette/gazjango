@@ -115,17 +115,8 @@ function initialize() {
                 </tr>
             {% endfor %}
         </table>
-            
-        <h4>We missing something{% if submitted_name %} else{% endif %}? Let us know.</h4>
-        <form method="post" action=".">
-          <table width="250px" cellspacing="0px" cellpadding="0px" border="0px">
-            {{ submit_form.as_table }}
-            <tr>
-              <td></td>
-              <td><input type="submit" value="Submit" class="default" name="_save" /></td>
-            </tr>
-          </table>
-        </form>
+        
+        <h4>We missing something{% if submitted_name %} else{% endif %}? <a href="{% url reviews.views.submit_review %}">Let us know.</a></h4>
       </div>
       <div id="map" class="jmap">
         
