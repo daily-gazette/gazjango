@@ -1,6 +1,7 @@
 from django.db        import models
 from django.db.models import signals
 from gazjango.accounts.models import UserProfile, UserKind
+from gazjango.registration import signals as registration_signals
 import random
 
 class ActiveSubscribersManager(models.Manager):
@@ -64,7 +65,6 @@ class Subscriber(models.Model):
     
     is_confirmed = models.BooleanField(default=True,
                    help_text="Whether this person's email has been confirmed.")
-    confirmation_key = models.CharField(max_length=15)
     
     objects = models.Manager()
     active = ActiveSubscribersManager()
@@ -74,10 +74,13 @@ class Subscriber(models.Model):
     def is_active(self):
         return bool(self.is_confirmed) and not(self.unsubscribed)
     
-    def randomize_confirmation_key(self):
-        chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
-        key = ''.join(random.choice(chars) for x in xrange(15))
-        self.confirmation_key = key
+    def link_to_user(self, user, save=True):
+        self._name = ''
+        self._email = ''
+        self._kind = ''
+        self.user = user
+        if save:
+            self.save()
     
     def __unicode__(self):
         if self.user:
@@ -88,9 +91,13 @@ class Subscriber(models.Model):
     class Meta:
         unique_together = (('receive', '_email'),
                            ('receive', 'user'))
+    
 
-def set_default_key(sender, instance, **kwargs):
-    if not instance.confirmation_key:
-        instance.randomize_confirmation_key()
 
-signals.post_init.connect(set_default_key, sender=Subscriber)
+# when a user's been registered, associate his subscriptions with him
+# we wait until registration to make sure that the email is right
+def link_subscribers(sender, user, **kwargs):
+    profile = user.get_profile()
+    for subscriber in Subscriber.objects.filter(email=user.email):
+        subscriber.link_to_user(profile)
+registration_signals.user_activated.connect(link_subscribers)
