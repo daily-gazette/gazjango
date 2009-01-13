@@ -2,7 +2,9 @@ from django.contrib import admin
 from gazjango.comments.models import PublicComment
 
 class PublicCommentAdmin(admin.ModelAdmin):
-    list_display = ('article_name', 'number', 'display_name', 'is_anonymous', 'is_approved')
+    date_hierarchy = 'time'
+    list_display = ('article_name', 'number', 'display_name', 'is_anonymous',
+                    'is_approved', 'time')
     list_display_links = ('number',)
     list_filter = ('is_approved',)
     search_fields = ('text', 'article__headline', 'name', 'email', 
