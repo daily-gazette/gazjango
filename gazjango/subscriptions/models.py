@@ -77,7 +77,7 @@ class Subscriber(models.Model):
     def link_to_user(self, user, save=True):
         self._name = ''
         self._email = ''
-        self._kind = ''
+        self._kind = None
         self.user = user
         if save:
             self.save()
