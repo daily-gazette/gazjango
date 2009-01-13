@@ -100,6 +100,12 @@ class IssuesManager(models.Manager):
         return (issue, created)
     
 
+class IssuesWithArticlesManager(IssuesManager):
+    def get_query_set(self):
+        base = super(IssuesWithArticlesManager, self).get_query_set()
+        return base.exclude(articles=None)
+    
+
 class Issue(models.Model):
     """
     An issue of the paper.
@@ -123,6 +129,7 @@ class Issue(models.Model):
     joke    = models.ForeignKey('WeatherJoke', null=True)
     
     objects = IssuesManager()
+    with_articles = IssuesWithArticlesManager()
     
     def articles_in_order(self, racy=True):
         """

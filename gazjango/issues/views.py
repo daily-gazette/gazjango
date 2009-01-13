@@ -19,7 +19,7 @@ def issue_for_date(request, year, month, day, plain=False):
     return show_issue(request, issue, plain)
 
 def latest_issue(request, plain=False):
-    return show_issue(request, Issue.objects.latest(), plain)
+    return show_issue(request, Issue.with_articles.latest(), plain)
 
 def show_issue(request, issue, plain=False):
     tomorrow = issue.date + datetime.timedelta(days=1)
