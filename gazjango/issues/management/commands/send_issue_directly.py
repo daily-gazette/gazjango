@@ -3,9 +3,10 @@ from django.core.management.base         import CommandError
 from django.core.mail                    import mail_admins
 from django.http                         import Http404
 
-from gazjango.subscriptions.models import Subscriber
-from gazjango.issues.views         import latest_issue
+from gazjango.issues.models        import Issue
+from gazjango.issues.views         import show_issue
 from gazjango.options.helpers      import is_publishing
+from gazjango.subscriptions.models import Subscriber
 
 import datetime
 
@@ -16,18 +17,15 @@ class Command(SendingOutCommand):
         if not is_publishing():
             raise CommandError('Not in publishing mode.')
         
-        try:
-            html_response = latest_issue(dummy_request)
-            if html_response.status_code == 404:
-                raise Http404
-        except Http404:
+        issue = Issue.objects.populate_issue()
+        if not issue.articles.count():
             mail_admins('ERROR IN SENDING GAZETTE ISSUE FOR '+
                         datetime.date.today().strftime('%A, %B %d, %Y'),
-                        "so it didn't get sent. probably no articles.")
+                        "there were no articles, but we're in publish mode!")
             raise CommandError('No issue, so not sending it.')
         
-        self.html_content = html_response.content
-        self.text_content = latest_issue(dummy_request, plain=True).content
+        self.html_content = show_issue(dummy_request).content
+        self.text_content = show_issue(dummy_request, plain=True).content
         
         dummy_request.GET['racy'] = 'no'
         self.tame_html_content = latest_issue(dummy_request).content
