@@ -20,7 +20,7 @@
         map.addControl(new GLargeMapControl());
         directionsPanel = document.getElementById("route");
         directions = new GDirections(map, directionsPanel);
-        directions.load("from: 500 College Ave, Swarthmore PA to: 18 Pelham Lane, Ridgefield CT");
+        directions.load("from: 500 College Ave, Swarthmore PA to: {{ establishment.street_address }}, {{ establishment.city }}");
     }
   </script>
 
