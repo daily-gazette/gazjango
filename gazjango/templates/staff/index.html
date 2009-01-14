@@ -79,6 +79,11 @@
                 <div class="widget widget_categories">
                     <h2>Welcome {{ user.get_full_name }}!</h2>
                     <h3>Claimed Stories</h3>
+                    {% ifchanged %}
+                        <div class="claimedDate">
+                            <span class="dueDate">{{ story.due }}</span>
+                        </div>
+                    {% endifchanged %}
                     <ul>
                         {% for story in claimed %}
                         <li><a href="http://daily.swarthmore.edu/admin/articles/article/{{ story.pk }}/">{{ story.name }}</a>, claimed by {{ story.user_names }} (<em>Status: {{ story.get_status_display }}</em> )</li>
