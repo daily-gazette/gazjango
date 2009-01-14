@@ -8,6 +8,7 @@
   <link rel="stylesheet" href="{% static css page/establishment.css %}" type="text/css"/>
   
   <script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=ABQIAAAAG8P9j9QQO2vTUNEZdr-SshRLWsA0A4EVy0DFjwCAooQph_S49xRweBxq-VXWfeMAOnB19OX6LVP9Ww" type="text/javascript"></script>
+  <script src="http://www.google.com/uds/solutions/localsearch/gmlocalsearch.js" type="text/javascript"></script> 
   
   {% jQuery %}
   
@@ -16,16 +17,71 @@
     var directionsPanel;
     var directions;
     var travelMode;
+    
+    function createMarker(point, text, icon) {
+		  var marker = new GMarker(point, icon);
+		  // Show this marker's index in the info window when it is clicked
+		  GEvent.addListener(marker, "click", function() {
+			  marker.openInfoWindowHtml(text);
+		  });
+
+		  return marker;
+	}
   
     function initialize() {
+        
+        var bicon = new GIcon();
+        bicon.image = "marker-blue.png";
+        bicon.shadow = "http://www.google.com/mapfiles/shadow50.png";
+        bicon.iconSize = new GSize(20, 34);
+        bicon.shadowSize = new GSize(37, 34);
+        bicon.iconAnchor = new GPoint(9, 34);
+        bicon.infoWindowAnchor = new GPoint(9, 2);
+        bicon.infoShadowAnchor = new GPoint(18, 25);
+
+        
         map = new GMap2(document.getElementById("map"));
         map.setCenter(new GLatLng(39.9034, -75.3529), 15);
         map.addControl(new GMapTypeControl());
         map.addControl(new GLargeMapControl());
-        directionsPanel = document.getElementById("route");
-        directions = new GDirections(map, directionsPanel);
-        travelType = {% ifequal establishment.access "w" %}G_TRAVEL_MODE_WALKING{% else %}G_TRAVEL_MODE_DRIVING{% endifequal %}
-        directions.load("from: 500 College Ave, Swarthmore PA to: {{ establishment.street_address }}, {{ establishment.city }}",{travelMode:travelType});
+        map.addControl(new google.maps.LocalSearch(), new GControlPosition(G_ANCHOR_BOTTOM_RIGHT, new GSize(10,20)));
+        
+        
+        {% ifequal establishment.access "p" %}
+            var requestSepta = GXmlHttp.create();
+            requestSepta.open("GET", "{% static xml/septa.xml %}", true);
+            requestSepta.onreadystatechange = function() {
+            	if (requestSepta.readyState == 4) {
+            		var xmlDoc = GXml.parse(requestSepta.responseText);
+            		var points = xmlDoc.documentElement.getElementsByTagName("point");
+            		for (var i = 0; i < points.length; i++) {
+            			var point = new GPoint(parseFloat(points[i].getAttribute("lng")),
+            			parseFloat(points[i].getAttribute("lat")));
+            			var text = points[i].getAttribute("txt");
+            			var marker = createMarker(point, text + '<BR><form method="GET" action="http://maps.google.com/maps" target="_blank"><span style="font-size: 10pt; color: #888">Get directions to here from:<BR></span><input type=text name=saddr size=25 style="font-size: 10pt"><input type=hidden name=daddr value=' + point.y + ',' + point.x + '> <input type=submit value="Go" style="padding: 0px"><input type=hidden name=hl value=en></form>', bicon);
+                                    map.addOverlay(marker);
+            requestSepta.send(null);
+        {% endifequal %}
+        
+        {% ifequal establishment.access "w" %}
+            directionsPanel = document.getElementById("route");
+            directions = new GDirections(map, directionsPanel);
+            travelType = G_TRAVEL_MODE_WALKING
+            directions.load("from: 500 College Ave, Swarthmore PA to: {{ establishment.street_address }}, {{ establishment.city }}",{travelMode:travelType});
+        {% else %}
+            {% ifequal establishment.access "p" %}
+                {% ifequal establishment.city "Philadelphia" %}
+                    travelType = G_TRAVEL_MODE_WALKING
+                    directions.load("from: Philadelphia 30th Street Station, Philadelphia, PA 19104 to: {{ establishment.street_address }}, {{ establishment.city }}",{travelMode:travelType});
+                {% else %}
+                    travelType = G_TRAVEL_MODE_DRIVING
+                    directions.load("from: 500 College Ave, Swarthmore PA to: {{ establishment.street_address }}, {{ establishment.city }}",{travelMode:travelType});
+                {% endifequal %}
+            {% else %}
+                travelType = G_TRAVEL_MODE_DRIVING
+                directions.load("from: 500 College Ave, Swarthmore PA to: {{ establishment.street_address }}, {{ establishment.city }}",{travelMode:travelType});
+            {% endifequal %}
+        {% endifequal %}
     }
   </script>
 
