@@ -2,18 +2,18 @@
 	http://127.0.0.1:8000/static/css/page/reviews.css
 	http://daily.swarthmore.edu/static/css/page/reviews.css
 	http://daily.swarthmore.edu/static/css/page/establishments.css
+	http://daily.swarthmore.edu/static/css/page/establishment.css
 */
 
-/*
-   Add the following to your CSS file should you wish the cursor to
-   "wait" while the script is processing the sort
 
-body.sort-active *
-        {
-        cursor:wait;
-        }
-*/
-
+#reviews h2 {
+	font-size: 300%;
+	font-family: "Helvetica Neue", Arial, Helvetica, Geneva, sans-serif;
+	color: black;
+	margin: 5px 0px 5px 20px;
+	text-align: left;
+	font-size: 3em;
+}
 
 #map.jmap {
 	width: 600px;
@@ -21,7 +21,7 @@ body.sort-active *
 	border: 3px solid #4f6b72;
 	float: right;
 	display: inline-block;
-	margin-top: 20px;
+	margin-top: 5px;
 	margin-right: 20px;
 }
 
@@ -36,7 +36,7 @@ body.sort-active *
 	height: 300px;
 	float: left;
 	margin-left: 20px;
-	margin-top: 20px;
+	margin-top: 5px;
 	text-align: left;
 }
 
