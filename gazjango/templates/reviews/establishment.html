@@ -43,7 +43,7 @@
         {% else %}
             {% ifequal establishment.access "p" %}
                 {% ifequal establishment.city "Philadelphia" %}
-                    directions.load("from: Philadelphia 30th Street Station, Philadelphia, PA 19104 to: {{ establishment.street_address }}, {{ establishment.city }}",{travelMode:G_TRAVEL_MODE_WALKING});
+                    directions.load("from: 2955 Market Street, Philadelphia, PA 19104 to: {{ establishment.street_address }}, {{ establishment.city }}",{travelMode:G_TRAVEL_MODE_WALKING});
                 {% else %}
                     directions.load("from: 500 College Ave, Swarthmore PA to: {{ establishment.street_address }}, {{ establishment.city }}",{travelMode:G_TRAVEL_MODE_DRIVING});
                 {% endifequal %}
