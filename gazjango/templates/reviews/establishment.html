@@ -13,10 +13,7 @@
   {% jQuery %}
   
   <script type="text/javascript">
-function initialize() {
-    initializeMap(document.getElementById('map'));
-    
-    function initialize(element) {
+    function initialize() {
         map = new GMap2(document.getElementById("map"));
         map.setCenter(new GLatLng(39.9034, -75.3529), 15);
         map.addControl(new GMapTypeControl());
@@ -25,8 +22,6 @@ function initialize() {
         directions = new GDirections(map, directionsPanel);
         directions.load("from: 500 College Ave, Swarthmore PA to: {{ establishment.street_address }}, {{ establishment.city }}");
     }
-    
-
   </script>
 
 {% endblock customheader %}
