@@ -24,7 +24,7 @@
         map.addControl(new GLargeMapControl());
         directionsPanel = document.getElementById("route");
         directions = new GDirections(map, directionsPanel);
-        travelType = {% ifequal access "w" %}G_TRAVEL_MODE_WALKING{% else %}G_TRAVEL_MODE_DRIVING{% endifequal %}
+        travelType = {% ifequal establishment.access "w" %}G_TRAVEL_MODE_WALKING{% else %}G_TRAVEL_MODE_DRIVING{% endifequal %}
         directions.load("from: 500 College Ave, Swarthmore PA to: {{ establishment.street_address }}, {{ establishment.city }}",{travelMode:travelType});
     }
   </script>
@@ -59,6 +59,7 @@
   </div>
 
   <div id="listings">
+      {{ establishment.access }}
         w00t
   </div>
 </div>
