@@ -65,20 +65,16 @@
         {% ifequal establishment.access "w" %}
             directionsPanel = document.getElementById("route");
             directions = new GDirections(map, directionsPanel);
-            travelType = G_TRAVEL_MODE_WALKING
-            directions.load("from: 500 College Ave, Swarthmore PA to: {{ establishment.street_address }}, {{ establishment.city }}",{travelMode:travelType});
+            directions.load("from: 500 College Ave, Swarthmore PA to: {{ establishment.street_address }}, {{ establishment.city }}",{travelMode:G_TRAVEL_MODE_WALKING});
         {% else %}
             {% ifequal establishment.access "p" %}
                 {% ifequal establishment.city "Philadelphia" %}
-                    travelType = G_TRAVEL_MODE_WALKING
-                    directions.load("from: Philadelphia 30th Street Station, Philadelphia, PA 19104 to: {{ establishment.street_address }}, {{ establishment.city }}",{travelMode:travelType});
+                    directions.load("from: Philadelphia 30th Street Station, Philadelphia, PA 19104 to: {{ establishment.street_address }}, {{ establishment.city }}",{travelMode:G_TRAVEL_MODE_WALKING});
                 {% else %}
-                    travelType = G_TRAVEL_MODE_DRIVING
-                    directions.load("from: 500 College Ave, Swarthmore PA to: {{ establishment.street_address }}, {{ establishment.city }}",{travelMode:travelType});
+                    directions.load("from: 500 College Ave, Swarthmore PA to: {{ establishment.street_address }}, {{ establishment.city }}",{travelMode:G_TRAVEL_MODE_DRIVING});
                 {% endifequal %}
             {% else %}
-                travelType = G_TRAVEL_MODE_DRIVING
-                directions.load("from: 500 College Ave, Swarthmore PA to: {{ establishment.street_address }}, {{ establishment.city }}",{travelMode:travelType});
+                directions.load("from: 500 College Ave, Swarthmore PA to: {{ establishment.street_address }}, {{ establishment.city }}",{travelMode:G_TRAVEL_MODE_DRIVING});
             {% endifequal %}
         {% endifequal %}
     }
