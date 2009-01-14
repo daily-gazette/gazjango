@@ -51,11 +51,13 @@
             		var xmlDoc = GXml.parse(requestSepta.responseText);
             		var points = xmlDoc.documentElement.getElementsByTagName("point");
             		for (var i = 0; i < points.length; i++) {
-            			var point = new GPoint(parseFloat(points[i].getAttribute("lng")),
-            			parseFloat(points[i].getAttribute("lat")));
+            			var point = new GPoint(parseFloat(points[i].getAttribute("lng")),parseFloat(points[i].getAttribute("lat")));
             			var text = points[i].getAttribute("txt");
             			var marker = createMarker(point, text, bicon);
-                                    map.addOverlay(marker);
+                        map.addOverlay(marker);
+                    }
+                }
+            }
             requestSepta.send(null);
         {% endifequal %}
         
