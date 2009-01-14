@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+{% load extras %}
+
+{% block title %}Community Guide{% endblock title %}
+
+{% block customheader %}
+  <link rel="stylesheet" href="{% static css page/section.css %}" type="text/css"/>
+  <link rel="stylesheet" href="{% static css page/reviews.css %}" type="text/css"/>
+  
+  <script type="text/javascript" src="{% static js tablesort.js %}"></script>
+  <script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key={{ GMAPS_API_KEY }}" type="text/javascript"></script>
+  
+  {% jQuery %}
+  
+  <script type="text/javascript">
+function initialize() {
+    initializeMap(document.getElementById('map'));
+    
+    function initializeMap(element) {
+        map = new GMap2(document.getElementById("map_canvas"));
+        map.setCenter(new GLatLng(39.9034, -75.3529), 15);
+        map.addControl(new GMapTypeControl());
+        map.addControl(new GLargeMapControl());
+        directionsPanel = document.getElementById("route");
+        directions = new GDirections(map, directionsPanel);
+        directions.load("from: 500 College Ave, Swarthmore PA to: {{ establishment.street_address }}, {{ establishment.city }}");
+    }
+    
+
+  </script>
+
+{% endblock customheader %}
+
+{% block body-args %}onload="initialize()" onunload="GUnload()"{% endblock %}
+
+{% block topbar %}
+  <div id="headerSectionBar">
+    <div id="headerSearch">
+      {% include "search_header.html" %}
+    </div>
+  </div>
+{% endblock topbar %}
+
+
+{% block content %}
+<div id="reviews">
+  <h2>The Zagette</h2>
+  <div id="topBlock">
+    <div id="mapBlock">
+      <div id="route">
+        <!-- Directions inserted here -->
+      </div>
+      <div id="map" class="jmap">
+        
+        <!-- Map inserted here -->
+        
+      </div>
+    </div>
+  </div>
+
+  <div id="listings">
+        w00t
+  </div>
+</div>
+{% endblock content %}
