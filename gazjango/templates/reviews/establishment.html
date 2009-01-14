@@ -36,9 +36,9 @@
 
         {% endifequal %}
         
+        directionsPanel = document.getElementById("route");
+        directions = new GDirections(map, directionsPanel);
         {% ifequal establishment.access "w" %}
-            directionsPanel = document.getElementById("route");
-            directions = new GDirections(map, directionsPanel);
             directions.load("from: 500 College Ave, Swarthmore PA to: {{ establishment.street_address }}, {{ establishment.city }}",{travelMode:G_TRAVEL_MODE_WALKING});
         {% else %}
             {% ifequal establishment.access "p" %}
