@@ -45,7 +45,7 @@
             bicon.infoShadowAnchor = new GPoint(18, 25);
         
             var requestSepta = GXmlHttp.create();
-            requestSepta.open("GET", "{% static js setpa.xml %}", true);
+            requestSepta.open("GET", "{% static js septa.xml %}", true);
             requestSepta.onreadystatechange = function() {
             	if (requestSepta.readyState == 4) {
             		var xmlDoc = GXml.parse(requestSepta.responseText);
