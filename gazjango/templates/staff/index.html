@@ -81,7 +81,7 @@
                     <h3>Claimed Stories</h3>
                     <ul>
                         {% for story in claimed %}
-                        <li><a href="http://daily.swarthmore.edu/admin/articles/article/{{ story.pk }}/">{{ story.name }}</a>, claimed by {{ concept.user_names }} (<em>Status: {{ story.get_status_display }}</em> )</li>
+                        <li><a href="http://daily.swarthmore.edu/admin/articles/article/{{ story.pk }}/">{{ story.name }}</a>, claimed by {{ story.user_names }} (<em>Status: {{ story.get_status_display }}</em> )</li>
                         {% endfor %}
                     </ul>                                     
                     
