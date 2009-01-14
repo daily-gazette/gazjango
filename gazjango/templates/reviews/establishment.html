@@ -17,7 +17,7 @@ function initialize() {
     initializeMap(document.getElementById('map'));
     
     function initializeMap(element) {
-        map = new GMap2(document.getElementById("map_canvas"));
+        map = new GMap2(document.getElementById("map"));
         map.setCenter(new GLatLng(39.9034, -75.3529), 15);
         map.addControl(new GMapTypeControl());
         map.addControl(new GLargeMapControl());
