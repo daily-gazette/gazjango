@@ -13,6 +13,10 @@
   {% jQuery %}
   
   <script type="text/javascript">
+    var map;
+    var directionsPanel;
+    var directions;
+  
     function initialize() {
         map = new GMap2(document.getElementById("map"));
         map.setCenter(new GLatLng(39.9034, -75.3529), 15);
@@ -26,7 +30,7 @@
 
 {% endblock customheader %}
 
-{% block body-args %}onload="initialize()" onunload="GUnload()"{% endblock %}
+{% block body-args %}onload="initialize()"{% endblock %}
 
 {% block topbar %}
   <div id="headerSectionBar">
