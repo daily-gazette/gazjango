@@ -33,29 +33,7 @@
         map.addControl(new GMapTypeControl());
         map.addControl(new GLargeMapControl());
         {% ifequal establishment.access "p" %}
-        
-        var bicon = new GIcon();
-        bicon.image = "marker-blue.png";
-        bicon.shadow = "http://www.google.com/mapfiles/shadow50.png";
-        bicon.iconSize = new GSize(20, 34);
-        bicon.shadowSize = new GSize(37, 34);
-        bicon.iconAnchor = new GPoint(9, 34);
-        bicon.infoWindowAnchor = new GPoint(9, 2);
-        bicon.infoShadowAnchor = new GPoint(18, 25);
-        
-        var requestSepta = GXmlHttp.create();
-        requestSepta.open("GET", "http://daily.swarthmore.edu/static/xml/septa.xml", true);
-        requestSepta.onreadystatechange = function() {
-        	if (requestSepta.readyState == 4) {
-        		var xmlDoc = GXml.parse(requestSepta.responseText);
-        		var points = xmlDoc.documentElement.getElementsByTagName("point");
-        		for (var i = 0; i < points.length; i++) {
-        			var point = new GPoint(parseFloat(points[i].getAttribute("lng")),
-        			parseFloat(points[i].getAttribute("lat")));
-        			var text = points[i].getAttribute("txt");
-        			var marker = createMarker(point, text + '<BR><form method="GET" action="http://maps.google.com/maps" target="_blank"><span style="font-size: 10pt; color: #888">Get directions to here from:<BR></span><input type=text name=saddr size=25 style="font-size: 10pt"><input type=hidden name=daddr value=' + point.y + ',' + point.x + '> <input type=submit value="Go" style="padding: 0px"><input type=hidden name=hl value=en></form>', bicon);
-                                map.addOverlay(marker);
-        requestSepta.send(null);
+
         {% endifequal %}
         
         {% ifequal establishment.access "w" %}
