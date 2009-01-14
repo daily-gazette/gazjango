@@ -33,6 +33,15 @@
         map.addControl(new GMapTypeControl());
         map.addControl(new GLargeMapControl());
         {% ifequal establishment.access "p" %}
+        var bicon = new GIcon();
+        bicon.image = "marker-blue.png";
+        bicon.shadow = "http://www.google.com/mapfiles/shadow50.png";
+        bicon.iconSize = new GSize(20, 34);
+        bicon.shadowSize = new GSize(37, 34);
+        bicon.iconAnchor = new GPoint(9, 34);
+        bicon.infoWindowAnchor = new GPoint(9, 2);
+        bicon.infoShadowAnchor = new GPoint(18, 25);
+        
 
         {% endifequal %}
         
