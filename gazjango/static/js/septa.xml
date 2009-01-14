@@ -1,0 +1,72 @@
+<septa>
+	<!-- R3M start 49th -->
+	
+	<stops>
+            <point lat="39.952538" lng="-75.16327" txt="R3: Suburban Station" />
+    </stops>
+    
+	<stops>
+	    <point lat="39.954833" lng="-75.183411" txt="R3: 30th St" />
+    </stops>
+	
+	<stops>
+		<point lat="39.948849" lng="-75.189646" txt="R3: University City" />
+	</stops>
+
+	<stops>
+	<point lat="39.943731" lng="-75.21663" txt="R3: 49th St" />
+	</stops>
+
+	<stops>
+	<point lat="39.944753" lng="-75.238752" txt="R3: Angora" />
+	</stops>
+
+	<stops>
+	<point lat="39.939611" lng="-75.256358" txt="R3: Fernwood-Yeadon" />
+	</stops>
+
+	<stops>
+	<point lat="39.937127" lng="-75.272065" txt="R3: Lansdowne" />
+	</stops>
+
+	<stops>
+	<point lat="39.932627" lng="-75.282311" txt="R3: Gladstone" />
+	</stops>
+
+	<stops>
+	<point lat="39.926251" lng="-75.290669" txt="R3: Clifton Aldan" />
+	</stops>
+
+	<stops>
+	<point lat="39.921495" lng="-75.298727" txt="R3: Primos" />
+	</stops>
+
+	<stops>
+	<point lat="39.915464" lng="-75.310271" txt="R3: Secane" />
+	</stops>
+
+	<stops>
+	<point lat="39.908197" lng="-75.32734" txt="R3: Morton" />
+	</stops>
+
+	<stops>
+	<point lat="39.902239" lng="-75.350654" txt="R3: Swarthmore" />
+	</stops>
+
+	<stops>
+	<point lat="39.903572" lng="-75.371747" txt="R3: Wallingford" />
+	</stops>
+
+	<stops>
+	<point lat="39.904988" lng="-75.388452" txt="R3: Moylan-Rose Valley" />
+	</stops>
+
+	<stops>
+	<point lat="39.913834" lng="-75.393999" txt="R3: Media" />
+	</stops>
+
+	<stops>
+	<point lat="39.905448" lng="-75.415499" txt="R3: Elwyn" />
+	</stops>
+
+</septa>
