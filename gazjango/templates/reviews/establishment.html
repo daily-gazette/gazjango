@@ -49,7 +49,7 @@
         
         {% ifequal establishment.access "p" %}
             var requestSepta = GXmlHttp.create();
-            requestSepta.open("GET", "{% static xml septa.xml %}", true);
+            requestSepta.open("GET", "http://daily.swarthmore.edu/static/xml/septa.xml" %}", true);
             requestSepta.onreadystatechange = function() {
             	if (requestSepta.readyState == 4) {
             		var xmlDoc = GXml.parse(requestSepta.responseText);
