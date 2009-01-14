@@ -32,7 +32,6 @@
 
 #reviewText {
 	width: 600px;
-	border: 3px solid #4f6b72;
 	float: right;
 	display: inline-block;
 	margin-top: 5px;
@@ -46,8 +45,21 @@
 	text-align: justify;
 	line-height: 1.4;
 	font-size: 1.4em;
-	width: 655px;
+	width: 600px;
 }
+
+#reviewInfo p {
+	margin: 0;
+	padding: 0 20px 10px 20px;
+	color: black;
+	text-align: justify;
+	line-height: 1.4;
+	font-size: 1.4em;
+	width: 895px;
+}
+
+
+
 
 #route {
 	width: 275px;

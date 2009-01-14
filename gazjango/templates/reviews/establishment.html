@@ -44,8 +44,13 @@
 
 {% block content %}
 <div id="reviews">
-  <h2>The Zagette</h2>
+  <h2>{{ establishment.name }}, in the Gazette's Zagette</h2>
   <div id="topBlock">
+      <div id="reviewInfo">
+          <p><strong>Average Rating:</strong> {{ establishment.avg_rating|default_if_none:"No Ratings" }} | <strong>Average Cost:</strong> {{ establishment.avg_cost|default_if_none:"Unknown" }} | <strong>Tags:</strong> {% for tag in establishment.tags.all %}{{ tag.name }}{% if not forloop.last %}, {% endif %}{% endfor %}</p>
+          <p><strong>Phone:</strong> {{ establishment.phone }} | <strong>Address:</strong> {{ establishment.street_address }}, {{ establishment.city }}</p>
+      </div>
+
     <div id="mapBlock">
       <div id="route">
         <!-- Directions inserted here -->
@@ -57,7 +62,7 @@
       </div>
       <div id="reviewText">
           {% for review in establishment.reviews.all %}
-            <p><strong>Reviewed by: {{ review.reviewer }}</strong> (Cost: {{ review.cost }} Rating: {{ review.rating }})</p>
+            <p><strong>Reviewed by: {{ review.reviewer.name }}</strong> (Cost: {{ review.cost }} Rating: {{ review.rating }})</p>
             <p>{{ review.review_text }}</p>
           {% endfor %}
       </div>
@@ -65,41 +70,3 @@
   </div>
 </div>
 {% endblock content %}
-
-
-
-
-
-class Review(models.Model):
-    "Represents the review of an establishment."
-    slug = models.SlugField()
-    establishment = models.ForeignKey(Establishment,related_name="reviews")
-    
-    COST_CHOICES = (
-        ('1',"$"),
-        ('2',"$$"),
-        ('3',"$$$"),
-        ('4',"$$$$"),
-        ('5',"$$$$$")
-    )
-    cost = models.CharField(max_length=1, choices=COST_CHOICES)
-    
-    RATING_CHOICES = (
-        ('1',"*"),
-        ('2',"**"),
-        ('3',"***"),
-        ('4',"****"),
-        ('5',"*****")
-    )
-    rating = models.CharField(max_length=1, choices=RATING_CHOICES)
-    
-    reviewer = models.ForeignKey(UserProfile, related_name="reviews")
-    
-    review_summary = models.TextField(blank=True) 
-    review_text = models.TextField(blank=True)   
-    
-    def __unicode__(self):
-        return self.slug
-    
-    def get_absolute_url(self):
-        return "%s#%s" % (self.establishment.get_absolute_url(), self.slug)
