@@ -52,7 +52,7 @@
         			var point = new GPoint(parseFloat(points[i].getAttribute("lng")),
         			parseFloat(points[i].getAttribute("lat")));
         			var text = points[i].getAttribute("txt");
-        			var marker = createMarker(point, text + '<BR><form method="GET" action="http://maps.google.com/maps" target="_blank"><span style="font-size: 10pt; color: #888">Get directions to here from:<BR></span><input type=text name=saddr size=25 style="font-size: 10pt"><input type=hidden name=daddr value=' + point.y + ',' + point.x + '> <input type=submit value="Go" style="padding: 0px"><input type=hidden name=hl value=en></form>', bicon);
+        			var marker = createMarker(point, text, bicon);
                                 map.addOverlay(marker);
         requestSepta.send(null);
         {% endifequal %}
