@@ -55,12 +55,52 @@
         <!-- Map inserted here -->
         
       </div>
+      <div id="reviewText">
+          {% for review in establishment.reviews.all %}
+            {{ review.reviewer }}<br />
+            {{ review.cost }} {{ review.rating }}<br />
+            {{ review.review_text }}
+          {% endfor %}
+      </div>
     </div>
-  </div>
-
-  <div id="listings">
-      {{ establishment.access }}
-        w00t
   </div>
 </div>
 {% endblock content %}
+
+
+
+
+
+class Review(models.Model):
+    "Represents the review of an establishment."
+    slug = models.SlugField()
+    establishment = models.ForeignKey(Establishment,related_name="reviews")
+    
+    COST_CHOICES = (
+        ('1',"$"),
+        ('2',"$$"),
+        ('3',"$$$"),
+        ('4',"$$$$"),
+        ('5',"$$$$$")
+    )
+    cost = models.CharField(max_length=1, choices=COST_CHOICES)
+    
+    RATING_CHOICES = (
+        ('1',"*"),
+        ('2',"**"),
+        ('3',"***"),
+        ('4',"****"),
+        ('5',"*****")
+    )
+    rating = models.CharField(max_length=1, choices=RATING_CHOICES)
+    
+    reviewer = models.ForeignKey(UserProfile, related_name="reviews")
+    
+    review_summary = models.TextField(blank=True) 
+    review_text = models.TextField(blank=True)   
+    
+    def __unicode__(self):
+        return self.slug
+    
+    def get_absolute_url(self):
+        return "%s#%s" % (self.establishment.get_absolute_url(), self.slug)

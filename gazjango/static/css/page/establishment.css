@@ -15,6 +15,11 @@
 	font-size: 3em;
 }
 
+#mapBlock {
+	display: inline-block;
+	float: left;
+}
+
 #map.jmap {
 	width: 600px;
 	height: 300px;
@@ -25,15 +30,17 @@
 	margin-right: 20px;
 }
 
-#listings {
-	float: left;
-	width: 100%;
-	padding-top: 20px;
+#reviewText {
+	width: 600px;
+	border: 3px solid #4f6b72;
+	float: right;
+	display: inline-block;
+	margin-top: 5px;
+	margin-right: 20px;
 }
 
 #route {
 	width: 275px;
-	height: 300px;
 	float: left;
 	margin-left: 20px;
 	margin-top: 5px;
