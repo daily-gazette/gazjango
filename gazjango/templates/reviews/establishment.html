@@ -36,7 +36,7 @@
         
         {% ifequal establishment.access "p" %}
             var bicon = new GIcon();
-            bicon.image = "marker-blue.png";
+            bicon.image = "{% static images reviews/map-markers/marker-blue.png %}";
             bicon.shadow = "http://www.google.com/mapfiles/shadow50.png";
             bicon.iconSize = new GSize(20, 34);
             bicon.shadowSize = new GSize(37, 34);
