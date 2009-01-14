@@ -61,7 +61,7 @@
       </div>
       <div id="reviewText">
           {% for review in establishment.reviews.all %}
-            <center><hr width="50%" /></center>
+            {% if not forloop.first %}<center><hr width="50%" /></center>{% endif %}
             <p><strong>Reviewed by: {{ review.reviewer.name }}</strong> (Cost: {{ review.cost }} Rating: {{ review.rating }})</p>
             <p>{{ review.review_text }}</p>
           {% endfor %}
