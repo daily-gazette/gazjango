@@ -57,9 +57,8 @@
       </div>
       <div id="reviewText">
           {% for review in establishment.reviews.all %}
-            {{ review.reviewer }}<br />
-            {{ review.cost }} {{ review.rating }}<br />
-            {{ review.review_text }}
+            <p><strong>Reviewed by: {{ review.reviewer }}</strong> (Cost: {{ review.cost }} Rating: {{ review.rating }})</p>
+            <p>{{ review.review_text }}</p>
           {% endfor %}
       </div>
     </div>

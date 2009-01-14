@@ -39,6 +39,16 @@
 	margin-right: 20px;
 }
 
+#reviewText p {
+	margin: 0;
+	padding: 0 0 10px 0px;
+	color: black;
+	text-align: justify;
+	line-height: 1.4;
+	font-size: 1.4em;
+	width: 655px;
+}
+
 #route {
 	width: 275px;
 	float: left;
