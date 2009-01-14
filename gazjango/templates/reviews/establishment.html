@@ -47,8 +47,7 @@
   <h2>{{ establishment.name }}, in the Gazette's Zagette</h2>
   <div id="topBlock">
       <div id="reviewInfo">
-          <p><strong>Average Rating:</strong> {{ establishment.avg_rating|default_if_none:"No Ratings" }} | <strong>Average Cost:</strong> {{ establishment.avg_cost|default_if_none:"Unknown" }} | <strong>Tags:</strong> {% for tag in establishment.tags.all %}{{ tag.name }}{% if not forloop.last %}, {% endif %}{% endfor %}</p>
-          <p><strong>Phone:</strong> {{ establishment.phone }} | <strong>Address:</strong> {{ establishment.street_address }}, {{ establishment.city }}</p>
+          <p><strong>Average Rating:</strong> {{ establishment.avg_rating|default_if_none:"No Ratings" }} | <strong>Average Cost:</strong> {{ establishment.avg_cost|default_if_none:"Unknown" }} | <strong>Tags:</strong> {% for tag in establishment.tags.all %}{{ tag.name }}{% if not forloop.last %}, {% endif %}{% endfor %} | <strong>Phone:</strong> {{ establishment.phone }} | <strong>Address:</strong> {{ establishment.street_address }}, {{ establishment.city }}</p>
       </div>
 
     <div id="mapBlock">
