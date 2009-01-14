@@ -69,7 +69,7 @@
             {% ifequal establishment.access "p" %}
                 {% ifequal establishment.city "Philadelphia" %}
                     if ({{ establishment.longitude }} < -75.183411) {
-                        directions.load("from: 2955 Market Street, Philadelphia, PA 19104 to: {{ establishment.street_address }}, {{ establishment.city }}",{travelMode:G_TRAVEL_MODE_WALKING});
+                        directions.load("from: 39.948849,-75.189646 to: {{ establishment.street_address }}, {{ establishment.city }}",{travelMode:G_TRAVEL_MODE_WALKING});
                     } else {
                         directions.load("from: 39.952538,-75.16327 to: {{ establishment.street_address }}, {{ establishment.city }}",{travelMode:G_TRAVEL_MODE_WALKING});
                     }
