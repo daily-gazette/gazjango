@@ -149,7 +149,7 @@ function initialize() {
             {% endfor %}
         </table>
         
-        <h4>We missing something{% if submitted_name %} else{% endif %}? <a href="{% url reviews.views.submit_review %}">Let us know.</a></h4>
+        <h4>Want to add {% if submitted_name %}another{% else %}a{% endif %} store? <a href="{% url reviews.views.submit_review %}">Submit it here</a>.</h4>
       </div>
       <div id="map" class="jmap">
         <noscript>
@@ -179,7 +179,7 @@ function initialize() {
         {% for establishment in establishments %}
           <tr id="establishment-{{ establishment.pk }}">
             <td><a onclick="showOnly('type', '{{ establishment.establishment_type }}');">{{ establishment.get_establishment_type_display }}</a></td>
-            <td><a href="{{ establishment.get_absolute_url }}" onclick='openInfo({{ establishment.pk }}); return false'>{{ establishment.name }}</a><link href="{{ establishment.get_absolute_url }}"><img src="{% static css page/reviews.cssglobe-icon.png %}" /></a></td>
+            <td><a href="{{ establishment.get_absolute_url }}" onclick='openInfo({{ establishment.pk }}); return false'>{{ establishment.name }}</a><a href="{{ establishment.get_absolute_url }}"><img src="{% static images reviews/globe-icon.png %}" /></a></td>
             <td>{{ establishment.avg_rating|default_if_none:"" }}</td>
             <td>{{ establishment.avg_cost|default_if_none:"" }}</td>
             <td><a onclick="showOnly('loc', {{ loc_dict|dict_lookup:establishment.city }})">{{ establishment.city }}</a></td>

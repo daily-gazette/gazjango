@@ -25,6 +25,10 @@ urlpatterns += patterns('',
         {'feed_dict': feeds}),
 )
 
+urlpatterns += patterns('facebook_connect.views',
+    (r'^xd_receiver\.html$', 'xd_receiver'),
+)
+
 reps = {
     'year':  r'(?P<year>\d{4})',
     'month': r'(?P<month>\d{1,2})',
