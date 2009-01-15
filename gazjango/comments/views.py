@@ -26,7 +26,7 @@ def comment_page(request):
     
     comment_list = defaultdict(lambda: [])
     for comment in comments:
-        comment_list[comment.subject].insert(0,(comment, comment.vote_status(user=user, ip=ip))
+        comment_list[comment.subject].insert(0,(comment, comment.vote_status(user=user, ip=ip)))
     final_list = sorted(comment_list.values(), key=lambda lst: lst[-1][0].time, reverse=True)
 
     rc = RequestContext(request, {
