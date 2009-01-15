@@ -30,7 +30,7 @@
 	border-bottom: 1px solid #cccccc;
 	border-left: 1px solid #cccccc;
 	border-right: 1px solid #cccccc;
-	background-color: #eeeeee;
+	background-color: #fff;
 	padding: 4px;
 	float: left;
 }
@@ -47,6 +47,7 @@ COMMENT STYLES
 	margin-left: 5px;
 	border-left: 1px solid #cccccc;
 	border-right: 1px solid #cccccc;
+	border-bottom: 1px solid #cccccc;
 	background-color: #ffffff;
 	padding: 4px;
 	display: inline-block;
