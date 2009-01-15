@@ -8,6 +8,7 @@ from gazjango.accounts.models          import UserProfile
 from gazjango.articles.models.stories  import Article
 from gazjango.misc.helpers             import avg, set_default_slug
 from gazjango.misc.templatetags.extras import join_authors
+from gazjango.reviews.directions       import TRAIN_STATIONS, TRAIN_CHOICES, nearest_station
 from gazjango.tagging.models           import Tag
 import datetime
 import urllib
@@ -63,6 +64,26 @@ class Establishment(models.Model):
     latitude = models.CharField(max_length=100, blank=True)
     longitude = models.CharField(max_length=100, blank=True)
     
+    def _get_nearest_station(self):
+        try:
+            return TRAIN_STATIONS[self._nearest_station]
+        except KeyError:
+            return None
+    
+    def _set_nearest_station(self, val):
+        try:
+            self._nearest_station = val['id']
+        except TypeError:
+            self._nearest_station = val
+    
+    _nearest_station = models.IntegerField('nearest train station', blank=True,
+        choices=TRAIN_CHOICES, help_text="Where to show directions from; only relevant "
+                                         "if access is set to public transit.")
+    nearest_station = property(_get_nearest_station, _set_nearest_station)
+    auto_nearest_station = models.BooleanField(default=True, blank=True,
+        help_text="Whether to override the nearest_station choice above with the "
+                  "one closest to it (straight-line distance).")
+    
     objects = models.Manager()
     published = PublishedEstablishmentManager()
     
@@ -77,6 +98,10 @@ class Establishment(models.Model):
             response_code, accuracy, latitude, longitude = data.split(',')
             self.latitude = latitude
             self.longitude = longitude
+    
+    def find_nearest_station(self):
+        if self.latitude and self.longitude:
+            self.nearest_station = nearest_station(self.latitude, self.longitude)
     
     def avg_cost(self):
         return avg(int(v) for v in self.reviews.values_list('cost', flat=True))
@@ -108,10 +133,12 @@ models.signals.pre_save.connect(_slugger, sender=Establishment)
 #     'group__content_type': ContentType.objects.get_for_model(Establishment)
 # }
 
-def geocode(sender, instance, **kwargs):
+def set_geographical_vars(sender, instance, **kwargs):
     if instance.auto_geocode:
         instance.geocode()
-models.signals.pre_save.connect(geocode, sender=Establishment)
+    if instance.auto_nearest_station:
+        instance.find_nearest_station()
+models.signals.pre_save.connect(set_geographical_vars, sender=Establishment)
 
 
 class Review(models.Model):
