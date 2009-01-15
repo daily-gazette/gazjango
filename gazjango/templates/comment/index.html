@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% load extras %}
 
-{% block title %}{{ page.title }}{% endblock %}
+{% block title %}Comments Listing :: The Daily Gazette{% endblock %}
 
 {% block customheader %}
   <link rel="stylesheet" href="{% static css page/story.css %}" type="text/css" media="screen, projection" />
@@ -63,7 +63,7 @@
                 <p>by {{ story_comment_object.0.authors_in_order|join_authors:"l" }}</p>                
             </div>
             <div id="comments">
-                {% for comment, status in story_comment_object %}
+                {% for comment in story_comment_object %}
                 <div class="comment {% if comment.is_visible %}shown-comment{% else %}hidden-comment{% endif %}{% if new %} new{% endif %}" id="c-{{ comment.number }}">
                   <div class="commentInformation">
                       <p class="floatLeft">
