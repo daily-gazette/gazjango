@@ -1,3 +1,5 @@
+from collections                    import defaultdict
+
 from django.contrib.auth.decorators import permission_required
 from django.contrib.sites.models    import Site
 from django.core.urlresolvers       import reverse
@@ -17,6 +19,21 @@ from gazjango.misc.view_helpers    import get_ip, get_user_profile, is_robot
 from gazjango.misc.view_helpers    import get_by_date_or_404
 import settings
 
+
+def comment_page(request):
+    'View for all recent comments'
+    comments = PublicComment.visible.order_by('-time').select_related(depth=1).all()[:20]
+    
+    comment_list = defaultdict(lambda: [])
+    for comment in comments:
+        comment_list[comment.subject].insert(0,(comment, comment.vote_status(user=user, ip=ip))
+    final_list = sorted(comment_list.values(), key=lambda lst: lst[-1][0].time, reverse=True)
+
+    rc = RequestContext(request, {
+        'comments': final_list,
+    })
+    return render_to_response('comment/index.html', context_instance=rc)    
+    
 def post_comment(request, slug, year, month, day):
     story = get_by_date_or_404(Article, year, month, day, slug=slug)
     if not story.comments_allowed:
@@ -145,3 +162,4 @@ def vote_on_comment(request, slug, year, month, day, num, val):
         return HttpResponse("success" if result else "failure")
     else:
         return HttpResponseRedirect(comment.get_absolute_url())
+        
