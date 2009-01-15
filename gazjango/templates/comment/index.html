@@ -60,7 +60,7 @@
         {% for story_comment_object in comments %}
             <div id="continueBox">
                 <h3>{{ story_comment_object.0.subject.headline }}</h3>
-                <p>by {{ story_comment_object.0.authors_in_order|join_authors:"l" }}</p>                
+                <p>by {{ story_comment_object.0.subject.authors_in_order|join_authors:"l" }}</p>                
             </div>
             <div id="comments">
                 {% for comment in story_comment_object %}
