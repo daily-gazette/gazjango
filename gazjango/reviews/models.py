@@ -169,12 +169,11 @@ class Review(models.Model):
     rating = models.CharField(max_length=1, choices=RATING_CHOICES)
     
     reviewer = models.ForeignKey(UserProfile, related_name="reviews")
-    
-    review_summary = models.TextField(blank=True) 
-    review_text = models.TextField(blank=True)   
+    text = models.TextField(blank=True)   
     
     def __unicode__(self):
         return self.slug
     
     def get_absolute_url(self):
         return "%s#review-%s" % (self.establishment.get_absolute_url(), self.pk)
+    

@@ -60,7 +60,7 @@
             directions.load("from: 500 College Ave, Swarthmore PA to: {{ establishment.street_address }}, {{ establishment.city }}",{travelMode:G_TRAVEL_MODE_WALKING});
         {% else %}
             {% ifequal establishment.access "p" %}
-                    directions.load("from: {{ establishment.nearest_station.lat }},{{ establishment.nearest_station.lng }} to: {{ establishment.street_address }}, {{ establishment.city }}",{travelMode:G_TRAVEL_MODE_WALKING});
+                    directions.load("from: {{ establishment.nearest_station.lat }},{{ establishment.nearest_station.lng }} ({{ establishment.nearest_station.name }}) to: {{ establishment.street_address }}, {{ establishment.city }}",{travelMode:G_TRAVEL_MODE_WALKING});
             {% else %}
                     directions.load("from: 500 College Ave, Swarthmore PA to: {{ establishment.street_address }}, {{ establishment.city }}",{travelMode:G_TRAVEL_MODE_DRIVING});
             {% endifequal %}
@@ -99,11 +99,23 @@
         
       </div>
       <div id="reviewText">
-          {% for review in establishment.reviews.all %}
+          {% for review in reviews %}
             {% if not forloop.first %}<center><hr width="50%" /></center>{% endif %}
-            <p id="review-{{ review.pk }}"><strong>Reviewed by: {{ review.reviewer.name }}</strong> (Cost: {{ review.cost }} Rating: {{ review.rating }})</p>
-            <p>{{ review.review_text }}</p>
+            <p id="review-{{ review.pk }}"><strong>Reviewed by: {{ review.reviewer.name }}</strong> (Cost: {{ review.cost }}; Rating: {{ review.rating }})</p>
+            <p>{{ review.text }}</p>
+            {% if forloop.last %}<center><hr width="50%" /></center>{% endif %}
           {% endfor %}
+          <div id="addReview">
+            {% if not user.is_authenticated %}
+              <p><a href="{% url login %}?next={{ establishment.get_absolute_url }}#addReview">Log in</a> to submit your own review.</p>
+            {% else %}
+            <form method="post" action=".">
+              <p><strong>Reviewed by: {{ user.get_full_name }}</strong> (Cost: {{ form.cost }}; Rating {{ form.rating }})</p>
+              <p>{{ form.text }}</p>
+              <p><input type="submit" value="Submit" /></p>
+            </form>
+            {% endif %}
+          </div>
       </div>
     </div>
   </div>

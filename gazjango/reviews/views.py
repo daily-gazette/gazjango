@@ -1,16 +1,17 @@
-from django.core.urlresolvers import reverse
-from django.http              import HttpResponse, HttpResponseRedirect
-from django.shortcuts         import get_object_or_404, render_to_response
-from django.template          import RequestContext
-from django.utils             import simplejson as json
+from django.contrib.contenttypes.models import ContentType
+from django.core.urlresolvers           import reverse
+from django.http                        import HttpResponse, HttpResponseRedirect
+from django.shortcuts                   import get_object_or_404, render_to_response
+from django.template                    import RequestContext
+from django.utils                       import simplejson as json
 
-from gazjango.articles.models             import Section
-from gazjango.misc.helpers                import get_static_path
-from gazjango.reviews.directions          import TRAIN_STATIONS
-from gazjango.reviews.models              import Establishment, Review
-from gazjango.reviews.forms               import SubmitEstablishmentForm
-from gazjango.tagging.models              import Tag
-from django.contrib.contenttypes.models   import ContentType
+from gazjango.articles.models    import Section
+from gazjango.misc.helpers       import get_static_path
+from gazjango.misc.view_helpers  import get_user_profile
+from gazjango.reviews.directions import TRAIN_STATIONS
+from gazjango.reviews.models     import Establishment, Review
+from gazjango.reviews.forms      import SubmitEstablishmentForm, SubmitReviewForm
+from gazjango.tagging.models     import Tag
 
 import urllib
 import settings
@@ -64,11 +65,34 @@ def submit_review(request):
 
 def establishment(request, slug):
     'View for "establishment" pages.'
+    estab = get_object_or_404(Establishment, slug=slug)
+    user = get_user_profile(request)
     
-    establishment = get_object_or_404(Establishment, slug=slug)
+    if request.method == 'POST':
+        form = SubmitReviewForm(request.POST)
+        if form.is_valid():
+            try:
+                review = estab.reviews.get(reviewer=user)
+            except Review.DoesNotExist:
+                review = Review(establishment=estab, reviewer=user)
+            review.cost = form.cleaned_data['cost']
+            review.rating = form.cleaned_data['rating']
+            review.text = form.cleaned_data['text']
+            review.save()
+            return HttpResponseRedirect(reverse(establishment, 
+                                                kwargs={'slug': slug}))
+    else:
+        try:
+            review = estab.reviews.get(reviewer=user)
+            form = SubmitReviewForm(review.__dict__)
+        except Review.DoesNotExist:
+            form = SubmitReviewForm()
     
-    rc = RequestContext(request, { 'establishment': establishment })
-    return render_to_response('reviews/establishment.html', context_instance=rc)
+    return render_to_response('reviews/establishment.html', {
+        'establishment': estab,
+        'reviews': estab.reviews.exclude(reviewer=user),
+        'form': form,
+    }, context_instance=RequestContext(request))
 
 def list_trains(request):
     return HttpResponse(json.dumps(TRAIN_STATIONS.values()))
