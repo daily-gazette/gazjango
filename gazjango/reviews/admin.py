@@ -17,7 +17,9 @@ class EstablishmentAdmin(admin.ModelAdmin):
         }),
         ('Advanced', {
             'classes': ('collapse',),
-            'fields': ('slug', 'auto_geocode', 'latitude', 'longitude')
+            'fields': ('slug', 
+                       'auto_geocode', 'latitude', 'longitude',
+                       'auto_nearest_station', '_nearest_station')
         }),
     )
     filter_horizontal = ('tags',)
@@ -29,6 +31,6 @@ admin.site.register(Establishment, EstablishmentAdmin)
 
 
 class ReviewAdmin(admin.ModelAdmin):
-    list_display = ('slug', 'establishment')
-    list_filter = ('slug', 'establishment')
+    list_display = ('reviewer', 'establishment')
+    list_filter = ('establishment')
 admin.site.register(Review, ReviewAdmin)
