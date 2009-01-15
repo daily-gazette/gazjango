@@ -45,7 +45,7 @@
             bicon.infoShadowAnchor = new GPoint(18, 25);
         
             var requestSepta = GXmlHttp.create();
-            requestSepta.open("GET", "{% static js septa.xml %}", true);
+            requestSepta.open("GET", "{% static xml septa.xml %}", true);
             requestSepta.onreadystatechange = function() {
             	if (requestSepta.readyState == 4) {
             		var xmlDoc = GXml.parse(requestSepta.responseText);
@@ -67,19 +67,9 @@
             directions.load("from: 500 College Ave, Swarthmore PA to: {{ establishment.street_address }}, {{ establishment.city }}",{travelMode:G_TRAVEL_MODE_WALKING});
         {% else %}
             {% ifequal establishment.access "p" %}
-                {% ifequal establishment.city "Philadelphia" %}
-                    if ({{ establishment.longitude }} < -75.183411) {
-                        // From University City
-                        directions.load("from: 39.948849,-75.189646 to: {{ establishment.street_address }}, {{ establishment.city }}",{travelMode:G_TRAVEL_MODE_WALKING});
-                    } else {
-                        // From Suburban Station
-                        directions.load("from: 39.952538,-75.16327 to: {{ establishment.street_address }}, {{ establishment.city }}",{travelMode:G_TRAVEL_MODE_WALKING});
-                    }
-                {% else %}
-                    directions.load("from: 500 College Ave, Swarthmore PA to: {{ establishment.street_address }}, {{ establishment.city }}",{travelMode:G_TRAVEL_MODE_DRIVING});
-                {% endifequal %}
+                    directions.load("from: {{ establishment.station.lat }},{{ establishment.station.lng }} to: {{ establishment.street_address }}, {{ establishment.city }}",{travelMode:G_TRAVEL_MODE_WALKING});
             {% else %}
-                directions.load("from: 500 College Ave, Swarthmore PA to: {{ establishment.street_address }}, {{ establishment.city }}",{travelMode:G_TRAVEL_MODE_DRIVING});
+                    directions.load("from: 500 College Ave, Swarthmore PA to: {{ establishment.street_address }}, {{ establishment.city }}",{travelMode:G_TRAVEL_MODE_DRIVING});
             {% endifequal %}
         {% endifequal %}
     }

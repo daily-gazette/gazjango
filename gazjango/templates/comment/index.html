@@ -1,0 +1,135 @@
+{% extends "base.html" %}
+{% load extras %}
+
+{% block title %}{{ page.title }}{% endblock %}
+
+{% block customheader %}
+  <link rel="stylesheet" href="{% static css page/story.css %}" type="text/css" media="screen, projection" />
+{% endblock customheader %}
+
+
+{% block topbar %}
+  <div id="headerSectionBar">
+    <div id="headerSection">
+      <h3>
+          <a href="http://daily.swarthmore.edu/about/">About Us</a> >> Comments
+      </h3>
+    </div>
+
+    <div id="headerSearch" class="floatRight">
+      {% include "search_header.html" %}
+    </div>
+  </div>
+{% endblock topbar %}
+
+{% block content %}
+    <div id="commentColumn">
+    </div>
+    <div id="storyBox">
+        <div id="story">
+              {% block above-headline %}
+                <center>
+                  <script type="text/javascript"><!--
+                    google_ad_client = "pub-6611826348976430";
+                    /* 468x60, created 12/4/08, Story header */
+                    google_ad_slot = "3210002859";
+                    google_ad_width = 468;
+                    google_ad_height = 60;
+                  //-->
+                  </script>
+                  <script type="text/javascript" 
+                          src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
+                  </script>
+                </center>
+              {% endblock %}
+                <h2>Most Recent Comments</h2>
+         </div>
+         
+        <div id="shareBox">
+            <div class="right">
+                <strong>Share:</strong> {% add_this hover %}
+            </div>
+            <p>
+                <a href="print"><img src="{% static images icons/print.png %}" /> Print</a>
+                &nbsp;&nbsp;
+                <a href="email"><img src="{% static images icons/email.png %}" /> Email</a>
+            </p>
+        </div>
+      
+        {% load comparisons %}
+        {% for story_comment_object in comments %}
+            <div id="continueBox">
+                <h3>{{ story_comment_object.0.subject.headline }}</h3>
+                <p>by {{ story_comment_object.0.authors_in_order|join_authors:"l" }}</p>                
+            </div>
+            <div id="comments">
+                {% for comment, status in story_comment_object %}
+                <div class="comment {% if comment.is_visible %}shown-comment{% else %}hidden-comment{% endif %}{% if new %} new{% endif %}" id="c-{{ comment.number }}">
+                  <div class="commentInformation">
+                      <p class="floatLeft">
+                        <span class="commentNumber">#{{ comment.number }}</span>:
+                        <span class="commentTime">{{ comment.time|date:"n/j/Y" }} at {{ comment.time|date:"g:i a" }}</span>
+                      </p>
+                      <ul class="floatRight">
+                        {% if perms.comments.can_moderate_absolutely %}
+                          [{{ status }}]
+                          <li class="up"><a href="vote-comment/{{ comment.number }}/up/">U</a></li>
+                          <li class="down"><a href="vote-comment/{{ comment.number }}/down/">D</a></li>
+
+                        {% else %}
+                          {% if status|gt:0 %}
+                            <li class="up selected"><a href="vote-comment/{{ comment.number }}/clear/">U</a></li>
+                          {% else %}
+                            <li class="up"><a href="vote-comment/{{ comment.number }}/up/">U</a></li>
+                          {% endif %}
+
+                          {% if status|lt:0 %}
+                            <li class="down selected"><a href="vote-comment/{{ comment.number }}/clear/">D</a></li>
+                          {% else %}
+                            <li class="down"><a href="vote-comment/{{ comment.number }}/down/">D</a></li>
+                          {% endif %}
+                        {% endif %}
+
+                        {% if comment.score|gt:0 %}
+                          <li>(+{{ comment.score }})</li>
+                        {% else %}
+                          <li>({{ comment.score }})</li>
+                        {% endif %}
+                      </ul>
+                  </div>
+
+                  <div class="commentContent {% if comment.is_staff %}staff{% else %}{% if not comment.is_visible %}moderate{% endif %}{% endif %}">
+
+                    <p class="commentText">
+                      {% if comment.is_visible %}
+                        {{ comment.text|safe }}
+                      {% endif %}
+                    </p>
+
+                    <p class="commentAuthorship">
+                      {% if not comment.is_visible %}
+                        {% if comment.is_approved %}
+                          <em>
+                            This comment has been deemed inappropriate or irrelevant by the community or site editors.<br/>
+                            The Gazette does not condone its content.
+                          </em>
+                        {% else %}
+                          <em>
+                            This comment has not yet been approved by a site administrator.  
+                          </em>
+                        {% endif %}
+
+                        [<a href="#" class='showLink'>show anyway</a>]
+                        <br/>
+                      {% endif %}
+
+                      <br />&mdash;
+                      {{ comment.linked_name|safe }}
+                      <span class="authorDark">| {{ comment.status }}</span>
+                    </p>
+                  </div>
+                </div>
+                {% endfor %}
+            </div>
+        {% endfor %}
+
