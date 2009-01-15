@@ -165,9 +165,9 @@ urlpatterns += patterns('athletics.views',
 )
 
 urlpatterns += patterns('reviews.views',
-    (r'^reviews/$',                 'reviews'),
+    (r'^reviews/$',                 'reviews',       {}, 'reviews'),
     (r'^reviews/new/$',             'submit_review'),
-    (r'^reviews/%(slug)s/$' % reps, 'establishment'),
+    (r'^reviews/%(slug)s/$' % reps, 'establishment', {}, 'establishment'),
 )
 
 

@@ -119,7 +119,7 @@ class Establishment(models.Model):
     
     @models.permalink
     def get_absolute_url(self):
-        return ('reviews.views.establishment', None, {'slug': self.slug})
+        return ('establishment', None, {'slug': self.slug})
     
 
 _slugger = set_default_slug(lambda x: x.name)

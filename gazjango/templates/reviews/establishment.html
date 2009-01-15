@@ -74,7 +74,14 @@
 
 {% block topbar %}
   <div id="headerSectionBar">
-    <div id="headerSearch">
+    <div id="headerSection">
+      <h3>
+        <a href="{% url reviews %}">The Zagette</a>
+        &raquo;
+        {{ establishment.get_establishment_type_display }}
+      </h3>
+    </div>
+    <div id="headerSearch" class="floatRight">
       {% include "search_header.html" %}
     </div>
   </div>
@@ -83,20 +90,26 @@
 
 {% block content %}
 <div id="reviews">
-  <h2>{{ establishment.name }}, in the Gazette's Zagette</h2>
+  <h2>{{ establishment.name }}</h2>
   <div id="topBlock">
-      <div id="reviewInfo">
-          <p><strong>Average Rating:</strong> {{ establishment.avg_rating|default_if_none:"No Ratings" }} | <strong>Average Cost:</strong> {{ establishment.avg_cost|default_if_none:"Unknown" }} | <strong>Tags:</strong> {% for tag in establishment.tags.all %}{{ tag.name }}{% if not forloop.last %}, {% endif %}{% endfor %} | <strong>Phone:</strong> {{ establishment.phone }} | <strong>Address:</strong> {{ establishment.street_address }}, {{ establishment.city }}</p>
-      </div>
+    <div id="reviewInfo">
+      <p>
+        <strong>Average Rating:</strong> {{ establishment.avg_rating|default_if_none:"No Ratings" }} |
+        <strong>Average Cost:</strong> {{ establishment.avg_cost|default_if_none:"Unknown" }} | 
+        <strong>Tags:</strong> {% for tag in establishment.tags.all %}{{ tag.name }}{% if not forloop.last %}, {% endif %}{% endfor %} |
+        <strong>Phone:</strong> {{ establishment.phone }} |
+        <strong>Address:</strong> {{ establishment.street_address }}, {{ establishment.city }}
+      </p>
+    </div>
 
     <div id="mapBlock">
       <div id="route">
         <!-- Directions inserted here -->
       </div>
       <div id="map" class="jmap">
-        
-        <!-- Map inserted here -->
-        
+        <noscript>
+          <center><p>For a better experience with the Zagette, please enable JavaScript in your browser.</p></center>
+        </noscript>
       </div>
       <div id="reviewText">
           {% for review in reviews %}
