@@ -3,17 +3,19 @@
 {% block title %}Log In{% endblock %}
 
 {% block content %}
-  <div id="errors">
-    {% if form.errors %}
+  {% if form.errors %}
+    <div id="errors">
       <p>Sorry, your username and password didn't match our records. Please try again.</p>
       <p>If you don't have an account yet, you should <a href="{% url registration_register %}">register one</a>.</p>
-    {% else %}
-      {% ifequal user.password '!' %}
-      <p>We're sorry: if you had an account on the old site, we were unable to transfer your password to the new one, for technical reasons.</p>
-      <p>You should <a href="{% url password-reset %}">set a new password</a>.</p>
-      {% endifequal %}
-    {% endif %}
-  </div>
+    </div>
+  {% else %}
+    {% ifequal user.password '!' %}
+      <div id="errors">
+        <p>We're sorry: if you had an account on the old site, we were unable to transfer your password to the new one, for technical reasons.</p>
+        <p>You should <a href="{% url password-reset %}">set a new password</a>.</p>
+      </div>
+    {% endifequal %}
+  {% endif %}
 
   <div id="login">
   	<div id="content">
