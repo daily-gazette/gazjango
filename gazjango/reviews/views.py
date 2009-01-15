@@ -1,10 +1,12 @@
 from django.core.urlresolvers import reverse
-from django.http              import HttpResponseRedirect
+from django.http              import HttpResponse, HttpResponseRedirect
 from django.shortcuts         import get_object_or_404, render_to_response
 from django.template          import RequestContext
+from django.utils             import simplejson as json
 
 from gazjango.articles.models             import Section
 from gazjango.misc.helpers                import get_static_path
+from gazjango.reviews.directions          import TRAIN_STATIONS
 from gazjango.reviews.models              import Establishment, Review
 from gazjango.reviews.forms               import SubmitEstablishmentForm
 from gazjango.tagging.models              import Tag
@@ -67,3 +69,6 @@ def establishment(request, slug):
     
     rc = RequestContext(request, { 'establishment': establishment })
     return render_to_response('reviews/establishment.html', context_instance=rc)
+
+def list_trains(request):
+    return HttpResponse(json.dumps(TRAIN_STATIONS.values()))

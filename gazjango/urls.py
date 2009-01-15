@@ -145,6 +145,7 @@ urlpatterns += patterns('',
     (r'^data/authors/$', 'accounts.views.author_completions', {}, 'author-completions'),
     (r'^data/usernames/$', 'accounts.views.username_for_name', {}, 'get-or-make-username'),
     # (r'^data/subsections/%(section)s/$' % reps, 'articles.views.list_subsections', {}, 'list-subsections')
+    (r'^data/train-stations\.json$', 'reviews.views.list_trains'),
 )
 
 if settings.DEBUG:

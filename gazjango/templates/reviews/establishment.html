@@ -43,22 +43,14 @@
             bicon.iconAnchor = new GPoint(9, 34);
             bicon.infoWindowAnchor = new GPoint(9, 2);
             bicon.infoShadowAnchor = new GPoint(18, 25);
-        
-            var requestSepta = GXmlHttp.create();
-            requestSepta.open("GET", "{% static xml septa.xml %}", true);
-            requestSepta.onreadystatechange = function() {
-            	if (requestSepta.readyState == 4) {
-            		var xmlDoc = GXml.parse(requestSepta.responseText);
-            		var points = xmlDoc.documentElement.getElementsByTagName("point");
-            		for (var i = 0; i < points.length; i++) {
-            			var point = new GPoint(parseFloat(points[i].getAttribute("lng")),parseFloat(points[i].getAttribute("lat")));
-            			var text = points[i].getAttribute("txt");
-            			var marker = createMarker(point, text, bicon);
-                        map.addOverlay(marker);
-                    }
-                }
-            }
-            requestSepta.send(null);
+            
+            $.getJSON('{% url reviews.views.list_trains %}', {}, function(data) {
+                jQuery.each(data, function() {
+                    var point = new GLatLng(parseFloat(this.lat), parseFloat(this.lng));
+                    var marker = createMarker(point, this.txt, bicon);
+                    map.addOverlay(marker);
+                });
+            });
         {% endifequal %}
         
         directionsPanel = document.getElementById("route");
@@ -67,7 +59,7 @@
             directions.load("from: 500 College Ave, Swarthmore PA to: {{ establishment.street_address }}, {{ establishment.city }}",{travelMode:G_TRAVEL_MODE_WALKING});
         {% else %}
             {% ifequal establishment.access "p" %}
-                    directions.load("from: {{ establishment.station.lat }},{{ establishment.station.lng }} to: {{ establishment.street_address }}, {{ establishment.city }}",{travelMode:G_TRAVEL_MODE_WALKING});
+                    directions.load("from: {{ establishment.nearest_station.lat }},{{ establishment.nearest_station.lng }} to: {{ establishment.street_address }}, {{ establishment.city }}",{travelMode:G_TRAVEL_MODE_WALKING});
             {% else %}
                     directions.load("from: 500 College Ave, Swarthmore PA to: {{ establishment.street_address }}, {{ establishment.city }}",{travelMode:G_TRAVEL_MODE_DRIVING});
             {% endifequal %}
