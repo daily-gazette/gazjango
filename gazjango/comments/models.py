@@ -189,13 +189,28 @@ class PublicComment(models.Model):
                 return "Registered, Non-Swarthmore"
     
     def get_vote(self, user=None, ip=None):
-        try:
-            if user is not None:
-                return self.votes.get(user=user)
-            else:
-                return self.votes.get(ip=ip, user=None)
-        except CommentVote.DoesNotExist:
+        args = { 'user': user }
+        if user is not None:
+            args['ip'] = ip
+        votes = list(self.votes.filter(**args))
+        if len(votes) == 0:
             return None
+        elif len(votes) == 1:
+            return votes[0]
+        else:
+            total = sum(1 if vote.positive else -1 for vote in votes)
+            if total == 0:
+                for vote in votes:
+                    vote.delete()
+                return None
+            else:
+                for vote in votes[1:]:
+                    vote.delete()
+                vote = votes[0]
+                vote.positive = total / abs(total)
+                vote.save()
+                self.recalculate_score()
+                return vote
     
     def vote(self, positive, user=None, ip=None):
         """
@@ -203,14 +218,12 @@ class PublicComment(models.Model):
         it; if there's a vote and `positive` is None, clear it. If the voter is
         an editor, update their custom_weight.
         """
-        status = self.vote_status(user=user, ip=ip)
-        if status is None: # hasn't voted yet
+        vote = self.get_vote(user=user, ip=ip)
+        if vote is None: # hasn't voted yet
             if positive is not None:
                 vote = self.votes.create(positive=positive, user=user, ip=ip)
                 self.register_vote(vote)
-        else:
-            vote = self.get_vote(user=user, ip=ip)
-                        
+        else:           
             if positive is None:
                 vote.delete()
             else:
@@ -233,8 +246,10 @@ class PublicComment(models.Model):
         Returns `user`/`ip`'s vote on this comment: None if they haven't
         voted, otherwise the value.
         """
-        vote = self.get_vote(user=user, ip=ip)
-        return vote.value if vote else None
+        try:
+            return self.get_vote(user=user, ip=ip).value
+        except AttributeError:
+            return None
     
     def linked_name(self):
         name = self.display_name
