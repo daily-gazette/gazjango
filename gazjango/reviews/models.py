@@ -65,16 +65,15 @@ class Establishment(models.Model):
     longitude = models.CharField(max_length=100, blank=True)
     
     def _get_nearest_station(self):
+        if not self._nearest_station and self.auto_nearest_station:
+            self.find_nearest_station()
         try:
             return TRAIN_STATIONS[self._nearest_station]
         except KeyError:
             return None
     
     def _set_nearest_station(self, val):
-        try:
-            self._nearest_station = val['id']
-        except TypeError:
-            self._nearest_station = val
+        self._nearest_station = val['id']
     
     _nearest_station = models.IntegerField('nearest train station', blank=True,
         choices=TRAIN_CHOICES, help_text="Where to show directions from; only relevant "
