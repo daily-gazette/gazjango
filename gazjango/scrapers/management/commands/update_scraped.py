@@ -1,5 +1,6 @@
 from django.core.management.base import LabelCommand
-import gazjango.issues.models as issue_models
+from gazjango.blogroll.models import OutsideSite
+from gazjango.issues.models   import Event, Menu, Weather
 
 class Command(LabelCommand):
     """Updates scraped objects."""
@@ -13,23 +14,27 @@ class Command(LabelCommand):
         gazjango.scrapers.tla.get_tla_links(override_cache=True)
     
     def update_events(self):
-        issue_models.Event.objects.update()
+        Event.objects.update()
     
     def update_menu(self):
-        issue_models.Menu.objects.for_today(   ignore_cached=True)
-        issue_models.Menu.objects.for_tomorrow(ignore_cached=True)
+        Menu.objects.for_today(   ignore_cached=True)
+        Menu.objects.for_tomorrow(ignore_cached=True)
     
     def update_weather(self):
-        issue_models.Weather.objects.for_today(   ignore_cached=True)
-        issue_models.Weather.objects.for_tomorrow(ignore_cached=True)
+        Weather.objects.for_today(   ignore_cached=True)
+        Weather.objects.for_tomorrow(ignore_cached=True)
+    
+    def update_blogroll(self):
+        OutsideSite.objects.update_all()
     
     def handle_label(self, label, **options):
         lookup = {
-            'bico':    self.update_bico,
-            'tla':     self.update_tla,
-            'events':  self.update_events,
-            'menu':    self.update_menu,
-            'weather': self.update_weather
+            'bico':     self.update_bico,
+            'tla':      self.update_tla,
+            'events':   self.update_events,
+            'menu':     self.update_menu,
+            'weather':  self.update_weather,
+            'blogroll': self.update_blogroll,
         }
         if label == 'all':
             for name, f in lookup.items():
