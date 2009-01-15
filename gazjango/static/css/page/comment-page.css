@@ -74,6 +74,9 @@ COMMENT STYLES
 	background-color: #CCC;
 }
 
+.commentInformation p {
+    width: 640px;
+}
 
 .commentInformation .commentNumber {
     font-weight: bold;
