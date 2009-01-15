@@ -4,7 +4,7 @@
 {% block title %}Comments Listing :: The Daily Gazette{% endblock %}
 
 {% block customheader %}
-  <link rel="stylesheet" href="{% static css page/story.css %}" type="text/css" media="screen, projection" />
+  <link rel="stylesheet" href="{% static css page/comment-page.css %}" type="text/css" media="screen, projection" />
 {% endblock customheader %}
 
 
@@ -44,21 +44,10 @@
               {% endblock %}
                 <h2>Most Recent Comments</h2>
          </div>
-         
-        <div id="shareBox">
-            <div class="right">
-                <strong>Share:</strong> {% add_this hover %}
-            </div>
-            <p>
-                <a href="print"><img src="{% static images icons/print.png %}" /> Print</a>
-                &nbsp;&nbsp;
-                <a href="email"><img src="{% static images icons/email.png %}" /> Email</a>
-            </p>
-        </div>
-      
+            
         {% load comparisons %}
         {% for story_comment_object in comments %}
-            <div id="continueBox">
+            <div class="commentHeaderBox">
                 <h3>{{ story_comment_object.0.subject.headline }}</h3>
                 <p>by {{ story_comment_object.0.subject.authors_in_order|join_authors:"l" }}</p>                
             </div>
