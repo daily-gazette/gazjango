@@ -168,6 +168,10 @@ urlpatterns += patterns('reviews.views',
     (r'^reviews/%(slug)s/$' % reps, 'establishment'),
 )
 
+urlpatterns += patterns('comments.views',
+    (r'^comments/$',                 'comment_page'),
+)
+
 # section match should be last, to avoid shadowing others
 urlpatterns += patterns('articles.views',
     (r'^archives/$', 'archives', {}, 'archives'),
