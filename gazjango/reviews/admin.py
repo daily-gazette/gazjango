@@ -32,5 +32,5 @@ admin.site.register(Establishment, EstablishmentAdmin)
 
 class ReviewAdmin(admin.ModelAdmin):
     list_display = ('reviewer', 'establishment')
-    list_filter = ('establishment')
+    list_filter = ('establishment',)
 admin.site.register(Review, ReviewAdmin)
