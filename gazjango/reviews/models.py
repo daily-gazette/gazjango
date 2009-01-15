@@ -136,10 +136,13 @@ models.signals.pre_save.connect(_slugger, sender=Establishment)
 # }
 
 def set_geographical_vars(sender, instance, **kwargs):
-    if instance.auto_geocode:
-        instance.geocode()
-    if instance.auto_nearest_station:
-        instance.find_nearest_station()
+    try:
+        if instance.auto_geocode:
+            instance.geocode()
+        if instance.auto_nearest_station:
+            instance.find_nearest_station()
+    except urllib2.URLError:
+        pass
 models.signals.pre_save.connect(set_geographical_vars, sender=Establishment)
 
 
