@@ -56,7 +56,7 @@
                 <div class="comment {% if comment.is_visible %}shown-comment{% else %}hidden-comment{% endif %}{% if new %} new{% endif %}" id="c-{{ comment.number }}">
                   <div class="commentInformation">
                       <p class="floatLeft">
-                        <span class="commentNumber"><a href="{{ comment.get_absolute_url }}">#{{ comment.number }}</span>:
+                        <span class="commentNumber"><a href="{{ comment.get_absolute_url }}">#{{ comment.number }}</a></span>:
                         <span class="commentTime">{{ comment.time|date:"n/j/Y" }} at {{ comment.time|date:"g:i a" }}</span>
                         Post by {{ comment.linked_name|safe }} ({{ comment.status }})
                       </p>

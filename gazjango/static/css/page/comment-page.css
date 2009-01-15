@@ -15,6 +15,10 @@
 	border-bottom: 2px solid #000000;
 	font-size: 3em;
 }
+
+#story a h2 {
+    color: black;
+}
 	
 #commentColumn {
 	width: 234px;
