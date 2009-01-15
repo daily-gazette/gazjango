@@ -19,14 +19,14 @@
     var travelMode;
     
     function createMarker(point, text, icon) {
-		  var marker = new GMarker(point, icon);
-		  // Show this marker's index in the info window when it is clicked
-		  GEvent.addListener(marker, "click", function() {
-			  marker.openInfoWindowHtml(text);
-		  });
-		  return marker;
-	}
-  
+		    var marker = new GMarker(point, icon);
+		    // Show this marker's index in the info window when it is clicked
+		    GEvent.addListener(marker, "click", function() {
+			      marker.openInfoWindowHtml(text);
+		    });
+		    return marker;
+	  }
+    
     function initialize() {
         
         map = new GMap2(document.getElementById("map"));
@@ -47,7 +47,8 @@
             $.getJSON('{% url reviews.views.list_trains %}', {}, function(data) {
                 jQuery.each(data, function() {
                     var point = new GLatLng(parseFloat(this.lat), parseFloat(this.lng));
-                    var marker = createMarker(point, this.txt, bicon);
+                    var text = "<b>" + this.name + "</b>";
+                    var marker = createMarker(point, text, bicon);
                     map.addOverlay(marker);
                 });
             });
@@ -100,7 +101,7 @@
       <div id="reviewText">
           {% for review in establishment.reviews.all %}
             {% if not forloop.first %}<center><hr width="50%" /></center>{% endif %}
-            <p><strong>Reviewed by: {{ review.reviewer.name }}</strong> (Cost: {{ review.cost }} Rating: {{ review.rating }})</p>
+            <p id="review-{{ review.pk }}"><strong>Reviewed by: {{ review.reviewer.name }}</strong> (Cost: {{ review.cost }} Rating: {{ review.rating }})</p>
             <p>{{ review.review_text }}</p>
           {% endfor %}
       </div>

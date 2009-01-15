@@ -142,8 +142,7 @@ models.signals.pre_save.connect(set_geographical_vars, sender=Establishment)
 
 class Review(models.Model):
     "Represents the review of an establishment."
-    slug = models.SlugField()
-    establishment = models.ForeignKey(Establishment,related_name="reviews")
+    establishment = models.ForeignKey(Establishment, related_name="reviews")
     
     COST_CHOICES = (
         ('1',"$"),
@@ -172,4 +171,4 @@ class Review(models.Model):
         return self.slug
     
     def get_absolute_url(self):
-        return "%s#%s" % (self.establishment.get_absolute_url(), self.slug)
+        return "%s#review-%s" % (self.establishment.get_absolute_url(), self.pk)
