@@ -48,7 +48,7 @@
         {% load comparisons %}
         {% for story_comment_object in comments %}
             <div class="commentHeaderBox">
-                <a href="{{ story_comment_object.0.subject.get_absolute_url }}"><h3>{{ story_comment_object.0.subject.headline }}</h3></a>
+                <h3><a href="{{ story_comment_object.0.subject.get_absolute_url }}">{{ story_comment_object.0.subject.headline }}</a></h3>
                 <p>by {{ story_comment_object.0.subject.authors_in_order|join_authors:"l" }}</p>                
             </div>
             <div id="comments">
@@ -56,7 +56,7 @@
                 <div class="comment {% if comment.is_visible %}shown-comment{% else %}hidden-comment{% endif %}{% if new %} new{% endif %}" id="c-{{ comment.number }}">
                   <div class="commentInformation">
                       <p class="floatLeft">
-                        <span class="commentNumber"><a href="{{ comment.get_absolute_url }}">#{{ comment.number }}</a></span>: <strong>Post by {{ comment.linked_name|safe }} ({{ comment.status }})</strong>
+                        <span class="commentNumber"><a href="{{ comment.get_absolute_url }}">#{{ comment.number }}</a></span>: <strong>Comment by {{ comment.linked_name|safe }}</strong> ({{ comment.status }})
                         <span class="commentTime">{{ comment.time|date:"n/j/Y" }} at {{ comment.time|date:"g:i a" }}</span>
                       </p>
                   </div>

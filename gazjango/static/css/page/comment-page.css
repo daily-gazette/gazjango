@@ -80,6 +80,7 @@ COMMENT STYLES
 }
 .commentInformation .commentTime {
     font-style: italic;
+    float: right;
 }
 
 .commentInformation ul {
