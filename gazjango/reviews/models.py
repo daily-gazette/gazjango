@@ -88,9 +88,12 @@ class Establishment(models.Model):
     
     def geocode(self):
         if self.street_address:
-            loc = (self.street_address, self.zip_code or self.city)
+            if self.city:
+                loc = [self.street_address, self.city, self.zip_code]
+            else:
+                loc = [self.street_address, self.zip_code]
             url = GEOCODE_REQUEST_URL % {
-                'req': urllib.quote_plus("%s, %s" % loc),
+                'req': urllib.quote_plus(', '.join(loc)),
                 'key': settings.GMAPS_API_KEY
             }
             data = urllib2.urlopen(url).read()
