@@ -56,6 +56,7 @@ urlpatterns += patterns('articles.views',
 )
 
 urlpatterns += patterns('comments.views',
+    (r'^comments/$',                 'comment_page'),
     (r'^%(year)s/%(month)s/%(day)s/%(slug)s/comment/$'         % reps, 'post_comment'),
     (r'^%(year)s/%(month)s/%(day)s/%(slug)s/comment/captcha/$' % reps, 'show_captcha'),
     (r'^%(year)s/%(month)s/%(day)s/%(slug)s/comments/(%(num)s/)?$'                         % reps, 'comments_for_article'),
@@ -168,9 +169,6 @@ urlpatterns += patterns('reviews.views',
     (r'^reviews/%(slug)s/$' % reps, 'establishment'),
 )
 
-urlpatterns += patterns('comments.views',
-    (r'^comments/$',                 'comment_page'),
-)
 
 # section match should be last, to avoid shadowing others
 urlpatterns += patterns('articles.views',
