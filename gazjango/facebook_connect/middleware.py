@@ -3,6 +3,7 @@ from django.conf                import settings
 from django.contrib.auth        import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.utils               import simplejson
+
 from gazjango.accounts.models   import UserProfile, UserKind
 from gazjango.misc.view_helpers import get_ip
 
@@ -25,6 +26,7 @@ class FacebookConnectMiddleware(object):
     
     def logout(self, request):
         logout(request)
+        request.facebook_user = None
         self.delete_fb_cookies = True
         return None
     
@@ -56,12 +58,15 @@ class FacebookConnectMiddleware(object):
             # Set the facebook message to empty. This message can be used to
             # display info from the middleware on a Web page.
             request.facebook_message = None
+            request.facebook_user = None
             
             if request.user.is_authenticated():
                 if API_KEY in request.COOKIES: # using FB Connect
                     # check for presence and correctness of ip cookie
                     real_ip = get_ip(request)
-                    if request.COOKIES.get('fb_ip', None) != self.hash(real_ip + API_SECRET):
+                    if request.COOKIES.get('fb_ip', None) == self.hash(real_ip + API_SECRET):
+                        request.facebook_user = request.user
+                    else:
                         return self.logout(request)
                 
             else: # not logged in
@@ -125,6 +130,7 @@ class FacebookConnectMiddleware(object):
                         if user.is_active:
                             login(request, user)
                             self.facebook_user_is_authenticated = True
+                            request.facebook_user = user
                         else:
                             request.facebook_message = ACCOUNT_DISABLED_ERROR
                             self.delete_fb_cookies = True

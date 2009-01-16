@@ -47,12 +47,16 @@
   					      <a href="/admin/">Management Admin</a> |
   					    {% endif %}
 			          <a href="{% url manage-user %}">Manage your Account</a> |
-			          <a href="{% url auth_logout %}">Logout</a>
+			          {% if facebook_user %}
+			            <fb:login-button size="medium" background="white" length="short" autologoutlink="true">Logout</fb:login-button>
+			          {% else %}
+  			          <a href="{% url auth_logout %}">Logout</a>
+  			        {% endif %}
 			        {% else %}
 			          <a href="{% url registration_register %}">Register an Account</a> |
 			          <a href="{% url auth_login %}">Login</a> | 
-			          <fb:login-button size="small" background="white" length="short"></fb:login-button>
-			          <script type="text/javascript">FB.init("{{ FACEBOOK_API_KEY }}", "/xd_receiver.html");</script>
+			          <fb:login-button size="small" background="white" length="short" autologoutlink="true"></fb:login-button>Login with Facebook
+			          <script type="text/javascript">FB.init("{{ FACEBOOK_API_KEY }}", "/xd_receiver.html", {'reloadIfSessionStateChanged': true});</script>
 			        {% endif %}
 			        | {% now "F j, Y" %}
   					</p>
