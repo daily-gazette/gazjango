@@ -63,7 +63,7 @@ def get_user_profile(request):
     except (AttributeError, UserProfile.DoesNotExist):
         return None
 
-ROBOT_UAS = ('Googlebot', 'Yahoo! Slurp', 'msnbot')
+ROBOT_UAS = ('Googlebot', 'Yahoo! Slurp', 'msnbot', 'Twiceler')
 def is_robot(request):
     ua = request.META.get('HTTP_USER_AGENT', '')
     for robot in ROBOT_UAS:
