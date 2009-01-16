@@ -106,12 +106,16 @@
 			      <span class="floatRight">
 			        {% if user.is_authenticated %}
 			          <a href="{% url manage-user %}">Manage your Account</a> |
-			          <a href="{% url auth_logout %}">Logout</a> |
+			          {% if not facebook_user %}
+  			          <a href="{% url auth_logout %}">Logout</a> |
+			          {% endif %}
 			        {% else %}
 			          <a href="{% url registration_register %}">Register an Account</a> |
 			          <a href="{% url auth_login %}">Login</a> |
 			        {% endif %}
-              <fb:login-button size="small" background="white" length="short" autologoutlink="true"></fb:login-button>
+			        {% if facebook_user or not user.is_authenticated %}
+                <fb:login-button size="small" background="white" length="short" autologoutlink="true"></fb:login-button>
+              {% endif %}
 			      </span>
 			    </p>
         </div>
