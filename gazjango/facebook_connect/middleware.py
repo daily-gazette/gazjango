@@ -24,6 +24,9 @@ class FacebookConnectMiddleware(object):
     delete_fb_cookies = False
     facebook_user_is_authenticated = False
     
+    def username(self, request):
+        return 'facebook-' + self.cookie(request, '_user')
+    
     def logout(self, request):
         logout(request)
         request.facebook_user = None
@@ -68,6 +71,8 @@ class FacebookConnectMiddleware(object):
                         request.facebook_user = request.user
                     else:
                         return self.logout(request)
+                elif request.user.username.startswith('facebook-'):
+                    return self.logout(request)
                 
             else: # not logged in
                 if API_KEY in request.COOKIES: # using FB Connect
@@ -83,7 +88,7 @@ class FacebookConnectMiddleware(object):
                         return self.logout(request)
                     
                     try: # check whether an account exists
-                        User.objects.get(username=self.cookie(request, '_user'))
+                        User.objects.get(username=self.username(request))
                     except User.DoesNotExist:
                         # make the user
                         user_info_params = {
@@ -121,7 +126,7 @@ class FacebookConnectMiddleware(object):
                         user_profile.save()
                     
                     # now the account definitely exists: log in to it
-                    user = authenticate(username=self.cookie(request, '_user'),
+                    user = authenticate(username=self.username(request),
                                         password=self.hash(self.cookie(request, '_user')))
                     if user is None:
                         request.facebook_message = ACCOUNT_PROBLEM_ERROR

@@ -4,6 +4,7 @@ from gazjango.accounts.models    import UserProfile, UserKind
 from gazjango.options.helpers    import new_user_groups
 from gazjango.registration.forms import RegistrationForm
 import datetime
+import re
 
 class RegistrationFormWithProfile(RegistrationForm):
     name = forms.CharField(max_length=50, label='name')
@@ -33,4 +34,12 @@ class RegistrationFormWithProfile(RegistrationForm):
         kind = UserKind.objects.get_or_create(**kind_args)[0]
         
         return user.userprofile_set.create(kind=kind)
+    
+    _FACEBOOK_USERNAME = re.compile(r'^facebook-\d+$')
+    def clean_username(self):
+        username = super(RegistrationFormWithProfile, self).clean_username()
+        if _FACEBOOK_USERNAME.match(username):
+            raise forms.ValidationError('Sorry, usernames beginning with "facebook-"'
+                                        ' are reserved for internal use.')
+        return username
     
