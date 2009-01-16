@@ -52,7 +52,7 @@
 			          <a href="{% url registration_register %}">Register an Account</a> |
 			          <a href="{% url auth_login %}">Login</a> | 
 			          <fb:login-button size="small" background="white" length="short"></fb:login-button>
-			          <script type="text/javascript">FB.init("YOUR_API_KEY_HERE", "/xd_receiver.html");</script>
+			          <script type="text/javascript">FB.init("{{ FACEBOOK_API_KEY }}", "/xd_receiver.html");</script>
 			        {% endif %}
 			        | {% now "F j, Y" %}
   					</p>
