@@ -14,7 +14,6 @@ import datetime
 API_KEY = settings.FACEBOOK_LOGIN_API_KEY
 API_SECRET = settings.FACEBOOK_LOGIN_SECRET
 REST_SERVER = 'http://api.facebook.com/restserver.php'
-MY_FACEBOOK_UID = settings.FACEBOOK_UID
 
 PROBLEM_ERROR = 'There was a problem. Try again later.'
 ACCOUNT_DISABLED_ERROR = 'Your account is not active.'
