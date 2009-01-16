@@ -157,7 +157,8 @@
               <a href="{{ user.manage_url }}">Manage your Account</a>
             {% else %}
               <a href="{{ user.register_url }}">Register an Account</a> |
-              <a href="{{ user.login_url }}">Login</a>
+              <a href="{{ user.login_url }}">Login</a> <br/>
+              <fb:login-button size="medium" background="white" length="long"></fb:login-button>
             {% endif %}
           </p>
         </div>
