@@ -48,9 +48,8 @@ class FacebookConnectMiddleware(object):
                                        for x in signature_keys)
         else:
             signature_string = ''.join('%s=%s' % (x, values_dict[x]) for x in signature_keys)
-        signature_string += API_SECRET
         
-        return md5.new(signature_string).hexdigest()
+        return md5.new(signature_string + API_SECRET).hexdigest()
     
     def process_request(self, request):
         try:
@@ -88,11 +87,10 @@ class FacebookConnectMiddleware(object):
                             'call_id': time.time(),
                             'v': '1.0',
                             'uids': self.cookie(request, '_user'),
-                            'fields': 'first_name,last_name',
+                            'fields': 'first_name,last_name,affiliations',
                             'format': 'json',
                         }
-                        user_info_hash = self.get_facebook_signature(user_info_params)
-                        user_info_params['sig'] = user_info_hash
+                        user_info_params['sig'] = self.get_facebook_signature(user_info_params)
                         user_info_params = urllib.urlencode(user_info_params)
                         user_info_r = simplejson.load(urllib2.urlopen(REST_SERVER, user_info_params))
                         user_info = user_info_r[0]
@@ -105,13 +103,14 @@ class FacebookConnectMiddleware(object):
                         user.first_name = user_info['first_name']
                         user.last_name = user_info['last_name']
                         
-                        for affiliation in user_info['affiliations']:
-                            if affiliation['name'] == 'Swarthmore':
-                                user_profile.from_swat = True
-                                user_profile.kind, created = UserKind.objects.get_or_create(
-                                    kind='s' if affiliation['status'] == 'Undergrad' else 'a',
-                                    year=affiliation['year']
-                                )
+                        if user_info['affiliations']:
+                            for affiliation in user_info['affiliations']:
+                                if affiliation['name'] == 'Swarthmore':
+                                    user_profile.from_swat = True
+                                    user_profile.kind, created = UserKind.objects.get_or_create(
+                                        kind='s' if affiliation['status'] == 'Undergrad' else 'a',
+                                        year=affiliation['year']
+                                    )
                         
                         user.save()
                         user_profile.save()
