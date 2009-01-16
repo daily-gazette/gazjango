@@ -67,9 +67,9 @@ class FacebookConnectMiddleware(object):
             else: # not logged in
                 if API_KEY in request.COOKIES: # using FB Connect
                     
-                    # check the hash of the cookie values, try to prevent forgery
+                    # check the hash of the cookie values, to prevent forgery
                     signature_hash = self.get_facebook_signature(request.COOKIES, True)
-                    if signature_hash != request.COOKIES[API]:
+                    if signature_hash != request.COOKIES[API_KEY]:
                         return self.logout(request)
                     
                     # check expiry
