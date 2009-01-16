@@ -47,6 +47,7 @@ jQuery(document).ready(function() {
 							  {{ comment.display_name }} commented on <a href="{{comment.get_absolute_url}}">{{ comment.subject.get_title }}</a>.
 							</li>
 					{% endfor %}
+					<li>See <a href="{% url comments.views.comment_page %}">more recent comments</a>.</li>
 					</ul>
 				</div>
 			
