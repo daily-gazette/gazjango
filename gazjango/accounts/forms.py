@@ -35,11 +35,3 @@ class RegistrationFormWithProfile(RegistrationForm):
         
         return user.userprofile_set.create(kind=kind)
     
-    _FACEBOOK_USERNAME = re.compile(r'^facebook-\d+$')
-    def clean_username(self):
-        username = super(RegistrationFormWithProfile, self).clean_username()
-        if self._FACEBOOK_USERNAME.match(username):
-            raise forms.ValidationError('Sorry, usernames beginning with "facebook-"'
-                                        ' are reserved for internal use.')
-        return username
-    
