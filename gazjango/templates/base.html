@@ -48,7 +48,7 @@
   					    {% endif %}
 			          <a href="{% url manage-user %}">Manage your Account</a> |
 			          {% if facebook_user %}
-			            <fb:login-button size="medium" background="white" length="short" autologoutlink="true"></fb:login-button>Logout
+			            <fb:login-button size="small" background="white" length="short" autologoutlink="true"></fb:login-button>Logout
 			          {% else %}
   			          <a href="{% url auth_logout %}">Logout</a>
   			        {% endif %}
