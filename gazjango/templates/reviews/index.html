@@ -179,7 +179,7 @@ function initialize() {
         {% for establishment in establishments %}
           <tr id="establishment-{{ establishment.pk }}">
             <td><a onclick="showOnly('type', '{{ establishment.establishment_type }}');">{{ establishment.get_establishment_type_display }}</a></td>
-            <td><a href="{{ establishment.get_absolute_url }}" onclick='openInfo({{ establishment.pk }}); return false'>{{ establishment.name }}</a><a href="{{ establishment.get_absolute_url }}"><img src="{% static images reviews/globe-icon.png %}" /></a></td>
+            <td><a href="{{ establishment.get_absolute_url }}" onclick='openInfo({{ establishment.pk }}); return false'>{{ establishment.name }}</a>[<a href="{{ establishment.get_absolute_url }}">Reviews</a>]</td>
             <td>{{ establishment.avg_rating|default_if_none:"" }}</td>
             <td>{{ establishment.avg_cost|default_if_none:"" }}</td>
             <td><a onclick="showOnly('loc', {{ loc_dict|dict_lookup:establishment.city }})">{{ establishment.city }}</a></td>
