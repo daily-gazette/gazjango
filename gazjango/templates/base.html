@@ -29,6 +29,16 @@
 
 <body {% block body-args %}{% endblock %}>
   <div id="container">
+      {% if user.is_authenticated %}
+      
+      {% else %}
+       <div id="hoverBox">
+          <p>Welcome to the Gazette! We've noticed your aren't logged in.</p>
+          <p>It you've got a Facebook account, it only takes a few seconds to register. Just click here: <fb:login-button size="small" background="white" length="short"></fb:login-button></p>
+          <script type="text/javascript">FB.init("{{ FACEBOOK_API_KEY }}", "/xd_receiver.html");</script>
+      </div>
+      {% endif %}
+      
   	<div id="header">
   		<div id="headerColor">
   			<div id="headerContent">
@@ -55,11 +65,6 @@
 			        {% else %}
 			          <a href="{% url registration_register %}">Register an Account</a> |
 			          <a href="{% url auth_login %}">Login</a>
-			           <div id="hoverBox">
-  			              <p>Welcome to the Gazette! We've noticed your aren't logged in.</p>
-  			              <p>It you've got a Facebook account, it only takes a few seconds to register. Just click here: <fb:login-button size="small" background="white" length="short"></fb:login-button></p>
-  			              <script type="text/javascript">FB.init("{{ FACEBOOK_API_KEY }}", "/xd_receiver.html");</script>
-  			          </div>
 			        {% endif %}
 			        | {% now "F j, Y" %}
   					</p>
