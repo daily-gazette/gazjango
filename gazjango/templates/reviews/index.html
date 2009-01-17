@@ -142,7 +142,7 @@ function initialize() {
                 <tr>
                     {% for tag in tagGroups %}
                     <td>
-                        <p><input type="checkbox" class="tag-checkbox" id="tag-checkbox-{{ tag.pk }}" onclick="setTag({{ tag.pk }}, this.checked);" /> {{ tag.longest_name }} </p>
+                        <p><input type="checkbox" class="tag-checkbox" id="tag-checkbox-{{ tag.pk }}" onclick="setTag({{ tag.pk }}, this.checked);" /> <small>{{ tag.longest_name }}</small> </p>
                     </td>
                     {% endfor %}
                 </tr>
