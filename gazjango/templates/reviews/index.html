@@ -98,7 +98,7 @@ function initialize() {
           </span>
         </h3>
         <table>
-          {% for types in TYPE_CHOICES|in_groups_of:2 %}
+          {% for types in TYPE_CHOICES|in_groups_of:3 %}
             <tr>
               {% for short, long in types %}
                 <td>
@@ -137,12 +137,12 @@ function initialize() {
             <a href="#" onclick="setAll('tag', false); return false;">none</a>
           </span>
         </h3>
-        <table width="270px">
-            {% for tagGroups in tags|in_groups_of:3 %}
+        <table>
+            {% for tagGroups in tags|in_groups_of:2 %}
                 <tr>
                     {% for tag in tagGroups %}
-                    <td width="90px">
-                        <p><input type="checkbox" class="tag-checkbox" id="tag-checkbox-{{ tag.pk }}" onclick="setTag({{ tag.pk }}, this.checked);" /> <small>{{ tag.longest_name }}</small> </p>
+                    <td>
+                        <p><input type="checkbox" class="tag-checkbox" id="tag-checkbox-{{ tag.pk }}" onclick="setTag({{ tag.pk }}, this.checked);" />{{ tag.longest_name }}</p>
                     </td>
                     {% endfor %}
                 </tr>
