@@ -186,6 +186,7 @@ p {
 
 #hoverBox a,#hoverBox a:hover {
 	color: #eeeeee;
+	text-decoration: underline;
 }
 
 #header {
