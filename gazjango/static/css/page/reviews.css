@@ -31,6 +31,7 @@ body.sort-active *
 }
 
 #map-menu {
+    display: inline-block;
 	width: 275px;
 	height: 300px;
 	float: left;
