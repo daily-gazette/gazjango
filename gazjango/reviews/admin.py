@@ -2,8 +2,7 @@ from django.contrib import admin
 from gazjango.reviews.models import Establishment, Review
 
 class EstablishmentAdmin(admin.ModelAdmin):
-    prepopulated_fields = { 'slug': ('name',) }
-    
+
     fieldsets = (
         (None, {
             'fields': ('name', 'establishment_type', 'tags', 'is_published')
