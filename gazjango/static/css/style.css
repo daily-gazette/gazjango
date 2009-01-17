@@ -171,7 +171,10 @@ p {
 	position: absolute;
 	top: 5px;
 	right: 5px;
+	color: #ffffff;
 	background: url(../images/body/float-bg.png) repeat;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
 }
 
 #header {
