@@ -17,7 +17,7 @@ class EstablishmentAdmin(admin.ModelAdmin):
         }),
         ('Advanced', {
             'classes': ('collapse',),
-            'fields': ('slug', 
+            'fields': ( 
                        'auto_geocode', 'latitude', 'longitude',
                        'auto_nearest_station', '_nearest_station')
         }),
