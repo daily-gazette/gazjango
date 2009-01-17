@@ -172,7 +172,7 @@ class Review(models.Model):
     text = models.TextField(blank=True)   
     
     def __unicode__(self):
-        return self.reviewer
+        return self.reviewer.name
     
     def get_absolute_url(self):
         return "%s#review-%s" % (self.establishment.get_absolute_url(), self.pk)
