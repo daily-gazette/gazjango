@@ -82,7 +82,7 @@ function initialize() {
 
 {% block content %}
 <div id="reviews">
-  <h2>The Zagette</h2>
+  <img src="{% static images reviews/zagette.jpg %}" alt="The Zagette"/>
   {% if submitted_name %}
     <p id="submitted-thanks">Thanks for letting us know about {{ submitted_name }}. Once we've verified the information you gave us, it'll show up here.</p>
   {% endif %}
