@@ -165,8 +165,8 @@ p {
 -----------------------------------------------------------------------*/
 
 #hoverBox {
-	padding: 5px;
-	width: 400px;
+	padding: 8px;
+	width: 350px;
 	float: right;
 	z-index: 2;
 	position: absolute;
