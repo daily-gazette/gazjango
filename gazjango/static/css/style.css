@@ -184,6 +184,10 @@ p {
 	font: 1.25em "Helvetica Neue", Arial, Helvetica, Geneva, sans-serif;
 }
 
+#hoverBox a,#hoverBox a:hover {
+	color: #eeeeee;
+}
+
 #header {
 	width: 100%;
 	position: relative;
