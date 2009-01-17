@@ -30,13 +30,20 @@
 <body {% block body-args %}{% endblock %}>
   <div id="container">
       {% if user.is_authenticated %}
-      
+       <div id="hoverBox">
+          <p>Welcome to the Gazette! We've just rolled out a lot of new features.</p>
+          <p>On our <a href="http://daily.swarthmore.edu/comments/">comments page</a> you can see our newest comments, and on our <a href="http://daily.swarthmore.edu/reviews/">reviews page</a> you can rate local stores and restaurants—and win coupons to eat out!</p>
+      </div>
       {% else %}
        <div id="hoverBox">
           <p>Welcome to the Gazette! We've noticed your aren't logged in.</p>
           <p>If you've got a Facebook account, it is really easy! Just click:</p>
           <center><fb:login-button size="medium" background="dark" length="long"></fb:login-button></center>
           <script type="text/javascript">FB.init("{{ FACEBOOK_API_KEY }}", "/xd_receiver.html");</script>
+      </div>
+       <div id="hoverBox">
+          <p>We've just rolled out a lot of new features.</p>
+          <p>On our <a href="http://daily.swarthmore.edu/comments/">comments page</a> you can see our newest comments, and on our <a href="http://daily.swarthmore.edu/reviews/">reviews page</a> you can rate local stores and restaurants—and win coupons to eat out!</p>
       </div>
       {% endif %}
       
