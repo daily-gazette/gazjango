@@ -1,3 +1,5 @@
+/* @override http://daily.swarthmore.edu/static/css/style.css */
+
 /* -----------------------------------------------------------------------
 
    The Daily Gazette Style Sheet
@@ -161,6 +163,16 @@ p {
 			Header Elements 
 			
 -----------------------------------------------------------------------*/
+
+#hoverBox {
+	width: 300px;
+	float: right;
+	z-index: 2;
+	position: absolute;
+	top: 5px;
+	right: 5px;
+	background: url(../images/body/float-bg.png) repeat;
+}
 
 #header {
 	width: 100%;
