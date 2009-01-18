@@ -67,6 +67,12 @@ a:hover {
 .post .content .wp-caption p {
 	margin:0;
 }
+
+.post h3 {
+    padding-top: 2px;
+    padding-bottom: 2px;
+}
+
 blockquote, pre {
 	background:#F4F5F7 url(http://daily.swarthmore.edu/static/images/staff/blockquote.gif) 3px 3px no-repeat;
 	border:1px dashed #CCC;
