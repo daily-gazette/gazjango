@@ -60,11 +60,10 @@
         			<div class="content">
     			        {% for concept in unclaimed %}
     			            {% ifchanged %}
-    			               <h3><strong>{{ concept.due }}</h3><br />
+    			               <h3>{{ concept.due }}</h3><br />
     			            {% endifchanged %}
     			            <strong><a href="http://daily.swarthmore.edu/admin/articles/storyconcept/{{ concept.pk }}/">{{ concept.name }}</a></strong><br />
     			            {% if concept.notes_excerpt %}<em>Notes: {{ concept.notes }}</em><br />{% endif %}
-    			            <br />
     			        {% endfor %}
         				<div class="fixed"></div>
         			</div>
