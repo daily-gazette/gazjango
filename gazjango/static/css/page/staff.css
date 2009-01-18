@@ -69,8 +69,8 @@ a:hover {
 }
 
 .post h3 {
-    padding-top: 20px;
-    padding-bottom: 2px;
+    padding-top: 5px;
+    margin-bottom: 0px;
 }
 
 blockquote, pre {
