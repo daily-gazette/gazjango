@@ -1,9 +1,12 @@
 from django.conf.urls.defaults import *
-from django.contrib import admin
-from gazjango.articles.feeds import MainFeed, LatestStoriesFeed, SectionFeed, SectionLatestFeed, TameFeed
-from gazjango.jobs.feeds     import JobsFeed
-from gazjango.accounts.forms import RegistrationFormWithProfile
+from django.contrib            import admin
 from django.conf import settings
+
+from gazjango.articles.feeds   import MainFeed, LatestStoriesFeed, SectionFeed
+from gazjango.articles.feeds   import SectionLatestFeed, TameFeed
+from gazjango.accounts.forms   import RegistrationFormWithProfile
+from gazjango.jobs.feeds       import JobsFeed
+from gazjango.misc.url_helpers import reps
 
 admin.autodiscover()
 urlpatterns = patterns('',
@@ -28,24 +31,6 @@ urlpatterns += patterns('',
 urlpatterns += patterns('facebook_connect.views',
     (r'^xd_receiver\.html$', 'xd_receiver'),
 )
-
-reps = {
-    'year':  r'(?P<year>\d{4})',
-    'month': r'(?P<month>\d{1,2})',
-    'day':   r'(?P<day>\d{1,2})',
-    
-    'slug': r'(?P<slug>[-\w]+)',
-    'name': r'(?P<name>[-\w]+)',
-    'kind': r'(?P<kind>[-\w]+)',
-    'bucket': r'(?P<bucket>[-\w]+)',
-    'section': r'(?P<section>[a-zA-Z][-\w]+)',
-    'subsection': r'(?P<subsection>[a-zA-Z][-\w]+)',
-    
-    'num': r'(?P<num>\d+)',
-    'uid': r'(?P<uidb36>[a-z0-9]+)',
-    'token': r'(?P<token>\w+-\w+)',
-}
-
 
 urlpatterns += patterns('articles.views',
     (r'^$', 'homepage'),
@@ -109,7 +94,10 @@ urlpatterns += patterns('issues.views',
 urlpatterns += patterns('polls.views',
     (r'^polls/%(year)s/%(slug)s/results/$' % reps, 'poll_results', {}, 'poll-results'),
     (r'^polls/%(year)s/%(slug)s/submit/$'  % reps, 'submit_poll', {}, 'submit-poll'),
-    
+)
+
+urlpatterns += patterns('',
+    (r'^books/', include('books.urls')),
 )
 
 urlpatterns += patterns('jobs.views',

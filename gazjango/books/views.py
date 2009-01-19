@@ -1,61 +1,56 @@
 from django.core.urlresolvers import reverse
 from django.http              import HttpResponseRedirect
-from django.template          import RequestContext
 from django.shortcuts         import render_to_response, get_object_or_404
-from gazjango.books.models     import BookListing
-from gazjango.books.forms      import SubmitBookForm
-from gazjango.articles.models import Article
-from gazjango.comments.models import PublicComment
+from django.template          import RequestContext
 
-def book_details(request, slug, template="books/details.html"):
+from gazjango.articles.models   import Article
+from gazjango.books.models      import BookListing
+from gazjango.books.forms       import SubmitBookForm
+from gazjango.comments.models   import PublicComment
+from gazjango.misc.view_helpers import get_user_profile
+
+def book_details(request, slug):
     book = get_object_or_404(BookListing, slug=slug)
     tops, mids, lows = Article.published.get_stories(num_top=1, num_mid=3, num_low=0)
-    data = {
-        'book': ,
+    
+    return render_to_response('books/details.html', {
+        'book': book,
         'topstory': tops[0],
         'stories': mids,
         'comments': PublicComment.visible.order_by('-time')[:3],
         'other_books': BookListing.unfilled.order_by('-pub_date')[:3]
-    }
-    rc = RequestContext(request)
-    return render_to_response(template, data, context_instance=rc)
+    }, context_instance=RequestContext(request))
 
 
-def list_books(request, options="", default_limit=10, template="books/list.html"):
-
-    books = BookListing.published.filter(**conditions).order_by('is_sold', '-pub_date')
-    if 'limit' in request.GET:
-        lim = request.GET['limit']
-        if lim.isdigit():
-            books = books[:int(lim)]
-    else:
-        books = books[:default_limit]
-    
+def list_books(request):
+    books = BookListing.published.filter(sold_at=None).order_by('-pub_date')
     tops, mids, lows = Article.published.get_stories(num_top=1, num_mid=3, num_low=0)
-    data = {
+    
+    return render_to_response('books/list.html', {
         'books': books,
         'topstory': tops[0],
         'stories': mids,
         'comments': PublicComment.visible.order_by('-time')[:3],
-        'other_books': BookListing.unfilled.order_by('-pub_date')[:3]
-    }
-    
-    rc = RequestContext(request)
-    return render_to_response(template, data, context_instance=rc)
+        'other_books': BookListing.unsold.order_by('-pub_date')[:3]
+    }, context_instance=RequestContext(request))
 
 
-def submit_book(request, template="books/submit.html"):
+def submit_book(request):
     if request.method == 'POST':
         form = SubmitBookForm(request.POST)
         if form.is_valid():
-            form.save()
+            book = form.save(commit=False)
+            book.seller = get_user_profile(request)
+            book.save()
+            form.save_m2m()
             return HttpResponseRedirect(reverse(book_success))
     else:
         form = SubmitBookForm()
     
-    data = { 'form': form }
-    rc = RequestContext(request)
-    return render_to_response(template, data, context_instance=rc)
+    return render_to_response('books/submit.html', {
+        'form': form,
+    }, context_instance=RequestContext(request))
+
 
 def book_success(request, template="books/success.html"):
     return render_to_response(template, {}, context_instance=RequestContext(request))

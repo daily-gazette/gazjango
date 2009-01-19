@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% load extras %}
+
+{% block title %}Book Exchange{% endblock %}
+
+{% block topbar %}
+  <div id="headerSectionBar">
+    <div id="headerSection">
+      <h3>Book Listings</h3>
+    </div>
+    <div id="headerSearch" class="floatRight">
+      {% include "search_header.html" %}
+    </div>
+  </div>
+{% endblock topbar %}
+
+{% block content %}
+  <div id="bookList">
+    <table>
+      <tr>
+        <th>Title</th>
+        <th>Seller</th>
+        <th>Departments</th>
+        <th>Classes</th>
+        <th>Condition</th>
+        <th>Cost</th>
+      </tr>
+      {% for book in books %}
+        <tr>
+          <td><a href="{{ book.get_absolute_url }}">{{ book.title }}</a></td>
+          <td><a href="mailto:{{ book.seller.email|entity_sub }}">{{ book.seller.name }}</a></td>
+          <td>{% for dept in book.departments.all %}{{ dept.name }}{% if not forloop.last %}, {% endif %}{% endfor %}</td>
+          <td>{{ book.classes }}</td>
+          <td>{{ book.get_condition_display }}</td>
+          <td>{{ book.cost }}</td>
+        </tr>
+      {% endfor %}
+    </table>
+    <p>Want to sell your own books? <a href="{% url books.views.submit_book %}">Add one</a> to our listings.</p>
+  </div>
+{% endblock %}
