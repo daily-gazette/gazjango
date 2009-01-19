@@ -24,8 +24,8 @@ class Command(SendingOutCommand):
                         "there were no articles, but we're in publish mode!")
             raise CommandError('No issue, so not sending it.')
         
-        self.html_content = show_issue(dummy_request).content
-        self.text_content = show_issue(dummy_request, plain=True).content
+        self.html_content = show_issue(dummy_request, issue).content
+        self.text_content = show_issue(dummy_request, issue, plain=True).content
         
         dummy_request.GET['racy'] = 'no'
         self.tame_html_content = latest_issue(dummy_request).content
