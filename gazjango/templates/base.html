@@ -64,6 +64,7 @@
 			          {% if facebook_user %}
 			            <a href="{% url logout %}" onclick="FB.Connect.logoutAndRedirect('{% url logout %}')"><img src="http://static.ak.fbcdn.net/images/fbconnect/logout-buttons/logout_small.gif" alt="Logout" /></a>
 			          {% else %}
+			            <fb:login-button size="small" background="white" length="short"></fb:login-button> Connect |
 			            <a href="{% url logout %}">Logout</a>
 			          {% endif %}
 			        
