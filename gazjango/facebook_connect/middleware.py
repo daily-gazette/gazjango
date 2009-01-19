@@ -5,7 +5,7 @@ from django.contrib.auth.models import User
 from django.utils               import simplejson
 
 from gazjango.accounts.models   import UserProfile, UserKind
-from gazjango.misc.view_helpers import get_ip, get_unique_name
+from gazjango.misc.view_helpers import get_ip, get_user_profile, get_unique_name
 
 import md5
 import urllib, urllib2
@@ -56,6 +56,59 @@ class FacebookConnectMiddleware(object):
         
         return md5.new(signature_string + API_SECRET).hexdigest()
     
+    def verify_facebook_cookies(self, request):
+        # check the hash of the cookie values, to prevent forgery
+        signature_hash = self.get_facebook_signature(request.COOKIES, True)
+        if signature_hash != request.COOKIES[API_KEY]:
+            return False
+        
+        # check expiry
+        expiry_key = float(self.cookie(request, '_expires'))
+        if (datetime.datetime.fromtimestamp(expiry) <= datetime.datetime.now()):
+            return False
+    
+    
+    def create_user(self, request):
+        user_info_params = {
+            'method': 'Users.getInfo',
+            'api_key': API_KEY,
+            'call_id': time.time(),
+            'v': '1.0',
+            'uids': self.cookie(request, '_user'),
+            'fields': 'first_name,last_name,affiliations',
+            'format': 'json',
+        }
+        user_info_params['sig'] = self.get_facebook_signature(user_info_params)
+        user_info_params = urllib.urlencode(user_info_params)
+        user_info_r = simplejson.load(urllib2.urlopen(REST_SERVER, user_info_params))
+        user_info = user_info_r[0]
+        
+        user = User.objects.create_user(
+            find_unique_name(
+                "%s_%s" % (user_info['first_name'], user_info['last_name']),
+                User.objects, 'username', '_'),
+            '', self.hash(self.cookie(request, '_user'))
+        )
+        user_profile = user.userprofile_set.create()
+        
+        user.first_name = user_info['first_name']
+        user.last_name = user_info['last_name']
+        user.facebook_id = self.cookie(request, '_user')                              
+        
+        if user_info['affiliations']:
+            for affiliation in user_info['affiliations']:
+                if affiliation['name'] == 'Swarthmore':
+                    user_profile.from_swat = True
+                    user_profile.kind, created = UserKind.objects.get_or_create(
+                        kind='s' if affiliation['status'] == 'Undergrad' else 'a',
+                        year=affiliation['year']
+                    )
+        
+        user.save()
+        user_profile.save()
+        return user
+    
+    
     def process_request(self, request):
         try:
             # Set the facebook message to empty. This message can be used to
@@ -65,70 +118,40 @@ class FacebookConnectMiddleware(object):
             
             if request.user.is_authenticated():
                 if API_KEY in request.COOKIES: # using FB Connect
-                    # check for presence and correctness of ip cookie
-                    real_ip = get_ip(request)
-                    if request.COOKIES.get('fb_ip', None) == self.hash(real_ip + API_SECRET):
+                    if 'fb_ip' not in request.COOKIES: # we haven't been associated yet
+                        if not self.verify_facebook_cookies(request):
+                            return self.logout(request)
+                        profile = get_user_profile(request)
+                        if profile.facebook_id:
+                            # already associated with a facebook account: oh well,
+                            # let's just change it.
+                            pass
+                        profile.facebook_id = self.cookie(request, '_user')
+                        profile.save()
+                        self.facebook_user_is_authenticated = True
                         request.facebook_user = request.user
-                    else:
-                        request.user.get_profile().facebook_id = self.cookie(request, '_user')
-                elif request.user.get_profile().facebook_id == self.cookie(request, '_user'):
-                    return self.logout(request)
+                    
+                    elif request.COOKIES['fb_ip'] == self.hash(get_ip(request) + API_SECRET):
+                        # all seems to be in order
+                        self.facebook_user_is_authenticated = True
+                        request.facebook_user = request.user
+                    
+                    else: # invalid ip! either some proxy stuff or a haxor
+                        return self.logout(request)
                 
+                else: # not using FB Connect
+                    pass
+            
             else: # not logged in
                 if API_KEY in request.COOKIES: # using FB Connect
-                    
-                    # check the hash of the cookie values, to prevent forgery
-                    signature_hash = self.get_facebook_signature(request.COOKIES, True)
-                    if signature_hash != request.COOKIES[API_KEY]:
+                    if not self.verify_facebook_cookies():
                         return self.logout(request)
                     
-                    # check expiry
-                    expiry_key = float(self.cookie(request, '_expires'))
-                    if (datetime.datetime.fromtimestamp(expiry) <= datetime.datetime.now()):
-                        return self.logout(request)
-                                        
-                    try: # check whether an account exists
-                        User.objects.get(facebook_id=self.cookie(request, '_user'))
+                    try:
+                        user = User.objects.get(facebook_id=self.cookie(request, '_user'))
                     except User.DoesNotExist:
-                        # make the user
-                        user_info_params = {
-                            'method': 'Users.getInfo',
-                            'api_key': API_KEY,
-                            'call_id': time.time(),
-                            'v': '1.0',
-                            'uids': self.cookie(request, '_user'),
-                            'fields': 'first_name,last_name,affiliations',
-                            'format': 'json',
-                        }
-                        user_info_params['sig'] = self.get_facebook_signature(user_info_params)
-                        user_info_params = urllib.urlencode(user_info_params)
-                        user_info_r = simplejson.load(urllib2.urlopen(REST_SERVER, user_info_params))
-                        user_info = user_info_r[0]
-                        
-                        user = User.objects.create_user(find_unique_name( "%s_%s" % (user_info['first_name'], user_info['last_name']), User.objects, 'username', '_'),
-                                                        '',
-                                                        self.hash(self.cookie(request, '_user')))
-                        user_profile = user.userprofile_set.create()
-                        
-                        user.first_name = user_info['first_name']
-                        user.last_name = user_info['last_name']
-                        user.facebook_id=self.cookie(request, '_user')                              
-                        
-                        if user_info['affiliations']:
-                            for affiliation in user_info['affiliations']:
-                                if affiliation['name'] == 'Swarthmore':
-                                    user_profile.from_swat = True
-                                    user_profile.kind, created = UserKind.objects.get_or_create(
-                                        kind='s' if affiliation['status'] == 'Undergrad' else 'a',
-                                        year=affiliation['year']
-                                    )
-                        
-                        user.save()
-                        user_profile.save()
+                        user = self.create_user(request)
                     
-                    # now the account definitely exists: log in to it
-                    user = authenticate(username=self.username(request),
-                                        password=self.hash(self.cookie(request, '_user')))
                     if user is None:
                         request.facebook_message = ACCOUNT_PROBLEM_ERROR
                         self.delete_fb_cookies = True
@@ -144,8 +167,7 @@ class FacebookConnectMiddleware(object):
         # something went wrong. make sure user doesn't have site access until problem is fixed.
         except:
             request.facebook_message = PROBLEM_ERROR
-            logout(request)
-            self.delete_fb_cookies = True
+            self.logout(request)
     
     def process_response(self, request, response):
         # delete FB Connect cookies -- the js might add them again, but
@@ -161,8 +183,7 @@ class FacebookConnectMiddleware(object):
         self.delete_fb_cookies = False
         
         if self.facebook_user_is_authenticated is True:
-            real_ip = get_ip(request)
-            response.set_cookie('fb_ip', self.hash(real_ip + API_SECRET))
+            response.set_cookie('fb_ip', self.hash(get_ip(request) + API_SECRET))
         
         return response
     
