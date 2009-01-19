@@ -15,7 +15,7 @@ def manage(request):
 def logout(request, next_page='/'):
     from gazjango.facebook_connect.middleware import FacebookConnectMiddleware
     FacebookConnectMiddleware.delete_fb_cookies = True
-    return auth_views.logout(request, next_page)
+    return auth_views.logout(request, next_page=next_page)
 
 
 def user_details(request, name, template="accounts/profile.html"):
