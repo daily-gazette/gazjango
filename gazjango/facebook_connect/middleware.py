@@ -87,7 +87,7 @@ class FacebookConnectMiddleware(object):
             find_unique_name(
                 "%s_%s" % (user_info['first_name'], user_info['last_name']),
                 User.objects, 'username', '_'),
-            '', self.hash(self.cookie(request, '_user'))
+            '')
         )
         user_profile = user.userprofile_set.create()
         
