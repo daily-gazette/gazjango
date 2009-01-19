@@ -3,6 +3,196 @@
 
 {% block title %}Book Exchange{% endblock %}
 
+{% block customheader %}
+  <link rel="stylesheet" href="{% static css page/section.css %}" type="text/css"/>
+  <style type="text/css">
+  #listings {
+  	float: left;
+  	width: 100%;
+  	padding-top: 20px;
+  }
+  
+  #listings table
+          {
+          width: 915px;
+          padding: 0;
+          margin: 0 auto 1.5em auto;
+          border-left: 1px solid #C1DAD7;
+          border-collapse:collapse;
+          }
+  .cs1
+          {
+          width:30em;
+          }
+  .cs2
+          {
+          width:20em;
+          }
+  .cs1 td,
+  .cs2 td,
+  #scientificNotation
+          {
+          text-align:right;
+          }
+  caption
+          {
+          padding: 0 0 5px 0;
+          margin:0 auto;
+          width:auto;
+          font: italic 11px "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
+          text-align: right;
+          }
+  #listings th
+          {
+          font: bold 10px/22px "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
+          color: #4f6b72;
+          border-right: 1px solid #C1DAD7;
+          border-bottom: 1px solid #C1DAD7;
+          border-top: 1px solid #C1DAD7;
+          letter-spacing: 1px;
+          text-transform: uppercase;
+          text-align: left;
+          padding: 8px 12px 4px 12px;
+          background: #CAE8EA url(../media/bg_header.jpg) no-repeat;
+          vertical-align:middle;
+          }
+  #listings td.total
+          {
+          border-top: 0;
+          border-left: 0;
+          border-right: 1px solid #C1DAD7;
+          background: none;
+          text-align:right;
+          font-weight:bold;
+          text-transform:uppercase;
+          letter-spacing:1px;
+          }
+  #listings th.sortable,
+  #listings th.sortable-text,
+  #listings th.sortable-date,
+  #listings th.sortable-keep,
+  #listings th.sortable-date-dmy,
+  #listings th.sortable-numeric,
+  #listings th.sortable-currency,
+  #listings th.sortable-sortByTwelveHourTimestamp,
+  #listings th.sortable-sortIPAddress,
+  #listings th.sortable-sortEnglishLonghandDateFormat,
+  #listings th.sortable-sortScientificNotation,
+  #listings th.sortable-sortImage,
+  #listings th.sortable-sortFileSize,
+  #listings th.sortable-sortAlphaNumeric,
+  #listings th.sortable-sortEnglishDateTime
+
+          {
+          cursor:pointer;
+          background: #CAE8EA url(../media/bg_header_sortable.jpg) no-repeat;
+          padding: 8px 12px 4px 16px;
+          }
+  #listings th.forwardSort
+          {
+          background:#CAE8EA url(../media/bg_header_down.jpg) no-repeat 0 0;
+          }
+  #listings th.reverseSort
+          {
+          background:#CAE8EA url(../media/bg_header_up.jpg) no-repeat 0 0;
+          }
+  #listings table thead th.forwardSort a,
+  #listings table thead th.reverseSort a
+          {
+          color:#000;
+          text-decoration:none;
+          }
+  /*
+  These styles should be added when very long tables are expected
+  th.sort-active
+          {
+          background:#CAE8EA url(../media/bg_header_sorting.jpg) no-repeat 0 0;
+          cursor:wait;
+          }
+  th.sort-active a
+          {
+          color:#a80000 !important;
+          cursor:wait;
+          }
+  */
+  #listings th a
+          {
+          text-decoration:none;
+          color: #4f6b72;
+          background:transparent;
+          }
+  #listings td a
+          {
+          text-decoration:none;
+          color:#239;
+          background:transparent;
+          }
+  #listings td img
+          {
+          margin:0 auto;
+          border:3px solid #ddd;
+          }
+  #listings td a:hover
+          {
+          color:#a84444;
+          border-bottom:1px dotted #a80000;
+          background:transparent;
+          }
+  #listings td
+          {
+          font: normal 11px "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
+          border-right: 1px solid #C1DAD7;
+          border-bottom: 1px solid #C1DAD7;
+          padding: 3px 6px 3px 6px;
+          color: #4f6b72;
+          }
+  td.lft
+          {
+          text-align:left;
+          }
+  tr.alt
+          {
+          background: #F5FAFA;
+          color: #797268;
+          }
+
+  /* Poor old Internet Explorer 6 has a bug that means we can't use background images for the table rows
+     as it trys to download the image each and every time that it is used (which means a 1000 row table
+     will produce 1000 http requests for the image in question) */
+  tr[class="alt"] td
+          {
+          background: #F5FAFA url(../media/td_alt.jpg) no-repeat;
+          }
+  td[class~="alt"]
+          {
+          background: #edf3f3 url(../media/col_alt.jpg) no-repeat !important;
+          }
+  /* Poor old Internet Explorer won't see the next two rules either as it doesn't get :first-child */
+  tbody tr.alt td:first-child
+          {
+          background: #F5FAFA url(../media/bullet2.gif) no-repeat;
+          font-weight:bold;
+          }
+  tbody tr td:first-child
+          {
+          background: #fff url(../media/bullet1.gif) no-repeat;
+          font-weight:bold;
+          }
+  /* Image free rules for Internet Explorer < 7 */
+  * html tr.alt td
+          {
+          background-color:#F5FAFA;
+          }
+  * html tr td.alt,
+  * html tr.alt td.alt
+          {
+          background-color:#edf3f3;
+          }
+  </style>
+
+  <script type="text/javascript" src="{% static js tablesort.js %}"></script>
+{% endblock %}
+
 {% block topbar %}
   <div id="headerSectionBar">
     <div id="headerSection">
@@ -15,26 +205,31 @@
 {% endblock topbar %}
 
 {% block content %}
-  <div id="bookList">
-    <table>
-      <tr>
-        <th>Title</th>
-        <th>Seller</th>
-        <th>Departments</th>
-        <th>Classes</th>
-        <th>Condition</th>
-        <th>Cost</th>
-      </tr>
-      {% for book in books %}
+  <div id="listings">
+    <table id="review-listings" cellpadding="0" cellspacing="0" border="0" class="sortable-onload-0-4 rowstyle-alt colstyle-alt no-arrow">
+      <caption>Books for sale by the Swarthmore community</caption>
+      <thead>
         <tr>
-          <td><a href="{{ book.get_absolute_url }}">{{ book.title }}</a></td>
-          <td><a href="mailto:{{ book.seller.email|entity_sub }}">{{ book.seller.name }}</a></td>
-          <td>{% for dept in book.departments.all %}{{ dept.name }}{% if not forloop.last %}, {% endif %}{% endfor %}</td>
-          <td>{{ book.classes }}</td>
-          <td>{{ book.get_condition_display }}</td>
-          <td>{{ book.cost }}</td>
+          <th class="sortable">Title</th>
+          <th class="sortable">Seller</th>
+          <th class="sortable">Departments</th>
+          <th class="sortable">Classes</th>
+          <th class="sortable">Condition</th>
+          <th class="sortable">Cost</th>
         </tr>
-      {% endfor %}
+      </thead>
+      <tbody>
+        {% for book in books %}
+          <tr>
+            <td>{{ book.title }}</td>
+            <td><a href="mailto:{{ book.seller.email|entity_sub }}">{{ book.seller.name }}</a></td>
+            <td>{% for dept in book.departments.all %}{{ dept.name }}{% if not forloop.last %}, {% endif %}{% endfor %}</td>
+            <td>{{ book.classes }}</td>
+            <td>{{ book.get_condition_display }}</td>
+            <td>{{ book.cost }}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
     </table>
     <p>Want to sell your own books? <a href="{% url books.views.submit_book %}">Add one</a> to our listings.</p>
   </div>

@@ -4,10 +4,38 @@
 {% block title %}Sell Books{% endblock %}
 
 {% block customheader %}
-  <link rel="stylesheet" href="{% static css page/story.css %}" type="text/css" media="screen, projection" />
-  {% for media in  %}
-    
-  {% endfor %}
+  {# <link rel="stylesheet" href="{% static css page/story.css %}" type="text/css" media="screen, projection" /> #}
+  <script type="text/javascript" src="/jsi18n/"></script>
+
+  <link rel="stylesheet" href="{% static admin css/widgets.css %}" type="text/css" media="screen,projection" />
+  <style type="text/css">
+
+#story > h2{
+	font-size: 200%;
+	font-family: "Helvetica Neue", Arial, Helvetica, Geneva, sans-serif;
+	color: black;
+	margin: 5px 0px 5px 0px;
+	text-align: left;
+	border-bottom: 2px solid #000000;
+	font-size: 3em;
+}
+
+#submission {
+  font-size: 1.4em;
+}
+#submission td {
+  vertical-align: top;
+  padding-bottom: 1em;
+  padding-left: 1em;
+}
+.selector p {
+  font-size: 1em !important;
+}
+.errorlist {
+  color: red;
+}
+  </style>
+  {{ form.media }}
 {% endblock %}
 
 {% block topbar %}
@@ -31,7 +59,7 @@
       <h2>Sell a Book</h2>
       
       <form action="" method="post">
-        <table class="submission">
+        <table id="submission">
           {{ form.as_table }}
           
           <tr>
