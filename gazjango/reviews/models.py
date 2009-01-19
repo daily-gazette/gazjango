@@ -132,7 +132,7 @@ models.signals.pre_save.connect(_slugger, sender=Establishment)
 # FIXME: this breaks syncdb from a blank database, since ContentType doesn't have
 #        a table yet
 # Establishment.tags.field.rel.limit_choices_to = { 
-#     'group__content_type': ContentType.objects.get_for_model(Establishment)
+#     'group__content_types': ContentType.objects.get_for_model(Establishment)
 # }
 
 def set_geographical_vars(sender, instance, **kwargs):

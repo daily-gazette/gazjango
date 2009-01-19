@@ -22,7 +22,7 @@ def reviews(request):
     establishments = Establishment.published.all()
     
     ct = ContentType.objects.get_for_model(Establishment)
-    tags = Tag.objects.filter(group__content_type=ct)
+    tags = Tag.objects.filter(group__content_types=ct)
     
     submitted_name = request.session.get('submitted_name', None)
     if submitted_name:
