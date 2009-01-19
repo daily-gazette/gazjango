@@ -147,7 +147,7 @@ class FacebookConnectMiddleware(object):
             
             else: # not logged in
                 if API_KEY in request.COOKIES: # using FB Connect
-                    if not self.verify_facebook_cookies():
+                    if not self.verify_facebook_cookies(request):
                         return self.logout(request)
                     
                     try:
