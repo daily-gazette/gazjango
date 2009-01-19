@@ -121,7 +121,7 @@ class UserProfile(models.Model):
     email    = property(lambda self: self.user.email)
     is_staff = property(lambda self: self.user.is_staff)
     
-    facebook_id = models.IntegerField('Facebook User ID #', blank=True, null=True)
+    facebook_id = models.IntegerField('Facebook User ID #', blank=True, null=True, unique=True)
     
     def is_editor(self):
         return self.current_positions().filter(is_editor=True).count() > 0
