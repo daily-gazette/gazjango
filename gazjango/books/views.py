@@ -1,7 +1,8 @@
-from django.core.urlresolvers import reverse
-from django.http              import HttpResponseRedirect
-from django.shortcuts         import render_to_response, get_object_or_404
-from django.template          import RequestContext
+from django.contrib.auth.decorators import login_required
+from django.core.urlresolvers       import reverse
+from django.http      import HttpResponseRedirect
+from django.shortcuts import render_to_response, get_object_or_404
+from django.template  import RequestContext
 
 from gazjango.articles.models   import Article
 from gazjango.books.models      import BookListing
@@ -35,6 +36,7 @@ def list_books(request):
     }, context_instance=RequestContext(request))
 
 
+@login_required
 def submit_book(request):
     if request.method == 'POST':
         form = SubmitBookForm(request.POST)

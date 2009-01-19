@@ -9,10 +9,15 @@ from gazjango.tagging.models  import Tag
 # author added to the new book
 class SubmitBookForm(forms.ModelForm):
     departments = forms.MultipleChoiceField(
-        widget=admin_widgets.FilteredSelectMultiple('departments', True),
-        choices=[(tag.pk, tag.longest_name()) 
-                 for tag in departments_taggroup().tags.all()]
+        widget=admin_widgets.FilteredSelectMultiple('departments', False)
     )
+    
+    def __init__(self, *args, **kwargs):
+        super(SubmitBookForm, self).__init__(*args, **kwargs)
+        self.fields['departments'].choices = [
+            (tag.pk, tag.longest_name())
+            for tag in departments_taggroup().tags.all()
+        ]
     
     class Meta:
         model = BookListing
