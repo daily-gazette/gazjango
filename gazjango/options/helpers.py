@@ -14,7 +14,7 @@ def _option_getter(name, type, value):
     return _get_option
 
 def _value_getter(option_getter):
-    return lambda: option_getter().value()
+    return lambda: option_getter().value
 
 def _value_setter(option_getter):
     def _set(value):
