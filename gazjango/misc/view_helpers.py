@@ -58,10 +58,13 @@ def get_ip(request):
         return None
 
 def get_user_profile(request):
+    if request.user.is_anonymous():
+        return None
     try:
         return request.user.get_profile()
-    except (AttributeError, UserProfile.DoesNotExist):
-        return None
+    except UserProfile.DoesNotExist:
+        request.user.userprofile_set.create() 
+        return request.user.get_profile()
 
 ROBOT_UAS = ('Googlebot', 'Yahoo! Slurp', 'msnbot', 'Twiceler')
 def is_robot(request):
