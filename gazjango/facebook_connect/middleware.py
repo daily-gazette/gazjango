@@ -96,7 +96,7 @@ class FacebookConnectMiddleware(object):
         
         user.first_name = user_info['first_name']
         user.last_name = user_info['last_name']
-        user.facebook_id = self.cookie(request, '_user')                              
+        user_profile.facebook_id = self.cookie(request, '_user')                              
         
         if user_info['affiliations']:
             for affiliation in user_info['affiliations']:
