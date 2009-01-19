@@ -157,6 +157,11 @@ class FacebookConnectMiddleware(object):
                     except UserProfile.DoesNotExist:
                         user, profile = self.create_user(request)
                     
+                    # TODO: fix up the crappy backend annotation
+                    from django.contrib.auth import get_backends
+                    backend = get_backends()[0]
+                    user.backend = "%s.%s" % (backend.__module__, backend.__class__.__name__)
+                    
                     if user is None:
                         request.facebook_message = ACCOUNT_PROBLEM_ERROR
                         self.delete_fb_cookies = True
