@@ -70,8 +70,8 @@ class FacebookConnectMiddleware(object):
                     if request.COOKIES.get('fb_ip', None) == self.hash(real_ip + API_SECRET):
                         request.facebook_user = request.user
                     else:
-                        return self.logout(request)
-                elif request.user.facebook_id:
+                        request.user.get_profile().facebook_id = self.cookie(request, '_user')
+                elif request.user.get_profile().facebook_id == self.cookie(request, '_user'):
                     return self.logout(request)
                 
             else: # not logged in
