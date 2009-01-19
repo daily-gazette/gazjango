@@ -58,7 +58,7 @@ def find_unique_name(basename, qset, fieldname='slug', mixer="-"):
     val = basename
     num = 0
     existing = qset.filter(**{("%s__contains" % fieldname): basename}) \
-                   .values_list('slug', flat=True)
+                   .values_list(fieldname, flat=True)
     while val in existing:
         num += 1
         val = "%s%s%s" % (basename, mixer, num)
@@ -79,10 +79,10 @@ def set_default_slug(namer, extra_limits=lambda x: {}):
     def _func(sender, instance, **kwords):
         if not instance.slug:
             instance.slug = find_unique_name(
-                slugify(namer(instance)),
-                sender._default_manager.filter(**extra_limits(instance)),
-                'slug',
-                '-'
+                basename=slugify(namer(instance)),
+                qset=sender._default_manager.filter(**extra_limits(instance)),
+                fieldname='slug',
+                mixer='-'
             )
     
     return _func
