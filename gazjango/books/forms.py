@@ -13,8 +13,9 @@ class SubmitBookForm(forms.ModelForm):
         required=False
     )
     
-    def __init__(self, data, needs_email=False, *args, **kwargs):
-        super(SubmitBookForm, self).__init__(data, *args, **kwargs)
+    def __init__(self, *args, **kwargs):
+        needs_email = kwargs.pop('needs_email', False)
+        super(SubmitBookForm, self).__init__(*args, **kwargs)
         self.fields['departments'].choices = [
             (tag.pk, tag.longest_name())
             for tag in departments_taggroup().tags.all()
