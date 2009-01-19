@@ -12,10 +12,10 @@ from gazjango.misc.view_helpers import get_user_profile
 def manage(request):
     raise Http404 # temporary, obviously
 
-def logout(request, next_page=None, template_name='registration/logged_out.html'):
+def logout(request, next_page='/'):
     from gazjango.facebook_connect.middleware import FacebookConnectMiddleware
     FacebookConnectMiddleware.delete_fb_cookies = True
-    return auth_views.logout(request, next_page, template_name)
+    return auth_views.logout(request, next_page)
 
 
 def user_details(request, name, template="accounts/profile.html"):
