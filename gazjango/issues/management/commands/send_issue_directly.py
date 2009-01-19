@@ -28,8 +28,8 @@ class Command(SendingOutCommand):
         self.text_content = show_issue(dummy_request, issue, plain=True).content
         
         dummy_request.GET['racy'] = 'no'
-        self.tame_html_content = latest_issue(dummy_request).content
-        self.tame_text_content = latest_issue(dummy_request, plain=True).content
+        self.tame_html_content = show_issue(dummy_request, issue).content
+        self.tame_text_content = show_issue(dummy_request, issue, plain=True).content
     
     def contents_for_subscriber(self, subscriber):
         if subscriber.racy_content:
