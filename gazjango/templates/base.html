@@ -62,13 +62,15 @@
   					    {% endif %}
 			          <a href="{% url manage-user %}">Manage your Account</a> |
 			          {% if facebook_user %}
-			            <fb:login-button size="small" background="white" length="short" autologoutlink="true"></fb:login-button>
+			            <a href="{% url logout %}" onclick="FB.Connect.logoutAndRedirect('{% url logout %}')"><img src="http://static.ak.fbcdn.net/images/fbconnect/logout-buttons/logout_small.gif" alt="Logout" /></a>
 			          {% else %}
-  			          <a href="{% url auth_logout %}">Logout</a>
-  			        {% endif %}
-			        {% else %}
+			            <a href="{% url logout %}">Logout</a>
+			          {% endif %}
+			        
+			        {% else %} {# not authenticated #}
 			          <a href="{% url registration_register %}">Register an Account</a> |
-			          <a href="{% url auth_login %}">Login</a>
+			          <a href="{% url auth_login %}">Login</a> |
+			          <fb:login-button size="small" background="white" length="short"></fb:login-button>
 			        {% endif %}
 			        | {% now "F j, Y" %}
   					</p>
