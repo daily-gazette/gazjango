@@ -5,7 +5,8 @@ from django.contrib.auth.models import User
 from django.utils               import simplejson
 
 from gazjango.accounts.models   import UserProfile, UserKind
-from gazjango.misc.view_helpers import get_ip, get_user_profile, get_unique_name
+from gazjango.misc.helpers      import find_unique_name
+from gazjango.misc.view_helpers import get_ip, get_user_profile
 
 import md5
 import urllib, urllib2
