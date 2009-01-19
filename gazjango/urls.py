@@ -126,7 +126,7 @@ urlpatterns += patterns('django.contrib.auth.views',
     (r'^accounts/reset-password/complete/$',                 'password_reset_complete'),
 )
 urlpatterns += patterns('',
-    (r'^accounts/logout$', 'accounts.views.logout', {'next_page': '/'}, 'logout')
+    (r'^accounts/logout$', 'accounts.views.logout', {'next_page': '/'}, 'logout'),
     (r'^accounts/manage/$', 'accounts.views.manage', {}, 'manage-user'),
     (r'^accounts/register/$', 'registration.views.register', { 'form_class': RegistrationFormWithProfile }, 'register'),
     
