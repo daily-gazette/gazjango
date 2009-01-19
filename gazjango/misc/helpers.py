@@ -54,6 +54,17 @@ def get_jquery_path():
         return "http://ajax.googleapis.com/ajax/libs/jquery/1.2/jquery.min.js"
 
 
+def find_unique_name(basename, qset, fieldname='slug'):
+    val = basename
+    num = 0
+    existing = qset.filter(**{("%s__contains" % fieldname): basename}) \
+                   .values_list('slug', flat=True)
+    while val in existing:
+        num += 1
+        val = "%s-%s" % (basename, num)
+    return val
+
+
 def set_default_slug(namer, extra_limits=lambda x: {}):
     """
     Returns a function to automatically set a default slug after creation.
@@ -67,15 +78,10 @@ def set_default_slug(namer, extra_limits=lambda x: {}):
     """
     def _func(sender, instance, **kwords):
         if not instance.slug:
-            base = slugify(namer(instance))
-            existing = sender.objects \
-                       .filter(slug__contains=base, **extra_limits(instance)) \
-                       .values_list('slug', flat=True)
-            slug = base
-            num = 0
-            while slug in existing:
-                num += 1
-                slug = "%s-%s" % (base, num)
-            instance.slug = slug
+            instance.slug = find_unique_name(
+                slugify(namer(instance)),
+                sender._default_manager.filter(**extra_limits(instance)),
+                'slug'
+            )
     
     return _func
