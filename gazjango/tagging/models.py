@@ -7,13 +7,10 @@ class TagGroup(models.Model):
     
     If the group has no name, it represents the "miscellaneous" category.
     """
-    name = models.CharField(max_length=60)
-    content_type = models.ForeignKey(ContentType)
+    name = models.CharField(max_length=60, unique=True)
+    content_types = models.ManyToManyField(ContentType)
     
     active_tags = property(lambda self: self.tags.filter(is_active=True))
-    
-    class Meta:
-        unique_together = ('name', 'content_type')
     
     def __unicode__(self):
         return self.name
