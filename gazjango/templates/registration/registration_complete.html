@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load extras %}
 
 {% block title %}Registration Complete{% endblock %}
 
@@ -7,5 +8,5 @@
   
   <p>Thanks for registering! We've sent you an email with instructions on how to finalize your account.</p>
   
-  <p>If you haven't recieved the email within an hour or so, check your spam folder. If you're sure you didn't get the email, don't just try again, because you won't be able to register with the same username for a few days. You might instead try contacting the webmaster (admin&#64;daily&#46;swarthmore&#46;edu).</p>
+  <p>If you haven't recieved the email within an hour or so, check your spam folder. If you're sure you didn't get the email, don't just try again, because you won't be able to register with the same username for a few days. You might instead try contacting the webmaster ({{ "admin@daily.swarthmore.edu"|entity_sub }}).</p>
 {% endblock %}

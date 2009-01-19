@@ -26,6 +26,18 @@ def order_by(queryset, args):
     return queryset.order_by(*args)
 
 
+### replace emails with numeric entities, to fight spam
+
+@register.filter
+def entity_sub(string, to_replace=None):
+    if to_replace:
+        def rep(x):
+            return ord(x) if x in to_replace else x
+    else:
+        rep = ord
+    return mark_safe(''.join("&#%d;" % rep(x) for x in string))
+
+
 ### various filters to ease the outputting of more human text
 
 
