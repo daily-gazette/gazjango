@@ -119,7 +119,6 @@ urlpatterns += patterns('media.views',
 
 urlpatterns += patterns('django.contrib.auth.views',
     (r'^accounts/login/$',  'login', {}, 'login'),
-    (r'^accounts/logout/$', 'logout', {'next_page': '/'}, 'logout'),
     
     (r'^accounts/reset-password/$',      'password_reset', {}, 'password-reset'),
     (r'^accounts/reset-password/sent/$', 'password_reset_done'),
@@ -127,6 +126,7 @@ urlpatterns += patterns('django.contrib.auth.views',
     (r'^accounts/reset-password/complete/$',                 'password_reset_complete'),
 )
 urlpatterns += patterns('',
+    (r'^accounts/logout$', 'accounts.views.logout', {'next_page': '/'}, 'logout')
     (r'^accounts/manage/$', 'accounts.views.manage', {}, 'manage-user'),
     (r'^accounts/register/$', 'registration.views.register', { 'form_class': RegistrationFormWithProfile }, 'register'),
     

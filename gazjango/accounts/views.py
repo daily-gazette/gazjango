@@ -1,17 +1,21 @@
-from django.http import HttpResponse, Http404
-from django.template import RequestContext
+from django.contrib.auth            import views as auth_views
 from django.contrib.auth.decorators import permission_required
-from django.shortcuts import render_to_response, get_object_or_404
-from django.db.models import Q
+from django.contrib.auth.models     import User
+from django.db.models               import Q
+from django.http                    import HttpResponse, Http404
+from django.shortcuts               import render_to_response, get_object_or_404
+from django.template                import RequestContext
+
+from gazjango.accounts.models   import UserProfile
 from gazjango.misc.view_helpers import get_user_profile
 
-from django.contrib.auth.models import User
-from gazjango.accounts.models import UserProfile
-from gazjango.articles.models import ArticleRevision
-from gazjango.comments.models import PublicComment
-
-def manage(requset):
+def manage(request):
     raise Http404 # temporary, obviously
+
+def logout(request, next_page=None, template_name='registration/logged_out.html'):
+    from gazjango.facebook_connect.middleware import FacebookConnectMiddleware
+    FacebookConnectMiddleware.delete_fb_cookies = True
+    return auth_views.logout(request, next_page, template_name)
 
 
 def user_details(request, name, template="accounts/profile.html"):
