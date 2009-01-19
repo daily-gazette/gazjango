@@ -74,7 +74,7 @@ class BookListing(models.Model):
     )
     condition = models.CharField(max_length=1, choices=CONDITION_CHOICES, blank=False)
     
-    is_published = models.BooleanField(default=False)
+    is_published = models.BooleanField(default=True)
     
     objects = models.Manager()
     published = PublishedBooksManager()

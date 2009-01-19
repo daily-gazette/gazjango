@@ -38,16 +38,20 @@ def list_books(request):
 
 @login_required
 def submit_book(request):
+    needs_email = not request.user.email
     if request.method == 'POST':
-        form = SubmitBookForm(request.POST)
+        form = SubmitBookForm(request.POST, needs_email=needs_email)
         if form.is_valid():
             book = form.save(commit=False)
-            book.seller = get_user_profile(request)
+            profile = get_user_profile(request)
+            book.seller = profile
             book.save()
+            profile.user.email = form.cleaned_data['email']
+            profile.save()
             form.save_m2m()
             return HttpResponseRedirect(reverse(book_success))
     else:
-        form = SubmitBookForm()
+        form = SubmitBookForm(needs_email=needs_email)
     
     return render_to_response('books/submit.html', {
         'form': form,
