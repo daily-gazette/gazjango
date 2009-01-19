@@ -44,8 +44,11 @@ def render_manyfks(instances):
         elif instance.__class__ != model:
             raise NotSameModel
         pks.append(str(instance.pk))
-    ct = str(ContentType.objects.get_for_model(model).pk)
-    return render_str_list([ct] + pks)
+    if not model:
+        return render_str_list([])
+    else:
+        ct = str(ContentType.objects.get_for_model(model).pk)
+        return render_str_list([ct] + pks)
 
 
 # foreign keys: stored as content_type_pk | pk
