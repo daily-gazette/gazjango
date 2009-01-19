@@ -64,9 +64,11 @@ class FacebookConnectMiddleware(object):
             return False
         
         # check expiry
-        expiry_key = float(self.cookie(request, '_expires'))
+        expiry = float(self.cookie(request, '_expires'))
         if (datetime.datetime.fromtimestamp(expiry) <= datetime.datetime.now()):
             return False
+        
+        return True
     
     
     def create_user(self, request):
@@ -107,7 +109,7 @@ class FacebookConnectMiddleware(object):
         
         user.save()
         user_profile.save()
-        return user
+        return user, user_profile
     
     
     def process_request(self, request):
@@ -149,9 +151,11 @@ class FacebookConnectMiddleware(object):
                         return self.logout(request)
                     
                     try:
-                        user = User.objects.get(facebook_id=self.cookie(request, '_user'))
-                    except User.DoesNotExist:
-                        user = self.create_user(request)
+                        fid = self.cookie(request, '_user')
+                        profile = UserProfile.objects.get(facebook_id=fid)
+                        user = profile.user
+                    except UserProfile.DoesNotExist:
+                        user, profile = self.create_user(request)
                     
                     if user is None:
                         request.facebook_message = ACCOUNT_PROBLEM_ERROR
