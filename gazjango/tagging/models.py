@@ -18,7 +18,7 @@ class TagGroup(models.Model):
 
 class Tag(models.Model):
     "A tag."
-    name = models.CharField(max_length=50, db_index=True)
+    name = models.CharField(max_length=50)
     verbose_name = models.CharField(max_length=80, blank=True)
     is_active = models.BooleanField(default=True, blank=True)
     group = models.ForeignKey(TagGroup, related_name="tags")
