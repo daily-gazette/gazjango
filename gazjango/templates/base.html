@@ -39,7 +39,6 @@
           <p>Welcome to the Gazette! We've noticed your aren't logged in.</p>
           <p>If you've got a Facebook account, it is really easy! Just click:</p>
           <center><fb:login-button size="medium" background="dark" length="long"></fb:login-button></center>
-          <script type="text/javascript">FB.init("{{ FACEBOOK_API_KEY }}", "/xd_receiver.html");</script>
           <p><br />We've just rolled out a lot of new features. On our <a href="http://daily.swarthmore.edu/comments/">comments page</a> you can see our newest comments, and on our <a href="http://daily.swarthmore.edu/reviews/">reviews page</a> you can rate local stores and restaurants—and win coupons to eat out!</p>
       </div>
       {% endif %}
@@ -63,6 +62,7 @@
   					    {% endif %}
 			          <a href="{% url manage-user %}">Manage your Account</a> |
 			          {% if facebook_user %}
+			            <fb:login-button size="small" background="white" length="short" autologoutlink="true"></fb:login-button>
 			          {% else %}
   			          <a href="{% url auth_logout %}">Logout</a>
   			        {% endif %}
@@ -72,6 +72,7 @@
 			        {% endif %}
 			        | {% now "F j, Y" %}
   					</p>
+  					<script type="text/javascript">FB.init("{{ FACEBOOK_API_KEY }}", "/xd_receiver.html");</script>
   				</div>
 				
   				<div id="headerTitle">
