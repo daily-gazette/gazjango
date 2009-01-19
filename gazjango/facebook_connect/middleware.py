@@ -111,7 +111,8 @@ class FacebookConnectMiddleware(object):
         user_profile.save()
         return user, user_profile
     
-    def associate_profile(self, request, profile):
+    def associate_profile(self, request):
+        profile = get_user_profile(request)
         profile.facebook_id = self.cookie(request, '_user')
         profile.save()
         self.facebook_user_is_authenticated = True
@@ -129,12 +130,12 @@ class FacebookConnectMiddleware(object):
                     if 'fb_ip' not in request.COOKIES: # we haven't been associated yet
                         if not self.verify_facebook_cookies(request):
                             return self.logout(request)
-                        self.associate_profile(get_user_profile(request))
+                        self.associate_profile(request)
                     
                     elif request.COOKIES['fb_ip'] == self.hash(get_ip(request) + API_SECRET):
                         if not self.verify_facebook_cookies(request):
                             return self.logout(request)
-                        self.associate_profile(get_user_profile(request))
+                        self.associate_profile(request)
                     
                     else: # invalid ip! either some proxy stuff or a haxor
                         return self.logout(request)
