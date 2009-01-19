@@ -5,7 +5,7 @@ from django.contrib.auth.models import User
 from django.utils               import simplejson
 
 from gazjango.accounts.models   import UserProfile, UserKind
-from gazjango.misc.view_helpers import get_ip
+from gazjango.misc.view_helpers import get_ip, get_unique_name
 
 import md5
 import urllib, urllib2
@@ -71,7 +71,7 @@ class FacebookConnectMiddleware(object):
                         request.facebook_user = request.user
                     else:
                         return self.logout(request)
-                elif request.user.username.startswith('facebook-'):
+                elif request.user.facebook_id:
                     return self.logout(request)
                 
             else: # not logged in
@@ -86,9 +86,9 @@ class FacebookConnectMiddleware(object):
                     expiry_key = float(self.cookie(request, '_expires'))
                     if (datetime.datetime.fromtimestamp(expiry) <= datetime.datetime.now()):
                         return self.logout(request)
-                    
+                                        
                     try: # check whether an account exists
-                        User.objects.get(username=self.username(request))
+                        User.objects.get(facebook_id=self.cookie(request, '_user'))
                     except User.DoesNotExist:
                         # make the user
                         user_info_params = {
@@ -105,13 +105,14 @@ class FacebookConnectMiddleware(object):
                         user_info_r = simplejson.load(urllib2.urlopen(REST_SERVER, user_info_params))
                         user_info = user_info_r[0]
                         
-                        user = User.objects.create_user(self.cookie(request, '_user'),
+                        user = User.objects.create_user(find_unique_name( "%s_%s" % (user_info['first_name'], user_info['last_name']), User.objects, 'username', '_'),
                                                         '',
                                                         self.hash(self.cookie(request, '_user')))
                         user_profile = user.userprofile_set.create()
                         
                         user.first_name = user_info['first_name']
                         user.last_name = user_info['last_name']
+                        user.facebook_id=self.cookie(request, '_user')                              
                         
                         if user_info['affiliations']:
                             for affiliation in user_info['affiliations']:
