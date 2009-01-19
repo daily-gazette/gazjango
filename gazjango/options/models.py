@@ -33,7 +33,7 @@ def read_manyfks(string):
     if len(bits) < 2:
         return []
     model = ContentType.objects.get_for_id(bits[0]).model_class()
-    return model._default_manager.filter(pk__in=bits[1:])
+    return model._default_manager.in_bulk(bits[1:]).values()
 
 def render_manyfks(instances):
     model = None # stick to straight iterable methods
@@ -48,6 +48,16 @@ def render_manyfks(instances):
     return render_str_list([ct] + pks)
 
 
+# foreign keys: stored as content_type_pk | pk
+def read_fk(string):
+    try:
+        return read_manyfks(string)[0]
+    except IndexError:
+        return None
+
+def render_fk(instance):
+    return render_manyfks([instance])
+
 OPTION_TYPES = {
 #   db    name       db->python,    python->db
     'b': ('boolean', make_bool,     str),
@@ -56,6 +66,7 @@ OPTION_TYPES = {
     'f': ('float',   float,         str),
     'l': ('strlist', read_str_list, render_str_list),
     'm': ('manyfks', read_manyfks,  render_manyfks),
+    'f': ('fk',      read_fk,       render_fk),
 }
 OPTION_CHOICES = [(db, name) for db, (name, dbtopy, pytodb) in OPTION_TYPES.items()]
 
