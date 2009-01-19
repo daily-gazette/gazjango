@@ -54,14 +54,14 @@ def get_jquery_path():
         return "http://ajax.googleapis.com/ajax/libs/jquery/1.2/jquery.min.js"
 
 
-def find_unique_name(basename, qset, fieldname='slug'):
+def find_unique_name(basename, qset, fieldname='slug', mixer="-"):
     val = basename
     num = 0
     existing = qset.filter(**{("%s__contains" % fieldname): basename}) \
                    .values_list('slug', flat=True)
     while val in existing:
         num += 1
-        val = "%s-%s" % (basename, num)
+        val = "%s%s%s" % (basename, mixer, num)
     return val
 
 
@@ -81,7 +81,8 @@ def set_default_slug(namer, extra_limits=lambda x: {}):
             instance.slug = find_unique_name(
                 slugify(namer(instance)),
                 sender._default_manager.filter(**extra_limits(instance)),
-                'slug'
+                'slug',
+                '-'
             )
     
     return _func
