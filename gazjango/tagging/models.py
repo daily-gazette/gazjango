@@ -18,7 +18,7 @@ class TagGroup(models.Model):
 
 class Tag(models.Model):
     "A tag."
-    name = models.CharField(unique=True, max_length=50, db_index=True)
+    name = models.CharField(max_length=50, db_index=True)
     verbose_name = models.CharField(max_length=80, blank=True)
     is_active = models.BooleanField(default=True, blank=True)
     group = models.ForeignKey(TagGroup, related_name="tags")
@@ -28,6 +28,7 @@ class Tag(models.Model):
     
     class Meta:
         ordering = ('name',)
+        unique_together = ('name', 'group')
     
     def __unicode__(self):
         return self.name
