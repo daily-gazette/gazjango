@@ -9,7 +9,7 @@ import math
 
 TRAIN_STATIONS = dict( (a[0], {'id': a[0], 'name': a[1], 'lat': a[2], 'lng': a[3]}) for a in [
     ( 1, "R3: Market East",        "39.952076", "-75.156612"),
-    ( 2, "R3: Suburban Station",   "39.952538", "-75.16327"),
+    ( 2, "R3: Suburban Station",   "39.95205",  "-75.174664"),
     ( 3, "R3: 30th St",            "39.954833", "-75.183411"),
     ( 4, "R3: University City",    "39.948849", "-75.189646"),
     ( 5, "R3: 49th St",            "39.943731", "-75.21663"),
