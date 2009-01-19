@@ -17,7 +17,7 @@ class Command(SendingOutCommand):
         if not is_publishing():
             raise CommandError('Not in publishing mode.')
         
-        issue = Issue.objects.populate_issue()
+        issue, created = Issue.objects.populate_issue()
         if not issue.articles.count():
             mail_admins('ERROR IN SENDING GAZETTE ISSUE FOR '+
                         datetime.date.today().strftime('%A, %B %d, %Y'),
