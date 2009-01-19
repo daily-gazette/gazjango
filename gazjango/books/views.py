@@ -50,7 +50,8 @@ def submit_book(request):
                 profile.user.email = form.cleaned_data['email']
                 profile.save()
             form.save_m2m()
-            return HttpResponseRedirect(reverse(book_success))
+            # return HttpResponseRedirect(reverse(book_success))
+            return HttpResponseRedirect(reverse(list_books))
     else:
         form = SubmitBookForm(needs_email=needs_email)
     
