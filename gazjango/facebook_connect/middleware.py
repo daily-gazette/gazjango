@@ -25,9 +25,6 @@ class FacebookConnectMiddleware(object):
     delete_fb_cookies = False
     facebook_user_is_authenticated = False
     
-    def username(self, request):
-        return 'facebook-' + self.cookie(request, '_user')
-    
     def logout(self, request):
         logout(request)
         request.facebook_user = None
