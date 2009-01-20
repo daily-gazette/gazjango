@@ -82,7 +82,7 @@
                     <ul>
                         {% for story in claimed %}
                         {% ifchanged %}<li><strong>{{ story.due }}</strong></li>{% endifchanged %}
-                        <li><a href="http://daily.swarthmore.edu/admin/articles/article/{{ story.pk }}/">{{ story.name }}</a>, claimed by {{ story.user_names }} (<em>Status: {{ story.get_status_display }}</em>)</li>
+                        <li><a href="http://daily.swarthmore.edu/admin/articles/storyconcept/{{ story.pk }}/">{{ story.name }}</a>, claimed by {{ story.user_names }} (<em>Status: {{ story.get_status_display }}</em>)</li>
                         {% endfor %}
                     </ul>                                     
                     

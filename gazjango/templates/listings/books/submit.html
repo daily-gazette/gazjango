@@ -1,0 +1,27 @@
+{% extends "listings/base.html" %}
+{% load extras %}
+{% load markup %}
+
+{% block title %}Book Exchange :: Submit{% endblock title %}
+{% block listings_customheader %}
+    <script type="text/javascript" src="/jsi18n/"></script>
+    <link rel="stylesheet" href="{% static admin css/widgets.css %}" type="text/css" media="screen,projection" />
+    {{ form.media }}
+{% endblock listings_customheader %}
+{% block listings_title %}Sell A Book{% endblock %}
+
+    
+{% block listings_content %}
+
+    <form action="" method="post">
+        <table id="submission">
+          {{ form.as_table }}
+          
+          <tr>
+            <td></td>
+            <td><input type="submit" value="Submit" /></td>
+          </tr>
+        </table>
+      </form>
+    
+{% endblock listings_content %}

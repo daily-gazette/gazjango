@@ -1,0 +1,24 @@
+{% extends "listings/base.html" %}
+{% load extras %}
+{% load markup %}
+
+{% block title %}{{ job.name|striptags }}{% endblock title %}
+{% block listings_customheader %}{% endblock listings_customheader %}
+{% block listings_title %}{{ job.name|striptags }}{% endblock listings_title %}
+
+{% block listings_content %}
+
+    {% if job.is_filled %}<h3>This position has been filled.</h3>{% endif %}
+    <p>Submitted:  {{ job.pub_date|date:"F j, Y" }}</p>
+    <p><strong>Pay:</strong> {{ job.get_pay }}<br />
+    <strong>Hours:</strong> {{ job.hours }}<br />
+    <strong>When:</strong> {{ job.when }}<br />
+    <strong>Where:</strong> {{ job.where }}
+    {% if job.needs_car %}<br />This position requires access to a car.{% endif %}
+    {% if job.contact_info %}<br /><strong>Contact:</strong> {{ job.contact_info }}</p>{% else %}</p>{% endif %}
+    
+    <p>{{ job.description|safe }}</p>
+
+    <p><strong>See our other <a href="http://daily.swarthmore.edu/jobs">job listings</a>, or <a href="http://daily.swarthmore.edu/jobs/new/">submit</a> your own.</strong></p>
+  
+{% endblock listings_content %}

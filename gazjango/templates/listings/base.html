@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% load extras %}
+
+{% block title %}{% endblock title %}
+
+
+{% block customheader %}
+
+<link rel="stylesheet" href="{% static css page/story.css %}" type="text/css" media="screen, projection" />
+<link rel="stylesheet" href="{% static css page/listings.css %}" type="text/css" media="screen, projection" />
+{% block listings_customheader %}{% endblock listings_customheader %}
+
+{% jQuery %}
+
+{% endblock customheader %}
+
+
+{% block topbar %}
+  <div id="headerSectionBar">
+    <div id="headerSearch">
+      {% include "search_header.html" %}
+    </div>
+  </div>
+{% endblock topbar %}
+
+
+{% block content %}
+  <div id="imageColumn">
+    <ul>
+          <li><a href="http://daily.swarthmore.edu/announcements/new/"><img src="{% static images listing/rsd-button.png %}" alt="Submit to the Reserved Students Digest" /></a></li>
+          <li><a href="http://daily.swarthmore.edu/books/new/"><img src="{% static images listing/book-button.png %}" alt="Submit to the Book Listings" /></a></li>
+          <li><a href="http://daily.swarthmore.edu/jobs/new/"><img src="{% static images listing/job-button.png %}" alt="Submit to the Jobs Listings" /></a></li>
+    </ul>
+  </div>
+
+  <div id="storyBox">
+    <div id="story">
+      <h2>{% block listings_title %}{% endblock listings_title %}</h2>
+      {% block listings_content %}
+      {% endblock listings_content %}
+    </div>
+  </div>
+
+{% endblock content %}

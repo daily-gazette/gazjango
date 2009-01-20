@@ -1,0 +1,226 @@
+/* @override http://127.0.0.1:8000/static/css/page/listings.css */
+
+#imageColumn {
+	float: right;
+	width: 255px;
+	padding-top: 50px;
+}
+
+#imageColumn li {
+	padding-bottom: 10px;
+}
+
+#story hr {
+	width: 50%;
+	display: inline-block;
+	text-align: left;
+}
+
+
+#story > h2{
+	font-size: 200%;
+	font-family: "Helvetica Neue", Arial, Helvetica, Geneva, sans-serif;
+	color: black;
+	margin: 5px 0px 5px 0px;
+	text-align: left;
+	border-bottom: 2px solid #000000;
+	font-size: 3em;
+}
+
+#submission {
+  font-size: 1.4em;
+}
+#submission td {
+  vertical-align: top;
+  padding-bottom: 1em;
+  padding-left: 1em;
+}
+.selector p {
+  font-size: 1em !important;
+}
+.errorlist {
+  color: red;
+}
+
+#story {
+	float: left;
+	width: 100%;
+	padding-top: 20px;
+}
+
+#story table
+    {
+    width: 655px;
+    padding: 0;
+    margin: 0 auto 1.5em auto;
+    border-left: 1px solid #C1DAD7;
+    border-collapse:collapse;
+    }
+.cs1
+        {
+        width:30em;
+        }
+.cs2
+        {
+        width:20em;
+        }
+.cs1 td,
+.cs2 td,
+#scientificNotation
+        {
+        text-align:right;
+        }
+caption
+        {
+        padding: 0 0 5px 0;
+        margin:0 auto;
+        width:auto;
+        font: italic 11px "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
+        text-align: right;
+        }
+#story th
+        {
+        font: bold 10px/22px "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
+        color: #4f6b72;
+        border-right: 1px solid #C1DAD7;
+        border-bottom: 1px solid #C1DAD7;
+        border-top: 1px solid #C1DAD7;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        text-align: left;
+        padding: 8px 12px 4px 12px;
+        background: #CAE8EA url(../media/bg_header.jpg) no-repeat;
+        vertical-align:middle;
+        }
+#story td.total
+        {
+        border-top: 0;
+        border-left: 0;
+        border-right: 1px solid #C1DAD7;
+        background: none;
+        text-align:right;
+        font-weight:bold;
+        text-transform:uppercase;
+        letter-spacing:1px;
+        }
+#story th.sortable,
+#story th.sortable-text,
+#story th.sortable-date,
+#story th.sortable-keep,
+#story th.sortable-date-dmy,
+#story th.sortable-numeric,
+#story th.sortable-currency,
+#story th.sortable-sortByTwelveHourTimestamp,
+#story th.sortable-sortIPAddress,
+#story th.sortable-sortEnglishLonghandDateFormat,
+#story th.sortable-sortScientificNotation,
+#story th.sortable-sortImage,
+#story th.sortable-sortFileSize,
+#story th.sortable-sortAlphaNumeric,
+#story th.sortable-sortEnglishDateTime
+
+        {
+        cursor:pointer;
+        background: #CAE8EA url(../media/bg_header_sortable.jpg) no-repeat;
+        padding: 8px 12px 4px 16px;
+        }
+#story th.forwardSort
+        {
+        background:#CAE8EA url(../media/bg_header_down.jpg) no-repeat 0 0;
+        }
+#story th.reverseSort
+        {
+        background:#CAE8EA url(../media/bg_header_up.jpg) no-repeat 0 0;
+        }
+#story table thead th.forwardSort a,
+#story table thead th.reverseSort a
+        {
+        color:#000;
+        text-decoration:none;
+        }
+/*
+These styles should be added when very long tables are expected
+th.sort-active
+        {
+        background:#CAE8EA url(../media/bg_header_sorting.jpg) no-repeat 0 0;
+        cursor:wait;
+        }
+th.sort-active a
+        {
+        color:#a80000 !important;
+        cursor:wait;
+        }
+*/
+#story th a
+        {
+        text-decoration:none;
+        color: #4f6b72;
+        background:transparent;
+        }
+#story td a
+        {
+        text-decoration:none;
+        color:#239;
+        background:transparent;
+        }
+#story td img
+        {
+        margin:0 auto;
+        border:3px solid #ddd;
+        }
+#story td a:hover
+        {
+        color:#a84444;
+        border-bottom:1px dotted #a80000;
+        background:transparent;
+        }
+#story td
+        {
+        font: normal 11px "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
+        border-right: 1px solid #C1DAD7;
+        border-bottom: 1px solid #C1DAD7;
+        padding: 3px 6px 3px 6px;
+        color: #4f6b72;
+        }
+td.lft
+        {
+        text-align:left;
+        }
+tr.alt
+        {
+        background: #F5FAFA;
+        color: #797268;
+        }
+
+/* Poor old Internet Explorer 6 has a bug that means we can't use background images for the table rows
+   as it trys to download the image each and every time that it is used (which means a 1000 row table
+   will produce 1000 http requests for the image in question) */
+tr[class="alt"] td
+        {
+        background: #F5FAFA url(../media/td_alt.jpg) no-repeat;
+        }
+td[class~="alt"]
+        {
+        background: #edf3f3 url(../media/col_alt.jpg) no-repeat !important;
+        }
+/* Poor old Internet Explorer won't see the next two rules either as it doesn't get :first-child */
+tbody tr.alt td:first-child
+        {
+        background: #F5FAFA url(../media/bullet2.gif) no-repeat;
+        font-weight:bold;
+        }
+tbody tr td:first-child
+        {
+        background: #fff url(../media/bullet1.gif) no-repeat;
+        font-weight:bold;
+        }
+/* Image free rules for Internet Explorer < 7 */
+* html tr.alt td
+        {
+        background-color:#F5FAFA;
+        }
+* html tr td.alt,
+* html tr.alt td.alt
+        {
+        background-color:#edf3f3;
+        }
