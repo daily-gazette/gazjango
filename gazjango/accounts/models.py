@@ -129,7 +129,6 @@ class UserProfile(models.Model):
     objects = ProfilesManager()
     
     _from_swat = models.BooleanField(default=False)
-    
     def is_from_swat(self, ip=None):
         if self._from_swat:
             return True
@@ -139,6 +138,13 @@ class UserProfile(models.Model):
             return True
         else:
             return False
+    
+    EMAIL_DOMAIN = '@swarthmore.edu'
+    def abbreviated_email(self):
+        if self.email.endswith(self.EMAIL_DOMAIN):
+            return self.email[:-len(self.EMAIL_DOMAIN)]
+        else:
+            return self.email
     
     def published_articles(self):
         return self.articles.filter(status='p')
