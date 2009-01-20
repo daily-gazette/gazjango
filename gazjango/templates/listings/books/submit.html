@@ -12,16 +12,42 @@
 
     
 {% block listings_content %}
-
+    {% if form.non_field_errors %}
+        <p>{{ form.non_field_errors }}</p>
+    {% endif %}
     <form action="" method="post">
-        <table id="submission">
-          {{ form.as_table }}
-          
-          <tr>
-            <td></td>
-            <td><input type="submit" value="Submit" /></td>
-          </tr>
+        <table class="submission">
+            <tr>
+                <th width="150px">{{ form.title.label_tag }}:</th>
+                <td>{{ form.title }}</td>
+            </tr>
+            {% if form.email %}<tr>
+                <th>{{ form.email.label_tag }}:</th>
+                <td>{{ form.email }}</td>
+            </tr>{% endif %}
+            <tr>
+                <th>{{ form.description.label_tag }}:</th>
+                <td>{{ form.description }}</td>
+            </tr>
+            <tr>
+                <th>{{ form.classes.label_tag }}:</th>
+                <td>{{ form.classes }}</td>
+            </tr>
+            <tr>
+                <th>{{ form.cost.label_tag }}:</th>
+                <td>{{ form.cost }}</td>
+            </tr>
+            <tr>
+                <th>{{ form.condition.label_tag }}:</th>
+                <td>{{ form.condition }}</td>
+            </tr>
+            <tr>
+                <td colspan="2">{{ form.departments }}</td>
+            </tr>
+            <tr>
+                <th></th>
+                <td><input type="submit" value="Submit" /></td>
+            </tr>			  
         </table>
-      </form>
-    
+    </form>    
 {% endblock listings_content %}

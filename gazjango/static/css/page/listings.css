@@ -224,3 +224,32 @@ tbody tr td:first-child
         {
         background-color:#edf3f3;
         }
+
+#story form table,#story form table tr,#story form table td {
+	border-style: none;
+}
+
+#story form table.submission h2 {
+	font-size: 2em;
+}
+
+.selector {
+	width: 100px;
+}
+
+#story form table.submission tbody tr td div.selector ul.selector-chooser {
+	padding: 4px;
+	margin: 3px;
+}
+
+#story form table.submission tbody > tr td div.selector div.selector-chosen p.selector-filter{
+	padding: 0px;
+	margin: 0px;
+	width: 270px;
+}
+
+#story form table.submission tbody > tr td div.selector div.selector-available p.selector-filter {
+	padding: 0px;
+	margin: 0px;
+	width: 270px;
+}

@@ -13,7 +13,7 @@ import datetime
 def book_details(request, slug):
     book = get_object_or_404(BookListing, slug=slug)
     
-    return render_to_response('books/details.html', {
+    return render_to_response('listings/books/details.html', {
         'book': book,
         'other_books': BookListing.unfilled.order_by('-pub_date')[:3]
     }, context_instance=RequestContext(request))
@@ -23,7 +23,7 @@ def list_books(request):
     books = BookListing.published.filter(sold_at=None).order_by('-pub_date')
     profile = get_user_profile(request)
     
-    return render_to_response('books/list.html', {
+    return render_to_response('listings/books/list.html', {
         'books': books,
         'user_profile': profile,
     }, context_instance=RequestContext(request))
@@ -67,7 +67,7 @@ def submit_book(request):
     else:
         form = SubmitBookForm(needs_email=needs_email)
     
-    return render_to_response('books/submit.html', {
+    return render_to_response('listings/books/submit.html', {
         'form': form,
     }, context_instance=RequestContext(request))
 
