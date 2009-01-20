@@ -5,6 +5,25 @@
 {% block title %}Book Exchange{% endblock title %}
 {% block listings_customheader %}
     <script type="text/javascript" src="{% static js tablesort.js %}"></script>
+    {% jQuery %}
+    <script type="text/javascript" charset="utf-8">
+$(function() {
+    $('.sell-link').click(function(event) {
+        event.preventDefault();
+        var link = $(this);
+        var book_name = link.parents('.book-row').children('td').eq(0).html();
+        var confirmed = confirm("Are you sure you want to remove "+book_name+" from the listings?");
+      
+        if (confirmed) {
+            $.post(link.attr('href'), {}, function(data, textStatus) {
+                if (data == 'success') {
+                    link.parents('.book-row').remove();
+                }
+            });
+        }
+    });
+});
+    </script>
 {% endblock listings_customheader %}
 {% block listings_title %}Book Exchange{% endblock listings_title %}
 
