@@ -5,22 +5,16 @@ from django.shortcuts           import render_to_response, get_object_or_404
 from gazjango.misc.view_helpers import filter_by_date
 from gazjango.announcements.models import Announcement
 from gazjango.announcements.forms  import SubmitAnnouncementForm
-from gazjango.articles.models      import Article
-from gazjango.comments.models      import PublicComment
 import datetime
 
 def announcement(request, slug, year, month=None, day=None):
     an = get_object_or_404(Announcement, slug=slug, date_start__year=year)
-    tops, mids, lows = Article.published.get_stories(num_top=1, num_mid=3, num_low=0)
     data = {
         'announcement': an,
-        'topstory': tops[0],
-        'stories': mids,
         'recent_announcements': Announcement.community.order_by('-date_end')[:4],
-        'comments': PublicComment.visible.order_by('-time')[:3]
     }
     rc = RequestContext(request)
-    return render_to_response("announcements/details.html", data, context_instance=rc)
+    return render_to_response("listings/announcements/details.html", data, context_instance=rc)
 
 
 def list_announcements(request, kind=None, year=None, month=None, day=None, order='d'):
@@ -37,7 +31,6 @@ def list_announcements(request, kind=None, year=None, month=None, day=None, orde
     if kind:
         qset = qset.filter(kind=kind)
     
-    tops, mids, lows = Article.published.get_stories(num_top=1, num_mid=3, num_low=0)
     
     data = { 
         'announcements': qset,
@@ -45,15 +38,12 @@ def list_announcements(request, kind=None, year=None, month=None, day=None, orde
         'year': year,
         'month': month,
         'day': day,
-        'topstory': tops[0],
-        'stories': mids,
-        'comments': PublicComment.visible.order_by('-time')[:3],
         'recent_announcements': Announcement.community.order_by('-date_end')[:4],
     }
     rc = RequestContext(request)
-    return render_to_response("announcements/list.html", data, context_instance=rc)
+    return render_to_response("listings/announcements/list.html", data, context_instance=rc)
 
-def submit_announcement(request, template="announcements/submit.html"):
+def submit_announcement(request, template="listings/announcements/submit.html"):
     if request.method == 'POST':
         form = SubmitAnnouncementForm(request.POST)
         if form.is_valid():
@@ -67,5 +57,5 @@ def submit_announcement(request, template="announcements/submit.html"):
     return render_to_response(template, data, context_instance=rc)
 
 
-def announcement_success(request, template="announcements/success.html"):
+def announcement_success(request, template="listings/announcements/success.html"):
     return render_to_response(template, {}, context_instance=RequestContext(request))
