@@ -72,12 +72,13 @@ class FacebookConnectMiddleware(object):
     
     
     def create_user(self, request):
+        facebook_id = self.cookie(request, '_user')
         user_info_params = {
             'method': 'Users.getInfo',
             'api_key': API_KEY,
             'call_id': time.time(),
             'v': '1.0',
-            'uids': self.cookie(request, '_user'),
+            'uids': facebook_id,
             'fields': 'first_name,last_name,affiliations',
             'format': 'json',
         }
@@ -86,17 +87,30 @@ class FacebookConnectMiddleware(object):
         user_info_r = simplejson.load(urllib2.urlopen(REST_SERVER, user_info_params))
         user_info = user_info_r[0]
         
-        user = User.objects.create_user(
-            find_unique_name(
-                "%s_%s" % (user_info['first_name'], user_info['last_name']),
-                User.objects, 'username', '_'),
-            ''
-        )
-        user_profile = user.userprofile_set.create()
+        if not user_info['first_name'] or not user_info['last_name']:
+            # NOTE: shitty temporary error logging
+            from django.core.mail import mail_admins
+            mail_admins('facebook giving us crap again', simplejson.dumps(user_info_r))            
+            return self.logout(request)
         
-        user.first_name = user_info['first_name']
-        user.last_name = user_info['last_name']
-        user_profile.facebook_id = self.cookie(request, '_user')                              
+        try:
+            user = User.objects.get(first_name=user_info['first_name'],
+                                    last_name =user_info['last_name'])
+            user_profile = user.get_profile()
+            user_profile.facebook_id = facebook_id
+        except User.DoesNotExist:
+            username = find_unique_name(
+                ("%s_%s" % (user_info['first_name'], user_info['last_name'])).lower(),
+                User.objects,
+                'username',
+                '_'
+            )
+            user = User.objects.create_user(name, '')
+            user_profile = user.userprofile_set.create()
+        
+            user.first_name = user_info['first_name']
+            user.last_name = user_info['last_name']
+            user_profile.facebook_id = facebook_id
         
         if user_info['affiliations']:
             for affiliation in user_info['affiliations']:
@@ -111,9 +125,23 @@ class FacebookConnectMiddleware(object):
         user_profile.save()
         return user, user_profile
     
-    def associate_profile(self, request):
-        profile = get_user_profile(request)
-        profile.facebook_id = self.cookie(request, '_user')
+    def associate_profile(self, request, profile=None):
+        facebook_id = self.cookie(request, '_user')
+        if not profile:
+            profile = get_user_profile(request)
+        
+        try:
+            other_profile = UserProfile.objects.get(facebook_id=facebook_id)
+            if profile != other_profile:
+                # uh oh! we're trying to have two profiles with the same 
+                # facebook_id. this town ain't big enough for the both of 
+                # us, so log into the one that's already properly associated.
+                # EVENTUAL: give the user some options here
+                profile = other_profile
+        except UserProfile.DoesNotExist:
+            pass
+        
+        profile.facebook_id = facebook_id
         profile.save()
         self.facebook_user_is_authenticated = True
         request.facebook_user = request.user
@@ -155,17 +183,21 @@ class FacebookConnectMiddleware(object):
                     except UserProfile.DoesNotExist:
                         user, profile = self.create_user(request)
                     
-                    # TODO: fix up the crappy backend annotation
-                    from django.contrib.auth import get_backends
-                    backend = get_backends()[0]
-                    user.backend = "%s.%s" % (backend.__module__, backend.__class__.__name__)
-                    
                     if user is None:
                         request.facebook_message = ACCOUNT_PROBLEM_ERROR
                         self.delete_fb_cookies = True
                     else:
                         if user.is_active:
+                            # TODO: fix up the crappy backend annotation
+                            from django.contrib.auth import load_backend
+                            path = 'django.contrib.auth.backends.ModelBackend'
+                            backend = load_backend(path)
+                            user.backend = "%s.%s" % (backend.__module__,
+                                                      backend.__class__.__name__)
+                            
                             login(request, user)
+                            
+                            self.associate_profile(request, profile)
                             self.facebook_user_is_authenticated = True
                             request.facebook_user = user
                         else:
