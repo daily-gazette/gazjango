@@ -191,6 +191,25 @@
   </style>
 
   <script type="text/javascript" src="{% static js tablesort.js %}"></script>
+  {% jQuery %}
+  <script type="text/javascript" charset="utf-8">
+$(function() {
+  $('.sell-link').click(function(event) {
+    event.preventDefault();
+    var link = $(this);
+    var book_name = link.parents('.book-row').children('td').eq(0).html();
+    var confirmed = confirm("Are you sure you want to mark " + book_name + " as sold?");
+    
+    if (confirmed) {
+      $.post(link.attr('href'), {}, function(data, textStatus) {
+        if (data == 'success') {
+          link.parents('.book-row').remove();
+        }
+      });
+    }
+  });
+});
+  </script>
 {% endblock %}
 
 {% block topbar %}
@@ -220,9 +239,17 @@
       </thead>
       <tbody>
         {% for book in books %}
-          <tr>
+          <tr class="book-row">
             <td>{{ book.title }}</td>
-            <td><a href="mailto:{{ book.seller.email|entity_sub }}">{{ book.seller.name }}</a></td>
+            <td>
+              {% ifequal book.seller user_profile %}
+                You ({{ book.seller.abbreviated_email }})
+                [<a class="sell-link" href="{% url books.views.mark_as_sold book.slug %}">mark as sold</a>]
+              {% else %}
+                {{ book.seller.name }}
+                <a href="mailto:{{ book.seller.email|entity_sub }}">{{ book.seller.abbreviated_email|entity_sub }}</a>
+              {% endifequal %}
+            </td>
             <td>{% for dept in book.departments.all %}{{ dept.name }}{% if not forloop.last %}, {% endif %}{% endfor %}</td>
             <td>{{ book.classes }}</td>
             <td>{{ book.get_condition_display }}</td>
