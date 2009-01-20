@@ -37,8 +37,8 @@
 /* 
 	STYLING EXTRAS
 */
-a[href^="mailto"]	{ background: url(images/emailIcon.png) left center no-repeat; padding-left: 10px; }
-a[href~=".pdf"]		{ background: url(images/pdfIcon.png) left center no-repeat; padding-left: 10px; }
+/*a[href^="mailto"] { background: url(images/emailIcon.png) left center no-repeat; padding-left: 10px; }*/
+/*a[href~=".pdf"]       { background: url(images/pdfIcon.png) left center no-repeat; padding-left: 10px; }*/
 a.button			{ color: black; border: 1px solid black; padding: 3px; }
 	a.button:hover	{ background: black; color: white; }
 .transpBlack		{ background: url(images/transpBlack.png); }
