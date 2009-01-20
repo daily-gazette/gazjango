@@ -4,23 +4,17 @@ from django.http      import HttpResponse, HttpResponseRedirect, Http404
 from django.shortcuts import render_to_response, get_object_or_404
 from django.template  import RequestContext
 
-from gazjango.articles.models   import Article
 from gazjango.books.models      import BookListing
 from gazjango.books.forms       import SubmitBookForm
-from gazjango.comments.models   import PublicComment
 from gazjango.misc.view_helpers import get_user_profile
 
 import datetime
 
 def book_details(request, slug):
     book = get_object_or_404(BookListing, slug=slug)
-    tops, mids, lows = Article.published.get_stories(num_top=1, num_mid=3, num_low=0)
     
     return render_to_response('books/details.html', {
         'book': book,
-        'topstory': tops[0],
-        'stories': mids,
-        'comments': PublicComment.visible.order_by('-time')[:3],
         'other_books': BookListing.unfilled.order_by('-pub_date')[:3]
     }, context_instance=RequestContext(request))
 
