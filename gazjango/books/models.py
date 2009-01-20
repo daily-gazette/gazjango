@@ -93,4 +93,4 @@ class BookListing(models.Model):
     
 
 _slugger = set_default_slug(lambda x: x.title)
-signals.post_init.connect(_slugger, sender=BookListing)
+signals.pre_save.connect(_slugger, sender=BookListing)

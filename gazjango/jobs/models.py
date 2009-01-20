@@ -88,4 +88,4 @@ class JobListing(models.Model):
     
 
 _slugger = set_default_slug(lambda x: x.name)
-signals.post_init.connect(_slugger, sender=JobListing)
+signals.pre_save.connect(_slugger, sender=JobListing)
