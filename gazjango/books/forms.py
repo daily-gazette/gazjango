@@ -24,7 +24,7 @@ class SubmitBookForm(forms.ModelForm):
             self.fields['email'] = forms.EmailField()
     
     def clean_cost(self):
-        if not self.cleaned_data['cost'].startswith('$'):
+        if '$' not in self.cleaned_data['cost']:
             self.cleaned_data['cost'] = '$' + self.cleaned_data['cost']
         return self.cleaned_data['cost']
     
