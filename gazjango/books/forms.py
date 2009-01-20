@@ -23,6 +23,11 @@ class SubmitBookForm(forms.ModelForm):
         if needs_email:
             self.fields['email'] = forms.EmailField()
     
+    def clean_cost(self):
+        if not self.cleaned_data['cost'].startswith('$'):
+            self.cleaned_data['cost'] = '$' + self.cleaned_data['cost']
+        return self.cleaned_data['cost']
+    
     class Meta:
         model = BookListing
         fields = ('title', 'departments', 'classes', 'cost',
