@@ -30,22 +30,21 @@ def list_books(request):
 
 
 def mark_as_sold(request, slug):
-    if request.method in ('POST', 'DELETE'):
-        book = get_object_or_404(BookListing, slug=slug)
-        profile = get_user_profile(request)
-        
-        if profile and profile == book.seller:
-            book.sold_at = datetime.datetime.now()
-            book.save()
-            if request.is_ajax():
-                return HttpResponse('success')
-            else:
-                return HttpResponseRedirect(reverse(list_books))
+    book = get_object_or_404(BookListing, slug=slug)
+    profile = get_user_profile(request)
     
-    if request.is_ajax():
-        return 'denied'
+    if profile and profile == book.seller:
+        book.sold_at = datetime.datetime.now()
+        book.save()
+        if request.is_ajax():
+            return HttpResponse('success')
+        else:
+            return HttpResponseRedirect(reverse(list_books))
     else:
-        raise Http404
+        if request.is_ajax():
+            return 'denied'
+        else:
+            raise Http404
 
 
 @login_required
