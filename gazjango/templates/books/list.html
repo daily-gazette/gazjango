@@ -247,7 +247,9 @@ $(function() {
                 [<a class="sell-link" href="{% url books.views.mark_as_sold book.slug %}">mark as sold</a>]
               {% else %}
                 {{ book.seller.name }}
-                (<a href="mailto:{{ book.seller.email|entity_sub }}">{{ book.seller.abbreviated_email|entity_sub }}</a>)
+                {% if book.seller.email %}
+                  (<a href="mailto:{{ book.seller.email|entity_sub }}">{{ book.seller.abbreviated_email|entity_sub }}</a>)
+                {% endif %}
               {% endifequal %}
             </td>
             <td>{% for dept in book.departments.all %}{{ dept.name }}{% if not forloop.last %}, {% endif %}{% endfor %}</td>
