@@ -74,11 +74,11 @@ class Event(models.Model):
         return self.link
     
 
-
+ISSUE_CUTOFF_TIME = datetime.time(15, 0, 0)
 class IssuesManager(models.Manager):
     def populate_issue(self, tomorrow=None):
         if tomorrow is None:
-            tomorrow = datetime.datetime.now().hour > 14
+            tomorrow = datetime.datetime.now().time() > ISSUE_CUTOFF_TIME
         day = datetime.date.today() + datetime.timedelta(days=(1 if tomorrow else 0))
         
         issue, created = self.get_or_create(date=day)
