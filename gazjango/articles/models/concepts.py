@@ -35,13 +35,9 @@ class StoryConcept(models.Model):
     # hardcoded because we have code (namely UnpublishedConceptsManager)
     # that refers to whether the story is complete or not. lame, i know 
     STATUSES = (
-        ('a', 'assigned'),
-        ('i', 'researching'),
-        ('w', 'writing - research mostly done'),
-        ('e', 'revising'),
-        ('s', 'submitted to editors'),
-        ('r', 'significant revisions after editing'),
-        ('p', 'published')
+        ('u', 'unassigned'),
+        ('a', 'assigned / working on it'),
+        ('p', 'published'),
     )
     
     name  = models.CharField(max_length=100)
