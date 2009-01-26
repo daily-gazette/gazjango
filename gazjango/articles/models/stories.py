@@ -288,6 +288,14 @@ class Article(models.Model):
         else:
             return None
     
+    def update_concept_status(self):
+        concept = self.concept
+        if concept:
+            concept.status = ('p' if self.status == 'p' else 'a')
+            for author in self.authors.all():
+                concept.users.add(author)
+            concept.save()
+    
     def __unicode__(self):
         return self.slug
     
@@ -305,6 +313,13 @@ class Article(models.Model):
         app_label = 'articles'
         get_latest_by = 'pub_date'
     
+
+# NOTE: concept updating is a little weird with the admin, because it
+#       saves related authors after post_save signals are called, so new
+#       authors don't exist when this gets run. not generally a big deal,
+#       as it's unimportant and stories usually get saved a lot anyway
+_update_concept = lambda sender, instance, **kwargs: instance.update_concept_status()
+models.signals.post_save.connect(_update_concept, sender=Article)
 
 class Writing(models.Model):
     """
