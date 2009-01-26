@@ -1,69 +1,27 @@
-{% load extras %}
-{% load markup %}
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head profile="http://gmpg.org/xfn/11">
-
-  <title>The Daily Gazette :: Staff Center</title>
-
-    <link rel="stylesheet" href="{% static css page/staff.css %}" type="text/css" media="screen, projection, print" />
-    </head>
-
+    <title>The Daily Gazette :: Daily Email</title>
+</head>
 <body>
-<div id="wrap">
-    <div id="container">
-        <div id="header">
-          <div id="caption">
-            <h1 id="title">The Gazette Staff Center</a></h1>
-            <div id="tagline">Making it easy to manage, edit, and write</div>
-          </div>
-          <!-- navigation START -->
-          <div id="navigation">
-            <ul id="menus">
-              <li><a href="profile.html">Dashboard</a></li>
-              <li><a href="profile.html">Edit Profile</a></li>
-              <li><a href="profile.html">Write a Story</a></li>
-              <li><a href="profile.html">Add Media</a></li>
-            </ul>
-            <div class="fixed"></div>
-          </div>
-          <!-- navigation END -->
-          <div class="fixed"></div>
-        </div>
-        <!-- content START -->
-        <div id="content">
-          <!-- main START -->
-          <div id="main">
-              <div class="post">
-              <h2>Announcements &amp; Minutes</h2>
-              <div class="content">
-                  {% autoescape off %}
-                      {{ minutes.text|textile }}
-                  {% endautoescape %}
-                <div class="fixed"></div>
-              </div>
-            </div>
-              
-            <div class="post">
-              <h2>Your Stories</h2>
-              <div class="content">
-                  <ul>
-                      {% for concept in personal %}
-                      <li><strong>Story:</strong> {{ concept.name }}</a><br />
-                          <strong>Due:</strong> {{ concept.due }}
-                          {% if concept.notes_excerpt %}<br /><strong>Notes: </strong>{{ concept.notes }}{% endif %}</li>
-                      {% endfor %}
-                  </ul>
-                <div class="fixed"></div>
-              </div>
-            </div>
-            
-            <div class="post">
-              <h2>Unclaimed Stories</h2>
-              <div class="content">
+THE DAILY GAZETTE'S DAILY STAFF MAILING<br />
+(sent to staff@daily.swarthmore.edu)<br />
+<br />
+NOTES<br /><br />
+<br />
+{{ minutes.text|textile }}<br />
+<br />
+UPCOMING STORIES<br />
+{% for concept in claimed %}
+<p><strong>Story:</strong> {{ concept.name }}</a><br />
+<strong>Due:</strong> {{ concept.due }}<br />
+{% if concept.notes_excerpt %}<br /><strong>Notes: </strong>{{ concept.notes }}{% endif %}</p>
+{% endfor %}
+<br />         
+UNCLAIMED STORIES<br />
                   {% for concept in unclaimed %}
                       {% ifchanged %}
-                         <h3>{{ concept.due }}</h3>
+                        <br />===== {{ concept.due }} =====<br />
                       {% endifchanged %}
                       <p><strong><a href="http://daily.swarthmore.edu/admin/articles/storyconcept/{{ concept.pk }}/">{{ concept.name }}</a></strong><br />
                       {% if concept.notes_excerpt %}<em>Notes: {{ concept.notes|textile|removetags:"p" }}</em><br />{% endif %}</p>

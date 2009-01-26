@@ -228,6 +228,20 @@ def staff(request,  template="staff/index.html"):
     rc = RequestContext(request)
     return render_to_response(template, data, context_instance=rc)
 
+@staff_required    
+def staff_mail(request,  template="staff/mail.html"):
+    personal, claimed, unclaimed = StoryConcept.unpublished.get_concepts(user="no-user")
+    admin_announcement = Announcement.admin.latest()
+    data = {
+        'minutes': admin_announcement,
+        'unclaimed': unclaimed,
+        'claimed': claimed,
+        'author': user,
+		'unpublished_stories': Article.objects.exclude(status='p')
+    }
+    rc = RequestContext(request)
+    return render_to_response(template, data, context_instance=rc)
+
 
 def search(request):
     "Temporary: redirect to Google search. :/"

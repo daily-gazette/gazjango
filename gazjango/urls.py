@@ -45,6 +45,7 @@ urlpatterns += patterns('articles.views',
     (r'^%(year)s/%(month)s/%(day)s/%(slug)s/email/$'    % reps, 'email_article', {}, 'email'),
     
     (r'^staff/$', 'staff'),
+	(r'^staff/mail/$', 'staff_mail')
 )
 
 urlpatterns += patterns('comments.views',

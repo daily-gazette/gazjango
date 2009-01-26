@@ -1,0 +1,31 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head profile="http://gmpg.org/xfn/11">
+    <title>The Daily Gazette :: Daily Email</title>
+</head>
+<body>
+THE DAILY GAZETTE'S DAILY STAFF MAILING<br />
+(sent to staff@daily.swarthmore.edu)<br />
+<br />
+NOTES<br /><br />
+<br />
+{{ minutes.text|textile }}<br />
+<br />
+UPCOMING STORIES<br />
+{% for concept in claimed %}
+<p><strong>Story:</strong> {{ concept.name }}</a><br />
+<strong>Due:</strong> {{ concept.due }}<br />
+{% if concept.notes_excerpt %}<br /><strong>Notes: </strong>{{ concept.notes }}{% endif %}</p>
+{% endfor %}
+<br />         
+UNCLAIMED STORIES<br />
+{% for concept in unclaimed %}
+{% ifchanged %}
+<br />===== {{ concept.due }} =====<br />
+{% endifchanged %}
+<p>{{ concept.name }}<br />
+{% if concept.notes_excerpt %}Notes: {{ concept.notes|textile|removetags:"p" }}<br />{% endif %}</p>
+{% endfor %}
+
+</body>
+</html>
