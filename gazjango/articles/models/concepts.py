@@ -17,9 +17,8 @@ class UnpublishedConceptsManager(models.Manager):
         """    
         base = base or self
         
-        users = base.filter(users=user).exclude(due__lt=date.today).order_by('due')
-        others = base.exclude(users=user).order_by('due')
-        others = others.exclude(users=None).order_by('due')
+        users = base.filter(users=user).order_by('due')
+        others = base.exclude(users=user).exclude(users=None).order_by('due')
         unclaimed = base.filter(users=None).order_by('due')
         return [users, others, unclaimed]
     
@@ -32,8 +31,6 @@ class StoryConcept(models.Model):
     and comments.
     """
     
-    # hardcoded because we have code (namely UnpublishedConceptsManager)
-    # that refers to whether the story is complete or not. lame, i know 
     STATUSES = (
         ('u', 'unassigned'),
         ('a', 'assigned / working on it'),
@@ -42,8 +39,8 @@ class StoryConcept(models.Model):
     
     name  = models.CharField(max_length=100)
     notes = models.TextField(blank=True)
-    due   = models.DateField(default=date.today)
-    status = models.CharField(max_length=1, choices=STATUSES, default='a')
+    due   = models.DateField(blank=True, null=True, default=None)
+    status = models.CharField(max_length=1, choices=STATUSES, default='u')
     
     users   = models.ManyToManyField(UserProfile, blank=True, related_name="assignments")
     # editors = models.ManyToManyFiled(UserProfile, related_name="concepts_overseen")
