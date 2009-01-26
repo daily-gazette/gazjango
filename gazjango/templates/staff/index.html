@@ -66,7 +66,7 @@
                          <h3>{{ concept.due }}</h3>
                       {% endifchanged %}
                       <p><strong><a href="http://daily.swarthmore.edu/admin/articles/storyconcept/{{ concept.pk }}/">{{ concept.name }}</a></strong><br />
-                      {% if concept.notes_excerpt %}<em>Notes: {{ concept.notes }}</em><br />{% endif %}</p>
+                      {% if concept.notes_excerpt %}<em>Notes: {{ concept.notes|textile|removetags:"p" }}</em><br />{% endif %}</p>
                   {% endfor %}
                 <div class="fixed"></div>
               </div>
