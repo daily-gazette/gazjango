@@ -10,6 +10,18 @@ class UnpublishedConceptsManager(models.Manager):
     def get_query_set(self):
         orig = super(UnpublishedConceptsManager, self).get_query_set()
         return orig.exclude(status='p')
+		
+	def get_upcoming_concepts(self):
+		"""
+		Returns the story concepts from the next 3 days.
+		"""
+		
+		base = None or self
+		
+		claimed = base.exclude(users=None).order_by('due')
+		unclaimed = base.filters(users=None).order_by('due')
+		
+		return [claimed,unclaimed]		
     
     def get_concepts(self, user, base=None):
         """
