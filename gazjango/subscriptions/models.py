@@ -22,6 +22,12 @@ class RSDSubscribersManager(ActiveSubscribersManager):
         return orig.filter(receive='r')
     
 
+class StaffSubscribersManager(ActiveSubscribersManager):
+    def get_query_set(self):
+        orig = super(StaffSubscribersManager, self).get_query_set()
+        return orig.filter(recieve='s')
+    
+
 class Subscriber(models.Model):
     """
     A subscriber, who gets issues in their inbox when we publish. Either 
@@ -47,7 +53,8 @@ class Subscriber(models.Model):
     
     RECEIVE_CHOICES = (
         ('i', 'Issues'),
-        ('r', 'Reserved Students Digest')
+        ('r', 'Reserved Students Digest'),
+        ('s', 'Staff Minutes'),
     )
     receive = models.CharField(max_length=1, choices=RECEIVE_CHOICES, default='i')
     
@@ -70,6 +77,7 @@ class Subscriber(models.Model):
     active = ActiveSubscribersManager()
     issues = IssueSubscribersManager()
     rsd = RSDSubscribersManager()
+    staff = StaffSubscribersManager()
     
     def is_active(self):
         return bool(self.is_confirmed) and not(self.unsubscribed)
