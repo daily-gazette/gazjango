@@ -11,7 +11,7 @@ read resp
 
 echo -n "clearing database..." && \
 $python manage.py sqlclear \
-$($python -c 'import settings; print " ".join(s.split(".")[-1] for s in settings.INSTALLED_APPS if s not in ("gazjango.misc", "gazjango.scrapers", "django.contrib.admindocs", "django.contrib.humanize"))') \
+$($python -c 'import settings; print " ".join(s.split(".")[-1] for s in settings.INSTALLED_APPS if s not in ("gazjango.misc", "gazjango.scrapers", "gazjango.facebook_connect", "django.contrib.admindocs", "django.contrib.humanize"))') \
 | $python manage.py dbshell && \
 echo "done." && \
 echo -n "syncing database..." && \
