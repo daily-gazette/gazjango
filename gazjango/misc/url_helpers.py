@@ -13,4 +13,8 @@ reps = {
     'num': r'(?P<num>\d+)',
     'uid': r'(?P<uidb36>[a-z0-9]+)',
     'token': r'(?P<token>\w+-\w+)',
+    
+    'val-b': r'(?P<val>t(?:rue)?|f(?:alse)|y(?:es)?|n(?:o)?|1|0)',
 }
+
+reps['ymds'] = '%(year)s/%(month)s/%(day)s/%(slug)s' % reps
