@@ -78,6 +78,8 @@
 #story blockquote { quotes: '“' '”' '‘' '’'; }
 #story blockquote p:before { content: open-quote;  }
 #story blockquote p:after  { content: close-quote; }
+#story q:before { content: open-quote;  }
+#story q:after  { content: close-quote; }
 /* it would be better to use no-close-quote after, 
    and close-quote only after the last */
 
