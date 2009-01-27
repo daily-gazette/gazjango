@@ -132,7 +132,9 @@ class UserProfile(models.Model):
     def is_from_swat(self, ip=None):
         if self._from_swat:
             return True
-        elif self.email.endswith('swarthmore.edu') or ip_from_swat(ip):
+        elif (self.is_staff or
+              self.email.endswith('swarthmore.edu') or
+              ip_from_swat(ip)):
             self._from_swat = True
             self.save()
             return True
