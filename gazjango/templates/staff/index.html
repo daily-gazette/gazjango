@@ -1,75 +1,104 @@
+{% load extras %}
+{% load markup %}
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head profile="http://gmpg.org/xfn/11">
-    <title>The Daily Gazette :: Daily Email</title>
+  <title>The Daily Gazette :: Staff Center</title>
+
+  <link rel="stylesheet" href="{% static css page/staff.css %}" type="text/css" media="screen, projection, print" />
 </head>
+
 <body>
-THE DAILY GAZETTE'S DAILY STAFF MAILING<br />
-(sent to staff@daily.swarthmore.edu)<br />
-<br />
-NOTES<br /><br />
-<br />
-{{ minutes.text|textile }}<br />
-<br />
-UPCOMING STORIES<br />
-{% for concept in claimed %}
-<p><strong>Story:</strong> {{ concept.name }}</a><br />
-<strong>Due:</strong> {{ concept.due }}<br />
-{% if concept.notes_excerpt %}<br /><strong>Notes: </strong>{{ concept.notes }}{% endif %}</p>
-{% endfor %}
-<br />         
-UNCLAIMED STORIES<br />
-                  {% for concept in unclaimed %}
-                      {% ifchanged %}
-                        <br />===== {{ concept.due }} =====<br />
-                      {% endifchanged %}
-                      <p><strong><a href="http://daily.swarthmore.edu/admin/articles/storyconcept/{{ concept.pk }}/">{{ concept.name }}</a></strong><br />
-                      {% if concept.notes_excerpt %}<em>Notes: {{ concept.notes|textile|removetags:"p" }}</em><br />{% endif %}</p>
-                  {% endfor %}
-                <div class="fixed"></div>
-              </div>
-            </div>
-            
-          </div>
-          <!-- main END -->
-            <!-- sidebar START -->
-            <div id="sidebar">
-            <!-- sidebar north START -->
-            <div id="northsidebar" class="sidebar">
-                    
-                <div class="widget widget_categories">
-                    <h2>Welcome {{ user.get_full_name }}!</h2>
-                    <h3>Claimed Stories</h3>
-                    <ul>
-                        {% for story in claimed %}
-                        {% ifchanged %}<li><strong>{{ story.due }}</strong></li>{% endifchanged %}
-                        <li><a href="http://daily.swarthmore.edu/admin/articles/storyconcept/{{ story.pk }}/">{{ story.name }}</a>, claimed by {{ story.user_names }} (<em>Status: {{ story.get_status_display }}</em>)</li>
-                        {% endfor %}
-                    </ul>                                     
-                    
-                </div>
-            </div>
-            <!-- sidebar north END -->
-            </div>
-            <!-- sidebar END -->
-          <div class="fixed"></div>
-        </div>
-        <!-- content END -->
-        <!-- footer START -->
-        <div id="footer">
-          <a id="gotop" href="#" onclick="MGJS.goTop();return false;">Top</a>
-          <div id="copyright">
-            Copyright &copy; 2009-2011 The Daily Gazette
-          </div>
-          <div id="themeinfo">
-            &nbsp;
-          </div>
-        </div>
-        <!-- footer END -->
+<div id="wrap">
+  <div id="container">
+    <div id="header">
+      <div id="caption">
+        <h1 id="title">The Gazette Staff Center</a></h1>
+        <div id="tagline">Making it easy to manage, edit, and write</div>
+      </div>
+      <div id="navigation">
+        <ul id="menus">
+          <li><a href="profile.html">Dashboard</a></li>
+          <li><a href="profile.html">Edit Profile</a></li>
+          <li><a href="profile.html">Write a Story</a></li>
+          <li><a href="profile.html">Add Media</a></li>
+        </ul>
+        <div class="fixed"></div>
+      </div>
+      <div class="fixed"></div>
     </div>
-    <!-- container END -->
+    
+    <div id="content">
+      <div id="main">
+        <div class="post">
+          <h2>Announcements &amp; Minutes</h2>
+          <div class="content">
+            {{ minutes.text|textile|safe }}
+            <div class="fixed"></div>
+          </div>
+        </div>
+              
+        <div class="post">
+          <h2>Your Stories</h2>
+          <div class="content">
+            <ul>
+              {% for concept in personal %}
+                <li>
+                  <strong>Story:</strong> {{ concept.name }}</a><br />
+                  <strong>Due:</strong> {{ concept.due }}
+                  {% if concept.notes_excerpt %}<br /><strong>Notes: </strong>{{ concept.notes }}{% endif %}
+                </li>
+              {% endfor %}
+            </ul>
+            <div class="fixed"></div>
+          </div>
+        </div>
+            
+        <div class="post">
+          <h2>Unclaimed Stories</h2>
+          <div class="content">
+            {% for concept in unclaimed %}
+              {% ifchanged %}
+                <h3>{{ concept.due }}</h3>
+              {% endifchanged %}
+              <p>
+                <strong><a href="http://daily.swarthmore.edu/admin/articles/storyconcept/{{ concept.pk }}/">{{ concept.name }}</a></strong><br />
+                {% if concept.notes_excerpt %}<em>Notes: {{ concept.notes|textile|removetags:"p" }}</em><br />{% endif %}
+              </p>
+            {% endfor %}
+            <div class="fixed"></div>
+          </div>
+        </div>
+            
+      </div>
+
+      <div id="sidebar">
+        <div id="northsidebar" class="sidebar">
+          <div class="widget widget_categories">
+            <h2>Welcome, {{ user.get_full_name }}!</h2>
+            <h3>Claimed Stories</h3>
+            <ul>
+              {% for story in claimed %}
+                {% ifchanged %}<li><strong>{{ story.due }}</strong></li>{% endifchanged %}
+                <li><a href="http://daily.swarthmore.edu/admin/articles/storyconcept/{{ story.pk }}/">{{ story.name }}</a>, claimed by {{ story.user_names }} (<em>Status: {{ story.get_status_display }}</em>)</li>
+              {% endfor %}
+            </ul>                    
+          </div>
+        </div>
+      </div>
+      <div class="fixed"></div>
+    </div>
+
+    <div id="footer">
+      <a id="gotop" href="#" onclick="MGJS.goTop();return false;">Top</a>
+      <div id="copyright">
+        Copyright &copy; 2009-2011 The Daily Gazette
+      </div>
+      <div id="themeinfo">&nbsp;</div>
+    </div>
+
+    </div>
 </div>
-<!-- wrap END -->
 
 </body>
 </html>
