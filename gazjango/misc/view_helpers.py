@@ -31,15 +31,15 @@ def filter_by_date(qset, year=None, month=None, day=None, field='pub_date', **ot
 # = getting stuff from requests =
 # ===============================
 
-TRUE_VALUES = set(('yes', 'y', 'true', 't', 1))
-FALSE_VALUES = set(('no', 'n', 'false', 'f', 0))
-def boolean_arg(lookup, arg, default=False):
+TRUE_VALUES = set(('yes', 'y', 'true', 't', '1'))
+FALSE_VALUES = set(('no', 'n', 'false', 'f', '0'))
+def boolean_arg(arg, default=False):
     """
-    Casts `arg` (from `lookup`) to a boolean based on TRUE_VALUES and
+    Casts `arg` to a boolean based on TRUE_VALUES and
     FALSE_VALUES, returning `default` if if it's uncertain.
     """
     try:
-        val = lookup[arg].lower()
+        val = str(arg).lower()
         if val in TRUE_VALUES:
             return True
         elif val in FALSE_VALUES:

@@ -31,7 +31,7 @@ def show_issue(request, issue, plain=False):
     else:
         jobs = JobListing.published.get_for_show(num=5, base_date=issue.date, cutoff=one_week)
     
-    articles = issue.articles_in_order(racy=boolean_arg(request.GET, 'racy', True))
+    articles = issue.articles_in_order(racy=boolean_arg(request.GET['racy'], True))
     try:
         topstory = articles[0]
     except IndexError:
@@ -44,7 +44,7 @@ def show_issue(request, issue, plain=False):
         'lowstories': articles[3:],
         'jobs': jobs,
         'comments': comments[:5],
-        'for_email': boolean_arg(request.GET, 'for_email', False)
+        'for_email': boolean_arg(request.GET['for_email'], False)
     }
     template = "issue/issue." + ('txt' if plain else 'html')
     return render_to_response(template, data)
@@ -106,7 +106,7 @@ def show_rsd(request, year, month, day, plain=False):
         'jobs': jobs,
         'comments': comments[:3],
         'stories': t,
-        'for_email': boolean_arg(request.GET, 'for_email', False)
+        'for_email': boolean_arg(request.GET['for_email'], False)
     }
     template = "issue/rsd." + ('txt' if plain else 'html')
     return render_to_response(template, data)
