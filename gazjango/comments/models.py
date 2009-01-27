@@ -1,17 +1,15 @@
-import django.db
 from django.db                          import models
-from django.db.models                   import Q
-from django.utils.encoding              import smart_str
-from django.contrib.sites.models        import Site
-from django.contrib.contenttypes.models import ContentType
+from django.conf                        import settings
 from django.contrib.contenttypes        import generic
+from django.contrib.contenttypes.models import ContentType
+from django.contrib.sites.models        import Site
+from django.utils.encoding              import smart_str
 
 from gazjango.accounts.models import UserProfile
+from gazjango.misc            import akismet
+from gazjango.misc.helpers    import is_from_swat
 
-from datetime     import datetime
-from gazjango.misc.helpers import is_from_swat
-from gazjango.misc import akismet
-from django.conf   import settings
+import datetime
 
 class CommentError(Exception):
     pass
@@ -113,7 +111,7 @@ class PublicComment(models.Model):
     is_anonymous = property(lambda self: bool(self.name))
     display_name = property(lambda self: self.name or (self.user.name if self.user else ''))
     
-    time = models.DateTimeField(default=datetime.now)
+    time = models.DateTimeField(default=datetime.datetime.now)
     text = models.TextField()
     
     ip_address = models.IPAddressField(null=True)
@@ -269,6 +267,10 @@ class PublicComment(models.Model):
     def get_absolute_url(self):
         return self.subject.get_absolute_url() + \
                ('#c-%d' % self.number) if self.number else ""
+    
+    def get_approve_url(self):
+        # NOTE: tight coupling to comment-approving url
+        return self.subject.get_absolute_url() + 'approve-comment/%s/' % self.number
     
     class Meta:
         permissions = (

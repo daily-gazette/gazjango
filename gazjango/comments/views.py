@@ -1,23 +1,19 @@
 from collections                    import defaultdict
 
-from django.contrib.auth.decorators import permission_required
-from django.contrib.sites.models    import Site
-from django.core.urlresolvers       import reverse
+from django.conf                    import settings
 from django.db.models               import Q
 from django.http                    import HttpResponse, Http404, HttpResponseRedirect
 from django.shortcuts               import render_to_response
 from django.template                import RequestContext
 from django.utils.html              import escape
 
-from gazjango.announcements.models import Announcement
-from gazjango.articles.models      import Article, StoryConcept
+from gazjango.articles.models      import Article
 from gazjango.articles.views       import specific_article
 from gazjango.comments.forms       import make_comment_form
 from gazjango.comments.models      import PublicComment, CommentIsSpam
 from gazjango.misc                 import recaptcha
 from gazjango.misc.view_helpers    import get_ip, get_user_profile, is_robot
-from gazjango.misc.view_helpers    import get_by_date_or_404
-import settings
+from gazjango.misc.view_helpers    import get_by_date_or_404, boolean_arg
 
 
 def comment_page(request):
@@ -136,25 +132,26 @@ def comments_for_article(request, slug, year, month, day, num=None):
     return render_to_response("stories/comments.html", context_instance=rc)
 
 
-def get_comment_text(request, slug, year, month, day, num):
-    story = get_by_date_or_404(Article, year, month, day, slug=slug)
+def _get_comment_or_404(year, month, day, slug, num):
     try:
-        comment = story.comments.get(number=num)
+        return PublicComment.objects.get(article__pub_date__year=year,
+                                         article__pub_date__month=month,
+                                         article__pub_date__day=day,
+                                         article__slug=slug,
+                                         number=num)
     except PublicComment.DoesNotExist:
         raise Http404
-    return HttpResponse(comment.text)
+
+
+def get_comment_text(request, slug, year, month, day, num):
+    return HttpResponse(_get_comment_or_404(year, month, day, slug, num).text)
 
 
 def vote_on_comment(request, slug, year, month, day, num, val):
-    story = get_by_date_or_404(Article, year, month, day, slug=slug)
-    try:
-        comment = story.comments.get(number=num)
-    except PublicComment.DoesNotExist:
-        raise Http404
-    
     if is_robot(request):
         return HttpResponse('sorry, you seem to be a robot, no voting for you!')
     
+    comment = _get_comment_or_404(Article, year, month, day, slug, num)
     positive = (val == 'up') if val in ('up', 'down') else None
     result = comment.vote(positive, ip=get_ip(request), user=get_user_profile(request))
     
@@ -162,4 +159,26 @@ def vote_on_comment(request, slug, year, month, day, num, val):
         return HttpResponse("success" if result else "failure")
     else:
         return HttpResponseRedirect(comment.get_absolute_url())
-        
+
+
+def approve_comment(request, slug, year, month, day, num, val='1'):
+    if not request.user.has_perm('comments.change_publiccomment'):
+        if request.is_ajax():
+            raise Http404
+        else:
+            return HttpResponseRedirect("%s?next_page=%s" % (settings.LOGIN_URL, request.path))
+    
+    comment = _get_comment_or_404(year, month, day, slug, num)
+    approve = boolean_arg(val, default=True)
+    
+    if bool(comment.is_approved) != approve:
+        comment.is_approved = approve
+        comment.save()
+    
+    if request.is_ajax():
+        return render_to_response('comment/authorship.html', {
+            'comment': comment,
+        }, context_instance=RequestContext(request))
+    else:
+        return HttpResponseRedirect(comment.get_absolute_url())
+    

@@ -4,7 +4,9 @@
 
 function fullSetup() {
     setupShowLinks();
+    setupSubmission();
     // setupVoteLinks();
+    setupApproveLinks();
 }
 $(fullSetup);
 
@@ -16,54 +18,58 @@ $(fullSetup);
 var speed = 'normal';
 
 function hideFunctionFor(id) {
-  return function() {
-    $('#c-' + id)
-      .removeClass('shown-comment').addClass('hidden-comment')
-      .find('.commentText').slideUp(speed).end()
-      .find('.showLink')
-        .html('show anyway')
-        .unbind('click')
-        .click(showFunctionFor(id));
-    return false;
-  };
+    return function() {
+        $('#c-' + id)
+            .removeClass('shown-comment').addClass('hidden-comment')
+            .find('.commentText')
+                .slideUp(speed)
+                .end()
+            .find('.showLink')
+                .html('show anyway')
+                .unbind('click')
+                .click(showFunctionFor(id));
+        return false;
+    };
 }
 function showFunctionFor(id) {
-  return function() {
-    $('#c-' + id)
-      .removeClass('hidden-comment').addClass('shown-comment')
-      .find('.commentText').slideDown(speed).end()
-      .find('.showLink')
-        .html('hide')
-        .unbind('click')
-        .click(hideFunctionFor(id));
-    return false;
+    return function() {
+        $('#c-' + id)
+            .removeClass('hidden-comment').addClass('shown-comment')
+            .find('.commentText')
+                .slideDown(speed)
+                .end()
+            .find('.showLink')
+                .html('hide')
+                .unbind('click')
+                .click(hideFunctionFor(id));
+        return false;
   };
 }
 
-function setupShowLinks() {
-  $('.hidden-comment').each(function() {
-    var comment = this;
-    var id = comment.id.substring('2');
-    
-    $(comment)
-      .find('.showLink')
-        .unbind('click')
-        .click(function() {
-            $(comment)
-              .find('.commentText')
+function loadFunctionFor(id) {
+    return function() {
+        alert('loading ' + id);
+        $('#c-' + id)
+            .find('.commentText')
                 .hide()
                 .load('show-comment/' + id + '/', function() {
                     $(this).slideDown(speed);
                 })
                 .removeClass('hidden-comment').addClass('shown-comment')
                 .end()
-              .find('.showLink')
+            .find('.showLink')
                 .html('hide')
                 .unbind('click')
                 .click(hideFunctionFor(id));
-          return false;
-        });
-  });
+        return false;
+    }
+}
+
+function setupShowLinks() {
+    $('.hidden-comment').each(function() {
+        var id = this.id.substring('2');
+        $(this).find('.showLink').unbind('click').click(loadFunctionFor(id));
+    });
 }
 
 
@@ -74,16 +80,17 @@ function setupShowLinks() {
 
 var default_comment_name;
 $(document).ready(function() {
-   default_comment_name = $('input[name="name"]').val();
+    default_comment_name = $('input[name="name"]').val();
 });
 
-function toggleNameDisabled() {
-    namebox = $('input[name="name"]');
-    if (namebox.attr('disabled')) {
-        namebox.attr('disabled', false);
-    } else {
+function syncNameDisabled() {
+    setNameDisabled($('input[name="anonymous"]:checked').length == 0);
+}
+
+function setNameDisabled(disabled) {
+    var namebox = $('input[name="name"]').attr('disabled', disabled);
+    if (disabled) {
         namebox.val(default_comment_name);
-        namebox.attr('disabled', true);
     }
 }
 
@@ -112,6 +119,22 @@ function newComments(speed) {
     });
 }
 
+var textareaIsDefault = true;
+function setupSubmission() {
+    syncNameDisabled();
+    $('input[name="anonymous"]').click(syncNameDisabled);
+    $('input[type=reset]').click(function() {
+        textareaIsDefault = true;
+        setNameDisabled(true);
+    });
+    $('#submitComments textarea')
+        .focus(function() {
+            if (textareaIsDefault) { $(this).val(''); }
+        })
+        .change(function() {
+            textareaIsDefault = false;
+        });
+}
 
 function strStartsWith(start, str) {
     return str.substr(0, start.length) == start;
@@ -128,6 +151,7 @@ function submitComment() {
            if (resp == 'success') {
                newComments();
                $('#commentForm input[type=reset]').click();
+               $()
            } else if (strStartsWith('redirect: ', resp)) {
                window.location = resp.substr('redirect: '.length)
            } else {
@@ -158,3 +182,23 @@ function submitComment() {
 //             });
 //     });
 // }
+
+
+// =============
+// = approving =
+// =============
+
+function setupApproveLinks() {
+    $('.approveLink').click(function(event) {
+        var comment = $(this).parents('.comment');
+        var id = comment.attr('id').substring(2);
+        event.preventDefault();
+        
+        $.post($(this).attr('href'), {}, function(resp) {
+            var loaded = $.trim(comment.find('.commentText').html()) != "";
+            loaded ? showFunctionFor(id)() : loadFunctionFor(id)();
+            
+            comment.find('.commentAuthorship').html(resp);
+        });
+    });
+}

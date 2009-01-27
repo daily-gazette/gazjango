@@ -44,25 +44,7 @@
       </p>
       
       <p class="commentAuthorship">
-        {% if not comment.is_visible %}
-          {% if comment.is_approved %}
-            <em>
-              This comment has been deemed inappropriate or irrelevant by the community or site editors.<br/>
-              The Gazette does not condone its content.
-            </em>
-          {% else %}
-            <em>
-              This comment has not yet been approved by a site administrator.  
-            </em>
-          {% endif %}
-          
-          [<a href="#" class='showLink'>show anyway</a>]
-          <br/>
-        {% endif %}
-        
-        <br />&mdash;
-        {{ comment.linked_name|safe }}
-        <span class="authorDark">| {{ comment.status }}</span>
+        {% include "comment/authorship.html" %}
       </p>
     </div>
   </div>

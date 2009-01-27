@@ -54,6 +54,7 @@ urlpatterns += patterns('comments.views',
     (r'^%(ymds)s/comments/(%(num)s/)?$'                         % reps, 'comments_for_article'),
     (r'^%(ymds)s/show-comment/%(num)s/$'                        % reps, 'get_comment_text'),
     (r'^%(ymds)s/vote-comment/%(num)s/(?P<val>up|down|clear)/$' % reps, 'vote_on_comment'),
+    (r'^%(ymds)s/approve-comment/%(num)s/(?:%(val-b)s/)?$'      % reps, 'approve_comment'),
 )
 
 urlpatterns += patterns('announcements.views',
