@@ -80,13 +80,13 @@
     margin: 0 auto;
     font-style: italic;
 }
-/*#story blockquote, #story q { quotes: '“' '”' '‘' '’'; }
+/* #story blockquote, #story q { quotes: '“' '”' '‘' '’'; }
 #story blockquote p:before { content: open-quote;  }
 #story blockquote p:after  { content: close-quote; }
 #story q:before { content: open-quote;  }
-#story q:after  { content: close-quote; }
+#story q:after  { content: close-quote; } */
 /* it would be better to use no-close-quote after, 
-   and close-quote only after the last */*/
+   and close-quote only after the last */
 
 /**************************************
 
