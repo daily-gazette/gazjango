@@ -75,7 +75,11 @@
 	font-weight: bold;
 }
 
-#story blockquote { quotes: '“' '”' '‘' '’'; }
+#story blockquote p {
+    width: 500px;
+    margin: 0 auto;
+}
+#story blockquote, #story q { quotes: '“' '”' '‘' '’'; }
 #story blockquote p:before { content: open-quote;  }
 #story blockquote p:after  { content: close-quote; }
 #story q:before { content: open-quote;  }
