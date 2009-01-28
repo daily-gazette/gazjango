@@ -56,6 +56,7 @@ class Special(models.Model):
     
     class Meta:
         app_label = 'articles'
+        ordering = ('-date',)
     
 
 def _remove_is_special_flag(sender, instance, **kwargs):
