@@ -161,7 +161,7 @@ jQuery(document).ready(function() {
       <ul id="mycarousel" class="jcarousel-skin-tango">
         {% for special in specials %}
           <li>
-            <h5>{{ special.category.name|safe }} &rsaquo;&rsaquo;</h5>
+            <h5>{{ special.get_category_display }} &rsaquo;&rsaquo;</h5>
             <a href="{{ special.get_target_url }}">
               <img src="{{ special.image.get_absolute_url }}" width="150" height="150" alt="" />
             </a>

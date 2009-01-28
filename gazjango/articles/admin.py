@@ -1,7 +1,7 @@
 from django.contrib import admin
 from gazjango.articles.models import Article, Section, Subsection, Column, Writing
-from gazjango.articles.models import StoryConcept, Special, DummySpecialTarget
-from gazjango.articles.models import SpecialsCategory, SectionSpecial
+from gazjango.articles.models import StoryConcept, Special
+from gazjango.articles.models import DummySpecialTarget, SectionSpecial
 from gazjango.articles.models import PhotoSpread, PhotoInSpread
 
 
@@ -61,11 +61,6 @@ admin.site.register(StoryConcept, StoryConceptAdmin)
 class SpecialsAdmin(admin.ModelAdmin):
     pass
 admin.site.register(Special, SpecialsAdmin)
-
-
-class SpecialsCategoryAdmin(admin.ModelAdmin):
-    pass
-admin.site.register(SpecialsCategory, SpecialsCategoryAdmin)
 
 
 class DummySpecialTargetAdmin(admin.ModelAdmin):

@@ -1,8 +1,10 @@
-from django.db                          import models
-from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes        import generic
+from django.contrib.contenttypes.models import ContentType
+from django.db                          import models
+
 from gazjango.media.models import ImageFile
-from datetime              import datetime
+
+import datetime
 
 class SectionSpecial(models.Model):
     "A special to be advertised on section pages."
@@ -25,29 +27,25 @@ class SectionSpecial(models.Model):
         return self.target.get_absolute_url()
     
 
-class SpecialsCategory(models.Model):
-    name = models.CharField(max_length=100)
-    
-    def __unicode__(self):
-        return self.name
-    
-    class Meta:
-        app_label = 'articles'
-    
-
 class Special(models.Model):
     "A special thing / article / whatever to be advertised on the homepage."
     
-    title    = models.CharField(max_length=80)
-    category = models.ForeignKey(SpecialsCategory)
-    date     = models.DateTimeField(default=datetime.now)
+    title = models.CharField(max_length=80)
+    date  = models.DateTimeField(default=datetime.datetime.now)
+    
+    SPECIALS_CATEGORIES = (
+        ('c', 'Column'),
+        ('f', 'Feature'),
+        ('p', 'Photo Spread'),
+        ('g', 'Gazette'),
+    )
+    category = models.CharField(max_length=1, choices=SPECIALS_CATEGORIES)
     
     image = models.ForeignKey(ImageFile)
     
     target_type = models.ForeignKey(ContentType)
     target_id   = models.PositiveIntegerField()
     target      = generic.GenericForeignKey('target_type', 'target_id')
-    
     
     def get_target_url(self):
         return self.target.get_absolute_url()
