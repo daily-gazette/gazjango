@@ -3,6 +3,7 @@
 from django import forms
 from django.core.mail import *
 from django.core.urlresolvers import reverse
+from django.db.models import *
 from django.http import *
 
 import settings
