@@ -30,11 +30,11 @@ def _make_option(name, type, value):
     return (_value_getter(opt_getter), _value_setter(opt_getter))
 
 
-PUBLISHING_NAME = 'is_publishing'
-is_publishing, set_publishing = _make_option(PUBLISHING_NAME, 'b', True)
+PUBLISHING_OPT_NAME = 'is_publishing'
+is_publishing, set_publishing = _make_option(PUBLISHING_OPT_NAME, 'b', True)
 
-NEW_USER_GROUPS_NAME = 'new_user_groups'
-new_user_groups, set_new_user_groups = _make_option(NEW_USER_GROUPS_NAME, 'm', [])
+NEW_USER_GROUPS_OPT_NAME = 'new_user_groups'
+new_user_groups, set_new_user_groups = _make_option(NEW_USER_GROUPS_OPT_NAME, 'm', [])
 
 
 DEPARTMENTS_TAGGROUP_NAME = 'Departments'
