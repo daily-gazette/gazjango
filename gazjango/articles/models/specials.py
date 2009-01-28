@@ -37,6 +37,7 @@ class Special(models.Model):
         ('c', 'Column'),
         ('f', 'Feature'),
         ('p', 'Photo Spread'),
+        ('v', 'Video'),
         ('g', 'Gazette'),
     )
     category = models.CharField(max_length=1, choices=SPECIALS_CATEGORIES)
