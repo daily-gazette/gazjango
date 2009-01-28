@@ -101,6 +101,13 @@ class Subsection(models.Model):
         articles = self.published_articles().order_by('-pub_date')
         return articles[:num] if num else articles
     
+    def is_column(self):
+        try:
+            self.column
+            return True
+        except Column.DoesNotExist:
+            return False
+    
 
 class Column(Subsection):
     """
