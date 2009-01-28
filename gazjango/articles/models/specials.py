@@ -57,6 +57,13 @@ class Special(models.Model):
         app_label = 'articles'
     
 
+def _remove_is_special_flag(sender, instance, **kwargs):
+    if instance.target_type.model in ('article', 'photospread'):
+        article = instance.target
+        article.is_special = False
+        article.save()
+models.signals.post_delete.connect(_remove_is_special_flag, sender=Special)
+
 class DummySpecialTarget(models.Model):
     """
     For when the thing we're linking to doesn't have a corresponding object

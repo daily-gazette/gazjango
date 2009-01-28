@@ -1,20 +1,23 @@
-from gazjango.diff_match_patch.diff_match_patch import diff_match_patch
-from datetime import datetime
-from gazjango.scrapers.BeautifulSoup import BeautifulSoup
-import re
+import datetime
 import random
+import re
 
-from django.db                   import models
-from django.contrib.auth.models  import User
-from django.contrib.contenttypes import generic
+from django.contrib.auth.models         import User
+from django.contrib.contenttypes        import generic
+from django.contrib.contenttypes.models import ContentType
+from django.core.exceptions             import ObjectDoesNotExist
+from django.db                          import models
 
-from gazjango.accounts.models            import UserProfile
-from gazjango.comments.models            import PublicComment
-from gazjango.media.models               import MediaFile, ImageFile, MediaBucket
-from gazjango.misc.exceptions            import RelationshipMismatch
-from gazjango.articles.models.concepts   import StoryConcept
-import gazjango.articles.formats as formats
+from gazjango.accounts.models          import UserProfile
+from gazjango.articles                 import formats
+from gazjango.articles.models.concepts import StoryConcept
+from gazjango.articles.models.specials import Special
+from gazjango.comments.models          import PublicComment
+from gazjango.diff_match_patch.diff_match_patch import diff_match_patch
+from gazjango.media.models             import MediaFile, ImageFile, MediaBucket
+from gazjango.misc.exceptions          import RelationshipMismatch
 from gazjango.misc.templatetags.extras import join_authors
+from gazjango.scrapers.BeautifulSoup   import BeautifulSoup
 
 
 class PublishedArticlesManager(models.Manager):
@@ -114,7 +117,7 @@ class Article(models.Model):
     text   = models.TextField()
     format = models.ForeignKey('Format')
     
-    pub_date = models.DateTimeField(default=datetime.now)
+    pub_date = models.DateTimeField(default=datetime.datetime.now)
     authors  = models.ManyToManyField(UserProfile, related_name="articles", through='Writing')
     section = models.ForeignKey('articles.Section', related_name="articles")
     subsection = models.ForeignKey('articles.Subsection', related_name="articles", null=True, blank=True)
@@ -135,6 +138,7 @@ class Article(models.Model):
                                        object_id_field='subject_id')
     
     is_racy = models.BooleanField(default=False,help_text="(If checked, will not appear on the faculty dashboard.)")
+    is_special = models.BooleanField(default=False, help_text="Whether this should show up on the specials bar.")
     
     STATUS_CHOICES = (
         ('d', 'Draft'),
@@ -169,6 +173,13 @@ class Article(models.Model):
     def shortest_summary(self):
         """Returns short_summary if we have it, else summary."""
         return (self.short_summary or self.summary)
+    
+    def is_photospread(self):
+        try:
+            self.photospread
+            return True
+        except ObjectDoesNotExist:
+            return False
     
     def allow_edit(self, user):
         return self.authors.filter(user__pk=user.pk).count() > 0 \
@@ -296,6 +307,33 @@ class Article(models.Model):
                 concept.users.add(author)
             concept.save()
     
+    def ensure_special_exists(self):
+        if self.is_special and self.status == 'p' and self.issue_image:
+            title = self.get_title()[:80]
+            if self.is_photospread():
+                category = 'p'
+            elif self.subsection and self.subsection.is_column():
+                category = 'c'
+            else:
+                category = 'f'
+            
+            ct = ContentType.objects.get_for_model(self.__class__)
+            special, created = Special.objects.get_or_create(
+                target_type=ct,
+                target_id=self.pk,
+                defaults=dict(
+                    title=title,
+                    date=self.pub_date,
+                    image=self.issue_image,
+                    category=category
+                )
+            )
+            if not created and not (special.image and special.title and special.category):
+                special.image = special.image or self.issue_image
+                special.title = special.title or title
+                special.category = special.category or category
+                special.save()
+    
     def __unicode__(self):
         return self.slug
     
@@ -320,6 +358,10 @@ class Article(models.Model):
 #       as it's unimportant and stories usually get saved a lot anyway
 _update_concept = lambda sender, instance, **kwargs: instance.update_concept_status()
 models.signals.post_save.connect(_update_concept, sender=Article)
+
+_ensure_special = lambda sender, instance, **kwargs: instance.ensure_special_exists()
+models.signals.post_save.connect(_ensure_special, sender=Article)
+
 
 class Writing(models.Model):
     """
@@ -371,7 +413,7 @@ class ArticleRevision(models.Model):
     article = models.ForeignKey(Article, related_name='revisions')
     reviser = models.ForeignKey(UserProfile, related_name='revisions')
     delta   = models.TextField()
-    date    = models.DateTimeField(default=datetime.now)
+    date    = models.DateTimeField(default=datetime.datetime.now)
     
     class Meta:
         ordering = ['-date']
