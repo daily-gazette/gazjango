@@ -59,7 +59,8 @@ admin.site.register(StoryConcept, StoryConceptAdmin)
 
 
 class SpecialsAdmin(admin.ModelAdmin):
-    pass
+    list_display = ('title', 'category', 'date')
+    list_filter = ('category',)
 admin.site.register(Special, SpecialsAdmin)
 
 
