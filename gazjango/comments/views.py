@@ -151,7 +151,7 @@ def vote_on_comment(request, slug, year, month, day, num, val):
     if is_robot(request):
         return HttpResponse('sorry, you seem to be a robot, no voting for you!')
     
-    comment = _get_comment_or_404(Article, year, month, day, slug, num)
+    comment = _get_comment_or_404(year, month, day, slug, num)
     positive = (val == 'up') if val in ('up', 'down') else None
     result = comment.vote(positive, ip=get_ip(request), user=get_user_profile(request))
     
