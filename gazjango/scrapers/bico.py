@@ -78,7 +78,10 @@ def get_bico_news_directly(order=DEFAULT_ORDER):
             index = 0
             feeds[cat] = (feed, index)
         
-        entry = feed.entries[index]
+        try:
+            entry = feed.entries[index]
+        except IndexError:
+            continue
         
         # awesomely enough, BiCo doesn't really set their authors; they
         # just have the first line "<p><strong>By Joe Schmoe</strong></p>"
