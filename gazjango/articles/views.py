@@ -230,7 +230,7 @@ def staff(request,  template="staff/index.html"):
 
 @staff_required    
 def staff_mail(request,  template="staff/mail.html"):
-    personal, claimed, unclaimed = StoryConcept.unpublished.get_upcoming_concepts()
+    personal, claimed, unclaimed = StoryConcept.unpublished.get_concepts(user="dlytle1")
     admin_announcement = Announcement.admin.latest()
     data = {
         'minutes': admin_announcement,
