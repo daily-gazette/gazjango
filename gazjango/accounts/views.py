@@ -20,9 +20,10 @@ def logout(request, next_page='/'):
 
 def user_details(request, name, template="accounts/profile.html"):
     """Shows a user's profile page."""
-    up = get_object_or_404(UserProfile, user__username=name, user__is_staff=True)
-    rc = RequestContext(request)
-    return render_to_response(template, {'author': up}, context_instance=rc)
+    relevant = UserProfile.objects.exclude(Q(positions=None) & Q(articles=None))
+    return render_to_response(template, {
+        'author': get_object_or_404(relevant.distinct(), user__username=name)
+    }, context_instance=RequestContext(request))
 
 
 def author_completions(request):
