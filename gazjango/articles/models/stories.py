@@ -107,7 +107,7 @@ class Article(models.Model):
     slug        = models.SlugField(unique_for_date="pub_date", max_length=100,
                   help_text="(Part of the URL: /2008/month/day/slug/. Should generally be lowercase and hyphenated, like global-neighbors or strong-endowment-in-recession.)")
     
-    concept = models.ForeignKey(StoryConcept, null=True, blank=True, unique=True,related_name="articles",
+    concept = models.ForeignKey(StoryConcept, null=True, blank=True, related_name="articles",
               help_text="(If this story was assigned via a Story Concept, pick which one so we know you've started work on it.)")
     
     summary = models.TextField()
