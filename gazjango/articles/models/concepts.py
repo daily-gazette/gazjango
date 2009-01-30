@@ -11,28 +11,21 @@ class UnpublishedConceptsManager(models.Manager):
         orig = super(UnpublishedConceptsManager, self).get_query_set()
         return orig.exclude(status='p')
 		
-	def get_upcoming_concepts(self):
-		"""
-		Returns the story concepts from the next 3 days.
-		"""
-		
-		base = None or self
-		
-		claimed = base.exclude(users=None).order_by('due')
-		unclaimed = base.filters(users=None).order_by('due')
-		
-		return [claimed,unclaimed]		
-    
-    def get_concepts(self, user, base=None):
+    def get_concepts(self, user=None, base=None):
         """
         Returns story concepts, ordered by their status and then by their due date.
         """    
         base = base or self
         
-        users = base.filter(users=user).order_by('due')
-        others = base.exclude(users=user).exclude(users=None).order_by('due')
-        unclaimed = base.filter(users=None).order_by('due')
-        return [users, others, unclaimed]
+        if user == None:
+            claimed = base.exclude(users=None).order_by('due')
+    		unclaimed = base.filters(users=None).order_by('due')
+    		return [claimed,unclaimed]	
+    	else:        
+            users = base.filter(users=user).order_by('due')
+            others = base.exclude(users=user).exclude(users=None).order_by('due')
+            unclaimed = base.filter(users=None).order_by('due')
+            return [users, others, unclaimed]
     
 
 class StoryConcept(models.Model):
