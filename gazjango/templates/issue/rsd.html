@@ -78,7 +78,9 @@
                     <td>
                       <font color="#333333" size="2" face="Georgia, Times New Roman, Times, serif">
                         {% for announcement in announcements %}
+                          {% ifequal date announcement.date_start %}<b>{% endifequal %}
                           {{ forloop.counter }}. <a href="#a{{ forloop.counter }}">{{ announcement.title }}</a><br />
+                          {% ifequal date announcement.date_start %}</b>{% endifequal %}
                         {% endfor %}
                       </font>
                     </td>
@@ -111,8 +113,11 @@
             		  					<strong>{{ event.event_date|near_future_date }}</strong>
             		  					<br />
             		  				{% endifchanged %}
-                        
-                          {{ forloop.counter }}. <a href="#e{{ forloop.counter }}">{{ event.title }}</a>{% if event.event_time %} at {{ event.event_time }} {% endif %}<br />
+                           
+                          {% ifequal date event.date_start %}<b>{% endifequal %}
+                          {{ forloop.counter }}. <a href="#e{{ forloop.counter }}">{{ event.title }}</a>{% if event.event_time %} at {{ event.event_time }} {% endif %}
+                          {% ifequal date event.date_start %}</b>{% endifequal %}
+                          <br />
                         {% endfor %}
                       </font>
                     </td>
