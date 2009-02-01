@@ -1,9 +1,9 @@
 from django.db                         import models
 from gazjango.accounts.models          import UserProfile
-from datetime                          import date
 from gazjango.misc.templatetags.extras import join_authors
 from gazjango.announcements.models     import Announcement
 
+import datetime
 
 class UnpublishedConceptsManager(models.Manager):
     "A manager for StoryConcepts that only deals with concepts not yet published."
@@ -11,15 +11,15 @@ class UnpublishedConceptsManager(models.Manager):
         orig = super(UnpublishedConceptsManager, self).get_query_set()
         return orig.exclude(status='p')
         
-    def get_upcoming_concepts(self):
+    def get_upcoming_concepts(self, base=None):
         """
         Returns the story concepts from the next 3 days.
         """
-        
         base = base or self
-        claimed = base.exclude(users=None).order_by('due')
+        end_date = datetime.date.today() + datetime.timedelta(days=3)
+        claimed = base.exclude(users=None).filter(due__lte=end_date).order_by('due')
         unclaimed = base.filters(users=None).order_by('due')
-        return [claimed,unclaimed]      
+        return [claimed, unclaimed]
     
     def get_concepts(self, user, base=None):
         """
