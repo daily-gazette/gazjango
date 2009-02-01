@@ -18,7 +18,7 @@ class UnpublishedConceptsManager(models.Manager):
         base = base or self
         end_date = datetime.date.today() + datetime.timedelta(days=3)
         claimed = base.exclude(users=None).filter(due__lte=end_date).order_by('due')
-        unclaimed = base.filters(users=None).order_by('due')
+        unclaimed = base.filter(users=None).order_by('due')
         return [claimed, unclaimed]
     
     def get_concepts(self, user, base=None):
