@@ -17,7 +17,7 @@ class ImageFileAdminForm(forms.ModelForm):
     class Meta:
         model = ImageFile
     
-    description = forms.CharField(widget=forms.Textarea(attrs={'rows': 3, 'cols': 40}))
+    description = forms.CharField(widget=forms.Textarea(attrs={'rows': 3, 'cols': 60}))
     
     def clean_slug(self):
         if self.cleaned_data['slug'] and self.cleaned_data['bucket']:
