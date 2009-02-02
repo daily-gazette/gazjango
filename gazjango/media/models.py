@@ -70,7 +70,7 @@ class BaseFile(models.Model):
     class Meta:
         unique_together = ('slug', 'bucket')
         abstract = True
-        ordering = ('-pub_date')
+        ordering = ('-pub_date',)
     
 
 
