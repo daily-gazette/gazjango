@@ -11,7 +11,7 @@ class MediaFileAdmin(admin.ModelAdmin):
 admin.site.register(MediaFile, MediaFileAdmin)
 
 class ImageFileAdmin(admin.ModelAdmin):
-    list_display = ('name', 'slug', 'bucket', 'admin_thumbnail_view')
+    list_display = ('name', 'bucket')#, 'admin_thumbnail_view')
     
     filter_horizontal = ('users',)
     fieldsets = (
@@ -26,9 +26,10 @@ class ImageFileAdmin(admin.ModelAdmin):
             'classes': ('collapse',),
         }),
         ('Advanced', {
-            'fields': ('pub_date', 'description'),
+            'fields': ('pub_date', 'slug', 'description'),
             'classes': ('collapse',),
         })
     )
+    prepopulated_fields = { 'slug': ('name',) }
 admin.site.register(ImageFile, ImageFileAdmin)
 
