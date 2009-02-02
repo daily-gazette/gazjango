@@ -13,7 +13,7 @@ class WritingInline(admin.StackedInline):
 
 class StoryAdmin(admin.ModelAdmin):
     date_hierarchy = 'pub_date'
-    exclude = ('media', )
+    exclude = ('media', 'images')
     search_fields = ('headline', 'slug', 'text',)
     
     list_display = ('headline', 'status', 'author_names', 'pub_date', 'position', 'section', 'subsection')
@@ -31,7 +31,7 @@ class PhotoInSpreadInline(admin.StackedInline):
 class PhotoSpreadAdmin(admin.ModelAdmin):
     inlines = [PhotoInSpreadInline, WritingInline]
     list_display = ('headline', 'status', 'author_names', 'position', 'section', 'subsection')
-    exclude = ('media', 'text')
+    exclude = ('media', 'images', 'text')
     
 admin.site.register(PhotoSpread, PhotoSpreadAdmin)
 
