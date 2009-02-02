@@ -103,9 +103,21 @@ class ImageFile(BaseFile, ImageModel):
             self.front_is_tall = img.height > img.width
     
     # optional explicit cropping / resizings
-    _front_data = models.ImageField(upload_to="by_date/%Y/%m/%d", blank=True)
-    _issue_data = models.ImageField(upload_to="by_date/%Y/%m/%d", blank=True)
-    _thumb_data = models.ImageField(upload_to="by_date/%Y/%m/%d", blank=True)
+    _front_data = models.ImageField(upload_to="by_date/%Y/%m/%d", blank=True,
+        help_text="A version of this file to show on the frontpage. Should be 350px wide"
+                  "and 120-200px tall, or 320px tall and 190-250px wide, for top stories."
+                  "Mid stories can be a little smaller, 280x125 or 90x155."
+    )
+    _issue_data = models.ImageField(upload_to="by_date/%Y/%m/%d", blank=True,
+        help_text="A version of this file to show in the issue, if it's the top story. "
+                  "Should be 192x192 pixels. Note that although this can look okay in the "
+                  "issue if it's not exactly square, it'll look weird if the article is "
+                  "a special to show up on the bar on the front page."
+    )
+    _thumb_data = models.ImageField(upload_to="by_date/%Y/%m/%d", blank=True,
+        help_text="A version of this file to show up at the bottom of the page, for top "
+                  "stories only. Should be about 50x80."
+    )
     
     class IKOptions:
         spec_module = 'media.image_specs'
