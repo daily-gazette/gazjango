@@ -4,8 +4,9 @@
 {% block story-content %}
 	<center>
     <div class="spreadImage">
-      <a href="{{ page.photo.get_absolute_url }}" class="lightbox">
-        <img src="{{ page.photo.get_absolute_url }}" alt="" />
+      <a href="{{ page.photo.photospreadimage.url }}" class="lightbox">
+        <img src="{{ page.photo.photospreadimage.url }}" alt=""
+             title="{{ page.photo.credit|before:"Photo by " }}" />
       </a>
     </div>
   </center>

@@ -94,7 +94,8 @@
     <div id="continueBox">
       <div id="top">
         <a href="{{ topstory.get_absolute_url }}">
-          <img src="{{ topstory.thumbnail.get_absolute_url }}" />
+          <img src="{{ topstory.main_image.thumb.url }}"
+               title="{{ topstory.main_image.credit|before:"Photo by " }}" />
         </a>
         <div class="content">
           <h4><a href="{{ topstory.get_absolute_url }}">{{ topstory.get_title }}</a></h4>

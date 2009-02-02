@@ -93,16 +93,16 @@ jQuery(document).ready(function() {
 		</div>
 {% endblock topbar %}
 
-	
+
 {% block content %}
 	<div id="indexMainBox">
 		<div id="indexMainStory">
 		  <a href="{{ topstory.get_absolute_url }}">
-		    <img class="{{ topstory.front_image.get_shape_display }}" 
-		         src="{{ topstory.front_image.get_absolute_url }}" 
-		         title="{{ topstory.headline }}" />
+		    <img class="{{ topstory.main_image.front_tall_or_wide }}" 
+		         src="{{ topstory.main_image.top_front.url }}" 
+		         title="{{ topstory.headline }}" alt="" />
 		  </a>
-			<h2>{% if topstory.section_if_special %}{{ topstory.section_if_special }}: {% endif %}<a href="{{ topstory.get_absolute_url }}">{{topstory.get_title|safe}}</a></h2>
+			<h2>{{ topstory.section_if_special|follow:": " }}<a href="{{ topstory.get_absolute_url }}">{{topstory.get_title|safe}}</a></h2>
 			<p class="byline">
 			  <span class="author">by {{ topstory.authors_in_order|join_authors:"l" }}</span>
 			  <span class="date">| {{ topstory.pub_date|date:"n/j/Y" }}</span>
@@ -137,9 +137,10 @@ jQuery(document).ready(function() {
 	<div id="indexSecondary">
 		{% for story in midstories %}
 		  <a href="{{ story.get_absolute_url }}">
-				<img src="{{ story.front_image.get_absolute_url }}"
-				     class="{{ story.front_image.get_shape_display }}" 
-				     title="{{ story.headline }}" alt="" />
+				<img src="{{ story.main_image.mid_front.url }}"
+				     class="{{ story.main_image.front_tall_or_wide }}" 
+				     title="{{ story.headline }}{{ story.main_image.credit|before:" - Photo by " }}"
+				     alt="" />
 			</a>
 		  <h3>{% if story.section_if_special %}{{ story.section_if_special }}: {% endif %}<a href="{{ story.get_absolute_url }}">{{ story.get_title|safe }}</a></h3>
 		  <p class="byline">
@@ -163,7 +164,8 @@ jQuery(document).ready(function() {
           <li>
             <h5>{{ special.get_category_display }} &rsaquo;&rsaquo;</h5>
             <a href="{{ special.get_target_url }}">
-              <img src="{{ special.image.get_absolute_url }}" width="150" height="150" alt="" />
+              <img src="{{ special.image.issue.url }}" width="150" height="150" 
+                   title="{{ special.image.credit|before:"Photo by "}}" alt="" />
             </a>
             <p><a href="{{ special.get_target_url }}">{{ special.title|safe }}</a></p>
           </li>

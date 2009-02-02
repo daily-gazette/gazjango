@@ -357,11 +357,11 @@
             			<table width="202" border="0" cellpadding="5" cellspacing="0">
 						<tr>
 						  <td width="202" align="center" valign="top" bgcolor="#ffa754">
-							<img src="http://daily.swarthmore.edu{{ topstory.issue_image.get_absolute_url }}" title="{{ topstory.headline }}" alt="Photo for {{ topstory.headline }}" />
+							<img src="http://daily.swarthmore.edu{{ topstory.main_image.issue.url }}" title="{{ topstory.headline }}" alt="Photo for {{ topstory.headline }}" />
 							<br />
-							{% if topstory.issue_image.credit %}
+							{% if topstory.main_image.credit %}
   							<font color="#000000" size="2" face="Arial, Helvetica, sans-serif">
-  							  by <em>{{ topstory.issue_image.credit }}</em>
+  							  by <em>{{ topstory.main_image.credit }}</em>
   							</font>
   						{% endif %}
 						  </td>

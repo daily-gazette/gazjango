@@ -92,8 +92,11 @@ class IssuesManager(models.Manager):
             except WeatherJoke.DoesNotExist:
                 issue.joke = WeatherJoke.objects.latest()
         if not issue.articles.count():
-            last_issue = issue.get_previous_by_date()
-            arts = Article.published.filter(pub_date__gte=last_issue.date, issues=None)
+            try:
+                last_issue_date = issue.get_previous_by_date().date
+            except Issue.DoesNotExist:
+                last_issue_date = datetime.datetime(1900, 1, 1)
+            arts = Article.published.filter(pub_date__gte=last_issue_date, issues=None)
             issue.articles = arts
         
         issue.save()

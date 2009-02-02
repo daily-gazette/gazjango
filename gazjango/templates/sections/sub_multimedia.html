@@ -67,8 +67,8 @@
       <ul>
         {% for story in midstories %}
           <li>
-            <img src="{{ story.front_image.get_absolute_url }}" 
-                 class="{{ story.front_image.get_shape_display }}" 
+            <img src="{{ story.main_image.top_front.url }}" 
+                 class="{{ story.main_image.front_tall_or_wide }}" 
                  title="{{ story.headline }}" alt="" />
             <h3><a href="{{ story.get_absolute_url }}">{{ story.get_title|safe }}</a></h3>
             <p class="byline">

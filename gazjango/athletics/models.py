@@ -26,7 +26,7 @@ class Team(models.Model):
     members = models.TextField('members', blank=True)
     
     club = models.BooleanField(default=False)
-    icon = models.ForeignKey(ImageFile,related_name="teams_with_icon")
+    icon = models.ForeignKey(ImageFile, related_name="teams_with_icon")
     ranked = models.BooleanField(default=False)
     
     def full_team_name(self):
@@ -64,6 +64,7 @@ class Team(models.Model):
     
     def __unicode__(self):
         return self.full_team_name()
+    
 
 class Game(models.Model):
     "Represents a specific game."
