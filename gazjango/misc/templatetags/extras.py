@@ -66,6 +66,9 @@ def join_authors(authors, format='', autoescape=None):
     If the format string includes an "s", positions are shown; if it includes
     an "x", positions are not shown. "s" is default.
     """
+    if not authors:
+        return ''
+    
     limit = None
     link = False
     case = 'u'
@@ -173,6 +176,10 @@ def in_groups_of(lst, num=2):
     """
     return [lst[num*i:num*(i+1)] for i in range((len(lst) + num - 1) // num)]
 
+
+@register.filter
+def before(arg, prefix):
+    return prefix + arg if arg else ''
 
 @register.filter
 def follow(arg, suffix):
