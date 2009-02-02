@@ -111,7 +111,7 @@ class ImageFile(BaseFile, ImageModel):
         spec_module = 'media.image_specs'
         cache_dir = 'resized'
         image_field = 'data'
-        admin_thumbnail_spec = 'thumbnail'
+        admin_thumbnail_spec = 'adminthumb'
     
     # NOTE: ImageFile inherits from both BaseMediaFile and ImageModel, 
     #       and each of these has a Meta class. this might be bad, 

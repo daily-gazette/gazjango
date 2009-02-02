@@ -139,6 +139,13 @@ class Thumbnail(ImageSpec):
     processors = [ResizeThumb, EnhanceThumb]
 
 
+class ResizeAdminThumb(processors.Resize):
+    height = 100
+    width = 200
+
+class AdminThumb(ImageSpec):
+    processors = [ResizeAdminThumb]
+
 # ================
 # = Other Images =
 # ================
