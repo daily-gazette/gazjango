@@ -11,7 +11,7 @@ class MediaFileAdmin(admin.ModelAdmin):
 admin.site.register(MediaFile, MediaFileAdmin)
 
 class ImageFileAdmin(admin.ModelAdmin):
-    list_display = ('name', 'slug', 'bucket', 'get_admin_thumbnail')
+    list_display = ('name', 'slug', 'bucket', 'admin_thumbnail_view')
     
     filter_horizontal = ('users',)
     fieldsets = (
