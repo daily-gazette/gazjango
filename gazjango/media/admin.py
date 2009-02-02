@@ -29,7 +29,7 @@ class ImageFileAdminForm(forms.ModelForm):
     
 
 class ImageFileAdmin(admin.ModelAdmin):
-    list_display = ('name', 'bucket', 'credit')#, 'admin_thumbnail_view')
+    list_display = ('name', 'slug', 'bucket', 'credit')#, 'admin_thumbnail_view')
     
     form = ImageFileAdminForm
     filter_horizontal = ('users',)
