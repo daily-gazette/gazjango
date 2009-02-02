@@ -17,6 +17,8 @@ class ImageFileAdminForm(forms.ModelForm):
     class Meta:
         model = ImageFile
     
+    description = forms.CharField(widget=forms.Textarea(attrs={'rows': 3, 'cols': 40}))
+    
     def clean_slug(self):
         if self.cleaned_data['slug'] and self.cleaned_data['bucket']:
             self.cleaned_data['slug'] = find_unique_name(
@@ -33,7 +35,7 @@ class ImageFileAdmin(admin.ModelAdmin):
     filter_horizontal = ('users',)
     fieldsets = (
         (None, {
-            'fields': ('name', 'bucket', 'data')
+            'fields': ('name', 'bucket', 'data', 'description')
         }),
         ('Authorship', {
             'fields': ('author_name', 'users', 'license_type', 'source_url')
@@ -43,7 +45,7 @@ class ImageFileAdmin(admin.ModelAdmin):
             'classes': ('collapse',),
         }),
         ('Advanced', {
-            'fields': ('pub_date', 'slug', 'description'),
+            'fields': ('pub_date', 'slug'),
             'classes': ('collapse',),
         })
     )
