@@ -35,7 +35,9 @@ class BaseFile(models.Model):
     slug = models.SlugField()
     bucket = models.ForeignKey(MediaBucket, related_name="%(class)ss")
     
-    author_name = models.CharField(max_length=100, blank=True)
+    author_name = models.CharField(max_length=100, blank=True,
+        help_text="Who made this file -- overrides users, below. "
+                  "Use if it was by someone who doesn't have an account.")
     users = models.ManyToManyField(UserProfile, related_name="%(class)s_set", blank=True)
     
     LICENSE_CHOICES = (
