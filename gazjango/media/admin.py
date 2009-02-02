@@ -14,7 +14,7 @@ class ImageFileAdmin(admin.ModelAdmin):
     list_display = ('name', 'slug', 'bucket', 'get_admin_thumbnail')
     
     filter_horizontal = ('users',)
-    fieldsets = {
+    fieldsets = (
         (None, {
             'fields': ('name', 'bucket', 'data')
         }),
@@ -29,6 +29,6 @@ class ImageFileAdmin(admin.ModelAdmin):
             'fields': ('pub_date', 'description'),
             'classes': ('collapse',),
         })
-    }
+    )
 admin.site.register(ImageFile, ImageFileAdmin)
 
