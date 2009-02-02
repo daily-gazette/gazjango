@@ -271,7 +271,11 @@ def section(request, section):
     if sec.slug == 'opinions':
         data['columns'] = Column.objects.order_by('-year', '-semester', 'name')
         f = data['columns'][0]
-        data['curr_columns'] = data['columns'].filter(year=f.year, semester=f.semester)
+        data['curr_columns'] = [
+            column for column
+            in data['columns'].filter(year=f.year, semester=f.semester).select_related(depth=1)
+            if column.articles.filter(status='p').count() > 0
+        ]
     
     template = ("sections/sec_%s.html" % section,
                 "sections/section.html")
