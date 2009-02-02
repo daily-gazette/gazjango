@@ -20,6 +20,18 @@
   <link rel="alternate" type="application/rss+xml" title="Latest Stories" href="/feeds/latest" />
   
   <script src="http://static.ak.connect.facebook.com/js/api_lib/v0.4/FeatureLoader.js.php" type="text/javascript"></script>
+  <script>
+      $(".rollover img").hover(
+       function()
+       {
+        this.src = this.src.replace("_off","_on");
+       },
+       function()
+       {
+        this.src = this.src.replace("_on","_off");
+       }
+      );
+  </script>
   <!--[if lt IE 7]><script src="http://ie7-js.googlecode.com/svn/version/2.0(beta3)/IE7.js" type="text/javascript"></script><![endif]-->
   <!--[if lt IE 8]><script src="http://ie7-js.googlecode.com/svn/version/2.0(beta3)/IE8.js" type="text/javascript"></script><![endif]-->
 
@@ -48,13 +60,13 @@
   	<div id="header">
   		<div id="headerColor">
   			<div id="headerContent">
-  			    <!-- <div id="headerSpecials">
-  			        <a href="http://daily.swarthmore.edu/announcements/" title="Announcements"> <img src="{% static images header/icons/icons_01.jpg %}" /></a>
-  			        <a href="http://daily.swarthmore.edu/jobs/" title="Jobs">                   <img src="{% static images header/icons/icons_02.jpg %}" /></a>
-  			        <a href="http://daily.swarthmore.edu/reviews/" title="Zagette">             <img src="{% static images header/icons/icons_03.jpg %}" /></a>
-  			        <a href="http://daily.swarthmore.edu/comments/" title="Comments">           <img src="{% static images header/icons/icons_04.jpg %}" /></a>
-  			        <a href="http://daily.swarthmore.edu/books/" title="Books">                 <img src="{% static images header/icons/icons_05.png %}" /></a>
-  			    </div>-->
+  			    <div id="headerSpecials">
+  			        <a class="rollover" href="http://daily.swarthmore.edu/announcements/" title="Announcements"> <img src="{% static images header/icons/icons_01_off.png %}" /></a>
+  			        <a class="rollover" href="http://daily.swarthmore.edu/jobs/" title="Jobs">                   <img src="{% static images header/icons/icons_02_off.png %}" /></a>
+  			        <a class="rollover" href="http://daily.swarthmore.edu/reviews/" title="Zagette">             <img src="{% static images header/icons/icons_03_off.png %}" /></a>
+  			        <a class="rollover" href="http://daily.swarthmore.edu/comments/" title="Comments">           <img src="{% static images header/icons/icons_04_off.png %}" /></a>
+  			        <a class="rollover" href="http://daily.swarthmore.edu/books/" title="Books">                 <img src="{% static images header/icons/icons_05_off.png %}" /></a>
+  			    </div>
   			    
   				<div id="headerSubscribe">
   					<p>
