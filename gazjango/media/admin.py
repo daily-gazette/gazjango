@@ -1,5 +1,7 @@
 from django.contrib import admin
+from django         import forms
 from gazjango.media.models import MediaFile, ImageFile, MediaBucket
+from gazjango.misc.helpers import find_unique_name
 
 class MediaBucketAdmin(admin.ModelAdmin):
     pass
@@ -10,9 +12,24 @@ class MediaFileAdmin(admin.ModelAdmin):
     filter_horizontal = ('users',)
 admin.site.register(MediaFile, MediaFileAdmin)
 
-class ImageFileAdmin(admin.ModelAdmin):
-    list_display = ('name', 'bucket')#, 'admin_thumbnail_view')
+
+class ImageFileAdminForm(forms.ModelForm):
+    class Meta:
+        model = ImageFile
     
+    def clean_slug(self):
+        if self.cleaned_data['slug'] and self.cleaned_data['bucket']:
+            self.cleaned_data['slug'] = find_unique_name(
+                basename=self.cleaned_data['slug'],
+                qset=self.cleaned_data['bucket'].imagefiles.all()
+            )
+        return self.cleaned_data['slug']
+    
+
+class ImageFileAdmin(admin.ModelAdmin):
+    list_display = ('name', 'bucket', 'credit')#, 'admin_thumbnail_view')
+    
+    form = ImageFileAdminForm
     filter_horizontal = ('users',)
     fieldsets = (
         (None, {
