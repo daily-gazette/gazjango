@@ -124,14 +124,12 @@ class Article(models.Model):
     
     highlighters = models.ManyToManyField(UserProfile, related_name='top_stories', through='Highlighting')
     
-    front_image = models.ForeignKey(ImageFile, null=True, blank=True,
-                                        related_name="articles_with_front",help_text="(Required for mid and top stories.)")
-    issue_image = models.ForeignKey(ImageFile, null=True, blank=True,
-                                        related_name="articles_with_issue",help_text="(Square image in issues. Requried for top stories.)")
-                                    
-    thumbnail   = models.ForeignKey(ImageFile, null=True, blank=True,
-                                    related_name="articles_with_thumbnail",help_text="(Small image in article footers. Required for top stories.)")
+    main_image = models.ForeignKey(ImageFile, null=True, blank=True,
+                related_name="articles_with_main",
+                help_text="The image which will be resized/cropped for various displays.")
+    
     media  = models.ManyToManyField(MediaFile, related_name="articles", blank=True)
+    images = models.ManyToManyField(ImageFile, related_name="articles", blank=True)
     
     comments = generic.GenericRelation(PublicComment,
                                        content_type_field='subject_type',
@@ -220,7 +218,7 @@ class Article(models.Model):
         return formatter(text)
     
     
-    _img_link = re.compile(r'^((?:img|media)://)?([-\w]+)/([-\w]+)$', re.IGNORECASE)
+    _media_link = re.compile(r'^(?:(img|media)://)?([-\w]+)/([-\w]+)$', re.IGNORECASE)
     def resolved_text(self, revision=None):
         """
         Formats the text (at the revision specified by ``revision``, if
@@ -231,9 +229,9 @@ class Article(models.Model):
         if self.media.count() > 0 or re.search("<img", text, re.IGNORECASE):
             soup = BeautifulSoup(text)
             
-            for image in soup.findAll("img", src=self._img_link):
+            for image in soup.findAll("img", src=self._media_link):
                 image['src'] = self.resolve_media_link(image['src'])
-            for a in soup.findAll("a", href=self._img_link):
+            for a in soup.findAll("a", href=self._media_link):
                 a['href'] = self.resolve_media_link(a['href'], required_scheme=True)
             return unicode(soup)
         else:
@@ -247,9 +245,10 @@ class Article(models.Model):
         '/files/some-bucket/cool-pic'.
         
         We can also use "img://bucket/slug"; this is the required format
-        for links to images (<a href="...">). "media://" is a valid format too.
+        in a link to an image (<a href="...">). Use "media://" if you want
+        a MediaFile.
         """
-        match = self._img_link.match(path)
+        match = self._media_link.match(path)
         if not match:
             return path
         
@@ -257,17 +256,20 @@ class Article(models.Model):
         if required_scheme and not scheme:
             return path
         
+        m2m  = self.media if scheme == "media" else self.images
+        model = MediaFile if scheme == "media" else ImageFile
+        
         try: # self.media should be cached, so we try it first
-            media = self.media.get(bucket__slug=bucket_slug, slug=slug)
-        except MediaFile.DoesNotExist:
+            media = m2m.get(bucket__slug=bucket_slug, slug=slug)
+        except model.DoesNotExist:
             try:
-                media = MediaFile.objects.get(bucket__slug=bucket_slug, slug=slug)
-                self.media.add(media)
-            except ImageFile.DoesNotExist:
+                media = model.objects.get(bucket__slug=bucket_slug, slug=slug)
+                m2m.add(media)
+            except model.DoesNotExist:
                 try:
-                    media = MediaFile.objects.get(bucket__slug='articles', slug=slug)
-                    self.media.add(media)
-                except MediaFile.DoesNotExist:
+                    media = model.get(bucket__slug='articles', slug=slug)
+                    m2m.add(media)
+                except model.DoesNotExist:
                     if complain:
                         raise
                     else:
@@ -308,7 +310,7 @@ class Article(models.Model):
             concept.save()
     
     def ensure_special_exists(self):
-        if self.is_special and self.status == 'p' and self.issue_image:
+        if self.is_special and self.status == 'p' and self.main_image:
             title = self.get_title()[:80]
             if self.is_photospread():
                 category = 'p'
@@ -324,12 +326,12 @@ class Article(models.Model):
                 defaults=dict(
                     title=title,
                     date=self.pub_date,
-                    image=self.issue_image,
+                    image=self.main_image,
                     category=category
                 )
             )
             if not created and not (special.image and special.title and special.category):
-                special.image = special.image or self.issue_image
+                special.image = special.image or self.main_image
                 special.title = special.title or title
                 special.category = special.category or category
                 special.save()
