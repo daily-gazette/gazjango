@@ -35,7 +35,7 @@ class ImageFileAdmin(admin.ModelAdmin):
     filter_horizontal = ('users',)
     fieldsets = (
         (None, {
-            'fields': ('name', 'bucket', 'data', 'description')
+            'fields': ('name', 'bucket', 'data', 'description','front_is_tall')
         }),
         ('Authorship', {
             'fields': ('author_name', 'users', 'license_type', 'source_url')
