@@ -98,10 +98,12 @@ class ImageFile(BaseFile, ImageModel):
     data = models.ImageField(upload_to="by_date/%Y/%m/%d")
     
     front_is_tall = models.BooleanField(default=False)
+    """
     def update_front_is_tall(self):
         img = self._front_data or self.data
         if img:
             self.front_is_tall = img.height > img.width
+    """
     
     # optional explicit cropping / resizings
     _front_data = models.ImageField(upload_to="by_date/%Y/%m/%d", blank=True,
@@ -155,8 +157,8 @@ class ImageFile(BaseFile, ImageModel):
         return "tall" if self.front_is_tall else "wide"
     
 
-_update_front_is_tall = lambda sender, instance, **kwargs: instance.update_front_is_tall()
-signals.pre_save.connect(_update_front_is_tall, sender=ImageFile)
+# _update_front_is_tall = lambda sender, instance, **kwargs: instance.update_front_is_tall()
+# signals.pre_save.connect(_update_front_is_tall, sender=ImageFile)
 
 
 FILE_CLASSES = [MediaFile, ImageFile]
