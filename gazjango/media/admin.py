@@ -23,7 +23,7 @@ class ImageFileAdminForm(forms.ModelForm):
         if self.cleaned_data['slug']:
             self.cleaned_data['slug'] = find_unique_name(
                 basename=self.cleaned_data['slug'],
-                qset=User.objects
+                qset=ImageFile.objects
             )
         return self.cleaned_data['slug']
     
