@@ -20,10 +20,10 @@ class ImageFileAdminForm(forms.ModelForm):
     description = forms.CharField(widget=forms.Textarea(attrs={'rows': 3, 'cols': 60}))
     
     def clean_slug(self):
-        if self.cleaned_data['slug'] and self.bucket:
+        if self.cleaned_data['slug']:
             self.cleaned_data['slug'] = find_unique_name(
                 basename=self.cleaned_data['slug'],
-                qset=self.bucket.imagefiles.all()
+                qset=User.objects
             )
         return self.cleaned_data['slug']
     
