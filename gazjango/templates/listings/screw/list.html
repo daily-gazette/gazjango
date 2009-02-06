@@ -11,7 +11,7 @@ $(function() {
     $('.screw-link').click(function(event) {
         event.preventDefault();
         var link = $(this);
-        var book_name = link.parents('.screw-row').children('td').eq(0).html();
+        var screwee = link.parents('.screw-row').children('td').eq(0).html();
         var confirmed = confirm("Are you sure you want to remove "+screwee+" from the listings?");
       
         if (confirmed) {
