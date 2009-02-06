@@ -33,7 +33,7 @@ def list_screws(request):
         form = SubmitBookForm(needs_email=needs_email)
     
     return render_to_response('listings/screw/listings.html', {
-        'screwer': screw,
+        'screws': screws,
         'screwee': profile,
         'form': form,
     }, context_instance=RequestContext(request))

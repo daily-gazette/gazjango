@@ -1,5 +1,5 @@
 from django.contrib import admin
-from gazjango.books.models import ScrewListing
+from gazjango.screw.models import ScrewListing
 
 class ScrewAdmin(admin.ModelAdmin):
     list_display = ('screwee', 'screwer', 'year', 'screwed_at')
