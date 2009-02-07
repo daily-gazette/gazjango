@@ -105,6 +105,10 @@ urlpatterns += patterns('',
     (r'^books/', include('books.urls')),
 )
 
+urlpatters += patterns('',
+    (r'^feedjack/', include('feedjack.urls')),
+)
+
 urlpatterns += patterns('',
     (r'^screw/', include('screw.urls')),
 )
@@ -156,7 +160,7 @@ if settings.DEBUG:
         (r'^static/js/(?P<path>.*)$',      'serve', {'document_root': path + '/js'}),
         (r'^static/images/(?P<path>.*)$',  'serve', {'document_root': path + '/images'}),
         (r'^static/uploads/(?P<path>.*)$', 'serve', {'document_root': path + '/../uploads'}),
-        
+        (r'^static/feedjack/(?P<path>.*)$',  'serve', {'document_root': path + '/feedjack'}),
         (r'^static/admin/(?P<path>.*)$', 'serve',  {'document_root': settings.ADMIN_MEDIA_PATH})
     )
     
@@ -165,12 +169,10 @@ urlpatterns += patterns('athletics.views',
     (r'^athletics/%(slug)s/$'   % reps, 'team',{},'athletics_team')
 )
 
-urlpatterns += patterns('reviews.views',
-    (r'^reviews/$',                 'reviews',       {}, 'reviews'),
-    (r'^reviews/new/$',             'submit_review'),
-    (r'^reviews/%(slug)s/$' % reps, 'establishment', {}, 'establishment'),
+urlpatterns += patterns('athletics.views',
+    (r'^athletics/$',                   'athletics'),
+    (r'^athletics/%(slug)s/$'   % reps, 'team',{},'athletics_team')
 )
-
 
 # section match should be last, to avoid shadowing others
 urlpatterns += patterns('articles.views',
