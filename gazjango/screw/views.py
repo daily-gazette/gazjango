@@ -28,9 +28,9 @@ def list_screws(request):
                 profile.save()
             form.save_m2m()
             # return HttpResponseRedirect(reverse(book_success))
-            return HttpResponseRedirect(reverse(list_books))
+            return HttpResponseRedirect(reverse(list_screws))
     else:
-        form = SubmitBookForm(needs_email=needs_email)
+        form = SubmitScreweeForm(needs_email=needs_email)
     
     return render_to_response('listings/screw/listings.html', {
         'screws': screws,
