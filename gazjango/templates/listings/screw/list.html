@@ -39,17 +39,16 @@ $(function() {
         <tr>
             <td width="50px">{{ form.screwer.label_tag }}:</th>
             <td>{{ form.screwer }}</td>
+            <td></td>
         </tr>
         {% if form.email %}<tr>
             <td>{{ form.email.label_tag }}:</th>
             <td>{{ form.email }}</td>
+            <td></td>
         </tr>{% endif %}
         <tr>
             <td>{{ form.year.label_tag }}:</th>
             <td>{{ form.year }}</td>
-        </tr>
-        <tr>
-            <td></th>
             <td><input type="submit" value="Submit" /></td>
         </tr>			  
     </table>
