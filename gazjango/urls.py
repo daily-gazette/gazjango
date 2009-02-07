@@ -105,6 +105,10 @@ urlpatterns += patterns('',
     (r'^books/', include('books.urls')),
 )
 
+urlpatterns += patterns('',
+    (r'^screw/', include('screw.urls')),
+)
+
 urlpatterns += patterns('jobs.views',
     (r'^jobs/$', 'list_jobs', {}, 'job_list'),
     (r'^jobs/new/$', 'submit_job', {}, 'submit-job'),
