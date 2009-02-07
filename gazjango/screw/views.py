@@ -32,7 +32,7 @@ def list_screws(request):
     else:
         form = SubmitScreweeForm(needs_email=needs_email)
     
-    return render_to_response('listings/screw/listings.html', {
+    return render_to_response('listings/screw/list.html', {
         'screws': screws,
         'screwee': profile,
         'form': form,
