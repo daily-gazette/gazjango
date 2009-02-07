@@ -105,10 +105,6 @@ urlpatterns += patterns('',
     (r'^books/', include('books.urls')),
 )
 
-urlpatters += patterns('',
-    (r'^feedjack/', include('feedjack.urls')),
-)
-
 urlpatterns += patterns('',
     (r'^screw/', include('screw.urls')),
 )
