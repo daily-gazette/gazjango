@@ -37,6 +37,8 @@ $(function() {
 <form action="" method="post">
     <table class="submission">
         <tr>
+            <td>Screwee:</td>
+            <td>{{ user.get_full_name }}</td>
             <td>{{ form.screwer.label_tag }}:</th>
             <td>{{ form.screwer }}</td>
             <td>{{ form.year.label_tag }}:</th>

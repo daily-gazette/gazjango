@@ -36,6 +36,7 @@ def list_screws(request):
         'screws': screws,
         'screwee': profile,
         'form': form,
+        'user': user,
     }, context_instance=RequestContext(request))
 
 def mark_as_screwed(request, slug):
