@@ -27,6 +27,9 @@ $(function() {
 {% endblock listings_customheader %}
 {% block listings_title %}The Swarthmore Screw{% endblock listings_title %}
 
+
+{% block listings_content %}
+
 {% if form.non_field_errors %}
     <p>{{ form.non_field_errors }}</p>
 {% endif %}
@@ -52,10 +55,8 @@ $(function() {
     </table>
 </form>
 
-
-{% block listings_content %}
     <table id="review-listings" cellpadding="0" cellspacing="0" border="0" class="sortable-onload-0-4 rowstyle-alt colstyle-alt no-arrow">
-      <caption>Screw listings</caption>
+      <caption>Screw Listings</caption>
       <thead>
         <tr>
           <th class="sortable">Screwee</th>
