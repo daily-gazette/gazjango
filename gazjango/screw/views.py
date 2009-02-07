@@ -12,7 +12,7 @@ import datetime
 
 @login_required
 def list_screws(request):
-    books = ScrewListing.published.filter(screwed_at=None).order_by('-pub_date')
+    screws = ScrewListing.published.filter(screwed_at=None).order_by('-pub_date')
     profile = get_user_profile(request)
     
     needs_email = not request.user.email
