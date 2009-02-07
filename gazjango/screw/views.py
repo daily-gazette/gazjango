@@ -55,5 +55,5 @@ def mark_as_screwed(request, slug):
         else:
             raise Http404
 
-def book_success(request, template="listings/screw/success.html"):
+def screw_success(request, template="listings/screw/success.html"):
     return render_to_response(template, {}, context_instance=RequestContext(request))
