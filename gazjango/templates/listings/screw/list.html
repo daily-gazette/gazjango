@@ -37,14 +37,14 @@ $(function() {
 <form action="" method="post">
     <table class="submission">
         <tr>
-            <td>Screwee:</td>
+            <td><strong>Screwee:</strong></td>
             <td>{{ user.get_full_name }}</td>
-            <td>{{ form.screwer.label_tag }}:</th>
+            <td><strong>{{ form.screwer.label_tag }}:</strong></th>
             <td>{{ form.screwer }}</td>
-            <td>{{ form.year.label_tag }}:</th>
+            <td><strong>{{ form.year.label_tag }}:</strong></th>
             <td>{{ form.year }}</td>
             {% if form.email %}
-                <td>{{ form.email.label_tag }}:</th>
+                <td><strong>{{ form.email.label_tag }}:</strong></th>
                 <td>{{ form.email }}</td>
             {% endif %}
             <td><input type="submit" value="Submit" /></td>
