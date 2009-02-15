@@ -105,6 +105,12 @@ urlpatterns += patterns('',
     (r'^books/', include('books.urls')),
 )
 
+urlpatterns += patterns('reviews.views', 
+    (r'^reviews/$',                 'reviews',       {}, 'reviews'), 
+    (r'^reviews/new/$',             'submit_review'), 
+    (r'^reviews/%(slug)s/$' % reps, 'establishment', {}, 'establishment'),
+)
+
 urlpatterns += patterns('',
     (r'^screw/', include('screw.urls')),
 )
