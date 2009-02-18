@@ -115,13 +115,13 @@ class Article(models.Model):
     long_summary  = models.TextField(blank=True)
     
     text   = models.TextField(help_text="""
-    Links: &lt;a href="URL"&gt;Link text&lt;/a&gt;
-    Placing images: &lt;div class="alignment size"&gt;&lt;img src="img://bucket/slug/" /&gt;by Photographer&lt;/div&gt;
-    &nbsp;&nbsp;Alignment: either imgLeft or imgRight
-    &nbsp;&nbsp;Size: zero through fifty, in increments of five (ex. thirtyfive)
-    &nbsp;&nbsp;Bucket and Slug: From a previously uploaded image
-    &nbsp;&nbsp;Photographer: Add the photographer's name.
-    Italics: _italicized text_
+    Links: &lt;a href="URL"&gt;Link text&lt;/a&gt;<br />
+    Placing images: &lt;div class="alignment size"&gt;&lt;img src="img://bucket/slug/" /&gt;by Photographer&lt;/div&gt;<br />
+    &nbsp;&nbsp;Alignment: either imgLeft or imgRight<br />
+    &nbsp;&nbsp;Size: zero through fifty, in increments of five (ex. thirtyfive)<br />
+    &nbsp;&nbsp;Bucket and Slug: From a previously uploaded image<br />
+    &nbsp;&nbsp;Photographer: Add the photographer's name.<br />
+    Italics: _italicized text_<br />
     Bold: *bold text*
     """)
     format = models.ForeignKey('Format')

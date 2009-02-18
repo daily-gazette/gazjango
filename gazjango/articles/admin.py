@@ -25,10 +25,12 @@ class StoryAdmin(admin.ModelAdmin):
             'fields':('headline','slug','status','concept','summary','text','format','section','subsection','main_image','position','possible_position')
         }),
         ('Top Stories', {
-            'fields': ('short_title','short_summary','long_summary','is_special')
+            'fields': ('short_title','short_summary','long_summary','is_special'),
+            'classes': ('collapse',),
         }),
         ('Advanced', {
-            'fields': ('pub_date','is_racy')
+            'fields': ('pub_date','is_racy'),
+            'classes': ('collapse',),
         })
     )
     
