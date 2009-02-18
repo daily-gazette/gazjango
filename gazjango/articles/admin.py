@@ -20,9 +20,20 @@ class StoryAdmin(admin.ModelAdmin):
     list_filter = ('status', 'position', 'possible_position', 'section', 'subsection')
     ordering = ('-pub_date',)
     
+    fieldsets = (
+        (None, {
+            'fields':('headline','slug','status','concept','summary','text','format','section','subsection','main_image','position','possible_position')
+        }),
+        ('Top Stories', {
+            'fields': ('short_title','short_summary','long_summary','is_special')
+        }),
+        ('Advanced', {
+            'fields': ('pub_date','is_racy')
+        })
+    )
+    
     inlines = [WritingInline]
 admin.site.register(Article, StoryAdmin)
-
 
 class PhotoInSpreadInline(admin.StackedInline):
     model = PhotoInSpread
@@ -34,10 +45,6 @@ class PhotoSpreadAdmin(admin.ModelAdmin):
     exclude = ('media', 'images', 'text')
     
 admin.site.register(PhotoSpread, PhotoSpreadAdmin)
-
-
-
-
 
 class SectionAdmin(admin.ModelAdmin):
     pass
