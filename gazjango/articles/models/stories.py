@@ -110,7 +110,7 @@ class Article(models.Model):
     concept = models.ForeignKey(StoryConcept, null=True, blank=True, related_name="articles",
               help_text="(If this story was assigned via a Story Concept, pick which one so we know you've started work on it.)")
     
-    summary = models.TextField(min_length=50)
+    summary = models.TextField()
     short_summary = models.CharField(max_length=150, blank=True,help_text="(Only needed for top stories, used in article footers.)")
     long_summary  = models.TextField(blank=True)
     
