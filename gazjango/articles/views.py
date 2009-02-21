@@ -251,6 +251,25 @@ def staff_mail(request, template="staff/mail.html"):
     rc = RequestContext(request)
     return render_to_response(template, data, context_instance=rc)
 
+@staff_required
+def concept_save_page(request, template="staff/submit.html"):
+    if request.method == 'POST':
+        form = ConceptSaveForm(request.POST)
+        if form.is_valid():
+            # Create or get concept
+            concept, dummy = StoryConcept.objects.get_or_create(
+                name  = form.clean_data['name']            
+            )
+            concept.users  = form.clean_data['users']
+            concept.notes  = form.clean_data['text']
+            concept.due    = form.clean_data['due']
+            concept.status = "u"
+    else:
+        form = ConceptSaveForm()
+    data = RequestContext(request, {
+        'form': form,
+    })
+    return render_to_response(template, data, context_instance=rc)
 
 def search(request):
     "Temporary: redirect to Google search. :/"
