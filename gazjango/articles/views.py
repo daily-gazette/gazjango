@@ -228,7 +228,6 @@ def staff(request,  template="staff/index.html"):
     else:
         form = SubmitStoryConcept()
     data = {
-        'form': form,
         'minutes': admin_announcement,
         'personal': personal,
         'unclaimed': unclaimed,
