@@ -96,7 +96,7 @@
         <div id="northsidebar" class="sidebar">
           <div class="widget widget_categories">
             <h2>Welcome, {{ user.get_full_name }}!</h2>
-            <h3>Claimed Stories</h3>
+            <h3>Stories</h3>
             <ul>
               {% for story in claimed %}
                 {% ifchanged %}
@@ -106,7 +106,7 @@
                 {% endifchanged %}
                 <li><a href="http://daily.swarthmore.edu/admin/articles/storyconcept/{{ story.pk }}/">{{ story.name }}</a>,
                      claimed by {{ story.user_names }}
-                     - [ <a href="http://daily.swarthmore.edu/staff/new/?name={{ story.name|urlencode }}" class="edit">edit</a> ]</li>
+                     - [ <a href="http://daily.swarthmore.edu/staff/new/?ajax&name={{ story.name|urlencode }}" class="edit">edit</a> ]</li>
               {% endfor %}
             </ul>                    
           </div>
