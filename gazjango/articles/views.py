@@ -228,13 +228,13 @@ def staff(request,  template="staff/index.html"):
     else:
         form = SubmitStoryConcept()
     data = {
+        'form': form,
         'minutes': admin_announcement,
         'personal': personal,
         'unclaimed': unclaimed,
         'claimed': claimed,
         'author': user,
 		'unpublished_stories': Article.objects.exclude(status='p')
-		'form':form,
     }
     rc = RequestContext(request)
     return render_to_response(template, data, context_instance=rc)
