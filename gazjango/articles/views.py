@@ -261,8 +261,6 @@ def concept_save_page(request, template="staff/submit.html"):
             return HttpResponseRedirect('/staff/')
     elif request.GET.has_key('name'):
         name = request.GET['name']
-        notes = ''
-        due = ''
         try:
             concept = StoryConcepts.objects.get(name=name)
             notes = concept.notes
