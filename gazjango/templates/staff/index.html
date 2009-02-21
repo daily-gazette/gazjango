@@ -101,7 +101,7 @@
                     <strong>{{ story.due }}</strong>
                     <ul>
                 {% endifchanged %}
-                <li><a href="http://daily.swarthmore.edu/admin/articles/storyconcept/{{ story.pk }}/">{{ story.name }}</a>, claimed by {{ story.user_names }} (<em>Status: {{ story.get_status_display }}</em>)</li>
+                <li><a href="http://daily.swarthmore.edu/admin/articles/storyconcept/{{ story.pk }}/">{{ story.name }}</a>, claimed by {{ story.user_names }}</li>
               {% endfor %}
             </ul>                    
           </div>

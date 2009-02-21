@@ -44,6 +44,7 @@ urlpatterns += patterns('articles.views',
     (r'^%(ymds)s/print/$'    % reps, 'article', {'print_view': True}, 'print'),
     (r'^%(ymds)s/email/$'    % reps, 'email_article', {}, 'email'),
     
+    (r'^staff/new/$', 'concept_save_page'),
     (r'^staff/$', 'staff'),
     (r'^staff/mail/$', 'staff_mail'),
 )
