@@ -17,6 +17,8 @@ class SubmitStoryConcept(forms.ModelForm):
         fields = ('name','due')
     
 class ConceptSaveForm(forms.Form):
+    model = StoryConcept
+    
     name  = forms.CharField(label = 'Concept',   widget=forms.TextInput(attrs={'size': 64}), required=True)
     notes = forms.CharField(label = 'Notes',     widget=forms.Textarea( attrs={'cols': 65}), required=False)
     due   = forms.CharField(label = 'Due Date',  widget=forms.TextInput(attrs={'size': 15}), required=False)
