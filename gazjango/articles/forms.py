@@ -21,17 +21,3 @@ class ConceptSaveForm(forms.Form):
     notes= forms.CharField(label = 'Notes',     widget=forms.Textarea( attrs={'cols': 65}), required=True)
     due  = forms.CharField(label = 'Due Date',  widget=forms.TextInput(attrs={'size': 15})               )
     users = forms.ModelMultipleChoiceField(queryset=User.objects.all(), widget=admin_widgets.FilteredSelectMultiple)
-    
-    
-    users = forms.MultipleChoiceField(
-        
-    )
-    
-    departments = forms.MultipleChoiceField(
-        widget=admin_widgets.FilteredSelectMultiple('departments', False),
-        required=False
-    )
-    self.fields['departments'].choices = [
-        (tag.pk, tag.longest_name())
-        for tag in departments_taggroup().tags.all()
-    ]
