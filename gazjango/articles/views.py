@@ -257,8 +257,25 @@ def concept_save_page(request, template="staff/submit.html"):
     if request.method == 'POST':
         form = ConceptSaveForm(request.POST)
         if form.is_valid():
-            concept = _concept_save(request, form)
-            return HttpResponseRedirect('/staff/new/')
+            concept = form.save(commit=False)
+            concept.save()
+            
+            user = get_user_profile(request)
+            personal, claimed, unclaimed = StoryConcept.unpublished.get_concepts(user=user)
+            admin_announcement = Announcement.admin.latest()
+            form = SubmitStoryConcept()
+            
+            data = {
+                'form': form,
+                'minutes': admin_announcement,
+                'personal': personal,
+                'unclaimed': unclaimed,
+                'claimed': [concept],
+                'author': user,
+        		'unpublished_stories': Article.objects.exclude(status='p')
+            }
+            rc = RequestContext(request)
+            return render_to_response("staff/index.html", data, context_instance=rc)
         else:
             return HttpResponse('failure')
     elif request.GET.has_key('name'):
@@ -279,26 +296,17 @@ def concept_save_page(request, template="staff/submit.html"):
             'due': due,
             'users': users,
         })
+        data = {
+            'form': form,
+        }
+        rc = RequestContext(request)
+        return render_to_response("staff/concept_save_form.html", data, context_instace=rc)
     else:
         form = ConceptSaveForm()
     data = { 'form': form }
     rc = RequestContext(request)
     return render_to_response(template, data, context_instance=rc)
- 
-@staff_required
-def _concept_save(request, form):
-    form = ConceptSaveForm(request.POST)
-    # Create or get concept
-    concept, dummy = StoryConcept.objects.get_or_create(
-        name  = form.clean_data['name']            
-    )
-    concept.users  = form.clean_data['users']
-    concept.notes  = form.clean_data['text']
-    concept.due    = form.clean_data['due']
-    concept.status = "u"
-    concept.save()
-    return concept
-
+    
 def search(request):
     "Temporary: redirect to Google search. :/"
     s = request.GET.get('s', '')
