@@ -103,7 +103,11 @@
             <h3>Claimed Stories</h3>
             <ul>
               {% for story in claimed %}
-                {% ifchanged %}<li><strong>{{ story.due }}</strong></li>{% endifchanged %}
+                {% ifchanged %}
+                    </ul>
+                    <strong>{{ story.due }}</strong>
+                    <ul>
+                {% endifchanged %}
                 <li><a href="http://daily.swarthmore.edu/admin/articles/storyconcept/{{ story.pk }}/">{{ story.name }}</a>, claimed by {{ story.user_names }} (<em>Status: {{ story.get_status_display }}</em>)</li>
               {% endfor %}
             </ul>                    
