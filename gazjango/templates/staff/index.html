@@ -18,10 +18,10 @@
       </div>
       <div id="navigation">
         <ul id="menus">
-          <li><a href="profile.html">Dashboard</a></li>
-          <li><a href="profile.html">Edit Profile</a></li>
-          <li><a href="profile.html">Write a Story</a></li>
-          <li><a href="profile.html">Add Media</a></li>
+          <li><a href="staff.html">Dashboard</a></li>
+          <li><a href="http://daily.swarthmore.edu/admin/accounts/userprofile/">Edit Profile</a></li>
+          <li><a href="http://daily.swarthmore.edu/admin/articles/article/add/">Write a Story</a></li>
+          <li><a href="http://daily.swarthmore.edu/admin/media/imagefile/add/">Add Media</a></li>
         </ul>
         <div class="fixed"></div>
       </div>
@@ -30,46 +30,70 @@
     
     <div id="content">
       <div id="main">
-        <div class="post">
-          <h2>Announcements &amp; Minutes</h2>
-          <div class="content">
-            {{ minutes.text|textile|safe }}
-            <div class="fixed"></div>
-          </div>
-        </div>
-              
-        <div class="post">
-          <h2>Your Stories</h2>
-          <div class="content">
-            <ul>
-              {% for concept in personal %}
-                <li>
-                  <strong>Story:</strong> {{ concept.name }}</a><br />
-                  <strong>Due:</strong> {{ concept.due }}
-                  {% if concept.notes_excerpt %}<br /><strong>Notes: </strong>{{ concept.notes }}{% endif %}
-                </li>
+          <div class="post">
+              <h2>Submit a Story</h2>
+              <div class="content">
+                  {% if form.non_field_errors %}
+                    <p>{{ form.non_field_errors }}</p>
+                  {% endif %}
+                  <form action="" method="post">
+                        <table class="submission">
+                            <tr>
+                                <td><strong>Concept Name:</strong></td>
+                                <td>{{ form.name }}</td>
+                                <td><strong>Concept Due Date:</strong></th>
+                                <td>{{ form.date }}</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Notes:</strong></td>
+                                <td colspan="3">{{ form.notes }}</td>
+                            </tr>
+                            <tr>
+                                <td colspan="3">&nbsp;</td>
+                                <td><input type="submit" value="Submit" /></td>
+                            </tr>		  
+                        </table>
+                    </form>    
+                <div class="fixed"></div>
+              </div>
+         </div>
+       <div class="post">
+            <h2>Your Stories</h2>
+            <div class="content">
+              <ul>
+                {% for concept in personal %}
+                  <li>
+                    <strong>Story:</strong> <a href="http://daily.swarthmore.edu/admin/articles/storyconcept/{{ concept.pk }}/">{{ concept.name }}</a><br />
+                    <strong>Due:</strong> {{ concept.due }}
+                    {% if concept.notes_excerpt %}<br /><strong>Notes: </strong>{{ concept.notes }}{% endif %}
+                  </li>
+                {% endfor %}
+              </ul>
+              <div class="fixed"></div>
+            </div>
+       </div>
+       <div class="post">
+            <h2>Unclaimed Stories</h2>
+            <div class="content">
+              {% for concept in unclaimed %}
+                {% ifchanged %}
+                  <h3>{{ concept.due }}</h3>
+                {% endifchanged %}
+                <p>
+                  <strong><a href="http://daily.swarthmore.edu/admin/articles/storyconcept/{{ concept.pk }}/">{{ concept.name }}</a></strong><br />
+                  {% if concept.notes_excerpt %}<em>Notes: {{ concept.notes|textile|removetags:"p" }}</em><br />{% endif %}
+                </p>
               {% endfor %}
-            </ul>
-            <div class="fixed"></div>
-          </div>
-        </div>
-            
-        <div class="post">
-          <h2>Unclaimed Stories</h2>
-          <div class="content">
-            {% for concept in unclaimed %}
-              {% ifchanged %}
-                <h3>{{ concept.due }}</h3>
-              {% endifchanged %}
-              <p>
-                <strong><a href="http://daily.swarthmore.edu/admin/articles/storyconcept/{{ concept.pk }}/">{{ concept.name }}</a></strong><br />
-                {% if concept.notes_excerpt %}<em>Notes: {{ concept.notes|textile|removetags:"p" }}</em><br />{% endif %}
-              </p>
-            {% endfor %}
-            <div class="fixed"></div>
-          </div>
-        </div>
-            
+              <div class="fixed"></div>
+            </div>
+       </div>
+       <div class="post">
+            <h2>Announcements &amp; Minutes</h2>
+            <div class="content">
+              {{ minutes.text|textile|safe }}
+              <div class="fixed"></div>
+            </div>
+        </div> 
       </div>
 
       <div id="sidebar">

@@ -14,6 +14,7 @@ from gazjango.misc.view_helpers import get_ip, get_user_profile
 
 from gazjango.articles.models      import Article, Special, PhotoSpread, StoryConcept
 from gazjango.articles.models      import Section, Subsection, Column
+from gazjango.articles.forms       import SubmitStoryConcept
 from gazjango.announcements.models import Announcement
 from gazjango.comments.models      import PublicComment
 from gazjango.comments.forms       import make_comment_form
@@ -217,6 +218,15 @@ def staff(request,  template="staff/index.html"):
     user = get_user_profile(request)
     personal, claimed, unclaimed = StoryConcept.unpublished.get_concepts(user=user)
     admin_announcement = Announcement.admin.latest()
+    if request.method == 'POST':
+        form = SubmitStoryConcept(request.POST)
+        if form.is_valid():
+            concept = form.save(commit=False)
+            concept.save()
+            form.save_m2m()
+            return HttpResponseRedirect(reverse(staff))
+    else:
+        form = SubmitStoryConcept()
     data = {
         'minutes': admin_announcement,
         'personal': personal,
@@ -224,6 +234,7 @@ def staff(request,  template="staff/index.html"):
         'claimed': claimed,
         'author': user,
 		'unpublished_stories': Article.objects.exclude(status='p')
+		'form':form,
     }
     rc = RequestContext(request)
     return render_to_response(template, data, context_instance=rc)
