@@ -14,10 +14,7 @@
     </head>
 
     <body>
-        <form method="post" action=".">
-            {{ form.as_p }}
-            <input type="submit" value="save" />
-        </form>
+        {% include 'staff/concept_save_form.html' %}
         
         <script type="text/javascript">
         	var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");

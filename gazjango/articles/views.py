@@ -259,6 +259,8 @@ def concept_save_page(request, template="staff/submit.html"):
         if form.is_valid():
             concept = _concept_save(request, form)
             return HttpResponseRedirect('/staff/')
+        else:
+            return HttpResponse('failure')
     elif request.GET.has_key('name'):
         name  = request.GET['name']
         notes = ""
@@ -279,6 +281,7 @@ def concept_save_page(request, template="staff/submit.html"):
         })
     else:
         form = BookmarkSaveForm()
+    data = { 'form': form }
     rc = RequestContext(request)
     return render_to_response(template, data, context_instance=rc)
  
