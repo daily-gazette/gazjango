@@ -20,4 +20,5 @@ class ConceptSaveForm(forms.Form):
     name = forms.CharField(label = 'Concept',   widget=forms.TextInput(attrs={'size': 64}), required=True)
     notes= forms.CharField(label = 'Notes',     widget=forms.Textarea( attrs={'cols': 65}), required=True)
     due  = forms.CharField(label = 'Due Date',  widget=forms.TextInput(attrs={'size': 15})               )
-    users = forms.ModelMultipleChoiceField(queryset=User.objects.all(), widget=admin_widgets.FilteredSelectMultiple)
+    userSet = User.objects.all()
+    users = forms.ModelMultipleChoiceField(label = 'Users', widget=admin_widgets.FilteredSelectMultiple(userSet, False), required=True)
