@@ -280,21 +280,6 @@ def concept_save_page(request, template="staff/submit.html"):
         form = BookmarkSaveForm()
     rc = RequestContext(request)
     return render_to_response(template, data, context_instance=rc)
-
-@staff_required
-def _concept_save(request, template="staff/submit.html"):
-    if request.method == 'POST':
-        form = ConceptSaveForm(request.POST)
-        if form.is_valid():
-            concept = _concept_save(request, form)
-            return HttpResponseRedirect('/staff/')
-    else:
-        form = ConceptSaveForm()
-    data = RequestContext(request, {
-        'form': form,
-    })
-    rc = RequestContext(request)
-    return render_to_response(template, data, context_instance=rc)
  
 @staff_required
 def _concept_save(request, form):
