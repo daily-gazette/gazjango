@@ -1,6 +1,6 @@
 function concept_edit() {
     var item = $(this).parent();
-    var url = item.find(".title").attr("href");
+    var name = item.find(".claimedTitle").attr("name");
     item.load("/staff/new/?ajax&name=" + escape(name),null, function () {
         $("#save-form").submit(concept_save);
     });
