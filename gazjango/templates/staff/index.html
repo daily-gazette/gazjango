@@ -30,33 +30,6 @@
     
     <div id="content">
       <div id="main">
-          <div class="post">
-              <h2>Submit a Story</h2>
-              <div class="content">
-                  {% if form.non_field_errors %}
-                    <p>{{ form.non_field_errors }}</p>
-                  {% endif %}
-                  <form action="" method="post">
-                        <table class="submission">
-                            <tr>
-                                <td><strong>Concept:</strong></td>
-                                <td>{{ form.name }}</td>
-                                <td><strong>Due:</strong></th>
-                                <td>{{ form.due }}</td>
-                            </tr>
-                            <tr>
-                                <td><strong>Notes:</strong></td>
-                                <td colspan="3">{{ form.notes }}</td>
-                            </tr>
-                            <tr>
-                                <td colspan="3">&nbsp;</td>
-                                <td><input type="submit" value="Submit" /></td>
-                            </tr>		  
-                        </table>
-                    </form>    
-                <div class="fixed"></div>
-              </div>
-         </div>
        <div class="post">
             <h2>Your Stories</h2>
             <div class="content">
@@ -69,6 +42,26 @@
                   </li>
                 {% endfor %}
               </ul>
+              <div class="fixed"></div>
+            </div>
+       </div>
+        <div class="post">
+            <h2>Submit a Story</h2>
+            <div class="content">
+                {% if form.non_field_errors %}
+                  <p>{{ form.non_field_errors }}</p>
+                {% endif %}
+                <form action="" method="post">
+                      <table class="submission">
+                          <tr>
+                              <td><strong>Concept:</strong></td>
+                              <td>{{ form.name }}</td>
+                              <td><strong>Due:</strong></th>
+                              <td>{{ form.due }}</td>
+                              <td><input type="submit" value="Submit" /></td>
+                          </tr>		  
+                      </table>
+                  </form>    
               <div class="fixed"></div>
             </div>
        </div>

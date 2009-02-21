@@ -9,5 +9,5 @@ class SubmitStoryConcept(forms.ModelForm):
     
     class Meta:
         model = StoryConcept
-        fields = ('name', 'notes','due')
+        fields = ('name','due')
     
