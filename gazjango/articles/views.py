@@ -8,6 +8,7 @@ from django.db.models import Q
 from django.template  import RequestContext
 from django.http      import Http404, HttpResponse, HttpResponseRedirect
 from django.core.urlresolvers   import reverse
+from django.core.exceptions     import ObjectDoesNotExist
 from django.shortcuts           import render_to_response, get_object_or_404
 from gazjango.misc.view_helpers import get_by_date_or_404, filter_by_date, staff_required
 from gazjango.misc.view_helpers import get_ip, get_user_profile
@@ -250,20 +251,43 @@ def staff_mail(request, template="staff/mail.html"):
     }
     rc = RequestContext(request)
     return render_to_response(template, data, context_instance=rc)
-
+ 
 @staff_required
 def concept_save_page(request, template="staff/submit.html"):
     if request.method == 'POST':
         form = ConceptSaveForm(request.POST)
         if form.is_valid():
-            # Create or get concept
-            concept, dummy = StoryConcept.objects.get_or_create(
-                name  = form.clean_data['name']            
-            )
-            concept.users  = form.clean_data['users']
-            concept.notes  = form.clean_data['text']
-            concept.due    = form.clean_data['due']
-            concept.status = "u"
+            concept = _concept_save(request, form)
+            return HttpResponseRedirect('/staff/')
+    elif request.GET.has_key('name'):
+        name = request.GET['name']
+        notes = ''
+        due = ''
+        try:
+            concept = StoryConcepts.objects.get(name=name)
+            notes = concept.notes
+            due = concept.due
+            users = concept.users
+        except ObjectDoesNotExist:
+            pass
+        form = ConceptSaveForm({
+            'name': name,
+            'notes': notes.
+            'due': due,
+            'users': users,
+        })
+    else:
+        form = BookmarkSaveForm()
+    rc = RequestContext(request)
+    return render_to_response(template, data, context_instance=rc)
+
+@staff_required
+def _concept_save(request, template="staff/submit.html"):
+    if request.method == 'POST':
+        form = ConceptSaveForm(request.POST)
+        if form.is_valid():
+            concept = _concept_save(request, form)
+            return HttpResponseRedirect('/staff/')
     else:
         form = ConceptSaveForm()
     data = RequestContext(request, {
@@ -271,6 +295,20 @@ def concept_save_page(request, template="staff/submit.html"):
     })
     rc = RequestContext(request)
     return render_to_response(template, data, context_instance=rc)
+ 
+@staff_required
+def _concept_save(request, form):
+    form = ConceptSaveForm(request.POST)
+    # Create or get concept
+    concept, dummy = StoryConcept.objects.get_or_create(
+        name  = form.clean_data['name']            
+    )
+    concept.users  = form.clean_data['users']
+    concept.notes  = form.clean_data['text']
+    concept.due    = form.clean_data['due']
+    concept.status = "u"
+    concept.save()
+    return concept
 
 def search(request):
     "Temporary: redirect to Google search. :/"
