@@ -431,13 +431,16 @@ textarea {
 }
 .post .content table {
 	background:#FFF;
-	border:1px solid #CCC;
 	margin:5px 0 10px;
 }
 .post .content table tr td {
-	border-top:1px solid #CCC;
 	padding:2px 10px;
 }
+
+.post .content form {
+    border:0px solid #fff;
+}
+
 .post .content table tr th {
 	padding:1px 10px;
 	background:#EDEFF0;
