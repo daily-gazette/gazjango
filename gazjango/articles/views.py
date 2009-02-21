@@ -300,7 +300,7 @@ def concept_save_page(request, template="staff/submit.html"):
             'form': form,
         }
         rc = RequestContext(request)
-        return render_to_response("staff/concept_save_form.html", data, context_instace=rc)
+        return render_to_response("staff/concept_save_form.html", data, context_instance=rc)
     else:
         form = ConceptSaveForm()
     data = { 'form': form }
