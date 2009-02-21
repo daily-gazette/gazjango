@@ -21,6 +21,6 @@ class ConceptSaveForm(forms.Form):
     due  = forms.CharField(label = 'Due Date',  widget=forms.TextInput(attrs={'size': 64})               )
     users= forms.MultipleChoiceField(
         label = 'Assignee',
-        widget= admin_widgets.FilteredSelectMultiple(UserProfile, False),
+        widget= admin_widgets.FilteredSelectMultiple('UserProfile', False),
         required=False
     )
