@@ -1,5 +1,4 @@
 from django import forms
-from django.newforms import form_for_model
 from gazjango.articles.models      import StoryConcept
 
 # note that this form should be saved manually (with commit=False)
