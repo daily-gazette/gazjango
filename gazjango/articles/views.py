@@ -14,7 +14,7 @@ from gazjango.misc.view_helpers import get_ip, get_user_profile
 
 from gazjango.articles.models      import Article, Special, PhotoSpread, StoryConcept
 from gazjango.articles.models      import Section, Subsection, Column
-from gazjango.articles.forms       import SubmitStoryConcept
+from gazjango.articles.forms       import SubmitStoryConcept,ConceptSaveForm
 from gazjango.announcements.models import Announcement
 from gazjango.comments.models      import PublicComment
 from gazjango.comments.forms       import make_comment_form
