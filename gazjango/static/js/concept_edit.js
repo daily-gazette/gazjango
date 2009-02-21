@@ -8,7 +8,7 @@ function concept_edit() {
 }
 
 $(document).ready(function () {
-    $("ul.concept .edit").click(concept_edit);
+    $(".edit").click(concept_edit);
 })
 
 function concept_save() {
