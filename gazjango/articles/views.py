@@ -280,7 +280,7 @@ def concept_save_page(request, template="staff/submit.html"):
             'users': users,
         })
     else:
-        form = BookmarkSaveForm()
+        form = ConceptSaveForm()
     data = { 'form': form }
     rc = RequestContext(request)
     return render_to_response(template, data, context_instance=rc)
