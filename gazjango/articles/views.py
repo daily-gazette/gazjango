@@ -283,7 +283,7 @@ def concept_save_page(request, template="staff/submit.html"):
             return HttpResponse('failure')
     elif request.GET.has_key('name'):
         name  = request.GET['name']
-        notes = ""
+        notes = "testing field"
         due   = ""
         users = None
         try:
