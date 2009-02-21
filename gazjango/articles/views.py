@@ -267,7 +267,7 @@ def concept_save_page(request, template="staff/submit.html"):
         due   = ""
         users = None
         try:
-            concept = StoryConcepts.objects.get(name=name)
+            concept = StoryConcept.objects.get(name=name)
             notes = concept.notes
             due = concept.due
             users = concept.users
