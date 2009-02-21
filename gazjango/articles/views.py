@@ -258,7 +258,7 @@ def concept_save_page(request, template="staff/submit.html"):
         form = ConceptSaveForm(request.POST)
         if form.is_valid():
             concept = _concept_save(request, form)
-            return HttpResponseRedirect('/staff/')
+            return HttpResponseRedirect('/staff/new/')
         else:
             return HttpResponse('failure')
     elif request.GET.has_key('name'):
