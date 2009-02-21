@@ -282,7 +282,7 @@ def concept_save_page(request, template="staff/submit.html"):
         else:
             return HttpResponse('failure')
     elif request.GET.has_key('name'):
-        name  = request.GET['name']
+        name  = request.__getitem('name')
         notes = "testing field"
         due   = ""
         users = None
