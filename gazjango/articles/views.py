@@ -257,7 +257,11 @@ def concept_save_page(request, template="staff/submit.html"):
     if request.method == 'POST':
         form = ConceptSaveForm(request.POST)
         if form.is_valid():
-            form.save()
+            concept = StoryConcept.objects.get_or_create(name=form.clean_data['name'])
+            concept.due = form.clean_data['due']
+            concept.notes = form.clean_data['notes']
+            concept.users = form.clean_data['users']
+            concept.save()
             
             user = get_user_profile(request)
             personal, claimed, unclaimed = StoryConcept.unpublished.get_concepts(user=user)
