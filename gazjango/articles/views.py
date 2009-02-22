@@ -261,7 +261,11 @@ def concept_save_page(request, template="staff/submit.html"):
             due = form.cleaned_data['due']
             users = form.cleaned_data['users']
             
-            concept = StoryConcept.objects.get_or_create(name=name)
+            try:
+                concept = StoryConcept.get(name=name)
+            except StoryConcept.DoesNotExist:
+                concept = StoryConcept(name=name)
+            
             concept.name = name
             concept.due = due
             concept.users = users
