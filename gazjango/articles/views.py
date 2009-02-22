@@ -257,8 +257,8 @@ def concept_save_page(request, template="staff/submit.html"):
     if request.method == 'POST':
         form = ConceptSaveForm(request.POST)
         if form.is_valid():
-            concept = StoryConcept.objects.get_or_create(name=form.cleaned_data['name'])
-            concept.name = form.cleaned_data['name']
+            concept = StoryConcept.objects.get_or_create(name=form.__getitem__('name'))
+            concept.name = form.get('name','test')
             concept.due = form.fields['due']
             concept.users = form.fields['users']
             concept.save()
