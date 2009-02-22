@@ -283,9 +283,7 @@ def concept_save_page(request, template="staff/submit.html"):
             return render_to_response("staff/index.html", data, context_instance=rc)
         else:
             return HttpResponse('failure')
-        
-        
-    elif request.GET.has_key('pk'):
+    else:
         primary_key = request.GET.get('pk','ERROR')
         concept = StoryConcept.objects.get(pk=pk)
         
@@ -303,8 +301,6 @@ def concept_save_page(request, template="staff/submit.html"):
         }
         rc = RequestContext(request)
         return render_to_response("staff/concept_save_form.html", data, context_instance=rc)
-    else:
-        form = ConceptSaveForm()
     data = { 'form': form }
     rc = RequestContext(request)
     return render_to_response(template, data, context_instance=rc)
