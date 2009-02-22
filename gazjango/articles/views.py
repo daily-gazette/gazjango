@@ -293,8 +293,9 @@ def concept_save_page(request, template="staff/submit.html"):
         
         form = ConceptSaveForm(
             initial={
-                'name': story_name,
-                'due': concept.due
+                'name': concept.name,
+                'due': concept.due,
+                'users': concept.users
             }
         )
         data = {
