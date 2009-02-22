@@ -291,11 +291,7 @@ def concept_save_page(request, template="staff/submit.html"):
         due  = concept.due
         users= concept.users
         
-        form = ConceptSaveForm({
-            'name': name,
-            'due': due,
-            'users': users,
-        })
+        form = ConceptSaveForm()
         data = {
             'form': form,
         }
