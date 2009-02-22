@@ -264,7 +264,6 @@ def concept_save_page(request, template="staff/submit.html"):
             concept.save()
             
             
-            
             user = get_user_profile(request)
             personal, claimed, unclaimed = StoryConcept.unpublished.get_concepts(user=user)
             admin_announcement = Announcement.admin.latest()
