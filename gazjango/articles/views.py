@@ -265,11 +265,11 @@ def concept_save_page(request, template="staff/submit.html"):
             concept = StoryConcept.objects.get(name=name)
             
             concept.due = due
-            if users == null:
+            if users == "null":
                 concept.users = None
             else:
                 for user in users:
-                    newUser = UserProfile.objects.get(pk=user)
+                    newUser = UserProfile.objects.get(pk=int(user))
                     concept.users += newUser
             concept.save()
             
