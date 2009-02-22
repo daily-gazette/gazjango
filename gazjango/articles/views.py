@@ -258,16 +258,17 @@ def concept_save_page(request, template="staff/submit.html"):
         form = ConceptSaveForm(request.POST)
         if form.is_valid():
             concept = StoryConcept.objects.get_or_create(name=form.__getitem__('name'))
-            concept.name = form.get('name','test')
-            concept.due = form.fields['due']
-            concept.users = form.fields['users']
+            concept.name = form.cleaned_data['name']
+            concept.due = form.cleaned_data['due']
+            concept.users = form.cleaned_data['users']
             concept.save()
+            
+            
             
             user = get_user_profile(request)
             personal, claimed, unclaimed = StoryConcept.unpublished.get_concepts(user=user)
             admin_announcement = Announcement.admin.latest()
             form = SubmitStoryConcept()
-            
             data = {
                 'form': form,
                 'minutes': admin_announcement,
@@ -282,6 +283,7 @@ def concept_save_page(request, template="staff/submit.html"):
         else:
             return HttpResponse('failure')
     elif request.GET.has_key('name'):
+        form = request.GET
         name  = request.GET.get('name','ERROR')
         due   = ""
         users = None
