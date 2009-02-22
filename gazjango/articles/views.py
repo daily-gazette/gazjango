@@ -295,7 +295,6 @@ def concept_save_page(request, template="staff/submit.html"):
             initial={
                 'name': concept.name,
                 'due': concept.due,
-                'users': concept.users
             }
         )
         data = {
