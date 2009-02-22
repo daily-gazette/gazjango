@@ -262,6 +262,7 @@ def concept_save_page(request, template="staff/submit.html"):
             name = form.cleaned_data['name']
             due = form.cleaned_data['due']
             users = form.cleaned_data['users']
+            
             concept = StoryConcept.objects.get(name=name)
             
             concept.due = due
@@ -275,9 +276,9 @@ def concept_save_page(request, template="staff/submit.html"):
             user = get_user_profile(request)
             personal, claimed, unclaimed = StoryConcept.unpublished.get_concepts(user=user)
             admin_announcement = Announcement.admin.latest()
-            form = SubmitStoryConcept()
+            newform = SubmitStoryConcept()
             data = {
-                'form': form,
+                'form': newform,
                 'minutes': admin_announcement,
                 'personal': personal,
                 'unclaimed': unclaimed,
@@ -285,6 +286,7 @@ def concept_save_page(request, template="staff/submit.html"):
                 'author': user,
         		'unpublished_stories': Article.objects.exclude(status='p')
             }
+            form.save_m2m()
             rc = RequestContext(request)
             return render_to_response("staff/index.html", data, context_instance=rc)
         else:
