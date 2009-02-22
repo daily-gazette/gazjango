@@ -285,7 +285,6 @@ def concept_save_page(request, template="staff/submit.html"):
                 'author': user,
         		'unpublished_stories': Article.objects.exclude(status='p')
             }
-            form.save_m2m()
             rc = RequestContext(request)
             return render_to_response("staff/index.html", data, context_instance=rc)
         else:
