@@ -291,14 +291,11 @@ def concept_save_page(request, template="staff/submit.html"):
         story_name = request.GET.get('name')
         concept = StoryConcept.objects.get(name=story_name)
         
-        name = concept.name
-        due  = concept.due
-        notes= concept.notes
-        
         form = ConceptSaveForm(
             initial={
                 'name': concept.name,
                 'due': concept.due,
+                'notes': concept.notes
             }
         )
         data = {

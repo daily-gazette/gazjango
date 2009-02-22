@@ -18,6 +18,7 @@ function concept_save() {
     };
     $.post("/staff/new/?ajax",data,function(result) {
         if (result != "failure") {
+            item.remove();
             $(".edit").click(concept_edit);
         }
         else {
