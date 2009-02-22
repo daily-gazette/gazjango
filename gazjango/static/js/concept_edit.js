@@ -1,9 +1,7 @@
 function concept_edit() {
     var item = $(this).parent();
     var name = item.find(".claimedTitle").attr("name");
-    item.load("/staff/new/?ajax&name=" + escape(name),null, function () {
-        $("#save-form").submit(concept_save);
-    });
+    item.load("/staff/new/?ajax&name=blah"+escape(name),null,function () { $("#save-form").submit(concept_save); });
     return false;
 }
 
