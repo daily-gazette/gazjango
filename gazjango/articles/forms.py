@@ -17,6 +17,6 @@ class SubmitStoryConcept(forms.ModelForm):
         fields = ('name','due')
     
 class ConceptSaveForm(forms.Form):        
-    name  = forms.CharField(label = 'Concept',   widget=forms.HiddenInput(attrs={'size': 30}), required=True)
+    name  = forms.CharField(label = 'Concept',   widget=forms.TextInput(attrs={'size': 30}), required=True)
     due   = forms.CharField(label = 'Due Date',  widget=forms.TextInput(attrs={'size': 15}),   required=False)
     users = forms.ModelMultipleChoiceField(label = 'Users', queryset=User.objects.all(), widget=admin_widgets.FilteredSelectMultiple('Users', False), required=False)
