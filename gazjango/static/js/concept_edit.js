@@ -2,7 +2,7 @@ function concept_edit() {
     var item = $(this);
     var href =  item.find(".edit").attr("href");
     var title = item.find(".edit").attr("title");
-    item.load("/staff/new/?ajax&href="+escape(href)+"&title="+escape(title),null,function () { $("#save-form").submit(concept_save); });
+    item.load("/staff/new/?ajax&href="+escape(href)+"&title="+escape(title)+"&this="+escape(item),null,function () { $("#save-form").submit(concept_save); });
     return false;
 }
 
