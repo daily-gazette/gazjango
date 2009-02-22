@@ -285,7 +285,7 @@ def concept_save_page(request, template="staff/submit.html"):
             return HttpResponse('failure')
     else:
         primary_key = request.GET.get('pk','ERROR')
-        concept = StoryConcept.objects.get(pk=pk)
+        concept = StoryConcept.objects.get(pk=primary_key)
         
         name = concept.name
         due  = concept.due
