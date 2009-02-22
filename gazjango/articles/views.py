@@ -259,11 +259,11 @@ def concept_save_page(request, template="staff/submit.html"):
         if form.is_valid():
             concept = StoryConcept.objects.get_or_create(name=form.cleaned_data['name'])
             if form.has_key('due'):
-                concept.due = form.cleaned_data['due']
+                concept.due = form.fields['due']
             else:
                 concept.due = ""
             if form.has_key('users'):
-                concept.users = form.cleaned_data['users']
+                concept.users = form.fields['users']
             else:
                 concept.users = None
             concept.save()
