@@ -261,15 +261,13 @@ def concept_save_page(request, template="staff/submit.html"):
         if form.is_valid():
             name = form.cleaned_data['name']
             due = form.cleaned_data['due']
-            users = form.cleaned_data['users']
+            notes = form.cleaned_data['notes']
             
             concept = StoryConcept.objects.get(name=name)
             
             concept.due = due
-            if users == "null":
-                concept.users = None
-            else:
-                concept.users = users
+            concept.notes = notes
+            
             concept.save()
             
             user = get_user_profile(request)
@@ -295,7 +293,7 @@ def concept_save_page(request, template="staff/submit.html"):
         
         name = concept.name
         due  = concept.due
-        users= concept.users
+        notes= concept.notes
         
         form = ConceptSaveForm(
             initial={

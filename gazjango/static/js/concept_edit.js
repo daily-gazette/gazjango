@@ -14,7 +14,7 @@ function concept_save() {
     var data = {
         name: item.find("#id_name").val(),
         due: item.find("#id_due").val(),
-        users: item.find("#id_users").val()        
+        notes: item.find("#id_notes").val()        
     };
     $.post("/staff/new/?ajax",data,function(result) {
         if (result != "failure") {
