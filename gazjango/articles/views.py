@@ -269,8 +269,7 @@ def concept_save_page(request, template="staff/submit.html"):
                 concept.users = None
             else:
                 for user in users:
-                    newUser = UserProfile.objects.get(pk=int(user))
-                    concept.users += newUser
+                    concept.users += user
             concept.save()
             
             user = get_user_profile(request)
