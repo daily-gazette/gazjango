@@ -13,7 +13,6 @@ function concept_save() {
     var item = $(this).parent();
     var data = {
         name: item.find("#id_name").val(),
-        notes: item.find("#id_notes").val(),
         due: item.find("#id_due").val(),
         users: item.find("#id_users").val()        
     };

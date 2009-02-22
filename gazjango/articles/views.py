@@ -21,6 +21,8 @@ from gazjango.comments.models      import PublicComment
 from gazjango.comments.forms       import make_comment_form
 from gazjango.issues.models        import Weather, WeatherJoke
 from gazjango.jobs.models          import JobListing
+from gazjango.accounts.models      import UserProfile
+
 
 from gazjango.scrapers.bico         import get_bico_news
 from gazjango.scrapers.tla          import get_tla_links
@@ -263,7 +265,12 @@ def concept_save_page(request, template="staff/submit.html"):
             concept = StoryConcept.objects.get(name=name)
             
             concept.due = due
-            concept.users = users
+            if users == null:
+                concept.users = None
+            else:
+                for user in users:
+                    newUser = UserProfile.objects.get(pk=user)
+                    concept.users += newUser
             concept.save()
             
             user = get_user_profile(request)
