@@ -108,9 +108,9 @@ class MidTallFront(ImageSpec):
 # ======================
 
 class ResizeIssue(processors.Resize):
-    height = 192
-    width = 192
-    # crop = True # TODO: not sure whether we want issue images cropped
+    height = 100
+    width = 100
+    crop = True # TODO: not sure whether we want issue images cropped
 
 class IssueImage(ImageSpec):
     processors = [ResizeIssue]

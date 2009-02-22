@@ -259,7 +259,6 @@ def concept_save_page(request, template="staff/submit.html"):
         if form.is_valid():
             concept = StoryConcept.objects.get_or_create(name=form.cleaned_data['name'])
             concept.due = form.cleaned_data['due']
-            concept.notes = form.cleaned_data['notes']
             concept.users = form.cleaned_data['users']
             concept.save()
             
@@ -282,20 +281,17 @@ def concept_save_page(request, template="staff/submit.html"):
         else:
             return HttpResponse('failure')
     elif request.GET.has_key('name'):
-        name  = request.GET.__getitem__('name')
-        notes = "testing field"
+        name  = request.GET.get('name','ERROR')
         due   = ""
         users = None
         try:
             concept = StoryConcept.objects.get(name=name)
-            notes = concept.notes
             due = concept.due
             users = concept.users
         except ObjectDoesNotExist:
             pass
         form = ConceptSaveForm({
             'name': name,
-            'notes': notes,
             'due': due,
             'users': users,
         })
