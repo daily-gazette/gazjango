@@ -105,7 +105,7 @@
                     <strong>{{ story.due }}</strong>
                     <ul>
                 {% endifchanged %}
-                <li><a href="http://daily.swarthmore.edu/admin/articles/storyconcept/{{ story.pk }}/" alt="{{ story.name }}" class="claimedTitle">{{ story.name }}</a>,
+                <li><a href="http://daily.swarthmore.edu/admin/articles/storyconcept/{{ story.pk }}/" title="{{ story.name }}" class="claimedTitle">{{ story.name }}</a>,
                      {{ story.user_names }},
                      <small>[<a href="http://daily.swarthmore.edu/staff/new/?name={{ story.name|urlencode }}" class="edit">edit</a>]</small></li>
               {% endfor %}
