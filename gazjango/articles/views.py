@@ -301,9 +301,11 @@ def concept_save_page(request, template="staff/submit.html"):
         }
         rc = RequestContext(request)
         return render_to_response("staff/concept_save_form.html", data, context_instance=rc)
-    data = { 'form': form }
-    rc = RequestContext(request)
-    return render_to_response(template, data, context_instance=rc)
+    else:
+        form = ConceptSaveForm()
+        data = { 'form': form }
+        rc = RequestContext(request)
+        return render_to_response(template, data, context_instance=rc)
     
 def search(request):
     "Temporary: redirect to Google search. :/"
