@@ -271,7 +271,6 @@ def concept_save_page(request, template="staff/submit.html"):
             else:
                 concept.users = users
             concept.save()
-            concept.save_m2m()
             
             user = get_user_profile(request)
             personal, claimed, unclaimed = StoryConcept.unpublished.get_concepts(user=user)
