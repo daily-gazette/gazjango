@@ -269,7 +269,7 @@ def concept_save_page(request, template="staff/submit.html"):
             if users == "null":
                 concept.users = None
             else:
-                concept.users = user
+                concept.users = users
             concept.save()
             concept.save_m2m()
             
