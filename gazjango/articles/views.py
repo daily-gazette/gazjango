@@ -283,8 +283,8 @@ def concept_save_page(request, template="staff/submit.html"):
             return render_to_response("staff/index.html", data, context_instance=rc)
         else:
             return HttpResponse('failure')
-    else:
-        story_name = request.GET.get('name','ERROR')
+    elif request.GET.has_key('name'):
+        story_name = request.GET.get('name')
         concept = StoryConcept.objects.get(name=story_name)
         
         name = concept.name
