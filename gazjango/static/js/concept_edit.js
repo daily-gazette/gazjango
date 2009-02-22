@@ -18,9 +18,8 @@ function concept_save() {
     };
     $.post("/staff/new/?ajax",data,function(result) {
         if (result != "failure") {
-            item.before($("li",result).get(0));
             item.remove();
-            $("ul.concept .edit").click(concept_edit);
+            $(".edit").click(concept_edit);
         }
         else {
             alert("Failed to validate the concept before saving.");
