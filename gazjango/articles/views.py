@@ -269,9 +269,9 @@ def concept_save_page(request, template="staff/submit.html"):
             if users == "null":
                 concept.users = None
             else:
-                for user in users:
-                    concept.users += user
+                concept.users += user
             concept.save()
+            concept.save_m2m()
             
             user = get_user_profile(request)
             personal, claimed, unclaimed = StoryConcept.unpublished.get_concepts(user=user)
