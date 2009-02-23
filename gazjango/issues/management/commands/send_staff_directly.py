@@ -3,7 +3,7 @@ from django.core.management.base         import CommandError
 from django.core.mail                    import mail_admins
 from django.http                         import Http404
 
-from gazjango.articles.views       import Issue
+from gazjango.articles.views       import staff_mail
 from gazjango.options.helpers      import is_publishing
 from gazjango.subscriptions.models import Subscriber
 
