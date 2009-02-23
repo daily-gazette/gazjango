@@ -7,18 +7,23 @@
 </head>
 <body>
 THE DAILY GAZETTE'S DAILY STAFF MAILING<br />
-(sent to staff@daily.swarthmore.edu)<br />
 <br />
 NOTES<br /><br />
 <br />
 {{ minutes.text|textile }}<br />
 <br />
-UPCOMING STORIES<br />
+UPCOMING STORIES
 {% for concept in claimed %}
-<p><strong>Story:</strong> {{ concept.name }}</a><br />
-<strong>Due:</strong> {{ concept.due }}<br />
-{% if concept.notes_excerpt %}<br /><strong>Notes: </strong>{{ concept.notes }}{% endif %}</p>
+{% ifchanged %}
+<br />===== {{ concept.due }} =====<br />
+{% endifchanged %}
+<br /><strong>Story:</strong> {{ concept.name }}<br />
+      <strong>Reporter:</strong> {{ concept.user_names }}<br />
+      <strong>Due:</strong> {{ concept.due }}<br />
+{% if concept.notes_excerpt %}<br /><strong>Notes: </strong>{{ concept.notes }}{% endif %}<br />
 {% endfor %}
+<br />
+(Something seem wrong? Just reply to this email.)<br />
 <br />         
 UNCLAIMED STORIES<br />
 {% for concept in unclaimed %}
