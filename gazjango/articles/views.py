@@ -242,7 +242,6 @@ def staff(request,  template="staff/index.html"):
     rc = RequestContext(request)
     return render_to_response(template, data, context_instance=rc)
 
-@staff_required    
 def staff_mail(request, template="staff/mail.html"):
     claimed, unclaimed = StoryConcept.unpublished.get_upcoming_concepts()
     admin_announcement = Announcement.admin.latest()
