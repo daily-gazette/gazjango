@@ -250,8 +250,7 @@ def staff_mail(request, template="staff/mail.html"):
         'unclaimed': unclaimed,
         'claimed': claimed,
     }
-    rc = RequestContext(request)
-    return render_to_response(template, data, context_instance=rc)
+    return render_to_response(template, data)
  
 @staff_required
 def concept_save_page(request, template="staff/submit.html"):
