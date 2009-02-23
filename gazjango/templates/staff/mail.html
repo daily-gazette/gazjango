@@ -7,11 +7,11 @@
 </head>
 <body>
 THE DAILY GAZETTE'S DAILY STAFF MAILING<br />
-<br />
 NOTES<br /><br />
 <br />
 {{ minutes.text|textile }}<br />
 <br />
+============================================================<br />
 UPCOMING STORIES
 {% for concept in claimed %}
 {% ifchanged %}
@@ -20,11 +20,12 @@ UPCOMING STORIES
 <br /><strong>Story:</strong> {{ concept.name }}<br />
       <strong>Reporter:</strong> {{ concept.user_names }}<br />
       <strong>Due:</strong> {{ concept.due }}<br />
-{% if concept.notes_excerpt %}<br /><strong>Notes: </strong>{{ concept.notes }}{% endif %}<br />
+{% if concept.notes_excerpt %}<strong>Notes: </strong>{{ concept.notes }}<br />{% endif %}
 {% endfor %}
 <br />
 (Something seem wrong? Just reply to this email.)<br />
-<br />         
+<br />    
+============================================================<br />     
 UNCLAIMED STORIES<br />
 {% for concept in unclaimed %}
 {% ifchanged %}
