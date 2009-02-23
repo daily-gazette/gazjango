@@ -25,7 +25,7 @@ class RSDSubscribersManager(ActiveSubscribersManager):
 class StaffSubscribersManager(ActiveSubscribersManager):
     def get_query_set(self):
         orig = super(StaffSubscribersManager, self).get_query_set()
-        return orig.filter(recieve='s')
+        return orig.filter(receive='s')
     
 
 class Subscriber(models.Model):
