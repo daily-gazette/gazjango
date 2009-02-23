@@ -23,6 +23,7 @@ class Command(SendingOutCommand):
             raise CommandError('no content')
         
         self.html_content = html_response.content
+        self.text_content = ""
     
     def get_subject(self):
         now = datetime.datetime.now()
