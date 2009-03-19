@@ -59,7 +59,6 @@ jQuery(document).ready(function() {
 						
 					<div class="headerColumnBox" id="sideContainer">
 						<div id="weather">
-						    {% comment %}
 						    
 						  <p class="weather">
 						    <strong>Today:</strong> {{ weather.today }}<br/>
@@ -76,22 +75,7 @@ jQuery(document).ready(function() {
   						  <span class="joke">{{ joke.line_three }}
   						</p>
 						  
-						  <p id="attrib">Weather updated daily, courtesy of the <a href="http://weather.gov">NWS</a>.</p>
-						  {% endcomment %}
-						  
-						  <p class="weather">
-  						    <strong>Due to an issue at the NWS, weather is temporarily down.</strong><br />
-  						    <span class="joke">{{ joke.line_one }}</span>
-  						  </p>
-
-  						  <p class="weather">
-    						  <span class="joke">{{ joke.line_two }}
-    						</p>
-
-  						  <p class="weather">
-    						  <span class="joke">{{ joke.line_three }}
-    						</p>
-						  
+						  <p id="attrib">Weather updated daily, courtesy of the <a href="http://weather.gov">NWS</a>.</p>						  
 						</div>
 					</div>
 						
@@ -104,7 +88,7 @@ jQuery(document).ready(function() {
 				</div>
 				
 				<div id="zagette">
-					<a href="http://daily.swarthmore.edu/reviews/"><img src="{% static images ads/zagette.png %}" alt="The Zagette" /></a>
+					<a href="http://www.swarthmore.coop"><img src="{% static images ads/coop-index-230.png %}" alt="The Swarthmore Food Cooperative" /></a>
 				</div>
 			</div>
 		</div>
