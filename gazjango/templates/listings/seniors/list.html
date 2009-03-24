@@ -1,0 +1,110 @@
+{% extends "listings/base.html" %}
+{% load extras %}
+{% load markup %}
+
+{% block title %}Swarthmore Post-Grad Housing{% endblock title %}
+{% block listings_customheader %}
+    <script type="text/javascript" src="{% static js tablesort.js %}"></script>
+    <script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key={{ GMAPS_API_KEY }}" type="text/javascript"></script>
+    
+    {% jQuery %}
+    
+      <script type="text/javascript" src="{% static js reviews.js %}"></script>
+
+      <script type="text/javascript">
+        function initialize() {
+            initializeMap(document.getElementById('map'));
+
+            {% for s in seniors %}
+            addMarker(
+              {{ s.pk }},
+              new GLatLng({{ s.latitude }}, {{ s.longitude }}),
+
+              '<large><strong>{{ s.senior.name }}</strong></large><br/>' + 
+              'City: {{ s.city }}<br/>' +
+              'State: {{ s.state }}<br/>' +
+              'Position: {{ s.position }}',
+            );
+            {% endfor %}
+        }
+      </script>
+      
+{% endblock listings_customheader %}
+{% block listings_title %}The Senior Post-Grad Directory{% endblock listings_title %}
+
+
+{% block listings_content %}
+
+<div id="map" class="jmap">
+    <noscript>
+      <center><p>For a better experience with the Zagette, please enable JavaScript in your browser.</p></center>
+    </noscript>
+</div>
+
+{% if form.non_field_errors %}
+    <p>{{ form.non_field_errors }}</p>
+{% endif %}
+
+<form action="" method="post">
+    <table class="submission">
+        <tr>
+            <td><strong>Your Name:</strong></td>
+            <td>{{ user.name }}</td>
+            <td><strong>{{ form.city.label_tag }}:</strong></th>
+            <td>{{ form.city }}</td>
+            <td><strong>{{ form.state.label_tag }}:</strong></th>
+            <td>{{ form.state }}</td>
+        </tr>
+        <tr>
+            <td><strong>{{ form.movein-month.label_tag }}:</strong></th>
+            <td>{{ form.movein-month }}</td>
+            <td><strong>{{ form.movein-year.label_tag }}:</strong></th>
+            <td>{{ form.movein-year }}</td>
+            <td><strong>{{ form.moveout-month.label_tag }}:</strong></th>
+            <td>{{ form.moveout-month }}</td>
+            <td><strong>{{ form.moveout-year.label_tag }}:</strong></th>
+            <td>{{ form.moveout-year }}</td>
+        </tr>
+        <tr>
+            <td><strong>Job Type:</strong></th>
+            <td>{{ form.position }}</td>          
+            {% if form.email %}
+                <td><strong>{{ form.email.label_tag }}:</strong></th>
+                <td>{{ form.email }}</td>
+            {% endif %}
+            <td><input type="submit" value="Submit" /></td>
+        </tr>		  
+    </table>
+</form>
+
+    <table id="review-listings" cellpadding="0" cellspacing="0" border="0" class="sortable-onload-0-4 rowstyle-alt colstyle-alt no-arrow">
+      <caption>Click on a column heading to sort.</caption>
+      <thead>
+        <tr>
+          <th class="sortable">Name</th>
+          <th class="sortable">Job Type</th>
+          <th class="sortable">City</th>
+          <th class="sortable">State</th>
+          <th class="sortable">Move-in Date</th>
+          <th class="sortable">Move-out Date</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for s in seniors %}
+          <tr class="senior-row">
+            <td>
+              {% ifequal s.senior user_profile %}
+                  You!
+              {% else %}
+                  {{ s.senior.name }}
+              {% endifequal %}</td>
+            <td>{{ s.position }}</td>
+            <td>{{ s.city }}</td>
+            <td>{{ s.state }}</td>
+            <td>{{ s.movein-month }}, {{ s.movein-year }}</td>
+            <td>{{ s.moveout-month }}, {{ s.moveout-year }}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+{% endblock listings_content %}

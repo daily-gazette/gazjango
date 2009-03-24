@@ -48,6 +48,15 @@
 	padding-top: 20px;
 }
 
+#map {
+    width: 650px;
+    height: 200px;
+    border: 3px solid #4f6b72;
+    float: left;
+    display: inline-block;
+    margin-top: 5px;
+}
+
 #story table
     {
     width: 655px;

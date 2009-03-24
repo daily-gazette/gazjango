@@ -201,7 +201,7 @@ def homepage(request, template="index.html"):
         'lowstories': lows,
         
         'comments': PublicComment.visible.order_by('-time').all()[:3],
-        # 'weather': Weather.objects.for_today(),
+        'weather': Weather.objects.for_today(),
         'joke': WeatherJoke.objects.latest(),
         
         'specials': Special.objects.order_by('-date').all()[:10],
