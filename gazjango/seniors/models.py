@@ -12,6 +12,7 @@ import urllib
 import urllib2 # yeah, we need both
 import settings
 
+GEOCODE_REQUEST_URL = "http://maps.google.com/maps/geo?q=%(req)s&output=csv&key=%(key)s"
 
 class PublishedSeniorManager(models.Manager):
     "Deals only with published names in the  listings."
