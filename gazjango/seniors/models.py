@@ -143,8 +143,6 @@ class SeniorListing(models.Model):
     def geocode(self):
         if self.state is not "NU":
             loc = [self.city, self.state]
-            else:
-                loc = [self.street_address, self.zip_code]
             url = GEOCODE_REQUEST_URL % {
                 'req': urllib.quote_plus(', '.join(loc)),
                 'key': settings.GMAPS_API_KEY
