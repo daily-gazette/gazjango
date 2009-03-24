@@ -5,8 +5,8 @@ from django.shortcuts               import render_to_response, get_object_or_404
 from django.template                import RequestContext
 from django.utils                   import simplejson as json
 
-from gazjango.senior.models     import SeniorListing
-from gazjango.senior.forms      import SubmitSeniorForm
+from gazjango.seniors.models     import SeniorListing
+from gazjango.seniors.forms      import SubmitSeniorForm
 from gazjango.misc.view_helpers import get_user_profile
 
 import datetime

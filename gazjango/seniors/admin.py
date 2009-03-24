@@ -1,5 +1,5 @@
 from django.contrib import admin
-from gazjango.senior.models import SeniorListing
+from gazjango.seniors.models import SeniorListing
 
 class SeniorAdmin(admin.ModelAdmin):
     list_display = ('senior', 'city', 'state', 'position')
