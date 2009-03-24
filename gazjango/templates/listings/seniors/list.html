@@ -17,7 +17,7 @@
            
            {% for s in seniors %}
            var point  = new GLatLng({{ s.latitude }}, {{ s.longitude }});
-           mapp.addOverlay(new GMarker(point));
+           map.addOverlay(new GMarker(point));
            {% endfor %}
          }
        }
