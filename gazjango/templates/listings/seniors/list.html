@@ -9,25 +9,41 @@
     
     <script type="text/javascript" src="{% static js reviews.js %}"></script>
     
+    
+    <script type="text/javascript">
+
+       function initialize() {
+         if (GBrowserIsCompatible()) {
+           var map = new GMap2(document.getElementById("map"));
+           map.setCenter(new GLatLng(37.4419, -122.1419), 8);
+           map.setUIToDefault();
+         }
+       }
+
+       </script>
        
-     <script type="text/javascript">
-   function initialize() {
-       initializeMap(document.getElementById('map'));
+       {% comment %}
+       
+         <script type="text/javascript">
+       function initialize() {
+           initializeMap(document.getElementById('map'));
 
-       {% for s in seniors %}
-       addMarker(
-         {{ s.pk }},
-         new GLatLng({{ s.latitude }}, {{ s.longitude }}),
+           {% for s in seniors %}
+           addMarker(
+             {{ s.pk }},
+             new GLatLng({{ s.latitude }}, {{ s.longitude }}),
 
-         '<large><strong>{{ s.senior.name }}</strong></large><br/>' + 
-         'City: {{ s.city }}<br/>' +
-         'State: {{ s.state }}<br/>' +
-         'Position: {{ s.position }}',
-       );
-       {% endfor %}
-   }
-     </script>
-                
+             '<large><strong>{{ s.senior.name }}</strong></large><br/>' + 
+             'City: {{ s.city }}<br/>' +
+             'State: {{ s.state }}<br/>' +
+             'Position: {{ s.position }}',
+           );
+           {% endfor %}
+       }
+         </script>
+         
+        {% endcomment %}
+       
       
 {% endblock listings_customheader %}
 {% block listings_title %}The Senior Post-Grad Directory{% endblock listings_title %}
