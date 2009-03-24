@@ -19,28 +19,6 @@ class PublishedSeniorManager(models.Manager):
         orig = super(PublishedSeniorManager, self).get_query_set()
         return orig.filter(is_published=True)
     
-    def get_for_show(self, num=5, cutoff=None, base_date=None):
-        """
-        Gets the `num` most recent senior names added.
-        
-        If `cutoff` is passed, exclude objects older than that date / 
-        more than that timedelta since now; if `num` is None or 0, don't 
-        limit the number.
-        
-        If `base_date` is passed, pretend that today is that date.
-        """
-        base_date = base_date or datetime.datetime.now()
-        if isinstance(cutoff, datetime.timedelta):
-            cutoff = base_date - cutoff
-        
-        results = self.order_by('-pub_date') \
-                      .filter(pub_date__lte=base_date) \
-        if cutoff:
-            results = results.filter(pub_date__gte=cutoff)
-        
-        return results[:num] if num else results
-    
-
 class SeniorListing(models.Model):
         
     "A Swarthmore senior."
