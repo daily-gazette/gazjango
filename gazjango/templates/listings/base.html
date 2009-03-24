@@ -24,6 +24,7 @@
   </div>
 {% endblock topbar %}
 
+{% block body-args %}onload="initialize()" onunload="GUnload()"{% endblock %}
 
 {% block content %}
   <div id="imageColumn">
