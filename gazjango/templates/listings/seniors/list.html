@@ -14,39 +14,15 @@
            var map = new GMap2(document.getElementById("map"));
            map.setCenter(new GLatLng(37.4419, -102.1419), 3);
            map.addControl(new GMapTypeControl());
-           map.addControl(new GLargeMapControl());
            
            {% for s in seniors %}
-           var marker = new GMarker(new GLatLng({{ s.latitude }}, {{ s.longitude }}));
-           mapp.addOverlay(marker);
+           var point  = new GLatLng({{ s.latitude }}, {{ s.longitude }});
+           mapp.addOverlay(new GMarker(point));
            {% endfor %}
          }
        }
 
-       </script>
-       
-       {% comment %}
-       
-         <script type="text/javascript">
-       function initialize() {
-           initializeMap(document.getElementById('map'));
-
-           {% for s in seniors %}
-           addMarker(
-             {{ s.pk }},
-             new GLatLng({{ s.latitude }}, {{ s.longitude }}),
-
-             '<large><strong>{{ s.senior.name }}</strong></large><br/>' + 
-             'City: {{ s.city }}<br/>' +
-             'State: {{ s.state }}<br/>' +
-             'Position: {{ s.position }}',
-           );
-           {% endfor %}
-       }
-         </script>
-         
-        {% endcomment %}
-       
+       </script>       
       
 {% endblock listings_customheader %}
 {% block listings_title %}The Senior Post-Grad Directory{% endblock listings_title %}
