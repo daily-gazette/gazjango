@@ -14,5 +14,5 @@ class SubmitSeniorForm(forms.ModelForm):
     
     class Meta:
         model = SeniorListing
-        fields = ('city','state','position','movein-month','movein-year','moveout-month','moveout-year')
+        fields = ('city','state','position','moveinmonth','moveinyear','moveoutmonth','moveoutyear')
     

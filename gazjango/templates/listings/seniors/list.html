@@ -56,14 +56,14 @@
             <td>{{ form.state }}</td>
         </tr>
         <tr>
-            <td><strong>{{ form.movein-month.label_tag }}:</strong></th>
-            <td>{{ form.movein-month }}</td>
-            <td><strong>{{ form.movein-year.label_tag }}:</strong></th>
-            <td>{{ form.movein-year }}</td>
-            <td><strong>{{ form.moveout-month.label_tag }}:</strong></th>
-            <td>{{ form.moveout-month }}</td>
-            <td><strong>{{ form.moveout-year.label_tag }}:</strong></th>
-            <td>{{ form.moveout-year }}</td>
+            <td><strong>{{ form.moveinmonth.label_tag }}:</strong></th>
+            <td>{{ form.moveinmonth }}</td>
+            <td><strong>{{ form.moveinyear.label_tag }}:</strong></th>
+            <td>{{ form.moveinyear }}</td>
+            <td><strong>{{ form.moveoutmonth.label_tag }}:</strong></th>
+            <td>{{ form.moveoutmonth }}</td>
+            <td><strong>{{ form.moveoutyear.label_tag }}:</strong></th>
+            <td>{{ form.moveoutyear }}</td>
         </tr>
         <tr>
             <td><strong>Job Type:</strong></th>
@@ -101,8 +101,8 @@
             <td>{{ s.position }}</td>
             <td>{{ s.city }}</td>
             <td>{{ s.state }}</td>
-            <td>{{ s.movein-month }}, {{ s.movein-year }}</td>
-            <td>{{ s.moveout-month }}, {{ s.moveout-year }}</td>
+            <td>{{ s.moveinmonth }}, {{ s.moveinyear }}</td>
+            <td>{{ s.moveoutmonth }}, {{ s.moveoutyear }}</td>
           </tr>
         {% endfor %}
       </tbody>

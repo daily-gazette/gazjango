@@ -119,11 +119,11 @@ class SeniorListing(models.Model):
     
     position = models.CharField(max_length=1, choices=POSITION_TYPE, blank=False)
     
-    movein-month = models.CharField(max_length=2, choices=DATE, blank=False)
-    movein-year  = models.CharField(max_length=2, choices=YEAR, blank=False)
+    moveinmonth = models.CharField(max_length=2, choices=DATE, blank=False)
+    moveinyear  = models.CharField(max_length=2, choices=YEAR, blank=False)
     
-    moveout-month = models.CharField(max_length=2, choices=DATE, blank=True)
-    moveout-year  = models.CharField(max_length=2, choices=YEAR, blank=True)
+    moveoutmonth = models.CharField(max_length=2, choices=DATE, blank=True)
+    moveoutyear  = models.CharField(max_length=2, choices=YEAR, blank=True)
     
     is_published = models.BooleanField(default=True)
     
