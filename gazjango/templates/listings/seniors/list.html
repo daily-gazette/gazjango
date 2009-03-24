@@ -9,11 +9,33 @@
     
     <script type="text/javascript">
 
+        function addMarker(num, point, info_box) {
+            var marker = new GMarker(point, icons[type]);
+            GEvent.addListener(marker, 'click', function() {
+                map.openInfoWindowHtml(point, info_box);
+            });
+            map.addOverlay(marker);
+        }
+        
+
        function initialize() {
          if (GBrowserIsCompatible()) {
            var map = new GMap2(document.getElementById("map"));
-           map.setCenter(new GLatLng(37.4419, -102.1419), 4);
-           map.setUIToDefault();
+           map.setCenter(new GLatLng(37.4419, -102.1419), 3);
+           map.addControl(new GMapTypeControl());
+           map.addControl(new GLargeMapControl());
+           
+           {% for s in seniors %}
+              addMarker(
+                {{ s.pk }},
+                new GLatLng({{ s.latitude }}, {{ s.longitude }}),
+
+                '<large><strong>{{ s.senior.name }}</strong></large><br/>' + 
+                'City: {{ s.city }}<br/>' +
+                'State: {{ s.state }}<br/>' +
+                'Position: {{ s.position }}',
+              );
+            {% endfor %}
          }
        }
 
