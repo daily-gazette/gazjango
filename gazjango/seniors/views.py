@@ -39,8 +39,6 @@ def list_seniors(request):
         'form': form,
         'user': profile,
         'GMAPS_API_KEY': settings.GMAPS_API_KEY,
-        'locations': locations,
-        'loc_dict': dict(reversed(x) for x in locations),
     }, context_instance=RequestContext(request))
 
 def senior_success(request, template="listings/seniors/success.html"):
