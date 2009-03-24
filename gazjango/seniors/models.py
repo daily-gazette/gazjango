@@ -141,7 +141,7 @@ class SeniorListing(models.Model):
         return self.slug or '<no slug>'
         
     def geocode(self):
-        if self.state not "NU":
+        if self.state is not "NU":
             loc = [self.city, self.state]
             else:
                 loc = [self.street_address, self.zip_code]
