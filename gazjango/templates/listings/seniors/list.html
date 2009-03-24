@@ -50,24 +50,29 @@
         <tr>
             <td><strong>Your Name:</strong></td>
             <td>{{ user.name }}</td>
+            <td><strong>Job Type:</strong></th>
+            <td>{{ form.position }}</td>
+        </tr>
+        <tr>    
+        
             <td><strong>{{ form.city.label_tag }}:</strong></th>
             <td>{{ form.city }}</td>
             <td><strong>{{ form.state.label_tag }}:</strong></th>
             <td>{{ form.state }}</td>
         </tr>
         <tr>
-            <td><strong>{{ form.moveinmonth.label_tag }}:</strong></th>
+            <td><strong>Move-in Month:</strong></th>
             <td>{{ form.moveinmonth }}</td>
-            <td><strong>{{ form.moveinyear.label_tag }}:</strong></th>
+            <td><strong>Move-in Year:</strong></th>
             <td>{{ form.moveinyear }}</td>
-            <td><strong>{{ form.moveoutmonth.label_tag }}:</strong></th>
-            <td>{{ form.moveoutmonth }}</td>
-            <td><strong>{{ form.moveoutyear.label_tag }}:</strong></th>
-            <td>{{ form.moveoutyear }}</td>
         </tr>
         <tr>
-            <td><strong>Job Type:</strong></th>
-            <td>{{ form.position }}</td>          
+            <td><strong>Move-out Month:</strong></th>
+            <td>{{ form.moveoutmonth }}</td>
+            <td><strong>Move-out Year:</strong></th>
+            <td>{{ form.moveoutyear }}</td>
+        </tr>
+        <tr>        
             {% if form.email %}
                 <td><strong>{{ form.email.label_tag }}:</strong></th>
                 <td>{{ form.email }}</td>
@@ -98,11 +103,11 @@
               {% else %}
                   {{ s.senior.name }}
               {% endifequal %}</td>
-            <td>{{ s.position }}</td>
+            <td>{{ s.get_position_display }}</td>
             <td>{{ s.city }}</td>
             <td>{{ s.state }}</td>
-            <td>{{ s.moveinmonth }}, {{ s.moveinyear }}</td>
-            <td>{{ s.moveoutmonth }}, {{ s.moveoutyear }}</td>
+            <td>{{ s.get_moveinmonth_display }}, {{ s.get_moveinyear_display }}</td>
+            <td>{{ s.get_moveoutmonth_display }}, {{ s.get_moveoutyear_display }}</td>
           </tr>
         {% endfor %}
       </tbody>
