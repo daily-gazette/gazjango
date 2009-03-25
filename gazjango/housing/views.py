@@ -34,7 +34,7 @@ def list_housing(request):
                 submission.student = profile
                 submission.save()
                 if needs_email:
-                    profile.email = form.cleaned_data['email']
+                    profile.user.email = form.cleaned_data['email']
                 if needs_name:
                     names = (form.cleaned_data['name'] + ' ').split(' ', 1)
                     profile.user.first_name, profile.user.last_name = names
