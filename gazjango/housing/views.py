@@ -39,7 +39,7 @@ def list_housing(request):
                 if needs_name:
                     name = form.cleaned_data['name']
                     name = name.split()
-                    profile.user.first_name = name[0]
+                    profile.user.first_name = form.cleaned_data['name'][0]
                     if len(name) > 1:
                         profile.user.last_name = name[-1]
                     profile.save()
