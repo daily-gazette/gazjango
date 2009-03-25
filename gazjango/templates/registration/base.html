@@ -9,12 +9,39 @@
   <link rel="stylesheet" href="{% static css toolbox.css %}" type="text/css" media="screen, projection, print" />
   <link rel="stylesheet" href="{% static css page/login.css %}" type="text/css" media="screen,projection" />
 
+  <script src="http://static.ak.connect.facebook.com/js/api_lib/v0.4/FeatureLoader.js.php" type="text/javascript"></script>
+  <script type="text/javascript">
+      $(function() {
+      	$('.rollover').hover(function() {
+      		var currentImg = $(this).attr('src');
+      		$(this).attr('src', $(this).attr('hover'));
+      		$(this).attr('hover', currentImg);
+      	}, function() {
+      		var currentImg = $(this).attr('src');
+      		$(this).attr('src', $(this).attr('hover'));
+      		$(this).attr('hover', currentImg);
+      	});
+      });
+  </script>
+
 </head>
 
 <body>
 
 {% block content %}
 {% endblock %}
+
+
+<script type="text/javascript">FB.init("{{ FACEBOOK_API_KEY }}", "/xd_receiver.html", {'reloadIfSessionStateChanged': true});</script>
+
+<script type="text/javascript">
+	var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+	document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+	</script>
+	<script type="text/javascript">
+	var pageTracker = _gat._getTracker("UA-1785594-4");
+	pageTracker._trackPageview();
+</script>
 
 </body>
 </html>
