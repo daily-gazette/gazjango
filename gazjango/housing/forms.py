@@ -8,6 +8,7 @@ class SubmitHousingForm(forms.ModelForm):
     
     def __init__(self, *args, **kwargs):
         needs_email = kwargs.pop('needs_email', False)
+        needs_name  = kwargs.pop('needs_name', False)
         super(SubmitHousingForm, self).__init__(*args, **kwargs)
         if needs_email:
             self.fields['email'] = forms.EmailField()
