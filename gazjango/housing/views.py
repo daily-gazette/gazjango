@@ -34,14 +34,14 @@ def list_housing(request):
                 submission.student = profile
                 submission.save()
                 if needs_email:
-                    profile.user.email = form.cleaned_data['email']
+                    profile.email = form.cleaned_data['email']
                     profile.save()
                 if needs_name:
                     name = form.cleaned_data['name']
                     name = name.split()
-                    profile.user.first_name = form.cleaned_data['name'][0]
+                    profile.first_name = form.cleaned_data['name'][0]
                     if len(name) > 1:
-                        profile.user.last_name = name[-1]
+                        profile.last_name = name[-1]
                     profile.save()
                 form.save_m2m()
                 return HttpResponseRedirect(reverse(list_housing))
