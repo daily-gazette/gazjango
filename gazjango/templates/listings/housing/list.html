@@ -128,9 +128,10 @@
       </tbody>
     </table>
 {% else %}
-    <br />
+    <p>&nbsp;</p>
     <p>You aren't logged in, so you can't access this information or add to the housing directory.<p>
-    <p>You have a few options. If you want to use Facebook to login or create a new account, <fb:login-button size="small"></fb:login-button>. Otherwise, <a href="{% url auth_login %}">Login</a> or <a href="{% url registration_register %}">Register an Account</a>.</p>
+    <p>You have a few options. If you want to use Facebook to login or create a new account, click: <fb:login-button></fb:login-button>.<br />
+        Otherwise, <a href="{% url auth_login %}">Login</a> or <a href="{% url registration_register %}">Register an Account</a>.</p>
     
 {% endif %}
 
