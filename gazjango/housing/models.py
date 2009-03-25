@@ -22,7 +22,7 @@ class PublishedSeniorManager(models.Manager):
     
 class HousingListing(models.Model):
         
-    "A Swarthmore senior."
+    "A Swarthmore student looking for housing."
     
     STATE = (
     ('AL',"ALABAMA"),
@@ -126,7 +126,7 @@ class HousingListing(models.Model):
     moveoutmonth = models.CharField(max_length=2, choices=DATE, blank=True)
     moveoutyear  = models.CharField(max_length=2, choices=YEAR, blank=True)
     
-    notes = models.CharField(max_length=150)
+    notes = models.CharField(max_length=150, blank=True)
     
     is_published = models.BooleanField(default=True)
     
@@ -156,7 +156,7 @@ class HousingListing(models.Model):
             self.longitude = longitude
     
 
-_slugger = set_default_slug(lambda x: x.senior)
+_slugger = set_default_slug(lambda x: x.student)
 signals.pre_save.connect(_slugger, sender=HousingListing)
 
 def set_geographical_vars(sender, instance, **kwargs):

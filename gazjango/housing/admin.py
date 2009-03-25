@@ -5,5 +5,5 @@ class SeniorAdmin(admin.ModelAdmin):
     list_display = ('student', 'city', 'state', 'position')
     list_filter = ('position',)
     date_hierarchy = 'pub_date'
-    prepopulated_fields = { 'slug': ('senior',) }
+    prepopulated_fields = { 'slug': ('student',) }
 admin.site.register(HousingListing, SeniorAdmin)

@@ -24,7 +24,7 @@ def list_housing(request):
         if form.is_valid():
             submission = form.save(commit=False)
             profile = get_user_profile(request)
-            submission.senior = profile
+            submission.student = profile
             submission.save()
             if needs_email:
                 profile.user.email = form.cleaned_data['email']
