@@ -17,21 +17,24 @@ def list_housing(request):
     housing = HousingListing.published.order_by('-pub_date')
     profile = get_user_profile(request)
     
-    needs_email = not request.user.email
-    if request.method == 'POST':
-        form = SubmitHousingForm(request.POST, needs_email=needs_email)
-        if form.is_valid():
-            submission = form.save(commit=False)
-            profile = get_user_profile(request)
-            submission.student = profile
-            submission.save()
-            if needs_email:
-                profile.user.email = form.cleaned_data['email']
-                profile.save()
-            form.save_m2m()
-            return HttpResponseRedirect(reverse(list_housing))
+    if profile:
+        needs_email = not request.user.email
+        if request.method == 'POST':
+            form = SubmitHousingForm(request.POST, needs_email=needs_email)
+            if form.is_valid():
+                submission = form.save(commit=False)
+                profile = get_user_profile(request)
+                submission.student = profile
+                submission.save()
+                if needs_email:
+                    profile.user.email = form.cleaned_data['email']
+                    profile.save()
+                form.save_m2m()
+                return HttpResponseRedirect(reverse(list_housing))
+        else:
+            form = SubmitHousingForm(needs_email=needs_email)
     else:
-        form = SubmitHousingForm(needs_email=needs_email)
+        form = SubmitHousingForm(needs_email=False)
     
     return render_to_response('listings/housing/list.html', {
         'housing': housing,
