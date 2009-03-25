@@ -17,6 +17,11 @@ def list_housing(request):
     housing = HousingListing.published.order_by('-pub_date')
     profile = get_user_profile(request)
     
+    newuser = True
+    for listing in housing:
+        if person.name == profile.name:
+            newuser = False
+    
     if profile:
         needs_email = not request.user.email
         if request.method == 'POST':
@@ -40,6 +45,7 @@ def list_housing(request):
         'housing': housing,
         'form': form,
         'person': profile,
+        'newuser': newuser,
         'GMAPS_API_KEY': settings.GMAPS_API_KEY,
     }, context_instance=RequestContext(request))
 
