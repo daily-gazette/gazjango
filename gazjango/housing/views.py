@@ -19,7 +19,7 @@ def list_housing(request):
     
     newuser = True
     for listing in housing:
-        if person.name == profile.name:
+        if listing.student.name == profile.name:
             newuser = False
     
     if profile:
