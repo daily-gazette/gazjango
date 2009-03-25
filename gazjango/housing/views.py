@@ -7,7 +7,7 @@ from django.utils                   import simplejson as json
 
 from gazjango.housing.models     import HousingListing
 from gazjango.housing.forms      import SubmitHousingForm
-from gazjango.misc.view_helpers import get_user_profile
+from gazjango.misc.view_helpers  import get_user_profile
 
 import datetime
 import urllib
@@ -39,7 +39,7 @@ def list_housing(request):
     return render_to_response('listings/housing/list.html', {
         'housing': housing,
         'form': form,
-        'user': profile,
+        'person': profile,
         'GMAPS_API_KEY': settings.GMAPS_API_KEY,
     }, context_instance=RequestContext(request))
 
