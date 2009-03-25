@@ -114,7 +114,7 @@ urlpatterns += patterns('reviews.views',
 
 urlpatterns += patterns('',
     (r'^screw/', include('screw.urls')),
-    (r'^seniors/', include('seniors.urls')),
+    (r'^housing/', include('housing.urls')),
 )
 
 urlpatterns += patterns('jobs.views',
