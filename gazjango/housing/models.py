@@ -84,7 +84,7 @@ class HousingListing(models.Model):
     POSITION_TYPE = (
         ('j',"Job"),
         ('i',"Internship"),
-        ('g',"Gradiate School"),
+        ('g',"Graduate School"),
         ('o',"Other"),
     )
         
