@@ -37,7 +37,11 @@ def list_housing(request):
                     profile.user.email = form.cleaned_data['email']
                     profile.save()
                 if needs_name:
-                    profile.user.name = form.cleaned_data['username']
+                    name = form.cleaned_data['name']
+                    name = name.split()
+                    profile.user.first_name = name[0]
+                    if len(name) > 1:
+                        profile.user.last_name = name[-1]
                     profile.save()
                 form.save_m2m()
                 return HttpResponseRedirect(reverse(list_housing))
