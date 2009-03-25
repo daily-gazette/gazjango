@@ -18,9 +18,10 @@ def list_housing(request):
     profile = get_user_profile(request)
     
     newuser = True
-    for listing in housing:
-        if listing.student.name == profile.name:
-            newuser = False
+    if profile:
+        for listing in housing:
+            if listing.student.name == profile.name:
+                newuser = False
     
     if profile:
         needs_email = not request.user.email

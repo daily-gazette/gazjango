@@ -37,6 +37,7 @@
 </div>
 
 {% if user.is_authenticated %} 
+    <p>Looking for a roommate during a summer internship or in a job after Swarthmore? Or maybe you just want to know what other Swatties are going to be in the same town with you? Just fill out your information, and see the other students listed below.</p>
     {% if newuser %}
         {% if form.non_field_errors %}
             <p>{{ form.non_field_errors }}</p>
@@ -82,11 +83,10 @@
             </table>
         </form>
     {% else %}
-        <br />
+        <p>&nbsp;</p>
         <p>You've already submitted! To edit your submission, email <a href="mailto:editor@daily.swarthmore.edu">us</a>.</p>
     {% endif %}
 
-    <p>Looking for a roommate during a summer internship or in a job after Swarthmore? Or maybe you just want to know what other Swatties are going to be in the same town with you? Just fill out your information, and see the other students listed below.</p>
     <table id="review-listings" cellpadding="0" cellspacing="0" border="0" class="sortable-onload-0-4 rowstyle-alt colstyle-alt no-arrow">
       <caption>Click on a column heading to sort.</caption>
       <thead>
@@ -102,7 +102,7 @@
       </thead>
       <tbody>
         {% for s in housing %}
-          <tr class="senior-row">
+          <tr class="student-row">
             <td>
               {% ifequal s.student user_profile %}
                   You!
