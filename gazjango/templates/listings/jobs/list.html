@@ -3,7 +3,9 @@
 {% load markup %}
 
 {% block title %}Jobs{% endblock title %}
-{% block listings_customheader %}{% endblock listings_customheader %}
+{% block listings_customheader %}
+    <script type="text/javascript" src="{% static js tablesort.js %}"></script>
+{% endblock listings_customheader %}
 {% block listings_title %}Jobs{% endblock %}
  
 {% block listings_content %}

@@ -11,6 +11,8 @@ class SubmitHousingForm(forms.ModelForm):
         super(SubmitHousingForm, self).__init__(*args, **kwargs)
         if needs_email:
             self.fields['email'] = forms.EmailField()
+        if needs_name:
+            self.fields['name'] = forms.CharField(max_length=40)
     
     class Meta:
         model = HousingListing

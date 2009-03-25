@@ -20,13 +20,14 @@ def list_housing(request):
     newuser = True
     if profile:
         for listing in housing:
-            if listing.student.name == profile.name:
+            if listing.student == profile:
                 newuser = False
     
     if profile:
         needs_email = not request.user.email
+        needs_name  = not request.user.name
         if request.method == 'POST':
-            form = SubmitHousingForm(request.POST, needs_email=needs_email)
+            form = SubmitHousingForm(request.POST, needs_email=needs_email, needs_name=needs_name)
             if form.is_valid():
                 submission = form.save(commit=False)
                 profile = get_user_profile(request)
@@ -35,12 +36,15 @@ def list_housing(request):
                 if needs_email:
                     profile.user.email = form.cleaned_data['email']
                     profile.save()
+                if needs_name:
+                    profile.user.name = form.cleaned_data['username']
+                    profile.save()
                 form.save_m2m()
                 return HttpResponseRedirect(reverse(list_housing))
         else:
-            form = SubmitHousingForm(needs_email=needs_email)
+            form = SubmitHousingForm(needs_email=needs_email,needs_name=needs_name)
     else:
-        form = SubmitHousingForm(needs_email=False)
+        form = SubmitHousingForm(needs_email=False,needs_name=False)
     
     return render_to_response('listings/housing/list.html', {
         'housing': housing,

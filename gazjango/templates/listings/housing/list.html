@@ -47,7 +47,11 @@
             <table class="submission">
                 <tr>
                     <td><strong>Your Name:</strong></td>
-                    <td>{{ person.name }}</td>
+                    {% if form.name %}
+                        <td>{{ form.name }}</td>
+                    {% else %}
+                        <td>{{ person.name }}</td>
+                    {% endif %}
                     <td><strong>Position Type:</strong></th>
                     <td>{{ form.position }}</td>
                 </tr>
