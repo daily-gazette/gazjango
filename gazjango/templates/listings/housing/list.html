@@ -1,0 +1,114 @@
+{% extends "listings/base.html" %}
+{% load extras %}
+{% load markup %}
+
+{% block title %}Housing Directory{% endblock title %}
+{% block listings_customheader %}
+    <script type="text/javascript" src="{% static js tablesort.js %}"></script>
+    <script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=ABQIAAAAG8P9j9QQO2vTUNEZdr-SshRBFkE0okIvh5jo6hT61-rPJ9wxNRTCSsSwq_CwS12DbBAmnO-NRXP2lA" type="text/javascript"></script>    
+    
+    <script type="text/javascript">    
+
+       function initialize() {
+         if (GBrowserIsCompatible()) {
+           var map = new GMap2(document.getElementById("map"));
+           map.setCenter(new GLatLng(40.4419, -102.1419), 3);
+           map.addControl(new GMapTypeControl());
+           
+           {% for s in housing %}
+           var point  = new GLatLng({{ s.latitude }}, {{ s.longitude }});
+           map.addOverlay(new GMarker(point));
+           {% endfor %}
+         }
+       }
+
+       </script>       
+      
+{% endblock listings_customheader %}
+{% block listings_title %}The Housing Directory{% endblock listings_title %}
+
+
+{% block listings_content %}
+
+<div id="map" class="jmap">
+    <noscript>
+      <center><p>For a better experience with the Housing Listing, please enable JavaScript in your browser.</p></center>
+    </noscript>
+</div>
+
+{% if form.non_field_errors %}
+    <p>{{ form.non_field_errors }}</p>
+{% endif %}
+
+<form action="" method="post">
+    <table class="submission">
+        <tr>
+            <td><strong>Your Name:</strong></td>
+            <td>{{ user.name }}</td>
+            <td><strong>Position Type:</strong></th>
+            <td>{{ form.position }}</td>
+        </tr>
+        <tr>    
+        
+            <td><strong>{{ form.city.label_tag }}:</strong></th>
+            <td>{{ form.city }}</td>
+            <td><strong>{{ form.state.label_tag }}:</strong></th>
+            <td>{{ form.state }}</td>
+        </tr>
+        <tr>
+            <td><strong>Move-in Month:</strong></th>
+            <td>{{ form.moveinmonth }}</td>
+            <td><strong>Move-in Year:</strong></th>
+            <td>{{ form.moveinyear }}</td>
+        </tr>
+        <tr>
+            <td><strong>Move-out Month:</strong></th>
+            <td>{{ form.moveoutmonth }}</td>
+            <td><strong>Move-out Year:</strong></th>
+            <td>{{ form.moveoutyear }}</td>
+        </tr>
+        <tr>
+            <td><strong>Notes:</strong></td>
+            <td colspan="3">{{ form.notes }} <em>(100 character limit)</em></td>
+        <tr>        
+            {% if form.email %}
+                <td><strong>{{ form.email.label_tag }}:</strong></th>
+                <td>{{ form.email }}</td>
+            {% endif %}
+            <td><input type="submit" value="Submit" /></td>
+        </tr>		  
+    </table>
+</form>
+
+    <table id="review-listings" cellpadding="0" cellspacing="0" border="0" class="sortable-onload-0-4 rowstyle-alt colstyle-alt no-arrow">
+      <caption>Click on a column heading to sort.</caption>
+      <thead>
+        <tr>
+          <th class="sortable">Name</th>
+          <th class="sortable">Position Type</th>
+          <th class="sortable">City</th>
+          <th class="sortable">State</th>
+          <th class="sortable">Move-in</th>
+          <th class="sortable">Move-out</th>
+          <th class="sortable">Additional Notes</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for s in housing %}
+          <tr class="senior-row">
+            <td>
+              {% ifequal s.senior user_profile %}
+                  You!
+              {% else %}
+                  {{ s.senior.name }}
+              {% endifequal %}</td>
+            <td>{{ s.get_position_display }}</td>
+            <td>{{ s.city }}</td>
+            <td>{{ s.state }}</td>
+            <td>{{ s.get_moveinmonth_display }}, {{ s.get_moveinyear_display }}</td>
+            <td>{{ s.get_moveoutmonth_display }}, {{ s.get_moveoutyear_display }}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+{% endblock listings_content %}
