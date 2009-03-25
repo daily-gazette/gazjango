@@ -106,7 +106,12 @@
             <td>{{ s.city }}</td>
             <td>{{ s.state }}</td>
             <td>{{ s.get_moveinmonth_display }}, {{ s.get_moveinyear_display }}</td>
-            <td>{{ s.get_moveoutmonth_display }}, {{ s.get_moveoutyear_display }}</td>
+            <td>
+                {% if s.get_moveoutmonth_display %}
+                    {{ s.get_moveoutmonth_display }}, {{ s.get_moveoutyear_display }}
+                {% endif %}
+            </td>
+            <td>{{ s.notes }}</td>
           </tr>
         {% endfor %}
       </tbody>
