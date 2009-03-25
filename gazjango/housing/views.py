@@ -13,7 +13,6 @@ import datetime
 import urllib
 import settings
 
-@login_required
 def list_housing(request):
     housing = HousingListing.published.order_by('-pub_date')
     profile = get_user_profile(request)
