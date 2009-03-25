@@ -24,8 +24,8 @@ def list_housing(request):
                 newuser = False
     
     if profile:
-        needs_email = not request.user.email
-        needs_name  = not request.user.name
+        needs_email = not request.profile.email
+        needs_name  = not request.profile.name
         if request.method == 'POST':
             form = SubmitHousingForm(request.POST, needs_email=needs_email, needs_name=needs_name)
             if form.is_valid():
