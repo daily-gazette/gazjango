@@ -41,7 +41,7 @@ def list_announcements(request, kind=None, year=None, month=None, day=None, orde
         'month': month,
         'day': day,
         'events': events.order_by('event_date', 'event_time', 'pk'),
-        'non_events': non_events
+        'non_events': non_events,
         'recent_announcements': Announcement.community.order_by('-date_end')[:4],
     }
     rc = RequestContext(request)
