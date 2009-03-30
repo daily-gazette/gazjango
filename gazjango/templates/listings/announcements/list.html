@@ -60,7 +60,7 @@ window.addEvent('domready', function(){
     /* ------------------------------------ */
     /* List Elements 						*/
 
-    	#myList{width:2000px; border:0; margin:0; padding:0; left:400px;}
+    	#myList{width:2000px; border:0; margin:0; padding:0; left:400px;border-bottom:solid 3px #000000;}
     	#myList li{
     		list-style:none; 
     		margin:0; 
@@ -157,6 +157,7 @@ window.addEvent('domready', function(){
 
     <p>&nbsp;</p>
     <h3>Announcements</h3>
+    <p>&nbsp;</p>
 
     {% for announcement in non_events|slice:":10" %}
         <h4><a href="{{ announcement.get_absolute_url }}">{{ announcement.title }}</a></h4>
