@@ -31,6 +31,8 @@ def list_announcements(request, kind=None, year=None, month=None, day=None, orde
     if kind:
         qset = qset.filter(kind=kind)
     
+    events = qset.exclude(event_date=None)
+    non_events = qset.filter(event_date=None)
     
     data = { 
         'announcements': qset,
@@ -38,6 +40,8 @@ def list_announcements(request, kind=None, year=None, month=None, day=None, orde
         'year': year,
         'month': month,
         'day': day,
+        'events': events.order_by('event_date', 'event_time', 'pk'),
+        'non_events': non_events
         'recent_announcements': Announcement.community.order_by('-date_end')[:4],
     }
     rc = RequestContext(request)

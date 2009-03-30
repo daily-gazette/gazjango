@@ -46,6 +46,10 @@
         <form action="" method="post">
             <table class="submission">
                 <tr>
+                    <td colspan="4">
+                        All bold fields are required.
+                    </td>
+                <tr>
                     <td><strong>Your Name:</strong></td>
                     {% if form.name %}
                         <td>{{ form.name }}</td>
@@ -69,13 +73,13 @@
                     <td>{{ form.moveinyear }}</td>
                 </tr>
                 <tr>
-                    <td><strong>Move-out Month:</strong></th>
+                    <td>Move-out Month:</th>
                     <td>{{ form.moveoutmonth }}</td>
-                    <td><strong>Move-out Year:</strong></th>
+                    <td>Move-out Year:</th>
                     <td>{{ form.moveoutyear }}</td>
                 </tr>
                 <tr>
-                    <td><strong>Notes:</strong></td>
+                    <td>Notes:</td>
                     <td colspan="3">{{ form.notes }} <em>(100 character limit)</em></td>
                 <tr>        
                     {% if form.email %}

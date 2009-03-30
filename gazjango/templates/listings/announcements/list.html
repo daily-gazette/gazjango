@@ -3,12 +3,156 @@
 {% load markup %}
 
 {% block title %}Announcements{% endblock title %}
-{% block listings_customheader %}{% endblock listings_customheader %}
+{% block listings_customheader %}
+
+<script type="text/javascript" src="mootools.svn.js"></script>
+
+<script type="text/javascript">
+window.addEvent('domready', function(){ 
+	  var totIncrement		= 0;
+	  var increment			= 214;
+	  var maxRightIncrement	= increment*(-6);
+	  var fx = new Fx.Style('myList', 'margin-left', {
+				duration: 1000,
+				transition: Fx.Transitions.Back.easeInOut,
+				wait: true
+	   });
+	   
+	   //-------------------------------------
+	  // EVENTS for the button "previous"
+	  $('previous').addEvents({ 
+          'click' : function(event){ 
+		  if(totIncrement<0){
+					totIncrement = totIncrement+increment;
+					fx.stop()
+					fx.start(totIncrement);
+				}
+			}			  	  
+      }); 
+	 
+       //-------------------------------------
+	  // EVENTS for the button "next"
+  	  $('next').addEvents({ 
+          'click' : function(event){ 
+			 if(totIncrement>maxRightIncrement){
+				 totIncrement = totIncrement-increment;
+		    	fx.stop()
+				fx.start(totIncrement);
+			}
+          }		  		  
+      })
+
+	 
+});
+	</script>
+	
+	<style type="text/css">
+    
+	
+    #stage{width:638px; overflow: auto;overflow-x:hidden; overflow-y:hidden; height:200px; margin:0 auto;}	
+
+    /* ------------------------------------ */
+    /* List Elements 						*/
+
+    	#myList{width:2000px; border:0; margin:0; padding:0; left:400px;}
+    	#myList li{
+    		list-style:none; 
+    		margin:0; 
+    		padding:0; 
+    		border:0; 
+    		margin-right:4px;
+    		padding:4px; 
+    		background:#FFF;
+    		float:left;
+    		width:200px;
+    		height:192px;
+    		border-left:solid 2px #DEDEDE;
+    		}
+    	#myList li.holiday{
+    		background:#efefef;
+    		}
+    	#myList .day{
+    		font-family:Georgia, "Times New Roman", Times, serif;
+    		font-size:22px;
+    		color:#444;
+    		clear:both;
+    	}
+
+    	#myList .day-text{
+    		font-family:Georgia, "Times New Roman", Times, serif;
+    		font-size:16px;
+    		color:#444;
+    		text-transform:uppercase;
+    	}
+    	#myList .month{
+    		font-family:Georgia, "Times New Roman", Times, serif;
+    		font-size:14px;
+    		font-style:italic;
+    		color:#666;
+    		padding:6px 0;
+    	}
+
+    	#myList .year{
+    		font-family:Georgia, "Times New Roman", Times, serif;
+    		font-weight:bold;
+    		font-size:16px;
+    		color:#999999;
+    		clear:both;
+    		padding-bottom:10px;
+    	}
+    	#myList p{
+    		background:#FFFFCC;
+    		padding:3px;
+    		font-size:11px;
+    		color:#000000;
+    		margin-bottom:4px;
+    	}
+    /* ------------------------------------ */
+    /* Buttons		 						*/
+
+    #slider-buttons{
+    	width:638px; 
+    	margin:0 auto;
+    	margin-top:4px; 
+    	height:24px; 
+    	line-height:24px; 
+    	clear:both;
+    	background:#CCCCCC;
+    }
+    	#slider-buttons a{font-weight:bold; color:#444;}
+    	#slider-buttons a:hover{background:#888; color:#FFF;}
+
+    	#previous{float:left; width:70px; border-right:solid 1px #FFF; text-align:center;}
+    	#next{float:right; width:70px; border-left:solid 1px #FFF; text-align:center;}
+    </style>
+
+{% endblock listings_customheader %}
 {% block listings_title %}Announcements{% endblock %}
 
 {% block listings_content %}
 
-    {% for announcement in announcements|slice:":10" %}
+    <div id="stage">
+        <ul id="myList">
+            {% for event in events|slice:":25" %}
+                {% ifchanged %}
+                    </li>
+                    <li id="l1">
+                    <div class="day">{{ event.event_date|day }}</div>
+            		<div class="month">{{ event.event_date|month }}</div>
+            		<div class="year">{{ event.event_date|year }}</div>
+                {% endifchanged %}
+                <p>{% if announcement.event_time %}<strong>{{ announcement.event_time }}</strong>: {% endif %} <a href="{{ announcement.get_absolute_url }}">{{ announcement.title }}</a></p>
+            {% endfor %}
+            </li>
+        </ul>
+    </div>
+    <div id="slider-buttons">
+        <a href="#" id="previous">Previous</a>
+        <a href="#" id="next">Next</a>
+    </div>
+
+
+    {% for announcement in non_events|slice:":10" %}
         <h4><a href="{{ announcement.get_absolute_url }}">{{ announcement.title }}</a></h4>
         <p><strong>Sponsor:</strong> {{ announcement.sponsor_link }}<br />
         {% if announcement.is_event %}

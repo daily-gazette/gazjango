@@ -153,6 +153,23 @@ def near_future_date(date):
 
 near_future_date.is_safe = True
 
+@register.filter
+def day(date):
+    """
+    Returns the # of the day.
+    """
+    return """%s <span class="day-text">%s</span>""" % (date.day,date.strftime("%A"))
+        
+@register.filter
+def month(date):
+    """
+    Returns the name of the month
+    """
+    return date.strftime("%B")
+
+@register.filter
+def year(date):
+    return date.strftime("%Y")
 
 @register.filter
 def month_name(num):

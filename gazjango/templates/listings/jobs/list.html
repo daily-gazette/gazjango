@@ -10,19 +10,34 @@
  
 {% block listings_content %}
 
+<table id="review-listings" cellpadding="0" cellspacing="0" border="0" class="sortable-onload-0-1 rowstyle-alt colstyle-alt no-arrow">
+  <caption>Click on a column heading to sort.</caption>
+  <thead>
+    <tr>
+      <th class="sortable">Job Name</th>
+      <th class="sortable">Pay</th>
+      <th class="sortable">Time</th>
+      <th class="sortable">Location</th>
+      <th class="sortable">Car Required?</th>
+      <th>Contact Information</th>
+    </tr>
+  </thead>
+  <tbody>
     {% for job in jobs %}
-        <h4><a href="{{ job.get_absolute_url }}">{{ job.name }}</a> {% if job.is_filled %}[filled]{% endif %}</h4>
-        <p><strong>Pay:</strong> {{ job.get_pay }}<br />
-        <strong>Hours:</strong> {{ job.hours }}<br />
-        <strong>When:</strong> {{ job.when }}<br />
-        <strong>Where:</strong> {{ job.where }}
-        {% if job.needs_car %}<br />This position requires access to a car.{% endif %}
-        {% if job.contact_info %}<br /><strong>Contact:</strong> {{ job.contact_info }}</p>{% else %}</p>{% endif %}
-        {% autoescape off %}
-          <p>{{ job.description|linebreaksbr }}</p>
-        {% endautoescape %}
-        {% if not forloop.last %}<hr width=50% color=#eee /><br />{% endif %}
+      <tr class="job-row">
+        <td><a href="{{ job.get_absolute_url }}">{{ job.name }}</a></td>
+        <td>{% if job.get_pay %}
+                Paid: {{ job.get_pay }}
+            {% else %}
+                Unpaid
+            {% endif %}</td>
+        <td>{{ job.hours }}, {{ job.when }}</td>
+        <td>{{ job.where }}</td>
+        <td>{% if job.needs_car %}<strong>X</strong>{% endif %}</td>
+        <td>{{ job.contact_info }}</td>        
+      </tr>
     {% endfor %}
-
-    
+  </tbody>
+</table>   
+ 
 {% endblock listings_content %}
