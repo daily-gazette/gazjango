@@ -48,7 +48,14 @@ window.addEvent('domready', function(){
 	
 	<style type="text/css">
     
-    #stage{width:638px; overflow: auto;overflow-x:hidden; overflow-y:hidden; height:200px; margin:0 auto;}	
+    #stage{
+        width:638px;
+        overflow: auto;
+        overflow-x:hidden;
+        overflow-y:hidden;
+        height:200px;
+        margin:0 auto;
+    }	
 
     /* ------------------------------------ */
     /* List Elements 						*/
@@ -64,6 +71,7 @@ window.addEvent('domready', function(){
     		background:#FFF;
     		float:left;
     		width:200px;
+    		height:192px;
     		border-left:solid 2px #DEDEDE;
     		}
     	#myList li.holiday{
@@ -99,7 +107,7 @@ window.addEvent('domready', function(){
     		padding-bottom:10px;
     	}
     	#myList p{
-    		background:#FFFFCC;
+    	    width: 192px;
     		padding:4px;
     		font-size:11px;
     		color:#000000;
@@ -134,13 +142,11 @@ window.addEvent('domready', function(){
             {% for event in events|slice:":25" %}
                 {% ifchanged %}
                     </li>
-                    <li id="l1">
+                    <li>
                         <div class="day">{{ event.event_date|day }}</div>
                         <div class="month">{{ event.event_date|month }}</div>
-                {% endifchanged %}
-                        <p>{% if event.event_time %}<strong>{{ event.event_time }}</strong>: {% endif %} <a href="{{ event.get_absolute_url }}">{{ event.title }}</a></p>
-            {% endfor %}
-                    </li>
+                        {% endifchanged %}<p>{% if event.event_time %}<strong>{{ event.event_time }}</strong>: {% endif %} <a href="{{ event.get_absolute_url }}">{{ event.title }}</a></p>
+            {% endfor %}</li>
         </ul>
     </div>
     <div id="slider-buttons">
