@@ -63,7 +63,7 @@ window.addEvent('domready', function(){
     		padding:4px; 
     		background:#FFF;
     		float:left;
-    		width:250px;
+    		width:200px;
     		height:192px;
     		border-left:solid 2px #DEDEDE;
     		}
@@ -101,7 +101,7 @@ window.addEvent('domready', function(){
     	}
     	#myList p{
     		background:#FFFFCC;
-    		padding:3px;
+    		padding:4px;
     		font-size:11px;
     		color:#000000;
     		margin-bottom:4px;
@@ -136,7 +136,8 @@ window.addEvent('domready', function(){
                 {% ifchanged %}
                     </li>
                     <li id="l1">
-                        <div><span class="month">{{ event.event_date|day }} in {{ event.event_date|month }}</span></div>
+                        <div class="day">{{ event.event_date|day }}</div>
+                        <div class="month">{{ event.event_date|month }}</div>
                 {% endifchanged %}
                         <p>{% if event.event_time %}<strong>{{ event.event_time }}</strong>: {% endif %} <a href="{{ event.get_absolute_url }}">{{ event.title }}</a></p>
             {% endfor %}
