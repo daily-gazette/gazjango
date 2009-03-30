@@ -59,7 +59,7 @@ window.addEvent('domready', function(){
     		margin:0; 
     		padding:0; 
     		border:0; 
-    		margin-right:4px;
+    		margin-right:8px;
     		padding:4px; 
     		background:#FFF;
     		float:left;
@@ -118,11 +118,11 @@ window.addEvent('domready', function(){
     	clear:both;
     	background:#CCCCCC;
     }
-    	#slider-buttons a{font-weight:bold; color:#444;}
-    	#slider-buttons a:hover{background:#888; color:#FFF;}
+    	#slider-buttons a{font-weight:bold; color:#444;height:24px;}
+    	#slider-buttons a:hover{background:#888; color:#FFF;height:24px; }
 
-    	#previous{float:left; width:70px; border-right:solid 1px #FFF; text-align:center;}
-    	#next{float:right; width:70px; border-left:solid 1px #FFF; text-align:center;}
+    	#previous{float:left; width:70px; border-right:solid 1px #FFF; text-align:center;height:24px;}
+    	#next{float:right; width:70px; border-left:solid 1px #FFF; text-align:center;height:24px;}
     </style>
 
 {% endblock listings_customheader %}
@@ -136,13 +136,11 @@ window.addEvent('domready', function(){
                 {% ifchanged %}
                     </li>
                     <li id="l1">
-                    <div class="day">{{ event.event_date|day }}</div>
-            		<div class="month">{{ event.event_date|month }}</div>
-            		<div class="year">{{ event.event_date|year }}</div>
+                        <div><span class="day">{{ event.event_date|day }} /</span> <span class="month">{{ event.event_date|month }}</span></div>
                 {% endifchanged %}
-                <p>{% if event.event_time %}<strong>{{ event.event_time }}</strong>: {% endif %} <a href="{{ event.get_absolute_url }}">{{ event.title }}</a></p>
+                        <p>{% if event.event_time %}<strong>{{ event.event_time }}</strong>: {% endif %} <a href="{{ event.get_absolute_url }}">{{ event.title }}</a></p>
             {% endfor %}
-            </li>
+                    </li>
         </ul>
     </div>
     <div id="slider-buttons">
@@ -150,6 +148,7 @@ window.addEvent('domready', function(){
         <a href="#" id="next">Next</a>
     </div>
 
+    <p>&nbsp;</p>
 
     {% for announcement in non_events|slice:":10" %}
         <h4><a href="{{ announcement.get_absolute_url }}">{{ announcement.title }}</a></h4>
