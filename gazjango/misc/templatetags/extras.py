@@ -158,7 +158,7 @@ def day(date):
     """
     Returns the # of the day.
     """
-    return """%s <span class="day-text">%s</span>""" % (date.day,date.strftime("%A"))
+    return """%s %s""" % (date.day,date.strftime("%A"))
         
 @register.filter
 def month(date):

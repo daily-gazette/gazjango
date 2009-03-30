@@ -5,7 +5,7 @@
 {% block title %}Announcements{% endblock title %}
 {% block listings_customheader %}
 
-<script type="text/javascript" src="mootools.svn.js"></script>
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/mootools/1.11/mootools.js"></script>
 
 <script type="text/javascript">
 window.addEvent('domready', function(){ 
@@ -48,7 +48,6 @@ window.addEvent('domready', function(){
 	
 	<style type="text/css">
     
-	
     #stage{width:638px; overflow: auto;overflow-x:hidden; overflow-y:hidden; height:200px; margin:0 auto;}	
 
     /* ------------------------------------ */
@@ -141,7 +140,7 @@ window.addEvent('domready', function(){
             		<div class="month">{{ event.event_date|month }}</div>
             		<div class="year">{{ event.event_date|year }}</div>
                 {% endifchanged %}
-                <p>{% if announcement.event_time %}<strong>{{ announcement.event_time }}</strong>: {% endif %} <a href="{{ announcement.get_absolute_url }}">{{ announcement.title }}</a></p>
+                <p>{% if event.event_time %}<strong>{{ event.event_time }}</strong>: {% endif %} <a href="{{ event.get_absolute_url }}">{{ event.title }}</a></p>
             {% endfor %}
             </li>
         </ul>
