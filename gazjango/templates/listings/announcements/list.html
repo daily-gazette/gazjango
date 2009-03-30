@@ -70,7 +70,7 @@ window.addEvent('domready', function(){
     		padding:4px; 
     		background:#FFF;
     		float:left;
-    		width:200px;
+    		width:250px;
     		height:192px;
     		border-left:solid 2px #DEDEDE;
     		}
@@ -107,7 +107,8 @@ window.addEvent('domready', function(){
     		padding-bottom:10px;
     	}
     	#myList p{
-    	    width: 192px;
+    		background:#FFFFCC;
+    		width: 192px;
     		padding:4px;
     		font-size:11px;
     		color:#000000;
@@ -123,13 +124,12 @@ window.addEvent('domready', function(){
     	height:24px; 
     	line-height:24px; 
     	clear:both;
-    	background:#CCCCCC;
     }
     	#slider-buttons a{font-weight:bold; color:#444;height:24px;}
     	#slider-buttons a:hover{background:#888; color:#FFF;height:24px; }
 
-    	#previous{float:left; width:70px; border-right:solid 1px #FFF; text-align:center;height:24px;}
-    	#next{float:right; width:70px; border-left:solid 1px #FFF; text-align:center;height:24px;}
+    	#previous{float:left; width:70px; border-right:solid 1px #FFF; text-align:center;height:24px; background:#CCCCCC;}
+    	#next{float:right; width:70px; border-left:solid 1px #FFF; text-align:center;height:24px; background:#CCCCCC;}
     </style>
 
 {% endblock listings_customheader %}
