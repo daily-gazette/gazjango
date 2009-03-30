@@ -2,7 +2,7 @@
 {% load extras %}
 {% load markup %}
 
-{% block title %}Announcements{% endblock title %}
+{% block title %}Events and Announcements{% endblock title %}
 {% block listings_customheader %}
 
 <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/mootools/1.11/mootools.js"></script>
@@ -133,10 +133,11 @@ window.addEvent('domready', function(){
     </style>
 
 {% endblock listings_customheader %}
-{% block listings_title %}Announcements{% endblock %}
+{% block listings_title %}Events and Announcements{% endblock %}
 
 {% block listings_content %}
 
+    <h3>Events</h3>
     <div id="stage">
         <ul id="myList">
             {% for event in events|slice:":25" %}
@@ -155,6 +156,7 @@ window.addEvent('domready', function(){
     </div>
 
     <p>&nbsp;</p>
+    <h3>Announcements</h3>
 
     {% for announcement in non_events|slice:":10" %}
         <h4><a href="{{ announcement.get_absolute_url }}">{{ announcement.title }}</a></h4>
