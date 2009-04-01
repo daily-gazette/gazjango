@@ -37,7 +37,7 @@ urlpatterns += patterns('facebook_connect.views',
 
 urlpatterns += patterns('articles.views',
     (r'^$', 'homepage'),
-    (r'^april-fools/$', 'aprilfools')
+    (r'^april-fools/$', 'aprilfools'),
     (r'^search/$', 'search', {}, 'search'),
     
     (r'^%(ymds)s/$'          % reps, 'article', {}, 'article'),
