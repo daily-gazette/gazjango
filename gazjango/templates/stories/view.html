@@ -23,8 +23,11 @@
       <h3>
         <a href="{{ story.section.get_absolute_url }}">{{ story.section.name }}</a>
         {% if story.subsection %}
+            {% ifequal story.subsection "April Fools" %}
+            {% else %}
           &raquo;
           <a href="{{ story.subsection.get_absolute_url }}">{{ story.subsection.name }}</a>
+          {% endifequal %}
         {% endif %}
       </h3>
     </div>
