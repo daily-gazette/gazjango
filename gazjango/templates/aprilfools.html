@@ -70,12 +70,12 @@
             <div class='column-2wide'>
               <div class='w-rdivider'>
                 <div class='spacer-half'></div>
-                <h4 class='section'><a href="{{ topstory.section.get_absolute_url }}">{{ topstroy.section.name }}</a></h4>
+                <h4 class='section'><a href="{{ topstory.section.get_absolute_url }}">{{ topstory.section.name }}</a></h4>
                 <p>
-                  <a href="{{ topstory.get_absolute_url }}"><img alt="{{ topstory.get_title|safe }}" src="{{ topstory.main_image.top_front.url }}" /></a>
+                  <a href="{{ topstory.get_absolute_url }}"><img alt="{{ topstory.get_title }}" src="{{ topstory.main_image.top_front.url }}" /></a>
                   <div class='spacer-half'></div>
                 </p>
-                <h1><a href="{{ topstory.get_absolute_url }">{{ topstory.get_title|safe }}</a></h1>
+                <h1><a href="{{ topstory.get_absolute_url }">{{ topstory.get_title }}</a></h1>
                 <h2></h2>
                 <div class='spacer-half'></div>
                 <p id='byline'>BY {{ topstory.authors_in_order|join_authors:"l" }}</p>
