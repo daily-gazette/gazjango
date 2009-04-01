@@ -219,7 +219,7 @@ def homepage(request, template="index.html"):
 def april_fools(request, template="aprilfools.html"):
     tops, mids, lows = Article.published.get_stories(num_mid=2, num_low=6)
     data = {
-        'topstory': tops[0],
+        'topstories': tops[1],
         'midstories': mids,
         'lowstories': lows,
         'announcements': Announcement.community.get_n(3),

@@ -70,6 +70,7 @@
             </div>
             <div class='column-2wide'>
               <div class='w-rdivider'>
+                  {% for topstory in topstories %}
                 <div class='spacer-half'></div>
                 <h4 class='section'><a href="{{ topstory.section.get_absolute_url }}">{{ topstory.section.name }}</a></h4>
                 <p><a href="{{ topstory.get_absolute_url }}">
@@ -84,6 +85,7 @@
                     <p id='pubdate'>Published {{ topstory.pub_date|date:"n/j/Y" }}</p>
                     <div class='spacer-half'></div>
         			<p>{{ topstory.longest_summary|safe }}<a class="readMore" href="{{ topstory.get_absolute_url }}">More</a></p>
+        			{% endfor %}
                     <div class='spacer'></div>
 
               </div>
