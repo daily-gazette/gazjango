@@ -217,7 +217,7 @@ def homepage(request, template="index.html"):
     return render_to_response(template, data, context_instance=rc)
     
 def april_fools(request, template="aprilfools.html"):
-    tops, mids, lows = Article.published.get_stories(num_top=2,num_mid=2, num_low=6)
+    tops, mids, lows = Article.published.get_stories(num_top=2,num_mid=4, num_low=3)
     data = {
         'topstories': tops,
         'midstories': mids,
