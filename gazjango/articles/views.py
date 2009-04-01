@@ -215,6 +215,29 @@ def homepage(request, template="index.html"):
     }
     rc = RequestContext(request)
     return render_to_response(template, data, context_instance=rc)
+    
+def homepage(request, template="aprilfools.html"):
+    tops, mids, lows = Article.published.get_stories(num_mid=2, num_low=6)
+    data = {
+        'topstory': tops[0],
+        'midstories': mids,
+        'lowstories': lows,
+
+        'comments': PublicComment.visible.order_by('-time').all()[:3],
+        'weather': Weather.objects.for_today(),
+        'joke': WeatherJoke.objects.latest(),
+
+        'specials': Special.objects.order_by('-date').all()[:10],
+        'announcements': Announcement.community.get_n(3),
+        'jobs': JobListing.published.get_for_show(3),
+
+        'bico_news': get_bico_news(),
+        'tla_links': get_tla_links(),
+        'manual_links': manual_links,
+        'lca_links': lca_links,
+    }
+    rc = RequestContext(request)
+    return render_to_response(template, data, context_instance=rc)
 
 @staff_required    
 def staff(request,  template="staff/index.html"):
