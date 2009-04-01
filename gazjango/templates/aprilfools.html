@@ -77,7 +77,7 @@
         		  </a>
         			<h2><a href="{{ topstory.get_absolute_url }}">{{topstory.get_title|safe}}</a></h2>
         			<p class="byline">
-        			  <span class="author">by {{ topstory.authors_in_order|join_authors:"l" }}</span>
+        			  <span class="author">by {{ topstory.authors_in_order }}</span>
         			  <span class="date">| {{ topstory.pub_date|date:"n/j/Y" }}</span>
         			</p>
         			<p>
