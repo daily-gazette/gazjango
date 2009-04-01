@@ -222,15 +222,7 @@ def april_fools(request, template="aprilfools.html"):
         'topstory': tops[0],
         'midstories': mids,
         'lowstories': lows,
-
-        'comments': PublicComment.visible.order_by('-time').all()[:3],
-        'weather': Weather.objects.for_today(),
-        'joke': WeatherJoke.objects.latest(),
-
-        'specials': Special.objects.order_by('-date').all()[:10],
         'announcements': Announcement.community.get_n(3),
-        'jobs': JobListing.published.get_for_show(3),
-
         'bico_news': get_bico_news(),
         'tla_links': get_tla_links(),
         'manual_links': manual_links,
