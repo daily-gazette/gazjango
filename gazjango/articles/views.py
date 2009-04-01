@@ -216,7 +216,7 @@ def homepage(request, template="index.html"):
     rc = RequestContext(request)
     return render_to_response(template, data, context_instance=rc)
     
-def homepage(request, template="aprilfools.html"):
+def april_fools(request, template="aprilfools.html"):
     tops, mids, lows = Article.published.get_stories(num_mid=2, num_low=6)
     data = {
         'topstory': tops[0],
