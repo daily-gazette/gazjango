@@ -55,7 +55,7 @@ class PublishedArticlesManager(models.Manager):
         
         base = base or self    
         
-        if april_fools:
+        if not april_fools:
             base = base.exclude(pub_date='2009-03-31')
         
         tops = list(base.filter(position='1').order_by('-pub_date')[:3])
