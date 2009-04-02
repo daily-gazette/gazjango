@@ -84,7 +84,8 @@ class PublishedArticlesManager(models.Manager):
             return [tops, mids, lows]
     
         else:
-            tops = list(base.filter(position='1').order_by('-pub_date')[:3])
+            top_base = base.exclude(pub_date='2009-03-31')
+            tops = list(top_base.filter(position='1').order_by('-pub_date')[:3])
             tops = sorted(tops, key=lambda x: random.random())
             if len(tops) < num_top:
                 cands = base.filter(possible_position='1').order_by('position', '-pub_date')
@@ -95,7 +96,7 @@ class PublishedArticlesManager(models.Manager):
                 tops = tops[:num_top]
         
             exclude_pks = [top.pk for top in tops]
-            mids = base.filter(position__in=('1', '2')).exclude(pk__in=exclude_pks)
+            mids = base.filter(position__in=('1', '2')).exclude(pk__in=exclude_pks,pub_date='2009-03-31')
             mids = list(mids.order_by('-pub_date'))
             if len(mids) < num_mid:
                 cands = base.filter(possible_position__in=('1', '2'))
@@ -108,7 +109,7 @@ class PublishedArticlesManager(models.Manager):
                 mids = mids[:num_mid]
         
             exclude_pks = [el.pk for el in (tops + mids)]
-            lows = list(base.exclude(pk__in=exclude_pks).order_by('-pub_date')[:num_low])
+            lows = list(base.exclude(pk__in=exclude_pks,pub_date='2009-03-31').order_by('-pub_date')[:num_low])
             return [tops, mids, lows]
     
     def get_top_story(self):
