@@ -54,7 +54,16 @@ class PublishedArticlesManager(models.Manager):
             april_fools = True
         
         base = base or self    
-            
+        
+        if not april_fools:
+            section = 'features'
+            subsection = 'april-fools'
+
+            sec = get_object_or_404(Section, slug=section)
+            sub = get_object_or_404(Subsection, section=sec, slug=subsection)
+        
+            base = base.exclude(subsection=sub)
+        
         tops = list(base.filter(position='1').order_by('-pub_date')[:3])
         tops = sorted(tops, key=lambda x: random.random())
         if len(tops) < num_top:
