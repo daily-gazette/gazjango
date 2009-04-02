@@ -27,7 +27,7 @@ class PublishedArticlesManager(models.Manager):
         orig = super(PublishedArticlesManager, self).get_query_set()
         return orig.filter(status='p')
     
-    def get_stories(self, num_top=1, num_mid=2, num_low=6, section_filter=None,base=None):
+    def get_stories(self, num_top=1, num_mid=2, num_low=6, section_filter="None",base=None):
         """
         Returns stories organized by priority. This method will do some
         rearranging to always get you the number of stories of each
@@ -51,7 +51,7 @@ class PublishedArticlesManager(models.Manager):
         """
         base = base or self
         
-        if section_filter == None:
+        if section_filter == "None":
             base = list(base.exclude(subsection.name="April Fools"))
         else:
             base = list(base.filter(subsection.name=section_filter))
