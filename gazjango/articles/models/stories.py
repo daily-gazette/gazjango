@@ -11,7 +11,7 @@ from django.db                          import models
 from gazjango.accounts.models          import UserProfile
 from gazjango.articles                 import formats
 from gazjango.articles.models.concepts import StoryConcept
-from gazjango.articles.models.sections import Sectoin, Subsection
+from gazjango.articles.models.sections import Section, Subsection
 from gazjango.articles.models.specials import Special
 from gazjango.comments.models          import PublicComment
 from gazjango.diff_match_patch.diff_match_patch import diff_match_patch
