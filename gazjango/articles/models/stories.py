@@ -50,20 +50,13 @@ class PublishedArticlesManager(models.Manager):
         get_stories(base=section.articles) would return stories from
         the articles in `section` (but see Section's get_stories method).
         """
-        april_fools = True
-        if base = None:
-            april_fools = False
+        april_fools = False
+        if base:
+            april_fools = True
         
         base = base or self    
         
-        if not april_fools:
-            section = 'features'
-            subsection = 'april-fools'
 
-            sec = get_object_or_404(Section, slug=section)
-            sub = get_object_or_404(Subsection, section=sec, slug=subsection)
-        
-            base = base.exclude(subsection=sub)
         
         tops = list(base.filter(position='1').order_by('-pub_date')[:3])
         tops = sorted(tops, key=lambda x: random.random())
