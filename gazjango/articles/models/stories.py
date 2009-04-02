@@ -54,37 +54,62 @@ class PublishedArticlesManager(models.Manager):
             april_fools = True
         
         base = base or self    
+
+        if april_fools:
+            tops = list(base.filter(position='1').order_by('-pub_date')[:3])
+            tops = sorted(tops, key=lambda x: random.random())
+            if len(tops) < num_top:
+                cands = base.filter(possible_position='1').order_by('position', '-pub_date')
+                cands = cands.exclude(pk__in=[top.pk for top in tops])
+                needed = num_top - len(tops)
+                tops += list(cands[:needed])
+            else:
+                tops = tops[:num_top]
         
-        if not april_fools:
-            base = list(base.exclude(pub_date='2009-03-31'))
-        
-        tops = list(base.filter(position='1').order_by('-pub_date')[:3])
-        tops = sorted(tops, key=lambda x: random.random())
-        if len(tops) < num_top:
-            cands = base.filter(possible_position='1').order_by('position', '-pub_date')
-            cands = cands.exclude(pk__in=[top.pk for top in tops])
-            needed = num_top - len(tops)
-            tops += list(cands[:needed])
-        else:
-            tops = tops[:num_top]
-        
-        exclude_pks = [top.pk for top in tops]
-        mids = base.filter(position__in=('1', '2')).exclude(pk__in=exclude_pks)
-        mids = list(mids.order_by('-pub_date'))
-        if len(mids) < num_mid:
-            cands = base.filter(possible_position__in=('1', '2'))
-            exclude_pks += [mid.pk for mid in mids]
-            cands = cands.exclude(pk__in=exclude_pks).order_by('-pub_date')
+            exclude_pks = [top.pk for top in tops]
+            mids = base.filter(position__in=('1', '2')).exclude(pk__in=exclude_pks)
+            mids = list(mids.order_by('-pub_date'))
+            if len(mids) < num_mid:
+                cands = base.filter(possible_position__in=('1', '2'))
+                exclude_pks += [mid.pk for mid in mids]
+                cands = cands.exclude(pk__in=exclude_pks).order_by('-pub_date')
             
-            needed = num_mid - len(mids)
-            mids += list(cands[:needed])
-        else:    
-            mids = mids[:num_mid]
+                needed = num_mid - len(mids)
+                mids += list(cands[:needed])
+            else:    
+                mids = mids[:num_mid]
         
-        exclude_pks = [el.pk for el in (tops + mids)]
-        lows = list(base.exclude(pk__in=exclude_pks).order_by('-pub_date')[:num_low])
-        return [tops, mids, lows]
+            exclude_pks = [el.pk for el in (tops + mids)]
+            lows = list(base.exclude(pk__in=exclude_pks).order_by('-pub_date')[:num_low])
+            return [tops, mids, lows]
     
+        else:
+            tops = list(base.filter(position='1').order_by('-pub_date')[:3].exclude(pub_date='2009-03-31'))
+            tops = sorted(tops, key=lambda x: random.random())
+            if len(tops) < num_top:
+                cands = base.filter(possible_position='1').order_by('position', '-pub_date')
+                cands = cands.exclude(pk__in=[top.pk for top in tops])
+                needed = num_top - len(tops)
+                tops += list(cands[:needed])
+            else:
+                tops = tops[:num_top]
+        
+            exclude_pks = [top.pk for top in tops]
+            mids = base.filter(position__in=('1', '2')).exclude(pk__in=exclude_pks).exclude(pub_date='2009-03-31')
+            mids = list(mids.order_by('-pub_date'))
+            if len(mids) < num_mid:
+                cands = base.filter(possible_position__in=('1', '2'))
+                exclude_pks += [mid.pk for mid in mids]
+                cands = cands.exclude(pk__in=exclude_pks).order_by('-pub_date')
+            
+                needed = num_mid - len(mids)
+                mids += list(cands[:needed])
+            else:    
+                mids = mids[:num_mid]
+        
+            exclude_pks = [el.pk for el in (tops + mids)]
+            lows = list(base.exclude(pk__in=exclude_pks).order_by('-pub_date')[:num_low]).exclude(pub_date='2009-03-31')
+            return [tops, mids, lows]
     
     def get_top_story(self):
         """
