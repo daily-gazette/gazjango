@@ -11,7 +11,6 @@ from django.db                          import models
 from gazjango.accounts.models          import UserProfile
 from gazjango.articles                 import formats
 from gazjango.articles.models.concepts import StoryConcept
-from gazjango.articles.models          import Section, Subsection, Column
 from gazjango.articles.models.specials import Special
 from gazjango.comments.models          import PublicComment
 from gazjango.diff_match_patch.diff_match_patch import diff_match_patch
@@ -55,9 +54,7 @@ class PublishedArticlesManager(models.Manager):
             april_fools = True
         
         base = base or self    
-        
-
-        
+            
         tops = list(base.filter(position='1').order_by('-pub_date')[:3])
         tops = sorted(tops, key=lambda x: random.random())
         if len(tops) < num_top:
