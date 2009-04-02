@@ -217,8 +217,12 @@ def homepage(request, template="index.html"):
     return render_to_response(template, data, context_instance=rc)
     
 def april_fools(request, template="aprilfools.html"):
-    sec = get_object_or_404(Section, slug='features')
-    sub = get_object_or_404(Subsection, section=sec, subsection='april-fools')
+    section = 'features'
+    subsection = 'april-fools'
+    
+    sec = get_object_or_404(Section, slug=section)
+    sub = get_object_or_404(Subsection, section=sec, slug=subsection)
+    
     tops, mids, lows = sub.get_stories(num_top=2,num_mid=4, num_low=3)
     data = {
         'topstories': tops,
