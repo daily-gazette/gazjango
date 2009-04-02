@@ -11,6 +11,7 @@ from django.db                          import models
 from gazjango.accounts.models          import UserProfile
 from gazjango.articles                 import formats
 from gazjango.articles.models.concepts import StoryConcept
+from gazjango.articles.models          import Section, Subsection, Column
 from gazjango.articles.models.specials import Special
 from gazjango.comments.models          import PublicComment
 from gazjango.diff_match_patch.diff_match_patch import diff_match_patch
@@ -49,8 +50,20 @@ class PublishedArticlesManager(models.Manager):
         get_stories(base=section.articles) would return stories from
         the articles in `section` (but see Section's get_stories method).
         """
+        april_fools = True
+        if base = None:
+            april_fools = False
         
-        base = base or self
+        base = base or self    
+        
+        if not april_fools:
+            section = 'features'
+            subsection = 'april-fools'
+
+            sec = get_object_or_404(Section, slug=section)
+            sub = get_object_or_404(Subsection, section=sec, slug=subsection)
+        
+            base = base.exclude(subsection=sub)
         
         tops = list(base.filter(position='1').order_by('-pub_date')[:3])
         tops = sorted(tops, key=lambda x: random.random())
