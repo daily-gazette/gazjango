@@ -207,10 +207,11 @@ h1 {
 				list-style-type: square;
 				list-style-position: inside;
 				margin-bottom: 4px;
+				font: .8em "Helvetica Neue", Arial, Helvetica, Geneva, sans-serif;
 			}
 			
 			.mootabs_panel ul li a {
-				color: #515151;
+				color: #666666;
 				text-decoration: none;
 			}
 
@@ -236,9 +237,12 @@ h1 {
 			
 			.story {
 	padding: 5px;
-	width: 303px;
+	margin-left: 2px;
+	width: 294px;
 	display: inline-block;
 	float: left;
+	background: #FFFFFF;
+	margin-bottom: 5px;
 }
 
 .image {
@@ -257,14 +261,13 @@ h1 {
 
 .excerpt h4 {
 	margin-top: 0px;
-	margin-bottom: 5px;
-	font-variant: normal;
-	font-family: "Helvetica Neue", Arial, Helvetica, Geneva, sans-serif;
-	font-weight: bold;
+	margin-bottom: 3px;
 	text-decoration: none;
+	font: normal bold .9em "Helvetica Neue", Arial, Helvetica, Geneva, sans-serif;
 }
 
 .excerpt a {
+	color: #666666;
 	text-decoration: none;
 }
 

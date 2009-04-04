@@ -241,18 +241,9 @@
                     <div id="gazettecontent">
                         <div id="gazettetabs" class="sideTabs">
                             <ul class="mootabs_title">
+                                <li title="stories"><span>Top Stories</span></li>
                             	<li title="comments"><span>Comments</span></li>
-                            	<li title="stories"><span>Top Stories</span></li>
-                            </ul>	
-
-                            <div class="mootabs_panel" id="comments">
-                            	<ul>
-                            	    {% for comment in comments %}
-                            	        <li><a href="http://daily.swarthmore.edu{{comment.get_absolute_url}}">{{comment.subject.get_title}}</a></li>
-                                    {% endfor %}
-                            	</ul>
-                            </div>
-
+                            </ul>
                             <div class="mootabs_panel" id="stories">
                                 {% for story in stories %}
                                     <div class="story">
@@ -270,6 +261,13 @@
                                         </div>
                                     </div>
                                 {% endfor %}
+                            </div>	
+                            <div class="mootabs_panel" id="comments">
+                            	<ul>
+                            	    {% for comment in comments %}
+                            	        <li><a href="http://daily.swarthmore.edu{{comment.get_absolute_url}}">{{comment.subject.get_title}}</a></li>
+                                    {% endfor %}
+                            	</ul>
                             </div>
                         </div>
                     </div>
