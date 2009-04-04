@@ -1,14 +1,22 @@
 /* @override http://daily.swarthmore.edu/static/css/page/around.css */
 
+#content {
+	width: 1000px;
+	margin: 0 auto;
+	border-style: solid;
+	border-width: 1px;
+}
+
 
 /* EVENTS */
 	#stage{
-		width:950px;
+		width:980px;
 		overflow: auto;
 		overflow-x:hidden;
 		overflow-y:hidden;
 		height:160px;
 		margin:0 auto;
+		margin-top: 5px;
 		border: 4px solid #DDDDDD;
 	}	
 	
@@ -29,7 +37,7 @@
 		padding:4px; 
 		background:#FFF;
 		float:left;
-		width:300px;
+		width:310px;
 		height:150px;
 		border-left:solid 2px #DEDEDE;
 	}
@@ -71,7 +79,7 @@
 	
 	#myList p{
 		background:#FFFFCC;
-		width: 292px;
+		width: 312px;
 		padding:4px;
 		font-size:11px;
 		color:#000000;
@@ -80,7 +88,7 @@
 	}
 	
 	#slider-buttons{
-	  	width:958px; 
+	  	width:988px; 
 	  	margin:0 auto;
 	  	margin-top:0px; 
 	  	height:24px; 
@@ -118,6 +126,10 @@
 	}
   	
 /* MIDDLE ROW */
+
+	#mid bar {
+		width: 980px;
+	}
   	
   	/* Announcements and Lost & Found */
   		/*- Sidebar Tabs - Popular, Comments, Featured, Tag Cloud -*/
