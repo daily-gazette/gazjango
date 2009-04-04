@@ -155,6 +155,10 @@ h1 {
 				display: block;
 			}
 			
+			#bottom .sideTabs {
+				width: 500px;
+			}
+			
 			.mootabs_title{
 				font-size: 12px;
 				width: 100%;
@@ -187,6 +191,7 @@ h1 {
 				clear: none;
 				float:left;
 				height:auto !important;
+				font: .8em "Helvetica Neue", Arial, Helvetica, Geneva, sans-serif;
 			}
 			
 			.mootabs_panel.active {
@@ -207,16 +212,21 @@ h1 {
 				list-style-type: square;
 				list-style-position: inside;
 				margin-bottom: 4px;
-				font: .8em "Helvetica Neue", Arial, Helvetica, Geneva, sans-serif;
 			}
 			
-			.mootabs_panel ul li a {
+			.mootabs_panel a {
 				color: #666666;
 				text-decoration: none;
 			}
 
-			.mootabs_panel ul li a:hover {
+			.mootabs_panel a:hover {
 				text-decoration: underline;
+			}
+			
+			.mootabs_panel table {
+				background-color: #FFFFFF;
+				margin: 5px;
+				padding: 5px;
 			}
 			
   	/* Story and Comment Lists */
@@ -236,49 +246,49 @@ h1 {
 			}
 			
 			.story {
-	padding: 5px;
-	margin-left: 2px;
-	width: 294px;
-	display: inline-block;
-	float: left;
-	background: #FFFFFF;
-	margin-bottom: 5px;
-}
-
-.image {
-	float: left;
-	margin-right: 5px;
-}
-  	
-.image img {
-	width: 75px;
-}
-
-.excerpt {
-	float: left;
-	width: 210px;
-}
-
-.excerpt h4 {
-	margin-top: 0px;
-	margin-bottom: 3px;
-	text-decoration: none;
-	font: normal bold .9em "Helvetica Neue", Arial, Helvetica, Geneva, sans-serif;
-}
-
-.excerpt a {
-	color: #666666;
-	text-decoration: none;
-}
-
-.excerpt a:hover {
-	text-decoration: underline;
-}
-
-.excerpt p.byline {
-	margin: 0px;
-	font: .6em "Helvetica Neue", Arial, Helvetica, Geneva, sans-serif;
-}
+				padding: 5px;
+				margin-left: 2px;
+				width: 294px;
+				display: inline-block;
+				float: left;
+				background: #FFFFFF;
+				margin-bottom: 5px;
+			}
+			
+			.image {
+				float: left;
+				margin-right: 5px;
+			}
+			  	
+			.image img {
+				width: 75px;
+			}
+			
+			.excerpt {
+				float: left;
+				width: 210px;
+			}
+			
+			.excerpt h4 {
+				margin-top: 0px;
+				margin-bottom: 3px;
+				text-decoration: none;
+				font: normal bold .9em "Helvetica Neue", Arial, Helvetica, Geneva, sans-serif;
+			}
+			
+			.excerpt a {
+				color: #666666;
+				text-decoration: none;
+			}
+			
+			.excerpt a:hover {
+				text-decoration: underline;
+			}
+			
+			.excerpt p.byline {
+				margin: 0px;
+				font: .6em "Helvetica Neue", Arial, Helvetica, Geneva, sans-serif;
+			}
   	
 /* Bottom Bar */
 
