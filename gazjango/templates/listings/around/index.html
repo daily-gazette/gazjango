@@ -227,7 +227,7 @@
                         <div class="mootabs_panel" id="landf" >
                             <ul>
                         	    {% for item in lost_and_found %}
-                        	        <li><a href="{{ item.get_absolute_url }}">{{ item.title }}</a> ( Contact: {{ announcement.sponsor_link }} {% if announcement.poster_email %}({{ announcement.poster_email }}){% endif %} )</li>
+                        	        <li><a href="{{ item.get_absolute_url }}">{{ item.title }}</a> ( Contact: {{ item.sponsor_link }} {% if announcement.poster_email %}({{ announcement.poster_email }}){% endif %} )</li>
                         	    {% endfor %}
                         	</ul>
                         </div>
