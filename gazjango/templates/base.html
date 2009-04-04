@@ -6,7 +6,7 @@
 <head>
   <title>
     {% block full-title %}
-      {% block title %}{% endblock title %} :: The Daily Phoenix
+      {% block title %}{% endblock title %} :: The Daily Gazette
     {% endblock full-title %}
   </title>
 
@@ -25,21 +25,7 @@
   {% block customheader %}
   {% endblock customheader %}
   
-  <script src="http://static.ak.connect.facebook.com/js/api_lib/v0.4/FeatureLoader.js.php" type="text/javascript"></script>
-  <script type="text/javascript">
-      $(function() {
-      	$('.rollover').hover(function() {
-      		var currentImg = $(this).attr('src');
-      		$(this).attr('src', $(this).attr('hover'));
-      		$(this).attr('hover', currentImg);
-      	}, function() {
-      		var currentImg = $(this).attr('src');
-      		$(this).attr('src', $(this).attr('hover'));
-      		$(this).attr('hover', currentImg);
-      	});
-      });
-  </script>
-  
+  <script src="http://static.ak.connect.facebook.com/js/api_lib/v0.4/FeatureLoader.js.php" type="text/javascript"></script> 
 </head>
 
 <body {% block body-args %}{% endblock %}>

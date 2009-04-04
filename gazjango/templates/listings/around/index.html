@@ -1,0 +1,608 @@
+{% load extras %}
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+  "http://www.w3.org/TR/html4/loose.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:fb="http://www.facebook.com/2008/fbml" lang="en">
+
+<head>
+  <title>
+      Around Swarthmore
+  </title>
+
+  <link rel="stylesheet" href="{% static css toolbox.css %}" type="text/css" media="screen, projection, print" />
+  <link rel="stylesheet" href="{% static css functions/functions.css %}" type="text/css" media="screen, projection" />
+
+  <link rel="icon" type="image/x-icon" href="/static/images/favicon.ico" />
+
+  <link rel="alternate" type="application/rss+xml" title="Homepage" href="/feeds/main" />
+  <link rel="alternate" type="application/rss+xml" title="Latest Stories" href="/feeds/latest" />
+  
+  <!--[if lt IE 7]><script src="http://ie7-js.googlecode.com/svn/version/2.0(beta3)/IE7.js" type="text/javascript"></script><![endif]-->
+  <!--[if lt IE 8]><script src="http://ie7-js.googlecode.com/svn/version/2.0(beta3)/IE8.js" type="text/javascript"></script><![endif]-->
+
+  {% block customheader %}
+  {% endblock customheader %}
+  
+  {% jQuery %}
+  <script type="text/javascript" src="{% static js tablesort.js %}"></script>
+  <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/mootools/1.11/mootools.js"></script>
+  <script type="text/javascript" src="{% static js mootabs1.2.js %}"></script>
+  <script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key={{ GMAPS_API_KEY }}" type="text/javascript"></script>
+  <script type="text/javascript" src="{% static js reviews.js %}"></script>
+
+  <script type="text/javascript" charset="utf-8">
+    window.addEvent("domready", init);
+    function init() {
+        announcementtabs = new mootabs("announcementtabs");
+        gazettetabs = new mootabs("gazettetabs");
+        submissiontabs = new mootabs("submissiontabs");
+    }
+  </script>
+  <script type="text/javascript">
+  window.addEvent('domready', function(){ 
+  	  var totIncrement		= 0;
+  	  var increment			= 214;
+  	  var maxRightIncrement	= increment*(-6);
+  	  var fx = new Fx.Style('myList', 'margin-left', {
+  				duration: 1000,
+  				transition: Fx.Transitions.Back.easeInOut,
+  				wait: true
+  	   });
+
+  	   //-------------------------------------
+  	  // EVENTS for the button "previous"
+  	  $('previous').addEvents({ 
+            'click' : function(event){ 
+  		  if(totIncrement<0){
+  					totIncrement = totIncrement+increment;
+  					fx.stop()
+  					fx.start(totIncrement);
+  				}
+  			}			  	  
+        }); 
+
+         //-------------------------------------
+  	  // EVENTS for the button "next"
+    	  $('next').addEvents({ 
+            'click' : function(event){ 
+  			 if(totIncrement>maxRightIncrement){
+  				 totIncrement = totIncrement-increment;
+  		    	fx.stop()
+  				fx.start(totIncrement);
+  			}
+            }		  		  
+        })
+
+
+  });
+  	</script>
+  	<script type="text/javascript" charset="utf-8">
+        function toggleSponsorLink() {
+            $('#sponsor-url-row')
+            .find('input').val('').end()
+            .toggle();
+            link = $('#sponsor-toggle');
+            if (link.text() == 'add a link') {
+                link.text('remove the link');
+                } else {
+                link.text('add a link');
+            }
+        }
+        function toggleEventFields() {
+            $('.event-row').find('input').val('').end().toggle();
+        }
+        $(document).ready(function() {
+            url_row = $('#sponsor-url-row');
+            if (url_row.find('input').val() == '') {
+                url_row.hide(0);
+                $('#sponsor-toggle').show(0);
+            } else {
+                $('#sponsor-toggle').text('remove the link').show(0);
+            }
+            if ($('#{{ announcement_form.is_event.auto_id }}:checked').length == 0) {
+                $('.event-row').hide(0);
+            }
+        });
+    </script>
+    <script type="text/javascript" charset="utf-8">
+        function togglePay() {
+          $('#{{ form.pay.auto_id }}').parent().parent().eq(0).toggle(0);
+        }
+
+        $(document).ready(function() {
+          if ($('#{{ form.is_paid.auto_id }}:checked').length == 0) {
+            togglePay();
+          }
+        })
+    </script>
+    
+    <script type="text/javascript">
+        function initialize() {
+            initializeMap(document.getElementById('map'));
+
+            // icons
+            {% for short, image_path, shadow_path in icons %}
+            icons['{{ short }}'] = new GIcon();
+            icons['{{ short }}'].image = "{{ image_path }}";
+            icons['{{ short }}'].shadow = "{{ shadow_path }}";
+            icons['{{ short }}'].iconSize = new GSize(32, 32);
+            icons['{{ short }}'].shadowSize = new GSize(59, 32);
+            icons['{{ short }}'].iconAnchor = new GPoint(16, 32);
+            icons['{{ short }}'].infoWindowAnchor = new GPoint(5, 1);
+            {% endfor %}
+
+            // variables that it's easier to init here
+            {% for short, long in TYPE_CHOICES %}
+              typeShown['{{ short }}'] = true;
+              estabsByType['{{ short }}'] = [];
+            {% endfor %}
+
+            {% for num, loc in locations %}
+              locShown[{{ num }}] = true;
+              estabsByLoc[{{ num }}] = [];
+            {% endfor %}
+
+            {% for tag in tags %}
+              tagChecked[{{ tag.pk }}] = false;
+            {% endfor %}
+
+            // establishments
+            // TODO: load establishments with ajax?
+            {% for e in establishments %}
+            addMarker(
+              {{ e.pk }},
+              new GLatLng({{ e.latitude }}, {{ e.longitude }}),
+
+              '<large><strong>{{ e.name }}</strong></large><br/>' + 
+              'Average Rating: {{ e.avg_rating|default_if_none:"-" }}<br/>' +
+              'Average Cost: {{ e.avg_cost|default_if_none:"-" }}<br/>' +
+              {% if e.phone %}'Phone: {{ e.phone }}<br/>' + {% endif %}
+              '<a href="{{ e.get_absolute_url }}">Read more</a>',
+
+              '{{ e.establishment_type }}',
+              {# NOTE: ugly as all hell #}
+              {% for num, loc in locations %}{% ifequal loc e.city %}{{ num }}{% endifequal %}{% endfor %},
+              [ {% for tag in e.tags.all %}{{ tag.pk }}{% if not forloop.last %}, {% endif %}{% endfor %} ]
+            );
+            {% endfor %}
+
+            synchronizeCheckboxes();
+        }
+    </script>
+    
+      
+  	<style type="text/css">
+
+  #stage{
+      width:950px;
+      overflow: auto;
+      overflow-x:hidden;
+      overflow-y:hidden;
+      height:160px;
+      margin:0 auto;
+  }	
+
+  /* ------------------------------------ */
+  /* List Elements 						*/
+
+  	#myList{width:2000px; border:0; margin:0; padding:0; left:400px;}
+  	#myList li{
+  		list-style:none; 
+  		margin:0; 
+  		padding:0; 
+  		border:0; 
+  		margin-right:8px;
+  		padding:4px; 
+  		background:#FFF;
+  		float:left;
+  		width:300px;
+  		height:150px;
+  		border-left:solid 2px #DEDEDE;
+  		}
+  	#myList li.holiday{
+  		background:#efefef;
+  		}
+  	#myList .day{
+  		font-family:Georgia, "Times New Roman", Times, serif;
+  		font-size:22px;
+  		color:#444;
+  		clear:both;
+  	}
+
+  	#myList .day-text{
+  		font-family:Georgia, "Times New Roman", Times, serif;
+  		font-size:16px;
+  		color:#444;
+  		text-transannouncement_form:uppercase;
+  	}
+  	#myList .month{
+  		font-family:Georgia, "Times New Roman", Times, serif;
+  		font-size:14px;
+  		font-style:italic;
+  		color:#666;
+  		padding:6px 0;
+  	}
+
+  	#myList .year{
+  		font-family:Georgia, "Times New Roman", Times, serif;
+  		font-weight:bold;
+  		font-size:16px;
+  		color:#999999;
+  		clear:both;
+  		padding-bottom:10px;
+  	}
+  	#myList p{
+  		background:#FFFFCC;
+  		width: 192px;
+  		padding:4px;
+  		font-size:11px;
+  		color:#000000;
+  		margin-bottom:4px;
+  	}
+  /* ------------------------------------ */
+  /* Buttons		 						*/
+
+  #slider-buttons{
+  	width:638px; 
+  	margin:0 auto;
+  	margin-top:4px; 
+  	height:24px; 
+  	line-height:24px; 
+  	clear:both;
+  }
+  	#slider-buttons a{font-weight:bold; color:#444;height:24px;}
+  	#slider-buttons a:hover{background:#888; color:#FFF;height:24px; }
+
+  	#previous{float:left; width:70px; border-right:solid 1px #FFF; text-align:center;height:24px; background:#CCCCCC;}
+  	#next{float:right; width:70px; border-left:solid 1px #FFF; text-align:center;height:24px; background:#CCCCCC;}
+  </style>
+  
+  <script src="http://static.ak.connect.facebook.com/js/api_lib/v0.4/FeatureLoader.js.php" type="text/javascript"></script>
+
+</head>
+
+<body onload="initialize()" onunload="GUnload()">
+    <div id="container">
+        <div id="header">
+            
+        </div>
+        <div id="content">
+            <div id="events">
+                <div id="stage">
+                    <ul id="myList">
+                        {% for event in events %}
+                            {% ifequal forloop.counter 1 %}
+                                {% ifchanged %}
+                                    <li>
+                                        <div class="day">{{ event.event_date|day }}</div>
+                                        <div class="month">{{ event.event_date|month }}</div>
+                                {% endifchanged %}
+                            {% else %}
+                                {% ifchanged %}
+                                    </li>
+                                    <li>
+                                        <div class="day">{{ event.event_date|day }}</div>
+                                        <div class="month">{{ event.event_date|month }}</div>
+                                {% endifchanged %}
+                            {% endifequal %}
+                            <p>{% if event.event_time %}<strong>{{ event.event_time }}</strong>: {% endif %} <a href="{{ event.get_absolute_url }}">{{ event.title }}</a></p>
+                        {% endfor %}
+                        </li>
+                    </ul>
+                </div>
+                <div id="slider-buttons">
+                    <a href="#" id="previous">Previous</a>
+                    <a href="#" id="next">Next</a>
+                </div>
+            </div>
+            <div id="mid bar">
+                <div id="announcements">
+                    <div id="announcementtabs" class="sideTabs">
+                        <ul class="mootabs_title">
+                        	<li title="announcement"><span>Announcements</span></li>
+                        	<li title="landf"><span>Lost &amp; Found</span></li>
+                        </ul>	
+
+                        <div class="mootabs_panel" id="announcement">
+                        	<ul>
+                        	    {% for announcement in announcements %}
+                        	        <li><a href="{{ announcement.get_absolute_url }}">{{ announcement.title }}</a></li>
+                        	    {% endfor %}
+                        	</ul>
+                        </div>
+
+                        <div class="mootabs_panel" id="landf" >
+                            <ul>
+                        	    {% for item in lost_and_found %}
+                        	        <li><a href="{{ item.get_absolute_url }}">{{ item.title }}</a> ( Contact: {{ announcement.sponsor_link }} {% if announcement.poster_email %}({{ announcement.poster_email }}){% endif %} )</li>
+                        	    {% endfor %}
+                        	</ul>
+                        </div>
+                    </div>
+                </div>
+                <div id="centerbox">
+                    <div id="menus">
+                        {% if issue.menu.closed %}
+							{{ issue.menu.message }}
+						{% else %}
+							<p><strong>Lunch</strong>: {{ issue.menu.lunch|safe }}</p>
+							<p><strong>Dinner</strong>: {{ issue.menu.dinner|safe }}</p>
+						{% endif %}
+                    </div>
+                    <div id="gazettecontent">
+                        <div id="gazettetabs" class="sideTabs">
+                            <ul class="mootabs_title">
+                            	<li title="comments"><span>Comments</span></li>
+                            	<li title="stories"><span>Top Stories</span></li>
+                            </ul>	
+
+                            <div class="mootabs_panel" id="comments">
+                            	<ul>
+                            	    {% for comment in comments %}
+                            	        <li>{{ comment.display_name }} commented on <a href="http://daily.swarthmore.edu{{comment.get_absolute_url}}">{{comment.subject.get_title}}</a> at at {{ comment.time|date:"g:i A" }}, {{ comment.time|date:"F j" }}</li>
+                                    {% endfor %}
+                            	</ul>
+                            </div>
+
+                            <div class="mootabs_panel" id="stories">
+                                {% for story in midstories %}
+                                    <div class="story">
+                                        <div class="image">
+                                            <a href="{{ story.get_absolute_url }}">
+                                    		    <img src="{{ story.main_image.issue.url }}" title="{{ story.headline }}" alt="" />
+                                    		</a>
+                                        </div>
+                                        <div class="excerpt">
+                                            <h4>{% if story.section_if_special %}{{ story.section_if_special }}: {% endif %}<a href="{{ story.get_absolute_url }}">{{ story.get_title|safe }}</a></h4>
+                                            <p class="byline">
+                                                  <span class="author">by {{ story.authors_in_order|join_authors:"l" }}</span>
+                                                  <span class="date"> | {{ story.pub_date|date:"n/j/Y" }}</span>
+                                  		    </p>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="submissions">
+                    <div id="submissiontabs" class="sideTabs">
+                        <ul class="mootabs_title">
+                        	<li title="announcement"><span>Announcement</span></li>
+                        	<li title="job"><span>Jobs</span></li>
+                        </ul>	
+
+                        <div class="mootabs_panel" id="announcement">
+                                {% if announcement_announcement_form.non_field_errors %}
+                                    <p>{{ announcement_form.non_field_errors }}</p>
+                                {% endif %}
+                                <p><strong>Please note:</strong> If you are submitting an event or lost-and-found item, check the correct box below. All submissions improperly marked <strong>will be removed</strong>.<br/ >
+                                    If this announcement is about a job, please use <a href="http://daily.swarthmore.edu/jobs/new/">the jobs listing announcement_form</a> instead.</p>
+                                <form action="" method="post">
+                                    <table class="submission">
+                                        <tr>
+                                            <th width="150px"><label for="{{ announcement_form.title.auto_id }}">Announcement Title</label>:</th>
+                                            <td>{{ announcement_form.title }}</td>
+                                            <td>{{ announcement_form.title.errors }}</td>
+                                        </tr>
+                                        <tr>
+                                            <th><label for="{{ announcement_form.poster_email.auto_id }}">Your Email</label>:</th>
+                                            <td>{{ announcement_form.poster_email }}</td>
+                                            <td>{{ announcement_form.poster_email.errors }}</td>
+                                        </tr>
+                                        <tr>
+                                            <th><label for="{{ announcement_form.text.auto_id }}">Announcement Text</label>:</th>
+                                            <td>{{ announcement_form.text }}</td>
+                                            <td>{{ announcement_form.text.errors }}</td>
+                                        </tr>
+                                        <tr>
+                                            <th><label for="{{ announcement_form.date_start.auto_id }}">First Day in Digest</label>:</th>
+                                            <td>{{ announcement_form.date_start }}</td>
+                                            <td>{{ announcement_form.date_start.errors }}</td>
+                                        </tr>
+                                        <tr>
+                                            <th><label for="{{ announcement_form.date_end.auto_id }}">Last Day in Digest</label>:</th>
+                                            <td>{{ announcement_form.date_end }}</td>
+                                            <td>{{ announcement_form.date_end.errors }}</td>
+                                        </tr>
+                                        <tr>
+                                            <th>{{ announcement_form.sponsor.label_tag }}:<br /><small>(Your name or your group's name)</small></th>
+                                            <td>
+                                            {{ announcement_form.sponsor }}
+                                            <a href="#" id='sponsor-toggle' style="display: none;" onclick="toggleSponsorLink(); return false;">add a link</a>
+                                            </td>
+                                            <td>{{ announcement_form.sponsor.errors }}</td>
+                                        </tr>
+                                            <tr id="sponsor-url-row">
+                                            <th><label for="{{ announcement_form.sponsor_url.auto_id }}">Sponsor Link</label>:</th>
+                                            <td>{{ announcement_form.sponsor_url }}</td>
+                                            <td>{{ announcement_form.sponsor_url.errors }}</td>
+                                        </tr>
+                                        <tr>
+                                            <th> &nbsp; </th>
+                                            <td colspan="2">
+                                            {{ announcement_form.is_lost_and_found }}
+                                            This announcement is about a lost (or found) item.
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th> &nbsp; </th>
+                                            <td colspan="2">
+                                            {{ announcement_form.is_event }}
+                                            This announcement is about a specific event.
+                                            </td>
+                                        </tr>
+                                        <tr class="event-row">
+                                            <th>{{ announcement_form.event_date.label_tag }}:</th>
+                                            <td>{{ announcement_form.event_date }}</td>
+                                            <td>{{ announcement_form.event_date.errors }}</td>
+                                        </tr>
+                                        <tr class="event-row">
+                                            <th>{{ announcement_form.event_time.label_tag }}:</th>
+                                            <td>{{ announcement_form.event_time }}</td>
+                                            <td>{{ announcement_form.event_time.errors }}</td>
+                                        </tr>
+                                        <tr class="event-row">
+                                            <th>{{ announcement_form.event_place.label_tag }}:</th>
+                                            <td>{{ announcement_form.event_place }}</td>
+                                            <td>{{ announcement_form.event_place.errors }}</td>
+                                        </tr>
+                                        <tr>
+                                            <th></th>
+                                            <td><input type="submit" value="Submit" /></td>
+                                            <td></td>
+                                        </tr>
+                                    </table>
+                                </form>
+                        </div>
+
+                        <div class="mootabs_panel" id="job">
+                            {% if job_form.non_field_errors %}
+                                <p>
+                                    {{ job_form.non_field_errors }}
+                                </p>
+                            {% endif %}
+                            <form action="" method="post">
+                                <table class="submission">
+                                    <tr>
+                                        <th width="150px"><label>Job </label>{{ job_form.name.label_tag }}:</th>
+                                        <td>{{ job_form.name }}</td>
+                                        <td>{{ job_form.name.errors }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>{{ job_form.contact_name.label_tag }}:</th>
+                                        <td>{{ job_form.contact_name }}</td>
+                                        <td>{{ job_form.contact_name.errors }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>{{ job_form.contact_email.label_tag }}:</th>
+                                        <td>{{ job_form.contact_email }}</td>
+                                        <td>{{ job_form.contact_email.errors }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>{{ job_form.description.label_tag }}:</th>
+                                        <td>{{ job_form.description }}</td>
+                                        <td>{{ job_form.description.errors }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th><label for="{{ job_form.is_paid.auto_id }}">Paid job</label>:</th>
+                                        <td>{{ job_form.is_paid }}</td>
+                                        <td>{{ job_form.is_paid.errors }}</td>
+                                    </tr>
+                                    <tr id="pay-row">
+                                        <th>{{ job_form.pay.label_tag }}:</th>
+                                        <td>{{ job_form.pay }}</td>
+                                        <td>{{ job_form.pay.errors }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>{{ job_form.hours.label_tag }}:</th>
+                                        <td>{{ job_form.hours }}</td>
+                                        <td>{{ job_form.hours.errors }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>{{ job_form.when.label_tag }}:</th>
+                                        <td>{{ job_form.when }}</td>
+                                        <td>{{ job_form.when.errors }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>{{ job_form.where.label_tag }}:</th>
+                                        <td>{{ job_form.where }}</td>
+                                        <td>{{ job_form.where.errors }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th><label for="{{ job_form.at_swat.auto_id }}">On campus</label>:</th>
+                                        <td>{{ job_form.at_swat }}</td>
+                                        <td>{{ job_form.at_swat.errors }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>{{ job_form.needs_car.label_tag }}:</th>
+                                        <td>{{ job_form.needs_car }}</td>
+                                        <td>{{ job_form.needs_car.errors }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th></th>
+                                        <td>
+                                        <input type="submit" value="Submit" />
+                                        </td>
+                                        <td></td>
+                                    </tr>			  
+                                </table>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="bottom bar">
+                <div id="jobs">
+                    <table id="job-listings" cellpadding="0" cellspacing="0" border="0" class="sortable-onload-0-1 rowstyle-alt colstyle-alt no-arrow">
+                      <caption>Click on a column heading to sort, click the name for more information</caption>
+                      <thead>
+                        <tr>
+                          <th class="sortable">Job Name</th>
+                          <th class="sortable">Pay</th>
+                          <th class="sortable">Time</th>
+                          <th class="sortable">Location</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {% for job in jobs %}
+                          <tr class="job-row">
+                            <td><a href="{{ job.get_absolute_url }}">{{ job.name }}</a></td>
+                            <td>{% if job.get_pay %}
+                                    Paid: {{ job.get_pay }}
+                                {% else %}
+                                    Unpaid
+                                {% endif %}</td>
+                            <td>{{ job.hours }}, {{ job.when }}</td>
+                            <td>{{ job.where }}</td>
+                          </tr>
+                        {% endfor %}
+                      </tbody>
+                    </table>
+                </div>
+                <div id="reviews">
+                    <div id="map" class="jmap">
+                        <noscript>
+                          <center><p>For a better experience with the Zagette, please enable JavaScript in your browser.</p></center>
+                        </noscript>
+                    </div>
+                    <div id="list">
+                        <table id="review-listings" cellpadding="0" cellspacing="0" border="0" class="sortable-onload-0-1 rowstyle-alt colstyle-alt no-arrow">
+                          <caption>Reviews for and by the Swarthmore Community</caption>
+                          <thead>
+                            <tr>
+                              <th class="sortable" width="225px">Name</th>
+                              <th class="sortable" width="50px">Rating</th>
+                              <th class="sortable" width="115px">Reviews</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {% for establishment in establishments %}
+                              <tr id="establishment-{{ establishment.pk }}">
+                                <td><a href="{{ establishment.get_absolute_url }}" onclick='openInfo({{ establishment.pk }}); return false'>{{ establishment.name }}</a> <small>[<a href="{{ establishment.get_absolute_url }}">Reviews</a>]</small></td>
+                                <td>{{ establishment.avg_rating|default_if_none:"" }}</td>
+                                <td>
+                                  {% for review in establishment.reviews.all %}
+                                    <a href="{{ review.get_absolute_url }}">{{ review.reviewer.name }}</a>
+                                    {% if not forloop.last %}<br />{% endif %}
+                                  {% endfor %}
+                                </td>
+                              </tr>
+                            {% endfor %}
+                          </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript">FB.init("{{ FACEBOOK_API_KEY }}", "/xd_receiver.html", {'reloadIfSessionStateChanged': true});</script>
+    <script type="text/javascript">
+    	var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+    	document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+    	</script>
+    	<script type="text/javascript">
+    	var pageTracker = _gat._getTracker("UA-1785594-4");
+    	pageTracker._trackPageview();
+    </script>
+</body>
+</html>
