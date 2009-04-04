@@ -48,7 +48,6 @@ urlpatterns += patterns('articles.views',
     (r'^staff/new/$', 'concept_save_page'),
     (r'^staff/$', 'staff'),
     (r'^aprilfools/$', 'april_fools'),
-    (r'^around/$', 'around_swarthmore'),
     (r'^staff/mail/$', 'staff_mail'),
 )
 
@@ -63,6 +62,7 @@ urlpatterns += patterns('comments.views',
 )
 
 urlpatterns += patterns('announcements.views',
+    (r'^around/$', 'around_swarthmore'),
     (r'^announcements/new/$', 'submit_announcement', {}, 'submit-announcement'),
     (r'^announcements/new/success/$', 'announcement_success', {}, 'announcement-success'),
 
