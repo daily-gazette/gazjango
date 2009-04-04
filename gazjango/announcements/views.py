@@ -124,7 +124,6 @@ def around_swarthmore(request,template = "listings/around/index.html"):
         menu = Menu.objects.for_today()
     else:
         menu = Menu.objects.for_tomorrow()
-    return render_to_response("scraped/menu.html", { 'menu': menu })
 
     data = {
         'year': year, 'month': month, 'day': day,
