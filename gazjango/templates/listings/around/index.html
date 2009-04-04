@@ -218,7 +218,7 @@
 
                         <div class="mootabs_panel" id="announcement">
                         	<ul>
-                        	    {% for announcement in announcements %}
+                        	    {% for announcement in announcements|slice:":15" %}
                         	        <li><a href="{{ announcement.get_absolute_url }}">{{ announcement.title }}</a></li>
                         	    {% endfor %}
                         	</ul>
@@ -248,7 +248,7 @@
                             <div class="mootabs_panel" id="comments">
                             	<ul>
                             	    {% for comment in comments %}
-                            	        <li>{{ comment.display_name }} commented on <a href="http://daily.swarthmore.edu{{comment.get_absolute_url}}">{{comment.subject.get_title}}</a> at at {{ comment.time|date:"g:i A" }}, {{ comment.time|date:"F j" }}</li>
+                            	        <li><a href="http://daily.swarthmore.edu{{comment.get_absolute_url}}">{{comment.subject.get_title}}</a></li>
                                     {% endfor %}
                             	</ul>
                             </div>

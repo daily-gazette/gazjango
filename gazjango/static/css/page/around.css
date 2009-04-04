@@ -5,8 +5,13 @@
 	margin: 0 auto;
 	border-style: solid;
 	border-width: 1px;
+	display: inline-block;
 }
 
+h1 {
+	padding-bottom: 0px;
+	margin-bottom: 0px;
+}
 
 /* EVENTS */
 	#stage{
@@ -127,8 +132,10 @@
   	
 /* MIDDLE ROW */
 
-	#mid bar {
+	#mid {
 		width: 980px;
+		padding: 5px;
+		float: left;
 	}
   	
   	/* Announcements and Lost & Found */
@@ -137,7 +144,6 @@
 				width:308px !important;
 				height:auto !important;
 				min-height:258px;
-				padding:5px;
 				border:1px solid #ddd;
 				background-color:#eeeeee;
 				float:left;
@@ -187,7 +193,7 @@
 				width: 293px !important;
 				padding:5px !important;
 				border:1px solid #ddd !important;
-				margin:5px 0px 0px !important;
+				margin:5px 0px 0px 2px!important;
 				background-color: #FFFFFF;
 				min-height:203px;
 			}
@@ -208,4 +214,27 @@
 			}
 			
   	/* Story and Comment Lists */
+  	
+  			#centerbox {
+				width:313px !important;
+				height:auto !important;
+				padding:1px;
+				float:left;
+				display: block;
+				margin-right: 5px;
+				margin-left: 5px;
+				
+			}
+			
+			#menus {
+
+			}
+  	
+  	
+/* Bottom Bar */
+
+	#bottom {
+		width: 980px;
+		float: left;
+	}
 
