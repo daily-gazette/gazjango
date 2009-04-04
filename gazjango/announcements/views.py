@@ -103,7 +103,7 @@ def around_swarthmore(request,template = "listings/around/index.html"):
     tomorrow = date + datetime.timedelta(days=1)
     comments = PublicComment.visible.filter(time__lt=tomorrow).order_by('-time')
 
-    t,m,l = Article.published.get_stories(num_top=0, num_mid=4, num_low=0, base=base)
+    t,m,l = Article.published.get_stories(num_top=0, num_mid=4, num_low=0)
     try:
         topstory = articles[0]
     except IndexError:
