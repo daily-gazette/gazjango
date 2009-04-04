@@ -311,41 +311,6 @@
                     <object type="text/html" data="http://www.flickr.com/slideShow/index.gne?group_id=89729977@N00&user_id=&set_id=&text=" width="350" height="300"></object>
                 </div>
             </div>
-            <div id="bottom" class="bar">
-                <div id="reviews">
-                    <div id="map" class="jmap">
-                        <noscript>
-                          <center><p>For a better experience with the Zagette, please enable JavaScript in your browser.</p></center>
-                        </noscript>
-                    </div>
-                    <div id="list">
-                        <table id="review-listings" cellpadding="0" cellspacing="0" border="0" class="sortable-onload-0-1 rowstyle-alt colstyle-alt no-arrow">
-                          <caption>Reviews for and by the Swarthmore Community</caption>
-                          <thead>
-                            <tr>
-                              <th class="sortable" width="225px">Name</th>
-                              <th class="sortable" width="50px">Rating</th>
-                              <th class="sortable" width="115px">Reviews</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            {% for establishment in establishments %}
-                              <tr id="establishment-{{ establishment.pk }}">
-                                <td><a href="{{ establishment.get_absolute_url }}" onclick='openInfo({{ establishment.pk }}); return false'>{{ establishment.name }}</a> <small>[<a href="{{ establishment.get_absolute_url }}">Reviews</a>]</small></td>
-                                <td>{{ establishment.avg_rating|default_if_none:"" }}</td>
-                                <td>
-                                  {% for review in establishment.reviews.all %}
-                                    <a href="{{ review.get_absolute_url }}">{{ review.reviewer.name }}</a>
-                                    {% if not forloop.last %}<br />{% endif %}
-                                  {% endfor %}
-                                </td>
-                              </tr>
-                            {% endfor %}
-                          </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
         </div>
     </div>
     <script type="text/javascript">FB.init("{{ FACEBOOK_API_KEY }}", "/xd_receiver.html", {'reloadIfSessionStateChanged': true});</script>
