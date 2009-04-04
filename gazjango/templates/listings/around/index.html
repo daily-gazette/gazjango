@@ -235,12 +235,8 @@
                 </div>
                 <div id="centerbox">
                     <div id="menus">
-                        {% if issue.menu.closed %}
-							{{ issue.menu.message }}
-						{% else %}
-							<p><strong>Lunch</strong>: {{ issue.menu.lunch|safe }}</p>
-							<p><strong>Dinner</strong>: {{ issue.menu.dinner|safe }}</p>
-						{% endif %}
+						<p><strong>Lunch</strong>: {{ menu.lunch|safe }}</p>
+						<p><strong>Dinner</strong>: {{ menu.dinner|safe }}</p>
                     </div>
                     <div id="gazettecontent">
                         <div id="gazettetabs" class="sideTabs">

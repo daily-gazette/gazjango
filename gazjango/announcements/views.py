@@ -119,6 +119,12 @@ def around_swarthmore(request,template = "listings/around/index.html"):
     else:
         announcement_form = SubmitAnnouncementForm()
         job_form = SubmitJobForm()
+        
+    if datetime.datetime.now().hour < 21:
+        menu = Menu.objects.for_today()
+    else:
+        menu = Menu.objects.for_tomorrow()
+    return render_to_response("scraped/menu.html", { 'menu': menu })
 
     data = {
         'year': year, 'month': month, 'day': day,
@@ -131,6 +137,7 @@ def around_swarthmore(request,template = "listings/around/index.html"):
         'stories': m,
         'announcement_form': announcement_form,
         'job_form': job_form,
+        'menu': menu,
     }
     rc = RequestContext(request)
     return render_to_response(template, data,context_instance=rc)

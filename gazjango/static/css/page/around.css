@@ -131,12 +131,15 @@
 				float:left;
 				display: block;
 			}
-			.col2 .mootabs_title{
+			
+			.mootabs_title{
 				font-size: 12px;
 				width: 100%;
 				float:left;
+				margin: 0px;
 			}
-			.col2 .mootabs_title li{
+			
+			.mootabs_title li{
 				float: left;
 				display:inline;
 				font-size: 11px;
@@ -150,45 +153,47 @@
 				padding:0px 5px !important;
 				cursor: pointer;
 			}
-			.col2 .mootabs_title li:hover, .col2 .mootabs_title li.active{
+			
+			.mootabs_title li:hover, .col2 .mootabs_title li.active{
 				border: 1px solid #ddd;
 				text-decoration: none;
 			}
-			.col2 .mootabs_panel {
+			
+			.mootabs_panel {
 				display: none;
 				clear: none;
 				float:left;
 				height:auto !important;
 			}
-			.col2 .mootabs_panel.active {
+			
+			.mootabs_panel.active {
 				display: block;
 				float:left;
 			}
-			.col2 .mootabs_panel ul{
+			
+			.mootabs_panel ul{
 				width: 293px !important;
 				padding:5px !important;
 				border:1px solid #ddd !important;
 				margin:5px 0px 0px !important;
 				background-color: #FFFFFF;
 				min-height:203px;
-				}
-			.list1 li,.list2 li, .list3 li{
-				padding: 6px 0 6px 25px;
-				border-bottom: 1px solid #eee;
 			}
-			.list1 li a,.list3 li a,.list4 li a, .list5 li a{
-				color: #666666;
-				font-size: 12px;
+			
+			.mootabs_panel ul li {
+				list-style-type: square;
+				list-style-position: inside;
+				margin-bottom: 4px;
 			}
-			.list3 li {
-				background: url(images/ico-mostcomm.gif) no-repeat left center !important;
-				}
-			.list5 li{
-				border-bottom: 1px solid #eee;	
-				padding:6px 0px;
+			
+			.mootabs_panel ul li a {
+				color: #515151;
+				text-decoration: none;
 			}
-			  	
-  	
-  	
-  	
-  	
+
+			.mootabs_panel ul li a:hover {
+				text-decoration: underline;
+			}
+			
+  	/* Story and Comment Lists */
+
