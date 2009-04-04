@@ -266,6 +266,7 @@
                             <ul class="mootabs_title">
                                 <li title="stories"><span>Top Stories</span></li>
                             	<li title="comments"><span>Comments</span></li>
+                            	<li title="bico"><span>The BiCo News</span></li>
                             </ul>
                             <div class="mootabs_panel" id="stories">
                                 {% for story in stories %}
@@ -292,170 +293,17 @@
                                     {% endfor %}
                             	</ul>
                             </div>
-                        </div>
-                    </div>
-                </div>
-                <div id="submissions">
-                    <div id="submissiontabs" class="sideTabs">
-                        <ul class="mootabs_title">
-                        	<li title="announcement"><span>Announcement</span></li>
-                        	<li title="job"><span>Jobs</span></li>
-                        </ul>	
-
-                        <div class="mootabs_panel" id="announcement">
-                                {% if announcement_announcement_form.non_field_errors %}
-                                    <p>{{ announcement_form.non_field_errors }}</p>
-                                {% endif %}
-                                <form action="" method="post">
-                                    <table class="submission">
-                                        <tr>
-                                            <th width="150px"><label for="{{ announcement_form.title.auto_id }}">Announcement Title</label>:</th>
-                                            <td>{{ announcement_form.title }}</td>
-                                            <td>{{ announcement_form.title.errors }}</td>
-                                        </tr>
-                                        <tr>
-                                            <th><label for="{{ announcement_form.poster_email.auto_id }}">Your Email</label>:</th>
-                                            <td>{{ announcement_form.poster_email }}</td>
-                                            <td>{{ announcement_form.poster_email.errors }}</td>
-                                        </tr>
-                                        <tr>
-                                            <th><label for="{{ announcement_form.text.auto_id }}">Announcement Text</label>:</th>
-                                            <td>{{ announcement_form.text }}</td>
-                                            <td>{{ announcement_form.text.errors }}</td>
-                                        </tr>
-                                        <tr>
-                                            <th><label for="{{ announcement_form.date_start.auto_id }}">First Day in Digest</label>:</th>
-                                            <td>{{ announcement_form.date_start }}</td>
-                                            <td>{{ announcement_form.date_start.errors }}</td>
-                                        </tr>
-                                        <tr>
-                                            <th><label for="{{ announcement_form.date_end.auto_id }}">Last Day in Digest</label>:</th>
-                                            <td>{{ announcement_form.date_end }}</td>
-                                            <td>{{ announcement_form.date_end.errors }}</td>
-                                        </tr>
-                                        <tr>
-                                            <th><label for="{{ announcement_form.sponsor }}">Group or Individual Name:</label></th>
-                                            <td>
-                                                {{ announcement_form.sponsor }}
-                                                <a href="#" id='sponsor-toggle' style="display: none;" onclick="toggleSponsorLink(); return false;">add a link</a>
-                                            </td>
-                                            <td>{{ announcement_form.sponsor.errors }}</td>
-                                        </tr>
-                                            <tr id="sponsor-url-row">
-                                            <th><label for="{{ announcement_form.sponsor_url.auto_id }}">Sponsor Link</label>:</th>
-                                            <td>{{ announcement_form.sponsor_url }}</td>
-                                            <td>{{ announcement_form.sponsor_url.errors }}</td>
-                                        </tr>
-                                        <tr>
-                                            <th> &nbsp; </th>
-                                            <td colspan="2">
-                                            {{ announcement_form.is_lost_and_found }}
-                                            This announcement is about a lost (or found) item.
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <th> &nbsp; </th>
-                                            <td colspan="2">
-                                            {{ announcement_form.is_event }}
-                                            This announcement is about a specific event.
-                                            </td>
-                                        </tr>
-                                        <tr class="event-row">
-                                            <th>{{ announcement_form.event_date.label_tag }}:</th>
-                                            <td>{{ announcement_form.event_date }}</td>
-                                            <td>{{ announcement_form.event_date.errors }}</td>
-                                        </tr>
-                                        <tr class="event-row">
-                                            <th>{{ announcement_form.event_time.label_tag }}:</th>
-                                            <td>{{ announcement_form.event_time }}</td>
-                                            <td>{{ announcement_form.event_time.errors }}</td>
-                                        </tr>
-                                        <tr class="event-row">
-                                            <th>{{ announcement_form.event_place.label_tag }}:</th>
-                                            <td>{{ announcement_form.event_place }}</td>
-                                            <td>{{ announcement_form.event_place.errors }}</td>
-                                        </tr>
-                                        <tr>
-                                            <th></th>
-                                            <td><input type="submit" value="Submit" /></td>
-                                            <td></td>
-                                        </tr>
-                                    </table>
-                                </form>
-                        </div>
-
-                        <div class="mootabs_panel" id="job">
-                            {% if job_form.non_field_errors %}
-                                <p>
-                                    {{ job_form.non_field_errors }}
-                                </p>
-                            {% endif %}
-                            <form action="" method="post">
-                                <table class="submission">
-                                    <tr>
-                                        <th width="150px"><label>Job </label>{{ job_form.name.label_tag }}:</th>
-                                        <td>{{ job_form.name }}</td>
-                                        <td>{{ job_form.name.errors }}</td>
-                                    </tr>
-                                    <tr>
-                                        <th>{{ job_form.contact_name.label_tag }}:</th>
-                                        <td>{{ job_form.contact_name }}</td>
-                                        <td>{{ job_form.contact_name.errors }}</td>
-                                    </tr>
-                                    <tr>
-                                        <th>{{ job_form.contact_email.label_tag }}:</th>
-                                        <td>{{ job_form.contact_email }}</td>
-                                        <td>{{ job_form.contact_email.errors }}</td>
-                                    </tr>
-                                    <tr>
-                                        <th>{{ job_form.description.label_tag }}:</th>
-                                        <td>{{ job_form.description }}</td>
-                                        <td>{{ job_form.description.errors }}</td>
-                                    </tr>
-                                    <tr>
-                                        <th><label for="{{ job_form.is_paid.auto_id }}">Paid job</label>:</th>
-                                        <td>{{ job_form.is_paid }}</td>
-                                        <td>{{ job_form.is_paid.errors }}</td>
-                                    </tr>
-                                    <tr id="pay-row">
-                                        <th>{{ job_form.pay.label_tag }}:</th>
-                                        <td>{{ job_form.pay }}</td>
-                                        <td>{{ job_form.pay.errors }}</td>
-                                    </tr>
-                                    <tr>
-                                        <th>{{ job_form.hours.label_tag }}:</th>
-                                        <td>{{ job_form.hours }}</td>
-                                        <td>{{ job_form.hours.errors }}</td>
-                                    </tr>
-                                    <tr>
-                                        <th>{{ job_form.when.label_tag }}:</th>
-                                        <td>{{ job_form.when }}</td>
-                                        <td>{{ job_form.when.errors }}</td>
-                                    </tr>
-                                    <tr>
-                                        <th>{{ job_form.where.label_tag }}:</th>
-                                        <td>{{ job_form.where }}</td>
-                                        <td>{{ job_form.where.errors }}</td>
-                                    </tr>
-                                    <tr>
-                                        <th><label for="{{ job_form.at_swat.auto_id }}">On campus</label>:</th>
-                                        <td>{{ job_form.at_swat }}</td>
-                                        <td>{{ job_form.at_swat.errors }}</td>
-                                    </tr>
-                                    <tr>
-                                        <th>{{ job_form.needs_car.label_tag }}:</th>
-                                        <td>{{ job_form.needs_car }}</td>
-                                        <td>{{ job_form.needs_car.errors }}</td>
-                                    </tr>
-                                    <tr>
-                                        <th></th>
-                                        <td>
-                                        <input type="submit" value="Submit" />
-                                        </td>
-                                        <td></td>
-                                    </tr>			  
-                                </table>
-                            </form>
+                            <div class="mootabs_nale" id="bico">
+                                {% ifequal bico_news "error" %}
+                    			  <p>Unfortunately, we seem to be having some technical difficulties. We're working to resolve them, but in the meantime you can get news from the BiCo at <a href="http://www.biconews.com/">biconews.com</a>.</p>
+                    			{% else %}
+                    			    <ul>
+                    			    {% for story in bico_news %}
+                                        <li><a href="{{ story.link }}">{{ story.headline }}</a> by {{ story.author|upper }}</li>
+                    			    {% endfor %}
+                    			    </ul>
+                    			{% endifequal %}
+                            </div>
                         </div>
                     </div>
                 </div>

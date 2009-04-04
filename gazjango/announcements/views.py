@@ -17,6 +17,8 @@ from gazjango.reviews.forms        import SubmitEstablishmentForm, SubmitReviewF
 from gazjango.housing.models       import HousingListing
 from gazjango.housing.forms        import SubmitHousingForm
 from gazjango.misc.view_helpers    import get_user_profile
+from gazjango.scrapers.bico        import get_bico_news
+
 
 import datetime
 
@@ -137,6 +139,7 @@ def around_swarthmore(request,template = "listings/around/index.html"):
         'announcement_form': announcement_form,
         'job_form': job_form,
         'menu': menu,
+        'bico_news': get_bico_news(),
     }
     rc = RequestContext(request)
     return render_to_response(template, data,context_instance=rc)
