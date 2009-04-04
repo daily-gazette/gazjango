@@ -48,6 +48,7 @@ urlpatterns += patterns('articles.views',
     (r'^staff/new/$', 'concept_save_page'),
     (r'^staff/$', 'staff'),
     (r'^aprilfools/$', 'april_fools'),
+    (r'^around/$', 'around_swarthmore'),
     (r'^staff/mail/$', 'staff_mail'),
 )
 
