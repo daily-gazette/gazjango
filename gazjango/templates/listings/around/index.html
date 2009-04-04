@@ -214,6 +214,7 @@
                         <ul class="mootabs_title">
                         	<li title="announcement"><span>Announcements</span></li>
                         	<li title="landf"><span>Lost &amp; Found</span></li>
+                        	<li title="jobs"><span>Jobs</span></li>
                         </ul>	
 
                         <div class="mootabs_panel" id="announcement">
@@ -230,6 +231,29 @@
                         	        <li><a href="{{ item.get_absolute_url }}">{{ item.title }}</a> ( Contact: {{ item.sponsor_link }} {% if announcement.poster_email %}({{ announcement.poster_email }}){% endif %} )</li>
                         	    {% endfor %}
                         	</ul>
+                        </div>
+                        <div class="mootabs_panel" id="jobs">
+                            <table id="job-listings" cellpadding="0" cellspacing="0" border="0" class="sortable-onload-0-1 rowstyle-alt colstyle-alt no-arrow">
+                              <caption>Click on a column heading to sort, click the name for more information</caption>
+                              <thead>
+                                <tr>
+                                  <th class="sortable" width="200">Job Name</th>
+                                  <th class="sortable">Pay</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                {% for job in jobs %}
+                                  <tr class="job-row">
+                                    <td><a href="{{ job.get_absolute_url }}">{{ job.name }}</a></td>
+                                    <td>{% if job.get_pay %}
+                                            Paid: {{ job.get_pay }}
+                                        {% else %}
+                                            Unpaid
+                                        {% endif %}</td>
+                                  </tr>
+                                {% endfor %}
+                              </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
@@ -440,33 +464,6 @@
                 </div>
             </div>
             <div id="bottom" class="bar">
-                <div id="jobs">
-                    <table id="job-listings" cellpadding="0" cellspacing="0" border="0" class="sortable-onload-0-1 rowstyle-alt colstyle-alt no-arrow">
-                      <caption>Click on a column heading to sort, click the name for more information</caption>
-                      <thead>
-                        <tr>
-                          <th class="sortable">Job Name</th>
-                          <th class="sortable">Pay</th>
-                          <th class="sortable">Time</th>
-                          <th class="sortable">Location</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {% for job in jobs %}
-                          <tr class="job-row">
-                            <td><a href="{{ job.get_absolute_url }}">{{ job.name }}</a></td>
-                            <td>{% if job.get_pay %}
-                                    Paid: {{ job.get_pay }}
-                                {% else %}
-                                    Unpaid
-                                {% endif %}</td>
-                            <td>{{ job.hours }}, {{ job.when }}</td>
-                            <td>{{ job.where }}</td>
-                          </tr>
-                        {% endfor %}
-                      </tbody>
-                    </table>
-                </div>
                 <div id="reviews">
                     <div id="map" class="jmap">
                         <noscript>
