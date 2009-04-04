@@ -264,8 +264,8 @@
                                         <div class="excerpt">
                                             <h4>{% if story.section_if_special %}{{ story.section_if_special }}: {% endif %}<a href="{{ story.get_absolute_url }}">{{ story.get_title|safe }}</a></h4>
                                             <p class="byline">
-                                                  <span class="author">by {{ story.authors_in_order|join_authors:"l" }}</span>
-                                                  <span class="date"> | {{ story.pub_date|date:"n/j/Y" }}</span>
+                                                  <span class="author">by {{ story.authors_in_order|join_authors:"l" }}</span><br />
+                                                  <span class="date">{{ story.pub_date|date:"n/j/Y" }}</span>
                                   		    </p>
                                         </div>
                                     </div>
