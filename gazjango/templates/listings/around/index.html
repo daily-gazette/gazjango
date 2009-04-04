@@ -29,15 +29,6 @@
   <script type="text/javascript" src="{% static js tablesort.js %}"></script>
   <script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=ABQIAAAAjWbJvs7_o1h7mvy1LX4wLhR5KfJaJml4RtqIZU-OVWjlCz_48xQ4oVstbz1JAsOIObe_7oP0ZhwLnA" type="text/javascript"></script>
   <script type="text/javascript" src="{% static js reviews.js %}"></script>
-
-  <script type="text/javascript" charset="utf-8">
-    window.addEvent("domready", init);
-    function init() {
-        announcementtabs = new mootabs("announcementtabs");
-        gazettetabs = new mootabs("gazettetabs");
-        submissiontabs = new mootabs("submissiontabs");
-    }
-  </script>
   <script type="text/javascript">
   window.addEvent('domready', function(){ 
   	  var totIncrement		= 0;
@@ -172,6 +163,14 @@
     <script src="http://static.ak.connect.facebook.com/js/api_lib/v0.4/FeatureLoader.js.php" type="text/javascript"></script>
     <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/mootools/1.11/mootools.js"></script>
     <script type="text/javascript" src="{% static js mootabs1.2.js %}"></script>
+    <script type="text/javascript" charset="utf-8">
+      window.addEvent("domready", init);
+      function init() {
+          announcementtabs = new mootabs("announcementtabs");
+          gazettetabs = new mootabs("gazettetabs");
+          submissiontabs = new mootabs("submissiontabs");
+      }
+    </script>
 
 </head>
 
