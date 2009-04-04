@@ -25,9 +25,8 @@
   {% endblock customheader %}
   
   {% jQuery %}
+  
   <script type="text/javascript" src="{% static js tablesort.js %}"></script>
-  <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/mootools/1.11/mootools.js"></script>
-  <script type="text/javascript" src="{% static js mootabs1.2.js %}"></script>
   <script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=ABQIAAAAjWbJvs7_o1h7mvy1LX4wLhR5KfJaJml4RtqIZU-OVWjlCz_48xQ4oVstbz1JAsOIObe_7oP0ZhwLnA" type="text/javascript"></script>
   <script type="text/javascript" src="{% static js reviews.js %}"></script>
 
@@ -171,6 +170,8 @@
         }
     </script>  
     <script src="http://static.ak.connect.facebook.com/js/api_lib/v0.4/FeatureLoader.js.php" type="text/javascript"></script>
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/mootools/1.11/mootools.js"></script>
+    <script type="text/javascript" src="{% static js mootabs1.2.js %}"></script>
 
 </head>
 
@@ -313,10 +314,10 @@
                                             <td>{{ announcement_form.date_end.errors }}</td>
                                         </tr>
                                         <tr>
-                                            <th>{{ announcement_form.sponsor.label_tag }}:<br /><small>(Your name or your group's name)</small></th>
+                                            <th><label for="{{ announcement_form.sponsor }}">Group or Individual Name:</label></th>
                                             <td>
-                                            {{ announcement_form.sponsor }}
-                                            <a href="#" id='sponsor-toggle' style="display: none;" onclick="toggleSponsorLink(); return false;">add a link</a>
+                                                {{ announcement_form.sponsor }}
+                                                <a href="#" id='sponsor-toggle' style="display: none;" onclick="toggleSponsorLink(); return false;">add a link</a>
                                             </td>
                                             <td>{{ announcement_form.sponsor.errors }}</td>
                                         </tr>
