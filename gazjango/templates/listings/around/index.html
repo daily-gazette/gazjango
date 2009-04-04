@@ -299,13 +299,16 @@
                     			{% else %}
                     			    <ul>
                     			    {% for story in bico_news %}
-                                        <li><a href="{{ story.link }}">{{ story.headline }}</a> by {{ story.author|upper }}</li>
+                                        <li><a href="{{ story.link }}">{{ story.headline }}</a> by {{ story.author }}</li>
                     			    {% endfor %}
                     			    </ul>
                     			{% endifequal %}
                             </div>
                         </div>
                     </div>
+                </div>
+                <div class="sideTabs" id="flickr">
+                    <object type="text/html" data="http://www.flickr.com/slideShow/index.gne?group_id=89729977@N00&user_id=&set_id=&text=" width="350" height="300"></object>
                 </div>
             </div>
             <div id="bottom" class="bar">
