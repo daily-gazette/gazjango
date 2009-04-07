@@ -146,7 +146,6 @@ h1 {
   	/* Announcements and Lost & Found */
   		/*- Sidebar Tabs - Popular, Comments, Featured, Tag Cloud -*/
 			.sideTabs {
-				width:308px !important;
 				height:auto !important;
 				min-height:258px;
 				border:1px solid #ddd;
@@ -155,8 +154,8 @@ h1 {
 				display: block;
 			}
 			
-			#bottom .sideTabs {
-				width: 500px;
+			.sideTabs {
+				width:308px !important;
 			}
 			
 			.mootabs_title{
@@ -296,4 +295,16 @@ h1 {
 		width: 980px;
 		float: left;
 	}
+	
+	#reviews {
+	margin-left: 10px;
+	width: 400px;
+	float: left;
+}
+
+#map.jmap {
+	width: 480px;
+	display: inline-block;
+	height: 300px;
+}
 

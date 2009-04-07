@@ -16,8 +16,12 @@
            map.addControl(new GMapTypeControl());
            
            {% for s in housing %}
+           {% ifequal s.state "NU" %}
+           // Removing an international marker.
+           {% else %}
            var point  = new GLatLng({{ s.latitude }}, {{ s.longitude }});
            map.addOverlay(new GMarker(point));
+           {% endifequal %}
            {% endfor %}
          }
        }
