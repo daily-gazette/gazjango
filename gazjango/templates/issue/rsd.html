@@ -84,6 +84,7 @@
                           {{ forloop.counter }}. <a href="#a{{ forloop.counter }}">{{ announcement.title }}</a><br />
                           {% ifequal date announcement.date_start %}</b>{% endifequal %}
                         {% endfor %}
+                        <br /><a href="#top"><em>Return to top.</em></a>
                       </font>
                     </td>
                   </tr>
@@ -121,6 +122,7 @@
                           {% ifequal date event.date_start %}</b>{% endifequal %}
                           <br />
                         {% endfor %}
+                        <br /><a href="#top"><em>Return to top.</em></a>
                       </font>
                     </td>
                   </tr>
@@ -149,6 +151,7 @@
                         {% for announcement in lost_and_found %}
                           {{ forloop.counter }}. <a href="#lf{{ forloop.counter }}">{{ announcement.title }}</a> (by {{ announcement.sponsor }})<br />
                         {% endfor %}
+                        <br /><a href="#top"><em>Return to top.</em></a>
                       </font>
                     </td>
                   </tr>
@@ -177,7 +180,7 @@
                           {{ forloop.counter }}. <a href="#j{{ forloop.counter }}">{{ job.name }}</a><br />
                         {% endfor %}
                         
-                        <a href="#top"><em>Return to top.</em></a>
+                        <br /><a href="#top"><em>Return to top.</em></a>
                       </font>
                     </td>
                   </tr>
