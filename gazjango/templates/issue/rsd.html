@@ -68,7 +68,7 @@
                     <td width="375" align="left" valign="middle">
                       <strong>
                         <font color="#000000" size="2" face="Arial, Helvetica, sans-serif">
-                          Announcements
+                          <a name="top">Announcements</a>
                         </font>
                       </strong>
                     </td>
@@ -176,6 +176,8 @@
                         {% for job in jobs %}
                           {{ forloop.counter }}. <a href="#j{{ forloop.counter }}">{{ job.name }}</a><br />
                         {% endfor %}
+                        
+                        <a href="#top"><em>Return to top.</em></a>
                       </font>
                     </td>
                   </tr>
@@ -223,7 +225,7 @@
                             {{ announcement.text|textile }}
                           {% endautoescape %}
                           {% if announcement.poster_email %}Posted by {{ announcement.poster_email }} &mdash;{% endif %} <a href="http://daily.swarthmore.edu{{ announcement.get_absolute_url }}">Permanent Link</a> 
-                          <br /><br/>
+                          <br /><a href="#top"><em>Return to top.</em></a><br /><br/>
                         {% endfor %}
                       </font>
                     </td>
@@ -255,7 +257,7 @@
 
                           {% if event.sponsor %}<strong>Contact:</strong> {{ event.sponsor_link }} <br /> {% endif %}
                           <a href="http://daily.swarthmore.edu{{ event.get_absolute_url }}">Permanent Link</a> <br />
-                          <br/>
+                          <a href="#top"><em>Return to top.</em></a><br /><br/>
                         {% endfor %}
                       </font>
                     </td>
@@ -283,7 +285,7 @@
 
                           {% if announcement.sponsor %}<strong>Contact:</strong> {{ announcement.sponsor_link }} {% if announcement.poster_email %}({{ announcement.poster_email }}){% endif %} <br /> {% endif %}
                           <a href="http://daily.swarthmore.edu{{ announcement.get_absolute_url }}">Permanent Link</a> <br />
-                          <br/>
+                          <a href="#top"><em>Return to top.</em></a><br /><br/>
                         {% endfor %}
                       </font>
                     </td>
@@ -320,7 +322,7 @@
                           </p>
 
                           <a href="http://daily.swarthmore.edu{{ event.get_absolute_url }}">Permanent Link</a> <br />
-                          <br/><br/>
+                          <br /><a href="#top"><em>Return to top.</em></a><br /><br/>
                         {% endfor %}
 
                       </font>
