@@ -138,6 +138,8 @@ TEXT BOX STYLES
 	
 	margin: 0 1em;
 	padding: 0 2px;
+	
+	float: left;
 }
 
 .linkBar p {
