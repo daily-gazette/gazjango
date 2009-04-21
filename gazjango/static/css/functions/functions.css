@@ -137,7 +137,7 @@ TEXT BOX STYLES
 	border-bottom: 2px solid #bbb;
 	
 	margin: 0 1em;
-	padding: 0 2px;
+	padding: 3px;
 	
 	float: left;
 }
