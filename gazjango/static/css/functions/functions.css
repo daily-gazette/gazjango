@@ -136,7 +136,7 @@ TEXT BOX STYLES
 	border-top: 2px solid #bbb;
 	border-bottom: 2px solid #bbb;
 	
-	margin: 0 1em;
+	margin: 0 1em 0px 0px;
 	padding: 3px;
 	
 	float: left;
