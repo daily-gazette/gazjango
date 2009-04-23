@@ -3,7 +3,7 @@ from gazjango.comments.models import PublicComment
 
 class PublicCommentAdmin(admin.ModelAdmin):
     date_hierarchy = 'time'
-    list_display = ('article_name', 'number', 'display_name', 'is_anonymous',
+    list_display = ('article_name', 'number', 'display_name', 'user', 'is_anonymous',
                     'is_approved', 'time')
     list_display_links = ('number',)
     list_filter = ('is_approved',)
