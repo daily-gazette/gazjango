@@ -57,7 +57,9 @@ jQuery(document).ready(function() {
 						<li><a href="/menu/" rel="sideContainer">Menus</a></li>
 					</ul>
 						
+						
 					<div class="headerColumnBox" id="sideContainer">
+					    {% comment %}
 						<div id="weather">
 						    
 						  <p class="weather">
@@ -76,6 +78,21 @@ jQuery(document).ready(function() {
   						</p>
 						  
 						  <p id="attrib">Weather updated daily, courtesy of the <a href="http://weather.gov">NWS</a>.</p>						  
+						</div>
+						{% endcomment %}
+						<div id="weather">
+						    
+						  <p class="weather">
+						    <span class="joke">{{ joke.line_one }}</span>
+						  </p>
+						  
+						  <p class="weather">
+  						  <span class="joke">{{ joke.line_two }}
+  						</p>
+						  
+						  <p class="weather">
+  						  <span class="joke">{{ joke.line_three }}
+  						</p>
 						</div>
 					</div>
 						
