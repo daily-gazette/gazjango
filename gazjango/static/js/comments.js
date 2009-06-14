@@ -48,7 +48,6 @@ function showFunctionFor(id) {
 
 function loadFunctionFor(id) {
     return function() {
-        alert('loading ' + id);
         $('#c-' + id)
             .find('.commentText')
                 .hide()
