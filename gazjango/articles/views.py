@@ -265,7 +265,15 @@ def staff(request,  template="staff/index.html"):
 
 def staff_mail(request, template="staff/mail.html"):
     claimed, unclaimed = StoryConcept.unpublished.get_upcoming_concepts()
+    
     admin_announcement = Announcement.admin.latest()
+    now = datetime.datetime.now()
+    if (now - admin_announcement.date_end) > datetime.timedelta(weeks=2):
+        admin_announcement = None
+    
+    if not (len(claimed) or len(unclaimed) or admin_announcement):
+        raise Http404("No content.")
+    
     data = {
         'minutes': admin_announcement,
         'unclaimed': unclaimed,

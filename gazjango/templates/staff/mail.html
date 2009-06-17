@@ -30,9 +30,10 @@ UNCLAIMED STORIES<br />
 <p>{{ concept.name }}<br />
 {% if concept.notes_excerpt %}Notes: {{ concept.notes|textile|removetags:"p" }}<br />{% endif %}</p>
 {% endfor %}
+{% if minutes %}
 ============================================================<br />
 NOTES<br />
 {{ minutes.text|textile }}
-
+{% endif %}
 </body>
 </html>
