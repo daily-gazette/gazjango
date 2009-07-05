@@ -23,8 +23,8 @@ class Command(SendingOutCommand):
     
     def get_subject(self):
         now = datetime.datetime.now()
-        name = 'Morning' if now.hour < 12 else 'Afternoon'
-        return now.strftime("%s of %%A, %%B %d, %%Y" % (name, now.day))
+        # name = 'Morning' if now.hour < 12 else 'Afternoon'
+        return now.strftime("%%A, %%B %d, %%Y" % now.day)
     
     def get_sent_str(self):
         now = datetime.datetime.now()
