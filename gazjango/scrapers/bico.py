@@ -12,7 +12,7 @@ CATEGORIES = {
     'last-word': '7'
 }
 DEFAULT_ORDER = ('news', 'features', 'arts', 'sports')
-AUTHOR_REGEX = re.compile(r'^\s*<p>\s*<strong>\s*By\s+([-\w\s\']+)\s*</strong>')
+AUTHOR_REGEX = re.compile(r'^\s*<p>\s*<strong>\s*By\s+([-\w\s\']+)\s*</strong>', re.I)
 
 
 def cache_item_name(order=DEFAULT_ORDER):
@@ -88,7 +88,7 @@ def get_bico_news_directly(order=DEFAULT_ORDER):
         
         content = entry.content[0].value
         
-        match = re.match(AUTHOR_REGEX, content, re.IGNORECASE)
+        match = re.match(AUTHOR_REGEX, content)
         if match:
             author = match.group(1)
         else:
