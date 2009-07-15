@@ -1,0 +1,101 @@
+{% extends "base.html" %}
+{% load extras %}
+
+{% block title %}{{ section.name }}{% endblock title %}
+
+{% block customheader %}
+  <link rel="stylesheet" href="{% static css page/section.css %}" type="text/css"/>
+  <link rel="stylesheet" href="{% static css page/section-multimedia.css %}" type="text/css"/>
+{% endblock customheader %}
+
+
+{% block topbar %}
+  <div id="headerSectionBar">
+    <div id="headerSearch">
+      {% include "search_header.html" %}
+    </div>
+
+    <div id="headerColumn">
+      <div class="headerColumnBox">
+        <h4>Comments</h4>
+        <ul class="commentList">
+          {% for comment in comments|slice:":4" %}
+            <li>
+              <a href="{{ comment.get_absolute_url }}">{{ comment.subject.get_title }}</a>
+              <br />
+              Comment on {{ comment.time|date:"F j, Y" }}
+            </li>
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
+      
+    <div class="headerColumnBox">
+      <h4>Multimedia Features</h4>
+      {% for subsection in section.subsections.a;; %}
+			  <p><a href="{{ subsection.get_absolute_url }}">{{ subsection.name }}</a></p>
+      {% endfor %}
+    </div>
+      
+  </div>
+{% endblock topbar %}
+
+
+
+{% block content %}
+  <div id="section">
+    <div id="sectionHeader">
+      <h2>{% block main-header %}{{ section.name }}{% endblock %}</h2>
+    </div>
+
+  	<div id="mainBoxes">
+      <div id="multimediaMain">
+        {% for topstory in topstories %}
+          <p>{{ topstory.multimedia }}</p>
+          <p>
+            <a class="readMore" href="{{ topstory.get_absolute_url }}">Respond</a>
+          </p>
+          <p class="byline">
+            <span class="author">by {{ topstory.authors_in_order|join_authors }}</span>
+            <span class="date">| {{ topstory.pub_date|date:"n/j/Y" }}</span>
+          </p>
+        {% endfor %}
+      </div>
+    </div>
+
+    <div id="sectionBar">
+      <ul>
+        {% for story in midstories %}
+          <li>
+            <img src="{{ story.main_image.top_front.url }}" 
+                 class="{{ story.main_image.front_tall_or_wide }}" 
+                 title="{{ story.headline }}" alt="" />
+            <h3><a href="{{ story.get_absolute_url }}">{{ story.get_title|safe }}</a></h3>
+            <p class="byline">
+              <span class="author">by {{ story.authors_in_order|join_authors }}</span>
+              <span class="date">| {{ story.pub_date|date:"n/j/Y" }}</span>
+            </p>
+            <p>
+              {{ story.summary|safe }}
+              <a class="readMore" href="{{ story.get_absolute_url }}">More</a>
+            </p>
+          </li>
+        {% endfor %}
+      </ul>
+    </div>
+
+    <div id="lowBar">
+      {% for lows in lowlist %}
+        <div class="storyColumn">
+          {% for story in lows %}
+            <li>
+              <h4><a href="{{ story.get_absolute_url }}">{{ story.get_title|safe }}</a></h4>
+              <span class="author">| by {{ story.authors_in_order|join_authors:"1x" }}</span>
+              <span class="date">| {{ story.pub_date|date:"n/j/Y" }}</span>
+            </li>
+          {% endfor %}
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+{% endblock content %}

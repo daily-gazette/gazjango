@@ -1,0 +1,325 @@
+{% load extras %}
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+  "http://www.w3.org/TR/html4/loose.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:fb="http://www.facebook.com/2008/fbml" lang="en">
+
+<head>
+  <title>
+      Around Swarthmore
+  </title>
+
+  <link rel="stylesheet" href="{% static css toolbox.css %}" type="text/css" media="screen, projection, print" />
+  <link rel="stylesheet" href="{% static css functions/functions.css %}" type="text/css" media="screen, projection" />
+  <link rel="stylesheet" href="{% static css page/around.css %}" type="text/css" media="screen, projection" />
+  
+
+  <link rel="icon" type="image/x-icon" href="/static/images/favicon.ico" />
+
+  <link rel="alternate" type="application/rss+xml" title="Homepage" href="/feeds/main" />
+  <link rel="alternate" type="application/rss+xml" title="Latest Stories" href="/feeds/latest" />
+  
+  <!--[if lt IE 7]><script src="http://ie7-js.googlecode.com/svn/version/2.0(beta3)/IE7.js" type="text/javascript"></script><![endif]-->
+  <!--[if lt IE 8]><script src="http://ie7-js.googlecode.com/svn/version/2.0(beta3)/IE8.js" type="text/javascript"></script><![endif]-->
+
+  {% block customheader %}
+  {% endblock customheader %}
+  
+  {% jQuery %}
+  <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/mootools/1.11/mootools.js"></script>
+  <script type="text/javascript">
+  window.addEvent('domready', function(){ 
+  	  var totIncrement		= 0;
+  	  var increment			= 214;
+  	  var maxRightIncrement	= increment*(-6);
+  	  var fx = new Fx.Style('myList', 'margin-left', {
+  				duration: 1000,
+  				transition: Fx.Transitions.Back.easeInOut,
+  				wait: true
+  	   });
+
+  	   //-------------------------------------
+  	  // EVENTS for the button "previous"
+  	  $('previous').addEvents({ 
+            'click' : function(event){ 
+  		  if(totIncrement<0){
+  					totIncrement = totIncrement+increment;
+  					fx.stop()
+  					fx.start(totIncrement);
+  				}
+  			}			  	  
+        }); 
+
+         //-------------------------------------
+  	  // EVENTS for the button "next"
+    	  $('next').addEvents({ 
+            'click' : function(event){ 
+  			 if(totIncrement>maxRightIncrement){
+  				 totIncrement = totIncrement-increment;
+  		    	fx.stop()
+  				fx.start(totIncrement);
+  			}
+            }		  		  
+        })
+
+
+  });
+  	</script>
+  <script type="text/javascript" src="{% static js mootabs1.2.js %}"></script>
+  <script type="text/javascript" charset="utf-8">
+    window.addEvent("domready", init);
+    function init() {
+        announcementtabs = new mootabs("announcementtabs");
+        gazettetabs = new mootabs("gazettetabs");
+        submissiontabs = new mootabs("submissiontabs");
+    }
+  </script>
+  <script type="text/javascript" src="{% static js tablesort.js %}"></script>
+  <script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=ABQIAAAAjWbJvs7_o1h7mvy1LX4wLhR5KfJaJml4RtqIZU-OVWjlCz_48xQ4oVstbz1JAsOIObe_7oP0ZhwLnA" type="text/javascript"></script>
+  <script type="text/javascript" src="{% static js reviews.js %}"></script>
+  	<script type="text/javascript" charset="utf-8">
+        function toggleSponsorLink() {
+            $('#sponsor-url-row')
+            .find('input').val('').end()
+            .toggle();
+            link = $('#sponsor-toggle');
+            if (link.text() == 'add a link') {
+                link.text('remove the link');
+                } else {
+                link.text('add a link');
+            }
+        }
+        function toggleEventFields() {
+            $('.event-row').find('input').val('').end().toggle();
+        }
+        $(document).ready(function() {
+            url_row = $('#sponsor-url-row');
+            if (url_row.find('input').val() == '') {
+                url_row.hide(0);
+                $('#sponsor-toggle').show(0);
+            } else {
+                $('#sponsor-toggle').text('remove the link').show(0);
+            }
+            if ($('#{{ announcement_form.is_event.auto_id }}:checked').length == 0) {
+                $('.event-row').hide(0);
+            }
+        });
+    </script>
+    <script type="text/javascript" charset="utf-8">
+        function togglePay() {
+          $('#{{ form.pay.auto_id }}').parent().parent().eq(0).toggle(0);
+        }
+
+        $(document).ready(function() {
+          if ($('#{{ form.is_paid.auto_id }}:checked').length == 0) {
+            togglePay();
+          }
+        })
+    </script>
+    
+    <script type="text/javascript">
+        function initialize() {
+            initializeMap(document.getElementById('map'));
+
+            // icons
+            {% for short, image_path, shadow_path in icons %}
+            icons['{{ short }}'] = new GIcon();
+            icons['{{ short }}'].image = "{{ image_path }}";
+            icons['{{ short }}'].shadow = "{{ shadow_path }}";
+            icons['{{ short }}'].iconSize = new GSize(32, 32);
+            icons['{{ short }}'].shadowSize = new GSize(59, 32);
+            icons['{{ short }}'].iconAnchor = new GPoint(16, 32);
+            icons['{{ short }}'].infoWindowAnchor = new GPoint(5, 1);
+            {% endfor %}
+
+            // variables that it's easier to init here
+            {% for short, long in TYPE_CHOICES %}
+              typeShown['{{ short }}'] = true;
+              estabsByType['{{ short }}'] = [];
+            {% endfor %}
+
+            {% for num, loc in locations %}
+              locShown[{{ num }}] = true;
+              estabsByLoc[{{ num }}] = [];
+            {% endfor %}
+
+            {% for tag in tags %}
+              tagChecked[{{ tag.pk }}] = false;
+            {% endfor %}
+
+            // establishments
+            // TODO: load establishments with ajax?
+            {% for e in establishments %}
+            addMarker(
+              {{ e.pk }},
+              new GLatLng({{ e.latitude }}, {{ e.longitude }}),
+
+              '<large><strong>{{ e.name }}</strong></large><br/>' + 
+              'Average Rating: {{ e.avg_rating|default_if_none:"-" }}<br/>' +
+              'Average Cost: {{ e.avg_cost|default_if_none:"-" }}<br/>' +
+              {% if e.phone %}'Phone: {{ e.phone }}<br/>' + {% endif %}
+              '<a href="{{ e.get_absolute_url }}">Read more</a>',
+
+              '{{ e.establishment_type }}',
+              {# NOTE: ugly as all hell #}
+              {% for num, loc in locations %}{% ifequal loc e.city %}{{ num }}{% endifequal %}{% endfor %},
+              [ {% for tag in e.tags.all %}{{ tag.pk }}{% if not forloop.last %}, {% endif %}{% endfor %} ]
+            );
+            {% endfor %}
+
+            synchronizeCheckboxes();
+        }
+    </script>  
+    <script src="http://static.ak.connect.facebook.com/js/api_lib/v0.4/FeatureLoader.js.php" type="text/javascript"></script>
+
+</head>
+
+<body onload="initialize()" onunload="GUnload()">
+    <div id="container">
+        <div id="header">
+            <h1><img src="{% static images aroundswarthmore/header.png %}" /></h1>
+        </div>
+        <div id="content">
+            <div id="events">
+                <div id="stage">
+                    <ul id="myList">
+                        {% for event in events %}
+                            {% ifequal forloop.counter 1 %}
+                                {% ifchanged %}
+                                    <li>
+                                        <div class="day">{{ event.event_date|day }}</div>
+                                        <div class="month">{{ event.event_date|month }}</div>
+                                {% endifchanged %}
+                            {% else %}
+                                {% ifchanged %}
+                                    </li>
+                                    <li>
+                                        <div class="day">{{ event.event_date|day }}</div>
+                                        <div class="month">{{ event.event_date|month }}</div>
+                                {% endifchanged %}
+                            {% endifequal %}
+                            <p>{% if event.event_time %}<strong>{{ event.event_time }}</strong>: {% endif %} <a href="{{ event.get_absolute_url }}">{{ event.title }}</a></p>
+                        {% endfor %}
+                        </li>
+                    </ul>
+                </div>
+                <div id="slider-buttons">
+                    <a href="#" id="previous">Previous</a>
+                    <a href="#" id="next">Next</a>
+                </div>
+            </div>
+            <div id="mid" class="bar">
+                <div id="announcements">
+                    <div id="announcementtabs" class="sideTabs">
+                        <ul class="mootabs_title">
+                        	<li title="announcement"><span>Announcements</span></li>
+                        	<li title="landf"><span>Lost &amp; Found</span></li>
+                        	<li title="jobs"><span>Jobs</span></li>
+                        </ul>	
+
+                        <div class="mootabs_panel" id="announcement">
+                        	<ul>
+                        	    {% for announcement in announcements|slice:":15" %}
+                        	        <li><a href="{{ announcement.get_absolute_url }}">{{ announcement.title }}</a></li>
+                        	    {% endfor %}
+                        	</ul>
+                        </div>
+
+                        <div class="mootabs_panel" id="landf" >
+                            <ul>
+                        	    {% for item in lost_and_found %}
+                        	        <li><a href="{{ item.get_absolute_url }}">{{ item.title }}</a> ( Contact: {{ item.sponsor_link }} {% if announcement.poster_email %}({{ announcement.poster_email }}){% endif %} )</li>
+                        	    {% endfor %}
+                        	</ul>
+                        </div>
+                        <div class="mootabs_panel" id="jobs">
+                            <table id="job-listings" cellpadding="0" cellspacing="0" border="0" class="sortable-onload-0-1 rowstyle-alt colstyle-alt no-arrow">
+                              <thead>
+                                <tr>
+                                  <th class="sortable" width="200">Job Name</th>
+                                  <th class="sortable">Pay</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                {% for job in jobs %}
+                                  <tr class="job-row">
+                                    <td><a href="{{ job.get_absolute_url }}">{{ job.name }}</a></td>
+                                    <td>{% if job.get_pay %}
+                                            Paid: {{ job.get_pay }}
+                                        {% else %}
+                                            Unpaid
+                                        {% endif %}</td>
+                                  </tr>
+                                {% endfor %}
+                              </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div id="centerbox">
+                    <div id="menus">
+						<p><strong>Lunch</strong>: {{ menu.lunch|safe }}</p>
+						<p><strong>Dinner</strong>: {{ menu.dinner|safe }}</p>
+                    </div>
+                    <div id="gazettecontent">
+                        <div id="gazettetabs" class="sideTabs">
+                            <ul class="mootabs_title">
+                                <li title="stories"><span>Top Stories</span></li>
+                            	<li title="comments"><span>Comments</span></li>
+                            	<li title="bico"><span>The BiCo News</span></li>
+                            </ul>
+                            <div class="mootabs_panel" id="stories">
+                                {% for story in stories %}
+                                    <div class="story">
+                                        <div class="image">
+                                            <a href="{{ story.get_absolute_url }}">
+                                    		    <img src="{{ story.main_image.issue.url }}" title="{{ story.headline }}" alt="" />
+                                    		</a>
+                                        </div>
+                                        <div class="excerpt">
+                                            <h4>{% if story.section_if_special %}{{ story.section_if_special }}: {% endif %}<a href="{{ story.get_absolute_url }}">{{ story.get_title|safe }}</a></h4>
+                                            <p class="byline">
+                                                  <span class="author">by {{ story.authors_in_order|join_authors:"l" }}</span><br />
+                                                  <span class="date">{{ story.pub_date|date:"n/j/Y" }}</span>
+                                  		    </p>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </div>	
+                            <div class="mootabs_panel" id="comments">
+                            	<ul>
+                            	    {% for comment in comments %}
+                            	        <li><a href="http://daily.swarthmore.edu{{comment.get_absolute_url}}">{{comment.subject.get_title}}</a></li>
+                                    {% endfor %}
+                            	</ul>
+                            </div>
+                            <div class="mootabs_panel" id="bico">
+                                {% ifequal bico_news "error" %}
+                    			  <p>Unfortunately, we seem to be having some technical difficulties. We're working to resolve them, but in the meantime you can get news from the BiCo at <a href="http://www.biconews.com/">biconews.com</a>.</p>
+                    			{% else %}
+                    			    <ul>
+                    			    {% for story in bico_news %}
+                                        <li><a href="{{ story.link }}">{{ story.headline }}</a> by {{ story.author }}</li>
+                    			    {% endfor %}
+                    			    </ul>
+                    			{% endifequal %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="sideTabs" id="flickr">
+                    <object type="text/html" data="http://www.flickr.com/slideShow/index.gne?group_id=89729977@N00&user_id=&set_id=&text=" width="350" height="300"></object>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript">FB.init("{{ FACEBOOK_API_KEY }}", "/xd_receiver.html", {'reloadIfSessionStateChanged': true});</script>
+    <script type="text/javascript">
+    	var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+    	document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+    	</script>
+    	<script type="text/javascript">
+    	var pageTracker = _gat._getTracker("UA-1785594-4");
+    	pageTracker._trackPageview();
+    </script>
+</body>
+</html>

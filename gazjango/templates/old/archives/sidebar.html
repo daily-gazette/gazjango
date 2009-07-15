@@ -1,0 +1,19 @@
+{% load extras %}
+
+<h4>Sections</h4>
+<ul>
+	{% for section in sections %}
+		<li>
+		  <a href="/archives/{{ section.slug }}/{% if year %}{{ year }}/{% if month %}{{ month }}/{% if day %}{{ day }}/{% endif %}{% endif %}{% endif %}">{{ section.name }}</a>
+		  <ul>
+		    {% for sub in section.subsections.all %}
+		      {% if not sub.column or sub.column.is_over %}
+  		      <li><a href="/archives/{{ section.slug }}/{{ sub.slug }}/{% if year %}{{ year }}/{% if month %}{{ month }}/{% if day %}{{ day }}/{% endif %}{% endif %}{% endif %}">{{ sub.name }}</a></li>
+  		    {% endif %}
+		    {% endfor %}
+		  </ul>
+		</li>
+	{% endfor %}
+</ul>
+
+<hr width="50%" color="#ffffff" size="1px" />

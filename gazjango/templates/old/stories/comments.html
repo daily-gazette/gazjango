@@ -1,0 +1,51 @@
+{% load comparisons %}
+
+{% for comment, status in comments %}
+  <div class="comment {% if comment.is_visible %}shown-comment{% else %}hidden-comment{% endif %}{% if new %} new{% endif %}" id="c-{{ comment.number }}">
+    <div class="commentInformation">
+        <p class="floatLeft">
+          <span class="commentNumber">#{{ comment.number }}</span>:
+          <span class="commentTime">{{ comment.time|date:"n/j/Y" }} at {{ comment.time|date:"g:i a" }}</span>
+        </p>
+        <ul class="floatRight">
+          {% if perms.comments.can_moderate_absolutely %}
+            [{{ status }}]
+            <li class="up"><a href="vote-comment/{{ comment.number }}/up/">U</a></li>
+            <li class="down"><a href="vote-comment/{{ comment.number }}/down/">D</a></li>
+          
+          {% else %}
+            {% if status|gt:0 %}
+              <li class="up selected"><a href="vote-comment/{{ comment.number }}/clear/">U</a></li>
+            {% else %}
+              <li class="up"><a href="vote-comment/{{ comment.number }}/up/">U</a></li>
+            {% endif %}
+            
+            {% if status|lt:0 %}
+              <li class="down selected"><a href="vote-comment/{{ comment.number }}/clear/">D</a></li>
+            {% else %}
+              <li class="down"><a href="vote-comment/{{ comment.number }}/down/">D</a></li>
+            {% endif %}
+          {% endif %}
+          
+          {% if comment.score|gt:0 %}
+            <li>(+{{ comment.score }})</li>
+          {% else %}
+            <li>({{ comment.score }})</li>
+          {% endif %}
+        </ul>
+    </div>
+
+    <div class="commentContent {% if comment.is_staff %}staff{% else %}{% if not comment.is_visible %}moderate{% endif %}{% endif %}">
+    
+      <p class="commentText">
+        {% if comment.is_visible %}
+          {{ comment.text|safe }}
+        {% endif %}
+      </p>
+      
+      <p class="commentAuthorship">
+        {% include "comment/authorship.html" %}
+      </p>
+    </div>
+  </div>
+{% endfor %}

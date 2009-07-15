@@ -1,0 +1,48 @@
+{% load extras %}
+{% load markup %}
+
+{% block story-content %}
+	<center>
+    <div class="spreadImage">
+      <a href="{{ page.photo.photospreadimage.url }}" class="lightbox">
+        <img src="{{ page.photo.photospreadimage.url }}" alt=""
+             title="{{ page.photo.credit|before:"Photo by " }}" />
+      </a>
+    </div>
+  </center>
+  
+  {% if page.caption %}
+    <span class="photo-caption">
+      {{ page.caption|textile }}
+    </span>
+  {% endif %}
+  
+  <div class="nav-links">
+    <center>
+    	<ul>
+    	  <li class="otherLink">
+          {% if prev %}
+      		  <a href="{{ prev.get_absolute_url }}" class="page-link">&laquo; Back</a>
+      		{% endif %}
+    		</li>
+
+      	{% ifequal story.photos.count 1 %}
+      	{% else %}
+      		{% for looped_page in story.pages.all %}
+      			{% ifequal page.number looped_page.number %}
+      				<li class="current"><a class="page-link" href="{{ looped_page.get_absolute_url }}">{{ looped_page.number }}</a></li>
+      			{% else %}
+      				<li class="notCurrent"><a class="page-link" href="{{ looped_page.get_absolute_url }}">{{ looped_page.number }}</a></li>
+      			{% endifequal %}
+      		{% endfor %}
+      	{% endifequal %}
+
+    		<li class="otherLink">
+        	{% if next %}
+      		  <a href="{{ next.get_absolute_url }}" class="page-link">Next &raquo;</a>
+      		{% endif %}
+    		</li>
+    	</ul>
+    </center>
+  </div>
+{% endblock %}

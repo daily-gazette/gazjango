@@ -1,0 +1,13 @@
+{% extends "stories/view.html" %}
+{% load extras %}
+
+{% block above-headline %}
+  <a href="{{ story.subsection.get_absolute_url }}">
+    <img src="{{ story.subsection.column.wide_logo_url }}" 
+         title="{{ story.subsection.name }}" />
+  </a>
+{% endblock %}
+
+{% block authors %}
+  by {{ story.authors_in_order|join_authors:"lx" }}
+{% endblock %}

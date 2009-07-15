@@ -1,0 +1,22 @@
+{% if not comment.is_visible %}
+  <span class="commentNotVisibleInfo">
+    {% if comment.is_approved %}
+      <em>
+        This comment has been deemed inappropriate or irrelevant by the community or site editors.<br/>
+        The Gazette does not condone its content.
+      </em>
+    {% else %}
+      <em>This comment has not yet been approved by a site administrator.</em>
+    {% endif %}
+    
+    [<a href="#" class='showLink'>show anyway</a>]
+    {% if perms.comments.change_publiccomment %}
+      [<a href="{{ comment.get_approve_url }}" class="approveLink">approve</a>]
+    {% endif %}
+    <br/>
+  </span>
+{% endif %}
+
+<br />&mdash;
+{{ comment.linked_name|safe }}
+<span class="authorDark">| {{ comment.status }}</span>

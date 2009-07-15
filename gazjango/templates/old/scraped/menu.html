@@ -1,0 +1,10 @@
+<div id="menu">
+  {% if menu.closed %}
+    <p>{{ menu.message|safe }}</p>
+  {% else %}
+    <p><strong>{{ menu.date|date:"l" }} Lunch:</strong> {{ menu.lunch|safe }}</p>
+    <p><strong>{{ menu.date|date:"l" }} Dinner:</strong> {{ menu.dinner|safe }}</p>
+  {% endif %}
+  
+  <p>See the <a href="http://www.swarthmore.edu/dashboards/feeds/dining/4weekmenu.php">4-week menu</a>.</p>
+</div>

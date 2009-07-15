@@ -1,0 +1,100 @@
+{% extends "base.html" %}
+{% load extras %}
+
+{% block title %}Athletics{% endblock title %}
+
+{% block customheader %}
+  <link rel="stylesheet" href="{% static css page/section.css %}" type="text/css"/>
+  <link rel="stylesheet" href="{% static css page/athletics.css %}" type="text/css"/>
+{% endblock customheader %}
+
+
+{% block topbar %}
+  <div id="headerSectionBar">
+    <div id="headerSearch">
+      {% include "search_header.html" %}
+    </div>
+  </div>
+{% endblock topbar %}
+
+
+{% block content %}
+  <div id="athletics">
+  	<div id="athleticsContent">
+  		<div id="athleticsHeader">
+  			<h2>Swarthmore Athletics</h2>
+  		</div>
+  		
+		<div id="athleticsColumnLeft">
+			{% for team in trimester %}
+			<div class="teamOverview">
+				<table width="300px" class="overview">
+					
+					<tr>
+						<td colspan="7" class="cellTop">
+							<a href="{% url athletics_team team.slug %}" >
+								{{ team.get_gender_display }} {{ team.sport }}
+							</a>
+						</td>
+					</tr>
+					<tr>
+					
+						{% if not team.ranked %}
+						
+							<td class="cellHeader">Wins:&nbsp;</td>
+							<td class="cellContent">&nbsp;{{ team.scores.0 }}</td>
+							
+							<td class="cellHeader">Losses:&nbsp;</td>
+							<td class="cellContent">&nbsp;{{ team.scores.1 }}</td>
+							
+							<td class="cellHeader">Draws:&nbsp;</td>
+							<td class="cellContent">&nbsp;{{ team.scores.2 }}</td>
+							
+							<td class="cellHeader readMore"><a href="{% url athletics_team team.slug %}" >Read More</a>&nbsp;</td>
+	
+							
+						{% else %}
+						
+							<td class="cellHeader right" colspan="7"><a href="{% url athletics_team team.slug %}" >Read More</a>&nbsp;</td>
+							
+						{% endif %}
+	
+					</tr>
+					
+				</table>
+				<br />
+			</div>
+			
+			<div class="teamGame">
+				<table width="70px">
+					<tr rowspan="2" height="38px">
+						<td width="150px">
+							<img src="{{ team.icon.data.url }}" />
+						</td>
+					</tr>
+				</table>
+			</div>
+			{% endfor %}
+		</div>
+
+		<div id="athleticsColumnRight">		
+			{% for article in article_list|slice:":4" %}
+			    <div class="athleticsStory">
+				    <h4><a href="{{ article.get_absolute_url }}">{{article.get_title|safe}}</a></h4>
+    				<p class="byline">
+    				  <span class="author">by {{ article.authors_in_order|join_authors }}</span>
+    				  <span class="date">| {{ article.pub_date|date:"n/j/Y" }}</span>
+    				</p>
+    				<p>
+    				  {{ article.longest_summary|safe }}
+    				  <a class="readMore" href="{{ article.get_absolute_url }}">More</a>
+    				</p>
+				</div>
+			{% endfor %}
+			
+		</div>
+			
+	</div>
+  </div>
+  
+{% endblock content %}

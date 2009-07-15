@@ -1,0 +1,205 @@
+{% extends "base.html" %}
+{% load extras %}
+
+{% block title %}Community Guide{% endblock title %}
+
+{% block customheader %}
+  <link rel="stylesheet" href="{% static css page/section.css %}" type="text/css"/>
+  <link rel="stylesheet" href="{% static css page/reviews.css %}" type="text/css"/>
+  
+  <script type="text/javascript" src="{% static js tablesort.js %}"></script>
+  <script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key={{ GMAPS_API_KEY }}" type="text/javascript"></script>
+  
+  {% jQuery %}
+  <script type="text/javascript" src="{% static js reviews.js %}"></script>
+  
+  <script type="text/javascript">
+function initialize() {
+    initializeMap(document.getElementById('map'));
+    
+    // icons
+    {% for short, image_path, shadow_path in icons %}
+    icons['{{ short }}'] = new GIcon();
+    icons['{{ short }}'].image = "{{ image_path }}";
+    icons['{{ short }}'].shadow = "{{ shadow_path }}";
+    icons['{{ short }}'].iconSize = new GSize(32, 32);
+    icons['{{ short }}'].shadowSize = new GSize(59, 32);
+    icons['{{ short }}'].iconAnchor = new GPoint(16, 32);
+    icons['{{ short }}'].infoWindowAnchor = new GPoint(5, 1);
+    {% endfor %}
+    
+    // variables that it's easier to init here
+    {% for short, long in TYPE_CHOICES %}
+      typeShown['{{ short }}'] = true;
+      estabsByType['{{ short }}'] = [];
+    {% endfor %}
+    
+    {% for num, loc in locations %}
+      locShown[{{ num }}] = true;
+      estabsByLoc[{{ num }}] = [];
+    {% endfor %}
+    
+    {% for tag in tags %}
+      tagChecked[{{ tag.pk }}] = false;
+    {% endfor %}
+    
+    // establishments
+    // TODO: load establishments with ajax?
+    {% for e in establishments %}
+    addMarker(
+      {{ e.pk }},
+      new GLatLng({{ e.latitude }}, {{ e.longitude }}),
+      
+      '<large><strong>{{ e.name }}</strong></large><br/>' + 
+      'Average Rating: {{ e.avg_rating|default_if_none:"-" }}<br/>' +
+      'Average Cost: {{ e.avg_cost|default_if_none:"-" }}<br/>' +
+      {% if e.phone %}'Phone: {{ e.phone }}<br/>' + {% endif %}
+      '<a href="{{ e.get_absolute_url }}">Read more</a>',
+      
+      '{{ e.establishment_type }}',
+      {# NOTE: ugly as all hell #}
+      {% for num, loc in locations %}{% ifequal loc e.city %}{{ num }}{% endifequal %}{% endfor %},
+      [ {% for tag in e.tags.all %}{{ tag.pk }}{% if not forloop.last %}, {% endif %}{% endfor %} ]
+    );
+    {% endfor %}
+    
+    synchronizeCheckboxes();
+}
+  </script>
+
+{% endblock customheader %}
+
+{% block body-args %}onload="initialize()" onunload="GUnload()"{% endblock %}
+
+{% block topbar %}
+  <div id="headerSectionBar">
+    <div id="headerSearch">
+      {% include "search_header.html" %}
+    </div>
+  </div>
+{% endblock topbar %}
+
+
+{% block content %}
+<div id="reviews">
+  <img src="{% static images reviews/zagette.jpg %}" alt="The Zagette"/>
+  {% if submitted_name %}
+    <p id="submitted-thanks">Thanks for letting us know about {{ submitted_name }}. Once we've verified the information you gave us, it'll show up here.</p>
+  {% endif %}
+  <div id="topBlock">
+    <div id="mapBlock">
+      <div id="map-menu">
+        <h3>
+          Categories
+          <span class="checkbox-links">
+            -
+            <a href="#" onclick="setAll('type', true); return false;">all</a>
+            <a href="#" onclick="setAll('type', false); return false;">none</a>
+          </span>
+        </h3>
+        <table>
+          {% for types in TYPE_CHOICES|in_groups_of:3 %}
+            <tr>
+              {% for short, long in types %}
+                <td>
+                  <p><input type="checkbox" class="type-checkbox" id="type-checkbox-{{ short }}" onclick="setType('{{ short }}', this.checked);" CHECKED /> {{ long }} </p>
+                </td>
+              {% endfor %}
+            </tr>
+          {% endfor %}
+        </table>
+        
+        <h3>
+          Locations
+          <span class="checkbox-links">
+            -
+            <a href="#" onclick="setAll('loc', true); return false;">all</a>
+            <a href="#" onclick="setAll('loc', false); return false;">none</a>
+          </span>
+        </h3>
+        <table>
+          {% for locations in locations|in_groups_of:2 %}
+            <tr>
+              {% for num, loc in locations %}
+                <td>
+                  <p><input type="checkbox" class="loc-checkbox" id="loc-checkbox-{{ num }}" onclick="setLoc({{ num }}, this.checked);" CHECKED /> {{ loc }}</p>
+                </td>
+              {% endfor %}
+            </tr>
+          {% endfor %}
+        </table>
+        
+        <h3>
+          Tags
+          <span class="checkbox-links">
+            -
+            <a href="#" onclick="setAll('tag', true); return false;">all</a>
+            <a href="#" onclick="setAll('tag', false); return false;">none</a>
+          </span>
+        </h3>
+        <table>
+            {% for tagGroups in tags|in_groups_of:2 %}
+                <tr>
+                    {% for tag in tagGroups %}
+                    <td>
+                        <p><input type="checkbox" class="tag-checkbox" id="tag-checkbox-{{ tag.pk }}" onclick="setTag({{ tag.pk }}, this.checked);" />{{ tag.longest_name }}</p>
+                    </td>
+                    {% endfor %}
+                </tr>
+            {% endfor %}
+        </table>
+        
+        <h4>Want to add {% if submitted_name %}another{% else %}a{% endif %} store? <a href="{% url reviews.views.submit_review %}">Submit it here</a>.</h4>
+      </div>
+      <div id="map" class="jmap">
+        <noscript>
+          <center><p>For a better experience with the Zagette, please enable JavaScript in your browser.</p></center>
+        </noscript>
+      </div>
+    </div>
+  </div>
+
+  <div id="listings">
+    <table id="review-listings" cellpadding="0" cellspacing="0" border="0" class="sortable-onload-4r-0-1 rowstyle-alt colstyle-alt no-arrow">
+      <caption>Reviews for and by the Swarthmore Community</caption>
+      <thead>
+        <tr>
+          <th class="sortable" width="70px">Type</th>
+          <th class="sortable" width="225px">Name</th>
+          <th class="sortable" width="50px">Rating</th>
+          <th class="sortable" width="50px">Cost</th>
+          <th class="sortable" width="100px">City</th>
+          <th class="sortable" width="100px">Access</th>
+          <th class="sortable" width="75px">Phone</th>
+          <th class="sortable" width="100px">Tags</th>
+          <th class="sortable" width="115px">Reviews</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for establishment in establishments %}
+          <tr id="establishment-{{ establishment.pk }}">
+            <td><a onclick="showOnly('type', '{{ establishment.establishment_type }}');">{{ establishment.get_establishment_type_display }}</a></td>
+            <td><a href="{{ establishment.get_absolute_url }}" onclick='openInfo({{ establishment.pk }}); return false'>{{ establishment.name }}</a> <small>[<a href="{{ establishment.get_absolute_url }}">Reviews</a>]</small></td>
+            <td>{{ establishment.avg_rating|default_if_none:"" }}</td>
+            <td>{{ establishment.avg_cost|default_if_none:"" }}</td>
+            <td><a onclick="showOnly('loc', {{ loc_dict|dict_lookup:establishment.city }})">{{ establishment.city }}</a></td>
+            <td>{{ establishment.get_access_display }}</td>
+            <td>{{ establishment.phone }}</td>
+            <td>
+              {% for tag in establishment.tags.all %}
+                <a onclick="setCheckbox('tag', {{ tag.pk }}, true);">{{ tag.name }}</a>{% if not forloop.last %}, {% endif %}
+              {% endfor %}
+            </td>
+            <td>
+              {% for review in establishment.reviews.all %}
+                <a href="{{ review.get_absolute_url }}">{{ review.reviewer.name }}</a>
+                {% if not forloop.last %}<br />{% endif %}
+              {% endfor %}
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock content %}

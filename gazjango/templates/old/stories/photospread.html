@@ -1,0 +1,46 @@
+{% extends "stories/view.html" %}
+{% load extras %}
+
+{% block customheader %}
+  {{ block.super }}
+  
+  <script type="text/javascript" src="{% static js lightbox/js/lightbox-05.js %}"></script>
+  <link rel="stylesheet" href="{% static js lightbox/css/lightbox-05.css %}" type="text/css" media="screen, projection" />
+  
+  <!--[if lte IE 7]>
+    <style type="text/css">
+      #photo-block img {
+        width: expression(document.body.clientWidth > 648 ? "650px" : "auto");
+        height: expression(document.body.clientHeight > 448 ? "450px" : "auto");
+      }
+    </style>
+  <![endif]-->
+  
+  
+  <script type="text/javascript" charset="utf-8">
+    function lightboxify() {
+      $('.lightbox').lightBox();
+    }
+    $(lightboxify);
+    
+    function ajaxifyLinks() {
+      $('.page-link').each(function() {
+        $(this).click(function(event) {
+          event.preventDefault();
+          $('#photo-block').load($(this).attr('href'), null, function() {
+            lightboxify();
+            ajaxifyLinks();
+          });
+        });
+      });
+    }
+    $(ajaxifyLinks);
+  </script>
+
+{% endblock %}
+
+{% block story-content %}
+  <div id="photo-block">
+    {% include "stories/photo.html" %}
+  </div>
+{% endblock %}

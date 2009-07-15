@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+{% load extras %}
+
+{% block title %}{{ author.name }}{% endblock %}
+
+{% block customheader %}
+<link rel="stylesheet" href="{% static css page/profile.css %}" type="text/css" media="screen, projection" />
+{% endblock %}
+
+{% block topbar %}
+  <div id="headerSectionBar">
+    <div id="headerSearch">
+      {% include "search_header.html" %}
+    </div>
+  </div>
+{% endblock topbar %}
+
+{% block content %}
+  <div id="storyBox">
+    <div id="story">
+      <div id="profiles">
+      	<h2>{{ author.name }}</h2>
+      	<h3><span class="position-name">{{ author.position.name|default:"Guest Writer" }}</span></h3>
+      	
+        <div id="description">
+          {% if author.picture %}
+            <div class="picture"><img src="{{ author.picture.profilepic.url }}" /></div>
+          {% endif %}
+          {% if author.bio %}
+            <p>{{ author.bio|safe }}</p>
+          {% endif %}
+          {% if author.top_stories.count %}
+            <br />
+            <h4>Highlighted Stories</h4>
+        
+            {% for story in author.top_stories.all %}
+          		<div class="storyListing">
+          			<p>
+          			  <a href="{{ story.get_absolute_url }}" class="title">{{ story.headline|safe }}</a>
+          			  <br />
+          			  <img src="{{ story.main_image.thumb.url }}" class="searchImage" />
+
+            			<span class="byline">
+            				<span class="author">by {{ story.authors_in_order|join_authors:"l" }}</span>
+            				<span class="date">| <a href="{{ story.pub_date|issue_url }}">{{ story.pub_date|date:"F j, Y" }}</a></span>
+            			</span>
+            			<br />
+            			{{ story.summary|safe }} <a href="{{ story.get_absolute_url }}" class="readMore">read more</a>
+            		</p>
+          		</div>
+          	{% endfor %}
+          {% endif %}
+        </div>
+	  
+  	  	<div id="history">
+      		<h4>History with the Gazette</h4>
+      		<ul>
+      		  {% for holding in author.holding_set.reverse %}
+              <li>
+                {{ holding.date_start.year }}-{{ holding.date_end.year|default:"Present" }}:
+                {{ holding.position.name }}
+              </li>
+              {# TODO: link to role description? #}
+      		  {% endfor %}
+      		</ul>
+      		
+      		{% if author.awards %}
+        		<br />
+        		<h4>Awards</h4>
+      		  <p>{{ author.awards|safe }}</p>
+      		{% endif %}
+  				
+      		<h4>Contributions to the Gazette</h4>
+      		<ul>
+      		  {% for story in author.published_articles %}
+      		    <li><a href="{{ story.get_absolute_url }}">{{ story.headline|safe }}</a></li>
+      		  {% endfor %}
+      		</ul>
+      	</div>
+	  	
+      </div>
+    </div>
+  </div>
+{% endblock %}

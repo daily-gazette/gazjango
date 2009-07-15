@@ -1,0 +1,95 @@
+{% extends "base.html" %}
+{% load extras %}
+{% load comparisons %}
+
+{% block title %}Archives {% if section %}- {{ section.name }} {% if subsection %}&raquo; {{ subsection.name }}{% endif %}{% endif %} {% if year %}- {% if day %}{{ day }}{% endif %} {% if month %}{{ month|month_name }}{% endif %} {{ year }}{% endif %}{% endblock title %}
+
+
+{% block customheader %}
+	<link rel="stylesheet" href="{% static css page/story.css %}" type="text/css" media="screen, projection" />
+	<link rel="stylesheet" href="{% static css page/archives.css %}" type="text/css" media="screen, projection" />
+	<link rel="stylesheet" type="text/css" href="{% static js ajaxtabs/ajaxtabs.css %}" />
+{% endblock customheader %}
+
+{% block topbar %}
+	<div id="headerSectionBar">
+		<div id="headerSection">
+			<h3>
+				<a href="/archives/">Archives</a>
+				{% if section %}
+					- <a href="/archives/{{ section.slug }}/">{{ section.name }}</a>
+				{% endif %}
+				{% if subsection %}
+					- <a href="/archives/{{ section.slug }}/{{ subsection.slug }}/">{{ subsection.name }}</a>
+				{% endif %}
+				{% if year %}
+					- <a href="/archives/{% if section %}{{ section.slug }}/{% if subsection %}{{ subsection.slug }}/{% endif %}{% endif %}{{ year }}/">{{ year }}</a>
+					{% if month %}
+						- <a href="/archives/{% if section %}{{ section.slug }}/{% if subsection %}{{ subsection.slug }}/{% endif %}{% endif %}{{ year }}/{{ month }}/">{{ month|month_name }}</a>
+						{% if day %}
+							- <a href="/archives/{% if section %}{{ section.slug }}/{% if subsection %}{{ subsection.slug }}/{% endif %}{% endif %}{{ year }}/{{ month }}/{{ day }}/">{{ day }}</a>
+						{% endif %}
+					{% endif %}
+				{% endif %}
+			</h3>
+		</div>
+
+		<div id="headerSearch" class="floatRight">
+			{% include "search_header.html" %}
+		</div>
+	</div>
+{% endblock %}
+
+
+{% block content %}
+  <div id="commentColumn">
+    <div id="commentBox">
+      {% include "archives/sidebar.html" %}
+    </div>
+  </div>
+
+	<div id="storyBox">
+		<div id="story">
+		  {% block archiveContent %}
+    		<h2>Archives</h2>
+  		
+    		{% for year_i, month_i, month_cal in calendar %}
+    		  <div class="monthArchives">
+    		    <table width="280px" height="145px">
+    		      <tr>
+    		        <td colspan="7" class="month">
+    		          <center><a href="{{ url_base }}/{{ year_i }}/{{ month_i }}/">{{ month_i|month_name }} {{ year_i }}</a></center>
+    		        </td>
+    		      </tr>
+    		      <tr class="week">
+    		        <td width="40px">S</td>
+    		        <td width="40px">M</td>
+    		        <td width="40px">T</td>
+    		        <td width="40px">W</td>
+    		        <td width="40px">Th</td>
+    		        <td width="40px">F</td>
+    		        <td width="40px">Sa</td>
+    		      </tr>
+    		      {% for week_a in month_cal %}
+    		        <tr class="day">
+    		          {% for day in week_a %}
+    		            {% ifequal day 0 %}
+    		              <td class="empty"></td>
+    		            {% else %}
+    		              {% if day|gt:0 %}
+    		                <td class="content"><a href="{{ url_base }}/{{ year_i }}/{{ month_i }}/{{ day }}/">{{ day }}</a></td>
+    		              {% else %}
+    		                <td class="empty">{{ day|negate }}</td>
+    		              {% endif %}
+    		            {% endifequal %}
+    		          {% endfor %}
+    		        </tr>
+    		      {% endfor %}
+    		    </table>
+    		  </div>
+    		{% endfor %}
+    	{% endblock %}
+		</div>
+	</div>
+
+{% endblock content %}

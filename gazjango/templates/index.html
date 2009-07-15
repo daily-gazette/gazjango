@@ -2,37 +2,165 @@
 {% load extras %}
 
 {% block full-title %}
-The Daily Gazette :: Swarthmore College's Daily Paper
+	The Daily Gazette :: Swarthmore College's Daily Paper
 {% endblock full-title %}
 
 
 {% block customheader %}
+  
+<script src="{% static v2 js/mootools.v1.11.js %}" type="text/javascript"></script>
+<script src="{% static v2 js/jd.gallery.js %}" type="text/javascript"></script>
+<script src="{% static v2 js/jd.gallery.transitions.js %}" type="text/javascript"></script>
+<script src="{% static v2 js/jd.gallery.set.js %}" type="text/javascript"></script>
 
-{% jQuery %}
-<script type="text/javascript" src="{% static js jcarousel/lib/jquery.jcarousel.pack.js %}"></script>
+<link rel="stylesheet" href="{% static v2 css/slideshow.css %}" type="text/css" media="screen" />
+<script type="text/javascript" src="{% static v2 js/suckerfish.js%}"></script>	
 
-<link rel="stylesheet" type="text/css" href="{% static js jcarousel/lib/jquery.jcarousel.css %}" />
-<link rel="stylesheet" type="text/css" href="{% static js jcarousel/skins/tango/skin.css %}" />
-
-
-<link rel="stylesheet" type="text/css" href="{% static js ajaxtabs/ajaxtabs.css %}" />
-<script type="text/javascript" src="{% static js ajaxtabs/ajaxtabs.js %}"></script>
-
-<script type="text/javascript">
-
-jQuery(document).ready(function() {
-    jQuery('#mycarousel').jcarousel({
-        scroll: 3,
-        wrap: "both",
-    });
-});
-
-</script>
 
 {% endblock customheader %}
-
-
 {% block topbar %}
+  
+{% endblock topbar %}
+{% block content %}
+	<!-- Below controls the main content of the homepage -->
+	<div id="homepagecontent">
+		<!-- Begin code for the Featured Content Gallery -->
+		<div class="featured">
+			<script type="text/javascript">
+				function startGallery() {
+					var myGallery = new gallery($('myGallery'), {
+						timed: true,
+						defaultTransition: "fadeslideleft"
+					});
+				}
+				window.onDomReady(startGallery);
+			</script>
+
+			<div id="myGallery">
+				{% for topstory in topstories %}
+			    <div class="imageElement" id="{{ forloop.counter }}">
+			    	<h3>{{ topstory.headline }}</h3>
+			        <p>{{ topstory.longest_summary|safe }}</p>
+			        <a href="{{ topstory.get_absolute_url }}" title="Read the full story" class="open"></a>
+			        <img src="{{ topstory.main_image.top_front.url }}" class="full" alt="Congresswoman discusses stimulus benefits for Cal Poly" />
+			        <img src="{{ topstory.main_image.top_front.url }}" class="thumbnail" alt="Congresswoman discusses stimulus benefits for Cal Poly" />
+			    </div>
+				{% endfor %}
+			</div>
+		</div>
+		<!-- Begin code for the 4 column section to the right of the Featured Content Gallery -->
+		<div id="homepage-section-wrap">
+			<!-- Begin Mid Columns -->	
+			{% for story in midstories %}
+				<div class="column">
+					<h4><a href="{{ story.section.get_absolute_url }}">{{ story.section.name }}</a></h4>
+					<h6><a href="{{ story.get_absolute_url }}" title="Permanent Link to {{ story.headline }}">{{ story.headline|slice:":40" }} ...</a></h6>
+					<li>Posted on {{ story.pub_date|date:"n/j/Y" }}</li>
+					<p>{{ story.summary|safe|slice:":210" }}...</p>
+					<li class="more">More in <a href="{{ story.section.get_absolute_url }}">{{ story.section.name }}</a></li>
+				</div>
+			{% endfor %}
+		</div>
+		<div style="clear:both"></div>
+		
+		<!-- Begin the Community Activity section -->
+		<div class="cathomesocial">
+			<h4>Community Activity</a></h4>
+				<div class="cathomesocial-links">
+					{% for photo,additional_info in flickrphotos %}
+                            <a href="{{ photo.url }}"><img src="{{ additional_info.square }}" title="{{ photo.title }}" /></a>
+					{% endfor %}
+						
+					<h5>Recent Community Posts</h5>
+					{% for tweet in tweets %}
+						<p>{{ tweet.description|safe }} <br /> <small>—<a href="http://www.twitter.com/{{ entry.owner_user }}">Twitter</a> @ {{ tweet.timestamp }}</small></p>
+					{% endfor %}
+				</div>
+				<!-- Begin code for weather display -->	
+				<div id="weather">	
+					<h5>Current Weather</h5>
+					
+					<p class="weather">
+					    <strong>Today:</strong> {{ weather.today }}<br/>
+					</p>  
+					<p class="weather">
+					    <strong>Tonight:</strong> {{ weather.tonight }}<br />
+					</p>
+					<p class="weather">
+						<strong>Tomorrow:</strong> {{ weather.tomorrow }}<br />
+					</p>
+				    <p id="attrib"><small>Weather from the <a href="http://weather.gov">NWS</a>.</small></p>						  
+				</div>
+				<!-- End weather code -->
+				<!-- Begin code for Publish2 links -->	
+				<div id="links">
+					<h5>Recent Announcements</h5>
+					{% for announcement in announcements %}
+						<p>
+							<strong><a href="{{ announcement.get_absolute_url }}">{{ announcement.title }}</a></strong>
+							{% if announcement.is_event %}<br />{{ announcement.event_date|near_future_date }} at {{ announcement.event_time }} at {{ announcement.event_place }}{% endif %}
+						</p>
+					{% endfor %}
+				</div>
+				<!-- End code for Publish2 links -->
+		</div>
+		<!-- End the Community Activity section -->
+		
+		<!-- Begin the Recent Video Section -->
+		<div class="two-column">
+			<h4>Recent Comments</h4><br /><br />
+			{% for comment in comments|slice:":10" %}
+				{% if forloop.first %}
+					<h6>"{{ comment.text|safe|slice:":40" }} ..." — <a href="{{comment.get_absolute_url}}">{{ comment.display_name }}</a>, discussing <a href="{{comment.subject.get_absolute_url}}">{{ comment.subject.get_title }}</a>.</h6>
+					<ul class="comments">
+				{% else %}
+						<li><a href="{{comment.get_absolute_url}}">{{ comment.display_name }}</a> spoke on <a href="{{comment.subject.get_absolute_url}}">{{ comment.subject.get_title }}</a>.</li>
+				{% endif %}
+			{% endfor %}
+					</ul>
+		</div>
+		<!-- End the Recent Video section -->
+		
+		<!-- Begin the Photo Galleries section -->
+		<div class="two-column">
+			<!-- Pulls Category Title and displays as a link to that category page -->
+			<?php $feature_post = get_posts( 'category=8&numberposts=1' ); ?>
+			<?php foreach( $feature_post as $post ) : setup_postdata( $post ); ?>
+				<h4><?php the_category(' '); ?></h4>
+			<?php endforeach; ?>
+			
+			<?php $feature_post = get_posts( 'category=8&numberposts=1' ); ?>
+			<?php foreach( $feature_post as $post ) : setup_postdata( $post ); ?>
+			
+			<?php if (function_exists('c2c_get_custom')) : ?>
+				<?php echo c2c_get_custom('post-image','<img src="','" alt="<?php the_title(); ?>" class="post-image" />',''); ?>
+			<?php endif; ?>
+
+  				<h6><a href="<?php the_permalink() ?>" title="Permanent Link to <?php the_title_attribute(); ?>"><?php if (strlen($post->post_title) > 40) {echo substr(the_title($before = '', $after ='', FALSE), 0, 40) . '...'; } else {the_title(); } ?></a></h6>
+  				<li>Posted on <?php the_time('M'); ?>.<?php the_time('d'); ?></li>
+  				<p><?php the_excerpt_reloaded('30');?></p>
+			<?php endforeach; ?>
+			<!-- Pulls Category Title and displays as a "more in __" link to that category page -->
+			<?php $feature_post = get_posts( 'category=8&numberposts=1' ); ?>
+			<?php foreach( $feature_post as $post ) : setup_postdata( $post ); ?>
+				<li class="more">More <?php the_category(' '); ?></li>
+			<?php endforeach; ?>
+		</div>
+		<!-- End the Photo Galleries section -->
+	    
+	    <!-- Begin section for recent Twitter updates -->
+	    <div class="two-column">
+	    	<h4><a href="http://www.twitter.com/andrewspittle/"><img src="/images/twitterlogo.png" alt="Twitter" border="0" /></img></a></h4>
+	    	<div id="twitter_div">
+				<ul id="twitter_update_list"></ul>
+				<a href="http://twitter.com/andrewspittle" id="twitter-link" style="display:block;text-align:right;">follow me on Twitter</a>
+			</div>
+			<script type="text/javascript" src="http://twitter.com/javascripts/blogger.js"></script>
+			<script type="text/javascript" src="http://twitter.com/statuses/user_timeline/andrewspittle.json?callback=twitterCallback2&amp;count=3"></script>
+	    </div>
+	    <!-- End the section for Twitter -->
+{% endblock content %}
+
 	<div id="headerSectionBar">
 			<div id="headerSearch">
 				{% include "search_header.html" %}
@@ -109,10 +237,11 @@ jQuery(document).ready(function() {
 				</div>
 			</div>
 		</div>
-{% endblock topbar %}
 
 
-{% block content %}
+
+
+
 	<div id="indexMainBox">
 		<div id="indexMainStory">
 		  <a href="{{ topstory.get_absolute_url }}">
@@ -267,4 +396,3 @@ jQuery(document).ready(function() {
 			{% endfor %}				
 		</div>
 	</div>
-{% endblock content %}

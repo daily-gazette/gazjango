@@ -1,0 +1,79 @@
+{% extends "listings/base.html" %}
+{% load extras %}
+{% load markup %}
+
+{% block title %}Screw{% endblock title %}
+{% block listings_customheader %}
+    <script type="text/javascript" src="{% static js tablesort.js %}"></script>
+    {% jQuery %}
+    <script type="text/javascript" charset="utf-8">
+$(function() {
+    $('.screw-link').click(function(event) {
+        event.preventDefault();
+        var link = $(this);
+        var screwee = link.parents('.screw-row').children('td').eq(0).html();
+        var confirmed = confirm("Are you sure you want to remove "+screwee+" from the listings?");
+      
+        if (confirmed) {
+            $.post(link.attr('href'), {}, function(data, textStatus) {
+                if (data == 'success') {
+                    link.parents('.screw-row').remove();
+                }
+            });
+        }
+    });
+});
+    </script>
+{% endblock listings_customheader %}
+{% block listings_title %}The Screw Directory{% endblock listings_title %}
+
+
+{% block listings_content %}
+
+{% if form.non_field_errors %}
+    <p>{{ form.non_field_errors }}</p>
+{% endif %}
+
+<form action="" method="post">
+    <table class="submission">
+        <tr>
+            <td><strong>Screwee:</strong></td>
+            <td>{{ user.name }}</td>
+            <td><strong>{{ form.screwer.label_tag }}:</strong></th>
+            <td>{{ form.screwer }}</td>
+            <td><strong>{{ form.year.label_tag }}:</strong></th>
+            <td>{{ form.year }}</td>
+            {% if form.email %}
+                <td><strong>{{ form.email.label_tag }}:</strong></th>
+                <td>{{ form.email }}</td>
+            {% endif %}
+            <td><input type="submit" value="Submit" /></td>
+        </tr>		  
+    </table>
+</form>
+
+    <table id="review-listings" cellpadding="0" cellspacing="0" border="0" class="sortable-onload-0-4 rowstyle-alt colstyle-alt no-arrow">
+      <caption>Click on a column heading to sort.</caption>
+      <thead>
+        <tr>
+          <th class="sortable">Screwee</th>
+          <th class="sortable">Screwer</th>
+          <th class="sortable">Year</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for screw in screws %}
+          <tr class="screw-row">
+            <td>
+              {% ifequal screw.screwee user_profile %}
+                  You [<a class="screw-link" href="{% url screw.views.mark_as_screwed screw.slug %}">mark as screwed</a>]
+              {% else %}
+                  {{ screw.screwee.name }}
+              {% endifequal %}</td>
+            <td>{{ screw.screwer }}</td>
+            <td>{{ screw.get_year_display }}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+{% endblock listings_content %}

@@ -1,0 +1,63 @@
+{# TODO: better error handling, especially for the logged-in case #}
+<form method="post" action="comment/#submitComments" onsubmit="submitComment(); return false;">
+  <table>
+    <tr>
+    {% if user.is_authenticated %}
+      <tr style="display: none;">
+        <td>{{ comment_form.email }}</td>
+      </tr>
+      <tr>
+        <td>
+          {{ comment_form.anonymous.label_tag }}
+          {{ comment_form.anonymous }}
+        </td>
+        <td>{{ comment_form.name.label_tag }}:</td>
+        <td>{{ comment_form.name }}</td>
+      </tr>
+    {% else %}
+      <tr style="display: none;">
+        <td>{{ comment_form.anonymous }}</td>
+      </tr>
+      <tr>
+        <td>{{ comment_form.name.label_tag }}:</td>
+        {% if comment_form.name.errors %}
+          <td class="errored">{{ comment_form.name }}</td>
+          <td class="errorList">
+            {% for error in comment_form.name.errors %}
+              {{ error }}
+              {% if not forloop.last %}<br/>{% endif %}
+            {% endfor %}
+          </td>
+        {% else %}
+          <td>{{ comment_form.name }}</td>
+          <td><a href="{% url login %}">Log in</a> to verify your identity.</td>
+        {% endif %}
+      </tr>
+      <tr>
+        <td>{{ comment_form.email.label_tag }}:</td>
+        {% if comment_form.email.errors %}
+          <td class="errored">{{ comment_form.email }}</td>
+          <td class="errorList">
+            {% for error in comment_form.name.errors %}
+              {{ error }}
+              {% if not forloop.last %}<br/>{% endif %}
+            {% endfor %}
+          </td>
+        {% else %}
+          <td>{{ comment_form.email }}</td>
+          <td>Required, but will not be made public.</td>
+        {% endif %}
+      </tr>
+    {% endif %}
+    
+    <tr><td colspan="3">{{ comment_form.text }}</td></tr>
+    <tr>
+      <td colspan="3">
+        <span style="float: right">
+          <input type="submit" name="submit" value="Submit" />
+          <input type="reset"  name="reset"  value="Cancel" />
+        </span>
+      </td>
+    </tr>
+  </table>
+</form>

@@ -1,7 +1,6 @@
 {% load extras %}
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
-  "http://www.w3.org/TR/html4/loose.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:fb="http://www.facebook.com/2008/fbml" lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:fb="http://www.facebook.com/2008/fbml">
 
 <head>
   <title>
@@ -10,9 +9,7 @@
     {% endblock full-title %}
   </title>
 
-  <link rel="stylesheet" href="{% static css toolbox.css %}" type="text/css" media="screen, projection, print" />
-  <link rel="stylesheet" href="{% static css style.css %}" type="text/css" media="screen, projection" />
-  <link rel="stylesheet" href="{% static css functions/functions.css %}" type="text/css" media="screen, projection" />
+  <link rel="stylesheet" href="{% static v2 css/style.css %}" type="text/css" media="screen, projection" />
 
   <link rel="icon" type="image/x-icon" href="/static/images/favicon.ico" />
 
@@ -29,139 +26,135 @@
 </head>
 
 <body {% block body-args %}{% endblock %}>
-  <div id="container">
-      {% comment %}
-      {% if user.is_authenticated %}
-       <div id="hoverBox">
-          <p>Welcome to the Gazette! We've just rolled out a lot of new features.</p>
-          <p><br />You can now <a href="/comments/">see our newest comments</a>, <a href="/books/">buy and sell used textbooks</a>, and <a href="http://daily.swarthmore.edu/reviews/">browse and rate local stores and restaurants</a>&mdash;and win coupons to eat out!</p>
-      </div>
-      {% else %}
-       <div id="hoverBox">
-          <p>Welcome to the Gazette! We've noticed you aren't logged in.</p>
-          <p>If you've got a Facebook account, it is really easy! Just click:</p>
-          <center><fb:login-button size="medium" background="dark" length="long"></fb:login-button></center>
-          <p><br />We've just rolled out a lot of new features. You can now <a href="/comments/">see our newest comments</a>, <a href="/books/">buy and sell used textbooks</a>, and <a href="http://daily.swarthmore.edu/reviews/">browse and rate local stores and restaurants</a>&mdash;and win coupons to eat out!</p>
-      </div>
-      {% endif %}
-      {% endcomment %}
-      
-  	<div id="header">
-  		<div id="headerColor">
-  			<div id="headerContent">
-  			    <div id="headerSpecials">
-  			        <a class="rollover" href="http://daily.swarthmore.edu/announcements/" title="Announcements"><img src="{% static images header/icons/icons_01_off.png %}" hover="{% static images header/icons/icons_01_on.png %}"/></a><a class="rollover" href="http://daily.swarthmore.edu/jobs/" title="Jobs"><img src="{% static images header/icons/icons_02_off.png %}" hover="{% static images header/icons/icons_02_on.png %}"/></a><a class="rollover" href="http://daily.swarthmore.edu/reviews/" title="Zagette"><img src="{% static images header/icons/icons_03_off.png %}" hover="{% static images header/icons/icons_03_on.png %}"/></a><a class="rollover" href="http://daily.swarthmore.edu/comments/" title="Comments"><img src="{% static images header/icons/icons_04_off.png %}" hover="{% static images header/icons/icons_04_on.png %}"/></a><a class="rollover" href="http://daily.swarthmore.edu/books/" title="Books"><img src="{% static images header/icons/icons_05_off.png %}" hover="{% static images header/icons/icons_05_on.png %}"/></a>
-  			    </div>
-  			    
-  				<div id="headerSubscribe">
-  					<p>
-  					  Subscribe: 
-  					  <a href="">Email</a> | 
-  					  <a href="/feeds/main">News Feed [RSS]</a> | 
-  					  <a href="https://twitter.com/swatgazette">Twitter</a> | 
-  					  <a href="http://facebook.com/pages/The-Daily-Gazette/25143725092">Facebook</a></p>
-  					<p>
-  					  {% if user.is_authenticated %} 
-  					    {{ user.get_full_name }} |
-  					    {% if user.is_staff %}
-  					      {# <a href="/reporter-admin/">Reporter Admin</a> | #}
-  					      <a href="/admin/">Management Admin</a> |
-  					    {% endif %}
-			          <a href="{% url manage-user %}">Manage your Account</a> |
-			          {% if facebook_user %}
-			            <a href="{% url logout %}" onclick="FB.Connect.logoutAndRedirect('{% url logout %}')"><img src="http://static.ak.fbcdn.net/images/fbconnect/logout-buttons/logout_small.gif" alt="Logout" /></a>
-			          {% else %}
-			            {% if not user.get_profile.facebook_id %}
-  			            <fb:login-button size="small" background="white" length="short"></fb:login-button> Connect |
-  			          {% endif %}
-			            <a href="{% url logout %}">Logout</a>
-			          {% endif %}
-			        
-			        {% else %} {# not authenticated #}
-			          <a href="{% url registration_register %}">Register an Account</a> |
-			          <a href="{% url auth_login %}">Login</a> |
-			          <fb:login-button size="small" background="white" length="short"></fb:login-button>
-			        {% endif %}
-			        | {% now "F j, Y" %}
-  					</p>
-   				</div>
-				
-  				<div id="headerTitle">
-  					<center><h1><a href="/"><img src="{% static images header/title.png %}" alt="The Daily Gazette" /></a></h1></center>
-  					{% comment %}
-  					<center><h1><a href="/"><img src="{% static images aprilfools/2009/header.png %}" alt="The Daily Gazette" /></a></h1></center>
-  					{% endcomment %}
-  				</div>
-  			</div>
-  		</div>
-			
-  		<div id="headerNav">
-        <center>
-					<ul>
-						<li><a href="{% url section "news" %}">News</a></li>
-						<li><a href="{% url section "features" %}">Features</a></li>
-						<li><a href="{% url section "athletics" %}">Athletics</a></li>
-						<li><a href="{% url section "multimedia" %}">Multimedia &amp; Photography</a></li>
-						<li><a href="{% url section "opinions" %}">Opinions</a></li>
-						<li><a href="{% url archives %}">Archives</a></li>
-						{# TODO: not sure what to do with the specials category yet #}
-						{# <li><a href="">Specials</a></li> #}
-					</ul>
-				</center>
-		  </div>
-	
-      {% block topbar %}
-      {% endblock topbar %}
-	  </div>
+    <div id="wrap">
+        <div id="header">
+			<div class="headerleft">
+				<h1 class="blogtitle"><a href="/">The Daily Gazette</a></h1><h4 class="tagline"> - News for Swatties</h4>
+			</div>
+			<div class="email-subscription">
+				<h6>Sign up for updates</h6>
+				<p>Subscribe via email</p>
+		    	<form id="email-updates" >
+			        <input type="text" style="width:150px" id="subbox" value="Submission form for the mailing list" name="email"/>
+			    	<input type="hidden" value="newsevolveddemo" name="uri"/>
+			    	<input type="hidden" name="loc" value="en_US"/>
+			    	<input type="submit" value="Sign Up" />
+		    	</form>
+			</div>
+			{% if user.is_authenticated %}
+				<div id="alertBox">
+			          <p>Welcome to the Gazette! This box could be used to show announcements for new users!.</p>
+			    </div>
+			{% else %}
+				<div id="alertBox">
+			          <p>Welcome to the Gazette! This box could be used to show announcements for new users!.</p>
+			    </div>
+			{% endif %}
+		</div>
+		
+		<!-- Below controls the page navigation -->
+		<div id="navigationbar">
+			<div id="nav">
+				<ul>
+					<li><a href="/">Home</a></li>
+					<li><a href="/about">About</a></li>
+					<li><a href="/archives">Archives</a></li>
+					<li><a href="/about/comments">Comments</a></li>
+					{% if user.is_authenticated %} 
+                        {% if user.is_staff %}
+                        	{# <li><a href="/reporter-admin/">Reporter Admin</a></li>#}
+                        	<li><a href="/admin/">Management Admin</a></li>
+                        {% endif %}
+                      		<li><a href="{% url manage-user %}">Manage your Account</a></li>
+                      {% if facebook_user %}
+                        	<li><a href="{% url logout %}" onclick="FB.Connect.logoutAndRedirect('{% url logout %}')"><img src="http://static.ak.fbcdn.net/images/fbconnect/logout-buttons/logout_small.gif" alt="Logout" /></a></li>
+                      {% else %}
+                      	{% if not user.get_profile.facebook_id %}
+                        	<li><fb:login-button size="small" length="short"></fb:login-button> Connect</li>
+                        {% endif %}
+                        	<li><a href="{% url logout %}">Logout</a></li>
+                      {% endif %}
+                    {% else %} {# not authenticated #}
+                      		<li><a href="{% url registration_register %}">Register an Account</a></li>
+                      		<li><a href="{% url auth_login %}">Login</a></li>
+                      		<li><fb:login-button size="small" background="white" length="short"></fb:login-button></li>
+                    {% endif %}
+					<form id="searchform">
+		        		<input type="text" name="s" id="s" value="Search form here..." />
+		        		<input type="submit" id="sbutt" value="Search" />
+		    		</form>
+				</ul>
+			</div>
+			<div id="catnav">
+				<ul>
+					<h6>Sections |</h6>
+					<li><a href="{% url section "news" %}">News</a></li>
+                    <li><a href="{% url section "features" %}">Features</a></li>
+                    <li><a href="{% url section "athletics" %}">Athletics</a></li>
+                    <li><a href="{% url section "multimedia" %}">Multimedia &amp; Photography</a></li>
+                    <li><a href="{% url section "opinions" %}">Opinions</a></li>
+				</ul>
+			</div>
+		</div>
 
-    <div id="content">
-      {% block content %}
-      {% endblock content %}
+		<div style="clear:both;"></div>
+    
+		{% block content %}
+		
+		{% endblock content %}
 
-      {% block footer %}
-    	<div id="footer">
-    		<div id="footerContent">
-    			<p>
-    			  The Daily Gazette is a publication written by members of the Swarthmore College community. The administration of Swarthmore College has no editorial control or oversight regarding the content or presentation of the Daily Gazette. Funding for the Gazette is provided by the Student Budget Committee and by advertising revenue.
-    			  <br/>
-    			  <br/>
-			      <span class="floatLeft">
-			        <a href="/about/contact/">Contact</a> | 
-			        <a href="/about/">About</a> | 
-			        <a href="/join/">Employment</a> | 
-			        <a href="/policies/">Policies</a> |
-			      </span>
-			      <span class="floatRight">
-			        {% if user.is_authenticated %}
-			          <a href="{% url manage-user %}">Manage your Account</a> |
-			          {% if not facebook_user %}
-  			          <a href="{% url auth_logout %}">Logout</a>
-			          {% endif %}
-			        {% else %}
-			          <a href="{% url registration_register %}">Register an Account</a> |
-			          <a href="{% url auth_login %}">Login</a>
-			        {% endif %}
-			        {% if facebook_user or not user.is_authenticated %}
-                <fb:login-button size="small" background="white" length="short" autologoutlink="true"></fb:login-button>
-              {% endif %}
-			      </span>
-			    </p>
-        </div>
-	    </div>
-	    {% endblock footer %}
-    </div>
-  </div>
+	</div> <!-- End Main Wrap --> 	<div style="clear:both;"></div>
+
+	<!-- Begin Footer -->
+
+	<div id="footerwrap">
+		<div class="footerbox">
+			<h1>Browse News Evolved</h1>
+			Sections
+			<ul>
+				<li><a href="{% url section "news" %}">News</a></li>
+                <li><a href="{% url section "features" %}">Features</a></li>
+                <li><a href="{% url section "athletics" %}">Athletics</a></li>
+                <li><a href="{% url section "multimedia" %}">Multimedia &amp; Photography</a></li>
+                <li><a href="{% url section "opinions" %}">Opinions</a></li>
+			</ul>
+
+	  		<h2>Search</h2>
+	  		<form id="searchform" method="get" action="<?php echo $_SERVER['PHP_SELF']; ?>">
+	        	<input type="text" name="s" id="s" value="Search News Evolved..." onfocus="if (this.value == 'Search News Evolved...') {this.value = '';}"
+	         onblur="if (this.value == '') {this.value = 'Search News Evolved...';}" />
+	        	<input type="submit" id="sbutt" value="Search" />
+	    	</form>
+		</div>
+		<div class="footerbox">
+			<h1>Contact the Gazette</h1>
+			<h6>Have questions about the Gazette? Want to suggest a story or advertise your event? Feel free to <a href="/about/contact">use our contact form</a>.</h6>
+		</div>
+		<div class="footerbox">
+			<h1>Popular Posts</h1>
+				<ul>
+					<li>List most popular posts</li>
+				</ul>
+		</div>
+		<div class="footerbox">
+			<h1>Popular Comments</h1>
+			<ul>
+				<li>List highest rated comments</li>
+			</ul>
+		</div>
+	</div>
+	<div style="clear:both;"></div>
+
 <script type="text/javascript">FB.init("{{ FACEBOOK_API_KEY }}", "/xd_receiver.html", {'reloadIfSessionStateChanged': true});</script>
 
 <script type="text/javascript">
-	var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
-	document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
-	</script>
-	<script type="text/javascript">
-	var pageTracker = _gat._getTracker("UA-1785594-4");
-	pageTracker._trackPageview();
+    var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+    document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+    </script>
+    <script type="text/javascript">
+    var pageTracker = _gat._getTracker("UA-1785594-4");
+    pageTracker._trackPageview();
 </script>
-  
-</body>
 
+</body>
 </html>

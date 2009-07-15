@@ -13,15 +13,17 @@ from django.shortcuts           import render_to_response, get_object_or_404
 from gazjango.misc.view_helpers import get_by_date_or_404, filter_by_date, staff_required
 from gazjango.misc.view_helpers import get_ip, get_user_profile
 
-from gazjango.articles.models      import Article, Special, PhotoSpread, StoryConcept
-from gazjango.articles.models      import Section, Subsection, Column
-from gazjango.articles.forms       import SubmitStoryConcept,ConceptSaveForm
-from gazjango.announcements.models import Announcement
-from gazjango.comments.models      import PublicComment
-from gazjango.comments.forms       import make_comment_form
-from gazjango.issues.models        import Weather, WeatherJoke
-from gazjango.jobs.models          import JobListing
-from gazjango.accounts.models      import UserProfile
+from gazjango.articles.models           import Article, Special, PhotoSpread, StoryConcept
+from gazjango.articles.models           import Section, Subsection, Column
+from gazjango.articles.forms            import SubmitStoryConcept,ConceptSaveForm
+from gazjango.announcements.models      import Announcement
+from gazjango.comments.models           import PublicComment
+from gazjango.comments.forms            import make_comment_form
+from gazjango.issues.models             import Weather, WeatherJoke
+from gazjango.jobs.models               import JobListing
+from gazjango.accounts.models           import UserProfile
+from gazjango.community.models          import Entry
+from gazjango.community.sources.flickr  import FlickrPhoto
 
 
 from gazjango.scrapers.bico         import get_bico_news
@@ -194,24 +196,43 @@ def archives(request, section=None, subsection=None, year=None, month=None, day=
 
 
 def homepage(request, template="index.html"):
-    tops, mids, lows = Article.published.get_stories(num_mid=2, num_low=6)
+    tops, mids, lows = Article.published.get_stories(num_top=2,num_mid=4, num_low=6)
+    
+    photos = Entry.published.get_photos(num=6)
+    flickrphotos = []
+    for photo in photos:
+        additional_information = {
+            'image':photo.object.image,
+            'square':photo.object.square,
+            'thumbnail':photo.object.thumbnail,
+            'small':photo.object.small,
+            'large':photo.object.large,
+            'original':photo.object.original
+        }
+        flickrphotos = flickrphotos + [(photo,additional_information)]
+        
+    tweets = Entry.published.get_tweets(num=5)
+    
     data = {
-        'topstory': tops[0],
+        'topstories': tops,
         'midstories': mids,
         'lowstories': lows,
         
-        'comments': PublicComment.visible.order_by('-time').all()[:3],
-        # 'weather': Weather.objects.for_today(),
+        'comments': PublicComment.visible.order_by('-time').all()[:20],
+        'weather': Weather.objects.for_today(),
         'joke': WeatherJoke.objects.latest(),
         
         'specials': Special.objects.order_by('-date').all()[:10],
-        'announcements': Announcement.community.get_n(3),
+        'announcements': Announcement.community.get_n(5),
         'jobs': JobListing.published.get_for_show(3),
         
         'bico_news': get_bico_news(),
         'tla_links': get_tla_links(),
         'manual_links': manual_links,
         'lca_links': lca_links,
+        
+        'flickrphotos':flickrphotos,
+        'tweets':tweets,
     }
     rc = RequestContext(request)
     return render_to_response(template, data, context_instance=rc)

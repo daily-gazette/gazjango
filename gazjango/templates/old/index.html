@@ -1,0 +1,270 @@
+{% extends "base.html" %}
+{% load extras %}
+
+{% block full-title %}
+The Daily Gazette :: Swarthmore College's Daily Paper
+{% endblock full-title %}
+
+
+{% block customheader %}
+
+{% jQuery %}
+<script type="text/javascript" src="{% static js jcarousel/lib/jquery.jcarousel.pack.js %}"></script>
+
+<link rel="stylesheet" type="text/css" href="{% static js jcarousel/lib/jquery.jcarousel.css %}" />
+<link rel="stylesheet" type="text/css" href="{% static js jcarousel/skins/tango/skin.css %}" />
+
+
+<link rel="stylesheet" type="text/css" href="{% static js ajaxtabs/ajaxtabs.css %}" />
+<script type="text/javascript" src="{% static js ajaxtabs/ajaxtabs.js %}"></script>
+
+<script type="text/javascript">
+
+jQuery(document).ready(function() {
+    jQuery('#mycarousel').jcarousel({
+        scroll: 3,
+        wrap: "both",
+    });
+});
+
+</script>
+
+{% endblock customheader %}
+
+
+{% block topbar %}
+	<div id="headerSectionBar">
+			<div id="headerSearch">
+				{% include "search_header.html" %}
+			</div>
+			
+			<div id="headerColumn">
+				<div class="headerColumnBox">
+					<h4>Newest Comments</h4>
+					<ul>
+					{% for comment in comments|slice:":4" %}
+							<li>
+							  {{ comment.display_name }} commented on <a href="{{comment.get_absolute_url}}">{{ comment.subject.get_title }}</a>.
+							</li>
+					{% endfor %}
+					<li>See <a href="{% url comments.views.comment_page %}">more recent comments</a>.</li>
+					</ul>
+				</div>
+			
+				<div id="headerContentBox">
+					<ul id="sideContent" class="shadetabs" id="tabs">
+						<li><a href="#" class="selected" rel="#default">Weather</a></li>
+						<li><a href="/menu/" rel="sideContainer">Menus</a></li>
+					</ul>
+						
+						
+					<div class="headerColumnBox" id="sideContainer">
+					    {% comment %}
+						<div id="weather">
+						    
+						  <p class="weather">
+						    <strong>Today:</strong> {{ weather.today }}<br/>
+						    <span class="joke">{{ joke.line_one }}</span>
+						  </p>
+						  
+						  <p class="weather">
+						    <strong>Tonight:</strong> {{ weather.tonight }}<br />
+  						  <span class="joke">{{ joke.line_two }}
+  						</p>
+						  
+						  <p class="weather">
+						    <strong>Tomorrow:</strong> {{ weather.tomorrow }}<br />
+  						  <span class="joke">{{ joke.line_three }}
+  						</p>
+						  
+						  <p id="attrib">Weather updated daily, courtesy of the <a href="http://weather.gov">NWS</a>.</p>						  
+						</div>
+						{% endcomment %}
+						<div id="weather">
+						    
+						  <p class="weather">
+						    <span class="joke">{{ joke.line_one }}</span>
+						  </p>
+						  
+						  <p class="weather">
+  						  <span class="joke">{{ joke.line_two }}
+  						</p>
+						  
+						  <p class="weather">
+  						  <span class="joke">{{ joke.line_three }}
+  						</p>
+						</div>
+					</div>
+						
+					<script type="text/javascript">
+						var switcher = new ddajaxtabs("sideContent", "sideContainer");
+						switcher.setpersist(true);
+						switcher.setselectedClassTarget("link");
+						switcher.init();
+					</script>
+				</div>
+				
+				<div id="zagette">
+					<a href="http://www.swarthmore.coop"><img src="{% static images ads/coop-index-230.png %}" alt="The Swarthmore Food Cooperative" /></a>
+				</div>
+			</div>
+		</div>
+{% endblock topbar %}
+
+
+{% block content %}
+	<div id="indexMainBox">
+		<div id="indexMainStory">
+		  <a href="{{ topstory.get_absolute_url }}">
+		    <img class="{{ topstory.main_image.front_tall_or_wide }}" 
+		         src="{{ topstory.main_image.top_front.url }}" 
+		         title="{{ topstory.headline }}" alt="" />
+		  </a>
+			<h2>{{ topstory.section_if_special|follow:": " }}<a href="{{ topstory.get_absolute_url }}">{{topstory.get_title|safe}}</a></h2>
+			<p class="byline">
+			  <span class="author">by {{ topstory.authors_in_order|join_authors:"l" }}</span>
+			  <span class="date">| {{ topstory.pub_date|date:"n/j/Y" }}</span>
+			</p>
+			<p>
+				{{ topstory.longest_summary|safe }}
+				<a class="readMore" href="{{ topstory.get_absolute_url }}">More</a>
+			</p>
+		</div>
+		
+		<div id="indexHeadlines">
+		  <table cellspacing="5px">
+		    {% for story_pair in lowstories|in_groups_of:2 %}
+		      <tr height="50px">
+		        {% for story in story_pair %}
+			        <td width="50%">
+			          {% if story.section_if_special %}
+                  <span class="type">{{ story.section_if_special }}:</span>
+			          {% endif %}
+			          <h4><a href="{{ story.get_absolute_url }}">{{ story.get_title|safe }}</a></h4>
+  						  <span class="author">
+  						    | by {{ story.authors_in_order|join_authors:"1xl" }}
+  						  </span>
+						</td>
+				{% endfor %}
+		      </tr>
+		    {% endfor %}
+		  </table>
+		</div>
+	</div>
+	
+	<div id="indexSecondary">
+		{% for story in midstories %}
+		  <a href="{{ story.get_absolute_url }}">
+				<img src="{{ story.main_image.mid_front.url }}"
+				     class="{{ story.main_image.front_tall_or_wide }}" 
+				     title="{{ story.headline }}{{ story.main_image.credit|before:" - Photo by " }}"
+				     alt="" />
+			</a>
+		  <h3>{% if story.section_if_special %}{{ story.section_if_special }}: {% endif %}<a href="{{ story.get_absolute_url }}">{{ story.get_title|safe }}</a></h3>
+		  <p class="byline">
+        <span class="author">by {{ story.authors_in_order|join_authors:"l" }}</span>
+        <span class="date"> | {{ story.pub_date|date:"n/j/Y" }}</span>
+		  </p>
+		  <p>
+		   {{ story.summary|safe }}
+		   <a class="readMore" href="{{ story.get_absolute_url }}">More</a>
+		  </p>
+		  <br />
+		{% endfor %}
+	</div>
+	
+	<div id="indexPOTDbar">
+		<center>
+		  <hr width="900px" color="#dddddd" size=.5px />
+		
+      <ul id="mycarousel" class="jcarousel-skin-tango">
+        {% for special in specials %}
+          <li>
+            <h5>{{ special.get_category_display }} &rsaquo;&rsaquo;</h5>
+            <a href="{{ special.get_target_url }}">
+              <img src="{{ special.image.issue.url }}" width="150" height="150" 
+                   title="{{ special.image.credit|before:"Photo by "}}" alt="" />
+            </a>
+            <p><a href="{{ special.get_target_url }}">{{ special.title|safe }}</a></p>
+          </li>
+        {% endfor %}
+      </ul>
+		
+			<hr width="900px" color="#dddddd" size=.5px />
+		</center>
+	</div>
+	
+	<div id="indexBottom">
+		<div class="indexBottomColumn floatLeft margin25">
+			<h3><a href="/announcements/">Announcements</a></h3>
+			
+			{% for announcement in announcements %}
+			  <h4>
+			    <a href="{{ announcement.get_absolute_url }}">{{ announcement.title }}</a>
+			  </h4>
+			  {% if announcement.is_event %}
+				  <p>Sponsored by {{ announcement.sponsor_link }}</p>
+          <p>When: {{ announcement.event_date|near_future_date }} at {{ announcement.event_time }}</p>
+          <p>Where: {{ announcement.event_place }}</p>
+          
+			  {% else %}
+			    <p>{{ announcement.brief_excerpt|safe }}</p>
+			  {% endif %}
+			  
+			  <hr width="50%" />
+			{% endfor %}
+			
+			<p>Have something to tell the Swarthmore-related world? <a href="{% url submit-announcement %}">Submit your own announcement</a> to show up in the Reserved Students Digest, our email issues, and right here.</p>
+		</div>
+		
+		<div class="indexBottomColumn floatLeft margin25">
+			<h3><a href="/jobs/">Jobs &amp; Internships</a></h3>
+			
+			{% for job in jobs %}
+			  <h4><a href="{{ job.get_absolute_url }}">{{ job.name }}</a></h4>
+			  <p>Pay: {{ job.get_pay }}</p>
+			  <p>Hours: {{ job.hours }}</p>
+			  <p>When: {{ job.when }}</p>
+			  <p>Where: {{ job.where }}</p>
+			  
+		    <hr width="50%" />
+			{% endfor %}
+			
+			<p>Have a job opportunity? <a href="{% url submit-job %}">Add it</a> to the listings: it'll show up here and in the Reserved Students Digest.</p>
+		</div>
+		
+		<div class="indexBottomColumn floatLeft" id="bico">
+			<h3>From <a href="http://www.biconews.com/"><em>The BiCo News</em></a></h3>
+			
+			{% ifequal bico_news "error" %}
+			  <p>Unfortunately, we seem to be having some technical difficulties. We're working to resolve them, but in the meantime you can get news from the BiCo at <a href="http://www.biconews.com/">biconews.com</a>.</p>
+			{% else %}
+				{% for story in bico_news %}
+				  <h4><a href="{{ story.link }}">{{ story.headline }}</a></h4>
+				  <p class="byline"><span class="author">by {{ story.author|upper }}</span></p>
+				{% endfor %}
+			{% endifequal %}
+			
+			<p><a href="http://www.biconews.com/"><em>The BiCo News</em></a> is the weekly paper for Bryn Mawr and Haverford Colleges.</p>
+			
+			<hr />
+			
+			{% for link in manual_links %}
+			  {{ link|safe }} |
+			{% endfor %}
+			
+			<!-- TLA -->
+			  {% for link in tla_links %}
+			    {{ link|safe }} |
+			  {% endfor %}
+			
+			<!-- <br /><br /> -->
+			
+			<!-- LCA  -->
+			{% for text, url in lca_links %}
+			  <a href="{{ url }}">{{ text }}</a>
+			  {% if not forloop.last %}|{% endif %}
+			{% endfor %}				
+		</div>
+	</div>
+{% endblock content %}

@@ -162,7 +162,8 @@ urlpatterns += patterns('',
 
 if settings.DEBUG:
     path = settings.BASE +'/static'
-    urlpatterns += patterns('django.views.static', 
+    urlpatterns += patterns('django.views.static',
+        (r'^static/v2/(?P<path>.*)$',     'serve', {'document_root': path + '/v2'}), 
         (r'^static/css/(?P<path>.*)$',     'serve', {'document_root': path + '/css'}),
         (r'^static/js/(?P<path>.*)$',      'serve', {'document_root': path + '/js'}),
         (r'^static/images/(?P<path>.*)$',  'serve', {'document_root': path + '/images'}),
