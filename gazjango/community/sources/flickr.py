@@ -66,16 +66,10 @@ class FlickrPhoto(Entry):
     def large(self):
         """ this is a 1024 (longest side) image """
         return self._build_image_url('b')
-    @property
-    def original(self):
-        """ original image, gif, png, or jpg. original size as well """
-        return self._build_image_url('o')
 
     def _build_image_url(self, size=None):
         if size in list('stmb'):
             return "http://static.flickr.com/%s/%s_%s_%s.jpg" % (self.server, self.photo_id, self.secret, size)
-        elif size == 'o':
-            return "http://static.flickr.com/%s/%s_%s_o.%s" % (self.server, self.photo_id, self.original_secret, self.original_format)
         return "http://static.flickr.com/%s/%s_%s.jpg" % (self.server, self.photo_id, self.secret)
 
 # retrieve function, this is how we handle items
@@ -98,7 +92,14 @@ def retrieve(force, **args):
     page = 1
 
     while True:
-        res = flickr.exe_method('people.getPublicPhotos', user_id=user_id, extras="date_taken,last_update", per_page='500', page=page)
+        res = flickr.exe_method(
+            'groups.pools.getPhotos', 
+            group_id="89729977@N00",
+            api_key="4b27219ffc49d3fbe5d2fcf3a4d411f7", 
+            extras="date_taken,last_update", 
+            per_page='500', 
+            page=page
+        )
         if res is False:
             log.error('error')
             break
@@ -139,7 +140,7 @@ class FClient(object):
             kwargs[k] = v
 
         res = utils.get_remote_data(url + urllib.urlencode(kwargs), rformat='json')
-
+        
         if res.get("stat", "") == "fail":
             log.error("flickr retrieve failed.")
             log.error("%s" % res.get("stat"))
@@ -174,29 +175,27 @@ class FClient(object):
 
 def _handle_photo(flickr_obj, photo, user):
     photo_id        = photo['id']
-    secret          = smart_unicode(photo['secret'])
 
-    log.info('working with photo => id: %s, secret: %s', photo_id, secret)
+    log.info('working with photo => id: %s', photo_id)
 
-    info = flickr_obj.exe_method('photos.getInfo', photo_id=photo_id, secret=secret)['photo']
+    info = flickr_obj.exe_method('photos.getInfo', photo_id=photo_id)['photo']
     photo_obj, created = FlickrPhoto.objects.get_or_create(
         photo_id    = photo_id,
         timestamp   = datetime.fromtimestamp(utils.safeint(info["dates"]["posted"]))
     )
-        
+
+
     photo_obj.taken_at    = photo['datetaken']
     photo_obj.source_type = "flickrphoto"
     photo_obj.timestamp   = datetime.fromtimestamp(utils.safeint(info["dates"]["posted"]))
     photo_obj.uploaded_at = datetime.fromtimestamp(utils.safeint(info["dates"]["posted"]))
-    photo_obj.owner_user  = user
+    photo_obj.owner_user  = photo['owner']
 
     try:
         photo_obj.url               = "http://www.flickr.com/photos/%s/%s" % (photo_obj.owner_user, photo_obj.photo_id)
-        photo_obj.secret            = secret
         photo_obj.server            = utils.safeint(smart_unicode(photo['server']))
-        photo_obj.original_secret   = smart_unicode(info['originalsecret'])
-        photo_obj.original_format   = smart_unicode(info['originalformat'])
         photo_obj.taken_at          = photo['datetaken']
+        photo_obj.secret            = photo['secret']
         photo_obj.title             = smart_unicode(photo['title'])
         photo_obj.description       = smart_unicode(info['description']['_content'])
         photo_obj.num_comments      = utils.safeint(info["comments"]["_content"])

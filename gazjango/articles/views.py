@@ -196,9 +196,8 @@ def archives(request, section=None, subsection=None, year=None, month=None, day=
 
 
 def homepage(request, template="index.html"):
-    tops, mids, lows = Article.published.get_stories(num_top=2,num_mid=4, num_low=6)
-    
-    photos = Entry.published.get_photos(num=6)
+    tops, mids, lows = Article.published.get_stories(num_top=2,num_mid=4, num_low=6)    
+    photos = Entry.published.get_entries(category="flickrphoto",num=6)
     flickrphotos = []
     for photo in photos:
         additional_information = {
@@ -207,11 +206,10 @@ def homepage(request, template="index.html"):
             'thumbnail':photo.object.thumbnail,
             'small':photo.object.small,
             'large':photo.object.large,
-            'original':photo.object.original
         }
         flickrphotos = flickrphotos + [(photo,additional_information)]
         
-    tweets = Entry.published.get_tweets(num=5)
+    community = Entry.published.get_entries(exclusion="flickrphoto",num=5)
     
     data = {
         'topstories': tops,
@@ -232,7 +230,7 @@ def homepage(request, template="index.html"):
         'lca_links': lca_links,
         
         'flickrphotos':flickrphotos,
-        'tweets':tweets,
+        'community':community,
     }
     rc = RequestContext(request)
     return render_to_response(template, data, context_instance=rc)

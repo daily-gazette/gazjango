@@ -15,9 +15,16 @@ class PublishedEntryManager(models.Manager):
         orig = super(PublishedEntryManager, self).get_query_set()
         return orig.filter(status__gte=2, timestamp__lte=datetime.datetime.now())
     
-    def get_entries(self, base=None, num=10):
+    def get_entries(self, base=None, num=10, exclusion=False,category=False):
         base = base or self
-        entries = list(base.order_by('-timestamp')[:num])
+        if category and exclusion:
+            entries = list(base.order_by('-timestamp').filter(source_type=category).exclude(source_type=exclusion)[:num])
+        elif category:
+            entries = list(base.order_by('-timestamp').filter(source_type=category)[:num])
+        elif exclusion:
+            entries = list(base.order_by('-timestamp').exclude(source_type=exclusion)[:num])
+        else:
+            entries = list(base.order_by('-timestamp')[:num])
         return entries    
     
     def get_photos(self,base=None,num=3):

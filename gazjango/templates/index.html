@@ -72,8 +72,16 @@
 					{% endfor %}
 						
 					<h5>Recent Community Posts</h5>
-					{% for tweet in tweets %}
-						<p>{{ tweet.description|safe }} <br /> <small>—<a href="http://www.twitter.com/{{ entry.owner_user }}">Twitter</a> @ {{ tweet.timestamp }}</small></p>
+					{% for entry in community %}
+						{% ifequal entry.source_type "tweet" %}
+							<p>{{ tweet.description|safe }} <br /> <small>—<a href="http://www.twitter.com/{{ entry.owner_user }}">Twitter</a> @ {{ tweet.timestamp }}</small></p>
+						{% endifequal %}
+						{% ifequal entry.source_type "bookmark" %}
+							<p><a href="{{ entry.url }}">{{ entry.title }}</a> <small>-<a href="http://www.delicious.com/{{ entry.owner_user }}">Del.icio.us</a> @ {{ entry.timestamp }}</small></p>
+						{%endifequal %}	
+						{% ifequal entry.source_type "review" %}
+							<p><a href="{{ entry.url }}">{{ entry.title }}</a> - Reviewed by {{ entry.owner_user }} @ {{ entry.timestamp }}</small></p>
+						{%endifequal %}
 					{% endfor %}
 				</div>
 				<!-- Begin code for weather display -->	

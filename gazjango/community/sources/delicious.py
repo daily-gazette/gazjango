@@ -27,11 +27,11 @@ class BookmarkAdmin(admin.ModelAdmin):
 # retrieve function
 def retrieve(force, **args):
     if isinstance(args['account'], tuple) and len(args['account']) == 2:
-        username, password = args['account']
+        tag, password = args['account']
     else:
-        username = args['account']
+        tag = args['account']
         password = False
-    url      = "http://feeds.delicious.com/v2/json/%s" % username
+    url      = "http://feeds.delicious.com/v2/json/tag/%s" % tag
     rformat = 'json'
 
     last_update = datetime.datetime.fromtimestamp(0)
@@ -42,7 +42,7 @@ def retrieve(force, **args):
         log.info("Forcing update of all bookmarks available.")
     else:
         try:
-            last_update = Bookmark.objects.filter(owner_user=username).order_by('-timestamp')[0].timestamp
+            last_update = Bookmark.objects.filter(owner_user=tag+" - Tag").order_by('-timestamp')[0].timestamp
         except Exception, e:
             log.debug('%s', e)
 
@@ -54,23 +54,23 @@ def retrieve(force, **args):
     if marks:
         for mark in marks:
             if password and force:
-                _handle_rss_bookmark(mark, username)
+                _handle_rss_bookmark(mark, tag)
                 continue
             dt = utils.parsedate(mark['dt']) 
             if dt > last_update:
-                _handle_bookmark(mark, dt, username)
+                _handle_bookmark(mark, dt, tag)
             else:
                 log.warning("No more bookmarks, stopping...")
                 break
 
-def _handle_bookmark(mark, dt, username):
+def _handle_bookmark(mark, dt, tag):
     log.info("working with bookmark => %s" % mark['d'])
 
     bookmark, created = Bookmark.objects.get_or_create(
         timestamp   = dt,
         url         = mark['u'],
         title       = mark['d'],
-        owner_user  = username,
+        owner_user  = tag+" - Tag",
         description = mark['n'],
         source_type = 'bookmark'
     )

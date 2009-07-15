@@ -10,6 +10,8 @@ from gazjango.misc.helpers             import avg, set_default_slug
 from gazjango.misc.templatetags.extras import join_authors
 from gazjango.reviews.directions       import TRAIN_STATIONS, TRAIN_CHOICES, nearest_station
 from gazjango.tagging.models           import Tag
+from gazjango.community.models         import Entry
+from gazjango.community.sources        import utils
 import datetime
 import urllib
 import urllib2 # yeah, we need both
@@ -176,4 +178,16 @@ class Review(models.Model):
     
     def get_absolute_url(self):
         return "%s#review-%s" % (self.establishment.get_absolute_url(), self.pk)
+        
+def create_entry(sender, instance, **kwargs):
+    review_entry = Entry.objects.get_or_create(
+        title           = instance.establishment.name,
+        description     = instance.text,
+        owner_user      = instance.reviewer,
+        url             = instance.get_absolute_url(),
+        source_type     = "review",
+        timestamp       = datetime.datetime.now()
+    )
+        
+models.signals.pre_save.connect(create_entry, sender=Review)
     
