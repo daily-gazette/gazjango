@@ -84,7 +84,7 @@ class ResizeTopTallFront(FuzzyRatioResize):
     height = 320
 
 class TopTallFront(ImageSpec):
-    processors = [ResizeTopWideFront]
+    processors = [ResizeTopTallFront]
 
 
 class ResizeMidWideFront(FuzzyRatioResize):
@@ -101,6 +101,13 @@ class ResizeMidTallFront(FuzzyRatioResize):
 
 class MidTallFront(ImageSpec):
     processors = [ResizeMidTallFront]
+
+class ResizePoster(FuzzyRatioResize):
+    width = 400
+    height_range = [450,550]
+    
+class Poster(ImageSpec):
+    processors = [ResizePoster]
 
 
 # ======================

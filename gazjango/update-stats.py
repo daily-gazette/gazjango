@@ -13,8 +13,8 @@ from gazjango.popular.models          import StoryRank
 from gazjango.articles.models.stories import Article
 
 # should be moved to settings when everything works
-username = 'arador@gmail.com'
-password = 'YOURS'
+username = 'accounts@daily.swarthmore.edu'
+password = 'randomness'
 account  = '12436739'
 
 connection = Connection(username,password)

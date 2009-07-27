@@ -1,6 +1,8 @@
 from django.db               import models
 from django.utils.safestring import mark_safe
 from gazjango.misc.helpers import set_default_slug
+from django.contrib.auth.models import User
+from gazjango.media.models             import MediaFile, ImageFile, MediaBucket
 import django.utils.html
 import datetime
 import re
@@ -18,6 +20,26 @@ class PublishedAnnouncementsManager(models.Manager):
     
     def get_n(self, n=3):
         "Returns the `n` announcements to be shown."
+        running = self.now_running()
+        if running.count() >= n:
+            return running[:n]
+        else:
+            new = self.order_by('-date_end', '-date_start').exclude(pk__in=[r.pk for r in running])
+            return list(running) + list(new[:n - running.count()])
+            
+class PublishedPosterManager(models.Manager):
+    "Deals only with published posters."
+    def get_query_set(self):
+        orig = super(PublishedPosterManager, self).get_query_set()
+        return orig.filter(is_published=True)
+
+    def now_running(self):
+        "Returns published posters which should now be shown."
+        t = datetime.date.today()
+        return self.filter(date_start__lte=t, date_end__gte=t).order_by('-date_start', '-date_end')
+
+    def get_n(self, n=3):
+        "Returns the `n` posters to be shown."
         running = self.now_running()
         if running.count() >= n:
             return running[:n]
@@ -131,4 +153,23 @@ class Announcement(models.Model):
 _slugger = set_default_slug(lambda x: x.title,
                             lambda x: { 'date_start__year': x.date_start.year })
 models.signals.pre_save.connect(_slugger, sender=Announcement)
+
+
+
+class Poster(models.Model):
+    title       = models.CharField(max_length=100)
+    poster      = models.ForeignKey(ImageFile, null=True, blank=True,help_text="The image which will be resized/cropped for various displays.")
+    sponsor_url = models.URLField(blank=True, verify_exists=True)
+    sponsor_user= models.ForeignKey(User)
+
+    date_start = models.DateField(default=datetime.date.today)
+    date_end   = models.DateField(default=datetime.date.today)
+        
+    is_published = models.BooleanField(default=False)
+    
+    related_event = models.ForeignKey(Announcement)
+    
+    published = PublishedPosterManager()
+    
+
 

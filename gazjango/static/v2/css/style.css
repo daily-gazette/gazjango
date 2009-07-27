@@ -1,4 +1,4 @@
-/* @override http://localhost:8000/static/v2/css/style.css */
+/* @override http://127.0.0.1:8000/static/v2/css/style.css */
 
 /*   
 Theme Name: News Evolved 
@@ -712,7 +712,7 @@ a, #catnav li li a:link, #catnav li li a:visited {
 	font-style: normal;
 	font-weight: normal;
 	font-size: 13px;
-	margin-left: 15px;
+	margin-left: 0px;
 	list-style-type: none;
 	margin-top: 5px;
 }
@@ -755,7 +755,7 @@ a, #catnav li li a:link, #catnav li li a:visited {
 }
 
 .two-column {
-	width: 290px;
+	width: 220px;
 	float: left;
 	padding: 5px;
 	margin-top: 10px;
@@ -772,7 +772,7 @@ a, #catnav li li a:link, #catnav li li a:visited {
 
 .two-column h4 a {
 	color: #3d3d3d;
-	width: 298px;
+	width: 228px;
 	float: left;
 	padding-bottom: 2px;
 	border-bottom-color: #989898;
@@ -921,10 +921,56 @@ ul#twitter_update_list li {
 	margin-right: 10px;
 	padding: 5px;
 	background-color: #efefef;
-	border-style: solid;
-	border-width: 1px;
-	border-color: #989898;
-	width: 425px;
+	width: 380px;
+	border: 1px solid #989898;
+}
+
+.bottom-box {
+	float: left;
+	width: 655px;
+	display: inline-box;
+	margin-right: 0px;
+	margin-top: 10px;
+	padding: 5px;
+	border-top: 1px solid #000;
+}
+
+.bottom-box h4 {
+	margin-left: 0px;
+	margin-bottom: 5px;
+	margin-right: 0px;
+	margin-top: 0px;
+	padding-left: 0px;
+	padding-bottom: 2px;
+	padding-right: 0px;
+	padding-top: 0px;
+	border-bottom-color: #000000;
+	border-bottom-style: double;
+	font-weight: bold;
+}
+
+.bottom-box .bottom-third {
+	float: left;
+	width: 210px;
+}
+
+.bottom-box .bottom-twothird {
+	float: left;
+	width: 420px;
+}
+
+.bottom-box ul {
+	padding: 0px;
+	margin: 0px;
+}
+
+.bottom-box ul li {
+	list-style-type: none;
+	padding-top: 10px;
+}
+
+.bottom-box .bottom-third.margin-right {
+	margin-right: 10px;
 }
 
 .cathomesocial h4 {
@@ -974,7 +1020,7 @@ ul#twitter_update_list li {
 }
 
 .cathomesocial-links {
-	width: 240px;
+	width: 380px;
 	min-height: 350px;
 	float: left;
 	display: inline;
@@ -989,6 +1035,49 @@ ul#twitter_update_list li {
 
 .cathomesocial-links h5 {
 	margin-bottom: 5px;
+}
+
+.cathomesocial .entry {
+    background-color: #dddddd;
+    -moz-border-radius: 10px;
+    -webkit-border-radius: 10px;
+    border: 2px solid #989898;
+    padding: 5px;
+    margin: 2px;
+    min-height: 45px
+}
+
+.cathomesocial .entry.delicious {
+	background: #dddddd url(/static/v2/images/social/delicious.png) no-repeat 10px center;
+}
+
+.cathomesocial .entry.review {
+	background: #dddddd url(/static/v2/images/social/review.png) no-repeat 10px center;
+}
+
+.cathomesocial .entry.comment {
+	background: #dddddd url(/static/v2/images/social/comment.png) no-repeat 10px center;
+}
+
+.cathomesocial .entry.flickrphoto {
+	min-height: 65px;
+}
+
+.cathomesocial .entry.twitter {
+	min-height: 60px;
+}
+
+.cathomesocial .entry p {
+	padding-left: 80px;
+}
+
+.cathomesocial .entry.flickrphoto p {
+	padding-top: 10px;
+}
+
+.cathomesocial .entry.twitter p {
+	padding-bottom: 0px;
+	margin-bottom: 0px;
 }
 
 /*** Styles for community links on homepage ***/
@@ -1219,6 +1308,8 @@ h6.publish2_link {
 #articlewrapper {
 	width: 1070px;
 	padding: 5px;
+	float: left;
+	display: inline-block;
 }
 
 #pagewrapper {
@@ -1286,7 +1377,7 @@ h6.publish2_link {
 	text-align: left;
 	font-size: 15px;
 	margin: 0px;
-	width: 570px;
+	width: 655px;
 	line-height: 20px;
 }
 
@@ -1369,20 +1460,20 @@ h6.publish2_link {
 /*** Styles for the article metadata (author, etc.) ***/
 
 #article-meta {
-	width: 130px;
-	float: right;
+	width: 400px;
+	float: left;
+	padding-bottom: 5px;
 }
 
 .metadata ul {
-	border-bottom-color: #989898;
-	border-bottom-style: solid;
-	border-bottom-width: 1px;
+	border-color: #989898;
+	border-style: solid;
+	border-width: 1px;
 	margin-bottom: 0px;
-	padding: 5px 0 5px 5px;
-	width: 130px;
-	float: right;
+	padding: 5px;
+	width: 395px;
+	float: left;
 	margin: 0;
-	border-left: 1px solid #989898;
 	background-color: #feffc6;
 }
 
@@ -1405,7 +1496,7 @@ h6.publish2_link {
 }
 
 .article-tools {
-	width: 135px;
+	width: 400px;
 	float: right;
 	background-color: #efefef;
 	border-left: 1px solid #989898;
@@ -1414,6 +1505,8 @@ h6.publish2_link {
 	font-size: 13px;
 	float: right;
 }
+
+
 
 .article-tools ul {
 	list-style-type: none;
@@ -1466,7 +1559,7 @@ h6.publish2_link {
 /*** Below are some styles for the righthand sidebar on article pages ***/
 
 #rightsidebar {
-	width: 480px;
+	width: 400px;
 	float: left;
 	margin: 0px;
 	padding: 0px;
@@ -1492,10 +1585,9 @@ h6.publish2_link {
 
 .leftbar {
 	font-size: 13px;
-	margin-left: 10px;
 	padding: 5px;
 	float: left;
-	width: 220px;
+	width: 185px;
 	margin-right: 10px;
 }
 
@@ -1520,7 +1612,7 @@ h6.publish2_link {
 }
 
 .leftbar li {
-	margin-left: 0px;
+	margin-left: 8px;
 	margin-bottom: 8px;
 	margin-right: 0px;
 	margin-top: 3px;
@@ -1550,7 +1642,7 @@ h6.publish2_link {
 	font-size: 13px;
 	padding: 5px;
 	float: left;
-	width: 220px;
+	width: 185px;
 }
 
 .rightbar p {
@@ -1592,224 +1684,291 @@ h6.publish2_link {
 	border-bottom-style: double;
 }
 
-/*** Below are styles for the comments section ***/
+/**************************************
 
-.ratingblock {
-	color: white;
-	background-color: #226b9f;
-	padding: 3px;
+STORY INCLUDES
+
+**************************************/
+
+#shareBox {
+	width: 655px;
+	margin-top: 10px;
+	margin-bottom: 0px;
+	border-top: 3px double #989898;
+	border-bottom: 1px solid #989898;
+	border-left: 1px solid #989898;
+	border-right: 1px solid #989898;
+	background-color: #376b9d;
+	padding: 4px;
+	color: #ffffff;
 }
 
-#comments-box {
-	margin-top: 26px;
-	background-color: #efefef;
-	padding-top: 25px;
-	padding: 10px;
-	border-top-style: double;
-	border-top-color: #226b9f;
+
+#shareBox p {
+	margin: 0;
+	padding: 0;
+	font: 1.2em "Helvetica Neue", Arial, Helvetica, Geneva, sans-serif;
+	color: #ffffff;
+}
+#shareBox a {
+	text-decoration: none;
+	font-family: "Helvetica Neue", Arial, Helvetica, Geneva, sans-serif;
+	color: #ffffff;
 }
 
-#commentlist {
-	padding-left: 0;
+#shareBox .right {
+/*  width: 200px;*/
+	float: right;
+	margin: 0;
+	padding: 0;
+	font-family: "Helvetica Neue", Arial, Helvetica, Geneva, sans-serif;
 }
 
-#commentlist li {
-	list-style-type: none;
-}
-
-#commentlist li.depth-1{
-	width: 540px;
-}
-
-#commentlist li.depth-1 li {
-}
-
-#commentlist ul ul {
-}
-
-#commentlist li > div {
-	padding: 5px;
-	border: 1px solid #989898;
-	margin-bottom: 8px;
-}
-
-#commentlist li.even > div {
-	background-color: #fff;
-	padding: 15px;
-	border: 1px solid #3d3d3d;
-}
-
-#commentlist li.odd > div {
-	background-color: #feffc6;
-	padding: 15px;
-	border: 1px solid #3d3d3d;
-}
-
-#commentsBlock li.bypostauthor > div:first-child .avatar {
-	border: 2px solid #989898;
-	padding: 1px;
-	background-color: #fff;
-}
-
-#commentlist .toggle {
-	background-color: #eeeeff;
-	padding: 5px;
-	line-height: 16px;
-	margin-bottom: 1em;
-}
-
-#commentlist .toggle span.posterName {
-	font-weight: bold;
-	font-style: oblique;
-}
-
-#commentlist .depth-1 div,
-#commentlist .depth-2 div  {
-	border-color: #ddd
-}
-
-#commentlist .depth-3 div  {
-	border-color: #aa0
-}
-
-#commentlist .depth-4 div  {
-	border-color: #0a0
-}
-
-#commentlist .depth-5 div  {
-	border-color: #00a
-}
-
-#commentlist .depth-2  .toggle {
-	background-color: #ffd;
-	border-color: #989898}
-
-#commentlist .depth-3  .toggle {
-	background-color: #dfd;
-	border-color: #989898}
-
-#commentlist .depth-4  .toggle {
-	background-color: #ddf;
-	border-color: #989898}
-
-#commentlist .depth-5  .toggle {
-	background-color: #ffd;
-	border-color: #989898}
-
-#trackbackList {
-	margin-left: 9px;
-}
-
-#trackbackList .says {
-	display: none
-}
-
-#trackbackList li {
-	margin-bottom: 1em;
-}
-
-.trackbackToggle {
+#continueBox {
 	display: block;
-	margin: 1em 0;
-	border-top: solid 1px #ccc;
-	border-bottom: solid 1px #ccc;
-	padding: 0.5em 1em;
-	background-color: #FFFFF6;
-}
-
-.avatar {
+	width: 100%;
+	margin-top: 0px;
+	border-bottom: 1px solid #989898;
+	border-left: 1px solid #989898;
+	border-right: 1px solid #989898;
+	background-color: #eeeeee;
+	padding: 4px;
 	float: left;
-	margin-right: 8px;
 }
 
-.comment div.commentmetadata {
-	margin-bottom: 5px;
+#continueBox #top {
+	width: 225px;
+	float: left;
+	border-right: 1px solid #989898;
+	margin: 0 5px 0 0px;
+	padding: 5px;
+	font-weight: normal;
+	font-style: normal;
 }
 
-.comment div.reply {
-	width: 100%; /*IE7 FIX*/
+
+#continueBox #top img {
+	width: 50px;
+	border: none;
+	float: left;
 }
 
-.comment div.reply a {
-	text-align: right;
-	padding-right: 21px;
-	overflow: hidden;
-	background-color: #efefef;
+#continueBox #top .content {
+	margin-left: 55px;
+	
+}
+
+#continueBox #more {
+	float: left;
 	display: block;
-	margin-top: 5px;
 }
 
-.comment div.reply a:hover {
+#continueBox #more .box {
+	width: 200px;
+	float: left;
 }
 
-.toggle span.upArrow {
-	width: 16px;
-	height: 16px;
-	margin-left: 10px;
+#continueBox #more .box ul {
+	list-style-type: square;
+	margin: 0px 0px 0px 15px;
+	padding: 0 0 0px 10px;
+	font-size: 1.3em;
+}
+
+/**************************************
+
+COMMENT STYLES
+
+**************************************/
+
+#comments {
+	width: 645px;
+	margin-left: 5px;
+	border-left: 1px solid #989898;
+	border-right: 1px solid #989898;
+	background-color: #ffffff;
+	padding: 4px;
 	display: inline-block;
-	overflow: hidden;
 }
 
-.toggle:hover span.upArrow {
-	background-position: 0 -16px;
+.comment {
+	padding-top: 5px;
+	display: inline-block;
 }
 
-#commentPagination {
-	text-align: right;
+.comment.new {
+    display: none;
+}
+
+.commentInformation {
+	width: 99%;
+	float: left;
+	background-color: #feffc6;
+	padding: 3px;
+	color: #000;
+}
+
+.comments p {
+	padding-top: 5px;
+	margin: 0px;
+}
+
+.commentInformation p.floatLeft {
+	float: left;
+	margin: 4px;
+}
+
+.commentInformation .floatRight {
+	float:  right;
+}
+
+.commentInformation .commentNumber {
+    font-weight: bold;
+}
+.commentInformation .commentTime {
+    font-style: italic;
+}
+
+.commentInformation ul {
+	list-style-type: none;
+	display: inline-block;
+	margin-top: 3px;
+	padding-bottom: 0px;
+	margin-bottom: 0px;
+}
+
+.commentInformation li {
+	display: inline;
+	width: 10px;
+	height: 10px; 
+}
+
+.commentInformation li.up a:link, .commentInformation li.up a:visited {
+	background: url(/static/images/story/up.png) 0 0 no-repeat; 
+	display:inline-block;
+	width: 10px;
+	height: 10px; 
+	overflow:hidden; 
+	text-decoration:none; 
+	text-indent: -3000px;
+}
+
+.commentInformation li.down a:link, .commentInformation li.down a:visited {
+	background: url(/static/images/story/down.png) 0 0 no-repeat; 
+	display:inline-block;
+	width: 10px;
+	height: 10px; 
+	overflow:hidden; 
+	text-decoration:none; 
+	text-indent: -3000px;
+}
+
+.commentInformation li.up.selected a:link, .commentInformation li.up.selected a:visited {
+	background:url(/static/images/story/up-selected.png) 0 0 no-repeat; 
+}
+
+.commentInformation li.down.selected a:link, .commentInformation li.down.selected a:visited {
+	background:url(/static/images/story/down-selected.png) 0 0 no-repeat; 
+}
+
+.commentInformation li.up a:link:hover, .commentInformation li.up a:visited:hover {
+	background:url(/static/images/story/up-hover.png) 0 0 no-repeat; 
+}
+
+.commentInformation li.down a:link:hover, .commentInformation li.down a:visited:hover {
+	background:url(/static/images/story/down-hover.png) 0 0 no-repeat; 
+}
+
+.commentContent {
+	width: 640px;
+	float: left;
+	text-align: justify;
+	margin-bottom: 10px;
+}
+
+.commentContent p {
+	margin-top: 0px;
+	margin-bottom: 0px;
+}
+
+.authorDark {
+	margin: 0px;
+	font: .8em "Helvetica Neue", Arial, Helvetica, Geneva, sans-serif;
+	color: #606060;
+}
+
+.commentContent.staff {
+	background-color: #fffcd7;
+}
+
+.commentContent.moderate .commentAuthorship {
+	font-style: italic;
+	color: #7c7c7c;
+}
+
+#submitComments {
+	width: 655px;
+	border: 1px solid #989898;
+	border-bottom: 3px solid #989898;
+	background-color: #376b9d;
+	padding: 4px;
+	display: inline-block;
+	text-align: left;
+	color: #fff;
+}
+
+#submitComments a {
+	color: #fff
 }
 
 #commentForm {
-	margin-top: 20px;
-}
-
-#commentForm label {
+	float: left;
+	width: 425px;
 	display: inline;
-	background-color: #fff6c0;
-	padding: 2px;
-	font-style: italic;
-	font-size: 16px;
+	overflow:hidden;
 }
 
-#author, #email, #url, #comment {
-	border: 1px solid #989898;
-	margin-bottom: 10px;
-	margin-left: 15px;
-	vertical-align: text-top;
+#commentRules {
+	float: right;
+	display: inline;
+	overflow:hidden;
+	width: 225px;
+
 }
 
-#author, #email, #url{
-	margin-right: 10px;
+#commentRules ul {
+	list-style-type: square;
+	margin: 0px 0px 0px 15px;
+	padding: 0 0 0px 10px;
+	font-size: .9em;
+	line-height: 1.1em;
 }
 
-#comment {
-	width: 520px;
-	margin-left: 0px;
-	border: 1px solid #989898;
-}
-
-body.ie #comment {
-	width: 520px;
-}
-
-.commentSubmit {
-	text-align: right;
-	margin-right: 15px;
-}
-
-.commentSubmit a {
-	color: #900;
-	margin-right: 2em;
-}
-
-.commentSubmit a:hover {
-	color: #f00;
-}
-
-.wp-smiley {
-	padding: 0px;
+#commentRules p {
 	margin: 0px;
-	border: 0;
-	display: inline;
+	padding: 0px;
+	font-size: .8em;
+	line-height: 1.2em;
+}
+
+
+/**************************************
+
+SUBMISSION FORM STYLES
+
+**************************************/
+
+.submission {
+	font-size: 1.4em;
+	padding-bottom: 4px;
+}
+
+.submission th {
+	text-align: right;
+}
+
+.submission tr {
+	margin: 2px;
 }
 
 /*** Below are the styles for the tag pages ***/
@@ -2399,4 +2558,17 @@ a, #menu-slide li li a:link, #menu-slide li li a:visited {
     margin-left: 20px;
     padding: 10px;
 	font-size: 15px;
+}
+
+span.posterannouncement {
+	font-style: italic;
+	font-size: 1.1em;
+	padding-top: 5px;
+	float: left;
+	width: 100%;
+	text-align: center;
+}
+
+img.poster {
+	border: 4px double #000000;
 }

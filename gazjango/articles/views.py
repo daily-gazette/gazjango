@@ -1,3 +1,4 @@
+from collections                    import defaultdict
 import datetime
 import calendar
 import re
@@ -16,7 +17,7 @@ from gazjango.misc.view_helpers import get_ip, get_user_profile
 from gazjango.articles.models           import Article, Special, PhotoSpread, StoryConcept
 from gazjango.articles.models           import Section, Subsection, Column
 from gazjango.articles.forms            import SubmitStoryConcept,ConceptSaveForm
-from gazjango.announcements.models      import Announcement
+from gazjango.announcements.models      import Announcement,Poster
 from gazjango.comments.models           import PublicComment
 from gazjango.comments.forms            import make_comment_form
 from gazjango.issues.models             import Weather, WeatherJoke
@@ -57,7 +58,7 @@ def specific_article(request, story, num=None, form=None, print_view=False):
 
 def show_article(request, story, form, print_view=False):
     "Shows the requested article."
-    
+    poster = Poster.published.get_n(1)
     d = story.pub_date
     template = (
         "stories/view_%s_%s_%s_%s.html" % (d.year, d.month, d.day, story.slug),
@@ -72,6 +73,8 @@ def show_article(request, story, form, print_view=False):
     ip = get_ip(request)
     comments = PublicComment.objects.for_article(story, user, ip)
     
+    recent_stories = Article.published.get_query_set()[:3]
+    
     context = RequestContext(request, {
         'story': story,
         'comments': comments,
@@ -79,7 +82,9 @@ def show_article(request, story, form, print_view=False):
         'topstory': Article.published.get_top_story(),
         'other_comments': cs,
         'print_view': print_view,
-        'comment_form': form
+        'comment_form': form,
+        'posters': poster,
+        'recent_stories':recent_stories,
     })
     return render_to_response(template, context_instance=context)
 
@@ -197,31 +202,63 @@ def archives(request, section=None, subsection=None, year=None, month=None, day=
 
 def homepage(request, template="index.html"):
     tops, mids, lows = Article.published.get_stories(num_top=2,num_mid=4, num_low=6)    
-    photos = Entry.published.get_entries(category="flickrphoto",num=6)
-    flickrphotos = []
-    for photo in photos:
-        additional_information = {
-            'image':photo.object.image,
-            'square':photo.object.square,
-            'thumbnail':photo.object.thumbnail,
-            'small':photo.object.small,
-            'large':photo.object.large,
-        }
-        flickrphotos = flickrphotos + [(photo,additional_information)]
-        
-    community = Entry.published.get_entries(exclusion="flickrphoto",num=5)
+            
+            
+    # creating the social stream
     
+    entries = Entry.published.get_entries(num=20)
+    comments = PublicComment.visible.order_by().all()[:20]
+
+    stream = sorted(
+       [("entry", entry) for entry in entries] + [("comment", comment) for comment in comments],
+       key=lambda (kind, obj): obj.timestamp if kind == "entry" else obj.time,
+       reverse=True
+    )
+    
+    stream = stream[:7]
+    
+    # getting the highlighted comment
+    comments = PublicComment.visible.order_by('-time').all()[:50]
+    top_score = -1
+    top_comment = None
+    for comment in comments:
+        score = 0
+        votes = comment.votes.all()
+        for vote in votes:
+            if vote.positive:
+                score = score + 1
+        if score > top_score:
+            top_score = score
+            top_comment = comment 
+            
+            
+    # getting comment list for facebook-style listings
+    
+    unsorted_comments = PublicComment.visible.order_by('-time').select_related(depth=1).all()[:20]
+    comment_list = defaultdict(lambda: [])
+    for comment in unsorted_comments:
+        comment_list[comment.subject].insert(0,comment)
+    sorted_comment_list = sorted(comment_list.values(), key=lambda lst: lst[-1].time, reverse=True)
+    
+    
+    # sorting events and announcements
+    qset = Announcement.community.order_by('-date_end', '-date_start')
+    events = qset.exclude(event_date=None)
+    events = events.order_by('event_date', 'event_time', 'pk')
+    non_events = qset.filter(event_date=None)
+    
+                    
     data = {
         'topstories': tops,
         'midstories': mids,
         'lowstories': lows,
         
-        'comments': PublicComment.visible.order_by('-time').all()[:20],
         'weather': Weather.objects.for_today(),
         'joke': WeatherJoke.objects.latest(),
         
         'specials': Special.objects.order_by('-date').all()[:10],
-        'announcements': Announcement.community.get_n(5),
+        'announcements': non_events[:7],
+        'events':events[:5],
         'jobs': JobListing.published.get_for_show(3),
         
         'bico_news': get_bico_news(),
@@ -229,8 +266,9 @@ def homepage(request, template="index.html"):
         'manual_links': manual_links,
         'lca_links': lca_links,
         
-        'flickrphotos':flickrphotos,
-        'community':community,
+        'stream':stream,
+        'top_comment':top_comment,
+        'sorted_comment_list':sorted_comment_list,
     }
     rc = RequestContext(request)
     return render_to_response(template, data, context_instance=rc)

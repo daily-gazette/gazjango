@@ -5,7 +5,6 @@
 
 
 {% block customheader %}
-  <link rel="stylesheet" href="{% static css page/story.css %}" type="text/css" media="screen, projection" />
   <link rel="stylesheet" href="{% static css functions/poll.css %}" type="text/css" media="screen, projection" />
 
   {% jQuery %}
@@ -17,122 +16,56 @@
 {% endblock %}
 
 
-{% block topbar %}
-  <div id="headerSectionBar">
-    <div id="headerSection">
-      <h3>
-        <a href="{{ story.section.get_absolute_url }}">{{ story.section.name }}</a>
-        {% if story.subsection %}
-            {% ifequal story.subsection.name "April Fools" %}
-            {% else %}
-          &raquo;
-          <a href="{{ story.subsection.get_absolute_url }}">{{ story.subsection.name }}</a>
-          {% endifequal %}
-        {% endif %}
-      </h3>
-    </div>
-
-    <div id="headerSearch" class="floatRight">
-      {% include "search_header.html" %}
-    </div>
-  </div>
-{% endblock %}
-
-
 {% block content %}
-  <div id="commentColumn">
-    <div id="commentBox">
-      {% include "stories/sidebar.html" %}
-    </div>
-  </div>
+<div id="articlewrapper">
+	<div class="article">
+		<!-- Begin code for article "breadcrumbs." This shows the path to the post's page -->
+		<div class="breadcrumb">
+		You are here: 	
+			<a href="{{ story.section.get_absolute_url }}">{{ story.section.name }}</a> 
+	        {% if story.subsection %}
+				{% ifequal story.subsection.name "April Fools" %}{% else %}&raquo; <a href="{{ story.subsection.get_absolute_url }}">{{ story.subsection.name }}</a>{% endifequal %}
+			{% endif %}
+		</div>
+		<!-- End breadcrumb code -->
+	
+		<!-- Begin code for The Loop -->			
+			<h1 class="article-title">{{ story.headline|safe }}</h1>
+				
+				<div style="clear:both"></div>
+			
+			<!-- Begin IMPORTANT code that pulls article content. DO NOT DELETE -->
+			<p>
+				{% block story-content %}
+	        		{{ story.resolved_text|safe }}
+	      		{% endblock %}
+			</p>
+			
+			{% for poll in story.polls.all %}
+		      {% include "polls/listing.html" %}
+		    {% endfor %}
+		
+			<!-- End IMPORTANT code -->
+						
+			<!-- End of The Loop -->
+					
+	
+	<div style="clear:right;"></div>
+	
 
-  <div id="storyBox">
-    <div id="story">
-      {% block above-headline %}
-        {% comment %}
-        <center>
-          <script type="text/javascript"><!--
-            google_ad_client = "pub-6611826348976430";
-            /* 468x60, created 12/4/08, Story header */
-            google_ad_slot = "3210002859";
-            google_ad_width = 468;
-            google_ad_height = 60;
-          //-->
-          </script>
-          <script type="text/javascript" 
-                  src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
-          </script>
-        </center>
-        {% endcomment %}
-        
-        <center>
-            <br /><a href="http://www.swarthmore.coop"><img src="{% static images ads/coop-articles-650.png %}" alt="The Swarthmore Food Cooperative" /></a>
-        </center>
-      {% endblock %}
-      
-      <h2>{{ story.headline|safe }}</h2>
-      <p class="byline">
-        <span class="author">
-          {% block authors %}by {{ story.authors_in_order|join_authors:"l" }}{% endblock %}
-        </span>
-        <span class="date">|
-          <a href="{{ story.pub_date|issue_url }}">{{ story.pub_date|date:"F j, Y" }}</a>
-        </span>
-      </p>
-      
-      {% block story-content %}
-        {{ story.resolved_text|safe }}
-      {% endblock %}
-    </div>
-    
-    {% for poll in story.polls.all %}
-      {% include "polls/listing.html" %}
-    {% endfor %}
-    
     <div id="shareBox">
       <div class="right">
         <strong>Share:</strong> {% add_this hover %}
       </div>
-      <p>
+      <p><small>
         <a href="print"><img src="{% static images icons/print.png %}" /> Print</a>
         &nbsp;&nbsp;
         <a href="email"><img src="{% static images icons/email.png %}" /> Email</a>
-      </p>
+		&nbsp;&nbsp;
+		<a href="#comment"> Submit a comment</a>
+      </small></p>
     </div>
 
-    <div id="continueBox">
-      <div id="top">
-        <a href="{{ topstory.get_absolute_url }}">
-          <img src="{{ topstory.main_image.thumb.url }}"
-               title="{{ topstory.main_image.credit|before:"Photo by " }}" />
-        </a>
-        <div class="content">
-          <h4><a href="{{ topstory.get_absolute_url }}">{{ topstory.get_title }}</a></h4>
-          <p>{{ topstory.shortest_summary }}</p>
-        </div>
-      </div>
-
-      <div id="more">
-        <div class="box">
-          <h4>Related Stories</h4>
-          <ul>
-            {% for rel in related %}
-              <li><a href="{{rel.get_absolute_url}}">{{ rel.get_title|safe }}</a></li>
-            {% endfor %}
-          </ul>
-        </div>
-        <div class="box">
-          <h4>Recent Comments</h4>
-          <ul>
-            {% for comment in other_comments|slice:":3" %}
-              <li><a href="{{comment.get_absolute_url}}">{{ comment.subject.get_title }}</a></li>
-            {% endfor %}
-          </ul>
-        </div>
-      </div>
-
-    </div>
-    
     {% if story.comments_allowed or comments %}
       <div id="comments">
         {% include "stories/comments.html" %}
@@ -150,7 +83,7 @@
 
           <hr width="50%" color="#dddddd" size="1px">
 
-          <h4>Discussion Rules</h4>
+          <h4 name="comment"><a name="comment">Discussion Rules</a></h4>
           <ul>
             <li>Be nice.</li>
             <li>Be constructive.</li>
@@ -158,7 +91,7 @@
             <li>Don't threaten.</li>
           </ul>
 
-          <p>More details on our policies <a href="/policies/">here</a>.</p>
+          <p>More details on our <a name="comment">policies</a> <a href="/policies/">here</a>.</p>
 
           <hr width="50%" color="#dddddd" size="1px" />
 
@@ -174,6 +107,66 @@
         </div>
       </div>
     {% endif %}
-  </div>
 
-{% endblock content %}
+</div>
+
+	<!-- SIDEBAR -->
+	<div id="rightsidebar">
+		
+		<div id="article-meta">	
+			<!-- Begin section for post metadata (author, date, tags) -->
+			<div class="metadata">
+				<ul>
+					<h4>Story Information</h4>
+					<li>{% block authors %}By {{ story.authors_in_order|join_authors:"l" }}{% endblock %}</li>
+					<li>Posted on <a href="{{ story.pub_date|issue_url }}">{{ story.pub_date|date:"F j, Y" }}</a> | {% add_this no-hover %} </li>
+			</div>
+			<!-- End code for the box of Article Tools -->
+		</div>
+		
+		
+		{% for item in posters %}
+			{% if item.sponsor_url %}
+				<a href="{{ item.sponsor_url }}"><img src="{{ item.poster.poster.url }}" class="poster" title="Poster from {{ item.sponsor }}"/></a>
+			{% else %}
+				<img src="{{ item.poster.poster.url }}" class="poster" title="Poster from {{ item.sponsor }}"/>
+			{% endif %}
+		{% endfor %}
+		
+		<span class="posterannouncement">Want to add your group's poster? Go <a href="/posters/new/">here</a>.</span>
+		
+		<div class="leftbar">
+
+			<h5>Recent Stories</h5>
+			<ul>
+			{% for story in recent_stories %}
+				<li><a href="{{ story.get_absolute_url }}">{{ story.headline }}</a></li>
+			{% endfor %}
+			</ul>
+			
+			<!-- Begin Recent Posts Section -->
+			<h5>Other Stories in {{ story.section }}</h5>
+			<ul>
+			{% for story in related %}
+				<li><a href="{{ story.get_absolute_url }}">{{ story.headline }}</a></li>
+			{% endfor %}
+			</ul>
+
+		</div>
+
+		<div class="rightbar">
+
+	    	<!-- Begin Facebook Connect Section -->
+	    		<?php widget_FacebookConnector(array()); ?>
+
+	    	<!-- Begin Popular Stories Section -->
+			<h5>Most popular stories</h5>					
+				<strong>WHAT SHOULD GO HERE?</strong>
+
+	    	<!-- Begin poll section -->	
+			<h5>Current Poll</h5>
+				<strong>WHAT SHOULD GO HERE?</strong>
+
+		</div>
+	</div>
+{% endblock %}

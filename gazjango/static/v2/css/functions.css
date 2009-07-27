@@ -1,0 +1,193 @@
+/* @override 
+	http://127.0.0.1:8000/static/css/functions/functions.css
+	/static/css/functions/functions.css
+	http://127.0.0.1:8000/static/v2/css/functions.css
+*/
+
+/******
+
+Functions for stories in The Daily Gazette
+Written on September 17, 2008
+by Miles Skorpen
+
+*******/
+
+/**************************************
+
+For conversion purposes from our WP version:
+	[ All as classes ]
+	blockquote => highlightBox center
+	leftImage => imgLeft twentyfive
+	rightImage => imgRight twentyfive
+	pullQuote => pullQuote left
+	pullQuoteRight => pullQuote right
+	images => imgRight twentyfive
+	images50 => imgRight thirtyfive
+	imagesLeft => imgLeft twentyfive
+	imagesleft50 => imgLeft thirtyfive
+	linkbar => linkBar
+	quote => pullQuote left
+	
+
+**************************************/
+
+/**************************************
+
+IMAGE STYLES
+
+**************************************/
+
+.imgLeft,.imgRight,.imgCenter {
+	background-color: #fff;
+	display: inline-block;
+	text-align: right;
+	font: italic .7em "Helvetica Neue", Arial, Helvetica, Geneva, sans-serif;
+}
+
+.imgLeft img,.imgRight img,.imgCenter img {
+	width: 100%;
+	border: 4px double #000;
+}
+
+.imgLeft {
+	float: left;
+	display: block;
+	margin: 5px 15px 5px 0px;
+}
+
+.imgRight {
+	margin: 5px 0px 5px 15px;
+	float: right;
+	display: block;
+	padding-right: 10px;
+
+}
+
+.imgCenter {
+	margin: 0 auto;
+	padding: 5px;
+}
+
+.imgLeft p,.imgRight p,.imgCenter p {
+	font-size: small;
+	font-style: italic;
+}
+
+.imgLeft.author,.imgRight.author,.imgCenter.author {
+	font-variant: small-caps;
+}
+
+.five {
+	width: 5%;
+}
+
+.ten {
+	width: 10%;
+}
+
+.fifteen {
+	width: 15%;
+}
+
+.twenty {
+	width: 20%;
+}
+
+.twentyfive {
+	width: 25%;
+}
+
+.thirty {
+	width: 30%;
+}
+
+.thirtyfive {
+	width: 35%;
+}
+
+.forty {
+	width: 40%;
+}
+
+.fortyfive {
+	width: 45%;
+}
+
+.fifty {
+	width: 50%;
+}
+
+.seventyfive {
+	width: 75%;
+}
+
+.hundred {
+	width: 100%;
+}
+
+
+/**************************************
+
+TEXT BOX STYLES
+
+**************************************/
+
+.linkBar {
+	width: 150px;
+	background-color: #eeeeee;
+	border-top: 2px solid #bbb;
+	border-bottom: 2px solid #bbb;
+	margin: 0 1em 0px 0px;
+	padding: 5px;
+	float: left;
+}
+
+.linkBar p {
+    padding-left: 5px;
+}
+
+.highlightBox {
+	width: 80%;
+	background-color: #a1e5ee;
+	border: 1px solid #bbb;
+}
+
+.pullQuote {
+	width: 100px;
+	border-top: 2px solid #bbbbbb;
+	padding: 2px;
+}
+
+/******************
+
+Locate Text Boxes
+
+*******************/
+
+.left {
+	float: left;
+	display: inline;
+	overflow:hidden;
+	margin: 10px 10px 10px 0px;
+}
+
+.right {
+	margin: 5px 0px 5px 5px;
+	float: right;
+}
+
+.center {
+	margin: 0 auto;
+	padding: 5px;
+}
+
+/******************
+
+Organization of Text
+
+*******************/
+
+h2.bottomBorder,h3.bottomBorder {
+	width: 100%;
+	border-bottom: 2px solid #000;
+}

@@ -142,9 +142,10 @@ class ImageFile(BaseFile, ImageModel):
             return self.toptallfront if top else self.midtallfront
         else:
             return self.topwidefront if top else self.midwidefront
-    
+                
     top_front = property(get_front_image)
     mid_front = property(lambda self: self.get_front_image(top=False))
+    poster    = property(lambda self: self.poster)
     
     issue = property(lambda self: self._issue_data or self.issueimage)
     thumb = property(lambda self: self._thumb_data or self.thumbnail)

@@ -66,108 +66,195 @@
 		<!-- Begin the Community Activity section -->
 		<div class="cathomesocial">
 			<h4>Community Activity</a></h4>
-				<div class="cathomesocial-links">
-					{% for photo,additional_info in flickrphotos %}
-                            <a href="{{ photo.url }}"><img src="{{ additional_info.square }}" title="{{ photo.title }}" /></a>
-					{% endfor %}
-						
-					<h5>Recent Community Posts</h5>
-					{% for entry in community %}
+				{% for type,entry in stream %}
+					{% ifequal type "entry" %}
 						{% ifequal entry.source_type "tweet" %}
-							<p>{{ tweet.description|safe }} <br /> <small>—<a href="http://www.twitter.com/{{ entry.owner_user }}">Twitter</a> @ {{ tweet.timestamp }}</small></p>
+						<div class="entry twitter" style="background: #dddddd url({{ entry.object.icon }}) no-repeat 0px center">
+							<p>{{ entry.description|safe }} <br /> —by <a href="http://www.twitter.com/{{ entry.owner_user }}">{{ entry.owner_user }}</a> from <a href="http://www.twitter.com/">Twitter</a></p>
+						</div>
 						{% endifequal %}
 						{% ifequal entry.source_type "bookmark" %}
-							<p><a href="{{ entry.url }}">{{ entry.title }}</a> <small>-<a href="http://www.delicious.com/{{ entry.owner_user }}">Del.icio.us</a> @ {{ entry.timestamp }}</small></p>
+						<div class="entry delicious">
+							<p><a href="{{ entry.url }}">{{ entry.title }}</a> -<a href="http://www.delicious.com/{{ entry.owner_user }}">Del.icio.us</a></p>
+						</div>
 						{%endifequal %}	
 						{% ifequal entry.source_type "review" %}
-							<p><a href="{{ entry.url }}">{{ entry.title }}</a> - Reviewed by {{ entry.owner_user }} @ {{ entry.timestamp }}</small></p>
+						<div class="entry review">
+							<p><a href="{{ entry.url }}">{{ entry.title }}</a> - Reviewed by {{ entry.owner_user }}</small></p>
+						</div>
 						{%endifequal %}
-					{% endfor %}
-				</div>
-				<!-- Begin code for weather display -->	
-				<div id="weather">	
-					<h5>Current Weather</h5>
-					
-					<p class="weather">
-					    <strong>Today:</strong> {{ weather.today }}<br/>
-					</p>  
-					<p class="weather">
-					    <strong>Tonight:</strong> {{ weather.tonight }}<br />
-					</p>
-					<p class="weather">
-						<strong>Tomorrow:</strong> {{ weather.tomorrow }}<br />
-					</p>
-				    <p id="attrib"><small>Weather from the <a href="http://weather.gov">NWS</a>.</small></p>						  
-				</div>
-				<!-- End weather code -->
-				<!-- Begin code for Publish2 links -->	
-				<div id="links">
-					<h5>Recent Announcements</h5>
-					{% for announcement in announcements %}
-						<p>
-							<strong><a href="{{ announcement.get_absolute_url }}">{{ announcement.title }}</a></strong>
-							{% if announcement.is_event %}<br />{{ announcement.event_date|near_future_date }} at {{ announcement.event_time }} at {{ announcement.event_place }}{% endif %}
-						</p>
-					{% endfor %}
-				</div>
-				<!-- End code for Publish2 links -->
+						{% ifequal entry.source_type "flickrphoto" %}
+						<div class="entry flickrphoto" style="background: #dddddd url({{ entry.object.square }}) no-repeat 0px center">
+							<p><a href="{{ entry.url }}">{{ entry.title }}</a>, by {{ entry.owner_user }}</small></p>
+						</div>
+						{%endifequal %}
+					{% else %}
+						<div class="entry comment">
+							<p><a href="{{entry.get_absolute_url}}">{{ entry.display_name }}</a> spoke on <a href="{{entry.subject.get_absolute_url}}">{{ entry.subject.get_title }}</a>.</p>
+						</div>
+					{% endifequal %}
+				{% endfor %}
 		</div>
-		<!-- End the Community Activity section -->
 		
-		<!-- Begin the Recent Video Section -->
-		<div class="two-column">
-			<h4>Recent Comments</h4><br /><br />
-			{% for comment in comments|slice:":10" %}
-				{% if forloop.first %}
-					<h6>"{{ comment.text|safe|slice:":40" }} ..." — <a href="{{comment.get_absolute_url}}">{{ comment.display_name }}</a>, discussing <a href="{{comment.subject.get_absolute_url}}">{{ comment.subject.get_title }}</a>.</h6>
-					<ul class="comments">
-				{% else %}
-						<li><a href="{{comment.get_absolute_url}}">{{ comment.display_name }}</a> spoke on <a href="{{comment.subject.get_absolute_url}}">{{ comment.subject.get_title }}</a>.</li>
-				{% endif %}
-			{% endfor %}
-					</ul>
-		</div>
-		<!-- End the Recent Video section -->
-		
-		<!-- Begin the Photo Galleries section -->
-		<div class="two-column">
-			<!-- Pulls Category Title and displays as a link to that category page -->
-			<?php $feature_post = get_posts( 'category=8&numberposts=1' ); ?>
-			<?php foreach( $feature_post as $post ) : setup_postdata( $post ); ?>
-				<h4><?php the_category(' '); ?></h4>
-			<?php endforeach; ?>
-			
-			<?php $feature_post = get_posts( 'category=8&numberposts=1' ); ?>
-			<?php foreach( $feature_post as $post ) : setup_postdata( $post ); ?>
-			
-			<?php if (function_exists('c2c_get_custom')) : ?>
-				<?php echo c2c_get_custom('post-image','<img src="','" alt="<?php the_title(); ?>" class="post-image" />',''); ?>
-			<?php endif; ?>
-
-  				<h6><a href="<?php the_permalink() ?>" title="Permanent Link to <?php the_title_attribute(); ?>"><?php if (strlen($post->post_title) > 40) {echo substr(the_title($before = '', $after ='', FALSE), 0, 40) . '...'; } else {the_title(); } ?></a></h6>
-  				<li>Posted on <?php the_time('M'); ?>.<?php the_time('d'); ?></li>
-  				<p><?php the_excerpt_reloaded('30');?></p>
-			<?php endforeach; ?>
-			<!-- Pulls Category Title and displays as a "more in __" link to that category page -->
-			<?php $feature_post = get_posts( 'category=8&numberposts=1' ); ?>
-			<?php foreach( $feature_post as $post ) : setup_postdata( $post ); ?>
-				<li class="more">More <?php the_category(' '); ?></li>
-			<?php endforeach; ?>
-		</div>
-		<!-- End the Photo Galleries section -->
-	    
-	    <!-- Begin section for recent Twitter updates -->
-	    <div class="two-column">
-	    	<h4><a href="http://www.twitter.com/andrewspittle/"><img src="/images/twitterlogo.png" alt="Twitter" border="0" /></img></a></h4>
-	    	<div id="twitter_div">
-				<ul id="twitter_update_list"></ul>
-				<a href="http://twitter.com/andrewspittle" id="twitter-link" style="display:block;text-align:right;">follow me on Twitter</a>
+		<div class="bottom-box">
+			<div class="bottom-twothird">
+				<h5><strong>Popular Comment:</strong> "{{ top_comment.text|safe|slice:":83" }} ..." — <a href="{{top_comment.get_absolute_url}}">{{ top_comment.display_name }}</a>, discussing <a href="{{top_comment.subject.get_absolute_url}}">{{ top_comment.subject.get_title }}</a>.</h5>
 			</div>
-			<script type="text/javascript" src="http://twitter.com/javascripts/blogger.js"></script>
-			<script type="text/javascript" src="http://twitter.com/statuses/user_timeline/andrewspittle.json?callback=twitterCallback2&amp;count=3"></script>
-	    </div>
-	    <!-- End the section for Twitter -->
+			<div class="bottom-third">
+				<a href="http://www.swarthmore.coop"><img src="{% static images ads/coop-index-230.png %}" alt="The Swarthmore Food Cooperative" /></a>
+			</div>
+		</div>
+		<div class="bottom-box">
+			<div class="bottom-third margin-right">
+				<h4>Comment Feed</h4>
+				{% load comparisons %}
+				<ul>
+		        {% for story_comment_object in sorted_comment_list %}
+					<li>
+					{% for comment in story_comment_object %}
+						{% if forloop.last %}
+							{{ comment.linked_name|safe }}
+						{% else %}
+							{% ifequal forloop.revcounter 2 %}
+								{{ comment.linked_name|safe }}, and 
+							{% else %}
+								{{ comment.linked_name|safe }}, 
+							{% endifequal %}
+						{% endif %}
+					{% endfor %}
+					 commented on <a href="{{ story_comment_object.0.subject.get_absolute_url }}">{{ story_comment_object.0.subject.headline }}</a>.
+					</li>
+				{% endfor %}
+				</ul>
+			</div>
+			<div class="bottom-third margin-right">
+				<h4>Announcements</h4>
+				{% for announcement in announcements %}
+					<p>
+						<strong><a href="{{ announcement.get_absolute_url }}">{{ announcement.title }}</a></strong>
+					</p>
+				{% endfor %}
+				<div class="weather">
+					<h4>Current Weather</h4>
+					<p class="weather">
+					    <strong>Today:</strong> {{ weather.today }}<br/>  
+					    <strong>Tonight:</strong> {{ weather.tonight }}<br />
+						<strong>Tomorrow:</strong> {{ weather.tomorrow }}<br />
+				    	<small>Weather from the <a href="http://weather.gov">NWS</a>.</small>
+					</p>
+				</div>
+			</div>
+			<div class="bottom-third">
+				<h4>Events</h4>
+				{% for event in events %}
+					<p>
+						<strong><a href="{{ event.get_absolute_url }}">{{ event.title }}</a></strong>: {{ event.event_date|near_future_date }} at {{ event.event_time }} at {{ event.event_place }}
+					</p>
+				{% endfor %}
+				text link ads
+			</div>
+		</div>
+				
 {% endblock content %}
+
+
+
+
+
+		<!-- Begin code for weather display -->	
+		<div id="weather">	
+			<h5>Current Weather</h5>
+			
+			<p class="weather">
+			    <strong>Today:</strong> {{ weather.today }}<br/>
+			</p>  
+			<p class="weather">
+			    <strong>Tonight:</strong> {{ weather.tonight }}<br />
+			</p>
+			<p class="weather">
+				<strong>Tomorrow:</strong> {{ weather.tomorrow }}<br />
+			</p>
+		    <p id="attrib"><small>Weather from the <a href="http://weather.gov">NWS</a>.</small></p>						  
+		</div>
+		<!-- End weather code -->
+		<!-- Begin code for Publish2 links -->	
+		<div id="links">
+			<h5>Recent Announcements</h5>
+			{% for announcement in announcements %}
+				<p>
+					<strong><a href="{{ announcement.get_absolute_url }}">{{ announcement.title }}</a></strong>
+					{% if announcement.is_event %}<br />{{ announcement.event_date|near_future_date }} at {{ announcement.event_time }} at {{ announcement.event_place }}{% endif %}
+				</p>
+			{% endfor %}
+			<br />
+			<h5>Our Accounts</h5>
+			<p><a href="http://twitter.com/swatgazette">Twitter</a></p>
+			<p><a href="http://delicious.com/tag/swarthmore">Delicious</a></p>
+			<p><a href="http://flickr.com/groups/swatgazette/">Flickr</a></p>
+		</div>
+		<!-- End code for Publish2 links -->
+</div>
+<!-- End the Community Activity section -->
+
+<!-- Begin the Recent Video Section -->
+<div class="two-column">
+	<h4>Recent Comments</h4><br /><br />
+	{% for comment in comments|slice:":10" %}
+		{% if forloop.first %}
+			<h6>"{{ comment.text|safe|slice:":40" }} ..." — <a href="{{comment.get_absolute_url}}">{{ comment.display_name }}</a>, discussing <a href="{{comment.subject.get_absolute_url}}">{{ comment.subject.get_title }}</a>.</h6>
+			<ul class="comments">
+		{% else %}
+				<li><a href="{{comment.get_absolute_url}}">{{ comment.display_name }}</a> spoke on <a href="{{comment.subject.get_absolute_url}}">{{ comment.subject.get_title }}</a>.</li>
+		{% endif %}
+	{% endfor %}
+			</ul>
+</div>
+<!-- End the Recent Video section -->
+
+<!-- Begin the Photo Galleries section -->
+<div class="two-column">
+	<!-- Pulls Category Title and displays as a link to that category page -->
+	<?php $feature_post = get_posts( 'category=8&numberposts=1' ); ?>
+	<?php foreach( $feature_post as $post ) : setup_postdata( $post ); ?>
+		<h4><?php the_category(' '); ?></h4>
+	<?php endforeach; ?>
+	
+	<?php $feature_post = get_posts( 'category=8&numberposts=1' ); ?>
+	<?php foreach( $feature_post as $post ) : setup_postdata( $post ); ?>
+	
+	<?php if (function_exists('c2c_get_custom')) : ?>
+		<?php echo c2c_get_custom('post-image','<img src="','" alt="<?php the_title(); ?>" class="post-image" />',''); ?>
+	<?php endif; ?>
+
+		<h6><a href="<?php the_permalink() ?>" title="Permanent Link to <?php the_title_attribute(); ?>"><?php if (strlen($post->post_title) > 40) {echo substr(the_title($before = '', $after ='', FALSE), 0, 40) . '...'; } else {the_title(); } ?></a></h6>
+		<li>Posted on <?php the_time('M'); ?>.<?php the_time('d'); ?></li>
+		<p><?php the_excerpt_reloaded('30');?></p>
+	<?php endforeach; ?>
+	<!-- Pulls Category Title and displays as a "more in __" link to that category page -->
+	<?php $feature_post = get_posts( 'category=8&numberposts=1' ); ?>
+	<?php foreach( $feature_post as $post ) : setup_postdata( $post ); ?>
+		<li class="more">More <?php the_category(' '); ?></li>
+	<?php endforeach; ?>
+</div>
+<!-- End the Photo Galleries section -->
+
+<!-- Begin section for recent Twitter updates -->
+<div class="two-column">
+	<h4><a href="http://www.twitter.com/andrewspittle/"><img src="/images/twitterlogo.png" alt="Twitter" border="0" /></img></a></h4>
+	<div id="twitter_div">
+		<ul id="twitter_update_list"></ul>
+		<a href="http://twitter.com/andrewspittle" id="twitter-link" style="display:block;text-align:right;">follow me on Twitter</a>
+	</div>
+	<script type="text/javascript" src="http://twitter.com/javascripts/blogger.js"></script>
+	<script type="text/javascript" src="http://twitter.com/statuses/user_timeline/andrewspittle.json?callback=twitterCallback2&amp;count=3"></script>
+</div>
+<!-- End the section for Twitter -->
+
+
+
+
+
+======================
 
 	<div id="headerSectionBar">
 			<div id="headerSearch">
