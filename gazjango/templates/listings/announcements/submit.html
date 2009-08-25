@@ -1,9 +1,9 @@
-{% extends "listings/base.html" %}
+{% extends "base-expand.html" %}
 {% load extras %}
 {% load markup %}
 
 {% block title %}Submit an Announcement or Event{% endblock title %}
-{% block listings_customheader %}
+{% block customheader %}
     {% jQuery %}
     <script type="text/javascript" charset="utf-8">
         function toggleSponsorLink() {
@@ -33,17 +33,18 @@
             }
         });
     </script>
-{% endblock listings_customheader %}
-{% block listings_title %}Submit an Announcement or Event{% endblock %}
+{% endblock customheader %}
 
-{% block listings_content %}
+{% block expand_breadcrumb %}<a href="/announcements/">Announcements &amp; Events</a> &rsaquo;&rsaquo; <a href="/announcements/new/">Submit</a>{% endblock expand_breadcrumb %}
+
+{% block expand_content %}
+	<h1>Announcement &amp; Event Submission</h1>
     {% if form.non_field_errors %}
         <p>{{ form.non_field_errors }}</p>
     {% endif %}
-    <p><strong>Please note:</strong> If you are submitting an event or lost-and-found item, check the correct box below. All submissions improperly marked <strong>will be removed</strong>.<br/ >
-        If this announcement is about a job, please use <a href="/jobs/new/">the jobs listing form</a> instead.</p>
+    <p><strong>Please note:</strong> If you are submitting an event or lost-and-found item, check the correct box below. All submissions improperly marked <strong>will be removed</strong>. If this announcement is about a job, please use <a href="/jobs/new/">the jobs listing form</a> instead.</p>
     <form action="" method="post">
-        <table class="submission">
+        <table class="submit-form">
             <tr>
                 <th width="150px"><label for="{{ form.title.auto_id }}">Announcement Title</label>:</th>
                 <td>{{ form.title }}</td>
@@ -118,7 +119,7 @@
             </tr>
         </table>
     </form>
-{% endblock listings_content %}
+{% endblock expand_content %}
 
 
 

@@ -22,9 +22,9 @@ var showAllTags = true;
 
 function initializeMap(element) {
     map = new GMap2(element);
-    map.setCenter(new GLatLng(39.9034, -75.3529), 15);
+    map.setCenter(new GLatLng(39.9027, -75.3529), 15);
     map.addControl(new GMapTypeControl());
-    map.addControl(new GLargeMapControl());
+    map.addControl(new GSmallMapControl());
 }
 
 function addMarker(num, point, info_box, type, loc, tags) {

@@ -1,22 +1,23 @@
-{% extends "listings/base.html" %}
+{% extends "base-expand.html" %}
 {% load extras %}
 {% load markup %}
 
-{% block title %}Book Exchange :: Submit{% endblock title %}
-{% block listings_customheader %}
+{% block title %}Add a Book{% endblock title %}
+{% block customheader %}
     <script type="text/javascript" src="/jsi18n/"></script>
     <link rel="stylesheet" href="{% static admin css/widgets.css %}" type="text/css" media="screen,projection" />
     {{ form.media }}
-{% endblock listings_customheader %}
-{% block listings_title %}Sell A Book{% endblock %}
+{% endblock customheader %}
 
-    
-{% block listings_content %}
+{% block expand_breadcrumb %}<a href="/books/">Book Listing</a> &rsaquo;&rsaquo; <a href="/books/new/">Submit</a>{% endblock expand_breadcrumb %}
+
+{% block expand_content %}
+	<h1>Book Submission</h1>
     {% if form.non_field_errors %}
         <p>{{ form.non_field_errors }}</p>
     {% endif %}
     <form action="" method="post">
-        <table class="submission">
+        <table class="submit-form">
             <tr>
                 <th width="150px">{{ form.title.label_tag }}:</th>
                 <td>{{ form.title }}</td>
@@ -50,4 +51,4 @@
             </tr>			  
         </table>
     </form>    
-{% endblock listings_content %}
+{% endblock expand_content %}

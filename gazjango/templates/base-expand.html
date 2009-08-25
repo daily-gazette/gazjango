@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+{% load extras %}
+
+{% block body-args %}onload="initialize()" onunload="GUnload()"{% endblock %}
+
+{% block content %}
+	<!-- Below controls the main content of the page -->
+	<div id="homepagecontent">
+		<!-- Begin code for article "breadcrumbs." This shows the path to the post's page -->
+		<div class="breadcrumb">
+		You are here: 	
+			{% block expand_breadcrumb %}{% endblock expand_breadcrumb %}
+		</div>
+		<!-- End breadcrumb code -->
+		
+		<div id="articlewrapper">
+		
+		{% block expand_top %}{% endblock expand_top %}
+		
+			<div class="article">
+		
+			{% block expand_content %}{% endblock expand_content %}
+		
+			</div>
+		
+			<div id="rightsidebar">
+			
+			{% block expand_rightsidebar %}
+		
+				<div class="action-row">
+					<div class="action">
+						<a href="/announcements/new/">Submit to the RSD</a>
+					</div>
+					<div class="action">
+						<a href="/books/new/">Sell a textbook</a>
+					</div>
+				</div>
+				<div class="action-row">
+					<div class="action">
+						<a href="/jobs/new/">Advertise a job</a>
+					</div>
+					<div class="action">
+						<a href="/posters/new">Display a poster</a>
+					</div>
+				</div>
+				<div class="action-row">
+					<div class="action">
+						<a href="/reviews/">Review a restaurant</a>
+					</div>
+					<div class="action">
+						<a href="/about/contact/">Send us a message</a>
+					</div>
+				</div>		
+		
+				{% for item in posters %}
+					{% if item.sponsor_url %}
+						<a href="{{ item.sponsor_url }}"><img src="{{ item.poster.poster.url }}" class="poster" title="Poster from {{ item.sponsor }}"/></a>
+					{% else %}
+						<img src="{{ item.poster.poster.url }}" class="poster" title="Poster from {{ item.sponsor }}"/>
+					{% endif %}
+				{% endfor %}
+
+				<span class="posterannouncement">Want to add your group's poster? Go <a href="/posters/new/">here</a>.</span>		
+		
+			{% endblock expand_rightsidebar %}
+		
+			</div>
+		</div>
+{% endblock content %}
+

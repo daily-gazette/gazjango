@@ -6,6 +6,8 @@ from gazjango.misc.view_helpers   import get_user_profile
 from gazjango.stackedpages.models import Page
 from gazjango.articles.models     import Article
 from gazjango.comments.models     import PublicComment
+from gazjango.announcements.models import Poster
+
 from django.conf import settings
 
 DEFAULT_TEMPLATE = 'flatpages/default.html'
@@ -39,7 +41,8 @@ def page(request, url):
         'page': page,
         'topstory': tops[0],
         'stories': mids,
-        'comments': PublicComment.visible.order_by('-time')[:3]
+        'comments': PublicComment.visible.order_by('-time')[:3],
+        'posters':Poster.published.get_n(1),
     }
     
     return render_to_response(template, context, context_instance=rc)

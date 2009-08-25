@@ -1,102 +1,87 @@
-{% extends "base.html" %}
+{% extends "base-expand.html" %}
 {% load extras %}
+{% load markup %}
 
 {% block title %}{{ section.name }}{% endblock title %}
 
 {% block customheader %}
-  <link rel="stylesheet" href="{% static css page/section.css %}" type="text/css"/>
 {% endblock customheader %}
 
-
-{% block topbar %}
-  <div id="headerSectionBar">
-    <div id="headerSearch">
-      {% include "search_header.html" %}
-    </div>
-
-    <div id="headerColumn">
-      <div class="headerColumnBox">
-        <h4>Comments</h4>
-        <ul class="commentList">
-          {% for comment in comments|slice:":4" %}
-            <li>
-              <a href="{{ comment.get_absolute_url }}">{{ comment.subject.get_title|safe }}</a>
-            </li>
-          {% endfor %}
-        </ul>
-      </div>
-
-      <div class="headerColumnBox">
-        <h4>In {{ section.name }}</h4>
-        {% for subsection in section.subsections.all %}
-          <p><a href="{{ subsection.get_absolute_url }}">{{ subsection.name }}</a></p>
-        {% endfor %}
-      </div>
-
-    </div>
-  </div>
-{% endblock topbar %}
-
-
 {% block content %}
-  <div id="section">
-    <div id="sectionHeader">
-      <h2>{% block main-header %}{{ section.name }}{% endblock %}</h2>
-    </div>
+	<!-- Below controls the main content of the page -->
+	
+	<div id="articlewrapper">
+		<div id="category-box">
+			<h2 class="title">Featured stories in {{ section.name }}</h2>
+			<div id="column-wrap">
+				<!-- Begin Mid Columns -->	
+				{% for story in topstories %}
+					<div class="section column">
+						<center><a href="{{ story.get_absolute_url }}" title="Permanent Link to {{ story.headline }}"><img src="{{ story.main_image.issue.url }}" /></a></center>
+						<h6><a href="{{ story.get_absolute_url }}" title="Permanent Link to {{ story.headline }}">{{ story.headline|slice:":40" }} ...</a></h6>
+						<li>Posted on {{ story.pub_date|date:"n/j/Y" }}</li>
+						<p>{{ story.summary|safe|slice:":210" }}...</p>
+						<li class="more">More in <a href="{{ story.section.get_absolute_url }}">{{ story.section.name }}</a></li>
+					</div>
+				{% endfor %}
+			</div>
 
-	<div id="mainBoxes">
-    {% for topstory in topstories %}
-      <div class="sectionMainBox sectionMainBoxMarginLeft">
-        <div id="sectionMainStory">
-          <img class="{{ topstory.main_image.front_tall_or_wide }}" 
-               src="{{ topstory.main_image.top_front.url }}" 
-               title="{{ topstory.headline }}" alt="" />
-          <h2><a href="{{ topstory.get_absolute_url }}">{{topstory.get_title|safe}}</a></h2>
-          <p class="byline">
-            <span class="author">by {{ topstory.authors_in_order|join_authors }}</span>
-            <span class="date">| {{ topstory.pub_date|date:"n/j/Y" }}</span>
-          </p>
-          <p>
-            {{ topstory.longest_summary|safe }}
-            <a class="readMore" href="{{ topstory.get_absolute_url }}">More</a>
-          </p>
-        </div>
-      </div>
-    {% endfor %}
-  </div>
+			<h2 class="title">More stories in {{ section.name }}</h2>
+			{% for group in midstories|in_groups_of:2 %}
+				<div class="two-column-short">
+				{% for story in group %}
+				<div class="two-column">
+					<h6><a href="{{ story.get_absolute_url }}" title="Permanent Link to {{ story.headline }}">{{ story.headline|slice:":40" }} ...</a></h6>
+					<li>Posted on {{ story.pub_date|date:"n/j/Y" }}</li>
+					<p>{{ story.summary|safe }}</p>
+					<li class="more">More in <a href="{{ story.section.get_absolute_url }}">{{ story.section.name }}</a></li>
+				</div>
+				{% endfor %}
+				</div>
+			{% endfor %}
+		</div>
 
-  <div id="sectionBar">
-    <ul>
-      {% for story in midstories %}
-        <li>
-          <img src="{{ story.main_image.mid_front.url }}" 
-               class="{{ story.main_image.front_tall_or_wide }}" 
-               title="{{ story.headline }}" alt="" />
-          <h3><a href="{{ story.get_absolute_url }}">{{ story.get_title|safe }}</a></h3>
-          <p class="byline">
-            <span class="author">by {{ story.authors_in_order|join_authors }}</span>
-            <span class="date"> | {{ story.pub_date|date:"n/j/Y" }}</span>
-          </p>
-          <p>
-            {{ story.summary|safe }}
-            <a class="readMore" href="{{ story.get_absolute_url }}">More</a>
-          </p>
-        </li>
-      {% endfor %}
-    </ul>
-  </div>
+		<div class="large-video-block">
+			<h2 class="title">Recent Multimedia</h2>
+			<h6><a href="#url">The Multimedia Title</a></h6>
+  			<p>The picture</p>
+		</div>
 
-  <div id="lowBar">
-    {% for lows in lowlist %}
-      <div class="storyColumn">
-        {% for story in lows %}
-          <li>
-            <h4><a href="{{ story.get_absolute_url }}">{{ story.get_title|safe }}</a></h4>
-            <span class="author">| by {{ story.authors_in_order|join_authors:"1x" }}</span>
-            <span class="date">| {{ story.pub_date|date:"n/j/Y" }}</span>
-          </li>
-        {% endfor %}
-      </div>
-    {% endfor %}
-  </div>
+		<div class="large-video-block">
+			<h4>From the Community</h4>
+			<div class="section cathomesocial">
+				{% for type,entry in stream %}
+					{% ifequal type "entry" %}
+						{% ifequal entry.source_type "tweet" %}
+						<div class="entry twitter" style="background: #fff url({{ entry.object.icon }}) no-repeat 0px center">
+							<p>{{ entry.description|safe }} <br /> —by <a href="http://www.twitter.com/{{ entry.owner_user }}">{{ entry.owner_user }}</a> from <a href="http://www.twitter.com/">Twitter</a></p>
+						</div>
+						{% endifequal %}
+						{% ifequal entry.source_type "bookmark" %}
+						<div class="entry delicious">
+							<p><a href="{{ entry.url }}">{{ entry.title }}</a> -<a href="http://www.delicious.com/{{ entry.owner_user }}">Del.icio.us</a></p>
+						</div>
+						{%endifequal %}	
+						{% ifequal entry.source_type "review" %}
+						<div class="entry review">
+							<p><a href="{{ entry.url }}">{{ entry.title }}</a> - Reviewed by {{ entry.owner_user }}</small></p>
+						</div>
+						{%endifequal %}
+						{% ifequal entry.source_type "flickrphoto" %}
+						<div class="entry flickrphoto" style="background: #fff url({{ entry.object.square }}) no-repeat 0px center">
+							<p><a href="{{ entry.url }}">{{ entry.title }}</a>, by {{ entry.owner_user }}</small></p>
+						</div>
+						{%endifequal %}
+					{% else %}
+						<div class="entry comment">
+							<p><a href="{{entry.get_absolute_url}}">{{ entry.display_name }}</a> spoke on <a href="{{entry.subject.get_absolute_url}}">{{ entry.subject.get_title }}</a>.</p>
+						</div>
+					{% endifequal %}
+				{% endfor %}					
+			</div>
+		</div>
+
+
+	<div style="clear:both"></div>
+
 {% endblock content %}

@@ -14,6 +14,8 @@ from gazjango.comments.models      import PublicComment, CommentIsSpam
 from gazjango.misc                 import recaptcha
 from gazjango.misc.view_helpers    import get_ip, get_user_profile, is_robot
 from gazjango.misc.view_helpers    import get_by_date_or_404, boolean_arg
+from gazjango.announcements.models import Poster
+
 
 
 def comment_page(request):
@@ -27,6 +29,8 @@ def comment_page(request):
 
     rc = RequestContext(request, {
         'comments': final_list,
+        'posters':Poster.published.get_n(1),
+        
     })
     return render_to_response('comment/index.html', context_instance=rc)    
     

@@ -1,14 +1,34 @@
-{% extends "listings/base.html" %}
+{% extends "base-expand.html" %}
 {% load extras %}
 {% load markup %}
 
 {% block title %}Jobs{% endblock title %}
-{% block listings_customheader %}
-    <script type="text/javascript" src="{% static js tablesort.js %}"></script>
-{% endblock listings_customheader %}
-{% block listings_title %}Jobs{% endblock %}
- 
-{% block listings_content %}
+{% block customheader %}
+<script type="text/javascript" src="{% static js tablesort.js %}"></script>
+{% endblock customheader %}
+
+{% block expand_breadcrumb %}<a href="/jobs/">Job Listing</a>{% endblock expand_breadcrumb %}
+
+{% block expand_top %}	
+
+<div class="full-action-row">
+	<div class="action">
+		<a href="/announcements/new/">Submit to the RSD</a>
+	</div>
+	<div class="action">
+		<a href="/books/new/">Sell a textbook</a>
+	</div>
+	<div class="action">
+		<a href="/jobs/new/">Advertise a job</a>
+	</div>
+	<div class="action">
+		<a href="/posters/new">Display a poster</a>
+	</div>
+	<div class="action">
+		<a href="/reviews/">Review a restaurant</a>
+	</div>
+</div>
+
 
 <table id="review-listings" cellpadding="0" cellspacing="0" border="0" class="sortable-onload-0-1 rowstyle-alt colstyle-alt no-arrow">
   <caption>Click on a column heading to sort.</caption>
@@ -31,7 +51,7 @@
             {% else %}
                 Unpaid
             {% endif %}</td>
-        <td>{{ job.hours }}, {{ job.when }}</td>
+        <td>{% if job.hours %}{{ job.hours }}{% if job.when %},{% endif %}{% endif %} {{ job.when }}</td>
         <td>{{ job.where }}</td>
         <td>{% if job.needs_car %}<strong>X</strong>{% endif %}</td>
         <td>{{ job.contact_info }}</td>        
@@ -39,5 +59,13 @@
     {% endfor %}
   </tbody>
 </table>   
- 
-{% endblock listings_content %}
+
+
+{% endblock expand_top %}
+
+{% block expand_content %}
+
+{% endblock expand_content %}
+
+{% block expand_rightsidebar %}
+{% endblock expand_rightsidebar %}

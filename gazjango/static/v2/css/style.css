@@ -288,6 +288,12 @@ h5 {
 	padding: 0px;
 }
 
+h5.popcomment {
+	margin-top: 30px;
+	padding-right: 10px;
+}
+
+
 h5.extras {
 	font-weight: bold;
 	font-style: italic;
@@ -587,15 +593,6 @@ a, #catnav li li a:link, #catnav li li a:visited {
 	padding: 0px;
 }
 
-#homecontent {
-	padding-left: 5px;
-	padding-bottom: 5px;
-	padding-right: 0px;
-	padding-top: 5px;
-	margin-top: 8px;
-	float: left;
-	width: 900px;
-}
 
 #homepagecontent {
 	margin-top: 8px;
@@ -617,6 +614,10 @@ a, #catnav li li a:link, #catnav li li a:visited {
 	margin-right: 3px;
 	padding: 0 5px 5px;
 	position: relative;
+}
+
+.section.column {
+	width: 138px;
 }
 
 .column-wrapper {
@@ -737,12 +738,12 @@ a, #catnav li li a:link, #catnav li li a:visited {
 }
 
 .two-column-short {
-	width: 285px;
-	height: 215px;
+	width: 610px;
 	float: left;
 	margin-right: 15px;
 	padding-bottom: 5px;
 	border-bottom: 1px dotted #989898;
+	display: inline-block;
 }
 
 .two-column-medium {
@@ -755,7 +756,7 @@ a, #catnav li li a:link, #catnav li li a:visited {
 }
 
 .two-column {
-	width: 220px;
+	width: 285px;
 	float: left;
 	padding: 5px;
 	margin-top: 10px;
@@ -925,6 +926,17 @@ ul#twitter_update_list li {
 	border: 1px solid #989898;
 }
 
+.section.cathomesocial {
+	width: 100%;
+	margin: 0px;
+	padding: 0px;
+	border: none;
+}
+
+.section.cathomesocial .entry {
+	margin-bottom: 5px;
+}
+
 .bottom-box {
 	float: left;
 	width: 655px;
@@ -1038,7 +1050,7 @@ ul#twitter_update_list li {
 }
 
 .cathomesocial .entry {
-    background-color: #dddddd;
+    background-color: #ffffff;
     -moz-border-radius: 10px;
     -webkit-border-radius: 10px;
     border: 2px solid #989898;
@@ -1048,15 +1060,15 @@ ul#twitter_update_list li {
 }
 
 .cathomesocial .entry.delicious {
-	background: #dddddd url(/static/v2/images/social/delicious.png) no-repeat 10px center;
+	background: #fff url(/static/v2/images/social/delicious.png) no-repeat 10px center;
 }
 
 .cathomesocial .entry.review {
-	background: #dddddd url(/static/v2/images/social/review.png) no-repeat 10px center;
+	background: #fff url(/static/v2/images/social/review.png) no-repeat 10px center;
 }
 
 .cathomesocial .entry.comment {
-	background: #dddddd url(/static/v2/images/social/comment.png) no-repeat 10px center;
+	background: #fff url(/static/v2/images/social/comment.png) no-repeat 10px center;
 }
 
 .cathomesocial .entry.flickrphoto {
@@ -1197,6 +1209,7 @@ h6.publish2_link {
 	width: 605px;
 	color: #3d3d3d;
 	padding: 0px;
+	float: left;
 	border-bottom-color: #989898;
 	border-bottom-style: double;
 	margin-bottom: 10px;
@@ -1377,7 +1390,7 @@ h6.publish2_link {
 	text-align: left;
 	font-size: 15px;
 	margin: 0px;
-	width: 655px;
+	width: 650px;
 	line-height: 20px;
 }
 
@@ -1392,7 +1405,7 @@ h6.publish2_link {
 	padding-bottom: 5px;
 }
 
-.article h1 {
+#articlewrapper h1 {
 	text-align: left;
 	padding: 0px;
 	margin-top: 5px;
@@ -1691,7 +1704,7 @@ STORY INCLUDES
 **************************************/
 
 #shareBox {
-	width: 655px;
+	width: 645px;
 	margin-top: 10px;
 	margin-bottom: 0px;
 	border-top: 3px double #989898;
@@ -1782,7 +1795,7 @@ COMMENT STYLES
 **************************************/
 
 #comments {
-	width: 645px;
+	width: 635px;
 	margin-left: 5px;
 	border-left: 1px solid #989898;
 	border-right: 1px solid #989898;
@@ -1791,13 +1804,29 @@ COMMENT STYLES
 	display: inline-block;
 }
 
-.comment {
+#comments .comment {
 	padding-top: 5px;
 	display: inline-block;
 }
 
-.comment.new {
+#comments .comment.new {
     display: none;
+}
+
+h5.columns {
+	width: 100%;
+	float: left;
+	padding-top: 10px;
+	padding-bottom: 10px;
+}
+
+#column-wrap {
+	display: inline-block;
+}
+
+.column-listing {
+	float: left;
+	width: 200px;
 }
 
 .commentInformation {
@@ -1880,7 +1909,7 @@ COMMENT STYLES
 }
 
 .commentContent {
-	width: 640px;
+	width: 630px;
 	float: left;
 	text-align: justify;
 	margin-bottom: 10px;
@@ -2549,26 +2578,506 @@ a, #menu-slide li li a:link, #menu-slide li li a:visited {
 	background: #376b9d;
 }
 
-/*** Dim the lights styles ***/
+/** Pure CSS Events **/
 
-#about-dim-the-lights {
-    background: #fff;
-    border: 2px solid #999;
-    width: 200px;
-    margin-left: 20px;
-    padding: 10px;
-	font-size: 15px;
+.event-timeline {
+	width: 100%;
+	float: left;
+	margin-top: 10px;
+	margin-bottom: 10px;
 }
 
-span.posterannouncement {
-	font-style: italic;
-	font-size: 1.1em;
-	padding-top: 5px;
+.event-day {
+	width: 192px;
+	padding: 5px;
+	margin-right: 5px;
+	min-height:100px;
+	float: left;
+	background-color: #fff5b0;
+	
+	/* optional rounded corners for browsers that support it */
+	-moz-border-radius: 5px;
+	-khtml-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	border-radius: 5px;
+	border: 3px solid #376b9d;
+}
+
+.event-day .date {
+	float: right;
+	color: rgba(55,107,157,0.37);
+	font: bold 1.3em "Helvetica Neue", Arial, Helvetica, Geneva, sans-serif;
+	z-index: 0;
+	width: 100%;
+	text-align: right;
+}
+
+.event-day ul {
+	padding: 0;
+	padding-top: 10px;
+	list-style-type: none;
+}
+
+.event-day ul li {
+	
+}
+
+/** ANNOUNCEMENTS **/
+
+.announcement-row {
+	float: left;
+	
+}
+
+.announcement {
+	width: 305px;
+	float: left;
+	padding: 10px;
+	min-height: 150px;
+}
+
+.action-row {
+	float: left;
+}
+
+.full-action-row {
+	float: right;
+	display: inline-block;
+}
+
+.action {
+	width: 180px;
+	float: left;
+	padding: 5px;
+	margin: 5px;
+	text-align: center;
+	min-height: 25px;
+	
+	background-color: #376b9d;
+	
+	/* optional rounded corners for browsers that support it */
+	-moz-border-radius: 5px;
+	-khtml-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	border-radius: 5px;
+}
+
+.action a, .action a:visited {
+	display: inline-block;
+	margin-top: 5px;
+	color: #fff;
+	font-weight: bold;
+	font-variant: normal;
+}
+
+
+/** FORMS **/
+.submit-form {
+	font-size: .8em;
+	font-weight: normal;
+	font-style: normal;
+	line-height: 1em;
+}
+
+.submit-form label {
+	margin: 0px;
+	padding: 0px;
+}
+
+.submit-form th {
+	text-align: right;
+	font-weight: normal;
+	font-style: normal;
+}
+
+
+
+/** SORTABLE TABLES **/
+
+/* @override http://127.0.0.1:8000/static/css/page/listings.css */
+
+.selector p {
+  font-size: 1em !important;
+}
+.errorlist {
+  color: red;
+}
+
+#listing table
+    {
+    width: 655px;
+    padding: 0;
+    margin: 0 auto 1.5em auto;
+    border-left: 1px solid #C1DAD7;
+    border-collapse:collapse;
+    }
+.cs1
+        {
+        width:30em;
+        }
+.cs2
+        {
+        width:20em;
+        }
+.cs1 td,
+.cs2 td,
+#scientificNotation
+        {
+        text-align:right;
+        }
+caption
+        {
+        padding: 0 0 5px 0;
+        margin:0 auto;
+        width:auto;
+        font: italic 11px "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
+        text-align: right;
+        }
+#listing th
+        {
+        font: bold 10px/22px "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
+        color: #4f6b72;
+        border-right: 1px solid #C1DAD7;
+        border-bottom: 1px solid #C1DAD7;
+        border-top: 1px solid #C1DAD7;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        text-align: left;
+        padding: 8px 12px 4px 12px;
+        background: #CAE8EA url(../media/bg_header.jpg) no-repeat;
+        vertical-align:middle;
+        }
+#listing td.total
+        {
+        border-top: 0;
+        border-left: 0;
+        border-right: 1px solid #C1DAD7;
+        background: none;
+        text-align:right;
+        font-weight:bold;
+        text-transform:uppercase;
+        letter-spacing:1px;
+        }
+#listing th.sortable,
+#listing th.sortable-text,
+#listing th.sortable-date,
+#listing th.sortable-keep,
+#listing th.sortable-date-dmy,
+#listing th.sortable-numeric,
+#listing th.sortable-currency,
+#listing th.sortable-sortByTwelveHourTimestamp,
+#listing th.sortable-sortIPAddress,
+#listing th.sortable-sortEnglishLonghandDateFormat,
+#listing th.sortable-sortScientificNotation,
+#listing th.sortable-sortImage,
+#listing th.sortable-sortFileSize,
+#listing th.sortable-sortAlphaNumeric,
+#listing th.sortable-sortEnglishDateTime
+
+        {
+        cursor:pointer;
+        background: #CAE8EA url(../media/bg_header_sortable.jpg) no-repeat;
+        padding: 8px 12px 4px 16px;
+        }
+#listing th.forwardSort
+        {
+        background:#CAE8EA url(../media/bg_header_down.jpg) no-repeat 0 0;
+        }
+#listing th.reverseSort
+        {
+        background:#CAE8EA url(../media/bg_header_up.jpg) no-repeat 0 0;
+        }
+#listing table thead th.forwardSort a,
+#listing table thead th.reverseSort a
+        {
+        color:#000;
+        text-decoration:none;
+        }
+/*
+These styles should be added when very long tables are expected
+th.sort-active
+        {
+        background:#CAE8EA url(../media/bg_header_sorting.jpg) no-repeat 0 0;
+        cursor:wait;
+        }
+th.sort-active a
+        {
+        color:#a80000 !important;
+        cursor:wait;
+        }
+*/
+#listing th a
+        {
+        text-decoration:none;
+        color: #4f6b72;
+        background:transparent;
+        }
+#listing td a
+        {
+        text-decoration:none;
+        color:#239;
+        background:transparent;
+        }
+#listing td img
+        {
+        margin:0 auto;
+        border:3px solid #ddd;
+        }
+#listing td a:hover
+        {
+        color:#a84444;
+        border-bottom:1px dotted #a80000;
+        background:transparent;
+        }
+#listing td
+        {
+        font: normal 11px "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
+        border-right: 1px solid #C1DAD7;
+        border-bottom: 1px solid #C1DAD7;
+        padding: 3px 6px 3px 6px;
+        color: #4f6b72;
+        }
+td.lft
+        {
+        text-align:left;
+        }
+tr.alt
+        {
+        background: #F5FAFA;
+        }
+
+/* Poor old Internet Explorer 6 has a bug that means we can't use background images for the table rows
+   as it trys to download the image each and every time that it is used (which means a 1000 row table
+   will produce 1000 http requests for the image in question) */
+   
+#review-listings {
 	float: left;
 	width: 100%;
-	text-align: center;
+	padding-top: 25px;
+}
+   
+   tr td {
+	padding: 3px;
+	padding-left: 10px;
+	border-bottom: 2px solid #edf3f3;
+}
+tr[class="alt"] td
+        {
+        background: #F5FAFA url(../media/td_alt.jpg) no-repeat;
+        }
+td[class~="alt"]
+        {
+        background: #edf3f3 url(../media/col_alt.jpg) no-repeat !important;
+        }
+/* Poor old Internet Explorer won't see the next two rules either as it doesn't get :first-child */
+tbody tr.alt td:first-child
+        {
+        background: #F5FAFA no-repeat;
+        font-weight:bold;
+        }
+tbody tr td:first-child
+        {
+        background: #fff url(../media/bullet1.gif) no-repeat;
+        font-weight:bold;
+        }
+/* Image free rules for Internet Explorer < 7 */
+* html tr.alt td
+        {
+        background-color:#F5FAFA;
+        }
+* html tr td.alt,
+* html tr.alt td.alt
+        {
+        background-color:#edf3f3;
+        }
+
+#listing form table,#listing form table tr,#listing form table td {
+	border-style: none;
 }
 
-img.poster {
-	border: 4px double #000000;
+#listing form table.submission h2 {
+	font-size: 2em;
+}
+
+.selector {
+	width: 100px;
+}
+
+#listing form table.submission tbody tr td div.selector ul.selector-chooser {
+	padding: 4px;
+	margin: 3px;
+}
+
+#listing form table.submission tbody > tr td div.selector div.selector-chosen p.selector-filter{
+	padding: 0px;
+	margin: 0px;
+	width: 270px;
+}
+
+#listing form table.submission tbody > tr td div.selector div.selector-available p.selector-filter {
+	padding: 0px;
+	margin: 0px;
+	width: 270px;
+}
+
+
+
+/** REVIEWS **/
+
+	/** Page Top **/
+	
+	#reviews-top-wrapper {
+		width: 100%;
+		float: left;
+	}
+	
+	.topreview {
+		float: left;
+		width: 31%;
+		min-height: 100px;
+		margin: 12px;
+	}
+	
+	.topreview h2 {
+	font: 1em "Helvetica Neue", Arial, Helvetica, Geneva, sans-serif;
+}
+	
+	.topreview h3 {
+	font-weight: bold;
+}
+		
+	/** Map **/
+	#reviews-map{
+		width: 100%;
+		float: left;
+	}
+	
+	#map.jmap {
+		height: 200px;
+		margin-top: 10px;
+		margin-bottom: 10px;
+	}
+	
+	/** Map Control Lists **/
+	
+		#reviews-menus ul {
+			width: 100%;
+			display: inline-block;
+			float: left;
+			margin: 0px;
+			padding: 0px;
+			margin-bottom: 10px;
+			font-family: "Helvetica Neue", Arial, Helvetica, Geneva, sans-serif;
+			background-color: #5186d7;
+		}
+		
+		#reviews-menus ul li {
+			display: inline;
+			padding: 5px;
+			float: left;
+			padding-right: 10px;
+		}
+	
+		#reviews-menus ul li.first {
+			display: inline;
+			padding: 6px;
+			background-color: #376b9d;
+			color: #ffffff;
+			font-weight: bold;
+			width: 50px;
+		text-align: right;
+		}
+		
+		
+		/** Establishment Pages **/
+		
+		#establishment {
+			width: 100%;
+			float: left;
+		}
+		
+		#establishment h2 {
+			text-align: left;
+			padding: 0px;
+			margin-top: 5px;
+			margin-bottom: 5px;
+			font: bold 36px/40px Georgia, Times, serif;
+		}
+		
+		#establishment #reviewInfo p {
+			padding: 0px;
+			font-size: 1em;
+		}
+		
+		
+
+#reviewText {
+	width: 770px;
+	float: right;
+	margin-top: 5px;
+}
+
+#reviewText p {
+	margin: 0;
+	padding: 0 0 10px 0px;
+	color: black;
+	line-height: 1.4;
+	font-size: 1em;
+	width: 770px;
+}
+
+div#map.gmap {
+	width: 770px;
+	height: 300px;
+	float: right;
+}
+
+#route {
+	width: 275px;
+	float: left;
+	margin-top: 5px;
+	text-align: left;
+}
+
+#route h4 {
+	padding-top: 15px;
+	display: inline-block;
+}
+
+
+/** ARCHIVES **/
+
+.monthRow {
+	width: 100%;
+	float: left;
+}
+.monthArchives {
+	width:  290px;
+	float: left;
+	padding-right: 20px;
+	min-height: 250px;
+}
+
+h3.year a {
+	width: 100%;
+	float: left;
+	font-weight: bold;
+	border-bottom-style: double;
+	border-bottom-width: 3px;
+	padding-bottom: 5px;
+	color: black;
+	text-align: right;
+}
+
+h3.year a:hover {
+	text-decoration: none;
+}
+
+p.returntotop {
+	width: 100%;
+	float: left;
+	padding: 0px;
+	margin: 0px;
+	text-align: right;
+	font-size: .8em;
 }

@@ -1,13 +1,19 @@
-{% extends "listings/base.html" %}
+{% extends "base-expand.html" %}
 {% load extras %}
 {% load markup %}
 
 {% block title %}Announcement Submitted{% endblock title %}
-{% block listings_customheader %}{% endblock listings_customheader %}
-{% block listings_title %}Success!{% endblock %}
+{% block customheader %}
 
-{% block listings_content %}
+{% endblock customheader %}
 
-    <p>Thanks for submitting your announcement. An administrator will review it and it should show up on the Gazette site soon.</p>
-    
-{% endblock listings_content %}
+{% block expand_breadcrumb %}<a href="/announcements/">Announcements &amp; Events</a> &rsaquo;&rsaquo; <a href="/announcements/new/">Submit</a>{% endblock expand_breadcrumb %}
+
+{% block expand_top %}	
+{% endblock expand_top %}
+
+{% block expand_content %}
+
+<p>Thanks for submitting your announcement. An administrator will review it and it should show up on the Gazette site soon.</p>
+
+{% endblock expand_content %}

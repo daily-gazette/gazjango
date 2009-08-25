@@ -58,7 +58,6 @@ def specific_article(request, story, num=None, form=None, print_view=False):
 
 def show_article(request, story, form, print_view=False):
     "Shows the requested article."
-    poster = Poster.published.get_n(1)
     d = story.pub_date
     template = (
         "stories/view_%s_%s_%s_%s.html" % (d.year, d.month, d.day, story.slug),
@@ -83,7 +82,7 @@ def show_article(request, story, form, print_view=False):
         'other_comments': cs,
         'print_view': print_view,
         'comment_form': form,
-        'posters': poster,
+        'posters': Poster.published.get_n(1),
         'recent_stories':recent_stories,
     })
     return render_to_response(template, context_instance=context)
@@ -136,8 +135,13 @@ def archives(request, section=None, subsection=None, year=None, month=None, day=
         articles = articles.filter(section=section, subsection=subsection)
     articles = articles.order_by('pub_date')
     
-    data = { 'articles': articles, 'year': year, 'month': month, 'day': day,
-             'section': section, 'subsection': subsection,
+    data = { 'articles': articles,
+             'year': year,
+             'month': month,
+             'day': day,
+             'section': section,
+             'subsection': subsection,
+             'posters': Poster.published.get_n(1),
              'sections': Section.objects.all() }
     
     if day:
@@ -207,7 +211,7 @@ def homepage(request, template="index.html"):
     # creating the social stream
     
     entries = Entry.published.get_entries(num=20)
-    comments = PublicComment.visible.order_by().all()[:20]
+    comments = PublicComment.visible.order_by('-time').all()[:20]
 
     stream = sorted(
        [("entry", entry) for entry in entries] + [("comment", comment) for comment in comments],
@@ -411,11 +415,23 @@ email_article = lambda request, **kwargs: render_to_response("base.html", locals
 def section(request, section):
     sec = get_object_or_404(Section, slug=section)
     
-    tops, mids, lows = sec.get_stories(num_top=2, num_mid=3, num_low=12)
+    tops, mids, lows = sec.get_stories(num_top=4, num_mid=6, num_low=12)
     num_low_lists = 4
     lowlist = [ [] for i in range(num_low_lists) ]
     for i in range(len(lows)):
         lowlist[i % num_low_lists].append(lows[i])
+        
+        
+    entries = Entry.published.get_entries(num=9)
+    comments = PublicComment.visible.filter(article__section=sec).order_by('-time').all()[:20]
+    
+    stream = sorted(
+       [("entry", entry) for entry in entries] + [("comment", comment) for comment in comments],
+       key=lambda (kind, obj): obj.timestamp if kind == "entry" else obj.time,
+       reverse=True
+    )
+    
+    stream = stream[:14]
     
     data = {
         'section': sec,
@@ -423,6 +439,7 @@ def section(request, section):
         'topstories': tops,
         'midstories': mids,
         'lowlist': lowlist,
+        'stream':stream,
         'comments': PublicComment.visible.filter(article__section=sec).order_by('-time')
     }
     
@@ -446,6 +463,10 @@ def subsection(request, section, subsection):
     sec = get_object_or_404(Section, slug=section)
     sub = get_object_or_404(Subsection, section=sec, slug=subsection)
     
+    comments = PublicComment.visible.filter(article__subsection=sub)
+    stream = comments
+    stream = stream[:5]
+    
     if sub.slug == 'stuco-platforms':
         articles = sub.published_articles()
         latest = articles.latest()
@@ -467,7 +488,7 @@ def subsection(request, section, subsection):
             'subsection': sub,
             'platforms': current,
             'latest': latest,
-            'comments': PublicComment.visible.filter(article__subsection=sub).order_by('-time')
+            'stream': stream,
         }
         return render_to_response('sections/sub_stuco-platforms.html',
                                   context_instance=RequestContext(request, data))
@@ -480,6 +501,9 @@ def subsection(request, section, subsection):
             lowlist[i % num_low_lists].append(lows[i])
     
         comments = PublicComment.visible.filter(article__subsection=sub)
+        stream = comments
+        stream = stream[:5]
+        
         data = {
             'section': sec,
             'subsection': sub,
@@ -487,7 +511,7 @@ def subsection(request, section, subsection):
             'topstories': tops,
             'midstories': mids,
             'lowlist': lowlist,
-            'comments': comments.order_by('-time')
+            'stream': stream,
         }
         try:
             column = sub.column

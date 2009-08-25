@@ -32,8 +32,33 @@ def reviews(request):
         short,
         get_static_path('images', 'reviews/map-markers/%s.png' % short),
         get_static_path('images', 'reviews/map-markers/%s-shadow.png' % short)
-    ) for short, long in Establishment.TYPE_CHOICES ]
+    ) for short, long in Establishment.TYPE_CHOICES ]	
     
+    topcityfood   = None
+    toplocalfood  = None
+    toplocalhotel = None
+    
+    for establishment in establishments.order_by():
+        if establishment.establishment_type == 'r':
+            if establishment.city == 'Swarthmore':
+                if toplocalfood == None:
+                    toplocalfood = establishment
+                else:
+                    if establishment.avg_rating() > toplocalfood.avg_rating():
+                        toplocalfood = establishment
+            elif establishment.city == 'Philadelphia':
+                if topcityfood == None:
+                    topcityfood = establishment
+                else:
+                    if establishment.avg_rating() > topcityfood.avg_rating():
+                        topcityfood = establishment
+        elif establishment.establishment_type == 'h':
+            if toplocalhotel == None:
+                toplocalhotel = establishment
+            else:
+                if establishment.avg_rating() > toplocalhotel.avg_rating():
+                    toplocalhotel = establishment
+                        
     locations = list(enumerate(establishments.
                    values_list('city', flat=True).order_by('city').distinct()))
     
@@ -46,6 +71,9 @@ def reviews(request):
         'tags': tags,
         'locations': locations,
         'loc_dict': dict(reversed(x) for x in locations),
+        'topcityfood': topcityfood,
+        'toplocalfood': toplocalfood,
+        'toplocalhotel': toplocalhotel, 
     })
     return render_to_response('reviews/index.html', context_instance=rc)
 

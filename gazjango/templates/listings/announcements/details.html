@@ -1,13 +1,44 @@
-{% extends "listings/base.html" %}
+{% extends "base-expand.html" %}
 {% load extras %}
 {% load markup %}
 
 {% block title %}{{ announcement.title|striptags }}{% endblock title %}
-{% block listings_customheader %}{% endblock listings_customheader %}
-{% block listings_title %}{{ announcement.title|striptags }}{% endblock listings_title %}
+{% block customheader %}
+    {% jQuery %}
+    <script type="text/javascript" charset="utf-8">
+        function toggleSponsorLink() {
+            $('#sponsor-url-row')
+            .find('input').val('').end()
+            .toggle();
+            link = $('#sponsor-toggle');
+            if (link.text() == 'add a link') {
+                link.text('remove the link');
+                } else {
+                link.text('add a link');
+            }
+        }
+        function toggleEventFields() {
+            $('.event-row').find('input').val('').end().toggle();
+        }
+        $(document).ready(function() {
+            url_row = $('#sponsor-url-row');
+            if (url_row.find('input').val() == '') {
+                url_row.hide(0);
+                $('#sponsor-toggle').show(0);
+            } else {
+                $('#sponsor-toggle').text('remove the link').show(0);
+            }
+            if ($('#{{ form.is_event.auto_id }}:checked').length == 0) {
+                $('.event-row').hide(0);
+            }
+        });
+    </script>
+{% endblock customheader %}
 
-{% block listings_content %}
+{% block expand_breadcrumb %}<a href="/announcements/">Announcements &amp; Events</a> &rsaquo;&rsaquo; {{ announcement.title|striptags }}{% endblock expand_breadcrumb %}
 
+{% block expand_content %}
+	<h1>{{ announcement.title|striptags }}</h1>
     <p><strong>Sponsor:</strong> {{ announcement.sponsor_link }}</p>
 	{% if announcement.is_event %}
         <p><strong>When:</strong>{{ announcement.event_date|near_future_date }}
@@ -17,10 +48,24 @@
         </p>
         {% if announcement.event_place %}<p><strong>Where:</strong> {{ announcement.event_place }}</p>{% endif %}
     {% endif %}
-    
+
     {% autoescape off %}
         <p>{{ announcement.text }}</p>
     {% endautoescape %}
+
+	{% if announcement.poster_set.all %}
+	<hr />
+	<h3>Related Posters</h3>
+	
+		{% for poster in announcement.poster_set.all %}
+				{% if poster.sponsor_url %}
+					<a href="{{ poster.sponsor_url }}"><img src="{{ poster.poster.poster.url }}" class="poster" title="Poster from {{ poster.poster_set.sponsor }}"/></a>
+				{% else %}
+					<img src="{{ poster.poster_set.poster.poster.url }}" class="poster" title="Poster from {{ poster.poster_set.sponsor }}"/>
+				{% endif %}
+		{% endfor %}
+	{% endif %}
+	
     <p><strong>See our <a href="/announcements">other announcements</a>, or <a href="/announcements/new/">submit</a> your own.</strong></p>
-  
-{% endblock listings_content %}
+
+{% endblock expand_content %}
