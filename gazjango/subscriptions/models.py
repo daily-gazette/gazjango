@@ -4,15 +4,17 @@ from gazjango.accounts.models import UserProfile, UserKind
 from gazjango.registration import signals as registration_signals
 import random
 
-class ActiveSubscribersManager(models.Manager):
-    def get_query_set(self):
-        orig = super(ActiveSubscribersManager, self).get_query_set()
-        return orig.filter(unsubscribed=None, is_confirmed=True)
-    
+class SubscribersManager(models.Manager):
     def find_by_email(self, email):
         return self.filter(Q(_email=email) | Q(user__user__email=email))
     
 
+class ActiveSubscribersManager(models.Manager):
+    def get_query_set(self):
+        orig = super(ActiveSubscribersManager, self).get_query_set()
+        return orig.filter(unsubscribed=None, is_confirmed=True)
+
+    
 class IssueSubscribersManager(ActiveSubscribersManager):
     def get_query_set(self):
         orig = super(IssueSubscribersManager, self).get_query_set()
@@ -76,7 +78,7 @@ class Subscriber(models.Model):
     is_confirmed = models.BooleanField(default=True,
                    help_text="Whether this person's email has been confirmed.")
     
-    objects = models.Manager()
+    objects = SubscribersManager()
     active = ActiveSubscribersManager()
     issues = IssueSubscribersManager()
     rsd = RSDSubscribersManager()
@@ -108,6 +110,6 @@ class Subscriber(models.Model):
 # we wait until registration to make sure that the email is right
 def link_subscribers(sender, user, **kwargs):
     profile = user.get_profile()
-    for subscriber in Subscriber.objects.filter(email=user.email):
+    for subscriber in Subscriber.objects.find_by_email(user.email):
         subscriber.link_to_user(profile)
 registration_signals.user_activated.connect(link_subscribers)
