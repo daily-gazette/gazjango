@@ -9,9 +9,9 @@ class ActiveSubscribersManager(models.Manager):
         orig = super(ActiveSubscribersManager, self).get_query_set()
         return orig.filter(unsubscribed=None, is_confirmed=True)
     
-	def find_by_email(self, email):
-		return self.filter(Q(_email=email) | Q(user__user__email=email))
-	
+    def find_by_email(self, email):
+        return self.filter(Q(_email=email) | Q(user__user__email=email))
+    
 
 class IssueSubscribersManager(ActiveSubscribersManager):
     def get_query_set(self):
