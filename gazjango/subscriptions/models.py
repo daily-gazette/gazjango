@@ -94,8 +94,9 @@ class Subscriber(models.Model):
             self.save()
     
     def __unicode__(self):
-        return "%s %s" % (self.receive, self.email) + \
-               " [%s]" % self.user.username if self.user else ""
+        base = self.email
+        base += "(%s)" % self.user.username if self.user else ""
+        return "%s [%s]" % (base, self.receive)
     
     class Meta:
         unique_together = (('receive', '_email'),
