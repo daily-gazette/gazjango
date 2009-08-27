@@ -1,6 +1,6 @@
 from misc import httplib2
-import dateutil.parser
-import dateutil.tz
+import misc.dateutil.parser
+import misc.dateutil.tz
 import logging
 from gazjango.community.sources import *
 from django.utils import simplejson
@@ -38,9 +38,9 @@ def parsedate(s):
     """
     Convert a string into a (local, naive) datetime object.
     """
-    dt = dateutil.parser.parse(s)
+    dt = misc.dateutil.parser.parse(s)
     if dt.tzinfo:
-        dt = dt.astimezone(dateutil.tz.tzlocal()).replace(tzinfo=None)
+        dt = dt.astimezone(misc.dateutil.tz.tzlocal()).replace(tzinfo=None)
     return dt
             
 def safeint(s):
