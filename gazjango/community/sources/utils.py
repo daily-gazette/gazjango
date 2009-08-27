@@ -1,4 +1,4 @@
-import httplib2
+from misc import httplib2
 import dateutil.parser
 import dateutil.tz
 import logging
