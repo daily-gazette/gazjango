@@ -42,14 +42,21 @@ class SendingOutCommand(NoArgsCommand):
         subscriber.last_sent = self.sent_str
         subscriber.save()
     
-    def renew_connection(self):
+    def renew_connection(self, subscriber, retries=3, sleep_time=1):
         # close the old one
         self.connection.fail_silently = True
         self.connection.close()
         
         # get a new one
-        self.connection = SMTPConnection()
-        self.connection.open()
+        for i in range(retries):
+            try:
+                self.connection = SMTPConnection()
+                self.connection.open()
+            except socket.timeout:
+                self.add_error(subscriber, 'timeout while opening connection')
+                time.sleep(sleep_time)
+            else:
+                return
     
     def try_sending_to_subscriber(self, subscriber, repeat_index=0, max_repeats=2):
         if repeat_index >= max_repeats:
@@ -61,15 +68,15 @@ class SendingOutCommand(NoArgsCommand):
             self.add_error(subscriber, 'recipient refused')
         except smtplib.SMTPServerDisconnected:
             self.add_error(subscriber, 'server disconnected')
-            self.renew_connection()
+            self.renew_connection(subscriber)
             self.try_sending_to_subscriber(subscriber, repeat_index + 1, max_repeats)
         except socket.sslerror:
             self.add_error(subscriber, 'ssl error') # probably timeout
-            self.renew_connection()
+            self.renew_connection(subscriber)
             self.try_sending_to_subscriber(subscriber, repeat_index + 1, max_repeats)
         except socket.timeout:
             self.add_error(subscriber, 'timeout')
-            self.renew_connection()
+            self.renew_connection(subscriber)
             self.try_sending_to_subscriber(subscriber, repeat_index + 1, max_repeats)
         except smtplib.SMTPException:
             self.add_error(subscriber, 'smtp error')
