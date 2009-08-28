@@ -33,6 +33,19 @@ class StaffSubscribersManager(ActiveSubscribersManager):
         return orig.filter(receive='s')
     
 
+class AllIssueSubscribersManager(SubscribersManager):
+    def get_query_set(self):
+        orig = super(AllIssuesSubscribersManager, self).get_query_set()
+        return orig.filter(receive='i')
+    
+
+class AllRSDSubscribersManager(SubscribersManager):
+    def get_query_set(self):
+        orig = super(AllIssuesSubscribersManager, self).get_query_set()
+        return orig.filter(receive='r')
+    
+
+
 class Subscriber(models.Model):
     """
     A subscriber, who gets issues in their inbox when we publish. Either 
@@ -83,6 +96,8 @@ class Subscriber(models.Model):
     issues = IssueSubscribersManager()
     rsd = RSDSubscribersManager()
     staff = StaffSubscribersManager()
+    rsd_all = AllRSDSubscribersManager()
+    issues_all = AllRSDSubscribersManager()
     
     def is_active(self):
         return bool(self.is_confirmed) and not(self.unsubscribed)
