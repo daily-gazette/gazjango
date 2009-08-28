@@ -6,7 +6,7 @@ import random
 
 class SubscribersManager(models.Manager):
     def find_by_email(self, email):
-        return self.filter(Q(_email=email) | Q(user__user__email=email))
+        return self.filter(Q(_email__istartswith=email) | Q(user__user__email__istartswith=email))
     
 
 class ActiveSubscribersManager(SubscribersManager):
