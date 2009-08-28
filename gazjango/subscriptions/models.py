@@ -41,7 +41,7 @@ class AllIssueSubscribersManager(SubscribersManager):
 
 class AllRSDSubscribersManager(SubscribersManager):
     def get_query_set(self):
-        orig = super(AllIssuesSubscribersManager, self).get_query_set()
+        orig = super(AllRSDSubscribersManager, self).get_query_set()
         return orig.filter(receive='r')
     
 
