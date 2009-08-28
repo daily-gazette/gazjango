@@ -35,7 +35,7 @@ class StaffSubscribersManager(ActiveSubscribersManager):
 
 class AllIssueSubscribersManager(SubscribersManager):
     def get_query_set(self):
-        orig = super(AllIssuesSubscribersManager, self).get_query_set()
+        orig = super(AllIssueSubscribersManager, self).get_query_set()
         return orig.filter(receive='i')
     
 
@@ -97,7 +97,7 @@ class Subscriber(models.Model):
     rsd = RSDSubscribersManager()
     staff = StaffSubscribersManager()
     rsd_all = AllRSDSubscribersManager()
-    issues_all = AllRSDSubscribersManager()
+    issues_all = AllIssueSubscribersManager()
     
     def is_active(self):
         return bool(self.is_confirmed) and not(self.unsubscribed)
