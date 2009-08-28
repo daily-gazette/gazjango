@@ -42,7 +42,7 @@ class SendingOutCommand(NoArgsCommand):
         subscriber.last_sent = self.sent_str
         subscriber.save()
     
-    def renew_connection(self, subscriber, retries=3, sleep_time=1):
+    def renew_connection(self, subscriber, retries=5, sleep_time_base=2):
         # close the old one
         self.connection.fail_silently = True
         self.connection.close()
@@ -54,7 +54,7 @@ class SendingOutCommand(NoArgsCommand):
                 self.connection.open()
             except socket.timeout:
                 self.add_error(subscriber, 'timeout while opening connection')
-                time.sleep(sleep_time)
+                time.sleep(sleep_time_base ** i)
             else:
                 return
     
