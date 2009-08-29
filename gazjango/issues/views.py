@@ -94,8 +94,8 @@ def show_rsd(request, year, month, day, plain=False):
     tomorrow = date + datetime.timedelta(days=1)
     comments = PublicComment.visible.filter(time__lt=tomorrow).order_by('-time')
     
-    base = Article.published.filter(pub_date__lt=tomorrow, is_racy=False)
-    t,m,l = Article.published.get_stories(num_top=3, num_mid=0, num_low=0, base=base)
+    # base = Article.published.filter(pub_date__lt=tomorrow, is_racy=False)
+    # t,m,l = Article.published.get_stories(num_top=3, num_mid=0, num_low=0, base=base)
     
     data = {
         'year': year, 'month': month, 'day': day,
@@ -105,7 +105,7 @@ def show_rsd(request, year, month, day, plain=False):
         'lost_and_found': lost_and_found.order_by('-date_start', 'pk'),
         'jobs': jobs,
         'comments': comments[:3],
-        'stories': t,
+        'stories': Article.published.order_by('-pub_date').filter(is_racy=False)[:3],
         'for_email': boolean_arg(request.GET.get('for_email', ''), False)
     }
     template = "issue/rsd." + ('txt' if plain else 'html')
