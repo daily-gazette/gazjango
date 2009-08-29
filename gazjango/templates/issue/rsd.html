@@ -420,7 +420,7 @@
                     <font size="2" face="Arial, Helvetica, sans-serif" color="black">
                       <br/>
                       {% for story in stories %}
-                        {{ forloop.counter }}. <a href="http://daily.swarthmore.edu{{story.get_absolute_url}}">{{story.get_title|safe}}</a>
+                        {{ forloop.counter }}. {{ story.section_if_special|follow:": " }}<a href="http://daily.swarthmore.edu{{story.get_absolute_url}}">{{story.get_title|safe}}</a>
                         <br /><br/>
                       {% endfor %}
                     </font>
