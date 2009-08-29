@@ -1,0 +1,15 @@
+{% ifequal obj.0 'a' %}
+  {{ obj.1.title }}
+{% else %}
+  {% ifequal obj.0 'p' %}
+    {{ obj.1.title }}
+  {% else %}
+    {% ifequal obj.0 'j' %}
+      {{ obj.1.name }}
+    {% else %}
+      {% ifequal obj.0 'e' %}
+        {{ obj.1.name }}
+      {% endifequal %}
+    {% endifequal %}
+  {% endifequal %}
+{% endifequal %}

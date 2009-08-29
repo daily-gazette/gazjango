@@ -1,0 +1,23 @@
+{% ifequal obj.0 'a' %}
+  {% with obj.1 as obj %}
+    {% include "feeds/announcement_description.html" %}
+  {% endwith %}
+{% else %}
+  {% ifequal obj.0 'p' %}
+    {% with obj.1 as obj %}
+      {% include "feeds/poster_description.html" %}
+    {% endwith %}
+  {% else %}
+    {% ifequal obj.0 'j' %}
+      {% with obj.1 as obj %}
+        {% include "feeds/job_description.html" %}
+      {% endwith %}
+    {% else %}
+      {% ifequal obj.0 'e' %}
+        {% with obj.1 as obj %}
+          {% include "feeds/establishment_description.html" %}
+        {% endwith %}
+      {% endifequal %}
+    {% endifequal %}
+  {% endifequal %}
+{% endifequal %}

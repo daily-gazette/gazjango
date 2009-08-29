@@ -2,11 +2,12 @@ from django.conf.urls.defaults import *
 from django.contrib            import admin
 from django.conf import settings
 
-from gazjango.articles.feeds   import MainFeed, LatestStoriesFeed, SectionFeed
-from gazjango.articles.feeds   import SectionLatestFeed, TameFeed
-from gazjango.accounts.forms   import RegistrationFormWithProfile
-from gazjango.jobs.feeds       import JobsFeed
-from gazjango.misc.url_helpers import reps
+from gazjango.articles.feeds      import MainFeed, LatestStoriesFeed, SectionFeed
+from gazjango.articles.feeds      import SectionLatestFeed, TameFeed
+from gazjango.announcements.feeds import AnnouncementsFeed, EventsFeed, NeedsApprovalFeed
+from gazjango.accounts.forms      import RegistrationFormWithProfile
+from gazjango.jobs.feeds          import JobsFeed
+from gazjango.misc.url_helpers    import reps
 
 admin.autodiscover()
 urlpatterns = patterns('',
@@ -25,6 +26,9 @@ feeds = {
     'jobs': JobsFeed,
     'dashboard': MainFeed,
     'faculty-dashboard': TameFeed,
+    'announcements': AnnouncementsFeed,
+    'events': EventsFeed,
+    'secret-lol_approval': NeedsApprovalFeed,
 }
 urlpatterns += patterns('',
     (r'^feeds/(?P<url>.*)(?:\.xml|\.rss|/)$', 'django.contrib.syndication.views.feed',

@@ -1,0 +1,7 @@
+{{ obj.get_establishment_display }} {% with obj.tag_names as tags %}{% if tags %}({{ tags }}){% endif %}{% endwith %}
+
+{{ obj.street_address }}
+{{ obj.city }}
+({{ obj.get_access_display }})
+{{ e.phone }}
+{% if e.link %}<a href="{{ e.link }}">{{ e.link }}</a>{% endif %}

@@ -1,8 +1,10 @@
 from django.db               import models
 from django.utils.safestring import mark_safe
-from gazjango.misc.helpers import set_default_slug
-from django.contrib.auth.models import User
-from gazjango.media.models             import MediaFile, ImageFile, MediaBucket
+from gazjango.misc.helpers   import set_default_slug
+
+from gazjango.accounts.models import UserProfile
+from gazjango.media.models    import MediaFile, ImageFile, MediaBucket
+
 import django.utils.html
 import datetime
 import re
@@ -62,6 +64,17 @@ class CommunityAnnouncementsManager(PublishedAnnouncementsManager):
         return orig.filter(kind='c')
     
 
+class EventsManager(CommunityAnnouncementsManager):
+    def get_query_set(self):
+        orig = super(EventsManager, self).get_query_set()
+        return orig.exclude(event_date=None)
+    
+
+class NonEventsManager(CommunityAnnouncementsManager):
+    def get_query_set(self):
+        orig = super(NonEventsManager, self).get_query_set()
+        return orig.filter(event_date=None)
+
 class AdminAnnouncementsManager(PublishedAnnouncementsManager):
     "A custom manager for dealing only with admin announcements."
     def get_query_set(self):
@@ -109,6 +122,8 @@ class Announcement(models.Model):
     published = PublishedAnnouncementsManager()
     staff = StaffAnnouncementsManager()
     community = CommunityAnnouncementsManager()
+    events = EventsManager()
+    nonevents = NonEventsManager()
     admin = AdminAnnouncementsManager()
     
     def is_event(self):
@@ -160,8 +175,12 @@ class Poster(models.Model):
     title       = models.CharField(max_length=100)
     poster      = models.ForeignKey(ImageFile, null=True, blank=True,help_text="The image which will be resized/cropped for various displays.")
     sponsor_url = models.URLField(blank=True, verify_exists=True)
-    sponsor_user= models.ForeignKey(User)
-
+    sponsor_user= models.ForeignKey(UserProfile)
+    
+    @property
+    def sponsor_name(self):
+        return self.sponsor_user.name
+    
     date_start = models.DateField(default=datetime.date.today)
     date_end   = models.DateField(default=datetime.date.today)
         
@@ -169,7 +188,11 @@ class Poster(models.Model):
     
     related_event = models.ForeignKey(Announcement)
     
+    objects = models.Manager()
     published = PublishedPosterManager()
+    
+    def __unicode__(self):
+        return self.title
     
 
 

@@ -163,4 +163,4 @@ def around_swarthmore(request,template = "listings/around/index.html"):
         'posters':Poster.published.get_n(1),
     }
     rc = RequestContext(request)
-    return render_to_response(template, data,context_instance=rc)
+    return render_to_response(template, data, context_instance=rc)

@@ -1,0 +1,8 @@
+{% load markup %}
+{{ obj.text|textile }}
+<a href="http://daily.swarthmore.edu{{ obj.get_absolute_url }}"><strong>{{ obj.title }}</strong></a><br />
+
+{% autoescape off %}
+	{{ obj.text|textile }}
+{% endautoescape %}
+{% if obj.poster_email %}Posted by {{ obj.poster_email }} &mdash;{% endif %} <a href="http://daily.swarthmore.edu{{ obj.get_absolute_url }}">Permanent Link</a>

@@ -1,0 +1,12 @@
+{% load markup %}
+{% load extras %}
+
+{{ obj.event_place }}, {{ obj.event_date|near_future_date }} at {{ obj.event_time }} <br />
+{% if obj.text %}
+	{% autoescape off %}
+	    <p>{{ obj.text|textile }}</p>
+    {% endautoescape %}
+{% endif %}
+
+{% if obj.sponsor %}<strong>Contact:</strong> {{ obj.sponsor_link }} <br /> {% endif %}
+<a href="http://daily.swarthmore.edu{{ obj.get_absolute_url }}">Permanent Link</a>
