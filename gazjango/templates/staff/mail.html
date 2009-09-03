@@ -6,7 +6,12 @@
     <title>The Daily Gazette :: Daily Email</title>
 </head>
 <body>
-THE DAILY GAZETTE'S DAILY STAFF MAILING<br />
+THE DAILY GAZETTE'S STAFF MAILING<br />
+{% if minutes %}
+============================================================<br />
+NOTES<br />
+{{ minutes.text|textile }}
+{% endif %}
 ============================================================<br />
 UPCOMING STORIES<br />
 (This list only includes unpublished stories.)<br />
@@ -30,10 +35,5 @@ UNCLAIMED STORIES<br />
 <p>{{ concept.name }}<br />
 {% if concept.notes_excerpt %}Notes: {{ concept.notes|textile|removetags:"p" }}<br />{% endif %}</p>
 {% endfor %}
-{% if minutes %}
-============================================================<br />
-NOTES<br />
-{{ minutes.text|textile }}
-{% endif %}
 </body>
 </html>
