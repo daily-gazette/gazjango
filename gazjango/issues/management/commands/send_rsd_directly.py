@@ -25,7 +25,7 @@ class Command(SendingOutCommand):
         now = datetime.datetime.now()
         # name = 'Morning' if now.hour < 12 else 'Afternoon'
         num = 'I' if now.hour < 13 else 'II'
-        return now.strftime("%%A, %%B %d´- %s" % (now.day, num))
+        return now.strftime("%%A, %%B %d - %s" % (now.day, num))
     
     def get_sent_str(self):
         now = datetime.datetime.now()
