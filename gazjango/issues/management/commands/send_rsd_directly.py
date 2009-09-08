@@ -6,7 +6,7 @@ from gazjango.subscriptions.models import Subscriber
 import datetime
 
 class Command(SendingOutCommand):
-    from_email = "RSD by the Daily Gazette <dailygazette@swarthmore.edu>"
+    from_email = "Reserved Students Digest <dailygazette@swarthmore.edu>"
     subscriber_base = Subscriber.rsd
     
     def set_content(self, dummy_request):
