@@ -43,4 +43,8 @@
   <div id="photo-block">
     {% include "stories/photo.html" %}
   </div>
+  
+  {% if story.text %}
+    {{ story.resolved_text|safe }}
+  {% endif %}
 {% endblock %}

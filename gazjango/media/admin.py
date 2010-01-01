@@ -30,12 +30,13 @@ class ImageFileAdminForm(forms.ModelForm):
 
 class ImageFileAdmin(admin.ModelAdmin):
     list_display = ('name', 'slug', 'bucket', 'credit')#, 'admin_thumbnail_view')
+    search_fields = ('name', 'slug', 'description')
     
     form = ImageFileAdminForm
     filter_horizontal = ('users',)
     fieldsets = (
         (None, {
-            'fields': ('name', 'bucket', 'data', 'description','front_is_tall')
+            'fields': ('name', 'bucket', 'data', 'description', 'front_is_tall')
         }),
         ('Authorship', {
             'fields': ('author_name', 'users', 'license_type', 'source_url')

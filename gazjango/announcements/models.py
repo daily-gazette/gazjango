@@ -17,8 +17,11 @@ class PublishedAnnouncementsManager(models.Manager):
     
     def now_running(self):
         "Returns published announcements which should now be shown."
-        t = datetime.date.today()
-        return self.filter(date_start__lte=t, date_end__gte=t).order_by('-date_start', '-date_end')
+        return self.running_on(datetime.date.today())
+    
+    def running_on(self, date, order=('-date_start', '-date_end')):
+        """Returns announcements that should be shown for `date`."""
+        return self.filter(date_start__lte=date, date_end__gte=date).order_by(*order)
     
     def get_n(self, n=3):
         "Returns the `n` announcements to be shown."
@@ -65,15 +68,23 @@ class CommunityAnnouncementsManager(PublishedAnnouncementsManager):
     
 
 class EventsManager(CommunityAnnouncementsManager):
+    "A manager for event announcements."
     def get_query_set(self):
         orig = super(EventsManager, self).get_query_set()
         return orig.exclude(event_date=None)
     
 
-class NonEventsManager(CommunityAnnouncementsManager):
+class RegularAnnouncementsManager(CommunityAnnouncementsManager):
+    "A manager for standard announcements (not lost-and-found or events)."
     def get_query_set(self):
         orig = super(NonEventsManager, self).get_query_set()
-        return orig.filter(event_date=None)
+        return orig.filter(event_date=None).filter(is_lost_and_found=False)
+
+class LostAndFoundManager(CommunityAnnouncementsManager):
+    "A manager that handles lost-and-found announcements."
+    def get_query_set(self):
+        orig = super(LostAndFoundManager, self).get_query_set()
+        return orig.filter(is_lost_and_found=True)
 
 class AdminAnnouncementsManager(PublishedAnnouncementsManager):
     "A custom manager for dealing only with admin announcements."
@@ -118,13 +129,14 @@ class Announcement(models.Model):
     
     is_published = models.BooleanField(default=False)
     
-    objects = models.Manager()
+    objects   = models.Manager()
     published = PublishedAnnouncementsManager()
-    staff = StaffAnnouncementsManager()
+    staff     = StaffAnnouncementsManager()
+    admin     = AdminAnnouncementsManager()
     community = CommunityAnnouncementsManager()
-    events = EventsManager()
-    nonevents = NonEventsManager()
-    admin = AdminAnnouncementsManager()
+    regular        = RegularAnnouncementsManager()
+    events         = EventsManager()
+    lost_and_found = LostAndFoundManager()
     
     def is_event(self):
         return bool(self.event_date)

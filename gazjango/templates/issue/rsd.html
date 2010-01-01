@@ -48,16 +48,6 @@
           <tr>
             <td width="1" bgcolor="#999999"></td>
             <td width="385" align="left" valign="top">
-	
-				<table width="385" border="0" cellspacing="0" cellpadding="10">
-                  <tr>
-                    <td>
-                      <font color="#333333" size="2" face="Georgia, Times New Roman, Times, serif">
-                        <strong>Possible change:</strong> We are considering altering the digest so the morning digest has <em>only events</em> while the afternoon digest has <em>only announcements</em>. Reply to this email if you have any thoughts or suggestions.
-                      </font>
-                    </td>
-                  </tr>
-                </table>
 
               {% if announcements %}
                 <table width="385" height="18" border="0" cellpadding="0" cellspacing="0" bgcolor="#a9aad7">
@@ -127,6 +117,35 @@
                 </table>
               {% endif %}
               
+              {% if jobs %}
+                <table width="385" height="18" border="0" cellpadding="0" cellspacing="0" bgcolor="#a9aad7">
+                  <tr>
+                    <td width="10" height="18" align="left" valign="middle"></td>
+                    <td width="375" align="left" valign="middle">
+                      <strong>
+                        <font color="#000000" size="2" face="Arial, Helvetica, sans-serif">
+                          Jobs
+                        </font>
+                      </strong>
+                    </td>
+                  </tr>
+                </table>
+
+                <table width="385" border="0" cellspacing="0" cellpadding="10">
+                  <tr>
+                    <td>
+                      <font color="#333333" size="2" face="Georgia, Times New Roman, Times, serif">
+                        {% for job in jobs %}
+                          {{ forloop.counter }}. <a href="#j{{ forloop.counter }}">{{ job.name }}</a><br />
+                        {% endfor %}
+                        
+                        <br /><a href="#top"><em>Return to top.</em></a>
+                      </font>
+                    </td>
+                  </tr>
+                </table>
+              {% endif %}
+              
               {% if lost_and_found %}
                 <br/>
                 <table width="385" height="18" border="0" cellpadding="0" cellspacing="0" bgcolor="#a9aad7">
@@ -156,35 +175,6 @@
                 </table>
               {% endif %}
               
-              {% if jobs %}
-                <table width="385" height="18" border="0" cellpadding="0" cellspacing="0" bgcolor="#a9aad7">
-                  <tr>
-                    <td width="10" height="18" align="left" valign="middle"></td>
-                    <td width="375" align="left" valign="middle">
-                      <strong>
-                        <font color="#000000" size="2" face="Arial, Helvetica, sans-serif">
-                          Jobs
-                        </font>
-                      </strong>
-                    </td>
-                  </tr>
-                </table>
-
-                <table width="385" border="0" cellspacing="0" cellpadding="10">
-                  <tr>
-                    <td>
-                      <font color="#333333" size="2" face="Georgia, Times New Roman, Times, serif">
-                        {% for job in jobs %}
-                          {{ forloop.counter }}. <a href="#j{{ forloop.counter }}">{{ job.name }}</a><br />
-                        {% endfor %}
-                        
-                        <br /><a href="#top"><em>Return to top.</em></a>
-                      </font>
-                    </td>
-                  </tr>
-                </table>
-              {% endif %}
-
               <table width="385" height="10" border="0" cellpadding="0" cellspacing="0">
                 <tr>
                   <td></td>
@@ -264,35 +254,6 @@
                     </td>
                   </tr>
                 {% endif %}
-                {% if lost_and_found %}
-                  <tr bgcolor="#a9aad7">
-                    <td width="10" height="18" align="left" valign="middle"></td>
-                    <td width="375" align="left" valign="middle">
-                      <strong>
-                        <font color="#000000" size="2" face="Arial, Helvetica, sans-serif">
-                          Lost &amp; Found
-                        </font>
-                      </strong>
-                    </td>
-                  </tr>
-                  <tr><td width="10" height="18" align="left" valign="middle"></td>
-                    <td>
-                      <font color="#333333" size="2" face="Georgia, Times New Roman, Times, serif">
-                        {% for announcement in lost_and_found %}
-                          {{ forloop.counter }}. <a href="http://daily.swarthmore.edu{{ announcement.get_absolute_url }}" name="lf{{ forloop.counter }}"><strong>{{ announcement.title }}</strong></a><br />
-                          {% autoescape off %}
-                            <p>{{ announcement.text|textile }}</p>
-                          {% endautoescape %}
-
-                          {% if announcement.sponsor %}<strong>Contact:</strong> {{ announcement.sponsor_link }} {% if announcement.poster_email %}({{ announcement.poster_email }}){% endif %} <br /> {% endif %}
-                          <a href="http://daily.swarthmore.edu{{ announcement.get_absolute_url }}">Permanent Link</a> <br />
-                          <a href="#top"><em>Return to top.</em></a><br /><br/>
-                        {% endfor %}
-                      </font>
-                    </td>
-                  </tr>
-                {% endif %}
-                
                 {% if jobs %}
                   <tr bgcolor="#a9aad7">
                     <td width="10" height="18" align="left" valign="middle"></td>
@@ -326,6 +287,34 @@
                           <br /><a href="#top"><em>Return to top.</em></a><br /><br/>
                         {% endfor %}
 
+                      </font>
+                    </td>
+                  </tr>
+                {% endif %}
+                {% if lost_and_found %}
+                  <tr bgcolor="#a9aad7">
+                    <td width="10" height="18" align="left" valign="middle"></td>
+                    <td width="375" align="left" valign="middle">
+                      <strong>
+                        <font color="#000000" size="2" face="Arial, Helvetica, sans-serif">
+                          Lost &amp; Found
+                        </font>
+                      </strong>
+                    </td>
+                  </tr>
+                  <tr><td width="10" height="18" align="left" valign="middle"></td>
+                    <td>
+                      <font color="#333333" size="2" face="Georgia, Times New Roman, Times, serif">
+                        {% for announcement in lost_and_found %}
+                          {{ forloop.counter }}. <a href="http://daily.swarthmore.edu{{ announcement.get_absolute_url }}" name="lf{{ forloop.counter }}"><strong>{{ announcement.title }}</strong></a><br />
+                          {% autoescape off %}
+                            <p>{{ announcement.text|textile }}</p>
+                          {% endautoescape %}
+
+                          {% if announcement.sponsor %}<strong>Contact:</strong> {{ announcement.sponsor_link }} {% if announcement.poster_email %}({{ announcement.poster_email }}){% endif %} <br /> {% endif %}
+                          <a href="http://daily.swarthmore.edu{{ announcement.get_absolute_url }}">Permanent Link</a> <br />
+                          <a href="#top"><em>Return to top.</em></a><br /><br/>
+                        {% endfor %}
                       </font>
                     </td>
                   </tr>

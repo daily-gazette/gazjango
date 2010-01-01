@@ -86,7 +86,7 @@ class PublishedArticlesManager(models.Manager):
         else:
             top_base = base.exclude(pub_date='2009-03-31')
             tops = list(top_base.filter(position='1').order_by('-pub_date')[:3])
-            tops = sorted(tops, key=lambda x: random.random())
+            random.shuffle(tops)
             if len(tops) < num_top:
                 cands = base.filter(possible_position='1').order_by('position', '-pub_date')
                 cands = cands.exclude(pk__in=[top.pk for top in tops])
@@ -96,7 +96,7 @@ class PublishedArticlesManager(models.Manager):
                 tops = tops[:num_top]
         
             exclude_pks = [top.pk for top in tops]
-            mids = base.filter(position__in=('1', '2')).exclude(pk__in=exclude_pks,pub_date='2009-03-31')
+            mids = base.filter(position__in=('1', '2')).exclude(pk__in=exclude_pks).exclude(pub_date='2009-03-31')
             mids = list(mids.order_by('-pub_date'))
             if len(mids) < num_mid:
                 cands = base.filter(possible_position__in=('1', '2'))
@@ -109,7 +109,7 @@ class PublishedArticlesManager(models.Manager):
                 mids = mids[:num_mid]
         
             exclude_pks = [el.pk for el in (tops + mids)]
-            lows = list(base.exclude(pk__in=exclude_pks,pub_date='2009-03-31').order_by('-pub_date')[:num_low])
+            lows = list(base.exclude(pk__in=exclude_pks).exclude(pub_date='2009-03-31').order_by('-pub_date')[:num_low])
             return [tops, mids, lows]
     
     def get_top_story(self):
@@ -147,9 +147,9 @@ class Article(models.Model):
     short_summary = models.CharField(max_length=150, blank=True,help_text="(Only needed for top stories, used in article footers.)")
     long_summary  = models.TextField(blank=True)
     
-    text   = models.TextField(help_text="""
+    text   = models.TextField(blank=True, help_text="""
     Links: &lt;a href="URL"&gt;Link text&lt;/a&gt;<br />
-    Placing images: &lt;div class="alignment size"&gt;&lt;img src="img://bucket/slug/" /&gt;by Photographer&lt;/div&gt;<br />
+    Placing images: &lt;div class="alignment size"&gt;&lt;img src="img://bucket/slug" /&gt;by Photographer&lt;/div&gt;<br />
     &nbsp;&nbsp;Alignment: either imgLeft or imgRight<br />
     &nbsp;&nbsp;Size: zero through fifty, in increments of five (ex. thirtyfive)<br />
     &nbsp;&nbsp;Bucket and Slug: From a previously uploaded image<br />
@@ -268,7 +268,7 @@ class Article(models.Model):
         it to links that will actually work.
         """
         text = self.formatted_text(revision)
-        if self.media.count() > 0 or re.search("<img", text, re.IGNORECASE):
+        if self.media.count() > 0 or re.search("<(a|img)", text, re.IGNORECASE):
             soup = BeautifulSoup(text)
             
             for image in soup.findAll("img", src=self._media_link):
@@ -309,7 +309,7 @@ class Article(models.Model):
                 m2m.add(media)
             except model.DoesNotExist:
                 try:
-                    media = model.get(bucket__slug='articles', slug=slug)
+                    media = model.objects.get(bucket__slug='articles', slug=slug)
                     m2m.add(media)
                 except model.DoesNotExist:
                     if complain:
@@ -379,7 +379,7 @@ class Article(models.Model):
                 special.save()
     
     def __unicode__(self):
-        return self.slug
+        return "%s (%s)" % (self.slug, self.pub_date.date())
     
     @models.permalink
     def get_absolute_url(self):

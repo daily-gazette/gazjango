@@ -40,8 +40,8 @@ def show_issue(request, issue, plain=False):
     data = {
         'issue': issue,
         'topstory': articles[0],
-        'midstories': articles[1:3],
-        'lowstories': articles[3:],
+        'midstories': articles[1:issue.num_full],
+        'lowstories': articles[issue.num_full:],
         'jobs': jobs,
         'comments': comments[:5],
         'for_email': boolean_arg(request.GET.get('for_email', ''), False)
@@ -70,48 +70,64 @@ def issues_list(request, year=None, month=None):
     return render_to_response("issue/issues_list.html", data, context_instance=rc)
 
 
-def rsd_now(request, plain=False):
-    today = datetime.date.today()
-    return show_rsd(request, today.year, today.month, today.day, plain)
 
-def show_rsd(request, year, month, day, plain=False):
-    date = datetime.date(int(year), int(month), int(day))
-    current = Announcement.community.filter(date_start__lte=date, date_end__gte=date)
-    
-    regular = current.filter(is_lost_and_found=False, event_date=None)
-    events = current.exclude(event_date=None)
-    lost_and_found = current.filter(is_lost_and_found=True)
-    
-    one_week = datetime.timedelta(days=7)
-    if date == datetime.date.today():
-        jobs = JobListing.unfilled.get_for_show(num=5, cutoff=one_week)
+def datify(year, month, day):
+    if not (year or month or day):
+        return datetime.date.today()
     else:
-        jobs = JobListing.published.get_for_show(num=5, base_date=date, cutoff=one_week)
+        try:
+            return datetime.date(int(year), int(month), int(day))
+        except ValueError:
+            raise Http404
+
+def show_rsd(request, year=None, month=None, day=None, plain=False, date=None):
+    return show_rsd_thing(request, date or datify(year, month, day), plain,
+            regular=True, lost_and_found=True, jobs=True)
+
+def show_events(request, year=None, month=None, day=None, plain=False, date=None):
+    return show_rsd_thing(request, date or datify(year, month, day), plain,
+            events=True)
+
+def show_combined(request, year=None, month=None, day=None, plain=False, date=None):
+    return show_rsd_thing(request, date or datify(year, month, day), plain,
+            regular=True, events=True, lost_and_found=True, jobs=True)
+
+def show_rsd_thing(request, date, plain=False,
+                   regular=False, events=False, lost_and_found=False, jobs=False):
+    """Show the RSD with some subset of sections."""
     
-    if not current.count() and not jobs.count():
+    if regular:
+        regular = Announcement.regular.running_on(date).order_by('-date_start', 'pk')
+    if events:
+        events = Announcement.events.running_on(date).order_by('event_date', 'event_time', 'pk')
+    if lost_and_found:
+        lost_and_found = Announcement.lost_and_found.running_on(date).order_by('-date_start', 'pk')
+    if jobs:
+        jobs = JobListing.published.get_for_show(num=5,
+            cutoff=datetime.timedelta(days=7),
+            base_date=date,
+            allow_filled=(date != datetime.date.today())
+        )
+    
+    if not any(x.count() if x else 0 for x in (regular, events, lost_and_found, jobs)):
         raise Http404
     
     tomorrow = date + datetime.timedelta(days=1)
     comments = PublicComment.visible.filter(time__lt=tomorrow).order_by('-time')
     
-    # base = Article.published.filter(pub_date__lt=tomorrow, is_racy=False)
-    # t,m,l = Article.published.get_stories(num_top=3, num_mid=0, num_low=0, base=base)
-    
+    order = lambda x, *ord: x.order_by(*ord) if x else []
     data = {
-        'year': year, 'month': month, 'day': day,
-        'date': date,
-        'announcements': regular.order_by('-date_start', 'pk'),
-        'events': events.order_by('event_date', 'event_time', 'pk'),
-        'lost_and_found': lost_and_found.order_by('-date_start', 'pk'),
-        'jobs': jobs,
+        'year': date.year, 'month': date.month, 'day': date.day, 'date': date,
+        'announcements': regular or [],
+        'events': events or [],
+        'jobs': jobs or [],
+        'lost_and_found': lost_and_found or [],
         'comments': comments[:3],
         'stories': Article.published.order_by('-pub_date').filter(is_racy=False)[:3],
-        'for_email': boolean_arg(request.GET.get('for_email', ''), False)
+        'for_email': boolean_arg(request.GET.get('for_email', ''), False),
     }
     template = "issue/rsd." + ('txt' if plain else 'html')
     return render_to_response(template, data)
-
-
 
 def menu_partial(request):
     if datetime.datetime.now().hour < 21:

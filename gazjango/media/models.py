@@ -47,7 +47,8 @@ class BaseFile(models.Model):
         ('p', 'Specific permission from the creator'),
         ('o', 'Other (note in description)'),
     )
-    license_type = models.CharField(max_length=1, choices=LICENSE_CHOICES, blank=False,
+    license_type = models.CharField(max_length=1, blank=False,
+                        choices=LICENSE_CHOICES, default='g',
                         help_text="Why is it okay for us to use this file?")
     source_url = models.URLField(blank=True, verify_exists=False)
     

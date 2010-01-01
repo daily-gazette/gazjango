@@ -1,7 +1,7 @@
 from datetime import datetime
 import urllib
 import logging
-import md5
+import hashlib
 import re
 
 from django.db import models
@@ -159,9 +159,7 @@ class FClient(object):
                         % (key, datum))
             data.append(datum)
         
-        md5_hash = md5.new()
-        md5_hash.update(''.join(data))
-        return md5_hash.hexdigest()
+        return hashlib.md5(''.join(data)).hexdigest()
 
     def encode_and_sign(self, **kwargs):
         '''URL encodes the data in the dictionary, and signs it using the

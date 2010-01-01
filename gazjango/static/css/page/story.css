@@ -125,7 +125,8 @@ RIGHT MENU STYLES
 	list-style-type: square;
 	margin: 0px 0px 0px 15px;
 	padding: 0 0 0px 10px;
-	font-size: 1.3em;	
+	font-size: 1.4em;	
+	text-align: justify;
 }
 
 #commentBox ul ul {

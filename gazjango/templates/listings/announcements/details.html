@@ -50,7 +50,7 @@
     {% endif %}
 
     {% autoescape off %}
-        <p>{{ announcement.text }}</p>
+        <p>{{ announcement.text|textile }}</p>
     {% endautoescape %}
 
 	{% if announcement.poster_set.all %}

@@ -261,6 +261,9 @@ class PublicComment(models.Model):
         except:
             return "<>"
     
+    def user_or_email(self):
+        return self.user or self.email or '[none]'
+    
     def __unicode__(self):
         return u"on %s by %s" % (self.subject.slug, self.display_name)
     

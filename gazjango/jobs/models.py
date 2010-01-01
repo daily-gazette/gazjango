@@ -10,7 +10,7 @@ class PublishedJobsManager(models.Manager):
         orig = super(PublishedJobsManager, self).get_query_set()
         return orig.filter(is_published=True)
     
-    def get_for_show(self, num=5, cutoff=None, base_date=None):
+    def get_for_show(self, num=5, cutoff=None, base_date=None, allow_filled=True):
         """
         Gets the `num` most recent unfilled jobs, but if there aren't
         that many, gets filled ones. 
@@ -31,6 +31,8 @@ class PublishedJobsManager(models.Manager):
             if isinstance(cutoff, datetime.timedelta):
                 cutoff = base_date - cutoff
             results = results.filter(pub_date__gte=cutoff)
+        if not allow_filled:
+            base = base.exclude(is_filled=True)
         return results[:num] if num else results
     
 

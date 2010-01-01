@@ -95,10 +95,20 @@ urlpatterns += patterns('issues.views',
     (r'^issue/preview/$',       'preview_issue'),
     (r'^issue/preview/plain/$', 'preview_issue', {'plain': True}),
     
-    (r'^rsd/$',                                         'rsd_now'),
-    (r'^rsd/plain/$',                                   'rsd_now', {'plain': True}),
+    (r'^rsd/$',                                         'show_rsd'),
+    (r'^rsd/plain/$',                                   'show_rsd', {'plain': True}),
     (r'^rsd/%(year)s/%(month)s/%(day)s/$'       % reps, 'show_rsd', {}, 'rsd'),
     (r'^rsd/%(year)s/%(month)s/%(day)s/plain/$' % reps, 'show_rsd', {'plain': True}),
+    
+    (r'^rsd-events/$',                                         'show_events'),
+    (r'^rsd-events/plain/$',                                   'show_events', {'plain': True}),
+    (r'^rsd-events/%(year)s/%(month)s/%(day)s/$'       % reps, 'show_events', {}, 'rsd'),
+    (r'^rsd-events/%(year)s/%(month)s/%(day)s/plain/$' % reps, 'show_events', {'plain': True}),
+    
+    (r'^rsd-full/$',                                         'show_combined'),
+    (r'^rsd-full/plain/$',                                   'show_combined', {'plain': True}),
+    (r'^rsd-full/%(year)s/%(month)s/%(day)s/$'       % reps, 'show_combined', {}, 'rsd'),
+    (r'^rsd-full/%(year)s/%(month)s/%(day)s/plain/$' % reps, 'show_combined', {'plain': True}),
     
     (r'^menu/$', 'menu_partial'),
     (r'^events/$', 'events_partial')
