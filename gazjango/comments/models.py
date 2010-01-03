@@ -169,8 +169,11 @@ class PublicComment(models.Model):
         self.score += sum(vote.value for vote in self.votes.all())
         self.save()
     
+    def num_upvotes(self):
+        return self.votes.filter(positive=True).count()
+    
     def is_staff(self):
-        return False if self.is_anonymous else self.user.is_staff
+        return not self.is_anonymous and self.user.s
     
     def status(self):
         if self.is_anonymous:
@@ -179,8 +182,8 @@ class PublicComment(models.Model):
             else:
                 return "Unregistered, Non-Swarthmore"
         else:
-            if self.user.is_staff:
-                return "Editor" if self.user.is_editor() else "Staff"
+            if self.user.staff_status():
+                return "Editor" if self.user.editor_status() else "Staff"
             elif is_from_swat(user=self.user, ip=self.ip_address):
                 return "Registered, Swarthmore"
             else:

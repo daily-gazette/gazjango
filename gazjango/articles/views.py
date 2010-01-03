@@ -1,6 +1,7 @@
-from collections                    import defaultdict
+from collections import defaultdict
 import datetime
 import calendar
+import heapq
 import re
 
 from django.contrib.auth.decorators import permission_required
@@ -204,54 +205,30 @@ def archives(request, section=None, subsection=None, year=None, month=None, day=
     return render_to_response(template, context_instance=rc)
 
 
-def homepage(request, template="index.html"):
+def homepage(request, social_len=7, template="index.html"):
     tops, mids, lows = Article.published.get_stories(num_top=2,num_mid=4, num_low=6)    
-            
-            
-    # creating the social stream
+    recent_comments = PublicComment.visible.order_by('-time')[:50]
     
-    entries = Entry.published.get_entries(num=20)
-    comments = PublicComment.visible.order_by('-time').all()[:20]
-
-    stream = sorted(
-       [("entry", entry) for entry in entries] + [("comment", comment) for comment in comments],
-       key=lambda (kind, obj): obj.timestamp if kind == "entry" else obj.time,
-       reverse=True
+    # creating the social stream
+    stream = heapq.nlargest(social_len,
+       [("entry", entry) for entry in Entry.published.get_entries(num=social_len)] +
+       [("comment", comment) for comment in recent_comments[:social_len]],
+       key=lambda (kind, obj): obj.timestamp if kind == "entry" else obj.time
     )
     
-    stream = stream[:7]
-    
     # getting the highlighted comment
-    comments = PublicComment.visible.order_by('-time').all()[:50]
-    top_score = -1
-    top_comment = None
-    for comment in comments:
-        score = 0
-        votes = comment.votes.all()
-        for vote in votes:
-            if vote.positive:
-                score = score + 1
-        if score > top_score:
-            top_score = score
-            top_comment = comment 
-            
+    top_comment = max(recent_comments, key=PublicComment.num_upvotes)            
             
     # getting comment list for facebook-style listings
-    
-    unsorted_comments = PublicComment.visible.order_by('-time').select_related(depth=1).all()[:20]
-    comment_list = defaultdict(lambda: [])
-    for comment in unsorted_comments:
-        comment_list[comment.subject].insert(0,comment)
+    comment_list = defaultdict(list)
+    for comment in recent_comments[:20]:
+        comment_list[comment.subject].insert(0, comment)
     sorted_comment_list = sorted(comment_list.values(), key=lambda lst: lst[-1].time, reverse=True)
     
-    
     # sorting events and announcements
-    qset = Announcement.community.order_by('-date_end', '-date_start')
-    events = qset.exclude(event_date=None)
-    events = events.order_by('event_date', 'event_time', 'pk')
-    non_events = qset.filter(event_date=None)
+    events = Announcement.events.order_by('event_date', 'event_time', 'pk')
+    announcements = Announcement.regular.order_by('-date_end', '-date_start')    
     
-                    
     data = {
         'topstories': tops,
         'midstories': mids,

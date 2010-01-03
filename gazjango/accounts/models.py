@@ -2,7 +2,7 @@ from django.db                  import models
 from django.db.models           import Q, permalink
 from django.contrib.auth.models import User
 from gazjango.misc.helpers import ip_from_swat
-from datetime              import datetime, date
+import datetime
 
 class UserKind(models.Model):
     """
@@ -104,6 +104,36 @@ class ProfilesManager(models.Manager):
                 return self.create_lite_user(first, last).username
             else:
                 raise
+    
+    def quick_create_user(self, username, first, last, year=None, kind='s', template='reporter'):
+        user = User.objects.create_user(username, username + '@swarthmore.edu')
+        user.first_name = first
+        user.last_name = last
+        if template == 'reporter':
+            user.is_staff = True
+            groups = ['Readers', 'Reporters']
+            pos = 'Staff Reporter'
+        elif template == 'photographer':
+            user.is_staff = True
+            groups = ['Readers', 'Photographers']
+            pos = 'Staff Photographer'
+        elif template == 'contributor':
+            groups = ['Readers', 'Contributor']
+            pos = 'Contributor'
+        elif template == 'columnist':
+            groups = ['Readers', 'Contributor']
+            pos = 'Columnist'
+        else:
+            raise Exception("unknown template %s" % template)
+        user.groups = [Group.objects.get(name=g) for g in groups]
+        user.save()
+        
+        d = {'kind': kind, 'year': year} if year else {'kind': kind}
+        kind, c = UserKind.objects.get_or_create(**d)
+        profile = UserProfile.objects.create(user=user, kind=kind)
+        profile.add_position(Position.objects.get(name=pos))
+        
+        return profile
         
 
 class UserProfile(models.Model):
@@ -123,8 +153,13 @@ class UserProfile(models.Model):
     
     facebook_id = models.IntegerField('Facebook User ID #', blank=True, null=True, unique=True)
     
-    def is_editor(self):
-        return self.current_positions().filter(is_editor=True).count() > 0
+    def staff_status(self, date=None):
+        "Returns whether the user holds a staff position (at `date`, or now)."
+        return self.positions_at(date).filter(staff_state__in=('s','e')).exists()
+    
+    def editor_status(self, date=None):
+        "Returns whether the user holds a staff position (at `date`, or now)."
+        return self.positions_at(date).filter(staff_state='e').exists()
     
     objects = ProfilesManager()
     
@@ -151,8 +186,10 @@ class UserProfile(models.Model):
     def published_articles(self):
         return self.articles.filter(status='p')
     
-    def positions_at(self, date):
+    def positions_at(self, date=None):
         """Returns the Positions the user had at the given date."""
+        if not date:
+            date = datetime.date.today()
         null_end = Q(holding__date_end__isnull = True)
         later_end = Q(holding__date_end__gte=date)
         started = Q(holding__date_start__lte=date)
@@ -160,7 +197,7 @@ class UserProfile(models.Model):
     
     def current_positions(self):
         "Returns Positions currently held by this user."
-        return self.positions_at(date.today())
+        return self.positions_at(datetime.date.today())
     
     def position_at(self, date):
         """Returns the highest-ranked of this user's Positions at date."""
@@ -171,7 +208,7 @@ class UserProfile(models.Model):
     
     def position(self):
         """Returns the highest-ranked of the user's Positions as of now."""
-        return self.position_at(date.today())
+        return self.position_at(datetime.date.today())
     
     
     def add_position(self, position, date_start=None, date_end=None):
@@ -179,7 +216,7 @@ class UserProfile(models.Model):
         Holding.objects.create(
             user_profile = self,
             position = position,
-            date_start = date_start or date.today(),
+            date_start = date_start or datetime.date.today(),
             date_end   = date_end
         )
     
@@ -211,12 +248,22 @@ class Position(models.Model):
     arts editor and a photographer, being arts editor takes precedence and will
     show up next to his name when he writes a story.
     
-    Also marks whether this position implies editorship.
+    Also marks whether this position implies staffhood or editorship.
     """
     
     name = models.CharField(max_length=40, unique=True)
     rank = models.IntegerField()
-    is_editor = models.BooleanField(default=False)
+    
+    STAFF_STATES = [
+        ('n', 'Non-Staff'),
+        ('s', 'Staff'),
+        ('e', 'Editor'),
+        ('x', 'Ex-Staff'),
+    ]
+    staff_state = models.CharField(length=1, choices=STAFF_STATES)
+    
+    is_staff = property(lambda self: self.staff_state in ('s', 'e'))
+    is_editor = property(lambda self: self.staff_state == 'e')
     
     def __unicode__(self):
         return self.name
@@ -232,7 +279,7 @@ class Holding(models.Model):
     
     user_profile = models.ForeignKey(UserProfile)
     position     = models.ForeignKey(Position)
-    date_start   = models.DateField(default=date.today)
+    date_start   = models.DateField(default=datetime.date.today)
     date_end     = models.DateField(null=True, blank=True)
     
     name = property(lambda self: self.position.name)

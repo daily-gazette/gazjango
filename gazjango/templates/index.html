@@ -37,7 +37,7 @@
 				{% for topstory in topstories %}
 			    <div class="imageElement" id="{{ forloop.counter }}">
 			    	<h3>{{ topstory.headline }}</h3>
-			        <p>{{ topstory.longest_summary|safe }}</p>
+			        <p>{{ topstory.shortest_summary|safe }}</p>
 			        <a href="{{ topstory.get_absolute_url }}" title="Read the full story" class="open"></a>
 			        <img src="{{ topstory.main_image.top_front.url }}" class="full" alt="Congresswoman discusses stimulus benefits for Cal Poly" />
 			        <img src="{{ topstory.main_image.top_front.url }}" class="thumbnail" alt="Congresswoman discusses stimulus benefits for Cal Poly" />
