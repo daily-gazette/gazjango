@@ -3,37 +3,25 @@ import logging
 
 log = logging.getLogger('community.sources')
 
-tree_modules_to_try =   [ "xml.etree.cElementTree", "elementtree.ElementTree", "cElementTree", ]
-element_tree = None
-
-for tree in tree_modules_to_try:
+try:
+    import xml.etree.cElementTree as element_tree
+except ImportError:
     try:
+        import elementtree.ElementTree as element_tree
+    except ImportError:
         try:
-            element_tree = __import__('%s' % tree, {}, {}, [''], -1)
-        except:
-            element_tree = __import__('%s' % tree, {}, {}, [''])
-        break
-    except ImportError, e:
-        continue
-    except Exception, e:
-        log.error("%s" % e)
-        raise
-
-if element_tree is None:
-    raise ImportError("No ElementTree found.")
+            import cElementTree as element_tree
+        except ImportError:
+            raise ImportError("No ElementTree found")
 log.debug("Using specified etree module: %s" % element_tree)
 
 def import_source_modules(source_list=settings.AGRO_SETTINGS['source_list'], class_name=''):
     sources = []
     for source in source_list:
+        log.debug('trying to load %s' % source)
         try:
-            log.debug('trying to load %s' % source)
-            try:
-                s = __import__("community.sources.%s" % source, {}, {}, ['%s%s' % (source, class_name)], -1)
-            except:
-                s = __import__("community.sources.%s" % source, {}, {}, ['%s%s' % (source, class_name)])
-            if s:
-                sources.append(s)
-        except Exception, e:
+            # CHANGED: make sure this works :)
+            sources.append(__import__("community.sources.%s" % source))
+        except ImportError as e:
             log.error('unable to load %s: %s', source, e)
     return sources
