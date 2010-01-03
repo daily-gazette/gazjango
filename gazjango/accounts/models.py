@@ -260,7 +260,7 @@ class Position(models.Model):
         ('e', 'Editor'),
         ('x', 'Ex-Staff'),
     ]
-    staff_state = models.CharField(length=1, choices=STAFF_STATES)
+    staff_state = models.CharField(max_length=1, choices=STAFF_STATES)
     
     is_staff = property(lambda self: self.staff_state in ('s', 'e'))
     is_editor = property(lambda self: self.staff_state == 'e')
