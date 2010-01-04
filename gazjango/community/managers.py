@@ -1,5 +1,7 @@
 from django.db import models
 
+import datetime
+
 class EntryManager(models.Manager):
     def get_of_type_for_user(self, types, usernames):
         "Get entries of type `types` from the users `usernames`."
