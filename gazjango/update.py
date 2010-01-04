@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 # TODO: turn this into a manage.py script
 from django.core.management import setup_environ
 from django.core.management import execute_manager
