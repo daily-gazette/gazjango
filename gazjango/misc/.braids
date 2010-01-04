@@ -1,0 +1,8 @@
+--- 
+python-textile: 
+  squashed: true
+  url: git://github.com/jsamsa/python-textile.git
+  branch: master
+  type: git
+  revision: 84bdad397c073fc9148696b7a6259021968e35fd
+  remote: braid/python-textile
