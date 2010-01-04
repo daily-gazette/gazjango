@@ -77,7 +77,7 @@ class EventsManager(CommunityAnnouncementsManager):
 class RegularAnnouncementsManager(CommunityAnnouncementsManager):
     "A manager for standard announcements (not lost-and-found or events)."
     def get_query_set(self):
-        orig = super(NonEventsManager, self).get_query_set()
+        orig = super(RegularAnnouncementsManager, self).get_query_set()
         return orig.filter(event_date=None).filter(is_lost_and_found=False)
 
 class LostAndFoundManager(CommunityAnnouncementsManager):
