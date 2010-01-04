@@ -48,7 +48,7 @@
 		<!-- Begin code for the 4 column section to the right of the Featured Content Gallery -->
 		<div id="homepage-section-wrap">
 			<!-- Begin Mid Columns -->	
-			{% for story in midstories %}
+			{% for story in stories %}
 				<div class="column">
 					<h4><a href="{{ story.section.get_absolute_url }}">{{ story.section.name }}</a></h4>
 					<h6><a href="{{ story.get_absolute_url }}" title="Permanent Link to {{ story.headline }}">{{ story.headline|slice:":40" }} ...</a></h6>

@@ -206,7 +206,6 @@ def archives(request, section=None, subsection=None, year=None, month=None, day=
 
 
 def homepage(request, social_len=7, template="index.html"):
-    tops, mids, lows = Article.published.get_stories(num_top=2,num_mid=4, num_low=6)    
     recent_comments = PublicComment.visible.order_by('-time')[:50]
     
     # creating the social stream
@@ -230,15 +229,14 @@ def homepage(request, social_len=7, template="index.html"):
     announcements = Announcement.regular.order_by('-date_end', '-date_start')    
     
     data = {
-        'topstories': tops,
-        'midstories': mids,
-        'lowstories': lows,
+        'topstories': Article.published.filter(position='1').order_by('-pub_date')[:4],
+        'stories': Article.published.order_by('-pub_date')[:4],
         
         'weather': Weather.objects.for_today(),
         'joke': WeatherJoke.objects.latest(),
         
         'specials': Special.objects.order_by('-date').all()[:10],
-        'announcements': non_events[:7],
+        'announcements': announcements[:7],
         'events':events[:5],
         'jobs': JobListing.published.get_for_show(3),
         
