@@ -71,17 +71,19 @@ class FuzzyRatioResize(processors.Resize):
 # = Story Front Images =
 # ======================
 
-class ResizeTopWideFront(FuzzyRatioResize):
-    width = 350
-    height_range = [120, 190]
+class ResizeTopWideFront(processors.Resize):
+    width = 425
+    height = 325
+    upscale = True
 
 class TopWideFront(ImageSpec):
     processors = [ResizeTopWideFront]
 
 
-class ResizeTopTallFront(FuzzyRatioResize):
-    width_range = [190, 250]
-    height = 320
+class ResizeTopTallFront(processors.Resize):
+    width = 425
+    height = 325
+    upscale = True
 
 class TopTallFront(ImageSpec):
     processors = [ResizeTopTallFront]
