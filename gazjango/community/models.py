@@ -24,7 +24,7 @@ class Entry(models.Model):
     # For Services
     owner_user = models.CharField(max_length=100, blank=True,
         help_text="Here we store the username used for the webservice, for this entry.")
-    url = models.URLField(verify_exists=False, blank=True,
+    url = models.URLField(verify_exists=False, max_length=300, blank=True,
         help_text="URL for the original item.")
     source_type = models.CharField(max_length=100, blank=True, default="post",
         help_text="Type of entry.")
