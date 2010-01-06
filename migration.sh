@@ -1,5 +1,7 @@
 ##### migration: v2009 => v2010
 
+# ALTER DATABASE gazette CHARACTER SET 'utf8';
+
 # convert to staff_state column for positions
 ./manage.py dbshell <<'SQL'
 BEGIN;
