@@ -43,7 +43,12 @@ class FlickrPhoto(Entry):
 
     @property
     def format_template(self):
-        return Template("<div class = 'entry photo'><a href='{{ curr_object.url }}'><img src='{{ curr_object.square }}' /> {{ curr_object.title }}</a></div>")
+        return Template("<div class='entry photo'>"
+                        "<a href='{{ curr_object.url }}'>"
+                            "<img src='{{ curr_object.square }}' />"
+                            "{{ curr_object.title }}"
+                        "</a>"
+                        "</div>")
     
     # image urls
     @property
@@ -68,9 +73,9 @@ class FlickrPhoto(Entry):
         return self._build_image_url('b')
 
     def _build_image_url(self, size=None):
-        if size in list('stmb'):
-            return "http://static.flickr.com/%s/%s_%s_%s.jpg" % (self.server, self.photo_id, self.secret, size)
-        return "http://static.flickr.com/%s/%s_%s.jpg" % (self.server, self.photo_id, self.secret)
+        size = '_' + size if size in 'stmb' else ''
+        return "http://static.flickr.com/%s/%s_%s%s.jpg" % \
+                (self.server, self.photo_id, self.secret, size)
 
 # retrieve function, this is how we handle items
 def retrieve(force, **args):
@@ -84,7 +89,8 @@ def retrieve(force, **args):
         log.info("Forcing update of all available photos")
     else:
         try:
-            last_update = FlickrPhoto.objects.filter(owner_user=username).order_by('-uploaded_at')[0].uploaded_at
+            last_update = FlickrPhoto.objects.filter(owner_user=username) \
+                                     .order_by('-uploaded_at')[0].uploaded_at
         except Exception, e:
             log.debug("%s", e)
 
@@ -176,27 +182,27 @@ def _handle_photo(flickr_obj, photo, user):
 
     log.info('working with photo => id: %s', photo_id)
 
-    info = flickr_obj.exe_method('photos.getInfo', photo_id=photo_id)['photo']
-    photo_obj, created = FlickrPhoto.objects.get_or_create(
-        photo_id    = photo_id,
-        timestamp   = datetime.fromtimestamp(utils.safeint(info["dates"]["posted"]))
-    )
-
-
-    photo_obj.taken_at    = photo['datetaken']
-    photo_obj.source_type = "flickrphoto"
-    photo_obj.timestamp   = datetime.fromtimestamp(utils.safeint(info["dates"]["posted"]))
-    photo_obj.uploaded_at = datetime.fromtimestamp(utils.safeint(info["dates"]["posted"]))
-    photo_obj.owner_user  = photo['owner']
-
     try:
-        photo_obj.url               = "http://www.flickr.com/photos/%s/%s" % (photo_obj.owner_user, photo_obj.photo_id)
-        photo_obj.server            = utils.safeint(smart_unicode(photo['server']))
-        photo_obj.taken_at          = photo['datetaken']
-        photo_obj.secret            = photo['secret']
-        photo_obj.title             = smart_unicode(photo['title'])
-        photo_obj.description       = smart_unicode(info['description']['_content'])
-        photo_obj.num_comments      = utils.safeint(info["comments"]["_content"])
+        info = flickr_obj.exe_method('photos.getInfo', photo_id=photo_id)['photo']
+        photo_obj, created = FlickrPhoto.objects.get_or_create(
+            photo_id    = photo_id,
+            timestamp   = datetime.fromtimestamp(utils.safeint(info["dates"]["posted"]))
+        )
+
+        photo_obj.taken_at    = photo['datetaken']
+        photo_obj.source_type = "flickrphoto"
+        photo_obj.timestamp   = datetime.fromtimestamp(utils.safeint(info["dates"]["posted"]))
+        photo_obj.uploaded_at = datetime.fromtimestamp(utils.safeint(info["dates"]["posted"]))
+        photo_obj.owner_user  = photo['owner']
+
+        photo_obj.url = "http://www.flickr.com/photos/%s/%s" % \
+                        (photo_obj.owner_user, photo_obj.photo_id)
+        photo_obj.server = utils.safeint(smart_unicode(photo['server']))
+        photo_obj.taken_at = photo['datetaken']
+        photo_obj.secret = photo['secret']
+        photo_obj.title = smart_unicode(photo['title'])
+        photo_obj.description = smart_unicode(info['description']['_content'])
+        photo_obj.num_comments = utils.safeint(info["comments"]["_content"])
         photo_obj.save()
     except Exception, e:
         log.error('%s' % e)
