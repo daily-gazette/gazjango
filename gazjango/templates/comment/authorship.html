@@ -7,12 +7,12 @@
       </em>
     {% else %}
       <em>This comment has not yet been approved by a site administrator.</em>
+      {% if perms.comments.change_publiccomment %}
+        [<a href="{{ comment.get_approve_url }}" class="approveLink">approve</a>]
+      {% endif %}
     {% endif %}
     
     [<a href="#" class='showLink'>show anyway</a>]
-    {% if perms.comments.change_publiccomment %}
-      [<a href="{{ comment.get_approve_url }}" class="approveLink">approve</a>]
-    {% endif %}
     <br/>
   </span>
 {% endif %}
