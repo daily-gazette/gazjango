@@ -15,8 +15,9 @@ from django.shortcuts           import render_to_response, get_object_or_404
 from gazjango.misc.view_helpers import get_by_date_or_404, filter_by_date, staff_required
 from gazjango.misc.view_helpers import get_ip, get_user_profile
 
-from gazjango.articles.models           import Article, Special, PhotoSpread, StoryConcept
-from gazjango.articles.models           import Section, Subsection, Column
+from gazjango.ads.models                import TextLinkAd
+from gazjango.articles.models           import Article, Special, PhotoSpread, StoryConcept, \
+                                               Section, Subsection, Column
 from gazjango.articles.forms            import SubmitStoryConcept,ConceptSaveForm
 from gazjango.announcements.models      import Announcement,Poster
 from gazjango.comments.models           import PublicComment
@@ -245,9 +246,7 @@ def homepage(request, social_len=7, num_tweets=2, template="index.html"):
         'jobs': JobListing.published.get_for_show(3),
         
         'bico_news': get_bico_news(),
-        'tla_links': get_tla_links(),
-        'manual_links': manual_links,
-        'lca_links': lca_links,
+        'text_link_ads': [ad.render() for ad in TextLinkAd.objects.all()],
         
         'stream':stream,
         'top_comment':top_comment,

@@ -148,8 +148,15 @@
 						<strong><a href="{{ event.get_absolute_url }}">{{ event.title }}</a></strong>: {{ event.event_date|near_future_date }} at {{ event.event_time }} at {{ event.event_place }}
 					</p>
 				{% endfor %}
-				text link ads
+				
+				<hr />
+				
+				<div class="tla">
+				{% autoescape off %}
+    				{{ text_link_ads|join:" | " }}
+    			{% endautoescape %}
+    			</div>
 			</div>
 		</div>
-				
+
 {% endblock content %}

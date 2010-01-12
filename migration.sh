@@ -29,6 +29,14 @@ SQL
 # add the community app
 ./manage.py sqlall community | ./manage.py dbshell
 
+# add the ads app
+./manage.py sqlall ads | ./manage.py dbshell
+./manage.py shell <<'ADS'
+from interactive_load import *
+TextLinkAd.objects.create(source='c', link='http://www.acairoots.com', text='acai')
+TextLinkAd.objects.create(source='c', link='http://www.r4-ds-card.ca', text='r4')
+ADS
+
 # add posters
 ./manage.py dbshell <<'SQL'
 BEGIN;
@@ -49,3 +57,6 @@ ALTER TABLE `announcements_poster` ADD CONSTRAINT `sponsor_user_id_refs_id_d23ac
 ALTER TABLE `announcements_poster` ADD CONSTRAINT `related_event_id_refs_id_344f307` FOREIGN KEY (`related_event_id`) REFERENCES `announcements_announcement` (`id`);
 COMMIT;
 SQL
+
+# makes sure that admin permissions are right, etc
+./manage.py syncdb

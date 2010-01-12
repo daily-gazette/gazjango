@@ -3081,3 +3081,13 @@ p.returntotop {
 	text-align: right;
 	font-size: .8em;
 }
+
+/** text link ads on the homepage */
+div.tla {
+    font-size: 7pt;
+/*    font-size: 1em;*/
+    color: #888;
+}
+div.tla a {
+    color: black;
+}

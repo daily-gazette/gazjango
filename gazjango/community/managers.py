@@ -57,3 +57,10 @@ class PublishedEntryManager(EntryManager):
     
     def get_tweets(self, base=None, num=3):
         return list((base or self).order_by('-timestamp').filter(source_type="tweet")[:num])
+
+class TweetsManager(PublishedEntryManager):
+    "A manager for tweets only."
+    
+    def get_query_set(self):
+        orig = super(TweetsManager, self).get_query_set()
+        return orig.filter(source_type='tweet')

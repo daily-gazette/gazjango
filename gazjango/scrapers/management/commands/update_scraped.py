@@ -9,10 +9,6 @@ class Command(LabelCommand):
         import gazjango.scrapers.bico
         gazjango.scrapers.bico.get_bico_news(override_cache=True)
     
-    def update_tla(self):
-        import gazjango.scrapers.tla
-        gazjango.scrapers.tla.get_tla_links(override_cache=True)
-    
     def update_events(self):
         Event.objects.update()
     
@@ -30,7 +26,6 @@ class Command(LabelCommand):
     def handle_label(self, label, **options):
         lookup = {
             'bico':     self.update_bico,
-            'tla':      self.update_tla,
             'events':   self.update_events,
             'menu':     self.update_menu,
             'weather':  self.update_weather,
