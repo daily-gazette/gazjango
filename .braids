@@ -1,4 +1,11 @@
 --- 
+django-registration: 
+  squashed: true
+  url: git://github.com/d00gs/django-registration.git
+  branch: master
+  type: git
+  revision: 807ba7182f4a648309fb31d4b8173fdb70a221da
+  remote: braid/django-registration
 gazjango/misc/python-textile: 
   squashed: true
   url: git://github.com/jsamsa/python-textile.git
