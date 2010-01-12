@@ -1,7 +1,8 @@
 import datetime
 
-from django.db         import models
-from django.db.models  import signals
+from django.contrib.contenttypes import generic
+from django.db                   import models
+from django.db.models            import signals
 
 from gazjango.accounts.models import UserProfile
 from gazjango.imagekit.models import ImageModel, ImageModelBase
@@ -123,6 +124,9 @@ class ImageFile(BaseFile, ImageModel):
                   "stories only. Should be about 50x80."
     )
     
+    ads = generic.GenericRelation('ads.BannerAd')
+    
+    
     class IKOptions:
         spec_module = 'media.image_specs'
         cache_dir = 'resized'
@@ -143,7 +147,7 @@ class ImageFile(BaseFile, ImageModel):
             return self.toptallfront if top else self.midtallfront
         else:
             return self.topwidefront if top else self.midwidefront
-                
+    
     top_front = property(get_front_image)
     mid_front = property(lambda self: self.get_front_image(top=False))
     poster    = property(lambda self: self.poster)
@@ -162,9 +166,20 @@ class ImageFile(BaseFile, ImageModel):
 # _update_front_is_tall = lambda sender, instance, **kwargs: instance.update_front_is_tall()
 # signals.pre_save.connect(_update_front_is_tall, sender=ImageFile)
 
+class OutsideMedia(BaseFile):
+    """
+    A media object to use for arbitrary things not connected to a FileField
+    at all. For, say, embedding YouTube videos or whatnot.
+    """
+    data = models.TextField(blank=True,
+        help_text='The HTML to insert the object. For a YouTube video or whatnot, '
+                  'you probably want to copy this from the "embed" link. For '
+                  'articles, it should be about 650px wide.')
+    
+    ads = generic.GenericRelation('ads.BannerAd')
 
-FILE_CLASSES = [MediaFile, ImageFile]
 
-_file_slugger = set_default_slug(lambda file: file.name)
-for file_class in FILE_CLASSES:
-    signals.pre_save.connect(_file_slugger, sender=file_class)
+MEDIA_CLASSES = [MediaFile, ImageFile, OutsideMedia]
+_name_slugger = set_default_slug(lambda obj: obj.name)
+for media_class in MEDIA_CLASSES:
+    signals.pre_save.connect(_name_slugger, sender=media_class)

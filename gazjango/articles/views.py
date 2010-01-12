@@ -15,7 +15,7 @@ from django.shortcuts           import render_to_response, get_object_or_404
 from gazjango.misc.view_helpers import get_by_date_or_404, filter_by_date, staff_required
 from gazjango.misc.view_helpers import get_ip, get_user_profile
 
-from gazjango.ads.models                import TextLinkAd
+from gazjango.ads.models                import TextLinkAd, BannerAd
 from gazjango.articles.models           import Article, Special, PhotoSpread, StoryConcept, \
                                                Section, Subsection, Column
 from gazjango.articles.forms            import SubmitStoryConcept,ConceptSaveForm
@@ -83,6 +83,8 @@ def show_article(request, story, form, print_view=False):
         'comment_form': form,
         'posters': Poster.published.get_n(1),
         'recent_stories':recent_stories,
+        
+        'top_banner': BannerAd.article_top.pick(allow_zero_priority=False),
     })
     return render_to_response(template, context_instance=context)
 
@@ -244,6 +246,7 @@ def homepage(request, social_len=7, num_tweets=2, template="index.html"):
         
         'bico_news': get_bico_news(),
         'text_link_ads': [ad.render() for ad in TextLinkAd.objects.all()],
+        'banner_ad': BannerAd.front.pick(),
         
         'stream':stream,
         'top_comment':top_comment,

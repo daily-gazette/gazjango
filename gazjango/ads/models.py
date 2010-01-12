@@ -1,5 +1,10 @@
 from django.db import models
+from django.utils.safestring import mark_safe
+
 from gazjango.ads import managers
+from gazjango.media.models import MediaFile, ImageFile, OutsideMedia
+
+import datetime
 
 class TextLinkAd(models.Model):
     SOURCES = [('t', 'TLA'), ('l', 'LinkWorth'), ('c', 'LiveCustomer')]
@@ -26,3 +31,58 @@ class TextLinkAd(models.Model):
     
     def __unicode__(self):
         return u"%s [%s]" % (self.text, self.get_source_display())
+    
+
+
+class BannerAd(models.Model):
+    SPACE_CHOICES = [('f', "Front Page"), ('t', "Article Top Banner")]
+    space = models.CharField(max_length=1, choices=SPACE_CHOICES)
+    
+    publisher = models.CharField(max_length=100)
+    link = models.URLField(blank=True, verify_exists=True)
+    description = models.TextField(blank=True)
+    
+    TYPE_CHOICES = [('i', "Image"), ('o', "Outside Media")]
+    render_type = models.CharField(max_length=1, choices=TYPE_CHOICES)
+    image = models.ForeignKey(ImageFile, null=True, blank=True)
+    outside = models.ForeignKey(OutsideMedia, null=True, blank=True)
+    
+    @property
+    def media(self):
+        if self.render_type == 'i':
+            return self.image
+        elif self.render_type == 'o':
+            return self.outside
+    
+    date_start = models.DateField(default=datetime.date.today,
+        help_text="First day for the ad to run.")
+    date_end   = models.DateField(default=datetime.date.today,
+        help_text="Last day for the ad to run.")
+    
+    priority = models.FloatField(default=1,
+        help_text="The priority with which this ad should appear; an ad of priority "
+                  "2 will show up twice as often as one with priority 1. An ad with "
+                  "a priority of 0 will only be picked if there are no ads with "
+                  "nonzero priority.")
+    
+    objects = managers.BannerAdsManager()
+    front = managers.FrontPageAdsManager()
+    article_top = managers.ArticleTopBannerAdsManager()
+    
+    def display(self):
+        if self.render_type == 'i':
+            s = '<img src="%(url)s" alt="%(name)s" title="%(name)s" />' % {
+                'url': getattr(self.image, 'bannerad%s' % self.space).url,
+                'name': self.publisher.replace('"', '\\"')
+            }
+            if self.link:
+                s = '<a href="%s">%s</a>' % (self.link, s)
+        elif self.render_type == 'o':
+            s = self.outside.data
+        else:
+            raise ValueError("invalid content type for this ad's media")
+        return mark_safe(s) # make sure this gets rendered as raw html in templates
+    
+    def __unicode__(self):
+        return self.slug
+    

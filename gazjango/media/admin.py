@@ -1,6 +1,7 @@
+from django import forms
 from django.contrib import admin
-from django         import forms
-from gazjango.media.models import MediaFile, ImageFile, MediaBucket
+
+from gazjango.media.models import MediaFile, ImageFile, OutsideMedia, MediaBucket
 from gazjango.misc.helpers import find_unique_name
 
 class MediaBucketAdmin(admin.ModelAdmin):
@@ -13,11 +14,19 @@ class MediaFileAdmin(admin.ModelAdmin):
 admin.site.register(MediaFile, MediaFileAdmin)
 
 
+class OutsideMediaAdmin(admin.ModelAdmin):
+    list_display = ('name', 'slug', 'bucket')
+    filter_horizontal = ('users',)
+admin.site.register(OutsideMedia, OutsideMediaAdmin)
+
 class ImageFileAdminForm(forms.ModelForm):
     class Meta:
         model = ImageFile
     
-    description = forms.CharField(widget=forms.Textarea(attrs={'rows': 3, 'cols': 60}))
+    description = forms.CharField(
+        widget=forms.Textarea(attrs={'rows': 3, 'cols': 60}),
+        required=False,
+    )
     
     def clean_slug(self):
         if self.cleaned_data['slug']:
@@ -27,6 +36,7 @@ class ImageFileAdminForm(forms.ModelForm):
             )
         return self.cleaned_data['slug']
     
+
 
 class ImageFileAdmin(admin.ModelAdmin):
     list_display = ('name', 'slug', 'bucket', 'credit')#, 'admin_thumbnail_view')
@@ -52,4 +62,3 @@ class ImageFileAdmin(admin.ModelAdmin):
     )
     prepopulated_fields = { 'slug': ('name',) }
 admin.site.register(ImageFile, ImageFileAdmin)
-

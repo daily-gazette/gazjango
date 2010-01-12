@@ -1,5 +1,8 @@
-from django.db import models
+from django.db import models, IntegrityError
+from django.conf import settings
 
+import datetime
+import random
 import urllib2
 try:
     from xml.etree import cElementTree as etree
@@ -9,7 +12,6 @@ except ImportError:
 
 class TextLinkAdsManager(models.Manager):
     source = None
-    
     def get_query_set(self):
         orig = super(TextLinkAdsManager, self).get_query_set()
         return orig.filter(source=self.source) if self.source else orig
@@ -85,3 +87,57 @@ class LiveCustomerAdsManager(TextLinkAdsManager):
     # no web feed for this one, it's manual
     def update(self):
         return True
+
+
+
+class BannerAdsManager(models.Manager):
+    space = None
+    def get_query_set(self):
+        orig = super(BannerAdsManager, self).get_query_set()
+        return orig.filter(space=self.space) if self.space else orig
+    
+    def create(self, *args, **kwargs):
+        if self.space:
+            kwargs.setdefault('space', self.space)
+            if kwargs['space'] != self.space:
+                s = "manager is for space '%s'; can't make for requested space '%s'"
+                raise ValueError(s % (self.space, kwargs['space']))
+        else:
+            if not kwargs.get('space', None):
+                raise IntegrityError('space cannot be null')
+        return super(BannerAdsManager, self).create(*args, **kwargs)
+    
+    def get_running(self, date=None):
+        if not date:
+            date = datetime.date.today()
+        return self.filter(date_start__lte=date, date_end__gte=date)
+    
+    def pick(self, date=None, allow_zero_priority=True):
+        "Pick an ad running at `date`/now according to their priorities."
+        # get the candidates and their weights
+        candidates = self.get_running(date=date)
+        nonzero_priority = candidates.exclude(priority=0)
+        zero_priority = candidates.filter(priority=0)
+        
+        # choose a "priority index" and go to it in the cand list
+        total_priority = sum(cand.priority for cand in nonzero_priority)
+        if total_priority == 0:
+            if not allow_zero_priority:
+                return None
+            try:
+                return random.choice(zero_priority)
+            except IndexError:
+                raise BannerAd.DoesNotExist
+        
+        pri_left = random.random() * total_priority # in [0, total_priority)
+        for cand in candidates:
+            if cand.priority >= pri_left:
+                return cand
+            pri_left -= cand.priority
+    
+
+class FrontPageAdsManager(BannerAdsManager):
+    space = 'f'
+
+class ArticleTopBannerAdsManager(BannerAdsManager):
+    space = 't'

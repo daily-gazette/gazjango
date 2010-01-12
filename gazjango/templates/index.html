@@ -98,7 +98,7 @@
 				<h5 class="popcomment"><strong>Popular Comment:</strong> "{{ top_comment.text|safe|slice:":83" }} ..." — <a href="{{top_comment.get_absolute_url}}">{{ top_comment.display_name }}</a>, discussing <a href="{{top_comment.subject.get_absolute_url}}">{{ top_comment.subject.get_title }}</a>.</h5>
 			</div>
 			<div class="bottom-third">
-				<a href="http://www.swarthmore.coop"><img src="{% static images ads/coop-index-230.png %}" alt="The Swarthmore Food Cooperative" /></a>
+			    {{ banner_ad.display }}
 			</div>
 		</div>
 		<div class="bottom-box">

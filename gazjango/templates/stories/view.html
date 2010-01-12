@@ -27,23 +27,22 @@
 				{% ifequal story.subsection.name "April Fools" %}{% else %}&raquo; <a href="{{ story.subsection.get_absolute_url }}">{{ story.subsection.name }}</a>{% endifequal %}
 			{% endif %}
 		</div>
-		<!-- End breadcrumb code -->
-	
-		<!-- Begin code for The Loop -->			
-			<h1 class="article-title">{{ story.headline|safe }}</h1>
-				
-				<div style="clear:both"></div>
+		    
+		
+		{% block above-headline %}
+		  {% if top_banner %}{{ top_banner.display }}{% endif %}
+		{% endblock %}
+		
+		<h1 class="article-title">{{ story.headline|safe }}</h1>		
+		<div style="clear:both"></div>
+
+		{% block story-content %}
+            {{ story.resolved_text|safe }}
+  		{% endblock %}
 			
-			<!-- Begin IMPORTANT code that pulls article content. DO NOT DELETE -->
-			<p>
-				{% block story-content %}
-	        		{{ story.resolved_text|safe }}
-	      		{% endblock %}
-			</p>
-			
-			{% for poll in story.polls.all %}
-		      {% include "polls/listing.html" %}
-		    {% endfor %}
+		{% for poll in story.polls.all %}
+            {% include "polls/listing.html" %}
+	    {% endfor %}
 		
 			<!-- End IMPORTANT code -->
 						

@@ -6,65 +6,65 @@ from imagekit.specs import ImageSpec
 # =============================
 # = Custom Resizing Processor =
 # =============================
-
-def _resize(image, obj=None, width=None, height=None, crop=False, upscale=False):
-    return type('RegularResize', (processors.Resize,), {
-        'width': width,
-        'height': height,
-        'crop': crop,
-        'upscale': upscale,
-    }).process(image, obj)
-
-class ProcessorImproperlyConfigured(Exception):
-    pass
-
-class FuzzyRatioResize(processors.Resize):
-    """
-    Has one "set" dimension and one "fuzzy" dimension:
-        width = 350
-        height_range = [130, 200]
-    If a rescale would put us in that range, just do that; otherwise,
-    we crop so that we lie within said range.
-    """
-    width = None
-    height = None
-    width_range = None
-    height_range = None
-    upscale = False
-    
-    @classmethod
-    def process(cls, image, obj=None):
-        cur_width, cur_height = image.size
-        if cls.width:
-            if cls.width_range or cls.height or not cls.height_range:
-                raise ProcessorImproperlyConfigured
-            
-            ratio = float(cls.width) / cur_width
-            min_height, max_height = cls.height_range
-            desired_height = max(min(ratio * cur_height, max_height), min_height)
-            
-            return _resize(image, obj,
-                width=cls.width,
-                height=desired_height,
-                crop=True,
-                upscale=cls.upscale
-            )
-        elif cls.height:
-            if cls.height_range or cls.width or not cls.width_range:
-                raise ProcessorImproperlyConfigured
-            
-            ratio = float(cls.height) / cur_height
-            min_width, max_width = cls.width_range
-            desired_width = max(min(ratio * cur_width, max_width), min_width)
-            
-            return _resize(image, obj,
-                width=desired_width,
-                height=cls.height,
-                crop=True,
-                uspcale=cls.upscale
-            )
-        else:
-            raise ProcessorImproperlyConfigured
+# 
+# def _resize(image, obj=None, width=None, height=None, crop=False, upscale=False):
+#     return type('RegularResize', (processors.Resize,), {
+#         'width': width,
+#         'height': height,
+#         'crop': crop,
+#         'upscale': upscale,
+#     }).process(image, obj)
+# 
+# class ProcessorImproperlyConfigured(Exception):
+#     pass
+# 
+# class FuzzyRatioResize(processors.Resize):
+#     """
+#     Has one "set" dimension and one "fuzzy" dimension:
+#         width = 350
+#         height_range = [130, 200]
+#     If a rescale would put us in that range, just do that; otherwise,
+#     we crop so that we lie within said range.
+#     """
+#     width = None
+#     height = None
+#     width_range = None
+#     height_range = None
+#     upscale = False
+#     
+#     @classmethod
+#     def process(cls, image, obj=None):
+#         cur_width, cur_height = image.size
+#         if cls.width:
+#             if cls.width_range or cls.height or not cls.height_range:
+#                 raise ProcessorImproperlyConfigured
+#             
+#             ratio = float(cls.width) / cur_width
+#             min_height, max_height = cls.height_range
+#             desired_height = max(min(ratio * cur_height, max_height), min_height)
+#             
+#             return _resize(image, obj,
+#                 width=cls.width,
+#                 height=desired_height,
+#                 crop=True,
+#                 upscale=cls.upscale
+#             )
+#         elif cls.height:
+#             if cls.height_range or cls.width or not cls.width_range:
+#                 raise ProcessorImproperlyConfigured
+#             
+#             ratio = float(cls.height) / cur_height
+#             min_width, max_width = cls.width_range
+#             desired_width = max(min(ratio * cur_width, max_width), min_width)
+#             
+#             return _resize(image, obj,
+#                 width=desired_width,
+#                 height=cls.height,
+#                 crop=True,
+#                 uspcale=cls.upscale
+#             )
+#         else:
+#             raise ProcessorImproperlyConfigured
     
 
 # ======================
@@ -88,26 +88,26 @@ class ResizeTopTallFront(processors.Resize):
 class TopTallFront(ImageSpec):
     processors = [ResizeTopTallFront]
 
-
-class ResizeMidWideFront(FuzzyRatioResize):
-    width = 280
-    height_range = [100, 150]
-
-class MidWideFront(ImageSpec):
-    processors = [ResizeMidWideFront]
-
-
-class ResizeMidTallFront(FuzzyRatioResize):
-    width = 90
-    height_range = [145, 185]
-
-class MidTallFront(ImageSpec):
-    processors = [ResizeMidTallFront]
-
-class ResizePoster(FuzzyRatioResize):
+# class ResizeMidWideFront(FuzzyRatioResize):
+#     width = 280
+#     height_range = [100, 150]
+# 
+# class MidWideFront(ImageSpec):
+#     processors = [ResizeMidWideFront]
+# 
+# 
+# class ResizeMidTallFront(FuzzyRatioResize):
+#     width = 90
+#     height_range = [145, 185]
+# 
+# class MidTallFront(ImageSpec):
+#     processors = [ResizeMidTallFront]
+# 
+class ResizePoster(processors.Resize): #FuzzyRatioResize):
     width = 400
-    height_range = [450,550]
-    
+    height = 500
+    #height_range = [450,550]
+
 class Poster(ImageSpec):
     processors = [ResizePoster]
 
@@ -154,6 +154,28 @@ class ResizeAdminThumb(processors.Resize):
 
 class AdminThumb(ImageSpec):
     processors = [ResizeAdminThumb]
+
+# ==============
+# = Banner Ads =
+# ==============
+
+# note that these classes *must* be named BannerAd*, where * is the letter
+# from gazjango.ads.models.BannerAd.SPACE_CHOICES
+
+class ResizeFrontAd(processors.Resize):
+    width = 230
+    height = 115
+
+class BannerAdF(ImageSpec):
+    processors = [ResizeFrontAd]
+
+
+class ResizeWideBanner(processors.Resize):
+    width = 646
+    height = 100
+
+class BannerAdT(ImageSpec):
+    processors = [ResizeWideBanner]
 
 # ================
 # = Other Images =
