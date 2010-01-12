@@ -28,10 +28,7 @@ from gazjango.accounts.models           import UserProfile
 from gazjango.community.models          import Entry
 from gazjango.community.sources.flickr  import FlickrPhoto
 
-
 from gazjango.scrapers.bico         import get_bico_news
-from gazjango.scrapers.tla          import get_tla_links
-from gazjango.scrapers.manual_links import manual_links, lca_links
 
 def article(request, slug, year, month, day, num=None, form=None, print_view=False):
     "Base function to call for displaying a given article."
@@ -269,9 +266,9 @@ def april_fools(request, template="aprilfools.html"):
         'lowstories': lows,
         'announcements': Announcement.community.get_n(3),
         'bico_news': get_bico_news(),
-        'tla_links': get_tla_links(),
-        'manual_links': manual_links,
-        'lca_links': lca_links,
+        # 'tla_links': get_tla_links(),
+        # 'manual_links': manual_links,
+        # 'lca_links': lca_links,
     }
     rc = RequestContext(request)
     return render_to_response(template, data, context_instance=rc)
