@@ -159,9 +159,7 @@ urlpatterns += patterns('django.contrib.auth.views',
 urlpatterns += patterns('',
     (r'^accounts/logout/$', 'accounts.views.logout', {'next_page': '/'}, 'logout'),
     (r'^accounts/manage/$', 'accounts.views.manage', {}, 'manage-user'),
-    (r'^accounts/register/$', 'registration.views.register', { 'form_class': RegistrationFormWithProfile }, 'register'),
-    
-    (r'^accounts/', include('registration.urls')),
+    (r'^accounts/', include('accounts.registration_urls')),
     
     (r'^users/%(name)s/$'  % reps, 'accounts.views.user_details', {}, 'user-details'),
     (r'^author/%(name)s/$' % reps, 'accounts.views.user_details')
