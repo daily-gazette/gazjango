@@ -205,13 +205,17 @@ def archives(request, section=None, subsection=None, year=None, month=None, day=
     return render_to_response(template, context_instance=rc)
 
 
-def homepage(request, social_len=7, template="index.html"):
+def homepage(request, social_len=7, num_tweets=2, template="index.html"):
     recent_comments = PublicComment.visible.order_by('-time')[:50]
     
     # creating the social stream
+    non_tweets = Entry.published.get_entries(num=social_len, exclusion="tweet")
+    tweets = Entry.published.get_entries(num=num_tweets, category="tweet")
+    
     stream = heapq.nlargest(social_len,
-       [("entry", entry) for entry in Entry.published.get_entries(num=social_len)] +
-       [("comment", comment) for comment in recent_comments[:social_len]],
+       [("entry", entry) for entry in non_tweets] +
+       [("entry", entry) for entry in tweets] +
+       [("comment", comment) for comment in recent_comments[:2]],
        key=lambda (kind, obj): obj.timestamp if kind == "entry" else obj.time
     )
     
