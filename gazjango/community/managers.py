@@ -49,7 +49,7 @@ class PublishedEntryManager(EntryManager):
         if category:
             entries = entries.filter(source_type=category)
         if exclusion:
-            entries = entries.filter(source_type=exclusion)
+            entries = entries.exclude(source_type=exclusion)
         return list(entries[:num])
     
     def get_photos(self, base=None, num=3):
