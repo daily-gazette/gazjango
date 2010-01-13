@@ -146,7 +146,12 @@ class PublicComment(models.Model):
     
     def check_for_spam(self):
         "Checks whether the comment is spam."
-        return self._akismet_framework(akismet.Akismet.comment_check)
+        try:
+            return self._akismet_framework(akismet.Akismet.comment_check)
+        except akismet.APIKeyError:
+            raise
+        except akismet.AkismetError:
+            return 'dunno' # will ask for a CAPTCHA, but is distinguishable
     
     def mark_as_spam(self):
         "Marks a comment which Akismet said was good as spam, then delete it."
