@@ -3,6 +3,7 @@ from django.conf import settings
 from django.db.models import signals
 from django.template.defaultfilters import slugify
 import datetime
+import re
 
 def is_from_swat(user=None, ip=None):
     if user:
@@ -88,26 +89,38 @@ def set_default_slug(namer, extra_limits=lambda x: {}):
     return _func
 
 
+WORD_BREAKS = re.compile(r'[-.,_\s]+')
 def smart_truncate(string, length, min_length_diff=8):
     """
     Truncates `string` to be no longer than `length`, but no shorter than
-    `length`-`min_length_diff`. Tries to do so at a word boundary (defined
-    simply by the presence of a space).
+    `length`-`min_length_diff`. Tries to do so at a word boundary, cutting
+    off terminal punctuation.
     
     >>> test = lambda *args: (lambda k: (k, len(k)))(smart_truncate(*args))
-    >>> s = "this is some text"
-    >>> test(s, 17)
+    >>> test("this is some text", 17)
     ('this is some text', 17)
-    >>> test(s, 15)
+    >>> test("this is some text", 15)
     ('this is some...', 15)
-    >>> test(s, 14)
+    >>> test("this is some text", 14)
     ('this is...', 10)
-    >>> test(s, 14, 3) # don't let it cut more than 3 chars
+    >>> test("this is some text", 14, 3) # don't let it cut more than 3 chars
     ('this is som...', 14)
+    >>> test("this is some, comma splicing", 17)
+    ('this is some...', 15)
+    >>> test("this is some, comma splicing", 15)
+    ('this is some...', 15)
     """
     if len(string) <= length or string.endswith('...'):
         return string
-    # find the rightmost appropriate space, accounting for the '...'
+    
+    # we'll need to add a '...', so we're effectively trimming it 3 shorter
     length -= 3
-    i = string.rfind(' ', length-min_length_diff, length+1)
-    return string[:(length if i == -1 else i)] + '...'
+    
+    # find the rightmost end-of-word
+    rev = ''.join(reversed(string[:length+1]))
+    match = WORD_BREAKS.search(rev, endpos=min_length_diff)
+    if match:
+        i = match.end()
+        if i <= min_length_diff: # we're trimming an acceptable amount
+            return string[:(length+1-i)] + '...'
+    return string[:length] + '...'
