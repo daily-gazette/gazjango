@@ -15,6 +15,7 @@ from gazjango.articles.models.specials import Special
 from gazjango.comments.models          import PublicComment
 from gazjango.diff_match_patch.diff_match_patch import diff_match_patch
 from gazjango.media.models             import MediaFile, ImageFile, MediaBucket
+from gazjango.misc.helpers             import smart_truncate
 from gazjango.misc.exceptions          import RelationshipMismatch
 from gazjango.misc.templatetags.extras import join_authors
 from gazjango.scrapers.BeautifulSoup   import BeautifulSoup
@@ -144,7 +145,7 @@ class Article(models.Model):
               help_text="(If this story was assigned via a Story Concept, pick which one so we know you've started work on it.)")
     
     summary = models.TextField()
-    short_summary = models.CharField(max_length=150, blank=True,help_text="(Only needed for top stories, used in article footers.)")
+    short_summary = models.CharField(max_length=210, blank=True,help_text="For the front page...make it look good!")
     long_summary  = models.TextField(blank=True)
     
     text   = models.TextField(blank=True, help_text="""
@@ -213,6 +214,9 @@ class Article(models.Model):
     def shortest_summary(self):
         """Returns short_summary if we have it, else summary."""
         return (self.short_summary or self.summary)
+    
+    def get_short_summary(self):
+        return self.short_summary or smart_truncate(self.summary, 210)
     
     def is_photospread(self):
         try:

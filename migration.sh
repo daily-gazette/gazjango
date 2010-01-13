@@ -5,6 +5,8 @@
 # add missing apps/tables
 ./manage.py syncdb
 
+# TODO: extend articles_article.short_summary to 210 chars
+
 # convert to staff_state column for positions
 ./manage.py dbshell <<'SQL'
 BEGIN;

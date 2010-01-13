@@ -16,44 +16,46 @@
 <link rel="stylesheet" href="{% static v2 css/slideshow.css %}" type="text/css" media="screen" />
 <script type="text/javascript" src="{% static v2 js/suckerfish.js%}"></script>	
 
+<script type="text/javascript">
+	function startGallery() {
+		var myGallery = new gallery($('myGallery'), {
+			timed: true,
+			defaultTransition: "fadeslideleft"
+		});
+	}
+	window.onDomReady(startGallery);
+</script>
 
 {% endblock customheader %}
-{% block content %}
-	<!-- Below controls the main content of the homepage -->
-	<div id="homepagecontent">
-		<!-- Begin code for the Featured Content Gallery -->
-		<div class="featured">
-			<script type="text/javascript">
-				function startGallery() {
-					var myGallery = new gallery($('myGallery'), {
-						timed: true,
-						defaultTransition: "fadeslideleft"
-					});
-				}
-				window.onDomReady(startGallery);
-			</script>
 
+
+{% block content %}
+	<div id="homepagecontent">
+	  
+		<!-- featured content gallery -->
+		<div class="featured">
 			<div id="myGallery">
 				{% for topstory in topstories %}
 			    <div class="imageElement" id="{{ forloop.counter }}">
 			    	<h3>{{ topstory.headline }}</h3>
-			        <p>{{ topstory.shortest_summary|safe }}</p>
-			        <a href="{{ topstory.get_absolute_url }}" title="Read the full story" class="open"></a>
-			        <img src="{{ topstory.main_image.top_front.url }}" class="full" alt="Congresswoman discusses stimulus benefits for Cal Poly" />
-			        <img src="{{ topstory.main_image.top_front.url }}" class="thumbnail" alt="Congresswoman discusses stimulus benefits for Cal Poly" />
+		        <p>{{ topstory.shortest_summary|safe }}</p>
+		        <a href="{{ topstory.get_absolute_url }}" title="Read the full story" class="open"></a>
+		        <img src="{{ topstory.main_image.top_front.url }}" class="full" alt="" />
+		        <img src="{{ topstory.main_image.top_front.url }}" class="thumbnail" alt="" />
+            {# TODO: look into what this class=thumbnail is actually doing #}
 			    </div>
 				{% endfor %}
 			</div>
 		</div>
-		<!-- Begin code for the 4 column section to the right of the Featured Content Gallery -->
+		
+		<!-- 4 stories to the right of featured content -->
 		<div id="homepage-section-wrap">
-			<!-- Begin Mid Columns -->	
 			{% for story in stories %}
 				<div class="column">
 					<h4><a href="{{ story.section.get_absolute_url }}">{{ story.section.name }}</a></h4>
-					<h6><a href="{{ story.get_absolute_url }}" title="Permanent Link to {{ story.headline }}">{{ story.headline|slice:":40" }} ...</a></h6>
+					<h6><a href="{{ story.get_absolute_url }}" title="{{ story.headline }}">{{ story.headline|slice:":40" }} ...</a></h6>
 					<li>Posted on {{ story.pub_date|date:"n/j/Y" }}</li>
-					<p>{{ story.summary|safe|slice:":210" }}...</p>
+					<p>{{ story.get_short_summary }}</p>
 					<li class="more">More in <a href="{{ story.section.get_absolute_url }}">{{ story.section.name }}</a></li>
 				</div>
 			{% endfor %}
@@ -103,23 +105,23 @@
 		</div>
 		<div class="bottom-box">
 			<div class="bottom-third margin-right">
-				<h4>Comment Feed</h4>
+				<h4>Comments</h4>
 				{% load comparisons %}
 				<ul>
 		        {% for story_comment_object in sorted_comment_list %}
 					<li>
 					{% for comment in story_comment_object %}
 						{% if forloop.last %}
-							{{ comment.linked_name|safe }}
+							{{ comment.display_name|safe }}
 						{% else %}
 							{% ifequal forloop.revcounter 2 %}
-								{{ comment.linked_name|safe }}, and 
+								{{ comment.display_name|safe }}, and 
 							{% else %}
-								{{ comment.linked_name|safe }}, 
+								{{ comment.display_name|safe }}, 
 							{% endifequal %}
 						{% endif %}
 					{% endfor %}
-					 commented on <a href="{{ story_comment_object.0.subject.get_absolute_url }}">{{ story_comment_object.0.subject.headline }}</a>.
+					 commented on <a href="{{ story_comment_object.0.get_absolute_url }}">{{ story_comment_object.0.subject.headline }}</a>.
 					</li>
 				{% endfor %}
 				</ul>
