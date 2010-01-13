@@ -64,8 +64,9 @@
 					<li><a href="/comments">Comments</a></li>
 					{% if user.is_authenticated %} 
                         {% if user.is_staff %}
+                            <li><a href="/staff/">Staff Page</a></li>
                         	{# <li><a href="/reporter-admin/">Reporter Admin</a></li>#}
-                        	<li><a href="/admin/">Management Admin</a></li>
+                        	<li><a href="/admin/">Admin</a></li>
                         {% endif %}
                       		<li><a href="{% url manage-user %}">Manage your Account</a></li>
                       {% if facebook_user %}
