@@ -86,3 +86,28 @@ def set_default_slug(namer, extra_limits=lambda x: {}):
             )
     
     return _func
+
+
+def smart_truncate(string, length, min_length_diff=8):
+    """
+    Truncates `string` to be no longer than `length`, but no shorter than
+    `length`-`min_length_diff`. Tries to do so at a word boundary (defined
+    simply by the presence of a space).
+    
+    >>> test = lambda *args: (lambda k: (k, len(k)))(smart_truncate(*args))
+    >>> s = "this is some text"
+    >>> test(s, 17)
+    ('this is some text', 17)
+    >>> test(s, 15)
+    ('this is some...', 15)
+    >>> test(s, 14)
+    ('this is...', 10)
+    >>> test(s, 14, 3) # don't let it cut more than 3 chars
+    ('this is som...', 14)
+    """
+    if len(string) <= length or string.endswith('...'):
+        return string
+    # find the rightmost appropriate space, accounting for the '...'
+    length -= 3
+    i = string.rfind(' ', length-min_length_diff, length+1)
+    return string[:(length if i == -1 else i)] + '...'
