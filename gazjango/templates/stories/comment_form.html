@@ -7,10 +7,19 @@
         <td>{{ comment_form.email }}</td>
       </tr>
       <tr>
-        <td>
-          {{ comment_form.anonymous.label_tag }}
-          {{ comment_form.anonymous }}
-        </td>
+        {% if user.get_profile.staff_status %}
+          <td>
+            <label for="id_anonymous">Anon</label>
+            {{ comment_form.anonymous }}
+            <label for="id_speaking_officially">Offic</label>
+            {{ comment_form.speaking_officially }}
+          </td>
+        {% else %}
+          <td>
+            {{ comment_form.anonymous.label_tag }}
+            {{ comment_form.anonymous }}
+          </td>
+        {% endif %}
         <td>{{ comment_form.name.label_tag }}:</td>
         <td>{{ comment_form.name }}</td>
       </tr>

@@ -40,21 +40,23 @@ def post_comment(request, slug, year, month, day):
         raise Http404 # semantically incorrect, but whatever
     
     logged_in = request.user.is_authenticated()
-    form = make_comment_form(data=request.POST, logged_in=logged_in)
+    staff = logged_in and request.user.get_profile().staff_status()
+    form = make_comment_form(data=request.POST, logged_in=logged_in, staff=staff)
     
     if form.is_valid():
+        data = form.cleaned_data
         args = {
             'subject': story,
-            'text': escape(form.cleaned_data['text']).replace("\n", "<br/>"),
+            'text': escape(data['text']).replace("\n", "<br/>"),
             'ip_address': get_ip(request),
             'user_agent': request.META.get('HTTP_USER_AGENT', '')
         }
         
-        data = form.cleaned_data
         if logged_in:
             args['user'] = get_user_profile(request)
-            if data['anonymous'] and data['name'] != request.user.get_full_name():
+            if data['anonymous']:# and data['name'] != request.user.get_full_name():
                 args['name'] = data['name']
+            args['speaking_officially'] = data['speaking_officially']
         else:
             args['name']  = data['name']
             args['email'] = data['email']

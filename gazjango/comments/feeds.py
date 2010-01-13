@@ -15,7 +15,6 @@ from django.utils.html              import escape
 
 from gazjango.articles.models      import Article
 from gazjango.articles.views       import specific_article
-from gazjango.comments.forms       import make_comment_form
 from gazjango.comments.models      import PublicComment, CommentIsSpam
 from gazjango.misc                 import recaptcha
 from gazjango.misc.view_helpers    import get_ip, get_user_profile, is_robot

@@ -36,7 +36,7 @@ Comment Listings :: The Daily Gazette
               </p>
           </div>
 
-          <div class="commentContent {% if comment.is_staff %}staff{% else %}{% if not comment.is_visible %}moderate{% endif %}{% endif %}">
+          <div class="commentContent {% if comment.is_official %}staff{% else %}{% if not comment.is_visible %}moderate{% endif %}{% endif %}">
 
             <p class="commentText">
               {% if comment.is_visible %}

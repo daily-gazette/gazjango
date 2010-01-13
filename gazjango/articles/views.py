@@ -46,7 +46,8 @@ def specific_article(request, story, num=None, form=None, print_view=False):
         initial = { 'text': 'Have your say.' }
         if logged_in:
             initial['name'] = request.user.get_full_name()
-        form = make_comment_form(logged_in=logged_in, initial=initial)
+        staff = logged_in and get_user_profile(request).staff_status()
+        form = make_comment_form(logged_in=logged_in, initial=initial, staff=staff)
     
     try:
         photospread = story.photospread
@@ -72,6 +73,10 @@ def show_article(request, story, form, print_view=False):
     comments = PublicComment.objects.for_article(story, user, ip)
     
     recent_stories = Article.published.get_query_set()[:3]
+    
+    import logging
+    logging.warn(user)
+    logging.warn(user.staff_status())
     
     context = RequestContext(request, {
         'story': story,

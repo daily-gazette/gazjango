@@ -1,5 +1,6 @@
 /*
     TODO: when a comment is posted, highlight it
+    TODO: make speaking_officially box disable when it's anonymous
 */
 
 function fullSetup() {

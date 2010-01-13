@@ -20,6 +20,22 @@ ALTER TABLE `accounts_position` DROP COLUMN `is_editor`;
 COMMIT;
 SQL
 
+# add speaking_officially column for comments
+./manage.py dbshell <<'SQL'
+BEGIN;
+ALTER TABLE `comments_publiccomment' ADD COLUMN
+            `speaking_officially` bool NOT NULL AFTER `email`;
+COMMIT;
+SQL
+./manage.py shell <<'PYTHON'
+from interactive_load import *
+for c in PublicComment.objects.filter(name=None, user__user__is_staff=True):
+    if c.user.staff_status(c.time):
+        c.speaking_officially = True
+        c.save()
+PYTHON
+
+
 # add num_full column for issues
 ./manage.py dbshell <<'SQL'
 BEGIN;

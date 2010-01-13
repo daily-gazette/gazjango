@@ -107,6 +107,7 @@ class PublicComment(models.Model):
     user  = models.ForeignKey(UserProfile, null=True, blank=True)
     name  = models.CharField(max_length=100, blank=True)
     email = models.EmailField(null=True, blank=True)
+    speaking_officially = models.BooleanField(default=False)
     
     is_anonymous = property(lambda self: bool(self.name))
     display_name = property(lambda self: self.name or (self.user.name if self.user else ''))
@@ -121,7 +122,7 @@ class PublicComment(models.Model):
     score = models.IntegerField(default=0, null=True)
     
     def is_visible(self):
-        return self.is_approved and self.score > 0
+        return (self.is_approved and self.score >= 0) or self.is_official()
     
     objects = CommentsManager()
     visible = VisibleCommentsManager()
@@ -172,8 +173,9 @@ class PublicComment(models.Model):
     def num_upvotes(self):
         return self.votes.filter(positive=True).count()
     
-    def is_staff(self):
-        return not self.is_anonymous and self.user.s
+    def is_official(self):
+        return self.speaking_officially and \
+               (not self.is_anonymous and self.user.staff_status(self.time))
     
     def status(self):
         if self.is_anonymous:
@@ -254,7 +256,7 @@ class PublicComment(models.Model):
     
     def linked_name(self):
         name = self.display_name
-        if self.is_staff():
+        if self.is_official():
             name = '<a href="%s">%s</a>' % (self.user.get_absolute_url(), name)
         return name
     
@@ -319,7 +321,7 @@ class CommentVote(models.Model):
             # don't bother with weight
             if self.custom_value is None:
                 self.custom_value = (1 if self.positive else -1) * 4
-        elif self.user.user.is_staff:
+        elif self.user.staff_status():
             self.weight = 4
         elif self.user.is_from_swat(ip=self.ip):
             self.weight = 3
