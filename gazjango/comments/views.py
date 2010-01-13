@@ -40,7 +40,7 @@ def post_comment(request, slug, year, month, day):
         raise Http404 # semantically incorrect, but whatever
     
     logged_in = request.user.is_authenticated()
-    staff = logged_in and request.user.get_profile().staff_status()
+    staff = logged_in and get_user_profile(request).staff_status()
     form = make_comment_form(data=request.POST, logged_in=logged_in, staff=staff)
     
     if form.is_valid():
