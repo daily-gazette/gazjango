@@ -127,7 +127,7 @@ class BannerAdsManager(models.Manager):
             try:
                 return random.choice(zero_priority)
             except IndexError:
-                raise BannerAd.DoesNotExist
+                raise self.model.DoesNotExist
         
         pri_left = random.random() * total_priority # in [0, total_priority)
         for cand in candidates:
