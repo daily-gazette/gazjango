@@ -183,36 +183,35 @@ class ArticleTestCase(unittest.TestCase):
             args.setdefault('section', self.news)
             return Article.objects.create(**args)
         
-        top1 = art(slug='squirrel-attack', position='1', possible_position='1')
+        top1 = art(slug='squirrel-attack', position='1')
         assert_pks([ [top1.pk], [], [] ])
         
-        mid1 = art(slug='this-weekend', position='2', possible_position='2')
+        mid1 = art(slug='this-weekend', position='2')
         assert_pks([ [top1.pk], [mid1.pk], [] ])
         
-        top2 = art(slug='squirrel-hunt', position='1', possible_position='1')
+        top2 = art(slug='squirrel-hunt', position='1')
         assert_pks_gives( [ [top1.pk], [top2.pk, mid1.pk], [] ],
                           [ [top2.pk], [top1.pk, mid1.pk], [] ] )
         
-        low_mid1 = art(slug='concert-last-week', position='3', possible_position='2')
+        low_mid1 = art(slug='concert-last-week', position='3')
         assert_pks_gives( [ [top1.pk], [top2.pk, mid1.pk], [low_mid1.pk] ],
                           [ [top2.pk], [top1.pk, mid1.pk], [low_mid1.pk] ] )
         
         top2.delete()
         assert_pks([ [top1.pk], [mid1.pk, low_mid1.pk], [] ])
         
-        low_top1 = art(slug='deer-all-dead', position='3', possible_position='2',
+        low_top1 = art(slug='deer-all-dead', position='3',
                        pub_date=date.today() - timedelta(days=1))
         assert_pks([ [top1.pk], [mid1.pk, low_mid1.pk], [low_top1.pk] ])
         
         top1.delete()
         assert_pks([ [low_top1.pk], [mid1.pk, low_mid1.pk], [] ])
         
-        mid2 = art(slug='why-are-there-so-many-penn-stations', 
-                   position='2', possible_position='2')
+        mid2 = art(slug='why-are-there-so-many-penn-stations', position='2')
         assert_pks_gives( [ [low_top1.pk], [mid1.pk, mid2.pk], [low_mid1.pk] ],
                           [ [low_top1.pk], [mid2.pk, mid1.pk], [low_mid1.pk] ] )
         
-        mid3 = art(slug='something-happened', position='2', possible_position='2')
+        mid3 = art(slug='something-happened', position='2')
         assert_pks_gives( [ [low_top1.pk], [mid1.pk, mid2.pk], [mid3.pk, low_mid1.pk] ],
                           [ [low_top1.pk], [mid1.pk, mid3.pk], [mid2.pk, low_mid1.pk] ],
                           [ [low_top1.pk], [mid2.pk, mid1.pk], [mid3.pk, low_mid1.pk] ],

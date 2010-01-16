@@ -28,7 +28,7 @@ class PublishedArticlesManager(models.Manager):
         orig = super(PublishedArticlesManager, self).get_query_set()
         return orig.filter(status='p')
     
-    def get_stories(self, num_top=1, num_mid=2, num_low=6,base=None):
+    def get_stories(self, num_top=1, num_mid=2, num_low=6, base=None):
         """
         Returns stories organized by priority. This method will do some
         rearranging to always get you the number of stories of each
@@ -50,6 +50,21 @@ class PublishedArticlesManager(models.Manager):
         get_stories(base=section.articles) would return stories from
         the articles in `section` (but see Section's get_stories method).
         """
+        # TODO: april fools stuff
+        # TODO: randomosity
+        base = (base or Article.objects).order_by('-pub_date')
+        
+        tops = base.filter(position='1')[:num_top]
+        selected_pks = list(tops.values_list('pk', flat=True))
+        
+        mids = base.filter(position__in=('1','2')).exclude(pk__in=selected_pks)[:num_mid]
+        selected_pks += list(mids.values_list('pk', flat=True))
+        
+        lows = base.exclude(pk__in=selected_pks)[:num_low]
+        
+        return [list(tops), list(mids), list(lows)]
+        
+        '''
         april_fools = False
         if base:
             april_fools = True
@@ -112,6 +127,7 @@ class PublishedArticlesManager(models.Manager):
             exclude_pks = [el.pk for el in (tops + mids)]
             lows = list(base.exclude(pk__in=exclude_pks).exclude(pub_date='2009-03-31').order_by('-pub_date')[:num_low])
             return [tops, mids, lows]
+        '''
     
     def get_top_story(self):
         """
@@ -195,9 +211,7 @@ class Article(models.Model):
         ('2', 'middle'),
         ('1', 'top')
     )
-    pos_args = {'max_length': 1, 'choices': POSITION_CHOICES, 'default': '3'}
-    position = models.CharField(**pos_args)
-    possible_position = models.CharField(**pos_args)
+    position = models.CharField(max_length=1, choices=POSITION_CHOICES, default=3)
     
     objects = models.Manager()
     published = PublishedArticlesManager()

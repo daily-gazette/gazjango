@@ -140,7 +140,7 @@ class Issue(models.Model):
         Returns this issue's articles, in the order in which they should
         appear in the issue.
         """
-        a = self.articles.order_by('position', 'possible_position', '-pub_date')
+        a = self.articles.order_by('position', '-pub_date')
         return a if racy else a.filter(is_racy=False)
     
     def announcements(self):

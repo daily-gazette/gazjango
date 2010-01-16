@@ -36,7 +36,7 @@ class StoryAdmin(admin.ModelAdmin):
     search_fields = ('headline', 'slug', 'text',)
     
     list_display = ('headline', 'status', 'author_names', 'pub_date', 'position', 'section', 'subsection')
-    list_filter = ('status', 'position', 'possible_position', 'section', 'subsection')
+    list_filter = ('status', 'position', 'section', 'subsection')
     ordering = ('-pub_date',)
     
     form = StoryAdminForm

@@ -15,8 +15,9 @@ UPDATE `articles_article` SET `short_title`=''
                           WHERE length(`short_title`) > 40;
 ALTER TABLE `articles_article` MODIFY `short_title` varchar(40) NOT NULL;
 
-# drop long_summary
+# drop unused fields
 ALTER TABLE `articles_article` DROP `long_summary`;
+ALTER TABLE `articles_article` DROP `possible_position`;
 SQL
 
 # convert to staff_state column for positions
