@@ -64,3 +64,21 @@ def departments_taggroup():
         return opt.value
 
 set_departments_taggroup = _value_setter(_departments_taggroup)
+
+
+
+HEADERBAR_OPT_NAME = 'header_notices'
+header_notices, set_header_notices = _make_option(HEADERBAR_OPT_NAME, 'l', [])
+
+def header_unauth_notice(notices=False):
+    if notices is False:
+        notices = header_notices()
+    return notices[0] if notices else ''
+
+def header_auth_notice(notices=False):
+    if notices is False:
+        notices = header_notices()
+    
+    if not notices:         return ''
+    elif len(notices) >= 2: return notices[1]
+    else:                   return notices[0]
