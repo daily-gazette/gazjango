@@ -4,3 +4,11 @@ def textile(text):
 
 def html(text):
     return text
+
+
+FORMATS = {
+    'h': ('Raw HTML', html),
+    't': ('Textile',  textile),
+}
+FORMAT_CHOICES = [(k, v[0]) for k, v in FORMATS.items()]
+FORMAT_FUNCS   = dict((k, v[1]) for k, v in FORMATS.items())

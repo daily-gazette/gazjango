@@ -1,6 +1,5 @@
 from django.db import models
 from django.contrib.sites.models import Site
-from gazjango.articles.models import Format
 from gazjango.articles import formats
 
 class Page(models.Model):
@@ -14,9 +13,10 @@ class Page(models.Model):
     updated = models.DateTimeField(auto_now=True)
     
     content = models.TextField('content', blank=True)
-    format = models.ForeignKey(Format)
+    format = models.CharField(max_length=1, choices=formats.FORMAT_CHOICES, default='t')
     template_name = models.CharField('template name', max_length=70, blank=True,
-        help_text="Example: 'flatpages/contact_page.html'. If this isn't provided, the system will use 'flatpages/default.html'.")
+        help_text="Example: 'flatpages/contact_page.html'. If this isn't provided, "
+                  "the system will use 'flatpages/default.html'.")
     sites = models.ManyToManyField(Site)
     
     staff_only = models.BooleanField(default=False)
@@ -33,7 +33,7 @@ class Page(models.Model):
         return self.url
     
     def formatted_content(self):
-        formatter = getattr(formats, self.format.function)
+        formatter = formats.FORMAT_FUNCS[self.format]
         return formatter(self.content)
     
     def ancestors(self):

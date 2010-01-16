@@ -1,7 +1,7 @@
 import unittest
 from django.core.exceptions     import ObjectDoesNotExist, MultipleObjectsReturned
 from django.contrib.auth.models import User
-from gazjango.articles.models import Article, ArticleRevision, Section, Format
+from gazjango.articles.models import Article, ArticleRevision, Section
 from gazjango.accounts.models import UserProfile, UserKind
 from gazjango.media.models    import MediaBucket, MediaFile, ImageFile
 from datetime import date, timedelta
@@ -15,23 +15,18 @@ class ArticleTestCase(unittest.TestCase):
         self.bob_profile = self.bob.get_profile()
         
         self.news = Section.objects.create(name="News")
-        
-        self.textile = Format.objects.create(name     = "textile",
-                                             function = "textile")
-        self.html = Format.objects.create(name     = "html",
-                                          function = "html")
 
         self.boring_article = Article.objects.create(headline = "...Boring",
                                                      text     = "Boring Text",
                                                      slug     = 'boring',
                                                      section = self.news,
-                                                     format   = self.html)
+                                                     format   = 'h')
         
         self.formatted_article = Article.objects.create(headline = "Formatted!",
                                                         text     = "_Emphasis_",
                                                         slug     = "formatted",
                                                         section = self.news,
-                                                        format   = self.textile)
+                                                        format   = 't')
         
         self.bucket = MediaBucket.objects.create(slug='from-the-internets')
         self.lolcat = ImageFile.objects.create(slug='kitteh',
@@ -56,19 +51,19 @@ class ArticleTestCase(unittest.TestCase):
                  '<img src="http://wow.com/lawl" />',
             slug='lolcats',
             section=self.news,
-            format=self.html
+            format='h'
         )
         
         self.textile_images_article = Article.objects.create(
             headline="Brief Test For Textile",
             text="!from-the-newspapers/war-declared!",
             section=self.news,
-            format=self.textile
+            format='t'
         )
     
     def tearDown(self):
         used = (User, UserProfile, UserKind, Section, Article, ArticleRevision)
-        for m in used + (Format, MediaBucket, MediaFile, ImageFile):
+        for m in used + (MediaBucket, MediaFile, ImageFile):
             m.objects.all().delete()
     
     def test_articles_empty(self):
@@ -97,10 +92,10 @@ class ArticleTestCase(unittest.TestCase):
                 self.assertEquals(a.text_at_revision(rs[j]), strs[j])
     
     def test_article_formatting(self):
-        self.formatted_article.format = self.textile
+        self.formatted_article.format = 't'
         self.assertEquals(self.formatted_article.formatted_text(),
                           "<p><em>Emphasis</em></p>")
-        self.formatted_article.format = self.html
+        self.formatted_article.format = 'h'
         self.assertEquals(self.formatted_article.formatted_text(),
                           self.formatted_article.text)
     
@@ -178,7 +173,7 @@ class ArticleTestCase(unittest.TestCase):
             self.assertEqual(len(to_see), 0)
         
         def art(**args):
-            args.setdefault('format', self.textile)
+            args.setdefault('format', 't')
             args.setdefault('status', 'p')
             args.setdefault('section', self.news)
             return Article.objects.create(**args)

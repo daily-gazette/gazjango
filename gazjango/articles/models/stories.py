@@ -172,7 +172,8 @@ class Article(models.Model):
     Italics: _italicized text_<br />
     Bold: *bold text*
     """)
-    format = models.ForeignKey('Format')
+    
+    format = models.CharField(max_length=1, choices=formats.FORMAT_CHOICES, default='t')
     
     pub_date = models.DateTimeField(default=datetime.datetime.now)
     authors  = models.ManyToManyField(UserProfile, related_name="articles", through='Writing')
@@ -202,7 +203,7 @@ class Article(models.Model):
         ('b', 'Edited (2)'),
         ('p', 'Published')
     )
-    status = models.CharField(max_length=1, choices=STATUS_CHOICES)
+    status = models.CharField(max_length=1, choices=STATUS_CHOICES, default='d')
     
     comments_allowed = models.BooleanField(default=True)
     
@@ -273,7 +274,7 @@ class Article(models.Model):
     
     def formatted_text(self, revision=None):
         text = self.text_at_revision(revision) if revision else self.text
-        formatter = getattr(formats, self.format.function)
+        formatter = formats.FORMAT_FUNCS[self.format]
         return formatter(text)
     
     
@@ -485,17 +486,4 @@ class ArticleRevision(models.Model):
     
     def __unicode__(self):
         return u"%s - %s" % (self.article.slug, self.date)
-    
-
-class Format(models.Model):
-    """ A format: html, textile, etc. """
-    
-    name     = models.CharField(max_length=30, unique=True)
-    function = models.CharField(max_length=30)
-    
-    def __unicode__(self):
-        return self.name
-    
-    class Meta:
-        app_label = 'articles'
     

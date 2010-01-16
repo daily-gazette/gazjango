@@ -2,11 +2,9 @@
 
 # ALTER DATABASE gazette CHARACTER SET 'utf8';
 
-# add missing apps/tables
-./manage.py syncdb
-
-# articles changes:
+echo "making changes to articles table (and stackedpages)"
 ./manage.py dbshell <<'SQL'
+BEGIN;
 # extend short_summary to 210 chars
 ALTER TABLE `articles_article` MODIFY `short_summary` varchar(210) NOT NULL;
 
@@ -18,9 +16,27 @@ ALTER TABLE `articles_article` MODIFY `short_title` varchar(40) NOT NULL;
 # drop unused fields
 ALTER TABLE `articles_article` DROP `long_summary`;
 ALTER TABLE `articles_article` DROP `possible_position`;
+
+# denormalize formats from articles
+ALTER TABLE `articles_article` ADD COLUMN `format` varchar(1) NOT NULL 
+                               AFTER `format_id`;
+UPDATE `articles_article` SET `format`='h' WHERE `format_id`=1;
+UPDATE `articles_article` SET `format`='t' WHERE `format_id`=2;
+ALTER TABLE `articles_article` DROP `format_id`;
+
+# do the same for stackedpages
+ALTER TABLE `stackedpages_page` ADD COLUMN `format` varchar(1) NOT NULL 
+                                AFTER `format_id`;
+UPDATE `stackedpages_page` SET `format`='h' WHERE `format_id`=1;
+UPDATE `stackedpages_page` SET `format`='t' WHERE `format_id`=2;
+ALTER TABLE `stackedpages_page` DROP `format_id`;
+
+DROP TABLE `articles_format`;
+
+COMMIT;
 SQL
 
-# convert to staff_state column for positions
+echo "converting to staff_state column for positions"
 ./manage.py dbshell <<'SQL'
 BEGIN;
 ALTER TABLE `accounts_position` ADD COLUMN 
@@ -35,10 +51,10 @@ ALTER TABLE `accounts_position` DROP COLUMN `is_editor`;
 COMMIT;
 SQL
 
-# add speaking_officially column for comments
+echo "adding speaking_officially column for comments"
 ./manage.py dbshell <<'SQL'
 BEGIN;
-ALTER TABLE `comments_publiccomment' ADD COLUMN
+ALTER TABLE `comments_publiccomment` ADD COLUMN
             `speaking_officially` bool NOT NULL AFTER `email`;
 COMMIT;
 SQL
@@ -51,7 +67,7 @@ for c in PublicComment.objects.filter(name=None, user__user__is_staff=True):
 PYTHON
 
 
-# add num_full column for issues
+echo "adding num_full column for issues"
 ./manage.py dbshell <<'SQL'
 BEGIN;
 ALTER TABLE `issues_issue` ADD COLUMN 
@@ -60,7 +76,14 @@ ALTER TABLE `issues_issue` ADD COLUMN
 COMMIT;
 SQL
 
-# add our livecustomer ads
+echo "adding all the other new tables, etc"
+./manage.py syncdb
+
+echo "moving the coop ad into the uploads folder"
+mkdir -p uploads/advertisements
+cp static/images/ads/coop-index-230.png uploads/advertisements/
+
+echo "adding our livecustomer and banner ads"
 ./manage.py shell <<'ADS'
 from interactive_load import *
 TextLinkAd.objects.create(source='c', 
@@ -69,7 +92,25 @@ TextLinkAd.objects.create(source='c',
     link='http://www.r4-ds-card.ca', text='r4')
 TextLinkAd.objects.create(source='c',
     link='http://www.framesdirect.com/sunglasses/', text='sunglasses')
+
+bucket = MediaBucket.objects.create(slug='ads', name='Ads')
+
+BannerAd.front.create(
+    publisher="The Swarthmore Coop",
+    link="http://swarthmore.coop",
+    render_type='i',
+    image=ImageFile.objects.create(
+        data="advertisements/coop-index-230.png",
+        name="Coop Ad",
+        slug="coop-ad",
+        bucket=bucket,
+        author_name="The Swarthmore Coop",
+        license_type='p',
+    ),
+    date_start=datetime.date(2008, 9, 1),
+    date_end  =datetime.date(2010, 3, 1),
+)
 ADS
 
-# make sure that admin permissions are right, etc
+echo "making sure that everything's just right :)"
 ./manage.py syncdb

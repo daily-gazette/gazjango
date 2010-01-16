@@ -1,5 +1,5 @@
 import unittest
-from gazjango.articles.models import Article, Section, Format
+from gazjango.articles.models import Article, Section
 from gazjango.issues.models   import Issue
 from datetime import date, timedelta
 
@@ -8,7 +8,7 @@ class IssueTestCase(unittest.TestCase):
     def setUp(self):
         self.news     = Section.objects.create(name="News", slug="news")
         self.features = Section.objects.create(name="Features", slug="features")
-        self.html = Format.objects.create(name="Plain HTML", function="html")
+        self.html = 'h'
         
         b = dict(headline="Boring", text="Text", slug="boring", 
                  section=self.news, format=self.html)
@@ -23,7 +23,7 @@ class IssueTestCase(unittest.TestCase):
         self.issue_yesterday = Issue.objects.create(date=yesterday)
     
     def tearDown(self):
-        for m in (Article, Section, Format, Issue):
+        for m in (Article, Section, Issue):
             m.objects.all().delete()
     
     def testOrdering(self):
