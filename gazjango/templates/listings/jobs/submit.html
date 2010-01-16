@@ -29,7 +29,7 @@
 	  {{ form.non_field_errors }}
 	</p>
   {% endif %}
-  <form action="" method="post">
+  <form action="" method="post">{% csrf_token %}
 	<table class="submit-form">
 	  <tr>
 			<th width="150px"><label>Job </label>{{ form.name.label_tag }}:</th>

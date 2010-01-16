@@ -34,7 +34,7 @@ $(function() {
     <p>{{ form.non_field_errors }}</p>
 {% endif %}
 
-<form action="" method="post">
+<form action="" method="post">{% csrf_token %}
     <table class="submission">
         <tr>
             <td><strong>Screwee:</strong></td>

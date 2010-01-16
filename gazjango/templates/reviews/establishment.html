@@ -105,7 +105,7 @@
 			            {% if not user.is_authenticated %}
 			              <p><a href="{% url login %}?next={{ establishment.get_absolute_url }}#addReview">Log in</a> to submit your own review.</p>
 			            {% else %}
-			            <form method="post" action=".">
+			            <form method="post" action=".">{% csrf_token %}
 			              <p><strong>Reviewed by: {{ user.get_full_name }}</strong> (Cost: {{ form.cost }}; Rating {{ form.rating }})</p>
 			              <p>{{ form.text }}</p>
 			              <p><input type="submit" value="Submit" /></p>
@@ -155,7 +155,7 @@
             {% if not user.is_authenticated %}
               <p><a href="{% url login %}?next={{ establishment.get_absolute_url }}#addReview">Log in</a> to submit your own review.</p>
             {% else %}
-            <form method="post" action=".">
+            <form method="post" action=".">{% csrf_token %}
               <p><strong>Reviewed by: {{ user.get_full_name }}</strong> (Cost: {{ form.cost }}; Rating {{ form.rating }})</p>
               <p>{{ form.text }}</p>
               <p><input type="submit" value="Submit" /></p>

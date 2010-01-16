@@ -19,7 +19,7 @@
 
   <div id="login">
   	<div id="content">
-  	  <form method="post" action=".">
+  	  <form method="post" action=".">{% csrf_token %}
     		<p class="form">
     		  {{ form.username.label_tag }}: {{ form.username }} <br />
     		  {{ form.password.label_tag }}: {{ form.password }}

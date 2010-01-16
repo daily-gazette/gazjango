@@ -5,7 +5,7 @@
 {% block content %}
   <div id="register">
   	<div id="content">
-  	  <form method="post" action=".">
+  	  <form method="post" action=".">{% csrf_token %}
     		<p class="form">
     		  <table>
             {{ form }}

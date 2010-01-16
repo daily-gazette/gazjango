@@ -20,7 +20,7 @@
     <div id="story">
       <h2>Submit an Establishment</h2>
       
-      <form action="" method="post">
+      <form action="" method="post">{% csrf_token %}
         <table class="submission">
           {{ form.as_table }}
           

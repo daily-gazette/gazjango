@@ -11,7 +11,7 @@
   <div class="poll-voting">
     <form method="post" 
           action="{% url submit-poll poll.time_start.year,poll.slug %}" 
-          onsubmit="submitPoll({{ poll.pk }}); return false;">
+          onsubmit="submitPoll({{ poll.pk }}); return false;">{% csrf_token %}
       <ul>
         {% for option in poll.options.all %}
           <li>

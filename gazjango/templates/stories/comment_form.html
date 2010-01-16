@@ -1,5 +1,5 @@
 {# TODO: better error handling, especially for the logged-in case #}
-<form method="post" action="comment/#submitComments" onsubmit="submitComment(); return false;">
+<form method="post" action="comment/#submitComments" onsubmit="submitComment(); return false;">{% csrf_token %}
   <table>
     <tr>
     {% if user.is_authenticated %}
