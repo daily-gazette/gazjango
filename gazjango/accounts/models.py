@@ -184,7 +184,7 @@ class UserProfile(models.Model):
             return self.email
     
     def published_articles(self):
-        return self.articles.filter(status='p')
+        return self.articles.filter(status='p').order_by('pub_date')
     
     def positions_at(self, date=None):
         """Returns the Positions the user had at the given date."""

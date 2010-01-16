@@ -27,7 +27,7 @@
             <div class="picture"><img src="{{ author.picture.profilepic.url }}" /></div>
           {% endif %}
           {% if author.bio %}
-            <p>{{ author.bio|safe }}</p>
+            <p>{{ author.bio|safe|linebreaksbr }}</p>
           {% endif %}
           {% if author.top_stories.count %}
             <br />
@@ -57,7 +57,11 @@
       		<ul>
       		  {% for holding in author.holding_set.reverse %}
               <li>
-                {{ holding.date_start.year }}-{{ holding.date_end.year|default:"Present" }}:
+                {% ifequal holding.date_start.year holding.date_end.year %}
+                  {{ holding.date_start.year }}: 
+                {% else %}
+                  {{ holding.date_start.year }}-{{ holding.date_end.year|default:"Present" }}:
+                {% endifequal %}
                 {{ holding.position.name }}
               </li>
               {# TODO: link to role description? #}
@@ -73,6 +77,9 @@
       		<h4>Contributions to the Gazette</h4>
       		<ul>
       		  {% for story in author.published_articles %}
+      		    {% ifchanged %}
+      		      </ul><center><h5>{{ story.pub_date|date:"F Y" }}</h5></center><ul>
+      		    {% endifchanged %}
       		    <li><a href="{{ story.get_absolute_url }}">{{ story.headline|safe }}</a></li>
       		  {% endfor %}
       		</ul>
