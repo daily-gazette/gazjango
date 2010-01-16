@@ -180,7 +180,6 @@ if settings.DEBUG:
         (r'^static/js/(?P<path>.*)$',      'serve', {'document_root': path + '/js'}),
         (r'^static/images/(?P<path>.*)$',  'serve', {'document_root': path + '/images'}),
         (r'^static/uploads/(?P<path>.*)$', 'serve', {'document_root': path + '/../uploads'}),
-        (r'^static/feedjack/(?P<path>.*)$',  'serve', {'document_root': path + '/feedjack'}),
         (r'^static/admin/(?P<path>.*)$', 'serve',  {'document_root': settings.ADMIN_MEDIA_PATH})
     )
     

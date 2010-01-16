@@ -273,8 +273,7 @@ def get_addthis_button(parser, token):
 
 
 ### static file URLs: change this if/when the static serving scheme changes
-
-STATIC_FILE_KINDS = ('css', 'js', 'images', 'uploads', 'admin','feedjack','v2')
+STATIC_FILE_KINDS = ('css', 'js', 'images', 'uploads', 'admin', 'v2')
 
 class StaticFileURLNode(template.Node):
     def __init__(self, kind, name):
