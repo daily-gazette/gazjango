@@ -4,7 +4,8 @@ from django.utils.safestring  import mark_safe
 from django.utils.html        import conditional_escape, strip_tags
 
 from django.contrib.humanize.templatetags.humanize import ordinal
-from gazjango.misc.helpers import get_static_path, get_jquery_path, smart_truncate
+from gazjango.misc.helpers import get_static_path, get_jquery_path
+import gazjango.misc.helpers # would import smart_truncate, but the filter has same name
 
 from datetime import date
 
@@ -41,8 +42,15 @@ def entity_sub(string, to_replace=None):
 ### various filters to ease the outputting of more human text
 
 @register.filter
-def smart_truncate(string, length):
-    return smart_truncate(string, length)
+def smart_truncate(string, length, autoescape=True):
+    if autoescape:
+        string = conditional_escape(string)
+    try:
+        length = int(length)
+    except ValueError:
+        return string # fail silently
+    return gazjango.misc.helpers.smart_truncate(string, length, 5)
+smart_truncate.needs_autoescape = True
 smart_truncate.is_safe = True
 
 
