@@ -1,6 +1,5 @@
 import datetime
 
-from django.contrib.contenttypes import generic
 from django.db                   import models
 from django.db.models            import signals
 
@@ -124,8 +123,6 @@ class ImageFile(BaseFile, ImageModel):
                   "stories only. Should be about 50x80."
     )
     
-    ads = generic.GenericRelation('ads.BannerAd')
-    
     
     class IKOptions:
         spec_module = 'media.image_specs'
@@ -150,7 +147,7 @@ class ImageFile(BaseFile, ImageModel):
     
     top_front = property(get_front_image)
     mid_front = property(lambda self: self.get_front_image(top=False))
-    poster    = property(lambda self: self.poster)
+    poster    = property(lambda self: self.poster) # FIXME - some crazy shit here
     
     issue = property(lambda self: self._issue_data or self.issueimage)
     thumb = property(lambda self: self._thumb_data or self.thumbnail)
@@ -175,8 +172,6 @@ class OutsideMedia(BaseFile):
         help_text='The HTML to insert the object. For a YouTube video or whatnot, '
                   'you probably want to copy this from the "embed" link. For '
                   'articles, it should be about 650px wide.')
-    
-    ads = generic.GenericRelation('ads.BannerAd')
 
 
 MEDIA_CLASSES = [MediaFile, ImageFile, OutsideMedia]
