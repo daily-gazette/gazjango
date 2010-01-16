@@ -43,7 +43,7 @@ class StoryAdmin(admin.ModelAdmin):
     fieldsets = (
         (None, {
             'fields': ('headline', 'short_title', 'slug',
-                       'status', 'concept', 'text', 'format', 'main_image')
+                       'status', 'concept', 'text', 'main_image')
         }),
         ('Summaries', {
             'fields': ('short_summary', 'summary'),
@@ -52,7 +52,7 @@ class StoryAdmin(admin.ModelAdmin):
             'fields': ('section', 'subsection', 'position'),
         }),
         ('Advanced', {
-            'fields': ('pub_date', 'is_racy', 'comments_allowed'),
+            'fields': ('pub_date', 'format', 'is_racy', 'comments_allowed'),
             'classes': ('collapse',),
         }),
     )
