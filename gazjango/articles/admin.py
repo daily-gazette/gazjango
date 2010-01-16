@@ -54,7 +54,7 @@ class StoryAdmin(admin.ModelAdmin):
             'fields': ('section', 'subsection', 'position'),
         }),
         ('Advanced', {
-            'fields': ('pub_date', 'format', 'is_racy', 'comments_allowed'),
+            'fields': ('pub_date', 'format', 'is_racy', 'comments_allowed', 'swat_only'),
             'classes': ('collapse',),
         }),
     )

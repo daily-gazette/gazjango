@@ -12,8 +12,9 @@ from django.http      import Http404, HttpResponse, HttpResponseRedirect
 from django.core.urlresolvers   import reverse
 from django.core.exceptions     import ObjectDoesNotExist
 from django.shortcuts           import render_to_response, get_object_or_404
-from gazjango.misc.view_helpers import get_by_date_or_404, filter_by_date, staff_required
-from gazjango.misc.view_helpers import get_ip, get_user_profile
+from gazjango.misc.helpers      import is_from_swat
+from gazjango.misc.view_helpers import get_by_date_or_404, filter_by_date, staff_required, \
+                                       get_ip, get_user_profile
 
 from gazjango.ads.models                import TextLinkAd, BannerAd
 from gazjango.articles.models           import Article, Special, PhotoSpread, StoryConcept, \
@@ -49,12 +50,30 @@ def specific_article(request, story, num=None, form=None, print_view=False):
         staff = logged_in and get_user_profile(request).staff_status()
         form = make_comment_form(logged_in=logged_in, initial=initial, staff=staff)
     
+    if story.is_swat_only():
+        if not is_from_swat(user=get_user_profile(request), ip=get_ip(request)):
+            return show_swat_only(request, story)
+    
     try:
         photospread = story.photospread
     except PhotoSpread.DoesNotExist:
         return show_article(request, story, form, print_view)
     else:
         return show_photospread_page(request, photospread, num, form)
+
+def show_swat_only(request, story, template='stories/swat_only.html'):
+    """Shows a "sorry, you can't see this story" message."""
+    return render_to_response(template, context_instance=RequestContext(request, {
+        'story': story,
+        'recent_stories': Article.published.order_by('-pub_date')[:3],
+        'posters': Poster.published.get_n(1),
+        'related': story.related_list(3),
+        
+        'base_template': 'stories/view.html',
+        'print_view': False,
+        
+        'top_banner': BannerAd.article_top.pick(allow_zero_priority=False)
+    }))
 
 def show_article(request, story, form, print_view=False):
     "Shows the requested article."
@@ -72,18 +91,16 @@ def show_article(request, story, form, print_view=False):
     ip = get_ip(request)
     comments = PublicComment.objects.for_article(story, user, ip)
     
-    recent_stories = Article.published.get_query_set()[:3]
-    
     context = RequestContext(request, {
         'story': story,
         'comments': comments,
         'related': story.related_list(3),
-        'topstory': Article.published.get_top_story(),
-        'other_comments': cs,
+        # 'topstory': Article.published.get_top_story(),
+        # 'other_comments': cs,
         'print_view': print_view,
         'comment_form': form,
         'posters': Poster.published.get_n(1),
-        'recent_stories':recent_stories,
+        'recent_stories': Article.published.order_by('-pub_date')[:3],
         
         'top_banner': BannerAd.article_top.pick(allow_zero_priority=False),
     })

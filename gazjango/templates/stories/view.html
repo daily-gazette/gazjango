@@ -17,39 +17,34 @@
 
 
 {% block content %}
-<div id="articlewrapper">
-	<div class="article">
-		<!-- Begin code for article "breadcrumbs." This shows the path to the post's page -->
-		<div class="breadcrumb">
-		You are here: 	
-			<a href="{{ story.section.get_absolute_url }}">{{ story.section.name }}</a> 
-	        {% if story.subsection %}
-				{% ifequal story.subsection.name "April Fools" %}{% else %}&raquo; <a href="{{ story.subsection.get_absolute_url }}">{{ story.subsection.name }}</a>{% endifequal %}
-			{% endif %}
-		</div>
+  <div id="articlewrapper">
+  	<div class="article">
+  		<!-- Begin code for article "breadcrumbs." This shows the path to the post's page -->
+  		<div class="breadcrumb">
+  		You are here: 	
+  			<a href="{{ story.section.get_absolute_url }}">{{ story.section.name }}</a> 
+  	        {% if story.subsection %}
+  				{% ifequal story.subsection.name "April Fools" %}{% else %}&raquo; <a href="{{ story.subsection.get_absolute_url }}">{{ story.subsection.name }}</a>{% endifequal %}
+  			{% endif %}
+  		</div>
 		    
 		
-		{% block above-headline %}
-		  {% if top_banner %}{{ top_banner.display }}{% endif %}
-		{% endblock %}
+  		{% block above-headline %}
+  		  {% if top_banner %}{{ top_banner.display }}{% endif %}
+  		{% endblock %}
 		
-		<h1 class="article-title">{{ story.headline|safe }}</h1>		
-		<div style="clear:both"></div>
+  		<h1 class="article-title">{{ story.headline|safe }}</h1>		
+  		<div style="clear:both"></div>
 
-		{% block story-content %}
-            {{ story.resolved_text|safe }}
+  		{% block story-content %}
+        {{ story.resolved_text|safe }}
   		{% endblock %}
 			
-		{% for poll in story.polls.all %}
-            {% include "polls/listing.html" %}
-	    {% endfor %}
-		
-			<!-- End IMPORTANT code -->
-						
-			<!-- End of The Loop -->
-					
+  		{% for poll in story.polls.all %}
+        {% include "polls/listing.html" %}
+      {% endfor %}				
 	
-	<div style="clear:right;"></div>
+  	<div style="clear:right;"></div>
 	
 
     <div id="shareBox">
@@ -60,111 +55,109 @@
         <a href="print"><img src="{% static images icons/print.png %}" /> Print</a>
         &nbsp;&nbsp;
         <a href="email"><img src="{% static images icons/email.png %}" /> Email</a>
-		&nbsp;&nbsp;
-		<a href="#comment"> Submit a comment</a>
+  	&nbsp;&nbsp;
+  	<a href="#comment"> Submit a comment</a>
       </small></p>
     </div>
 
-    {% if story.comments_allowed or comments %}
-      <div id="comments">
-        {% include "stories/comments.html" %}
-      </div>
-    {% endif %}
-
-    {% if story.comments_allowed %}
-      <div id="submitComments">
-        <div id="commentForm">
-          <h4 name="submitComment" style="display: none;">Submit a Comment</h4>
-          {% include "stories/comment_form.html" %}
+    {% block comments %}
+      {% if story.comments_allowed or comments %}
+        <div id="comments">
+          {% include "stories/comments.html" %}
         </div>
-        <div id="commentRules">
-          <p>Comments posted anonymously must be approved by Gazette staff before they are published.</p>
+      {% endif %}
+    {% endblock %}
 
-          <hr width="50%" color="#dddddd" size="1px">
+    {% block comment_form %}
+      {% if story.comments_allowed %}
+        <div id="submitComments">
+          <div id="commentForm">
+            <h4 name="submitComment" style="display: none;">Submit a Comment</h4>
+            {% include "stories/comment_form.html" %}
+          </div>
+          <div id="commentRules">
+            <p>Comments posted anonymously must be approved by Gazette staff before they are published.</p>
 
-          <h4 name="comment"><a name="comment">Discussion Rules</a></h4>
-          <ul>
-            <li>Be nice.</li>
-            <li>Be constructive.</li>
-            <li>Don't curse.</li>
-            <li>Don't threaten.</li>
-          </ul>
+            <hr width="50%" color="#dddddd" size="1px">
 
-          <p>More details on our <a name="comment">policies</a> <a href="/policies/">here</a>.</p>
+            <h4 name="comment"><a name="comment">Discussion Rules</a></h4>
+            <ul>
+              <li>Be nice.</li>
+              <li>Be constructive.</li>
+              <li>Don't curse.</li>
+              <li>Don't threaten.</li>
+            </ul>
 
-          <hr width="50%" color="#dddddd" size="1px" />
+            <p>More details on our <a name="comment">policies</a> <a href="/policies/">here</a>.</p>
 
-          <p>
-            {% if user.is_authenticated %}
-              <a href="{{ user.manage_url }}">Manage your Account</a>
-            {% else %}
-              <a href="{{ user.register_url }}">Register an Account</a> |
-              <a href="{{ user.login_url }}">Login</a> <br/>
-              <fb:login-button size="medium" background="white" length="long"></fb:login-button>
-            {% endif %}
-          </p>
+            <hr width="50%" color="#dddddd" size="1px" />
+
+            <p>
+              {% if user.is_authenticated %}
+                <a href="{{ user.manage_url }}">Manage your Account</a>
+              {% else %}
+                <a href="{{ user.register_url }}">Register an Account</a> |
+                <a href="{{ user.login_url }}">Login</a> <br/>
+                <fb:login-button size="medium" background="white" length="long"></fb:login-button>
+              {% endif %}
+            </p>
+          </div>
         </div>
-      </div>
-    {% endif %}
+      {% endif %}
+    {% endblock %}
+  </div>
 
-</div>
+  <!-- SIDEBAR -->
+  <div id="rightsidebar">
+	
+  	<div id="article-meta">	
+  		<!-- Begin section for post metadata (author, date, tags) -->
+  		<div class="metadata">
+  			<ul>
+  				<h4>Story Information</h4>
+  				<li>{% block authors %}By {{ story.authors_in_order|join_authors:"l" }}{% endblock %}</li>
+  				<li>Posted on <a href="{{ story.pub_date|issue_url }}">{{ story.pub_date|date:"F j, Y" }}</a> | {% add_this no-hover %} </li>
+  		</div>
+  		<!-- End code for the box of Article Tools -->
+  	</div>
+	
+	
+  	{% for item in posters %}
+  		{% if item.sponsor_url %}<a href="{{ item.sponsor_url }}">{% endif %}
+		  <img src="{{ item.poster.poster.url }}" class="poster" title="Poster from {{ item.sponsor }}"/>
+  		{% if item.sponsor_url %}</a>{% endif %}
+  	{% endfor %}
+	
+  	<span class="posterannouncement">Want to add your group's poster? Go <a href="/posters/new/">here</a>.</span>
+	
+  	<div class="leftbar">
 
-	<!-- SIDEBAR -->
-	<div id="rightsidebar">
+  		<h5>Recent Stories</h5>
+  		<ul>
+  		{% for story in recent_stories %}
+  			<li><a href="{{ story.get_absolute_url }}">{{ story.headline }}</a></li>
+  		{% endfor %}
+  		</ul>
 		
-		<div id="article-meta">	
-			<!-- Begin section for post metadata (author, date, tags) -->
-			<div class="metadata">
-				<ul>
-					<h4>Story Information</h4>
-					<li>{% block authors %}By {{ story.authors_in_order|join_authors:"l" }}{% endblock %}</li>
-					<li>Posted on <a href="{{ story.pub_date|issue_url }}">{{ story.pub_date|date:"F j, Y" }}</a> | {% add_this no-hover %} </li>
-			</div>
-			<!-- End code for the box of Article Tools -->
-		</div>
-		
-		
-		{% for item in posters %}
-			{% if item.sponsor_url %}
-				<a href="{{ item.sponsor_url }}"><img src="{{ item.poster.poster.url }}" class="poster" title="Poster from {{ item.sponsor }}"/></a>
-			{% else %}
-				<img src="{{ item.poster.poster.url }}" class="poster" title="Poster from {{ item.sponsor }}"/>
-			{% endif %}
-		{% endfor %}
-		
-		<span class="posterannouncement">Want to add your group's poster? Go <a href="/posters/new/">here</a>.</span>
-		
-		<div class="leftbar">
+  		<!-- Begin Recent Posts Section -->
+  		<h5>Other Stories in {{ story.section }}</h5>
+  		<ul>
+    		{% for story in related %}
+    			<li><a href="{{ story.get_absolute_url }}">{{ story.headline }}</a></li>
+    		{% endfor %}
+  		</ul>
+  	</div>
 
-			<h5>Recent Stories</h5>
-			<ul>
-			{% for story in recent_stories %}
-				<li><a href="{{ story.get_absolute_url }}">{{ story.headline }}</a></li>
-			{% endfor %}
-			</ul>
-			
-			<!-- Begin Recent Posts Section -->
-			<h5>Other Stories in {{ story.section }}</h5>
-			<ul>
-			{% for story in related %}
-				<li><a href="{{ story.get_absolute_url }}">{{ story.headline }}</a></li>
-			{% endfor %}
-			</ul>
+  	<div class="rightbar">
+    	<!-- Begin Facebook Connect Section -->
 
-		</div>
+    	<!-- Begin Popular Stories Section -->
+  		<h5>Most popular stories</h5>					
+			<strong>WHAT SHOULD GO HERE?</strong>
 
-		<div class="rightbar">
-
-	    	<!-- Begin Facebook Connect Section -->
-
-	    	<!-- Begin Popular Stories Section -->
-			<h5>Most popular stories</h5>					
-				<strong>WHAT SHOULD GO HERE?</strong>
-
-	    	<!-- Begin poll section -->	
-			<h5>Current Poll</h5>
-				<strong>WHAT SHOULD GO HERE?</strong>
-
-		</div>
-	</div>
+    	<!-- Begin poll section -->	
+  		<h5>Current Poll</h5>
+			<strong>WHAT SHOULD GO HERE?</strong>
+  	</div>
+  </div>
 {% endblock %}

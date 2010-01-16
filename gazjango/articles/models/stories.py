@@ -206,6 +206,8 @@ class Article(models.Model):
     status = models.CharField(max_length=1, choices=STATUS_CHOICES, default='d')
     
     comments_allowed = models.BooleanField(default=True)
+    swat_only = models.TextField(help_text="If empty, not Swat-only; if there's text, show that text "
+                                           "to non-Swat visitors instead. (Rendered w/ textile.)")
     
     POSITION_CHOICES = (
         ('3', 'low'),
@@ -398,6 +400,14 @@ class Article(models.Model):
                 special.title = special.title or title
                 special.category = special.category or category
                 special.save()
+    
+    def is_swat_only(self):
+        return bool(self.swat_only.strip())
+    
+    def non_swat_text(self):
+        if not self.is_swat_only():
+            raise Exception("this article isn't swat-only")
+        return formats.textile(self.swat_only)
     
     def __unicode__(self):
         return "%s (%s)" % (self.slug, self.pub_date.date())
