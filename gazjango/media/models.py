@@ -4,8 +4,9 @@ from django.db                   import models
 from django.db.models            import signals
 
 from gazjango.accounts.models import UserProfile
-from gazjango.imagekit.models import ImageModel, ImageModelBase
 from gazjango.misc.helpers    import set_default_slug
+
+from imagekit.models import ImageModel, ImageModelBase
 
 class MediaBucket(models.Model):
     """
