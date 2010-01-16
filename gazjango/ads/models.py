@@ -84,5 +84,5 @@ class BannerAd(models.Model):
         return mark_safe(s) # make sure this gets rendered as raw html in templates
     
     def __unicode__(self):
-        return self.slug
+        return "%s [%s; %s]" % (self.publisher, self.date_start, self.get_space_display())
     
