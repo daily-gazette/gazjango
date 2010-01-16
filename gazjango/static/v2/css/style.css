@@ -1055,7 +1055,8 @@ ul#twitter_update_list li {
     border: 2px solid #989898;
     padding: 5px;
     margin: 2px;
-    min-height: 45px
+    min-height: 45px;
+    overflow: hidden;
 }
 
 .cathomesocial .entry.delicious {
