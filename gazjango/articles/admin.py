@@ -6,23 +6,25 @@ from gazjango.articles.models import DummySpecialTarget, SectionSpecial
 from gazjango.articles.models import PhotoSpread, PhotoInSpread
 
 _help_text = lambda field, model=Article: model._meta.get_field_by_name(field)[0].help_text
+_blank = lambda field, model=Article: model._meta.get_field_by_name(field)[0].blank
+args = lambda *a, **kw: {'help_text': _help_text(*a, **kw), 'required': not _blank(*a, **kw)}
+
 class StoryAdminForm(forms.ModelForm):
     class Meta:
         model = Article
     
     headline = forms.CharField(
         widget=forms.TextInput(attrs={'size': '80'}),
-        help_text=_help_text('headline'))
+        **args('headline'))
     short_title = forms.CharField(
         widget=forms.TextInput(attrs={'size': 50, 'maxchars': 40}),
-        help_text=_help_text('short_title'))
+        **args('short_title'))
     text = forms.CharField(
         widget=forms.Textarea(attrs={'rows': '40', 'cols': '120'}),
-        help_text=_help_text('text'))
+        **args('text'))
     short_summary = forms.CharField(
         widget=forms.Textarea(attrs={'rows': 2, 'cols': 100}),
-        help_text=_help_text('short_summary')
-    )
+        **args('short_summary'))
 
 class WritingInline(admin.StackedInline):
     model = Writing
