@@ -1,13 +1,15 @@
 {% load extras %}
 {% load markup %}
 
-{% block story-content %}
+{% block photo-block %}
 	<center>
     <div class="spreadImage">
-      <a href="{{ page.photo.photospreadimage.url }}" class="lightbox">
-        <img src="{{ page.photo.photospreadimage.url }}" alt=""
-             title="{{ page.photo.credit|before:"Photo by " }}" />
-      </a>
+      {% if next %}<a href="{{ next.get_absolute_url }}" class="page-link">{% endif %}
+      <img src="{{ page.photo.photospreadimage.url }}" alt=""
+           title="{{ page.photo.credit|before:"Photo by " }}"
+           width="650" />
+      {% if next %}</a>{% endif %}
+      <a class="photospreadBigLink" href="{{ page.photo.photospreadbig.url }}">[see larger size]</a>
     </div>
   </center>
   

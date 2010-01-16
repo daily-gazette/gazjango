@@ -3,10 +3,7 @@
 
 {% block customheader %}
   {{ block.super }}
-  
-  <script type="text/javascript" src="{% static js lightbox/js/lightbox-05.js %}"></script>
-  <link rel="stylesheet" href="{% static js lightbox/css/lightbox-05.css %}" type="text/css" media="screen, projection" />
-  
+    
   <!--[if lte IE 7]>
     <style type="text/css">
       #photo-block img {
@@ -17,20 +14,12 @@
   <![endif]-->
   
   
-  <script type="text/javascript" charset="utf-8">
-    function lightboxify() {
-      $('.lightbox').lightBox();
-    }
-    $(lightboxify);
-    
+  <script type="text/javascript" charset="utf-8">    
     function ajaxifyLinks() {
       $('.page-link').each(function() {
         $(this).click(function(event) {
           event.preventDefault();
-          $('#photo-block').load($(this).attr('href'), null, function() {
-            lightboxify();
-            ajaxifyLinks();
-          });
+          $('#photo-block').load($(this).attr('href'), null, ajaxifyLinks);
         });
       });
     }

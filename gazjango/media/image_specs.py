@@ -196,11 +196,19 @@ class ProfilePic(ImageSpec):
 #
 
 class ResizePhotospreadImage(processors.Resize):
-    # bigger than the real size, so that lightbox does something
-    height = 1175
-    width = 900
+    # height = 
+    width = 650
     crop = False
     upscale = False
 
 class PhotospreadImage(ImageSpec):
     processors = [ResizePhotospreadImage]
+
+
+class ResizePhotospreadBig(processors.Resize):
+    width = 1500
+    crop = False
+    upscale = False
+
+class PhotospreadBig(ImageSpec):
+    processors = [ResizePhotospreadBig]
