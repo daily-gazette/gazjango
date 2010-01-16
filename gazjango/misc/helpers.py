@@ -90,7 +90,7 @@ def set_default_slug(namer, extra_limits=lambda x: {}):
 
 
 WORD_BREAKS = re.compile(r'[-.,_\s]+')
-def smart_truncate(string, length, min_length_diff=8):
+def smart_truncate(string, length, min_length_diff=15):
     """
     Truncates `string` to be no longer than `length`, but no shorter than
     `length`-`min_length_diff`. Tries to do so at a word boundary, cutting
