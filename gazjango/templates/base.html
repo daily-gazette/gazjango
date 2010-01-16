@@ -12,7 +12,6 @@
   <link rel="stylesheet" href="{% static v2 css/style.css %}" type="text/css" media="screen, projection" />
   <link rel="stylesheet" href="{% static v2 css/functions.css %}" type="text/css" media="screen, projection" />
 
-
   <link rel="icon" type="image/x-icon" href="/static/images/favicon.ico" />
 
   <link rel="alternate" type="application/rss+xml" title="Homepage" href="/feeds/main" />
@@ -28,20 +27,20 @@
 </head>
 
 <body {% block body-args %}{% endblock %}>
-    <div id="wrap">
-        <div id="header">
+  <div id="wrap">
+    <div id="header">
 			<div class="headerleft">
-				<h1 class="blogtitle"><a href="/">The Daily Gazette</a></h1><h4 class="tagline"> - News for Swatties</h4>
+  			<h1 class="blogtitle"><a href="/">The Daily Gazette</a></h1><h4 class="tagline"> - News for Swatties</h4>
 			</div>
 			<div class="email-subscription">
 				<h6>Sign up for updates</h6>
 				<p>Subscribe via email</p>
-		    	<form id="email-updates" >
-			        <input type="text" style="width:150px" id="subbox" value="Submission form for the mailing list" name="email"/>
-			    	<input type="hidden" value="newsevolveddemo" name="uri"/>
-			    	<input type="hidden" name="loc" value="en_US"/>
-			    	<input type="submit" value="Sign Up" />
-		    	</form>
+	    	<form id="email-updates" >
+          <input type="text" style="width:150px" id="subbox" value="Submission form for the mailing list" name="email"/>
+		    	<input type="hidden" value="newsevolveddemo" name="uri"/>
+		    	<input type="hidden" name="loc" value="en_US"/>
+		    	<input type="submit" value="Sign Up" />
+	    	</form>
 			</div>
 			{% if user.is_authenticated %}
 			  {% if header_auth_notice %}
@@ -63,38 +62,36 @@
 					<li><a href="/archives">Archives</a></li>
 					<li><a href="/comments">Comments</a></li>
 					{% if user.is_authenticated %} 
-                        {% if user.is_staff %}
-                            <li><a href="/staff/">Staff Page</a></li>
-                        	{# <li><a href="/reporter-admin/">Reporter Admin</a></li>#}
-                        	<li><a href="/admin/">Admin</a></li>
-                        {% endif %}
-                      		<li><a href="{% url manage-user %}">Manage your Account</a></li>
-                      {% if facebook_user %}
-                        	<li><a href="{% url logout %}" onclick="FB.Connect.logoutAndRedirect('{% url logout %}')"><img src="http://static.ak.fbcdn.net/images/fbconnect/logout-buttons/logout_small.gif" alt="Logout" /></a></li>
-                      {% else %}
-                      	{% if not user.get_profile.facebook_id %}
-                        	<li><fb:login-button size="small" length="short"></fb:login-button> Connect</li>
-                        {% endif %}
-                        	<li><a href="{% url logout %}">Logout</a></li>
-                      {% endif %}
-                    {% else %} {# not authenticated #}
-                      		<li><a href="{% url registration_register %}">Register an Account</a></li>
-                      		<li><a href="{% url auth_login %}">Login</a></li>
-                      		<li><fb:login-button size="small" background="white" length="short"></fb:login-button></li>
-                    {% endif %}
-					<form id="searchform">
-		        		<input type="text" name="s" id="s" value="Search form here..." />
-		        		<input type="submit" id="sbutt" value="Search" />
-		    		</form>
+            {% if user.is_staff %}
+              <li><a href="/staff/">Staff Page</a></li>
+            	{# <li><a href="/reporter-admin/">Reporter Admin</a></li>#}
+            	<li><a href="/admin/">Admin</a></li>
+            {% endif %}
+        		<li><a href="{% url manage-user %}">Manage your Account</a></li>
+            {% if facebook_user %}
+            	<li><a href="{% url logout %}" onclick="FB.Connect.logoutAndRedirect('{% url logout %}')"><img src="http://static.ak.fbcdn.net/images/fbconnect/logout-buttons/logout_small.gif" alt="Logout" /></a></li>
+            {% else %}
+            	{% if not user.get_profile.facebook_id %}
+              	<li><fb:login-button size="small" length="short"></fb:login-button> Connect</li>
+              {% endif %}
+            	<li><a href="{% url logout %}">Logout</a></li>
+            {% endif %}
+          {% else %} {# not authenticated #}
+        		<li><a href="{% url registration_register %}">Register an Account</a></li>
+        		<li><a href="{% url auth_login %}">Login</a></li>
+        		<li><fb:login-button size="small" background="white" length="short"></fb:login-button></li>
+          {% endif %}
+
+          {% include "search_header.html" %}
 				</ul>
 			</div>
 			<div id="catnav">
 				<ul>
-					<h6>Sections |</h6>
+					<h6>Sections: </h6>
 					<li><a href="{% url section "news" %}">News</a></li>
-                    <li><a href="{% url section "features" %}">Features</a></li>
-                    <!-- ><li><a href="{% url section "athletics" %}">Athletics</a></li> Removed for now. -->
-                    <li><a href="{% url section "opinions" %}">Opinions</a></li>
+          <li><a href="{% url section "features" %}">Features</a></li>
+          {# <li><a href="{% url section "athletics" %}">Athletics</a></li> Removed for now. #}
+          <li><a href="{% url section "opinions" %}">Opinions</a></li>
 				</ul>
 			</div>
 		</div>
@@ -105,39 +102,38 @@
 		
 		{% endblock content %}
 
-	</div> <!-- End Main Wrap --> 	<div style="clear:both;"></div>
+	</div>
+	<div style="clear:both;"></div>
 
 	<!-- Begin Footer -->
-
 	<div id="footerwrap">
 		<div class="footerbox">
 			<h1>Browse the Gazette</h1>
 			Sections
 			<ul>
 				<li><a href="{% url section "news" %}">News</a></li>
-                <li><a href="{% url section "features" %}">Features</a></li>
-                <li><a href="{% url section "athletics" %}">Athletics</a></li>
-                <li><a href="{% url section "multimedia" %}">Multimedia &amp; Photography</a></li>
-                <li><a href="{% url section "opinions" %}">Opinions</a></li>
+        <li><a href="{% url section "features" %}">Features</a></li>
+        <li><a href="{% url section "athletics" %}">Athletics</a></li>
+        <li><a href="{% url section "multimedia" %}">Multimedia &amp; Photography</a></li>
+        <li><a href="{% url section "opinions" %}">Opinions</a></li>
 			</ul>
 
-	  		<h2>Search</h2>
-	  		<form id="searchform" method="get" action="<?php echo $_SERVER['PHP_SELF']; ?>">
-	        	<input type="text" name="s" id="s" value="Search News Evolved..." onfocus="if (this.value == 'Search News Evolved...') {this.value = '';}"
-	         onblur="if (this.value == '') {this.value = 'Search News Evolved...';}" />
-	        	<input type="submit" id="sbutt" value="Search" />
-	    	</form>
+      <h2>Search</h2>
+		  {% include "search_header.html" %}
 		</div>
+		
 		<div class="footerbox">
 			<h1>Contact the Gazette</h1>
-			<h6>Have questions about the Gazette? Want to suggest a story or advertise your event? Feel free to <a href="/about/contact">use our contact form</a>.</h6>
+			<h6>Have questions about the Gazette? Want to suggest a story or advertise your event? Feel free to <a href="/about/contact">contact us</a>.</h6>
 		</div>
+		
 		<div class="footerbox">
 			<h1>Popular Posts</h1>
 				<ul>
 					<li>List most popular posts</li>
 				</ul>
 		</div>
+		
 		<div class="footerbox">
 			<h1>Popular Comments</h1>
 			<ul>
@@ -145,6 +141,7 @@
 			</ul>
 		</div>
 	</div>
+	
 	<div style="clear:both;"></div>
 
 <script type="text/javascript">FB.init("{{ FACEBOOK_API_KEY }}", "/xd_receiver.html", {'reloadIfSessionStateChanged': true});</script>
