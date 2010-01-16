@@ -74,10 +74,6 @@ def show_article(request, story, form, print_view=False):
     
     recent_stories = Article.published.get_query_set()[:3]
     
-    import logging
-    logging.warn(user)
-    logging.warn(user.staff_status())
-    
     context = RequestContext(request, {
         'story': story,
         'comments': comments,
