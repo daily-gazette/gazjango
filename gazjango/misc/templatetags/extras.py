@@ -70,6 +70,10 @@ def join_authors(authors, format='', autoescape=None):
     
     If the format string includes an "s", positions are shown; if it includes
     an "x", positions are not shown. "s" is default.
+    
+    If the format string includes a "," or a ";", it uses that to separate
+    authors. (Note that a "," with positions will look stupid.) A "b" means
+    to insert a <br/>.
     """
     if not authors:
         return ''
@@ -78,17 +82,20 @@ def join_authors(authors, format='', autoescape=None):
     link = False
     case = 'u'
     positions = True
+    sep = '; '
     for char in format.lower():
         if char.isdigit():
             limit = int(char)
         elif char == 'a':
             limit = None
-        elif char in ('l', 'p'):
+        elif char in 'lp':
             link = (char == 'l')
-        elif char in ('d', 't', 'u'):
+        elif char in 'dtu':
             case = char
-        elif char in ('s', 'x'):
+        elif char in 'sx':
             positions = (char == 's')
+        elif char in ";,b":
+            sep = '<br/> ' if char == 'b' else (char + ' ')
         else:
             pass
     
@@ -116,10 +123,10 @@ def join_authors(authors, format='', autoescape=None):
     if positions: base += "%(pos)s"
     if link:      base = "<a href='%(url)s'>" + base + "</a>"
     
-    return mark_safe('; '.join(base % reps(author) for author in result))
+    return mark_safe(sep.join(base % reps(author) for author in result))
 
 join_authors.needs_autoescape = True
-
+join_authors.is_safe = True
 
 
 
