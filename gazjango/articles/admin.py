@@ -1,9 +1,28 @@
 from django.contrib import admin
+from django import forms
 from gazjango.articles.models import Article, Section, Subsection, Column, Writing
 from gazjango.articles.models import StoryConcept, Special
 from gazjango.articles.models import DummySpecialTarget, SectionSpecial
 from gazjango.articles.models import PhotoSpread, PhotoInSpread
 
+_help_text = lambda field, model=Article: model._meta.get_field_by_name(field)[0].help_text
+class StoryAdminForm(forms.ModelForm):
+    class Meta:
+        model = Article
+    
+    headline = forms.CharField(
+        widget=forms.TextInput(attrs={'size': '80'}),
+        help_text=_help_text('headline'))
+    short_title = forms.CharField(
+        widget=forms.TextInput(attrs={'size': 50, 'maxchars': 40}),
+        help_text=_help_text('short_title'))
+    text = forms.CharField(
+        widget=forms.Textarea(attrs={'rows': '40', 'cols': '120'}),
+        help_text=_help_text('text'))
+    short_summary = forms.CharField(
+        widget=forms.Textarea(attrs={'rows': 2, 'cols': 100}),
+        help_text=_help_text('short_summary')
+    )
 
 class WritingInline(admin.StackedInline):
     model = Writing
@@ -20,18 +39,22 @@ class StoryAdmin(admin.ModelAdmin):
     list_filter = ('status', 'position', 'possible_position', 'section', 'subsection')
     ordering = ('-pub_date',)
     
+    form = StoryAdminForm
     fieldsets = (
         (None, {
-            'fields':('headline','slug','status','concept','summary','text','format','section','subsection','main_image','position','possible_position')
+            'fields': ('headline', 'short_title', 'slug',
+                       'status', 'concept', 'text', 'format', 'main_image')
         }),
-        ('Top Stories', {
-            'fields': ('short_title','short_summary','long_summary','is_special'),
-            'classes': ('collapse',),
+        ('Summaries', {
+            'fields': ('short_summary', 'summary'),
+        }),
+        ('Placement', {
+            'fields': ('section', 'subsection', 'position'),
         }),
         ('Advanced', {
-            'fields': ('pub_date','is_racy'),
+            'fields': ('pub_date', 'is_racy', 'comments_allowed'),
             'classes': ('collapse',),
-        })
+        }),
     )
     
     inlines = [WritingInline]

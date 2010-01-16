@@ -5,7 +5,19 @@
 # add missing apps/tables
 ./manage.py syncdb
 
-# TODO: extend articles_article.short_summary to 210 chars
+# articles changes:
+./manage.py dbshell <<'SQL'
+# extend short_summary to 210 chars
+ALTER TABLE `articles_article` MODIFY `short_summary` varchar(210) NOT NULL;
+
+# shorten short_title to 40 chars
+UPDATE `articles_article` SET `short_title`=''
+                          WHERE length(`short_title`) > 40;
+ALTER TABLE `articles_article` MODIFY `short_title` varchar(40) NOT NULL;
+
+# drop long_summary
+ALTER TABLE `articles_article` DROP `long_summary`;
+SQL
 
 # convert to staff_state column for positions
 ./manage.py dbshell <<'SQL'
@@ -50,9 +62,12 @@ SQL
 # add our livecustomer ads
 ./manage.py shell <<'ADS'
 from interactive_load import *
-TextLinkAd.objects.create(source='c', link='http://www.acairoots.com', text='acai')
-TextLinkAd.objects.create(source='c', link='http://www.r4-ds-card.ca', text='r4')
-TextLinkAd.objects.create(source='c', link='http://www.framesdirect.com/sunglasses/', text='sunglasses')
+TextLinkAd.objects.create(source='c', 
+    link='http://www.acairoots.com', text='acai')
+TextLinkAd.objects.create(source='c',
+    link='http://www.r4-ds-card.ca', text='r4')
+TextLinkAd.objects.create(source='c',
+    link='http://www.framesdirect.com/sunglasses/', text='sunglasses')
 ADS
 
 # make sure that admin permissions are right, etc

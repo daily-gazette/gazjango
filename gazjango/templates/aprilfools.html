@@ -84,7 +84,7 @@
                     <div class='spacer-half'></div>
                     <p id='pubdate'>Published {{ topstory.pub_date|date:"n/j/Y" }}</p>
                     <div class='spacer-half'></div>
-        			<p>{{ topstory.longest_summary|safe }}<a class="readMore" href="{{ topstory.get_absolute_url }}">More</a></p>
+        			<p>{{ topstory.summary|safe }}<a class="readMore" href="{{ topstory.get_absolute_url }}">More</a></p>
         			{% endfor %}
                     <div class='spacer'></div>
 

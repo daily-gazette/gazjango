@@ -238,7 +238,7 @@ def homepage(request, social_len=7, num_tweets=2, template="index.html"):
     announcements = Announcement.regular.order_by('-date_end', '-date_start')    
     
     data = {
-        'topstories': Article.published.filter(position='1').order_by('-pub_date')[:4],
+        'topstories': Article.published.filter(position='1').order_by('-pub_date')[:6],
         'stories': Article.published.order_by('-pub_date')[:4],
         
         'weather': Weather.objects.for_today(),

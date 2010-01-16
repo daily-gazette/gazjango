@@ -126,31 +126,29 @@ class Article(models.Model):
     A story or other article to be published. Includes news stories,
     editorials, etc, but not announcements or jobs.
     
-    Note that although there are a ton of summaries, only major stories (ie
-    thoe that go in the topstories bit) need a long_summary or a short_summary.
-    All stories, however, should have a regular summary.
-    
     Stores major revisions of the article: whatever the author decides to
     save manually while writing, changes editors make afterwards, and then
     any changes made after publication. Comments can (and should) be attached
     to these revisions.
     """
     
-    headline    = models.CharField(max_length=200,help_text="(Main headline.)")
-    short_title = models.CharField(blank=True, max_length=80,help_text="(Only needed for top stories, used in article footers.)")
+    headline    = models.CharField(max_length=200, help_text="Main headline.")
+    short_title = models.CharField(blank=True, max_length=40,
+        help_text="For the front page; keep it *short*.")
     slug        = models.SlugField(unique_for_date="pub_date", max_length=100,
-                  help_text="(Part of the URL: /2008/month/day/slug/. Should generally be lowercase and hyphenated, like global-neighbors or strong-endowment-in-recession.)")
+        help_text="Example: global-neighbors, strong-endowment-in-recession. It's part "
+                  "of the article's URL: daily.swarthmore.edu/year/month/day/slug/.")
     
     concept = models.ForeignKey(StoryConcept, null=True, blank=True, related_name="articles",
-              help_text="(If this story was assigned via a Story Concept, pick which one so we know you've started work on it.)")
+        help_text="If this story was assigned via a Story Concept, pick which one so we know you've started work on it.")
     
     summary = models.TextField()
-    short_summary = models.CharField(max_length=210, blank=True,help_text="For the front page...make it look good!")
-    long_summary  = models.TextField(blank=True)
-    
-    text   = models.TextField(blank=True, help_text="""
+    short_summary = models.CharField(max_length=210, blank=True, help_text="For the front page...make it look good! [max 210 chars]")
+        
+    text = models.TextField(blank=True, help_text="""
     Links: &lt;a href="URL"&gt;Link text&lt;/a&gt;<br />
-    Placing images: &lt;div class="alignment size"&gt;&lt;img src="img://bucket/slug" /&gt;by Photographer&lt;/div&gt;<br />
+    Placing images: &lt;div class="alignment size"&gt;&lt;img src="img://bucket/slug"
+                    /&gt;by Photographer&lt;/div&gt;<br />
     &nbsp;&nbsp;Alignment: either imgLeft or imgRight<br />
     &nbsp;&nbsp;Size: zero through fifty, in increments of five (ex. thirtyfive)<br />
     &nbsp;&nbsp;Bucket and Slug: From a previously uploaded image<br />
@@ -178,7 +176,7 @@ class Article(models.Model):
                                        content_type_field='subject_type',
                                        object_id_field='subject_id')
     
-    is_racy = models.BooleanField(default=False,help_text="(If checked, will not appear on the faculty dashboard.)")
+    is_racy = models.BooleanField(default=False,help_text="If checked, will not appear on the faculty dashboard.")
     is_special = models.BooleanField(default=False, help_text="Whether this should show up on the specials bar.")
     
     STATUS_CHOICES = (
@@ -205,11 +203,12 @@ class Article(models.Model):
     published = PublishedArticlesManager()
     
     def get_title(self):
-        return (self.short_title or self.headline)
+        "Returns the shortest complete headline available."
+        return self.short_title or self.headline
     
-    def longest_summary(self):
-        """Returns long_summary if we have it, else summary."""
-        return (self.long_summary or self.summary)
+    def get_short_title(self, min_diff=8, length=45):
+        "Returns a headline of length between `length` and `length`-`min_diff`."
+        return self.short_title or smart_truncate(self.headline, length, min_diff)
     
     def shortest_summary(self):
         """Returns short_summary if we have it, else summary."""

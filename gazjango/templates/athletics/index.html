@@ -86,7 +86,7 @@
     				  <span class="date">| {{ article.pub_date|date:"n/j/Y" }}</span>
     				</p>
     				<p>
-    				  {{ article.longest_summary|safe }}
+    				  {{ article.summary|safe }}
     				  <a class="readMore" href="{{ article.get_absolute_url }}">More</a>
     				</p>
 				</div>
