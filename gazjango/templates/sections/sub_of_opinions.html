@@ -1,4 +1,4 @@
-{% extends "base-expand.html" %}
+{% extends "sections/sec_opinions.html" %}
 {% load extras %}
 {% load markup %}
 
@@ -7,55 +7,33 @@
 {% block customheader %}
 {% endblock customheader %}
 
-{% block content %}
-	<!-- Below controls the main content of the page -->
+{% block article-listing %}
+  {% if column.wide_logo_url %}
+    <img src="{{ column.wide_logo_url }}" alt="{{ column.name }}" />
+  {% else %}
+    <h2 class="title">{{ column.name }}</h2>
+  {% endif %}
 	
-	<div id="articlewrapper">
-		<div id="category-box">
-			{% if column.wide_logo_url %}
-	          <img src="{{ column.wide_logo_url }}" alt="{{ column.name }}" />
-	        {% else %}
-	          <h2 class="title">{{ column.name }}</h2>
-	        {% endif %}
-	
-				{% for group in column.most_recent_articles|in_groups_of:4 %}
-					<div id="column-wrap">
-						<!-- Begin Mid Columns -->
-						{% for story in group %}
-						<div class="section column">
-							<h6><a href="{{ story.get_absolute_url }}" title="Permanent Link to {{ story.headline }}">{{ story.headline|slice:":40" }} ...</a></h6>
-							<li>Posted on {{ story.pub_date|date:"n/j/Y" }}</li>
-							<p>{{ story.summary|safe }}...</p>
-							<li class="more">More in <a href="{{ story.section.get_absolute_url }}">{{ story.section.name }}</a></li>
-						</div>
-						{% endfor %}
-					</div>
-				{% endfor %}
+	{% for group in column.most_recent_articles|in_groups_of:4 %}
+  	<div id="column-wrap">
+  		{% for story in group %}
+  			<div class="section column">
+  				<h6><a href="{{ story.get_absolute_url }}" title="{{ story.headline }}">{{ story.get_short_title }}</a></h6>
+					<li>Posted {{ story.pub_date|date:"n/j/Y" }}</li>
+					<p>{{ story.get_short_summary }}</p>
+				</div>
+			{% endfor %}
 		</div>
+	{% endfor %}
+{% endblock %}
 		
-		<div class="large-video-block">
-			<h2>Column Listings</h2>
-	        {% for column in columns %}
-		          	{% ifchanged %}
-		          		<h5 class="columns">{{ column.get_semester_display }} {{ column.year }}</h5>
-		          	{% endifchanged %}
-		          	<div class="column-listing"><a href="{{ column.get_absolute_url }}">{{ column.name }}</a></div>
-	        {% endfor %}
-		</div>
-		
-
-		<div class="large-video-block">
-			<h4>Comments</h4>
-			<div class="section cathomesocial">
-				{% for entry in stream %}
-					<div class="entry comment">
-						<p><a href="{{entry.get_absolute_url}}">{{ entry.display_name }}</a> spoke on <a href="{{entry.subject.get_absolute_url}}">{{ entry.subject.get_title }}</a>.</p>
-					</div>
-				{% endfor %}					
+{% block section-sidebar-mid %}
+	<h4>Comments</h4>
+	<div class="section cathomesocial">
+		{% for entry in stream %}
+			<div class="entry comment">
+				<p><a href="{{entry.get_absolute_url}}">{{ entry.display_name }}</a> spoke on <a href="{{entry.subject.get_absolute_url}}">{{ entry.subject.get_title }}</a>.</p>
 			</div>
-		</div>
-
-
-	<div style="clear:both"></div>
-
-{% endblock content %}
+		{% endfor %}					
+	</div>
+{% endblock %}

@@ -447,8 +447,7 @@ def subsection(request, section, subsection):
     sub = get_object_or_404(Subsection, section=sec, slug=subsection)
     
     comments = PublicComment.visible.filter(article__subsection=sub)
-    stream = comments
-    stream = stream[:5]
+    stream = comments[:5]
     
     if sub.slug == 'stuco-platforms':
         articles = sub.published_articles()
@@ -490,7 +489,7 @@ def subsection(request, section, subsection):
         data = {
             'section': sec,
             'subsection': sub,
-            'recent_stories': sub.published_articles().order_by('-pub_date')[:10],
+            'recent_stories': sub.published_articles().order_by('-pub_date')[:12],
             'topstories': tops,
             'midstories': mids,
             'lowlist': lowlist,

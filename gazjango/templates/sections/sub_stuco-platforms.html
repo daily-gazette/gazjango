@@ -14,7 +14,7 @@
 		<div id="category-box">
 	          <h2 class="title">{{ subsection.name }}</h2>		
 	
-			  <p>This page lists the platforms from the most recent Student Council election. Platforms are <strong>always</strong> due to The Daily Gazette by 11:00PM, the day before the election begins.</p>
+			  <p>This page lists the platforms from the most recent Student Council election (in {{ latest.pub_date|date:"F Y" }}). Platforms are <strong>always</strong> due to The Daily Gazette by 11:59PM on the day before the election begins.</p>
 			
 		      {% for position, name, article in platforms %}
 		          	{% ifchanged position %}

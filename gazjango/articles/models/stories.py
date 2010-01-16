@@ -346,6 +346,9 @@ class Article(models.Model):
         else:
             return None
     
+    def sub_or_sec(self):
+        return self.subsection.name if self.subsection else self.section.name
+    
     def update_concept_status(self):
         concept = self.concept
         if concept:
