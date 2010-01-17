@@ -13,13 +13,23 @@
     </style>
   <![endif]-->
   
+  <script type="text/javascript" src="{% static js lightbox/js/lightbox-05.js %}"></script>
+  <link rel="stylesheet" href="{% static js lightbox/css/lightbox-05.css %}" type="text/css" media="screen, projection" />
   
   <script type="text/javascript" charset="utf-8">    
+    function lightboxify() {
+      $('.lightbox').lightBox();
+    }
+    $(lightboxify);
+  
     function ajaxifyLinks() {
       $('.page-link').each(function() {
         $(this).click(function(event) {
           event.preventDefault();
-          $('#photo-block').load($(this).attr('href'), null, ajaxifyLinks);
+          $('#photo-block').load($(this).attr('href'), null, function() {
+            lightboxify();
+            ajaxifyLinks();
+          });
         });
       });
     }

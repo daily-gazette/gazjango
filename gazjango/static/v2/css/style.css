@@ -1794,7 +1794,68 @@ PHOTOSPREADS
 
 **************************************/
 
+.photospreadBigLink {
+    font-size: 0.7em;
+}
 
+
+.nav-links a {
+	font: 1.4em "Helvetica Neue", Arial, Helvetica, Geneva, sans-serif;
+	font-weight:bold;
+	text-decoration: none;
+	color: #ffffff;
+}
+
+.nav-links .otherLink a {
+	color: #376b9d;
+}
+.nav-links .otherLink a:hover {
+    color: #DD0A1C;
+}
+
+.nav-links a:hover {
+	text-decoration: underline;
+}
+
+.photo-caption {
+	width: 400px;
+	font-family: Georgia, "Times New Roman", Times, serif;
+}
+
+.nav-links ul {
+	display: inline-block;
+	margin-top: 5px;
+}
+
+.nav-links ul li {
+	display: inline;
+	padding: 5px;
+	margin: 0px;
+	font-color: #FFF;
+}
+
+.current, .notCurrent {
+	border: 1px solid #000000;
+}
+
+.current {
+	background-color: #A04248;
+}
+.current > a {
+/*    color: black;*/
+}
+
+.notCurrent {
+	background-color: #376b9d;
+}
+
+.current:hover, .notCurrent:hover {
+	background-color: #DD0A1C;
+}
+
+.navLinks .hidden {
+    visibility: hidden;
+}
 
 
 /**************************************

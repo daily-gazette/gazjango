@@ -9,7 +9,7 @@
            title="{{ page.photo.credit|before:"Photo by " }}"
            width="650" />
       {% if next %}</a>{% endif %}
-      <a class="photospreadBigLink" href="{{ page.photo.photospreadbig.url }}">[see larger size]</a>
+      <a class="photospreadBigLink lightbox" href="{{ page.photo.photospreadbig.url }}">[see larger size]</a>
     </div>
   </center>
   
@@ -23,9 +23,7 @@
     <center>
     	<ul>
     	  <li class="otherLink">
-          {% if prev %}
-      		  <a href="{{ prev.get_absolute_url }}" class="page-link">&laquo; Back</a>
-      		{% endif %}
+    		  <a class="page-link"{% if prev %}href="{{ prev.get_absolute_url }}"{% else %}style="visibility: hidden;"{% endif %}>&laquo; Back</a>
     		</li>
 
       	{% ifequal story.photos.count 1 %}
@@ -40,9 +38,7 @@
       	{% endifequal %}
 
     		<li class="otherLink">
-        	{% if next %}
-      		  <a href="{{ next.get_absolute_url }}" class="page-link">Next &raquo;</a>
-      		{% endif %}
+    		  <a class="page-link"{% if next %}href="{{ next.get_absolute_url }}"{% else %}style="visibility: hidden;"{% endif %}>Next &raquo;</a>
     		</li>
     	</ul>
     </center>
