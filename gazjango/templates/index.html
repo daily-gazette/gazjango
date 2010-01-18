@@ -52,7 +52,9 @@
 		<div id="homepage-section-wrap">
 			{% for story in stories %}
 				<div class="column">
-					<h4><a href="{{ story.section.get_absolute_url }}">{{ story.sub_or_sec }}</a></h4>
+				  {% with story.sub_or_sec as sec %}
+  					<h4><a href="{{ sec.get_absolute_url }}">{{ sec.name }}</a></h4>
+  				{% endwith %}
 					<h6><a href="{{ story.get_absolute_url }}" title="{{ story.headline }}">{{ story.get_short_title }}</a></h6>
 					<li>{{ story.authors_in_order|join_authors:"2ptxb" }}</li>
 					<li>Posted {{ story.pub_date|date:"n/j/Y" }}</li>
