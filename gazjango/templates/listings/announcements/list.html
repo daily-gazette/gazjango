@@ -9,41 +9,46 @@
 {% endblock customheader %}
 
 {% block expand_breadcrumb %}
-	<a href="/announcements/">Events and Announcements</a>
+	<a href="/announcements/">Events and Announcements</a>. Also see: <a href="{% url rsd-full-today %}">today's RSD</a>.
 {% endblock expand_breadcrumb %}
 
-{% block expand_top %}	
-		<div class="event-timeline">
-			{% for list in event_list %}
-				<div class="event-day">
-	        		<span class="date">{{ list.0.event_date|month}} {{ list.0.event_date|day}}</span>
-					<ul>
-					{% for event in list %}
+{% block expand_top %}
+	<div class="event-timeline">
+		{% for date, events in event_list %}
+			<div class="event-day">
+    		<span class="date">{{ date|month}} {{ date|day}}</span>
+				<ul>
+					{% for event in events %}
 						<li>{{ event.event_time }}: <a href="{{ event.get_absolute_url }}">{{ event.title }}</a></li>
 					{% endfor %}
-					</ul>
-				</div>
-			{% endfor %}
-	    </div> <!-- end .timeline -->
+				</ul>
+			</div>
+		{% endfor %}
+  </div>
 {% endblock expand_top %}
 
 {% block expand_content %}
-		    <h1 class="article-title">Announcements</h1>
-		    {% for announcementpair in non_events|slice:":10"|in_groups_of:2 %}
-				<div class="announcement-row">
-					{% for announcement in announcementpair %}
-					<div class="announcement">
-				        <h4><a href="{{ announcement.get_absolute_url }}">{{ announcement.title }}</a></h4>
-				        <p><strong>Sponsor:</strong> {{ announcement.sponsor_link }}<br />
-				        {% if announcement.is_event %}
-				            <strong>When:</strong> {{ announcement.event_date|near_future_date }} {% if announcement.event_time %} at {{ announcement.event_time }}{% endif %}<br />
-				            {% if annnouncement.event_place %}
-				                <strong>Where:</strong> {{ announcement.event_place }}<br />
-				            {% endif %}
-				        {% endif %}
-				        {{ announcement.long_excerpt|safe }}</p>
-					</div>
-					{% endfor %}
+  <h1 class="article-title">Announcements</h1>
+  {% for announcement_pair in regular|slice:":10"|in_groups_of:2 %}
+  	<div class="announcement-row">
+			{% for announcement in announcement_pair %}
+				<div class="announcement">
+	        <h4><a href="{{ announcement.get_absolute_url }}">{{ announcement.title }}</a></h4>
+	        <p><strong>Sponsor:</strong> {{ announcement.sponsor_link }}<br />
+	        {{ announcement.long_excerpt|safe }}</p>
 				</div>
-		    {% endfor %}
+			{% endfor %}
+		</div>
+  {% endfor %}
 {% endblock expand_content %}
+
+{% block expand_rightsidebar %}
+  <h1>Lost and Found</h1>
+  <ul>
+    {% for announcement in lost_and_found %}
+      <li><a href="{{ announcement.get_absolute_url }}">{{ announcement.title }}</a> - {{ announcement.sponsor_link|safe }}</li>
+    {% endfor %}
+  </ul>
+  <hr />
+  {{ block.super }}
+{% endblock %}

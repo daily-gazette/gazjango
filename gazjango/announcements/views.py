@@ -19,8 +19,8 @@ from gazjango.housing.forms        import SubmitHousingForm
 from gazjango.misc.view_helpers    import get_user_profile
 from gazjango.scrapers.bico        import get_bico_news
 
-
 import datetime
+import itertools
 
 def announcement(request, slug, year, month=None, day=None):
     an = get_object_or_404(Announcement, slug=slug, date_start__year=year)
@@ -33,50 +33,28 @@ def announcement(request, slug, year, month=None, day=None):
     return render_to_response("listings/announcements/details.html", data, context_instance=rc)
 
 
-def list_announcements(request, kind=None, year=None, month=None, day=None, order='d'):
-    if (request.GET.get('order', None) or order).startswith('d'):
-        qset = Announcement.community.order_by('-date_end', '-date_start')
-    else:
-        qset = Announcement.community.order_by('date_end', 'date_start')
+def list_announcements(request):
+    regular = Announcement.regular.all().order_by('-date_end', '-date_start')
+    lost_and_found = Announcement.lost_and_found.now_running().order_by('-date_start')
     
-    if year:
-        qset = filter_by_date(qset, year, month, day, field='date_start')
-    else:
-        qset = qset.exclude(date_start__gt=datetime.date.today())
+    # get the five most recent days with announcements, starting with today
+    today = datetime.date.today()
+    event_days = Announcement.events.filter(event_date__gte=today).order_by('event_date') \
+                                    .values_list('event_date', flat=True).distinct()[:5]
+    if len(event_days) < 5:
+        event_days = Announcement.events.all().order_by('-event_date') \
+                                 .values_list('event_date', flat=True).distinct()[:5]
     
-    if kind:
-        qset = qset.filter(kind=kind)
+    # get the actual announcements from those days
+    # mysql doesn't actually support this fancy query, so listify it
+    events = Announcement.events.filter(event_date__in=list(event_days)) \
+                                .order_by('event_date', 'event_time')
+    event_list = [(date, list(evs)) for date, evs in itertools.groupby(events, lambda e: e.event_date)]
     
-    events = qset.exclude(event_date=None)
-    non_events = qset.filter(event_date=None)
-    
-    date = None
-    event_list = []
-    item_list = []
-    for event in events.order_by('event_date', 'event_time', 'pk'):
-        if len(item_list) != 0:
-            if event.event_date == date:
-                item_list.append(event)
-            if event.event_date != date:
-                event_list.append(item_list)
-                item_list = []
-                item_list.append(event)
-                date = event.event_date
-        else:
-            date = event.event_date
-            item_list.append(event)
-    
-    event_list = event_list[-5:]
-    
-    data = { 
-        'announcements': qset,
-        'kind': kind,
-        'year': year,
-        'month': month,
-        'day': day,
+    data = {
         'event_list': event_list,
-        'non_events': non_events,
-        'recent_announcements': Announcement.community.order_by('-date_end')[:4],
+        'regular': regular,
+        'lost_and_found': lost_and_found[:10],
         'posters':Poster.published.get_n(1),
     }
     rc = RequestContext(request)
