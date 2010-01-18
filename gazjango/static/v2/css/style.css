@@ -561,6 +561,10 @@ a, #catnav li li a:link, #catnav li li a:visited {
 	background: #376b9d;
 }
 
+#catnav .right {
+    float: right;
+}
+
 /*** Styles for the weather widget ***/
 
 #weather {

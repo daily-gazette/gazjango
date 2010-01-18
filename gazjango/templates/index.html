@@ -140,15 +140,18 @@
 						<strong><a href="{{ announcement.get_absolute_url }}">{{ announcement.title }}</a></strong>
 					</p>
 				{% endfor %}
-				<div class="weather">
-					<h4>Current Weather</h4>
-					<p class="weather">
-					    <strong>Today:</strong> {{ weather.today }}<br/>  
-					    <strong>Tonight:</strong> {{ weather.tonight }}<br />
-						<strong>Tomorrow:</strong> {{ weather.tomorrow }}<br />
-				    	<small>Weather from the <a href="http://weather.gov">NWS</a>.</small>
-					</p>
-				</div>
+        {# <div class="weather"> #}
+        {#           <h4>Weather</h4> #}
+        {#  <p class="weather"> #}
+        {#            <strong>Today:</strong> {{ weather.today }}<br/> #}
+        {#            <em>{{ joke.line_one }}</em><br /> #}
+        {#     <strong>Tonight:</strong> {{ weather.tonight }}<br /> #}
+        {#     <em>{{ joke.line_two }}</em><br /> #}
+        {#    <strong>Tomorrow:</strong> {{ weather.tomorrow }}<br /> #}
+        {#    <em>{{ joke.line_three }}</em><br /> #}
+        {#            <small>Weather from the <a href="http://weather.gov">NWS</a>.</small> #}
+        {#  </p> #}
+        {# </div> #}
 			</div>
 			<div class="bottom-third">
 				<h4>Events</h4>

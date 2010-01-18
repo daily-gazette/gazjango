@@ -92,7 +92,11 @@
           <li><a href="{% url section "features" %}">Features</a></li>
           {# <li><a href="{% url section "athletics" %}">Athletics</a></li> Removed for now. #}
           <li><a href="{% url section "opinions" %}">Opinions</a></li>
-          <li><a href="{% url announcements %}">RSD</a></li>
+          
+          {# <li class="right"><a href="{% url reviews %}">Reviews</a></li> #}
+          <li class="right"><a href="{% url books %}">Books</a></li>
+          <li class="right"><a href="{% url job_list %}">Jobs</a></li>
+          <li class="right"><a href="{% url announcements %}">Announcements / Events</a></li>
 				</ul>
 			</div>
 		</div>
@@ -125,20 +129,23 @@
 		
 		<div class="footerbox">
 			<h1>Contact the Gazette</h1>
-			<h6>Have questions about the Gazette? Want to suggest a story or advertise your event? Feel free to <a href="/about/contact">contact us</a>.</h6>
+			<h6>Have questions about the Gazette? Want to suggest a story, or send in a photo you think we'd like? Feel free to <a href="/about/contact">send us an email</a>.</h6>
+			<p>If you want to submit <a href="{% url submit-announcement %}">an announcement, an event, a lost and found listing</a>, or a <a href="{% url submit-job %}">job</a>, please use those forms.</p>
 		</div>
 		
-		<div class="footerbox">
-			<h1>Popular Posts</h1>
-				<ul>
-					<li>List most popular posts</li>
-				</ul>
-		</div>
+    <div class="footerbox">
+     <h1>Popular Posts</h1>
+       <ul>
+         <li>List most popular posts</li>
+       </ul>
+    </div>
 		
 		<div class="footerbox">
 			<h1>Popular Comments</h1>
 			<ul>
-				<li>List highest rated comments</li>
+			  {% for comment in popular_comments %}
+			   <li><a href="{{ comment.get_absolute_url }}">{{ comment.display_name }}</a> on "{{ comment.subject.get_short_title }}"</li>
+			  {% endfor %}
 			</ul>
 		</div>
 	</div>
