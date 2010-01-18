@@ -40,6 +40,30 @@ DROP TABLE `articles_format`;
 COMMIT;
 SQL
 
+
+echo "dropping the unused 'by the numbers' section"
+./manage.py shell <<'SHELL'
+from interactive_load import *
+Subsection.objects.get(slug='btn').delete()
+SHELL
+
+
+echo "moving the multimedia section into features"
+
+multi_id=$(echo 'SELECT id FROM `articles_section` WHERE slug="multimedia";' | ./manage.py dbshell | tail -n 1)
+features_id=$(echo 'SELECT id FROM `articles_section` WHERE slug="features";' | ./manage.py dbshell | tail -n 1)
+
+./manage.py dbshell <<SQL
+UPDATE articles_subsection SET section_id=$features_id WHERE section_id=$multi_id;
+UPDATE articles_article SET section_id=$features_id WHERE section_id=$multi_id;
+SQL
+
+./manage.py shell <<'SHELL'
+from interactive_load import *
+Section.objects.get(slug='multimedia').delete()
+SHELL
+
+
 echo "converting to staff_state column for positions"
 ./manage.py dbshell <<'SQL'
 BEGIN;
