@@ -294,7 +294,7 @@ def april_fools(request, template="aprilfools.html"):
     rc = RequestContext(request)
     return render_to_response(template, data, context_instance=rc)
 
-@staff_required    
+@staff_required
 def staff(request,  template="staff/index.html"):
     user = get_user_profile(request)
     personal, claimed, unclaimed = StoryConcept.unpublished.get_concepts(user=user)
@@ -421,13 +421,14 @@ def section(request, section):
     entries = Entry.published.get_entries(num=9)
     comments = PublicComment.visible.filter(article__section=sec).order_by('-time').all()[:20]
     
-    stream = sorted(
+    stream = heapq.nlargest(14,
        [("entry", entry) for entry in entries] + [("comment", comment) for comment in comments],
-       key=lambda (kind, obj): obj.timestamp if kind == "entry" else obj.time,
-       reverse=True
+       key=lambda (kind, obj): obj.timestamp if kind == "entry" else obj.time
     )
     
-    stream = stream[:14]
+    rec_multi_story, rec_multi = Article.published.get_recent_multimedia(
+        base=sec.articles,
+        exclude=[a.main_image for a in tops])
     
     data = {
         'section': sec,
@@ -435,8 +436,10 @@ def section(request, section):
         'topstories': tops,
         'midstories': mids,
         'lowlist': lowlist,
-        'stream':stream,
-        'comments': PublicComment.visible.filter(article__section=sec).order_by('-time')
+        'stream': stream,
+        'comments': PublicComment.visible.filter(article__section=sec).order_by('-time'),
+        'rec_multi': rec_multi or 'none',
+        'rec_multi_story': rec_multi_story,
     }
     
     if sec.slug == 'opinions':
@@ -484,6 +487,8 @@ def subsection(request, section, subsection):
             'platforms': current,
             'latest': latest,
             'stream': stream,
+            'rec_multi': rec_multi or 'none',
+            'rec_multi_story': rec_multi_story,
         }
         return render_to_response('sections/sub_stuco-platforms.html',
                                   context_instance=RequestContext(request, data))
@@ -498,6 +503,10 @@ def subsection(request, section, subsection):
         comments = PublicComment.visible.filter(article__subsection=sub)
         stream = comments
         stream = stream[:5]
+        
+        rec_multi_story, rec_multi = Article.published.get_recent_multimedia(
+            base=sub.articles,
+            exclude=[a.main_image for a in tops])
         
         data = {
             'section': sec,

@@ -136,6 +136,42 @@ class PublishedArticlesManager(models.Manager):
         """
         return self.get_stories(num_top=1, num_mid=0, num_low=0)[0][0]
     
+    def get_recent_multimedia(self, base=None, exclude=None, num_stories=3):
+        """
+        Gets a recent picture out of `base`/self; will not include any that
+        are in `exclude`. Returns (story, image).
+        """
+        # TODO: favor big images in get_recent_multimedia?
+        # TODO: add video support to get_recent_multimedia
+        if not base:
+            base = self
+        
+        exclude = [i.pk for i in exclude] if exclude else []        
+        stories = base.order_by('-pub_date')
+        
+        images = []
+        article_counter = 0
+        
+        prepend = lambda a, lst: [(a, x) for x in lst]
+        
+        for story in stories:
+            article_counter += 1
+            
+            images += prepend(story, story.images.all().exclude(pk__in=exclude))
+            
+            try:    photospread = story.photospread
+            except ObjectDoesNotExist: pass
+            else:   images += prepend(story, photospread.photos.all().exclude(pk__in=exclude))
+            
+            if story.main_image:
+                images.append((story, story.main_image))
+            
+            if images and article_counter % num_stories == 0:
+                return random.choice(images)
+        
+        # went through all the stories...
+        return (None, None)
+    
 
 class Article(models.Model):
     """

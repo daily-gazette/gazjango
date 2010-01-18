@@ -212,3 +212,11 @@ class ResizePhotospreadBig(processors.Resize):
 
 class PhotospreadBig(ImageSpec):
     processors = [ResizePhotospreadBig]
+
+
+class SidebarBigResize(processors.Resize):
+    width = 432
+    crop = False
+
+class SidebarBig(ImageSpec):
+    processors = [SidebarBigResize]

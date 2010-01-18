@@ -2,7 +2,7 @@
 {% load extras %}
 {% load markup %}
 
-{% block section-sidebar-top %}
+{% block section-sidebar-top-content %}
   <h2>Column Listings</h2>
   {% for column in columns %}
     {% ifchanged %}
@@ -12,4 +12,7 @@
       <a href="{{ column.get_absolute_url }}">{{ column.name }}</a>
     </div>
   {% endfor %}
+{% endblock %}
+
+{% block section-sidebar-mid %}
 {% endblock %}

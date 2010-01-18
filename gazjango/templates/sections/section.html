@@ -8,11 +8,10 @@
 {% endblock customheader %}
 
 {% block content %}
-	
 	<div id="articlewrapper">
 		<div id="category-box">
 		  {% block article-listing %}
-  			<h2 class="title">Featured stories in {{ section.name }}</h2>
+        {# <h2 class="title">Featured stories in {{ section.name }}</h2> #}
   			<div id="column-wrap">
   				<!-- Begin Mid Columns -->	
   				{% for story in topstories %}
@@ -26,7 +25,7 @@
   				{% endfor %}
   			</div>
 
-  			<h2 class="title">More stories in {{ section.name }}</h2>
+        <h2 class="title">More stories in {{ section.name }}</h2>
   			{% for group in midstories|in_groups_of:2 %}
   				<div class="two-column-short">
     				{% for story in group %}
@@ -42,49 +41,69 @@
   		{% endblock %}
 		</div>
 
-		<div class="large-video-block">
-		  {% block section-sidebar-top %}
-  			<h2 class="title">Recent Multimedia</h2>
-  			<h6><a href="#url">The Multimedia Title</a></h6>
-  			<p>The picture</p>
-  		{% endblock %}
-		</div>
+    {% block section-sidebar-top %}
+      <div class="large-video-block">
+        {% block section-sidebar-top-content %}
+          <h4>Subsections in {{ section.name }}</h4>
+          {% for subsection in section.subsections.all %}
+            <div class="column-listing">
+              <a href="{{ subsection.get_absolute_url }}">{{ subsection.name }}</a>
+            </div>
+          {% endfor %}
+        {% endblock %}
+      </div>
+    {% endblock %}
 
-		<div class="large-video-block">
-		  {% block section-sidebar-mid %}
-  			<h4>From the Community</h4>
-  			<div class="section cathomesocial">
-  				{% for type,entry in stream %}
-  					{% ifequal type "entry" %}
-  						{% ifequal entry.source_type "tweet" %}
-    						<div class="entry twitter" style="background: #fff url({{ entry.object.icon }}) no-repeat 0px center">
-    							<p>{{ entry.description|safe }} <br /> —by <a href="http://www.twitter.com/{{ entry.owner_user }}">{{ entry.owner_user }}</a> from <a href="http://www.twitter.com/">Twitter</a></p>
+    {% block section-sidebar-mid %}
+      {% if rec_multi != "none" %}
+    		<div class="large-video-block">
+    		  {% block section-sidebar-mid-content %}
+      			<h4>Recent Multimedia</h4>
+      			<h6><a href="{{ rec_multi_story.get_absolute_url }}">{{ rec_multi_story.get_title }}</a></h6>
+      			<img src="{{ rec_multi.sidebarbig.url }}" alt="" />
+      			<p>photo by {{ rec_multi.credit }}</p>
+      		{% endblock %}
+    		</div>
+    	{% endif %}
+  	{% endblock %}
+
+    {% block section-sidebar-bot %}
+  		<div class="large-video-block">
+  		  {% block section-sidebar-bot-content %}
+    			<h4>From the Community</h4>
+    			<div class="section cathomesocial">
+    				{% for type,entry in stream %}
+    					{% ifequal type "entry" %}
+    						{% ifequal entry.source_type "tweet" %}
+      						<div class="entry twitter" style="background: #fff url({{ entry.object.icon }}) no-repeat 0px center">
+      							<p>{{ entry.description|safe }} <br /> —by <a href="http://www.twitter.com/{{ entry.owner_user }}">{{ entry.owner_user }}</a> from <a href="http://www.twitter.com/">Twitter</a></p>
+      						</div>
+    						{% endifequal %}
+    						{% ifequal entry.source_type "bookmark" %}
+      						<div class="entry delicious">
+      							<p><a href="{{ entry.url }}">{{ entry.title }}</a> -<a href="http://www.delicious.com/{{ entry.owner_user }}">Del.icio.us</a></p>
+      						</div>
+    						{%endifequal %}	
+    						{% ifequal entry.source_type "review" %}
+      						<div class="entry review">
+      							<p><a href="{{ entry.url }}">{{ entry.title }}</a> - Reviewed by {{ entry.owner_user }}</small></p>
+      						</div>
+    						{%endifequal %}
+    						{% ifequal entry.source_type "flickrphoto" %}
+      						<div class="entry flickrphoto" style="background: #fff url({{ entry.object.square }}) no-repeat 0px center">
+      							<p><a href="{{ entry.url }}">{{ entry.title }}</a>, by {{ entry.owner_user }}</small></p>
+      						</div>
+    						{%endifequal %}
+    					{% else %}
+    						<div class="entry comment">
+    							<p><a href="{{entry.get_absolute_url}}">{{ entry.display_name }}</a> spoke on <a href="{{entry.subject.get_absolute_url}}">{{ entry.subject.get_title }}</a>.</p>
     						</div>
-  						{% endifequal %}
-  						{% ifequal entry.source_type "bookmark" %}
-    						<div class="entry delicious">
-    							<p><a href="{{ entry.url }}">{{ entry.title }}</a> -<a href="http://www.delicious.com/{{ entry.owner_user }}">Del.icio.us</a></p>
-    						</div>
-  						{%endifequal %}	
-  						{% ifequal entry.source_type "review" %}
-    						<div class="entry review">
-    							<p><a href="{{ entry.url }}">{{ entry.title }}</a> - Reviewed by {{ entry.owner_user }}</small></p>
-    						</div>
-  						{%endifequal %}
-  						{% ifequal entry.source_type "flickrphoto" %}
-    						<div class="entry flickrphoto" style="background: #fff url({{ entry.object.square }}) no-repeat 0px center">
-    							<p><a href="{{ entry.url }}">{{ entry.title }}</a>, by {{ entry.owner_user }}</small></p>
-    						</div>
-  						{%endifequal %}
-  					{% else %}
-  						<div class="entry comment">
-  							<p><a href="{{entry.get_absolute_url}}">{{ entry.display_name }}</a> spoke on <a href="{{entry.subject.get_absolute_url}}">{{ entry.subject.get_title }}</a>.</p>
-  						</div>
-  					{% endifequal %}
-  				{% endfor %}				
-  			</div>
-  		{% endblock %}
-		</div>
+    					{% endifequal %}
+    				{% endfor %}				
+    			</div>
+    		{% endblock %}
+  		</div>
+  	{% endblock %}
 
   	<div style="clear:both"></div>
 {% endblock content %}
