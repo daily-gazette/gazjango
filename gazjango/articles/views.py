@@ -258,7 +258,7 @@ def homepage(request, social_len=7, num_tweets=2, template="index.html"):
         'joke': WeatherJoke.objects.latest(),
         
         'specials': Special.objects.order_by('-date').all()[:10],
-        'announcements': announcements[:7],
+        'announcements': announcements[:9],
         'events':events[:5],
         'jobs': JobListing.published.get_for_show(3),
         
