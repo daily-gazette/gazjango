@@ -1,4 +1,4 @@
-{% extends "base-expand.html" %}
+{% extends "sections/section.html" %}
 {% load extras %}
 {% load markup %}
 
@@ -7,40 +7,29 @@
 {% block customheader %}
 {% endblock customheader %}
 
-{% block content %}
-	<!-- Below controls the main content of the page -->
-	
-	<div id="articlewrapper">
-		<div id="category-box">
-	          <h2 class="title">{{ subsection.name }}</h2>
-	
-				{% for group in recent_stories|in_groups_of:4 %}
-					<div id="column-wrap">
-						<!-- Begin Mid Columns -->
-						{% for story in group %}
-						<div class="section column">
-							<h6><a href="{{ story.get_absolute_url }}" title="{{ story.headline }}">{{ story.get_short_title }}</a></h6>
-							<li>{{ story.authors_in_order|join_authors:"2ptbx" }}
-							<li>Posted {{ story.pub_date|date:"n/j/Y" }}</li>
-							<p>{{ story.get_short_summary|safe }}</p>
-						</div>
-						{% endfor %}
-					</div>
-				{% endfor %}
-		</div>		
+{% block article-listing %}
+  <h2 class="title">{{ subsection.name }}</h2>
+  {% for group in recent_stories|in_groups_of:4 %}
+    <div id="column-wrap">
+      {% for story in group %}
+        <div class="section column">
+          <h6><a href="{{ story.get_absolute_url }}" title="{{ story.headline }}">{{ story.get_short_title }}</a></h6>
+          <li>{{ story.authors_in_order|join_authors:"2ptbx" }}</li>
+          <li>Posted {{ story.pub_date|date:"n/j/Y" }}</li>
+          <p>{{ story.get_short_summary|safe }}</p>
+        </div>
+      {% endfor %}
+    </div>
+  {% endfor %}
+{% endblock %}
 
-		<div class="large-video-block">
-			<h4>Comments</h4>
-			<div class="section cathomesocial">
-				{% for entry in stream %}
-					<div class="entry comment">
-						<p><a href="{{entry.get_absolute_url}}">{{ entry.display_name }}</a> spoke on <a href="{{entry.subject.get_absolute_url}}">{{ entry.subject.get_title }}</a>.</p>
-					</div>
-				{% endfor %}					
-			</div>
-		</div>
-
-
-	<div style="clear:both"></div>
-
-{% endblock content %}
+{% block section-sidebar-bot-content %}
+  <h4>Comments</h4>
+  <div class="section cathomesocial">
+  	{% for entry in stream %}
+  		<div class="entry comment">
+  			<p><a href="{{entry.get_absolute_url}}">{{ entry.display_name }}</a> spoke on <a href="{{entry.subject.get_absolute_url}}">{{ entry.subject.get_title }}</a>.</p>
+  		</div>
+  	{% endfor %}					
+  </div>  
+{% endblock %}

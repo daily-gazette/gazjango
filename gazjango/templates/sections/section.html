@@ -59,9 +59,13 @@
     		<div class="large-video-block">
     		  {% block section-sidebar-mid-content %}
       			<h4>Recent Multimedia</h4>
-      			<h6><a href="{{ rec_multi_story.get_absolute_url }}">{{ rec_multi_story.get_title }}</a></h6>
-      			<img src="{{ rec_multi.sidebarbig.url }}" alt="" />
-      			<p>photo by {{ rec_multi.credit }}</p>
+      			<h6 class="photoTitle"><a href="{{ rec_multi_story.get_absolute_url }}" title="{{ rec_multi_story.headline }}">{{ rec_multi_story.get_title }}</a></h6>
+      			<a href="{{ rec_multi_story.get_absolute_url }}" title="{{ rec_multi_story.headline }}">
+        			<img src="{{ rec_multi.sidebarbig.url }}" alt="" />
+        		</a>
+      			{% if rec_multi.credit %}
+      			  <p class="photoCredit">Photo by {{ rec_multi.credit }}.</p>
+      			{% endif %}
       		{% endblock %}
     		</div>
     	{% endif %}
@@ -72,7 +76,7 @@
   		  {% block section-sidebar-bot-content %}
     			<h4>From the Community</h4>
     			<div class="section cathomesocial">
-    				{% for type,entry in stream %}
+    				{% for type, entry in stream %}
     					{% ifequal type "entry" %}
     						{% ifequal entry.source_type "tweet" %}
       						<div class="entry twitter" style="background: #fff url({{ entry.object.icon }}) no-repeat 0px center">

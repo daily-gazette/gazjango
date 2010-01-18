@@ -487,8 +487,6 @@ def subsection(request, section, subsection):
             'platforms': current,
             'latest': latest,
             'stream': stream,
-            'rec_multi': rec_multi or 'none',
-            'rec_multi_story': rec_multi_story,
         }
         return render_to_response('sections/sub_stuco-platforms.html',
                                   context_instance=RequestContext(request, data))
@@ -500,9 +498,8 @@ def subsection(request, section, subsection):
         for i in range(len(lows)):
             lowlist[i % num_low_lists].append(lows[i])
     
-        comments = PublicComment.visible.filter(article__subsection=sub)
-        stream = comments
-        stream = stream[:5]
+        comments = PublicComment.visible.filter(article__subsection=sub).order_by('-time')
+        stream = comments[:4]
         
         rec_multi_story, rec_multi = Article.published.get_recent_multimedia(
             base=sub.articles,
@@ -516,6 +513,8 @@ def subsection(request, section, subsection):
             'midstories': mids,
             'lowlist': lowlist,
             'stream': stream,
+            'rec_multi': rec_multi or 'none',
+            'rec_multi_story': rec_multi_story,
         }
         try:
             column = sub.column

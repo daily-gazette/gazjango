@@ -3161,3 +3161,12 @@ div.tla {
 div.tla a {
     color: black;
 }
+
+
+/* section page */
+.photoTitle {
+    text-align: center;
+}
+.photoCredit {
+    text-align: center;
+}
