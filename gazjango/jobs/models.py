@@ -32,7 +32,7 @@ class PublishedJobsManager(models.Manager):
                 cutoff = base_date - cutoff
             results = results.filter(pub_date__gte=cutoff)
         if not allow_filled:
-            base = base.exclude(is_filled=True)
+            results = results.exclude(is_filled=True)
         return results[:num] if num else results
     
 
