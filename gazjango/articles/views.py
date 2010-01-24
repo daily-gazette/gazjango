@@ -66,7 +66,7 @@ def show_swat_only(request, story, template='stories/swat_only.html'):
     return render_to_response(template, context_instance=RequestContext(request, {
         'story': story,
         'recent_stories': Article.published.order_by('-pub_date')[:3],
-        'posters': Poster.published.get_n(1),
+        'poster': Poster.published.get_running(),
         'related': story.related_list(3),
         
         'base_template': 'stories/view.html',
@@ -99,7 +99,7 @@ def show_article(request, story, form, print_view=False):
         # 'other_comments': cs,
         'print_view': print_view,
         'comment_form': form,
-        'posters': Poster.published.get_n(1),
+        'poster': Poster.published.get_running(),
         'recent_stories': Article.published.order_by('-pub_date')[:3],
         
         'top_banner': BannerAd.article_top.pick(allow_zero_priority=False),
@@ -160,7 +160,7 @@ def archives(request, section=None, subsection=None, year=None, month=None, day=
              'day': day,
              'section': section,
              'subsection': subsection,
-             'posters': Poster.published.get_n(1),
+             'poster': Poster.published.get_running(),
              'sections': Section.objects.all() }
     
     if day:

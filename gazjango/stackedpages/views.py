@@ -42,7 +42,7 @@ def page(request, url):
         'topstory': tops[0],
         'stories': mids,
         'comments': PublicComment.visible.order_by('-time')[:3],
-        'posters':Poster.published.get_n(1),
+        'poster': Poster.published.get_running(),
     }
     
     return render_to_response(template, context, context_instance=rc)

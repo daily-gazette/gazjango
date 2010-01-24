@@ -29,7 +29,7 @@ def comment_page(request):
 
     rc = RequestContext(request, {
         'comments': final_list,
-        'posters':Poster.published.get_n(1),
+        'poster': Poster.published.get_running(),
         
     })
     return render_to_response('comment/index.html', context_instance=rc)    

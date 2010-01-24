@@ -17,7 +17,7 @@ def book_details(request, slug):
     return render_to_response('listings/books/details.html', {
         'book': book,
         'other_books': BookListing.unfilled.order_by('-pub_date')[:3],
-        'posters':Poster.published.get_n(1),
+        'poster': Poster.published.get_running(),
     }, context_instance=RequestContext(request))
 
 
@@ -70,9 +70,11 @@ def submit_book(request):
     
     return render_to_response('listings/books/submit.html', {
         'form': form,
-        'posters':Poster.published.get_n(1),
+        'poster': Poster.published.get_running(),
     }, context_instance=RequestContext(request))
 
 
 def book_success(request, template="books/success.html"):
-    return render_to_response(template, {'posters':Poster.published.get_n(1),}, context_instance=RequestContext(request))
+    return render_to_response(template, context_instance=RequestContext(request, {
+        'poster': Poster.published.get_running(),
+    }))

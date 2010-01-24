@@ -122,11 +122,11 @@
   	</div>
 	
 	
-  	{% for item in posters %}
-  		{% if item.sponsor_url %}<a href="{{ item.sponsor_url }}">{% endif %}
-		  <img src="{{ item.poster.poster.url }}" class="poster" title="Poster from {{ item.sponsor }}"/>
-  		{% if item.sponsor_url %}</a>{% endif %}
-  	{% endfor %}
+	  {% if poster %}
+	    {% if poster.sponsor_url %}<a href="{{ item.sponsor_url }}">{% endif %}
+	    <img src="{{ poster.poster.poster.url }}" class="poster" title="Poster from {{ poster.sponsor }}"/>
+      {% if poster.sponsor_url %}</a>{% endif %}
+    {% endif %}
 	
   	<span class="posterannouncement">Want to add your group's poster? Go <a href="/posters/new/">here</a>.</span>
 	

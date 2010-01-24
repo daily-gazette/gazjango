@@ -27,7 +27,7 @@ def announcement(request, slug, year, month=None, day=None):
     data = {
         'announcement': an,
         'recent_announcements': Announcement.community.order_by('-date_end')[:4],
-        'posters':Poster.published.get_n(1),
+        'poster': Poster.published.get_running(),
     }
     rc = RequestContext(request)
     return render_to_response("listings/announcements/details.html", data, context_instance=rc)
@@ -55,7 +55,7 @@ def list_announcements(request):
         'event_list': event_list,
         'regular': regular,
         'lost_and_found': lost_and_found[:10],
-        'posters':Poster.published.get_n(1),
+        'poster': Poster.published.get_running(),
     }
     rc = RequestContext(request)
     return render_to_response("listings/announcements/list.html", data, context_instance=rc)
@@ -69,13 +69,16 @@ def submit_announcement(request, template="listings/announcements/submit.html"):
     else:
         form = SubmitAnnouncementForm()
     
-    data = { 'form': form,'posters':Poster.published.get_n(1), }
-    rc = RequestContext(request)
-    return render_to_response(template, data, context_instance=rc)
+    return render_to_response(template, context_instance=RequestContext(request, {
+        'form': form,
+        'poster': Poster.published.get_running(),
+    }))
 
 
 def announcement_success(request, template="listings/announcements/success.html"):
-    return render_to_response(template, {'posters':Poster.published.get_n(1),}, context_instance=RequestContext(request))
+    return render_to_response(template, context_instance=RequestContext(request, {
+        'poster': Poster.published.get_running(),
+    }))
     
  
 def around_swarthmore(request,template = "listings/around/index.html"):
@@ -138,7 +141,7 @@ def around_swarthmore(request,template = "listings/around/index.html"):
         'job_form': job_form,
         'menu': menu,
         'bico_news': get_bico_news(),
-        'posters':Poster.published.get_n(1),
+        'poster': Poster.published.get_running(),
     }
     rc = RequestContext(request)
     return render_to_response(template, data, context_instance=rc)

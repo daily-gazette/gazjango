@@ -7,6 +7,7 @@ from gazjango.media.models    import MediaFile, ImageFile, MediaBucket
 
 import django.utils.html
 import datetime
+import random
 import re
 
 class PublishedAnnouncementsManager(models.Manager):
@@ -40,17 +41,16 @@ class PublishedPosterManager(models.Manager):
 
     def now_running(self):
         "Returns published posters which should now be shown."
-        t = datetime.date.today()
-        return self.filter(date_start__lte=t, date_end__gte=t).order_by('-date_start', '-date_end')
-
-    def get_n(self, n=3):
-        "Returns the `n` posters to be shown."
-        running = self.now_running()
-        if running.count() >= n:
-            return running[:n]
-        else:
-            new = self.order_by('-date_end', '-date_start').exclude(pk__in=[r.pk for r in running])
-            return list(running) + list(new[:n - running.count()])
+        return self.running_at(datetime.date.today())
+    
+    def running_at(self, date):
+        return self.filter(date_start__lte=date, date_end__gte=date)
+    
+    def get_running(self, date=None):
+        if not date:
+            date = datetime.date.today()
+        options = self.running_at(date)
+        return random.choice(options) if options else None
     
 
 class StaffAnnouncementsManager(PublishedAnnouncementsManager):

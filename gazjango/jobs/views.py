@@ -11,7 +11,7 @@ def job_details(request, slug, template="listings/jobs/details.html"):
     data = {
         'job': job,
         'other_jobs': JobListing.unfilled.order_by('-pub_date')[:3],
-        'posters':Poster.published.get_n(1),
+        'poster': Poster.published.get_running(),
     }
     rc = RequestContext(request)
     return render_to_response(template, data, context_instance=rc)
@@ -43,7 +43,7 @@ def list_jobs(request, options="", default_limit=10, template="listings/jobs/lis
     data = {
         'jobs': jobs,
         'other_jobs': JobListing.unfilled.order_by('-pub_date')[:3],
-        'posters':Poster.published.get_n(1),
+        'poster': Poster.published.get_running(),
     }
     
     rc = RequestContext(request)
@@ -59,7 +59,7 @@ def submit_job(request, template="listings/jobs/submit.html"):
     else:
         form = SubmitJobForm()
     
-    data = { 'form': form , 'posters':Poster.published.get_n(1),}
+    data = { 'form': form , 'poster': Poster.published.get_running(1),}
     rc = RequestContext(request)
     return render_to_response(template, data, context_instance=rc)
 
