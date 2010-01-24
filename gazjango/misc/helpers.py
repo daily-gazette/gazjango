@@ -1,9 +1,13 @@
 from __future__ import division
+
 from django.conf import settings
+from django.core.cache import cache as _djcache
 from django.db.models import signals
 from django.template.defaultfilters import slugify
+
 import datetime
 import re
+from hashlib import sha1
 
 def is_from_swat(user=None, ip=None):
     if user:
@@ -124,3 +128,22 @@ def smart_truncate(string, length, min_length_diff=15):
         if i <= min_length_diff: # we're trimming an acceptable amount
             return string[:(length+1-i)] + '...'
     return string[:length] + '...'
+
+
+def cache(seconds=900):
+    """
+    Caches the results of a function call for the specified number of seconds,
+    using the standard Django cache. Assumes it is a pure function (ie only
+    depends on its arguments); note also that the exact argument string matters.
+    Also note that a result of None will not be cached.
+    """
+    def doCache(f):
+        def x(*args, **kwargs):
+            key = sha1(str(f.__module__) + str(f.__name__) + str(args) + str(kwargs)).hexdigest()
+            result = _djcache.get(key)
+            if result is None:
+                result = f(*args, **kwargs)
+                _djcache.set(key, result, seconds)
+            return result
+        return x
+    return doCache
