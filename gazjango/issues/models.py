@@ -318,6 +318,9 @@ class Weather(models.Model):
     
     objects = WeatherManager()
     
+    def tomorrow_date(self):
+        return self.date + datetime.timedelta(days=1)
+    
     def __unicode__(self):
         return self.date.strftime("%m/%d/%Y")
     
