@@ -185,15 +185,10 @@ if settings.DEBUG:
         (r'^static/admin/(?P<path>.*)$', 'serve',  {'document_root': settings.ADMIN_MEDIA_PATH})
     )
     
-urlpatterns += patterns('athletics.views',
-    (r'^athletics/$',                   'athletics'),
-    (r'^athletics/%(slug)s/$'   % reps, 'team',{},'athletics_team')
-)
-
-urlpatterns += patterns('athletics.views',
-    (r'^athletics/$',                   'athletics'),
-    (r'^athletics/%(slug)s/$'   % reps, 'team',{},'athletics_team')
-)
+# urlpatterns += patterns('athletics.views',
+#     (r'^athletics/$',                   'athletics'),
+#     (r'^athletics/%(slug)s/$'   % reps, 'team',{},'athletics_team')
+# )
 
 # section match should be last, to avoid shadowing others
 urlpatterns += patterns('articles.views',
