@@ -13,6 +13,19 @@ so long as it is not redistributed or resold in any way.
 . 
 */
 
+
+/*
+Color scheme based on http://hunch.com/color-palettes/eco-friendly/2445523/
+
+              OLD      NEW
+links:       #376B9D
+hover links: #ff1301
+section-bar: #FFF5B0
+main bar:    #5186D7
+box border:  #C0C0C0
+*/
+
+
 body {
 	background-color: #FFFFFF;
 	color: #000000;
