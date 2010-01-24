@@ -7,7 +7,7 @@ from django.utils.encoding              import smart_str
 
 from gazjango.accounts.models import UserProfile
 from gazjango.misc            import akismet
-from gazjango.misc.helpers    import is_from_swat
+from gazjango.misc.helpers    import is_from_swat, cache
 
 import datetime
 
@@ -175,6 +175,7 @@ class PublicComment(models.Model):
         self.score += sum(vote.value for vote in self.votes.all())
         self.save()
     
+    @cache(60*5)
     def num_upvotes(self):
         return self.votes.filter(positive=True).count()
     
