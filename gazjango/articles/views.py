@@ -421,7 +421,7 @@ def section(request, section):
     entries = Entry.published.get_entries(num=9)
     comments = PublicComment.visible.filter(article__section=sec).order_by('-time').all()[:20]
     
-    stream = heapq.nlargest(14,
+    stream = heapq.nlargest(9,
        [("entry", entry) for entry in entries] + [("comment", comment) for comment in comments],
        key=lambda (kind, obj): obj.timestamp if kind == "entry" else obj.time
     )
