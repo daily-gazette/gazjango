@@ -41,6 +41,12 @@ class PhotoSpread(Article):
         
         return obj
     
+    def get_comments(self):
+        # http://code.djangoproject.com/ticket/9546 changed this behavior
+        # we want generics that point to the article instance
+        # TODO: also ones that point to the photospread?
+        return self.article_ptr.comments
+    
     class Meta:
         app_label = 'articles'
     

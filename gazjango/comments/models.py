@@ -71,7 +71,7 @@ class CommentsManager(models.Manager):
         
         The comments can optionally be filtered by `spec`.
         """
-        comments = article.comments.filter(spec).select_related(depth=1)
+        comments = article.get_comments().filter(spec).select_related(depth=1)
         return [(c, c.vote_status(user=user, ip=ip)) for c in comments]
 
 class VisibleCommentsManager(CommentsManager):

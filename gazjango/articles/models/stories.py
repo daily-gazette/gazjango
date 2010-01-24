@@ -255,6 +255,9 @@ class Article(models.Model):
     objects = models.Manager()
     published = PublishedArticlesManager()
     
+    def get_comments(self):
+        return self.comments
+    
     def get_title(self):
         "Returns the shortest complete headline available."
         return self.short_title or self.headline
