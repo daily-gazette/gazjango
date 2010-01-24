@@ -1802,7 +1802,6 @@ PHOTOSPREADS
     font-size: 0.7em;
 }
 
-
 .nav-links a {
 	font: 1.4em "Helvetica Neue", Arial, Helvetica, Geneva, sans-serif;
 	font-weight:bold;
@@ -1829,6 +1828,7 @@ PHOTOSPREADS
 .nav-links ul {
 	display: inline-block;
 	margin-top: 5px;
+	padding-left: 0;
 }
 
 .nav-links ul li {
