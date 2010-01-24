@@ -128,16 +128,9 @@
 		
 		<div class="footerbox">
 			<h1>Contact the Gazette</h1>
-			<h6>Have questions about the Gazette? Want to suggest a story, or send in a photo you think we'd like? Feel free to <a href="/about/contact">send us an email</a>.</h6>
+			<h6>Have questions about the Gazette? Want to suggest a story, or send in a photo you think we'd like? Feel free to <a href="/about/contact/">send us an email</a>.</h6>
 			<p>If you want to submit <a href="{% url submit-announcement %}">an announcement, an event, a lost and found listing</a>, or a <a href="{% url submit-job %}">job</a>, please use those forms.</p>
 		</div>
-		
-    <div class="footerbox">
-     <h1>Popular Posts</h1>
-       <ul>
-         <li>List most popular posts</li>
-       </ul>
-    </div>
 		
 		<div class="footerbox">
 			<h1>Popular Comments</h1>
@@ -147,6 +140,18 @@
 			  {% endfor %}
 			</ul>
 		</div>
+		
+		<div class="footerbox">
+      <h1>Weather</h1>
+      <p class="weather"><strong>{{ weather.date|date:"l" }}:</strong> {{ weather.today }}</p>
+      <p class="weather-joke">{{ weather_joke.line_one }}</p>
+      
+      <p class="weather"><strong>Overnight:</strong> {{ weather.tonight }}</p>
+      <p class="weather-joke">{{ weather_joke.line_two }}</p>
+      
+      <p class="weather"><strong>{{ weather.tomorrow_date|date:"l" }}:</strong> {{ weather.tomorrow }}</p>
+      <p class="weather-joke">{{ weather_joke.line_three }}</p>
+    </div>
 	</div>
 	
 	<div style="clear:both;"></div>

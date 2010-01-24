@@ -2260,6 +2260,16 @@ SUBMISSION FORM STYLES
 	line-height: 16px;
 }
 
+.footerbox .weather-joke {
+    font-style: italic;
+    text-align: center;
+    margin-top: 0;
+}
+
+.footerbox .weather {
+    margin-bottom: 2px;
+}
+
 /*
 Sliding Login Panel with jQuery courtesy of Jeremie Tisseau. Please visit his website http://web-kreation.com/ for futher information. The CSS, XHTML and design is released under Creative Common License 3.0: http://creativecommons.org/licenses/by-sa/3.0/
 */
