@@ -216,7 +216,8 @@ class PhotospreadBig(ImageSpec):
 
 class SidebarBigResize(processors.Resize):
     width = 432
-    crop = False
+    height = 288
+    crop = True
 
 class SidebarBig(ImageSpec):
     processors = [SidebarBigResize]
