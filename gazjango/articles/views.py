@@ -242,9 +242,9 @@ def homepage(request, social_len=7, num_tweets=2, template="index.html"):
             
     # getting comment list for facebook-style listings
     comment_list = defaultdict(list)
-    for comment in recent_comments[:20]:
+    for comment in recent_comments[:25]:
         comment_list[comment.subject].insert(0, comment)
-    sorted_comment_list = sorted(comment_list.values(), key=lambda lst: lst[-1].time, reverse=True)
+    sorted_comment_list = sorted(comment_list.values(), key=lambda lst: lst[-1].time, reverse=True)[:5]
     
     # sorting events and announcements
     events = Announcement.events.order_by('event_date', 'event_time', 'pk')
@@ -259,7 +259,7 @@ def homepage(request, social_len=7, num_tweets=2, template="index.html"):
         
         'specials': Special.objects.order_by('-date').all()[:10],
         'announcements': announcements[:9],
-        'events':events[:5],
+        'events':events[:4],
         'jobs': JobListing.published.get_for_show(3),
         
         'bico_news': get_bico_news(),
