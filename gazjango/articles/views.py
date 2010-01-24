@@ -246,9 +246,10 @@ def homepage(request, social_len=7, num_tweets=2, template="index.html"):
         comment_list[comment.subject].insert(0, comment)
     sorted_comment_list = sorted(comment_list.values(), key=lambda lst: lst[-1].time, reverse=True)[:5]
     
-    # sorting events and announcements
+    # events and announcements
     events = Announcement.events.order_by('event_date', 'event_time', 'pk')
-    announcements = Announcement.regular.order_by('-date_end', '-date_start')    
+    announcements = Announcement.regular.order_by('-date_end', '-date_start')
+    jobs = JobListing.unfilled.order_by('-pub_date')
     
     data = {
         'topstories': Article.published.filter(position='1').order_by('-pub_date')[:6],
@@ -258,9 +259,9 @@ def homepage(request, social_len=7, num_tweets=2, template="index.html"):
         'joke': WeatherJoke.objects.latest(),
         
         'specials': Special.objects.order_by('-date').all()[:10],
-        'announcements': announcements[:9],
+        'announcements': announcements[:6],
         'events':events[:4],
-        'jobs': JobListing.published.get_for_show(3),
+        'jobs': jobs[:3],
         
         'bico_news': get_bico_news(),
         'text_link_ads': [ad.render() for ad in TextLinkAd.objects.all()],

@@ -140,19 +140,13 @@
 						<strong><a href="{{ announcement.get_absolute_url }}">{{ announcement.title }}</a></strong>
 					</p>
 				{% endfor %}
-        {# <div class="weather"> #}
-        {#           <h4>Weather</h4> #}
-        {#  <p class="weather"> #}
-        {#            <strong>Today:</strong> {{ weather.today }}<br/> #}
-        {#            <em>{{ joke.line_one }}</em><br /> #}
-        {#     <strong>Tonight:</strong> {{ weather.tonight }}<br /> #}
-        {#     <em>{{ joke.line_two }}</em><br /> #}
-        {#    <strong>Tomorrow:</strong> {{ weather.tomorrow }}<br /> #}
-        {#    <em>{{ joke.line_three }}</em><br /> #}
-        {#            <small>Weather from the <a href="http://weather.gov">NWS</a>.</small> #}
-        {#  </p> #}
-        {# </div> #}
+				
+				<h4>Jobs</h4>
+				{% for job in jobs %}
+			    <p><strong><a href="{{ job.get_absolute_url }}">{{ job.name }}</a></strong></p>
+			  {% endfor %}
 			</div>
+			
 			<div class="bottom-third">
 				<h4>Events</h4>
 				{% for event in events %}
