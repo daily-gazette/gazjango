@@ -14,8 +14,8 @@ UPDATE `articles_article` SET `short_title`=''
 ALTER TABLE `articles_article` MODIFY `short_title` varchar(40) NOT NULL;
 
 # add a swat_only field
-ALTER TABLE `articles_article` ADD COLUMN `swat_only` longtext NOT NULL
-                               AFTER `comments_allowed`;
+#ALTER TABLE `articles_article` ADD COLUMN `swat_only` longtext NOT NULL
+#                               AFTER `comments_allowed`;
 
 # drop unused fields
 ALTER TABLE `articles_article` DROP `long_summary`;
