@@ -3180,7 +3180,9 @@ div.tla a {
 /* section page */
 .photoTitle {
     text-align: center;
+    margin-bottom: 5px;
 }
 .photoCredit {
     text-align: center;
+    margin-bottom: 0;
 }
