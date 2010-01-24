@@ -185,7 +185,7 @@ models.signals.pre_save.connect(_slugger, sender=Announcement)
 
 class Poster(models.Model):
     title       = models.CharField(max_length=100)
-    poster      = models.ForeignKey(ImageFile, null=True, blank=True,help_text="The image which will be resized/cropped for various displays.")
+    poster      = models.ForeignKey(ImageFile, null=True, blank=True, help_text="The image which will be resized/cropped for various displays.")
     sponsor_url = models.URLField(blank=True, verify_exists=True)
     sponsor_user= models.ForeignKey(UserProfile)
     
@@ -206,5 +206,3 @@ class Poster(models.Model):
     def __unicode__(self):
         return self.title
     
-
-

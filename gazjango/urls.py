@@ -70,6 +70,9 @@ urlpatterns += patterns('announcements.views',
     (r'^announcements/new/$', 'submit_announcement', {}, 'submit-announcement'),
     (r'^announcements/new/success/$', 'announcement_success', {}, 'announcement-success'),
 
+    (r'^posters/new/$',         'submit_poster',  {}, 'submit-poster'),
+    (r'^posters/new/success/$', 'poster_success', {}, 'poster-success'),
+
     (r'^announcements/%(year)s/%(slug)s/$'                   % reps, 'announcement', {}, 'announcement'),
     (r'^announcements/%(year)s/%(month)s/%(slug)s/$'         % reps, 'announcement'),
     (r'^announcements/%(year)s/%(month)s/%(day)s/%(slug)s/$' % reps, 'announcement'),

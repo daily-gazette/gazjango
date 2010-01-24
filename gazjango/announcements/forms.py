@@ -1,5 +1,5 @@
 from django import forms
-from gazjango.announcements.models import Announcement
+from gazjango.announcements.models import Announcement, Poster
 
 class SubmitAnnouncementForm(forms.ModelForm):
     text = forms.CharField(widget=forms.Textarea(attrs={'rows': 5, 'cols': 40}))
@@ -29,3 +29,11 @@ class SubmitAnnouncementForm(forms.ModelForm):
         
         return d
     
+
+
+class SubmitPosterForm(forms.ModelForm):
+    class Meta:
+        model = Poster
+        fields = ('title', 'poster', 'sponsor_url', 'date_start', 'date_end',)
+    
+

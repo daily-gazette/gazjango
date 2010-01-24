@@ -1,11 +1,12 @@
 from django.http                   import HttpResponseRedirect, Http404
 from django.template               import RequestContext
+from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers      import reverse
 from django.shortcuts              import render_to_response, get_object_or_404
 
 from gazjango.misc.view_helpers    import get_by_date_or_404, filter_by_date
 from gazjango.announcements.models import Announcement, Poster
-from gazjango.announcements.forms  import SubmitAnnouncementForm
+from gazjango.announcements.forms  import SubmitAnnouncementForm, SubmitPosterForm
 from gazjango.articles.models      import Article
 from gazjango.issues.models        import Issue, Menu, Event
 from gazjango.jobs.models          import JobListing
@@ -79,8 +80,30 @@ def announcement_success(request, template="listings/announcements/success.html"
     return render_to_response(template, context_instance=RequestContext(request, {
         'poster': Poster.published.get_running(),
     }))
+
+@login_required
+def submit_poster(request, template="listings/posters/submit.html"):
+    if request.method == 'POST':
+        form = SubmitPosterForm(request.POST)
+        if form.is_valid():
+            poster = form.save(commit=False)
+            poster.sponsor_user = get_user_profile(request)
+            poster.save()
+            return HttpResponseRedirect(reverse(poster_success))
+    else:
+        form = SubmitPosterForm()
     
- 
+    return render_to_response(template, context_instance=RequestContext(request, {
+        'form': form,
+        'poster': Poster.published.get_running(),
+    }))
+
+def poster_success(request, template="listings/posters/success.html"):
+    return render_to_response(template, context_instance=RequestContext(request, {
+        'poster': Poster.published.get_running(),
+    }))
+
+
 def around_swarthmore(request,template = "listings/around/index.html"):
     today = datetime.date.today()
     year = today.year
