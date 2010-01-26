@@ -265,7 +265,7 @@ class WeatherManager(models.Manager):
         Returns the weather object for today, creating a new
         one (by parsing it from the online data feed) if necessary.
         """
-        return self._get_or_parse(True, ignore_cached)
+        return self._get_or_parse(False, ignore_cached)
     
     def for_tomorrow(self, ignore_cached=False):
         """
