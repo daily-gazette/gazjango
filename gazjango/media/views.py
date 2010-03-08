@@ -4,7 +4,6 @@ from django.http              import HttpResponseRedirect, Http404
 from django.template          import RequestContext
 from django.shortcuts         import get_object_or_404, render_to_response
 from gazjango.media.models import MediaFile, ImageFile, MediaBucket
-from gazjango.misc.files   import handle_file_upload
 from django.conf import settings
 
 def _get_or_post(key, request, default=None):
