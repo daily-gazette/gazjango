@@ -79,11 +79,13 @@ ALTER TABLE `accounts_position` DROP COLUMN `is_editor`;
 COMMIT;
 SQL
 
-echo "adding speaking_officially column for comments"
+echo "adding speaking_officially and superhidden columns for comments"
 ./manage.py dbshell <<'SQL'
 BEGIN;
 ALTER TABLE `comments_publiccomment` ADD COLUMN
             `speaking_officially` bool NOT NULL AFTER `email`;
+ALTER TABLE `comments_publiccomment` ADD COLUMN
+            `superhidden` bool NOT NULL;
 COMMIT;
 SQL
 ./manage.py shell <<'PYTHON'

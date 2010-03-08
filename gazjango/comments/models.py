@@ -71,13 +71,14 @@ class CommentsManager(models.Manager):
         
         The comments can optionally be filtered by `spec`.
         """
-        comments = article.get_comments().filter(spec).select_related(depth=1)
+        comments = article.get_comments().filter(spec).filter(superhidden=False)
+        comments = comments.select_related(depth=1)
         return [(c, c.vote_status(user=user, ip=ip)) for c in comments]
 
 class VisibleCommentsManager(CommentsManager):
     def get_query_set(self):
         orig = super(VisibleCommentsManager, self).get_query_set()
-        return orig.filter(is_approved=True, score__gt=0)
+        return orig.filter(is_approved=True, superhidden=False, score__gt=0)
     
 
 class PublicComment(models.Model):
@@ -120,6 +121,7 @@ class PublicComment(models.Model):
     
     is_approved = models.BooleanField(default=False)
     score = models.IntegerField(default=0, null=True)
+    superhidden = models.BooleanField(default=False)
     
     def is_visible(self):
         return (self.is_approved and self.score >= 0) or self.is_official()
