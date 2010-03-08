@@ -1,10 +1,14 @@
 {% extends "stories/view.html" %}
 
+{% block customheader %}
+  {{ block.super }}
+  <meta name="robots" content="noindex" />
+  <meta name="robots" content="noarchive" />
+{% endblock %}
+
 {% block comments %}{% endblock %}
 {% block comment_form %}{% endblock %}
 
 {% block story-content %}
   {{ story.non_swat_text|safe }}
-  
-  <p>You must be on the Swarthmore campus or using an account with an @swarthmore.edu email address to view this article. If you are a member of the Swarthmore community, you can <a href="/accounts/login/">log in</a> or <a href="/accounts/register/">register an account</a>.</p>
 {% endblock %}
