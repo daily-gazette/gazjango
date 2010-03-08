@@ -237,7 +237,8 @@ class Article(models.Model):
         ('e', 'Pending Review'),
         ('a', 'Edited (1)'),
         ('b', 'Edited (2)'),
-        ('p', 'Published')
+        ('p', 'Published'),
+        ('h', 'On Hold'),
     )
     status = models.CharField(max_length=1, choices=STATUS_CHOICES, default='d')
     
