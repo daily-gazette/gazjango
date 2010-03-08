@@ -134,6 +134,7 @@ class ProfilesManager(models.Manager):
         profile.add_position(Position.objects.get(name=pos))
         
         return profile
+    quick_create_user.templates = ['reporter', 'photographer', 'contributor', 'columnist']
         
 
 class UserProfile(models.Model):
