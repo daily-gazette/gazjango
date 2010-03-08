@@ -129,6 +129,10 @@
 							</font>
 							<br />
 		
+                            <font color="#333333" size="2"><em>
+                                    by {{ topstory.authors_in_order|join_authors:"pt" }}
+                            </em></font>
+                           <br />
 							<a href="http://daily.swarthmore.edu{{ topstory.get_absolute_url }}">
 							  <font color="#004484" size="2" face="Arial, Helvetica, sans-serif">
 								<strong>&gt;&gt; Read on</strong>
@@ -160,6 +164,10 @@
 							  {{ story.summary|safe }}
 							</font>
 							<br />
+                            <font color="#333333" size="2"><em>
+                                    by {{ story.authors_in_order|join_authors:"pt" }}
+                            </em></font>
+                            <br />
 							<a href="http://daily.swarthmore.edu{{ story.get_absolute_url }}">
 							  <font color="#004484" size="2" face="Arial, Helvetica, sans-serif">
 								<strong>&gt;&gt; Read on</strong>
