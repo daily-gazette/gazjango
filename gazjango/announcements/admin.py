@@ -1,5 +1,5 @@
 from django.contrib import admin
-from gazjango.announcements.models import Announcement,Poster
+from gazjango.announcements.models import Announcement, Poster
 
 class AnnouncementAdmin(admin.ModelAdmin):
     list_display = ('slug', 'title', 'unlinked_excerpt', 'is_published', 
