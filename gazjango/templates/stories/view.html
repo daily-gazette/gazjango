@@ -36,9 +36,11 @@
   		<h1 class="article-title">{{ story.headline|safe }}</h1>		
   		<div style="clear:both"></div>
 
-  		{% block story-content %}
-        {{ story.resolved_text|safe }}
-  		{% endblock %}
+        <div class="article-content">
+            {% block story-content %}
+                {{ story.resolved_text|safe }}
+            {% endblock %}
+        </div>
 			
   		{% for poll in story.polls.all %}
         {% include "polls/listing.html" %}

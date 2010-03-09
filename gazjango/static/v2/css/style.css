@@ -1456,6 +1456,10 @@ h6.publish2_link {
 	margin-bottom: 5px;
 }
 
+.article-content p {
+    text-align: justify;
+}
+
 .voting {
 	margin-left: 2px;
 	margin-bottom: 2px;
