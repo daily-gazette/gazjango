@@ -159,7 +159,7 @@ class AdminThumb(ImageSpec):
 # = Banner Ads =
 # ==============
 
-# note that these classes *must* be named BannerAd*, where * is the letter
+# note that these classes *must* be named BannerAdX, where X is the letter
 # from gazjango.ads.models.BannerAd.SPACE_CHOICES
 
 class ResizeFrontAd(processors.Resize):
