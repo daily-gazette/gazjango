@@ -41,10 +41,11 @@ COMMIT;
 SQL
 
 
-echo "dropping the unused 'by the numbers' section"
+echo "dropping the unused 'by the numbers' section; adding a 'posters' media-bucket"
 ./manage.py shell <<'SHELL'
 from interactive_load import *
 Subsection.objects.get(slug='btn').delete()
+MediaBucket.objects.create(slug='posters', name='Poster')
 SHELL
 
 
