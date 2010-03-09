@@ -243,8 +243,9 @@ class Article(models.Model):
     status = models.CharField(max_length=1, choices=STATUS_CHOICES, default='d')
     
     comments_allowed = models.BooleanField(default=True)
-    swat_only = models.TextField(help_text="If empty, not Swat-only; if there's text, show that text "
-                                           "to non-Swat visitors instead. (Rendered w/ textile.)")
+    swat_only = models.TextField(blank=True,
+            help_text="If empty, not Swat-only; if there's text, show that text "
+                      "to non-Swat visitors instead. (Rendered w/ textile.)")
     
     POSITION_CHOICES = (
         ('3', 'low'),
