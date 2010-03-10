@@ -137,7 +137,7 @@ BannerAd.front.create(
         license_type='p',
     ),
     date_start=datetime.date(2008, 9, 1),
-    date_end  =datetime.date(2010, 3, 1),
+    date_end  =datetime.date(2010, 9, 1),
 )
 ADS
 
