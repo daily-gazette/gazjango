@@ -69,6 +69,13 @@ class BannerAd(models.Model):
     front = managers.FrontPageAdsManager()
     article_top = managers.ArticleTopBannerAdsManager()
     
+    def linked_publisher(self):
+        if self.link:
+            s = '<a href="%s">%s</a>' % (self.link, self.publisher)
+        else:
+            s = self.publisher
+        return mark_safe(s)
+
     def display(self):
         if self.render_type == 'i':
             s = '<img src="%(url)s" alt="%(name)s" title="%(name)s" />' % {
