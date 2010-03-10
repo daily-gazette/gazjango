@@ -1458,6 +1458,7 @@ h6.publish2_link {
 
 .article-content p {
     text-align: justify;
+    padding-right: 0.75em;
 }
 
 .voting {
