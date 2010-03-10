@@ -141,3 +141,6 @@ class FrontPageAdsManager(BannerAdsManager):
 
 class ArticleTopBannerAdsManager(BannerAdsManager):
     space = 't'
+
+class ArticleSideBannerAdsManager(BannerAdsManager):
+    space = 's'

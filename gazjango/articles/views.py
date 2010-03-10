@@ -49,7 +49,7 @@ def specific_article(request, story, num=None, form=None, print_view=False):
             initial['name'] = request.user.get_full_name()
         staff = logged_in and get_user_profile(request).staff_status()
         form = make_comment_form(logged_in=logged_in, initial=initial, staff=staff)
-    
+
     if story.is_swat_only():
         if not is_from_swat(user=get_user_profile(request), ip=get_ip(request)):
             return show_swat_only(request, story)
@@ -72,7 +72,8 @@ def show_swat_only(request, story, template='stories/swat_only.html'):
         'base_template': 'stories/view.html',
         'print_view': False,
         
-        'top_banner': BannerAd.article_top.pick(allow_zero_priority=False)
+        'top_banner': BannerAd.article_top.pick(allow_zero_priority=False),
+        'side_banner': BannerAd.article_side.pick(allow_zero_priority=False),
     }))
 
 def show_article(request, story, form, print_view=False):
@@ -103,6 +104,7 @@ def show_article(request, story, form, print_view=False):
         'recent_stories': Article.published.order_by('-pub_date')[:3],
         
         'top_banner': BannerAd.article_top.pick(allow_zero_priority=False),
+        'side_banner': BannerAd.article_side.pick(allow_zero_priority=False),
     })
     return render_to_response(template, context_instance=context)
 

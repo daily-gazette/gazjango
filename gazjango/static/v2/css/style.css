@@ -1602,6 +1602,10 @@ h6.publish2_link {
 
 /*** This style below controls what would be the advertising section of the article ***/
 
+.leftbar .ad-notice,.rightbar .ad-notice {
+    font-style: italic;
+}
+
 .adbox {
 	background-repeat: no-repeat;
 	padding-bottom: 5px;

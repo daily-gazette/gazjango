@@ -177,6 +177,15 @@ class ResizeWideBanner(processors.Resize):
 class BannerAdT(ImageSpec):
     processors = [ResizeWideBanner]
 
+
+class ResizeSideBanner(processors.Resize):
+    width = 185
+    height = 300
+
+class BannerAdS(ImageSpec):
+    processors = [ResizeSideBanner]
+
+
 # ================
 # = Other Images =
 # ================

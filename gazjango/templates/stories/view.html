@@ -43,8 +43,8 @@
         </div>
 			
   		{% for poll in story.polls.all %}
-        {% include "polls/listing.html" %}
-      {% endfor %}				
+            {% include "polls/listing.html" %}
+        {% endfor %}				
 	
   	<div style="clear:right;"></div>
 	
@@ -124,42 +124,57 @@
   	</div>
 	
 	
-	  {% if poster %}
-	    {% if poster.sponsor_url %}<a href="{{ item.sponsor_url }}">{% endif %}
-	    <img src="{{ poster.poster.poster.url }}" class="poster" title="Poster from {{ poster.sponsor }}"/>
-      {% if poster.sponsor_url %}</a>{% endif %}
+    {% if poster %}
+        {% if poster.sponsor_url %}<a href="{{ item.sponsor_url }}">{% endif %}
+        <img src="{{ poster.poster.poster.url }}" class="poster" title="Poster from {{ poster.sponsor }}" />
+        {% if poster.sponsor_url %}</a>{% endif %}
     {% endif %}
 	
   	<span class="posterannouncement">Want to add your group's poster? Go <a href="/posters/new/">here</a>.</span>
-	
-  	<div class="leftbar">
 
-  		<h5>Recent Stories</h5>
-  		<ul>
-  		{% for story in recent_stories %}
-  			<li><a href="{{ story.get_absolute_url }}">{{ story.headline }}</a></li>
-  		{% endfor %}
-  		</ul>
-		
-  		<!-- Begin Recent Posts Section -->
-  		<h5>Other Stories in {{ story.section }}</h5>
-  		<ul>
-    		{% for story in related %}
-    			<li><a href="{{ story.get_absolute_url }}">{{ story.headline }}</a></li>
-    		{% endfor %}
-  		</ul>
-  	</div>
+    <hr />
 
-  	<div class="rightbar">
-    	<!-- Begin Facebook Connect Section -->
 
-    	<!-- Begin Popular Stories Section -->
-  		<h5>Most popular stories</h5>					
-			<strong>WHAT SHOULD GO HERE?</strong>
+    {% if side_banner %}
+        <div class="leftbar">
+            {{ side_banner.display }}
+            <span class="ad-notice">Advertisement by {{ side_banner.linked_publisher }}.</span>
+        </div>
 
-    	<!-- Begin poll section -->	
-  		<h5>Current Poll</h5>
-			<strong>WHAT SHOULD GO HERE?</strong>
-  	</div>
+        <div class="rightbar">
+            <h5>Recent Stories</h5>
+            <ul>
+            {% for story in recent_stories %}
+                <li><a href="{{ story.get_absolute_url }}">{{ story.headline }}</a></li>
+            {% endfor %}
+            </ul>
+            
+            <h5>Other Stories in {{ story.section }}</h5>
+            <ul>
+                {% for story in related %}
+                    <li><a href="{{ story.get_absolute_url }}">{{ story.headline }}</a></li>
+                {% endfor %}
+            </ul>
+        </div>
+
+    {% else %}
+        <div class="leftbar">
+            <h5>Recent Stories</h5>
+            <ul>
+            {% for story in recent_stories %}
+                <li><a href="{{ story.get_absolute_url }}">{{ story.headline }}</a></li>
+            {% endfor %}
+            </ul>
+        </div>
+
+        <div class="rightbar">
+            <h5>Other Stories in {{ story.section }}</h5>
+            <ul>
+                {% for story in related %}
+                    <li><a href="{{ story.get_absolute_url }}">{{ story.headline }}</a></li>
+                {% endfor %}
+            </ul>
+        </div>
+    {% endif %}
   </div>
 {% endblock %}

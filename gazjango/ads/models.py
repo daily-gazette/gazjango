@@ -35,7 +35,7 @@ class TextLinkAd(models.Model):
 
 
 class BannerAd(models.Model):
-    SPACE_CHOICES = [('f', "Front Page"), ('t', "Article Top Banner")]
+    SPACE_CHOICES = [('f', "Front Page"), ('t', "Article Top Banner"), ('s', "Article Side Banner")]
     space = models.CharField(max_length=1, choices=SPACE_CHOICES)
     
     publisher = models.CharField(max_length=100)
@@ -68,6 +68,7 @@ class BannerAd(models.Model):
     objects = managers.BannerAdsManager()
     front = managers.FrontPageAdsManager()
     article_top = managers.ArticleTopBannerAdsManager()
+    article_side = managers.ArticleSideBannerAdsManager()
     
     def linked_publisher(self):
         if self.link:
