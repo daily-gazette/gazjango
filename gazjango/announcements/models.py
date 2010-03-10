@@ -198,7 +198,7 @@ class Poster(models.Model):
         
     is_published = models.BooleanField(default=False)
     
-    related_event = models.ForeignKey(Announcement)
+    related_event = models.ForeignKey(Announcement, null=True, blank=True)
     
     objects = models.Manager()
     published = PublishedPosterManager()
