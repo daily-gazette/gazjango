@@ -264,7 +264,7 @@ class Article(models.Model):
         "Returns the shortest complete headline available."
         return self.short_title or self.headline
     
-    def get_short_title(self, min_diff=8, length=45):
+    def get_short_title(self, min_diff=8, length=50):
         "Returns a headline of length between `length` and `length`-`min_diff`."
         return self.short_title or smart_truncate(self.headline, length, min_diff)
     
