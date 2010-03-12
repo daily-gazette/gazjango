@@ -3,170 +3,174 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:fb="http://www.facebook.com/2008/fbml">
 
 <head>
-  <title>
-    {% block full-title %}
-      {% block title %}{% endblock title %} :: The Daily Gazette
-    {% endblock full-title %}
-  </title>
+    <title>
+        {% block full-title %}
+        {% block title %}{% endblock title %} :: The Daily Gazette
+        {% endblock full-title %}
+    </title>
 
-  <link rel="stylesheet" href="{% static v2 css/style.css %}" type="text/css" media="screen, projection" />
-  <link rel="stylesheet" href="{% static v2 css/functions.css %}" type="text/css" media="screen, projection" />
+    <link rel="stylesheet" href="{% static v2 css/style.css %}" type="text/css" media="screen, projection" />
+    <link rel="stylesheet" href="{% static v2 css/functions.css %}" type="text/css" media="screen, projection" />
 
-  <link rel="icon" type="image/x-icon" href="/static/images/favicon.ico" />
+    <link rel="icon" type="image/x-icon" href="/static/images/favicon.ico" />
 
-  <link rel="alternate" type="application/rss+xml" title="Homepage" href="/feeds/main" />
-  <link rel="alternate" type="application/rss+xml" title="Latest Stories" href="/feeds/latest" />
-  
-  <!--[if lt IE 7]><script src="http://ie7-js.googlecode.com/svn/version/2.0(beta3)/IE7.js" type="text/javascript"></script><![endif]-->
-  <!--[if lt IE 8]><script src="http://ie7-js.googlecode.com/svn/version/2.0(beta3)/IE8.js" type="text/javascript"></script><![endif]-->
+    <link rel="alternate" type="application/rss+xml" title="Homepage" href="/feeds/main" />
+    <link rel="alternate" type="application/rss+xml" title="Latest Stories" href="/feeds/latest" />
 
-  {% block customheader %}
-  {% endblock customheader %}
-  
-  <script src="http://static.ak.connect.facebook.com/js/api_lib/v0.4/FeatureLoader.js.php" type="text/javascript"></script> 
+    <!--[if lt IE 7]><script src="http://ie7-js.googlecode.com/svn/version/2.0(beta3)/IE7.js" type="text/javascript"></script><![endif]-->
+    <!--[if lt IE 8]><script src="http://ie7-js.googlecode.com/svn/version/2.0(beta3)/IE8.js" type="text/javascript"></script><![endif]-->
+
+    {% block customheader %}
+    {% endblock customheader %}
+
+    <script src="http://static.ak.connect.facebook.com/js/api_lib/v0.4/FeatureLoader.js.php" type="text/javascript"></script> 
 </head>
 
 <body {% block body-args %}{% endblock %}>
-  <div id="wrap">
-    <div id="header">
-			<div class="headerleft">
-  			<h1 class="blogtitle"><a href="/">The Daily Gazette</a></h1><h4 class="tagline">News for Swatties</h4>
-			</div>
-			<div class="email-subscription">
-				<h6>Sign up for updates</h6>
-				<p>Subscribe via email</p>
-	    	<form id="email-updates" >
-          <input type="text" style="width:150px" id="subbox" value="Submission form for the mailing list" name="email"/>
-		    	<input type="hidden" value="newsevolveddemo" name="uri"/>
-		    	<input type="hidden" name="loc" value="en_US"/>
-		    	<input type="submit" value="Sign Up" />
-	    	</form>
-			</div>
-			{% if user.is_authenticated %}
-			  {% if header_auth_notice %}
-  				<div id="alertBox"><p>{{ header_auth_notice|safe }}</p></div>
-  			{% endif %}
-			{% else %}
-			  {% if header_unauth_notice %}
-  				<div id="alertBox"><p>{{ header_unauth_notice|safe }}</p></div>
-				{% endif %}
-			{% endif %}
-		</div>
-		
-		<!-- Below controls the page navigation -->
-		<div id="navigationbar">
-			<div id="nav">
-				<ul>
-					<li><a href="/">Home</a></li>
-					<li><a href="/about">About</a></li>
-					<li><a href="/archives">Archives</a></li>
-					<li><a href="/comments">Comments</a></li>
-					{% if user.is_authenticated %} 
-            {% if user.is_staff %}
-              <li><a href="/staff/">Staff Page</a></li>
-            	{# <li><a href="/reporter-admin/">Reporter Admin</a></li>#}
-            	<li><a href="/admin/">Admin</a></li>
+    <div id="wrap">
+        <div id="header">
+            <div class="headerleft">
+                <h1 class="blogtitle"><a href="/">The Daily Gazette</a></h1><h4 class="tagline">News for Swatties</h4>
+            </div>
+            <div class="email-subscription">
+                <h6>Sign up for updates</h6>
+                <p>Subscribe via email</p>
+                <form id="email-updates" >
+                    <input type="text" style="width:150px" id="subbox" value="Submission form for the mailing list" name="email"/>
+                    <input type="hidden" value="newsevolveddemo" name="uri"/>
+                    <input type="hidden" name="loc" value="en_US"/>
+                    <input type="submit" value="Sign Up" />
+                </form>
+            </div>
+            {% if user.is_authenticated %}
+            {% if header_auth_notice %}
+            <div id="alertBox"><p>{{ header_auth_notice|safe }}</p></div>
             {% endif %}
-        		<li><a href="{% url manage-user %}">Manage your Account</a></li>
-            {% if facebook_user %}
-            	<li><a href="{% url logout %}" onclick="FB.Connect.logoutAndRedirect('{% url logout %}')"><img src="http://static.ak.fbcdn.net/images/fbconnect/logout-buttons/logout_small.gif" alt="Logout" /></a></li>
             {% else %}
-            	{% if not user.get_profile.facebook_id %}
-              	<li><fb:login-button size="small" length="short"></fb:login-button> Connect</li>
-              {% endif %}
-            	<li><a href="{% url logout %}">Logout</a></li>
+            {% if header_unauth_notice %}
+            <div id="alertBox"><p>{{ header_unauth_notice|safe }}</p></div>
             {% endif %}
-          {% else %} {# not authenticated #}
-        		<li><a href="{% url registration_register %}">Register an Account</a></li>
-        		<li><a href="{% url auth_login %}">Login</a></li>
-        		<li><fb:login-button size="small" background="white" length="short"></fb:login-button></li>
-          {% endif %}
+            {% endif %}
+        </div>
 
-          {% include "search_header.html" %}
-				</ul>
-			</div>
-			<div id="catnav">
-				<ul>
-					<h6>Sections: </h6>
-					<li><a href="{% url section "news" %}">News</a></li>
-          <li><a href="{% url section "features" %}">Features</a></li>
-          <li><a href="{% url section "athletics" %}">Athletics</a></li>
-          <li><a href="{% url section "opinions" %}">Opinions</a></li>
-          
-          {# <li class="right"><a href="{% url reviews %}">Reviews</a></li> #}
-          <li class="right"><a href="{% url books %}">Books</a></li>
-          <li class="right"><a href="{% url housing %}">Housing</a></li>
-          <li class="right"><a href="{% url job_list %}">Jobs</a></li>
-          <li class="right"><a href="{% url announcements %}">Announcements &amp; Events</a></li>
-				</ul>
-			</div>
-		</div>
+        <!-- Below controls the page navigation -->
+        <div id="navigationbar">
+            <div id="nav">
+                <ul>
+                    <li><a href="/">Home</a></li>
+                    <li><a href="/about">About</a></li>
+                    <li><a href="/archives">Archives</a></li>
+                    <li><a href="/comments">Comments</a></li>
+                    {% if user.is_authenticated %} 
+                    {% if user.is_staff %}
+                    <li><a href="/staff/">Staff Page</a></li>
+                    {# <li><a href="/reporter-admin/">Reporter Admin</a></li>#}
+                    <li><a href="/admin/">Admin</a></li>
+                    {% endif %}
+                    <li><a href="{% url manage-user %}">Manage your Account</a></li>
+                    {% if facebook_user %}
+                    <li><a href="{% url logout %}" onclick="FB.Connect.logoutAndRedirect('{% url logout %}')"><img src="http://static.ak.fbcdn.net/images/fbconnect/logout-buttons/logout_small.gif" alt="Logout" /></a></li>
+                    {% else %}
+                    {% if not user.get_profile.facebook_id %}
+                    <li><fb:login-button size="small" length="short"></fb:login-button> Connect</li>
+                    {% endif %}
+                    <li><a href="{% url logout %}">Logout</a></li>
+                    {% endif %}
+                    {% else %} {# not authenticated #}
+                    <li><a href="{% url registration_register %}">Register an Account</a></li>
+                    <li><a href="{% url auth_login %}">Login</a></li>
+                    <li><fb:login-button size="small" background="white" length="short"></fb:login-button></li>
+                    {% endif %}
 
-		<div style="clear:both;"></div>
-    
-		{% block content %}
-		
-		{% endblock content %}
+                    {% include "search_header.html" %}
+                </ul>
+            </div>
+            <div id="catnav">
+                <ul>
+                    <h6>Sections: </h6>
+                    <li><a href="{% url section "news" %}">News</a></li>
+                    <li><a href="{% url section "features" %}">Features</a></li>
+                    <li><a href="{% url section "athletics" %}">Athletics</a></li>
+                    <li><a href="{% url section "opinions" %}">Opinions</a></li>
 
-	</div>
-	<div style="clear:both;"></div>
+                    {# <li class="right"><a href="{% url reviews %}">Reviews</a></li> #}
+                    <li class="right"><a href="{% url books %}">Books</a></li>
+                    <li class="right"><a href="{% url housing %}">Housing</a></li>
+                    <li class="right"><a href="{% url job_list %}">Jobs</a></li>
+                    <li class="right"><a href="{% url announcements %}">Announcements &amp; Events</a></li>
+                </ul>
+            </div>
+        </div>
 
-	<!-- Begin Footer -->
-	<div id="footerwrap">
-		<div class="footerbox">
-			<h1>Browse the Gazette</h1>
-			Sections
-			<ul>
-				<li><a href="{% url section "news" %}">News</a></li>
-        <li><a href="{% url section "features" %}">Features</a></li>
-        <li><a href="{% url section "athletics" %}">Athletics</a></li>
-        <li><a href="{% url section "opinions" %}">Opinions</a></li>
-			</ul>
+        <div style="clear:both;"></div>
 
-      <h2>Search</h2>
-		  {% include "search_header.html" %}
-		</div>
-		
-		<div class="footerbox">
-			<h1>Contact the Gazette</h1>
-			<h6>Have questions about the Gazette? Want to suggest a story, or send in a photo you think we'd like? Feel free to <a href="/about/contact/">send us an email</a>.</h6>
-			<p>If you want to submit <a href="{% url submit-announcement %}">an announcement, an event, a lost and found listing</a>, or a <a href="{% url submit-job %}">job</a>, please use those forms.</p>
-		</div>
-		
-		<div class="footerbox">
-			<h1>Popular Comments</h1>
-			<ul>
-			  {% for comment in popular_comments %}
-			   <li><a href="{{ comment.get_absolute_url }}">{{ comment.display_name }}</a> on "{{ comment.subject.get_short_title }}"</li>
-			  {% endfor %}
-			</ul>
-		</div>
-		
-		<div class="footerbox">
-      <h1>Weather</h1>
-      <p class="weather"><strong>{{ weather.date|date:"l" }}:</strong> {{ weather.today }}</p>
-      <p class="weather-joke">{{ weather_joke.line_one }}</p>
-      
-      <p class="weather"><strong>Overnight:</strong> {{ weather.tonight }}</p>
-      <p class="weather-joke">{{ weather_joke.line_two }}</p>
-      
-      <p class="weather"><strong>{{ weather.tomorrow_date|date:"l" }}:</strong> {{ weather.tomorrow }}</p>
-      <p class="weather-joke">{{ weather_joke.line_three }}</p>
+        {% block content %}
+
+        {% endblock content %}
+
     </div>
-	</div>
-	
-	<div style="clear:both;"></div>
+    <div style="clear:both;"></div>
 
-<script type="text/javascript">FB.init("{{ FACEBOOK_API_KEY }}", "/xd_receiver.html", {'reloadIfSessionStateChanged': true});</script>
+    <!-- Begin Footer -->
+    <div id="footerwrap">
+        <div class="footerbox">
+            <h1>Browse the Gazette</h1>
+            Sections
+            <ul>
+                <li><a href="{% url section "news" %}">News</a></li>
+                <li><a href="{% url section "features" %}">Features</a></li>
+                <li><a href="{% url section "athletics" %}">Athletics</a></li>
+                <li><a href="{% url section "opinions" %}">Opinions</a></li>
+            </ul>
 
-<script type="text/javascript">
-    var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
-    document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
-    </script>
+            <h2>Search</h2>
+            {% include "search_header.html" %}
+        </div>
+
+
+        <div class="footerbox">
+            <h1>Popular Comments</h1>
+            <ul>
+                {% for comment in popular_comments %}
+                <li>
+                    <a href="{{ comment.get_absolute_url }}">{{ comment.display_name }}</a>
+                    on "{{ comment.subject.get_short_title }}"
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+
+        <div class="footerbox">
+            <h1>Weather</h1>
+            <p class="weather"><strong>{{ weather.date|date:"l" }}:</strong> {{ weather.today }}</p>
+            <p class="weather-joke">{{ weather_joke.line_one }}</p>
+
+            <p class="weather"><strong>Overnight:</strong> {{ weather.tonight }}</p>
+            <p class="weather-joke">{{ weather_joke.line_two }}</p>
+
+            <p class="weather"><strong>{{ weather.tomorrow_date|date:"l" }}:</strong> {{ weather.tomorrow }}</p>
+            <p class="weather-joke">{{ weather_joke.line_three }}</p>
+        </div>
+
+        <div class="footerbox">
+            <h1>Contact the Gazette</h1>
+            <h6>Have questions about the Gazette? Want to suggest a story, or send in a photo you think we'd like? Feel free to <a href="/about/contact/">send us an email</a>.</h6>
+            <p>If you want to submit <a href="{% url submit-announcement %}">an announcement, an event, a lost and found listing</a>, a <a href="{% url submit-job %}">job</a>, a <a href="{% url housing %}">housing listing</a>, or a <a href="{% url books %}">book-selling announcement</a>, please use those forms.</p>
+        </div>
+    </div>
+
+    <div style="clear:both;"></div>
+
+    <script type="text/javascript">FB.init("{{ FACEBOOK_API_KEY }}", "/xd_receiver.html", {'reloadIfSessionStateChanged': true});</script>
+
     <script type="text/javascript">
-    var pageTracker = _gat._getTracker("UA-1785594-4");
-    pageTracker._trackPageview();
-</script>
+        var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+        document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+    </script>
 
+    <script type="text/javascript">
+        var pageTracker = _gat._getTracker("UA-1785594-4");
+        pageTracker._trackPageview();
+    </script>
 </body>
 </html>
