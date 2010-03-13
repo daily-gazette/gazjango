@@ -12,7 +12,7 @@ log = logging.getLogger('community.sources.twitter')
 
 # model definition
 class Tweet(Entry):
-    tweet_id    = models.DecimalField(max_digits=20,decimal_places=0,null=True, blank=True, help_text="This is the id assigned to each tweet by twitter.")
+    tweet_id    = models.BigIntegerField(null=True, blank=True, help_text="This is the id assigned to each tweet by twitter.")
     source      = models.TextField(blank=True, null=True, )
     icon        = models.CharField(max_length="200",blank=True)
 
