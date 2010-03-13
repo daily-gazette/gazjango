@@ -5,7 +5,7 @@ from community.sources import import_source_modules
 
 register = template.Library()
 
-@register.gazjango.(name="get_latest")
+@register.tag(name="get_latest")
 def get_latest(parser, token):
     """ 
     Return a list of entries to your template as a context variable.
