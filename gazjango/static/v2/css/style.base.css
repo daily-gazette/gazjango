@@ -769,6 +769,10 @@ a, #catnav li li a:link, #catnav li li a:visited {
 	text-decoration: none;
 }
 
+.column h6 {
+    font-weight: bold;
+}
+
 .column h6 a {
 	margin-left: 0px;
 	margin-bottom: 0px;
