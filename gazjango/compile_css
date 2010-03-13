@@ -1,0 +1,6 @@
+#!/bin/sh
+
+for colors in static/v2/css/*.colors; do
+    x=`basename $colors .colors`;
+    ./compile_css.py $colors static/v2/css/style.base.css static/v2/css/style.$x.css
+done
