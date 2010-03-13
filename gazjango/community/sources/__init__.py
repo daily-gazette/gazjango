@@ -22,6 +22,6 @@ def import_source_modules(source_list=settings.AGRO_SETTINGS['source_list'], cla
         try:
             sources.append(__import__("community.sources.%s" % source, 
                                       fromlist=['%s%s' % (source, class_name)]))
-        except ImportError as e:
+        except ImportError, e:
             log.error('unable to load %s: %s', source, e)
     return sources
