@@ -403,6 +403,12 @@ class Article(models.Model):
             return self.section.name
         else:
             return None
+
+    def sub_if_special(self):
+        if self.subsection and self.subsection.is_special:
+            return self.subsection.name
+        else:
+            return None
     
     def sub_or_sec(self):
         return self.subsection or self.section
