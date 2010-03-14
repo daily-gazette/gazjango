@@ -175,7 +175,7 @@ class Announcement(models.Model):
     
     class Meta:
         get_latest_by = 'date_start'
-
+    
 
 _slugger = set_default_slug(lambda x: x.title,
                             lambda x: { 'date_start__year': x.date_start.year })
@@ -184,14 +184,11 @@ models.signals.pre_save.connect(_slugger, sender=Announcement)
 
 
 class Poster(models.Model):
-    title       = models.CharField(max_length=100)
-    poster      = models.ForeignKey(ImageFile, null=True, blank=True, help_text="The image which will be resized/cropped for various displays.")
-    sponsor_url = models.URLField(blank=True, verify_exists=True)
-    sponsor_user= models.ForeignKey(UserProfile)
-    
-    @property
-    def sponsor_name(self):
-        return self.sponsor_user.name
+    title        = models.CharField(max_length=90)
+    poster       = models.ForeignKey(ImageFile, null=True, blank=True)
+    sponsor_name = models.CharField(max_length=100)
+    sponsor_url  = models.URLField(blank=True, verify_exists=True)
+    sponsor_user = models.ForeignKey(UserProfile)
     
     date_start = models.DateField(default=datetime.date.today)
     date_end   = models.DateField(default=datetime.date.today)

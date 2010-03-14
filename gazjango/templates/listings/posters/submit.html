@@ -42,83 +42,51 @@
     {% if form.non_field_errors %}
         <p>{{ form.non_field_errors }}</p>
     {% endif %}
-    <form action="" method="post">
-      <table>
-      {{ form.as_table }}
-      </table>
-        {# <table class="submit-form"> #}
-        {#     <tr> #}
-        {#         <th width="150px"><label for="{{ form.title.auto_id }}">Poster Title</label>:</th> #}
-        {#         <td>{{ form.title }}</td> #}
-        {#         <td>{{ form.title.errors }}</td> #}
-        {#     </tr> #}
-        {#     <tr> #}
-        {#         <th><label for="{{ form.poster_email.auto_id }}">Your Email</label>:</th> #}
-        {#         <td>{{ form.poster_email }}</td> #}
-        {#         <td>{{ form.poster_email.errors }}</td> #}
-        {#     </tr> #}
-        {#     <tr> #}
-        {#         <th><label for="{{ form.text.auto_id }}">Announcement Text</label>:</th> #}
-        {#         <td>{{ form.text }}</td> #}
-        {#         <td>{{ form.text.errors }}</td> #}
-        {#     </tr> #}
-        {#     <tr> #}
-        {#         <th><label for="{{ form.date_start.auto_id }}">First Day in Digest</label>:</th> #}
-        {#         <td>{{ form.date_start }}</td> #}
-        {#         <td>{{ form.date_start.errors }}</td> #}
-        {#     </tr> #}
-        {#     <tr> #}
-        {#         <th><label for="{{ form.date_end.auto_id }}">Last Day in Digest</label>:</th> #}
-        {#         <td>{{ form.date_end }}</td> #}
-        {#         <td>{{ form.date_end.errors }}</td> #}
-        {#     </tr> #}
-        {#     <tr> #}
-        {#         <th>{{ form.sponsor.label_tag }}:<br /><small>(Your name or your group's name)</small></th> #}
-        {#         <td> #}
-        {#         {{ form.sponsor }} #}
-        {#         <a href="#" id='sponsor-toggle' style="display: none;" onclick="toggleSponsorLink(); return false;">add a link</a> #}
-        {#         </td> #}
-        {#         <td>{{ form.sponsor.errors }}</td> #}
-        {#     </tr> #}
-        {#         <tr id="sponsor-url-row"> #}
-        {#         <th><label for="{{ form.sponsor_url.auto_id }}">Sponsor Link</label>:</th> #}
-        {#         <td>{{ form.sponsor_url }}</td> #}
-        {#         <td>{{ form.sponsor_url.errors }}</td> #}
-        {#     </tr> #}
-        {#     <tr> #}
-        {#         <th> &nbsp; </th> #}
-        {#         <td colspan="2"> #}
-        {#         {{ form.is_lost_and_found }} #}
-        {#         This announcement is about a lost (or found) item. #}
-        {#         </td> #}
-        {#     </tr> #}
-        {#     <tr> #}
-        {#         <th> &nbsp; </th> #}
-        {#         <td colspan="2"> #}
-        {#         {{ form.is_event }} #}
-        {#         This announcement is about a specific event. #}
-        {#         </td> #}
-        {#     </tr> #}
-        {#     <tr class="event-row"> #}
-        {#         <th>{{ form.event_date.label_tag }}:</th> #}
-        {#         <td>{{ form.event_date }}</td> #}
-        {#         <td>{{ form.event_date.errors }}</td> #}
-        {#     </tr> #}
-        {#     <tr class="event-row"> #}
-        {#         <th>{{ form.event_time.label_tag }}:</th> #}
-        {#         <td>{{ form.event_time }}</td> #}
-        {#         <td>{{ form.event_time.errors }}</td> #}
-        {#     </tr> #}
-        {#     <tr class="event-row"> #}
-        {#         <th>{{ form.event_place.label_tag }}:</th> #}
-        {#         <td>{{ form.event_place }}</td> #}
-        {#         <td>{{ form.event_place.errors }}</td> #}
-        {#     </tr> #}
-        {#     <tr> #}
-        {#         <th></th> #}
-        {#         <td><input type="submit" value="Submit" /></td> #}
-        {#         <td></td> #}
-        {#     </tr> #}
-        {# </table> #}
+    <form action="" method="post" enctype="multipart/form-data">
+        <table class="submit-form">
+            <tr>
+                <th width="150px"><label for="{{ form.title.auto_id }}">Poster Name</label>:</th>
+                <td>{{ form.title }} (not public)</td>
+                <td>{{ form.title.errors }}</td>
+            </tr>
+            <tr>
+                <th><label>Your Email</label>:</th>
+                <td>{{ user.email }} (not public)</td>
+                <td></td>
+            </tr>
+            <tr>
+                <th><label for="{{ form.sponsor_name.auto_id }}">Your (group's) name</label>:</th>
+                <td>
+                    {{ form.sponsor_name }}
+                    <a href="#" id='sponsor-toggle' style="display: none;" onclick="toggleSponsorLink(); return false;">add a link</a>
+                </td>
+                <td>{{ form.sponsor.errors }}</td>
+            </tr>
+            <tr id="sponsor-url-row">
+                <th><label for="{{ form.sponsor_url.auto_id }}">Sponsor Link</label>:</th>
+                <td>{{ form.sponsor_url }}</td>
+                <td>{{ form.sponsor_url.errors }}</td>
+            </tr>
+            <tr>
+                <th><label>Poster Image</label>:</th>
+                <td>{{ form.poster }}<br />{{ form.poster.help_text }}</td>
+                <td>{{ form.poster.errors }}</td>
+            </tr>
+            <tr>
+                <th><label for="{{ form.date_start.auto_id }}">Start Date</label>:</th>
+                <td>{{ form.date_start }}</td>
+                <td>{{ form.date_start.errors }}</td>
+            </tr>
+            <tr>
+                <th><label for="{{ form.date_end.auto_id }}">Last Date</label>:</th>
+                <td>{{ form.date_end }}</td>
+                <td>{{ form.date_end.errors }}</td>
+            </tr>
+            <tr>
+                <th></th>
+                <td><input type="submit" value="Submit" /></td>
+                <td></td>
+            </tr>
+        </table>
     </form>
 {% endblock expand_content %}

@@ -1,5 +1,6 @@
 from django.http                   import HttpResponseRedirect, Http404
 from django.template               import RequestContext
+from django.template.defaultfilters import slugify
 from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers      import reverse
 from django.shortcuts              import render_to_response, get_object_or_404
@@ -18,7 +19,9 @@ from gazjango.reviews.forms        import SubmitEstablishmentForm, SubmitReviewF
 from gazjango.housing.models       import HousingListing
 from gazjango.housing.forms        import SubmitHousingForm
 from gazjango.misc.view_helpers    import get_user_profile
+from gazjango.misc.files           import handle_file_upload
 from gazjango.scrapers.bico        import get_bico_news
+from gazjango.media.models         import ImageFile, MediaBucket
 
 import datetime
 import itertools
@@ -84,10 +87,27 @@ def announcement_success(request, template="listings/announcements/success.html"
 @login_required
 def submit_poster(request, template="listings/posters/submit.html"):
     if request.method == 'POST':
-        form = SubmitPosterForm(request.POST)
+        form = SubmitPosterForm(request.POST, request.FILES)
         if form.is_valid():
-            poster = form.save(commit=False)
-            poster.sponsor_user = get_user_profile(request)
+            profile = get_user_profile(request)
+            
+            args = dict( (k, v) for k, v in form.cleaned_data.items() if k != 'poster' )
+            poster = Poster(**args)
+            poster.sponsor_user = profile
+            
+            poster_file_path = handle_file_upload(request.FILES['poster'], 'posters')
+            poster.poster = ImageFile.objects.create(
+                name = poster.title,
+                slug = slugify(poster.title),
+                bucket = MediaBucket.objects.get_or_create(slug="posters", defaults={
+                    'name': "Posters",
+                    'description': "Posters uploaded by the community."
+                })[0],
+                license_type='p',
+                data=poster_file_path,
+            )
+            poster.poster.users = [profile]
+            
             poster.save()
             return HttpResponseRedirect(reverse(poster_success))
     else:

@@ -1599,6 +1599,15 @@ h6.publish2_link {
 	margin-top: 5px;
 }
 
+.posterannouncement {
+    font-style: italic;
+}
+
+img.poster {
+    border: 2px solid BORDER;
+}
+
+
 /*** Below are styles for the blog category pages ***/
 
 .blog-post {

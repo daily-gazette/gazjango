@@ -1,6 +1,8 @@
 from django import forms
 from gazjango.announcements.models import Announcement, Poster
 
+import datetime
+
 class SubmitAnnouncementForm(forms.ModelForm):
     text = forms.CharField(widget=forms.Textarea(attrs={'rows': 5, 'cols': 40}))
     is_event = forms.BooleanField(
@@ -31,9 +33,12 @@ class SubmitAnnouncementForm(forms.ModelForm):
     
 
 
-class SubmitPosterForm(forms.ModelForm):
-    class Meta:
-        model = Poster
-        fields = ('title', 'poster', 'sponsor_url', 'date_start', 'date_end',)
-    
+class SubmitPosterForm(forms.Form):
+    title = forms.CharField()
+    sponsor_name = forms.CharField()
+    sponsor_url = forms.URLField()
 
+    date_start = forms.DateField(initial=datetime.date.today)
+    date_end = forms.DateField(initial=lambda: datetime.date.today() + datetime.timedelta(days=7))
+
+    poster = forms.ImageField(help_text="Will be resized to 400x500.")
