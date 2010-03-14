@@ -13,6 +13,7 @@ class Section(models.Model):
     """
     
     name = models.CharField(max_length=40, unique=True)
+    short_name = models.CharField(max_length=20, blank=True)
     slug = models.SlugField(unique=True)
     description = models.CharField(max_length=250, blank=True)
     is_special = models.BooleanField(blank=True, default=False,
@@ -52,6 +53,9 @@ class Section(models.Model):
     def most_recent_articles(self, num=None):
         articles = self.published_articles().order_by('-pub_date')
         return articles[:num] if num else articles
+
+    def shortest_name(self):
+        return self.short_name or self.name
     
 
 class Subsection(models.Model):

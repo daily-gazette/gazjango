@@ -3,7 +3,7 @@
 # ALTER DATABASE gazette CHARACTER SET 'utf8';
 
 echo "making changes to articles table (and stackedpages)"
-./manage.py dbshell <<'SQL'
+./manage.py dbshell <<"SQL"
 BEGIN;
 # extend short_summary to 210 chars
 ALTER TABLE `articles_article` MODIFY `short_summary` varchar(210) NOT NULL;
@@ -20,6 +20,11 @@ ALTER TABLE `articles_article` MODIFY `short_title` varchar(40) NOT NULL;
 # drop unused fields
 ALTER TABLE `articles_article` DROP `long_summary`;
 ALTER TABLE `articles_article` DROP `possible_position`;
+
+
+# add short_name for sections
+ALTER TABLE `articles_section` ADD COLUMN `short_name` varchar(20) NOT NULL
+                               AFTER `name`;
 
 # denormalize formats from articles
 ALTER TABLE `articles_article` ADD COLUMN `format` varchar(1) NOT NULL 
@@ -41,11 +46,11 @@ COMMIT;
 SQL
 
 
-echo "dropping the unused 'by the numbers' section; adding a 'posters' media-bucket"
+echo "dropping the unused 'by the numbers' section; setting Opinions & Columns's short_name"
 ./manage.py shell <<'SHELL'
 from interactive_load import *
 Subsection.objects.get(slug='btn').delete()
-MediaBucket.objects.create(slug='posters', name='Poster')
+Section.objects.filter(slug='opinions').update(short_name='Opinions')
 SHELL
 
 

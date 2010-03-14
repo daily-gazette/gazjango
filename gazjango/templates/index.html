@@ -37,12 +37,11 @@
         <div id="myGallery">
             {% for topstory in topstories %}
             <div class="imageElement" id="{{ forloop.counter }}">
-                <h3>{{ topstory.section_if_special|follow:": " }}{{ topstory.headline }}</h3>
-                <p>{{ topstory.shortest_summary|safe }}</p>
+                <h3>{{ topstory.section_if_special|follow:": " }}<a href="{{ topstory.get_absolute_url }}">{{ topstory.headline }}</a></h3>
+                <p>{{ topstory.get_short_summary|safe }}</p>
                 <a href="{{ topstory.get_absolute_url }}" title="Read the full story" class="open"></a>
                 <img src="{{ topstory.main_image.top_front.url }}" class="full" alt="" />
                 <img src="{{ topstory.main_image.top_front.url }}" class="thumbnail" alt="" />
-                {# TODO: look into what this class=thumbnail is actually doing #}
             </div>
             {% endfor %}
         </div>
@@ -52,7 +51,7 @@
 		<div id="homepage-section-wrap">
 			{% for story in stories %}
             <div class="column">
-                <h4><a href="{{ story.section.get_absolute_url }}">{{ story.section.name }}</a></h4>
+                <h4><a href="{{ story.section.get_absolute_url }}">{{ story.section.shortest_name }}</a></h4>
                 <h6>{{ story.sub_if_special|follow:": " }}<a href="{{ story.get_absolute_url }}" title="{{ story.headline }}">{{ story.get_short_title }}</a></h6>
                 {# <li>Posted {{ story.pub_date|date:"n/j/Y" }}</li> #}
                 <p>{{ story.get_short_summary }}</p>
