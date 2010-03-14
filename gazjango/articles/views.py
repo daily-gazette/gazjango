@@ -254,7 +254,7 @@ def homepage(request, social_len=7, num_tweets=2, template="index.html"):
     jobs = JobListing.unfilled.order_by('-pub_date')
     
     data = {
-        'topstories': Article.published.filter(position='1').order_by('-pub_date')[:6],
+        'topstories': Article.published.filter(position='1').order_by('-pub_date')[:7],
         'stories': Article.published.order_by('-pub_date')[:4],
         
         'weather': Weather.objects.for_today(),
