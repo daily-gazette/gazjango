@@ -2,7 +2,6 @@ from django.db        import models
 from django.db.models import signals, Q
 from gazjango.accounts.models import UserProfile, UserKind
 from gazjango.registration import signals as registration_signals
-import random
 
 class SubscribersManager(models.Manager):
     def find_by_email(self, email):
