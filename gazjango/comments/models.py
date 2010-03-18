@@ -179,7 +179,7 @@ class PublicComment(models.Model):
     
     @cache(60*5)
     def num_upvotes(self):
-        return self.votes.filter(positive=True).count()
+        return self.votes.filter(positive=True).aggregate(models.Sum('weight'))['weight__sum']
     
     def is_official(self):
         return self.speaking_officially and \
