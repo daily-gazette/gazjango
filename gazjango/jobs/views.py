@@ -6,6 +6,8 @@ from gazjango.jobs.models     import JobListing
 from gazjango.jobs.forms      import SubmitJobForm
 from gazjango.announcements.models import Poster
 
+import datetime
+
 def job_details(request, slug, template="listings/jobs/details.html"):
     job = get_object_or_404(JobListing, slug=slug)
     data = {
@@ -17,7 +19,7 @@ def job_details(request, slug, template="listings/jobs/details.html"):
     return render_to_response(template, data, context_instance=rc)
 
 
-def list_jobs(request, options="", default_limit=10, template="listings/jobs/list.html"):
+def list_jobs(request, options="", template="listings/jobs/list.html"):
     opts = options.split("/")
     opts = [(opt[:-1] if opt.endswith("/") else opt).lower() for opt in opts]
     
@@ -38,7 +40,7 @@ def list_jobs(request, options="", default_limit=10, template="listings/jobs/lis
         if lim.isdigit():
             jobs = jobs[:int(lim)]
     else:
-        jobs = jobs[:default_limit]
+        jobs = jobs.filter(pub_date__gte=datetime.date.today() - datetime.timedelta(days=60))
     
     data = {
         'jobs': jobs,
