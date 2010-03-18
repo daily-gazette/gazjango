@@ -2894,7 +2894,7 @@ caption
         text-transform: uppercase;
         text-align: left;
         padding: 8px 12px 4px 12px;
-        background: #CAE8EA url(../media/bg_header.jpg) no-repeat;
+        background: LISTING_TH_BG;
         vertical-align:middle;
         }
 #listing td.total
@@ -2926,16 +2926,16 @@ caption
 
         {
         cursor:pointer;
-        background: #CAE8EA url(../media/bg_header_sortable.jpg) no-repeat;
+        background: LISTING_TH_BG;
         padding: 8px 12px 4px 16px;
         }
 #listing th.forwardSort
         {
-        background:#CAE8EA url(../media/bg_header_down.jpg) no-repeat 0 0;
+        background:LISTING_TH_BG;
         }
 #listing th.reverseSort
         {
-        background:#CAE8EA url(../media/bg_header_up.jpg) no-repeat 0 0;
+        background:LISTING_TH_BG;
         }
 #listing table thead th.forwardSort a,
 #listing table thead th.reverseSort a
@@ -2976,7 +2976,7 @@ th.sort-active a
 #listing td a:hover
         {
         color: LISTING_TD_A_HOVER;
-        border-bottom:1px dotted #a80000;
+        border-bottom:1px dotted LISTING_BORDER;
         background:transparent;
         }
 #listing td
@@ -3005,29 +3005,48 @@ th.sort-active a
 	width: 100%;
 	padding-top: 25px;
 }
-   
-   #listing tr td {
+
+#listing tr td:first-child, #listing tr th:first-child {
+    border-left: 1px solid LISTING_BORDER;
+}
+
+#listing tr td {
 	padding: 3px;
 	padding-left: 10px;
-	border-bottom: 2px solid LISTING_TR_NONALT;
+	border-bottom: 2px solid LISTING_BORDER;
 }
-#listing tr[class="alt"] td
-        {
-        background: #F5FAFA url(../media/td_alt.jpg) no-repeat;
-        }
-#listing td[class~="alt"]
-        {
-        background: LISTING_TR_NONALT url(../media/col_alt.jpg) no-repeat !important;
-        }
+
+#listing tr td {
+    background: LISTING_TR_TD;
+}
+#listing tr.alt td {
+    background: LISTING_ALTTR_TD;
+}
+
+#listing tr td.alt {
+    background: LISTING_TR_ALTTD;
+}
+#listing tr.alt td.alt {
+    background: LISTING_ALTTR_ALTTD;
+}
+
+
+/*#listing tr.alt td[class~="alt"] {*/
+    /*background: LISTING_ALTTR_NONALT;*/
+/*}*/
+/*#listing tr.alt td.alt {*/
+    /*background: LISTING_ALTTR_ALT;*/
+/*}*/
+
 /* Poor old Internet Explorer won't see the next two rules either as it doesn't get :first-child */
 #listing tbody tr.alt td:first-child
         {
-        background: LISTING_TR_ALT no-repeat;
+        background: LISTING_TR_ALT_FST;
         font-weight:bold;
         }
 #listing tbody tr td:first-child
         {
-        background: #fff url(../media/bullet1.gif) no-repeat;
+        background: LISTING_TR_NONALT_FST;
         font-weight:bold;
         }
 /* Image free rules for Internet Explorer < 7 */
