@@ -105,8 +105,10 @@ class ProfilesManager(models.Manager):
             else:
                 raise
     
-    def quick_create_user(self, username, first, last, year=None, kind='s', template='reporter'):
-        user = User.objects.create_user(username, username + '@swarthmore.edu')
+    def quick_create_user(self, username, first, last, year=None, kind='s', template='reporter', email=None):
+        if email is None:
+            email = username + '@swarthmore.edu'
+        user = User.objects.create_user(username, email)
         user.first_name = first
         user.last_name = last
         if template == 'reporter':
