@@ -240,8 +240,8 @@ def homepage(request, social_len=7, num_tweets=2, template="index.html"):
     )
     
     # getting the highlighted comment
-    top_comment = max(recent_comments, key=PublicComment.num_upvotes)            
-            
+    top_comment = max(recent_comments, key=lambda c: c.score)
+    
     # getting comment list for facebook-style listings
     comment_list = defaultdict(list)
     for comment in recent_comments[:25]:

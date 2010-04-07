@@ -99,8 +99,10 @@
 			<div class="bottom-twothird">
 				<h5 class="popcomment">
 				  <strong>Popular Comment:</strong>
-				  <em>{{ top_comment.text|safe|smart_truncate:"190" }}</em>
-				  — <a href="{{top_comment.get_absolute_url}}">{{ top_comment.display_name }}</a>, discussing <a href="{{top_comment.subject.get_absolute_url}}">{{ top_comment.subject.get_title }}</a>.
+				  <em>{{ top_comment.text|safe|striptags|smart_truncate:"300" }}</em>
+                  — <a href="{{top_comment.get_absolute_url}}">{{ top_comment.display_name }}</a>, 
+                  discussing {{ top_comment.subject.sub_if_special|follow:": " }}
+                  <a href="{{top_comment.subject.get_absolute_url}}">{{ top_comment.subject.get_title }}</a>.
 				</h5>
 			</div>
 			<div class="bottom-third">
