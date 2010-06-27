@@ -122,10 +122,6 @@ echo "adding our livecustomer and banner ads"
 from interactive_load import *
 TextLinkAd.objects.create(source='c', 
     link='http://www.acairoots.com', text='acai')
-TextLinkAd.objects.create(source='c',
-    link='http://www.r4-ds-card.ca', text='r4')
-TextLinkAd.objects.create(source='c',
-    link='http://www.framesdirect.com/sunglasses/', text='sunglasses')
 
 bucket = MediaBucket.objects.create(slug='ads', name='Ads')
 
