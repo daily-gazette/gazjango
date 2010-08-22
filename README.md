@@ -10,6 +10,7 @@ Getting started:
  * Set up a MySQL database for the project
  * Create a `settings.py` file with at least these contents:
 
+This should be the contents.
     from settings_dev import *
     DATABASE_ENGINE = 'mysql'
     DATABASE_NAME = 'gazette' # or whatever you set up the db name to be
@@ -17,6 +18,8 @@ Getting started:
     DATABASE_PASSWORD = 'your_mysql_password'
     DATABASE_HOST = 'localhost'
     DATABASE_PORT = ''
+Does it work?
+
 
  * Get a DB backup from `sccs.swarthmore.edu:~aquinton/db_backups`. It'll be something like `gazjango_2010-08-22_07-00.sql.bz2`.
  * Put the DB file into your local repository: `bzcat gazjango_2010-08-22_07-00.sql.bz2 | ./manage.py dbshell`
