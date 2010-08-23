@@ -148,6 +148,6 @@ AGRO_SETTINGS = {
     # for services that require an API key, they are added like so
     # note that last.fm also requires a secret, so we add its api key and secret as a tuple
     'api_keys': {
-        'flickr': FLICKR_API_KEY,
+        'flickr': FLICKR_API,
     },
 }
