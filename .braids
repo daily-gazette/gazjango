@@ -2,7 +2,7 @@
 django-imagekit: 
   branch: master
   remote: braid/django-imagekit
-  revision: 125c2c1470e18ba2898e3258c4eb4a4119f43762
+  revision: 5e2466bcc84dbd5532cb6c0c5e0bd812c5175ace
   squashed: true
   type: git
   url: git://github.com/d00gs/django-imagekit.git
