@@ -29,4 +29,6 @@ Get a DB backup from `sccs.swarthmore.edu:~aquinton/db_backups`. It'll be someth
 
 Put the DB file into your local repository: `bzcat gazjango_2010-08-22_07-00.sql.bz2 | ./manage.py dbshell`
 
-Update stuff for the community feed: `bash ./update.sh`
+(This should go away shortly, but run `bash ../migration.sh` to convert from the old DB format, which the website is running, to the new one. Choose "no" to deleting content types the first time it asks, then "yes" the second.)
+
+Update stuff for the community feed: `python ./update.py`
