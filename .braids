@@ -1,22 +1,22 @@
 --- 
-django-registration: 
-  squashed: true
-  url: git://github.com/d00gs/django-registration.git
-  branch: master
-  type: git
-  revision: 807ba7182f4a648309fb31d4b8173fdb70a221da
-  remote: braid/django-registration
-gazjango/misc/python-textile: 
-  squashed: true
-  url: git://github.com/jsamsa/python-textile.git
-  branch: master
-  type: git
-  revision: 84bdad397c073fc9148696b7a6259021968e35fd
-  remote: braid/gazjango/misc/python-textile
 django-imagekit: 
-  squashed: true
-  url: git://github.com/d00gs/django-imagekit.git
   branch: master
-  type: git
-  revision: 125c2c1470e18ba2898e3258c4eb4a4119f43762
   remote: braid/django-imagekit
+  revision: 125c2c1470e18ba2898e3258c4eb4a4119f43762
+  squashed: true
+  type: git
+  url: git://github.com/d00gs/django-imagekit.git
+django-registration: 
+  branch: master
+  remote: braid/django-registration
+  revision: b9714a364149cb49113d7b1cf97b8d4680c2da0c
+  squashed: true
+  type: git
+  url: git://github.com/d00gs/django-registration.git
+gazjango/misc/python-textile: 
+  branch: master
+  remote: braid/gazjango/misc/python-textile
+  revision: 84bdad397c073fc9148696b7a6259021968e35fd
+  squashed: true
+  type: git
+  url: git://github.com/jsamsa/python-textile.git
