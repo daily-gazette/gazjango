@@ -6,7 +6,7 @@ If you don't work for the Gazette, you're welcome to check out the code (obvious
 
 Make sure you have Python (2.5, 2.6, or 2.7), Django, MySQL, and MySQLdb installed
 
-Clone the repository.
+Clone the repository. The commands below assume you're in the `gazjango` directory (ie the one with `manage.py`).
 
 Get `settings_secret.py` from `sccs.swarthmore.edu:~aquinton/settings_secret.py` (this has API keys and such).
 
@@ -32,3 +32,7 @@ Put the DB file into your local repository: `bzcat gazjango_2010-08-22_07-00.sql
 (This should go away shortly, but run `bash ../migration.sh` to convert from the old DB format, which the website is running, to the new one. Choose "no" to deleting content types the first time it asks, then "yes" the second.)
 
 Update stuff for the community feed: `python ./update.py`
+
+Compile the CSS templates into real stylesheets: `./compile_css`
+
+Now you should be able to do `./manage.py runserver`, `./manage.py shell`, etc.
