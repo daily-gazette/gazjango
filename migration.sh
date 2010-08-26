@@ -47,7 +47,7 @@ SQL
 
 
 echo "dropping the unused 'by the numbers' section; setting Opinions & Columns's short_name"
-./manage.py shell <<'SHELL'
+./manage.py shell --plain <<'SHELL'
 from interactive_load import *
 Subsection.objects.get(slug='btn').delete()
 Section.objects.filter(slug='opinions').update(short_name='Opinions')
@@ -64,7 +64,7 @@ UPDATE articles_subsection SET section_id=$features_id WHERE section_id=$multi_i
 UPDATE articles_article SET section_id=$features_id WHERE section_id=$multi_id;
 SQL
 
-./manage.py shell <<'SHELL'
+./manage.py shell --plain <<'SHELL'
 from interactive_load import *
 Section.objects.get(slug='multimedia').delete()
 SHELL
@@ -92,7 +92,7 @@ ALTER TABLE `comments_publiccomment` ADD COLUMN
             `speaking_officially` bool NOT NULL AFTER `email`;
 COMMIT;
 SQL
-./manage.py shell <<'PYTHON'
+./manage.py shell --plain <<'PYTHON'
 from interactive_load import *
 for c in PublicComment.objects.filter(name=None, user__user__is_staff=True):
     if c.user.staff_status(c.time):
@@ -118,7 +118,7 @@ mkdir -p uploads/advertisements
 cp static/images/ads/coop-index-230.png uploads/advertisements/
 
 echo "adding our livecustomer and banner ads"
-./manage.py shell <<'ADS'
+./manage.py shell --plain <<'ADS'
 from interactive_load import *
 TextLinkAd.objects.create(source='c', 
     link='http://www.acairoots.com', text='acai')
