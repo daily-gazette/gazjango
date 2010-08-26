@@ -13,6 +13,12 @@
   {% if story.polls.count %}
     <script type="text/javascript" src="{% static js polls.js %}"></script>
   {% endif %}
+
+  {% comment %}
+    <script type="text/javascript" src="http://cornify.com/js/cornify.js"></script>
+    <script type="text/javascript" src="{% static js jquery.cookie.js %}"></script>
+    <script type="text/javascript" src="{% static js dance.js %}"></script>
+  {% endcomment %}
 {% endblock %}
 
 

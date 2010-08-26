@@ -117,8 +117,8 @@ class Poster(ImageSpec):
 # ======================
 
 class ResizeIssue(processors.Resize):
-    height = 100
-    width = 100
+    height = 180
+    width = 180
     crop = True # TODO: not sure whether we want issue images cropped
 
 class IssueImage(ImageSpec):

@@ -115,7 +115,7 @@ class Announcement(models.Model):
     text  = models.TextField()
     
     sponsor = models.CharField(max_length=50)
-    sponsor_url = models.URLField(blank=True, verify_exists=True)
+    sponsor_url = models.URLField(blank=True, verify_exists=False)
     poster_email = models.EmailField()
     
     date_start = models.DateField(default=datetime.date.today)
