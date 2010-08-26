@@ -31,6 +31,8 @@ Put the DB file into your local repository: `bzcat gazjango_2010-08-22_07-00.sql
 
 (This should go away shortly, but run `bash ../migration.sh` to convert from the old DB format, which the website is running, to the new one. Choose "no" to deleting content types the first time it asks, then "yes" the second.)
 
+Get all of the uploaded media files off the website: `./sync_uploads.sh`
+
 Update stuff for the community feed: `python ./update.py`
 
 Compile the CSS templates into real stylesheets: `./compile_css`
