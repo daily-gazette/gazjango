@@ -111,7 +111,7 @@ COMMIT;
 SQL
 
 echo "adding all the other new tables, etc"
-./manage.py syncdb
+yes yes | ./manage.py syncdb
 
 echo "moving the coop ad into the uploads folder"
 mkdir -p uploads/advertisements
@@ -143,6 +143,3 @@ BannerAd.front.create(
     date_end  =datetime.date(2010, 9, 1),
 )
 ADS
-
-echo "making sure that everything's just right :)"
-./manage.py syncdb
