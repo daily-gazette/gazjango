@@ -34,23 +34,27 @@
   <caption>Click on a column heading to sort.</caption>
   <thead>
     <tr>
-      <th class="sortable">Job Name</th>
+      <th class="sortable-numeric favour-reverse"></th>
+      <th class="sortable-text">Job Name</th>
       <th>Pay</th>
-      <th class="sortable">Time</th>
-      <th class="sortable">Location</th>
-      <th class="sortable">Car Required?</th>
+      <th>Time</th>
+      <th class="sortable-text">Location</th>
+      <th class="sortable-text">Car?</th>
       <th>Contact Information</th>
     </tr>
   </thead>
   <tbody>
     {% for job in jobs %}
       <tr class="job-row">
+        <td>{{ job.pub_date|date:"n/d" }}</td>
         <td><a href="{{ job.get_absolute_url }}">{{ job.name }}</a></td>
         <td>{% if job.get_pay %}
                 Paid: {{ job.get_pay }}
+            {% else %} {% if job.is_paid %}
+                Paid: Unknown
             {% else %}
                 Unpaid
-            {% endif %}</td>
+            {% endif %}{% endif %} </td>
         <td>{% if job.hours %}{{ job.hours }}{% if job.when %},{% endif %}{% endif %} {{ job.when }}</td>
         <td>{{ job.where }}</td>
         <td>{% if job.needs_car %}<strong>X</strong>{% endif %}</td>

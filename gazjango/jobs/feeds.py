@@ -10,7 +10,7 @@ class JobsFeed(Feed):
     description = "Job listings from the Daily Gazette."
     
     def items(self):
-        return JobListing.published.get_for_show(10)
+        return JobListing.unfilled.order_by('-pub_date')[:10]
     
     def item_pubdate(self, item):
         return item.pub_date

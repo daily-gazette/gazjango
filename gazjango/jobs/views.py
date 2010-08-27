@@ -19,37 +19,12 @@ def job_details(request, slug, template="listings/jobs/details.html"):
     return render_to_response(template, data, context_instance=rc)
 
 
-def list_jobs(request, options="", template="listings/jobs/list.html"):
-    opts = options.split("/")
-    opts = [(opt[:-1] if opt.endswith("/") else opt).lower() for opt in opts]
-    
-    conditions = {}
-    for opt in opts:
-        if opt in ('paid', 'not-paid'):
-            conditions['is_paid'] = opt == 'paid'
-        elif opt in ('at-swat', 'on-campus', 'off-campus'):
-            conditions['at_swat'] = opt == 'off-campus'
-        elif opt in ('filled', 'not-filled'):
-            conditions['is_filled'] = opt == 'filled'
-        elif opt in ('needs-car', 'no-car'):
-            conditions['needs_car'] = opt == 'needs-car'
-    
-    jobs = JobListing.published.filter(**conditions).order_by('is_filled', '-pub_date')
-    if 'limit' in request.GET:
-        lim = request.GET['limit']
-        if lim.isdigit():
-            jobs = jobs[:int(lim)]
-    else:
-        jobs = jobs.filter(pub_date__gte=datetime.date.today() - datetime.timedelta(days=60))
-    
-    data = {
-        'jobs': jobs,
-        'other_jobs': JobListing.unfilled.order_by('-pub_date')[:3],
-        'poster': Poster.published.get_running(),
-    }
-    
+def list_jobs(request, template="listings/jobs/list.html"):
+    lim = datetime.date.today() - datetime.timedelta(days=60)
+    jobs = JobListing.unfilled.filter(pub_date__gte=lim).order_by('-pub_date')
+
     rc = RequestContext(request)
-    return render_to_response(template, data, context_instance=rc)
+    return render_to_response(template, {'jobs': jobs}, context_instance=rc)
 
 
 def submit_job(request, template="listings/jobs/submit.html"):
