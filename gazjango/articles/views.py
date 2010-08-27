@@ -225,17 +225,17 @@ def archives(request, section=None, subsection=None, year=None, month=None, day=
     return render_to_response(template, context_instance=rc)
 
 
-def homepage(request, social_len=7, num_tweets=2, template="index.html"):
-    recent_comments = PublicComment.visible.order_by('-time')[:50]
+def homepage(request, social_len=7, num_tweets=2, num_comments=2,
+             template="index.html"):
+
+    recent_comments = PublicComment.visible.order_by('-time')[:25]
     
     # creating the social stream
-    non_tweets = Entry.published.get_entries(num=social_len, exclusion="tweet")
-    tweets = Entry.published.get_entries(num=num_tweets, category="tweet")
+    entries = Entry.published.get_entries(num=social_len, tweet=num_tweets)
     
     stream = heapq.nlargest(social_len,
-       [("entry", entry) for entry in non_tweets] +
-       [("entry", entry) for entry in tweets] +
-       [("comment", comment) for comment in recent_comments[:2]],
+       [("entry", entry) for entry in entries] +
+       [("comment", comment) for comment in recent_comments[:num_comments]],
        key=lambda (kind, obj): obj.timestamp if kind == "entry" else obj.time
     )
     
@@ -244,9 +244,11 @@ def homepage(request, social_len=7, num_tweets=2, template="index.html"):
     
     # getting comment list for facebook-style listings
     comment_list = defaultdict(list)
-    for comment in recent_comments[:25]:
+    for comment in recent_comments:
         comment_list[comment.subject].insert(0, comment)
-    sorted_comment_list = sorted(comment_list.values(), key=lambda lst: lst[-1].time, reverse=True)[:5]
+
+    sorted_comment_list = sorted(comment_list.values(),
+                    key=lambda lst: lst[-1].time, reverse=True)[:5]
     
     # events and announcements
     events = Announcement.events.order_by('event_date', 'event_time', 'pk')
