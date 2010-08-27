@@ -120,11 +120,17 @@
 						{% if forloop.last %}
 							{{ comment.display_name|safe }}
 						{% else %}
-							{% ifequal forloop.revcounter 2 %}
-								{{ comment.display_name|safe }}, and 
-							{% else %}
-								{{ comment.display_name|safe }}, 
-							{% endifequal %}
+					
+					                {% if forloop.first %}
+					                        {{ comment.display_name|safe }},
+					                {% else %}
+
+					                        {% ifequal forloop.revcounter 2 %}
+					                             {{ comment.display_name|safe }}, and 
+							        {% else %}
+								     {{ comment.display_name|safe }}, 
+							        {% endifequal %}
+					                {% endif %}
 						{% endif %}
 					{% endfor %}
 					 commented on <a href="{{ story_comment_object.0.get_absolute_url }}">{{ story_comment_object.0.subject.headline }}</a>.
