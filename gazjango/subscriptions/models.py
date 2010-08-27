@@ -1,7 +1,7 @@
 from django.db        import models
 from django.db.models import signals, Q
 from gazjango.accounts.models import UserProfile, UserKind
-from gazjango.registration import signals as registration_signals
+from registration.signals import user_activated
 
 class SubscribersManager(models.Manager):
     def find_by_email(self, email):
@@ -53,9 +53,6 @@ class Subscriber(models.Model):
     When someone unsubscribes, we set `unsubscribed` to that day and leave
     their data around, so that we can get pretty graphs of subscription
     numbers or whatever.
-    
-    The confirmation key is quasi-secret: it serves in lieu of a password
-    for management things (unsubscribing, changing preferences).
     """
     _name  = models.CharField(max_length=40, blank=True)
     _email = models.EmailField(null=True, default=None, blank=True)
@@ -120,10 +117,17 @@ class Subscriber(models.Model):
     
 
 
-# when a user's been registered, associate his subscriptions with him
-# we wait until registration to make sure that the email is right
-def link_subscribers(sender, user, **kwargs):
+# When a user's been registered, associate his subscriptions with him if he
+# already has some. Also, activate any subscriptions that haven't yet been
+# activated, since we know that his email is correct. We shouldn't associate
+# (or confirm) subscribers before user activation, since they might not really
+# have the email address they signed up with.
+def setup_subscribers(sender, user, **kwargs):
     profile = user.get_profile()
+    for subscriber in Subscriber.objects.filter(user=profile):
+        subscriber.is_confirmed = True
+        subscriber.save()
+
     for subscriber in Subscriber.objects.find_by_email(user.email):
         subscriber.link_to_user(profile)
-registration_signals.user_activated.connect(link_subscribers)
+user_activated.connect(setup_subscribers)

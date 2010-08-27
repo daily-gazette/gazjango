@@ -109,7 +109,7 @@ INSTALLED_APPS = (
     'gazjango.misc',
     'gazjango.options',
     'gazjango.polls',
-    'gazjango.registration',
+    'registration',
     'gazjango.reviews',
     'gazjango.scrapers',
     'gazjango.screw',
