@@ -74,7 +74,7 @@
 						{% endifequal %}
 						{% ifequal entry.source_type "bookmark" %}
 						<div class="entry delicious">
-							<p><a href="{{ entry.url }}">{{ entry.title }}</a> -<a href="http://www.delicious.com/{{ entry.owner_user }}">Del.icio.us</a></p>
+                            <p><a href="{{ entry.url }}">{{ entry.title }}</a> - <a href="http://www.delicious.com/{{ entry.owner_user }}">Del.icio.us {{entry.owner_user}}</a></p>
 						</div>
 						{%endifequal %}	
 						{% ifequal entry.source_type "review" %}

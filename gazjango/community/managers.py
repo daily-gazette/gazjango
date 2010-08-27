@@ -1,6 +1,7 @@
 from django.db import models
 
 import datetime
+from operator import attrgetter
 
 class EntryManager(models.Manager):
     def get_of_type_for_user(self, types, usernames):
@@ -44,19 +45,56 @@ class PublishedEntryManager(EntryManager):
         orig = super(PublishedEntryManager, self).get_query_set()
         return orig.filter(status__gte=2, timestamp__lte=datetime.datetime.now())
     
-    def get_entries(self, base=None, num=10, exclusion=None, category=None):
-        entries = (base or self).order_by('-timestamp')
-        if category:
-            entries = entries.filter(source_type=category)
-        if exclusion:
-            entries = entries.exclude(source_type=exclusion)
-        return list(entries[:num])
+    def get_entries(self, base=None, num=None, **kwargs):
+        '''Gets recent entries of various types.
+
+        get_entries(num=5) will give you the 5 most recent entries of any type.
+
+        get_entries(num=10, tweet=5) will give you 10 recent entries, no more
+        than 5 of which will be tweets.
+
+        get_entries(num=10, tweet=5, flickrphoto=5, bookmark=5) will give you
+        10 recent entries, with no more than 5 each of tweets, flickr photos,
+        or bookmarks.
+
+        get_entries(tweet=3, flickrphoto=2, others=2) will give you the
+        three most recent tweets, the two most recent photos from flickr, and
+        the two most recent from other sources.
+
+        get_entries(num=5, tweet=5, flickrphoto=5, others=0) will give you the
+        5 most recent entries which are either tweets or flickrphotos.
+        '''
+        base = (base or self).order_by('-timestamp')
+        entries = []
+
+        sum_kwargs = sum(kwargs.itervalues())
+        if num is None:
+            if not kwargs:
+                return []
+            else:
+                num = sum_kwargs
+
+        for kind, kind_num in kwargs.iteritems():
+            if kind != 'others':
+                entries.extend(base.filter(source_type=kind)[:kind_num])
+
+        if ('others' in kwargs) or (not kwargs) or (sum_kwargs < num):
+            if kwargs.get('others', -1) != 0:
+                exc_types = [k for k in kwargs.keys() if k != 'others']
+                entries.extend(base.exclude(source_type__in=exc_types)[:num])
+
+        # this is actually faster than heapq.nlargest for numbers we deal with
+        return sorted(entries, key=attrgetter('timestamp'), reverse=True)[:num]
     
+
     def get_photos(self, base=None, num=3):
-        return list((base or self).order_by('-timestamp').filter(source_type="flickrphoto")[:num])
+        base = (base or self).order_by('-timestamp')
+        return base.filter(source_type='flickrphoto')[:num]
     
     def get_tweets(self, base=None, num=3):
-        return list((base or self).order_by('-timestamp').filter(source_type="tweet")[:num])
+        base = (base or self).order_by('-timestamp')
+        return base.filter(source_type='tweet')[:num]
+
 
 class TweetsManager(PublishedEntryManager):
     "A manager for tweets only."

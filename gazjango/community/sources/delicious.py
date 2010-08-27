@@ -31,7 +31,7 @@ def retrieve(force, **args):
     else:
         tag = args['account']
         password = False
-    url      = "http://feeds.delicious.com/v2/json/tag/%s" % tag
+    url = "http://feeds.delicious.com/v2/json/tag/%s" % tag
     rformat = 'json'
 
     last_update = datetime.datetime.fromtimestamp(0)
@@ -42,7 +42,7 @@ def retrieve(force, **args):
         log.info("Forcing update of all bookmarks available.")
     else:
         try:
-            last_update = Bookmark.objects.filter(owner_user=tag+" - Tag").order_by('-timestamp')[0].timestamp
+            last_update = Bookmark.objects.filter(owner_user="tag/"+tag).order_by('-timestamp')[0].timestamp
         except Exception, e:
             log.debug('%s', e)
 
@@ -70,7 +70,7 @@ def _handle_bookmark(mark, dt, tag):
         timestamp   = dt,
         url         = mark['u'],
         title       = mark['d'],
-        owner_user  = tag+" - Tag",
+        owner_user  = "tag/"+tag,
         description = mark['n'],
         source_type = 'bookmark'
     )

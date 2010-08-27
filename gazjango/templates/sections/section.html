@@ -80,7 +80,7 @@
     					{% ifequal type "entry" %}
     						{% ifequal entry.source_type "tweet" %}
       						<div class="entry twitter" style="background: #fff url({{ entry.object.icon }}) no-repeat 0px center">
-      							<p>{{ entry.description|safe }} <br /> —by <a href="http://www.twitter.com/{{ entry.owner_user }}">{{ entry.owner_user }}</a> from <a href="http://www.twitter.com/">Twitter</a></p>
+      							<p>{{ entry.description|safe|urlize }} <br /> —by <a href="http://www.twitter.com/{{ entry.owner_user }}">{{ entry.owner_user }}</a> from <a href="http://www.twitter.com/">Twitter</a></p>
       						</div>
     						{% endifequal %}
     						{% ifequal entry.source_type "bookmark" %}
