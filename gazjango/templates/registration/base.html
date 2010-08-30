@@ -1,29 +1,34 @@
 {% load extras %}
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
   "http://www.w3.org/TR/html4/loose.dtd">
-<html lang="en">
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:fb="http://www.facebook.com/2008/fbml" lang="en">
 
 <head>
-  <title>{% block title %}{% endblock %}</title>
+  <title>
+    {% block full-title %}
+    {% block title %}{% endblock title %} :: The Daily Gazette
+    {% endblock full-title %}
+  </title>
+
+  <link rel="icon" type="image/x-icon" href="/static/images/favicon.ico" />
 
   <link rel="stylesheet" href="{% static css toolbox.css %}" type="text/css" media="screen, projection, print" />
   <link rel="stylesheet" href="{% static css page/login.css %}" type="text/css" media="screen,projection" />
 
+  {% jQuery %}
+
   <script src="http://static.ak.connect.facebook.com/js/api_lib/v0.4/FeatureLoader.js.php" type="text/javascript"></script>
   <script type="text/javascript">
-      $(function() {
-      	$('.rollover').hover(function() {
-      		var currentImg = $(this).attr('src');
-      		$(this).attr('src', $(this).attr('hover'));
-      		$(this).attr('hover', currentImg);
-      	}, function() {
-      		var currentImg = $(this).attr('src');
-      		$(this).attr('src', $(this).attr('hover'));
-      		$(this).attr('hover', currentImg);
-      	});
-      });
+      function swapHoverSrc() {
+          var currentImg = $(this).attr('src');
+          $(this).attr('src', $(this).attr('hover'));
+          $(this).attr('hover', currentImg);
+      }
+      
+      $(function() { $('.rollerover').hover(swapHoverSrc, swapHoverSrc) });
   </script>
+
+  {% block customheader %}{% endblock %}
 
 </head>
 
