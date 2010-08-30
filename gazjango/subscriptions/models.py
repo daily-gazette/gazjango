@@ -5,7 +5,8 @@ from registration.signals import user_activated
 
 class SubscribersManager(models.Manager):
     def find_by_email(self, email):
-        return self.filter(Q(_email__istartswith=email) | Q(user__user__email__istartswith=email))
+        return self.filter(Q(_email__istartswith=email) |
+                           Q(user__user__email__istartswith=email))
     
 
 class ActiveSubscribersManager(SubscribersManager):
@@ -124,10 +125,11 @@ class Subscriber(models.Model):
 # have the email address they signed up with.
 def setup_subscribers(sender, user, **kwargs):
     profile = user.get_profile()
-    for subscriber in Subscriber.objects.filter(user=profile):
-        subscriber.is_confirmed = True
-        subscriber.save()
 
-    for subscriber in Subscriber.objects.find_by_email(user.email):
-        subscriber.link_to_user(profile)
+    # associate subscribers with the same email address here
+    Subscriber.objects.filter(_email=user.email).update(
+            _name='', _email='', _kind=None, user=profile)
+
+    # confirm linked subscribers
+    Subscriber.objects.filter(user=profile).update(is_confirmed=True)
 user_activated.connect(setup_subscribers)
