@@ -9,6 +9,6 @@ NUM_RETURNED = 6
 def popular_comments(request, range=NUM_CONSIDERED, num=NUM_RETURNED):
     return {
         'popular_comments': heapq.nlargest(num,
-            PublicComment.objects.order_by('-time')[:range],
+            PublicComment.visible.order_by('-time')[:range],
             key=lambda c: c.score),
     }
