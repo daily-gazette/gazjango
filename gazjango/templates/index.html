@@ -38,7 +38,7 @@
             {% for topstory in topstories %}
             <div class="imageElement" id="{{ forloop.counter }}">
                 <h3>{{ topstory.section_if_special|follow:": " }}<a href="{{ topstory.get_absolute_url }}">{{ topstory.headline }}</a></h3>
-                <p>{{ topstory.get_short_summary|safe }}</p>
+                <p>{{ topstory.authors_in_order|join_authors:"2pt"|safe }}</p>
                 <a href="{{ topstory.get_absolute_url }}" title="Read the full story" class="open"></a>
                 <img src="{{ topstory.main_image.top_front.url }}" class="full" alt="" />
                 <img src="{{ topstory.main_image.top_front.url }}" class="thumbnail" alt="" />

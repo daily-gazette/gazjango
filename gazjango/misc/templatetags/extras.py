@@ -116,7 +116,8 @@ def join_authors(authors, format='', autoescape=None):
     elif case == 'u':
         casify = lambda s: esc(s).upper()
     else: # case == 't'
-        casify = lambda s: ' '.join(x.capitalize() for x in esc(s).split())
+        casify = esc
+        #casify = lambda s: ' '.join(x.capitalize() for x in esc(s).split())
     
     def reps(author):
         results = { 'name': casify(author.name) }
