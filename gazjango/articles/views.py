@@ -423,7 +423,7 @@ def section(request, section):
         lowlist[i % num_low_lists].append(lows[i])
         
         
-    entries = Entry.published.get_entries(num=9)
+    entries = Entry.published.get_entries(num=4)
     comments = PublicComment.visible.filter(article__section=sec).order_by('-time').all()[:20]
     
     stream = heapq.nlargest(9,
@@ -442,7 +442,7 @@ def section(request, section):
         'midstories': mids,
         'lowlist': lowlist,
         'stream': stream,
-        'comments': PublicComment.visible.filter(article__section=sec).order_by('-time'),
+        'comments': comments,
         'rec_multi': rec_multi or 'none',
         'rec_multi_story': rec_multi_story,
     }
