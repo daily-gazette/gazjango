@@ -38,6 +38,23 @@
             </div>
             <div class="email-subscription">
                 <h6>Sign up for updates</h6>
+
+                <p>
+                    {% if user.is_authenticated %}<a href="/accounts/manage/">{% else %}<a href="/accounts/register">{% endif %}<img src="{% static images icons/email.png %}" alt="" /> Daily Email</a>
+                    &nbsp;&nbsp;
+
+                    <a href="/feeds/latest"><img src="{% static images icons/feed.png %}" alt="" /> RSS</a>
+                    &nbsp;&nbsp;
+
+                    <a href="http://fusion.google.com/add?source=atgs&feedurl=http%3A//daily.swarthmore.edu/feeds/latest/"><img src="http://gmodules.com/ig/images/plus_google.gif" border="0" alt="Add to Google"></a> 
+                    &nbsp;&nbsp;
+
+                    <a href="http://www.twitter.com/swatgazette"><img src="http://twitter-badges.s3.amazonaws.com/twitter-b.png" alt="Follow swatgazette on Twitter"/></a>
+                </p>
+
+
+                {% comment %}
+                
                 <p>Subscribe via email</p>
                 <form id="email-updates" >
                     <input type="text" style="width:150px" id="subbox" value="Submission form for the mailing list" name="email"/>
@@ -45,6 +62,7 @@
                     <input type="hidden" name="loc" value="en_US"/>
                     <input type="submit" value="Sign Up" />
                 </form>
+                {% endcomment %}
             </div>
             {% if user.is_authenticated %}
             {% if header_auth_notice %}

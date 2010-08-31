@@ -436,7 +436,7 @@ h6 {
 	background: #efefef url(images/emailfeedicon.png) top right no-repeat;
 	float: right;
 	width: 310px;
-	height: 70px;
+	height: 50px;
 	margin: 0px;
 	padding: 5px;
 	border: 1px solid #989898;
@@ -461,7 +461,7 @@ h6 {
 
 #alertBox {
 	padding: 8px;
-	width: 700px;
+	width: 1040px;
 	float: left;
 	position: relative;
 	margin: 10px;
