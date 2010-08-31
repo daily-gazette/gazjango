@@ -59,11 +59,14 @@
       <div class="right">
         <strong>Share:</strong> {% add_this hover %}
       </div>
+
       <p><small>
+          {% comment %}
         <a href="print"><img src="{% static images icons/print.png %}" /> Print</a>
         &nbsp;&nbsp;
         <a href="email"><img src="{% static images icons/email.png %}" /> Email</a>
-  	&nbsp;&nbsp;
+        &nbsp;&nbsp;
+          {% endcomment %}
   	<a href="#comment"> Submit a comment</a>
       </small></p>
     </div>
