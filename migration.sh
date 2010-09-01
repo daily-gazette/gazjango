@@ -143,3 +143,19 @@ BannerAd.front.create(
     date_end  =datetime.date(2010, 9, 1),
 )
 ADS
+
+echo "unsubscribing all RSD subscribers, switching to the mailman list"
+./manage.py dbshell <<'SQL'
+BEGIN;
+UPDATE `subscriptions_subscriber` SET `unsubscribed`=CURDATE()
+    WHERE `receive`='r' AND `unsubscribed` IS NULL;
+
+INSERT INTO `subscriptions_subscriber`
+    SET is_confirmed=1,
+        plain_text=0,
+        modified=NOW(),
+        subscribed=NOW(),
+        receive='r',
+        _email='student-digest@swarthmore.edu';
+COMMIT;
+SQL
