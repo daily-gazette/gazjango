@@ -126,7 +126,7 @@ class ImageFile(BaseFile, ImageModel):
     
     
     class IKOptions:
-        spec_module = 'media.image_specs'
+        spec_module = 'gazjango.media.image_specs'
         cache_dir = 'resized'
         image_field = 'data'
         admin_thumbnail_spec = 'adminthumb'
