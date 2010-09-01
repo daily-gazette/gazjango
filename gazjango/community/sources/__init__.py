@@ -20,7 +20,7 @@ def import_source_modules(source_list=settings.AGRO_SETTINGS['source_list'], cla
     for source in source_list:
         log.debug('trying to load %s' % source)
         try:
-            sources.append(__import__("community.sources.%s" % source, 
+            sources.append(__import__("gazjango.community.sources.%s" % source, 
                                       fromlist=['%s%s' % (source, class_name)]))
         except ImportError, e:
             log.error('unable to load %s: %s', source, e)
