@@ -93,6 +93,9 @@ INSTALLED_APPS = (
     'django.contrib.humanize',
     'django.contrib.markup',
     
+    'imagekit',
+    'registration',
+
     'gazjango.accounts',
     'gazjango.ads',
     'gazjango.announcements',
@@ -103,13 +106,11 @@ INSTALLED_APPS = (
     'gazjango.comments',
     'gazjango.facebook_connect',
     'gazjango.issues',
-    'gazjango.imagekit',
     'gazjango.jobs',
     'gazjango.media',
     'gazjango.misc',
     'gazjango.options',
     'gazjango.polls',
-    'registration',
     'gazjango.reviews',
     'gazjango.scrapers',
     'gazjango.screw',
