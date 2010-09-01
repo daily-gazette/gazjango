@@ -1,16 +1,47 @@
-from django.contrib.auth            import views as auth_views
-from django.contrib.auth.decorators import permission_required
+from django.contrib.auth  import views as auth_views
+from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.auth.models     import User
-from django.db.models               import Q
-from django.http                    import HttpResponse, Http404
-from django.shortcuts               import render_to_response, get_object_or_404
-from django.template                import RequestContext
+from django.db.models     import Q
+from django.http          import HttpResponse, Http404, HttpResponseRedirect
+from django.shortcuts     import render_to_response, get_object_or_404
+from django.template      import RequestContext
 
-from gazjango.accounts.models   import UserProfile
-from gazjango.misc.view_helpers import get_user_profile
+import datetime
 
-def manage(request):
-    raise Http404 # temporary, obviously
+from gazjango.accounts.models      import UserProfile
+from gazjango.misc.view_helpers    import get_user_profile
+from gazjango.subscriptions.models import Subscriber
+
+@login_required
+def manage(request, template="accounts/manage.html"):
+    profile = get_user_profile(request)
+    subscribers = Subscriber.issues.filter(user=profile)
+
+    rc = RequestContext(request, {
+            'subscriber': subscribers[0] if subscribers else None,
+        })
+    return render_to_response(template, context_instance=rc)
+
+@login_required
+def racy_switch(request, val):
+    profile = get_user_profile(request)
+    Subscriber.issues.filter(user=profile).update(racy_content=(val == "on"))
+    return HttpResponseRedirect('/accounts/manage/')
+
+@login_required
+def unsubscribe(request):
+    profile = get_user_profile(request)
+    today = datetime.datetime.today()
+    Subscriber.issues.filter(user=profile).update(unsubscribed=today)
+    return HttpResponseRedirect('/accounts/manage/')
+
+@login_required
+def subscribe(request):
+    profile = get_user_profile(request)
+    racy = profile.kind.kind in 'sk'
+    Subscriber.objects.create(receive='i', user=profile, racy_content=racy)
+    return HttpResponseRedirect('/accounts/manage/')
+
 
 def logout(request, next_page='/'):
     from gazjango.facebook_connect.middleware import FacebookConnectMiddleware

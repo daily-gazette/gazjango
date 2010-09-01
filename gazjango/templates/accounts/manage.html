@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block title %}Account Management{% endblock %}
+
+{% block content %}
+
+<p>Welcome, {{ user.get_full_name }}.</p>
+
+<p>Your email address is {{ user.email }}.</p>
+
+<hr />
+<h5>Subscription Status</h5>
+
+{% if subscriber %}
+    <form action="unsubscribe/" method="POST"><p>
+        You are currently subscribed to daily email issues. &nbsp;
+        <input type="submit" value="Unsubscribe" />
+    </p></form>
+
+    {% if subscriber.racy_content %}
+        <form action="racy/off/" method="POST"><p>
+            You are currently receiving "racy" content (e.g. sex columns). &nbsp;
+            <input type="submit" value="Stop receiving racy content" />
+        </p></form>
+        
+    {% else %}
+        <form action="racy/on/" method="POST"><p>
+            You are currently not receiving "racy" content (e.g. sex columns). &nbsp;
+            <input type="submit" value="Start receiving racy content" />
+        </p></form>
+    {% endif %}
+
+
+{% else %}
+    <form action="subscribe/" method="POST"><p>
+        You are currently not subscribed to daily email issues. &nbsp;
+        <input type="submit" value="Subscribe" />
+    </p></form>
+
+{% endif %}
+
+{% endblock %}
