@@ -29,12 +29,20 @@ class SendingOutCommand(NoArgsCommand):
     
     
     def send_to_subscriber(self, subscriber):
+        subj = self.subject
+        frm = self.from_email
         text_content, html_content = self.contents_for_subscriber(subscriber)
         
-        msg = EmailMessage(self.subject, text_content, self.from_email, [subscriber.email])
-        if not subscriber.plain_text:
-            msg.multipart_subtype = 'alternative'
-            msg.attach(content=html_content, mimetype='text/html')
+        if subscriber.plain_text:
+            msg = EmailMessage(subj, text_content, frm, [subscriber.email])
+        else:
+            msg = EmailMessage(subj, html_content, frm, [subscriber.email])
+            msg.content_subtype = "html"
+
+        # msg = EmailMessage(self.subject, text_content, self.from_email, [subscriber.email])
+        # if not subscriber.plain_text:
+        #     msg.multipart_subtype = 'alternative'
+        #     msg.attach(content=html_content, mimetype='text/html')
         
         self.connection.send_messages([msg])
         
