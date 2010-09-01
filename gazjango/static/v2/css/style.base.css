@@ -433,7 +433,7 @@ h6 {
 }
 
 .email-subscription {
-	background: #efefef url(images/emailfeedicon.png) top right no-repeat;
+	background-color: #efefef;
 	float: right;
 	width: 310px;
 	height: 50px;

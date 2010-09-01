@@ -386,11 +386,11 @@
 
 
 
-.withArrows a.open:hover { background: url('/static/v2/images/open.png') no-repeat center center; }
+.withArrows a.open:hover { background: url('img/open.png') no-repeat center center; }
 
 
 
-* html .withArrows a.open:hover { background: url('/static/v2/images/open.gif') no-repeat center center;
+* html .withArrows a.open:hover { background: url('img/open.gif') no-repeat center center;
 
 	filter:alpha(opacity=80); }
 
