@@ -180,14 +180,16 @@ class Review(models.Model):
         return "%s#review-%s" % (self.establishment.get_absolute_url(), self.pk)
         
 def create_entry(sender, instance, **kwargs):
-    review_entry = Entry.objects.get_or_create(
-        title           = instance.establishment.name,
-        description     = instance.text,
-        owner_user      = instance.reviewer,
-        url             = instance.get_absolute_url(),
-        source_type     = "review",
-        timestamp       = datetime.datetime.now()
-    )
-        
+    review_entry, created = Entry.objects.get_or_create(
+        title      = instance.establishment.name,
+        owner_user = instance.reviewer,
+        url        = instance.get_absolute_url(),
+        source_type= "review",
+        defaults={ 'description': instance.text,
+                   'timestamp':   datetime.datetime.now() })
+
+    if not created:
+        review_entry.description = instance.text
+        review_entry.timestamp = datetime.datetime.now()
+
 models.signals.pre_save.connect(create_entry, sender=Review)
-    
