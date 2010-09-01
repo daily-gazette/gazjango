@@ -3,6 +3,7 @@
 {% load markup %}
 
 {% block title %}Submit a Poster{% endblock title %}
+
 {% block customheader %}
     {% jQuery %}
     <script type="text/javascript" charset="utf-8">
@@ -39,6 +40,11 @@
 
 {% block expand_content %}
 	<h1>Poster Submission</h1>
+
+    <p>The posters that appear on the right-hand side of many of our pages are intended for <b>Swarthmore students only</b>, and primarily for student groups. Think of it as the online equivalent of putting fliers up in Sharples.</p>
+
+    <p>Non-students should <a href="/about/contact/">contact us</a> about paid advertising.</p>
+
     {% if form.non_field_errors %}
         <p>{{ form.non_field_errors }}</p>
     {% endif %}
