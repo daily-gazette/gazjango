@@ -1,8 +1,8 @@
-appdir=/home/dailygazette/webapps/django_trunk
+appdir=/home/dailygazette/webapps/gazjango
 appname=gazjango
 
 export PATH=$HOME/bin:$PATH
-export PYTHONPATH=$appdir/lib/python2.5:$appdir:
+export PYTHONPATH=$appdir/lib/python2.6:$appdir:
 export DJANGO_SETTINGS_MODULE=$appname.settings
 
 python $appdir/$appname/manage.py $*
