@@ -2,7 +2,7 @@ from django.db import models
 from gazjango.articles.models.stories import Article
 import datetime
 import os.path
-import settings
+from django.conf import settings
 
 class Section(models.Model):
     """

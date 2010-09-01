@@ -10,7 +10,7 @@ from gazjango.misc.helpers    import set_default_slug
 import datetime
 import urllib
 import urllib2 # yeah, we need both
-import settings
+from django.conf import settings
 
 GEOCODE_REQUEST_URL = "http://maps.google.com/maps/geo?q=%(req)s&output=csv&key=%(key)s"
 

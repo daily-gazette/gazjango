@@ -11,7 +11,7 @@ from gazjango.misc.view_helpers  import get_user_profile
 
 import datetime
 import urllib
-import settings
+from django.conf import settings
 
 def list_housing(request):
     housing = HousingListing.published.order_by('-pub_date')

@@ -14,7 +14,7 @@ from gazjango.reviews.forms      import SubmitEstablishmentForm, SubmitReviewFor
 from gazjango.tagging.models     import Tag
 
 import urllib
-import settings
+from django.conf import settings
 
 def reviews(request):
     'View for "establishment review" page.'
