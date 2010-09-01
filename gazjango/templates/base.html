@@ -90,7 +90,7 @@
                     {# <li><a href="/reporter-admin/">Reporter Admin</a></li>#}
                     <li><a href="/admin/">Admin</a></li>
                     {% endif %}
-                    <li><a href="{% url manage-user %}">Manage your Account</a></li>
+                    <li><a href="{% url manage-user %}">Manage Account</a></li>
                     {% if facebook_user %}
                     <li><a href="{% url logout %}" onclick="FB.Connect.logoutAndRedirect('{% url logout %}')"><img src="http://static.ak.fbcdn.net/images/fbconnect/logout-buttons/logout_small.gif" alt="Logout" /></a></li>
                     {% else %}
