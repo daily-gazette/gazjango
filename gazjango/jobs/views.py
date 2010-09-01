@@ -36,7 +36,7 @@ def submit_job(request, template="listings/jobs/submit.html"):
     else:
         form = SubmitJobForm()
     
-    data = { 'form': form , 'poster': Poster.published.get_running(1),}
+    data = { 'form': form , 'poster': Poster.published.get_running(),}
     rc = RequestContext(request)
     return render_to_response(template, data, context_instance=rc)
 
