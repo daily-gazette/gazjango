@@ -6,6 +6,9 @@ from django.core.urlresolvers import reverse
 from django.db.models import *
 from django.http import *
 
+import sys
+sys.path.append('..')
+
 from django.conf import settings
 for app in settings.INSTALLED_APPS:
     if app.startswith('gazjango.'):
