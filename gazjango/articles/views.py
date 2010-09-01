@@ -137,8 +137,8 @@ def show_photospread_page(request, spread, num=None, form=None, whole_page=None)
             recent_stories=Article.published.order_by('-pub_date')[:3],
             related=spread.related_list(3),
 
-            top_banner=BannerAd.article_top.picke(allow_zero_priority=False),
-            side_banner=BannerAd.article_top.picke(allow_zero_priority=False),
+            top_banner=BannerAd.article_top.pick(allow_zero_priority=False),
+            side_banner=BannerAd.article_top.pick(allow_zero_priority=False),
         )
         template = "stories/photospread.html"
     else:
