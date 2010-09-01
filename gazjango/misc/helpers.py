@@ -54,9 +54,9 @@ def get_static_path(kind, name):
 
 def get_jquery_path():
     if settings.LOCAL_JQUERY:
-        return get_static_path('js', 'jquery-1.2.6.min.js')
+        return get_static_path('js', 'jquery-1.4.2.min.js')
     else:
-        return "http://ajax.googleapis.com/ajax/libs/jquery/1.2/jquery.min.js"
+        return "http://ajax.googleapis.com/ajax/libs/jquery/1.4/jquery.min.js"
 
 
 def find_unique_name(basename, qset, fieldname='slug', mixer="-"):
