@@ -95,13 +95,11 @@ def show_article(request, story, form, print_view=False):
     context = RequestContext(request, {
         'story': story,
         'comments': comments,
-        'related': story.related_list(3),
-        # 'topstory': Article.published.get_top_story(),
-        # 'other_comments': cs,
         'print_view': print_view,
         'comment_form': form,
         'poster': Poster.published.get_running(),
         'recent_stories': Article.published.order_by('-pub_date')[:3],
+        'related': story.related_list(3),
         
         'top_banner': BannerAd.article_top.pick(allow_zero_priority=False),
         'side_banner': BannerAd.article_side.pick(allow_zero_priority=False),
@@ -132,11 +130,15 @@ def show_photospread_page(request, spread, num=None, form=None, whole_page=None)
     
     if whole_page:
         data.update(
-            related=spread.related_list(3),
-            topstory=Article.published.get_top_story(),
             comments=PublicComment.objects.for_article(spread, user, ip),
-            other_comments=PublicComment.visible.order_by('-time').exclude(article=spread),
-            comment_form=form
+            comment_form=form,
+
+            poster=Poster.published.get_running(),
+            recent_stories=Article.published.order_by('-pub_date')[:3],
+            related=spread.related_list(3),
+
+            top_banner=BannerAd.article_top.picke(allow_zero_priority=False),
+            side_banner=BannerAd.article_top.picke(allow_zero_priority=False),
         )
         template = "stories/photospread.html"
     else:
