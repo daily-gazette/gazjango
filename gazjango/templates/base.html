@@ -94,7 +94,7 @@
                     <li><a href="{% url logout %}" onclick="FB.Connect.logoutAndRedirect('{% url logout %}')"><img src="http://static.ak.fbcdn.net/images/fbconnect/logout-buttons/logout_small.gif" alt="Logout" /></a></li>
                     {% else %}
                     {% if not user.get_profile.facebook_id %}
-                    <li><fb:login-button size="small" length="short"></fb:login-button> Connect</li>
+                    <li><fb:login-button size="small" length="short"></fb:login-button></li>
                     {% endif %}
                     <li><a href="{% url logout %}">Logout</a></li>
                     {% endif %}
