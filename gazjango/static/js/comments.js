@@ -79,7 +79,7 @@ function setupShowLinks() {
 // ====================
 
 var default_comment_name;
-$(document).ready(function() {
+$(function() {
     default_comment_name = $('input[name="name"]').val();
 });
 
@@ -145,6 +145,11 @@ function submitComment() {
     $('#commentForm :input').each(function() {
         data[$(this).attr('name')] = $(this).val();
     });
+    // explicit override for checkboxes since they're not working right
+    anon = $('#commentForm :input[name="anonymous"]:checked').length;
+    offic = $('#commentForm :input[name="speaking_officially"]:checked').length;
+    data.anonymous = anon == 1 ? "on" : "";
+    data.speaking_officially = offic == 1 ? "on" : "";
     
     $.post($('#commentForm form').attr('action'), data,
        function(resp, textStatus) {
@@ -153,7 +158,7 @@ function submitComment() {
                $('#commentForm input[type=reset]').click();
                $()
            } else if (strStartsWith('redirect: ', resp)) {
-               window.location = resp.substr('redirect: '.length)
+               window.location = resp.substr('redirect: '.length);
            } else {
                // it's okay to kill the <h4>, since it's unlikely that
                // many people will have javascript on but css off :)
