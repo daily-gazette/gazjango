@@ -27,5 +27,4 @@ class Command(SendingOutCommand):
     
     def get_sent_str(self):
         now = datetime.datetime.now()
-        return now.strftime("%Y-%m-%d-announce")
-    
+        return now.strftime("%Y-%m-%d-a")
