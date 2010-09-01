@@ -1,4 +1,4 @@
-from stackedpages.views import page
+from gazjango.stackedpages.views import page
 from django.http import Http404
 from django.conf import settings
 
