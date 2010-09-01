@@ -1,12 +1,13 @@
 from django.db               import models
 from django.utils.safestring import mark_safe
-from gazjango.misc.helpers   import set_default_slug
+from gazjango.misc.helpers   import set_default_slug, groupby
 
 from gazjango.accounts.models import UserProfile
 from gazjango.media.models    import MediaFile, ImageFile, MediaBucket
 
 import django.utils.html
 import datetime
+from operator import attrgetter
 import random
 import re
 
@@ -50,7 +51,11 @@ class PublishedPosterManager(models.Manager):
         if not date:
             date = datetime.date.today()
         options = self.running_at(date)
-        return random.choice(options) if options else None
+        if options:
+            sponsors = groupby(attrgetter('sponsor_name'), options)
+            return random.choice(random.choice(sponsors.values()))
+        else:
+            return None
     
 
 class StaffAnnouncementsManager(PublishedAnnouncementsManager):
@@ -202,4 +207,7 @@ class Poster(models.Model):
     
     def __unicode__(self):
         return self.title
+
+    def get_absolute_url(self):
+        return self.poster.get_absolute_url()
     

@@ -48,6 +48,22 @@ def avg(iterable):
     total = _c.real; count = _c.imag
     return total / count if count > 0 else None
 
+def groupby(fun, gen):
+    '''Inputs: a function and an iterable
+    Returns: a dictionary grouping elements by their image under fun
+    Exceptional cases: throws TypeError if fun returns something unhashable
+
+    >>> groupby(lambda n: n % 3, range(11))
+    {0: [0, 3, 6, 9],  1: [1, 4, 7, 10],  2: [2, 5, 8]}
+    '''
+    d = {}
+    for el in gen:
+        val = fun(el)
+        if val not in d:
+            d[val] = []
+        d[val].append(el)
+    return d
+
 
 def get_static_path(kind, name):
     return "/static/%s/%s" % (kind, name)
