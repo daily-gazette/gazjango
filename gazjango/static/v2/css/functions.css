@@ -153,9 +153,12 @@ TEXT BOX STYLES
 }
 
 .pullQuote {
-	width: 100px;
-	border-top: 2px solid #bbbbbb;
+	width: 230px;
+	border: 2px solid #bbbbbb;
 	padding: 2px;
+    margin-left: 30px;
+    font-style: italic;
+    font-size: 14pt;
 }
 
 /******************
