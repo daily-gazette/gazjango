@@ -1,6 +1,11 @@
 from imagekit       import processors
 from imagekit.specs import ImageSpec
 
+# hack around a PIL limitation with large files
+import ImageFile
+ImageFile.MAXBLOCK = 1000000
+
+
 # TODO: hook this up to a JS cropper
 
 # =============================
