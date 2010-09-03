@@ -510,7 +510,7 @@ def subsection(request, section, subsection):
         
         rec_multi_story, rec_multi = Article.published.get_recent_multimedia(
             base=sub.articles,
-            exclude=[a.main_image for a in tops])
+            exclude=[a.main_image for a in tops if a.main_image])
         
         data = {
             'section': sec,
