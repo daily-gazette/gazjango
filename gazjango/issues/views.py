@@ -103,11 +103,12 @@ def show_rsd_thing(request, date, plain=False,
     if lost_and_found:
         lost_and_found = Announcement.lost_and_found.running_on(date).order_by('-date_start', 'pk')
     if jobs:
-        jobs = JobListing.published.get_for_show(num=5,
-            cutoff=datetime.timedelta(days=7),
-            base_date=date,
-            allow_filled=(date != datetime.date.today())
-        )
+        midnight = datetime.datetime.combine(date, datetime.time(23, 59))
+        jobs = JobListing.published.order_by('is_filled', '-pub_date') \
+                     .filter(pub_date__lte=midnight) \
+                     .filter(pub_date__gte=midnight - datetime.timedelta(days=7))
+        if date == datetime.date.today():
+            jobs = jobs.filter(is_filled=False)
     
     if not any(x.count() if x else 0 for x in (regular, events, lost_and_found, jobs)):
         raise Http404
