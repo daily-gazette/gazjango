@@ -130,6 +130,15 @@ class IssueImage(ImageSpec):
     processors = [ResizeIssue]
 
 
+class ResizeSection(processors.Resize):
+    height = 100
+    width = 100
+    crop = False
+
+class SectionImage(ImageSpec):
+    processors = [ResizeSection]
+
+
 # class ResizeSpecial(processors.Resize):
 #     height = 180
 #     width = 180

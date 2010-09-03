@@ -16,7 +16,7 @@
   				<!-- Begin Mid Columns -->	
   				{% for story in topstories %}
   					<div class="section column">
-  						<center><a href="{{ story.get_absolute_url }}" title="{{ story.headline }}"><img src="{{ story.main_image.issue.url }}" /></a></center>
+  						<center><a href="{{ story.get_absolute_url }}" title="{{ story.headline }}"><img src="{{ story.main_image.sectionimage.url }}" /></a></center>
   						<h6><a href="{{ story.get_absolute_url }}" title="{{ story.headline }}">{{ story.get_short_title }}</a></h6>
   						<li>{{ story.authors_in_order|join_authors:"2ptxb" }}</li>
   						<p>{{ story.get_short_summary }}</p>
