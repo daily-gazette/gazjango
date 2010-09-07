@@ -212,6 +212,8 @@ def in_groups_of(lst, num=2):
     Returns the list split up into groups of length `num`. For example, calling
     this with `num=2` on range(5) would return [ [0, 1], [2, 3], [4] ].
     """
+    if lst is None:
+        return [[]]
     return [lst[num*i:num*(i+1)] for i in range((len(lst) + num - 1) // num)]
 
 
