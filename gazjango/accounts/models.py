@@ -1,6 +1,6 @@
 from django.db                  import models
 from django.db.models           import Q, permalink
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, Group
 from gazjango.misc.helpers import ip_from_swat
 import datetime
 
