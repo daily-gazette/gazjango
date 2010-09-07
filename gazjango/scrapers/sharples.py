@@ -1,9 +1,12 @@
+import re
 import urllib2
 from BeautifulSoup import BeautifulStoneSoup
 from datetime      import date, timedelta
 
 FEED_URL = "http://www.swarthmore.edu/dashboards/feeds/sharples.xml"
 NUM_WEEKS = 4
+
+br = re.compile(r'\s*&lt;\s*br\s*/?\s*&gt;')
 
 def get_menu(url=FEED_URL, tomorrow=False, die_on_closed=False):
     """
@@ -53,6 +56,6 @@ def get_menu(url=FEED_URL, tomorrow=False, die_on_closed=False):
     for item in week.find("day", {'value': day_name}).findAll("item"):
         meal = item.meal.string.strip()
         if meal:
-            data[meal.lower()] = item.menu.string.strip()
+            data[meal.lower()] = br.sub('; ', item.menu.string.strip())
     
     return data
