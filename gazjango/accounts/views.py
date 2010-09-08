@@ -38,7 +38,10 @@ def unsubscribe(request):
 @login_required
 def subscribe(request):
     profile = get_user_profile(request)
-    racy = profile.kind.kind in 'sk'
+    if profile.kind:
+        racy = profile.kind.kind in 'sk'
+    else:
+        racy = False
     Subscriber.objects.create(receive='i', user=profile, racy_content=racy)
     return HttpResponseRedirect('/accounts/manage/')
 
