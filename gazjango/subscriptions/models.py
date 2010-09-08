@@ -112,10 +112,6 @@ class Subscriber(models.Model):
         base += "(%s)" % self.user.username if self.user else ""
         return "%s [%s]" % (base, self.receive)
     
-    class Meta:
-        unique_together = (('receive', '_email'),
-                           ('receive', 'user'))
-    
 
 
 # When a user's been registered, associate his subscriptions with him if he
