@@ -52,7 +52,7 @@ class PublishedArticlesManager(models.Manager):
         """
         # TODO: april fools stuff
         # TODO: randomosity
-        base = (base or Article.objects).order_by('-pub_date')
+        base = (base or self).order_by('-pub_date')
         
         tops = base.filter(position='1')[:num_top]
         selected_pks = list(tops.values_list('pk', flat=True))
