@@ -279,11 +279,12 @@ class WeatherManager(models.Manager):
         if tomorrow:
             day += datetime.timedelta(days=1)
         
-        try:
-            obj = self.get(date=day)
+        objs = self.filter(date=day)
+        if objs: # if there's more than one, ignore the extras
+            obj = objs[0]
             if not ignore_cached:
                 return obj
-        except self.model.DoesNotExist:
+        else:
             obj = self.model()
         
         try:
