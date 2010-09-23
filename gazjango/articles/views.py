@@ -140,7 +140,12 @@ def show_photospread_page(request, spread, num=None, form=None, whole_page=None)
             top_banner=BannerAd.article_top.pick(allow_zero_priority=False),
             side_banner=BannerAd.article_top.pick(allow_zero_priority=False),
         )
-        template = "stories/photospread.html"
+        template = (
+            "stories/photospread_%s_%s_%s_%s.html" % (d.year, d.month, d.day, story.slug),
+            "stories/photospread_from_sub_%s.html" % story.subsection.slug if story.subsection else '',
+            "stories/photospread_from_sec_%s.html" % story.section.slug,
+            "stories/photospread.html"
+        )
     else:
         template = "stories/photo.html"
     

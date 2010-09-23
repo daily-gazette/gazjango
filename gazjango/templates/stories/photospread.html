@@ -43,24 +43,11 @@
 {% endblock %}
 
 {% block story-content %}
-  {% ifequal story.slug "parrish" %}
-      {% if story.text %}
-        {{ story.resolved_text|safe }}
-      {% endif %}
-
-
-      <div id="photo-block">
-        {% include "stories/photo.html" %}
-      </div>
+  <div id="photo-block">
+    {% include "stories/photo.html" %}
+  </div>
   
-  {% else %}
-      <div id="photo-block">
-        {% include "stories/photo.html" %}
-      </div>
-      
-      {% if story.text %}
-        {{ story.resolved_text|safe }}
-      {% endif %}
-
-  {% endifequal %}
+  {% if story.text %}
+    {{ story.resolved_text|safe }}
+  {% endif %}
 {% endblock %}
