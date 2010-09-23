@@ -39,7 +39,9 @@
   		  {% if top_banner %}{{ top_banner.display }}{% endif %}
   		{% endblock %}
 		
-        <h1 class="article-title">{{ story.section_if_special|follow:": " }} {{ story.headline|safe }}</h1>		
+        {% block article-title %}
+            <h1 class="article-title">{{ story.section_if_special|follow:": " }} {{ story.headline|safe }}</h1>		
+        {% endblock %}
   		<div style="clear:both"></div>
 
         <div class="article-content">

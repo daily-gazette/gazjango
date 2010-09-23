@@ -1,5 +1,9 @@
 {% extends "stories/photospread_from_sec_opinions.html" %}
 
+{% block article-title %}
+    <h1 class="article-title">{{ story.headline|safe }}</h1>		
+{% endblock %}
+
 {% block story-content %}
   {{ story.resolved_text|safe }}
 
