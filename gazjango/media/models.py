@@ -1,4 +1,5 @@
 import datetime
+import re
 
 from django.db                   import models
 from django.db.models            import signals
@@ -160,6 +161,60 @@ class ImageFile(BaseFile, ImageModel):
     def front_tall_or_wide(self):
         return "tall" if self.front_is_tall else "wide"
     
+
+
+flickr_id = re.compile(r'^(?:http://)?(?:www\.)?flickr.com/photos/[^/]+/(\d+)/')
+
+def get_from_flickr(url, name, user, bucket, size='Large'):
+    from gazjango.scrapers import flickr
+    import os, os.path
+    import time
+    from urllib import urlretrieve
+    from django.conf import settings
+    from django.template.defaultfilters import slugify
+
+    flickr.API_KEY = settings.FLICKR_API
+    flickr.API_SECRET = settings.FLICKR_SECRET
+
+    m = flickr_id.match(url)
+    if m:
+        id = m.group(1)
+    elif url.isdigit():
+        id = url
+    else:
+        raise ValueError("confusing url '%s'" % url)
+
+    p = flickr.Photo(id)
+    sizes = p.getSizes()
+    for sizedict in sizes:
+        if sizedict.get('label', None) == size:
+            size_url = sizedict['source']
+            break
+    else:
+        size_url = sizes[-1]['source']
+
+    dir = time.strftime("by_date/%Y/%m/%d/")
+    os_dir = os.path.join(settings.MEDIA_ROOT, dir)
+
+    if not os.path.exists(os_dir):
+        os.makedirs(os_dir)
+    elif not os.path.isdir(os_dir):
+        raise IOError("%s exists, but isn't a directory!" % os_dir)
+
+    filename = size_url.split('/')[-1]
+
+    urlretrieve(size_url, os.path.join(os_dir, filename))
+
+    image = ImageFile.objects.create(
+            data=os.path.join(dir, filename),
+            name=name,
+            slug=slugify(name),
+            bucket=bucket,
+    )
+    image.users = [user]
+    return image
+
+
 
 # _update_front_is_tall = lambda sender, instance, **kwargs: instance.update_front_is_tall()
 # signals.pre_save.connect(_update_front_is_tall, sender=ImageFile)
