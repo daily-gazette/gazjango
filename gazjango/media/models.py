@@ -185,13 +185,10 @@ def get_from_flickr(url, name, user, bucket, size='Large'):
         raise ValueError("confusing url '%s'" % url)
 
     p = flickr.Photo(id)
-    sizes = p.getSizes()
-    for sizedict in sizes:
-        if sizedict.get('label', None) == size:
-            size_url = sizedict['source']
-            break
-    else:
-        size_url = sizes[-1]['source']
+    size_url = p.getURL(size=size, urlType='source')
+
+    if 'flickr.com' not in url:
+        url = p.getURL(size=size, urlType='url')
 
     dir = time.strftime("by_date/%Y/%m/%d/")
     os_dir = os.path.join(settings.MEDIA_ROOT, dir)
@@ -210,6 +207,7 @@ def get_from_flickr(url, name, user, bucket, size='Large'):
             name=name,
             slug=slugify(name),
             bucket=bucket,
+            source_url=url,
     )
     image.users = [user]
     return image
