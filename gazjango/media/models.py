@@ -202,18 +202,21 @@ def get_from_flickr(url, name, user, bucket, size='Large'):
 
     urlretrieve(size_url, os.path.join(os_dir, filename))
 
-    image = ImageFile(
-            data=os.path.join(dir, filename),
-            name=name,
-            slug=slugify(name),
-            bucket=bucket,
-            source_url=url,
-    )
+    args = {
+        'data': os.path.join(dir, filename),
+        'name': name,
+        'slug': slugify(name),
+        'bucket': bucket,
+        'source_url': url,
+    }
     if isinstance(user, basestring):
-        image.author_name = user
-    else:
+        args['author_name'] = user
+
+    image = ImageFile.objects.create(**args)
+
+    if not isinstance(user, basestring):
         image.users = [user]
-    image.save()
+
     return image
 
 
