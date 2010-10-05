@@ -138,7 +138,7 @@ def show_photospread_page(request, spread, num=None, form=None, whole_page=None)
             related=spread.related_list(3),
 
             top_banner=BannerAd.article_top.pick(allow_zero_priority=False),
-            side_banner=BannerAd.article_top.pick(allow_zero_priority=False),
+            side_banner=BannerAd.article_side.pick(allow_zero_priority=False),
         )
 
         d = spread.pub_date
