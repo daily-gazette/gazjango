@@ -36,7 +36,7 @@ class SubmitAnnouncementForm(forms.ModelForm):
 class SubmitPosterForm(forms.Form):
     title = forms.CharField()
     sponsor_name = forms.CharField()
-    sponsor_url = forms.URLField()
+    sponsor_url = forms.URLField(required=False)
 
     date_start = forms.DateField(initial=datetime.date.today)
     date_end = forms.DateField(initial=lambda: datetime.date.today() + datetime.timedelta(days=7))
