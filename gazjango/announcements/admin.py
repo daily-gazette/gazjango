@@ -12,4 +12,5 @@ admin.site.register(Announcement, AnnouncementAdmin)
 class PosterAdmin(admin.ModelAdmin):
     list_display = ('title', 'sponsor_user', 'is_published', 'date_start', 'date_end')
     list_filter = ('is_published',)
+    save_as = True
 admin.site.register(Poster, PosterAdmin)
