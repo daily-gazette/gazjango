@@ -1669,6 +1669,18 @@ img.poster {
 	padding-left: 10px;
 }
 
+.fullbar {
+    font-size: 13px;
+    padding: 5px;
+    float: left;
+    width: 380;
+}
+.fullbar img {
+    border: double BORDER;
+    padding: 2px;
+}
+
+
 .leftbar {
 	font-size: 13px;
 	padding: 5px;
