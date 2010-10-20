@@ -193,8 +193,8 @@ class BannerAdT(ImageSpec):
 
 
 class ResizeSideBanner(processors.Resize):
-    width = 185
-    height = 300
+    width = 375
+    height = 275
 
 class BannerAdS(ImageSpec):
     processors = [ResizeSideBanner]

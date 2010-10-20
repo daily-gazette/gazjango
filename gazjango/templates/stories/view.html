@@ -148,46 +148,28 @@
     {% endblock poster %}
     <hr />
 
+    <div class="leftbar">
+        <h5>Recent Stories</h5>
+        <ul>
+        {% for story in recent_stories %}
+            <li><a href="{{ story.get_absolute_url }}">{{ story.headline }}</a></li>
+        {% endfor %}
+        </ul>
+    </div>
 
+    <div class="rightbar">
+        <h5>Other Stories in {{ story.section }}</h5>
+        <ul>
+            {% for story in related %}
+                <li><a href="{{ story.get_absolute_url }}">{{ story.headline }}</a></li>
+            {% endfor %}
+        </ul>
+    </div>
+    
     {% if side_banner %}
         <div class="leftbar">
             {{ side_banner.display }}
             <span class="ad-notice">Advertisement by {{ side_banner.linked_publisher }}.</span>
-        </div>
-
-        <div class="rightbar">
-            <h5>Recent Stories</h5>
-            <ul>
-            {% for story in recent_stories %}
-                <li><a href="{{ story.get_absolute_url }}">{{ story.headline }}</a></li>
-            {% endfor %}
-            </ul>
-            
-            <h5>Other Stories in {{ story.section }}</h5>
-            <ul>
-                {% for story in related %}
-                    <li><a href="{{ story.get_absolute_url }}">{{ story.headline }}</a></li>
-                {% endfor %}
-            </ul>
-        </div>
-
-    {% else %}
-        <div class="leftbar">
-            <h5>Recent Stories</h5>
-            <ul>
-            {% for story in recent_stories %}
-                <li><a href="{{ story.get_absolute_url }}">{{ story.headline }}</a></li>
-            {% endfor %}
-            </ul>
-        </div>
-
-        <div class="rightbar">
-            <h5>Other Stories in {{ story.section }}</h5>
-            <ul>
-                {% for story in related %}
-                    <li><a href="{{ story.get_absolute_url }}">{{ story.headline }}</a></li>
-                {% endfor %}
-            </ul>
         </div>
     {% endif %}
   </div>
