@@ -56,7 +56,6 @@ def get_menu(url=FEED_URL, tomorrow=False, die_on_closed=False):
     for item in week.find("day", {'value': day_name}).findAll("item"):
         meal = item.meal.string.strip()
         if meal:
-            data[meal.lower()] = item.menu.string.strip().sub("\n", "<br />")
-            #br.sub('; ', item.menu.string.strip())
+            data[meal.lower()] = br.sub("<br />", item.menu.string.strip())
     
     return data
