@@ -310,8 +310,11 @@
 							  {% if issue.menu.closed %}
 								{{ issue.menu.message }}
 							  {% else %}
-								<p><strong>Lunch</strong>: {{ issue.menu.lunch|safe }}</p>
-								<p><strong>Dinner</strong>: {{ issue.menu.dinner|safe }}</p>
+                                <p><strong>Lunch</strong></p>
+                                {{ issue.menu.lunch|safe }}
+
+                                <p><strong>Dinner</strong></p>
+                                {{ issue.menu.dinner|safe }}
 							  {% endif %}
 							</font>
 						  </td>
