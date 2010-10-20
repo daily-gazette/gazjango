@@ -163,7 +163,7 @@ class ImageFile(BaseFile, ImageModel):
     
 
 
-flickr_id = re.compile(r'^(?:http://)?(?:www\.)?flickr.com/photos/[^/]+/(\d+)/')
+flickr_id = re.compile(r'^(?:http://)?(?:www\.)?flickr.com/photos/[^/]+/(\d+)/?')
 
 def get_from_flickr(url, name, user, bucket, size='Large'):
     from gazjango.scrapers import flickr
