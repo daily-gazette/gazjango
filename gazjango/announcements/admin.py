@@ -7,6 +7,7 @@ class AnnouncementAdmin(admin.ModelAdmin):
     list_filter = ('is_published', 'kind', 'is_lost_and_found')
     search_fields = ('slug', 'title', 'text', 'sponsor')
     date_hierarchy = 'date_start'
+    save_as = True
 admin.site.register(Announcement, AnnouncementAdmin)
 
 class PosterAdmin(admin.ModelAdmin):
