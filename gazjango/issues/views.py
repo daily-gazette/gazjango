@@ -53,9 +53,11 @@ def show_issue(request, issue, plain=False):
 @staff_required
 def preview_issue(request, plain=False):
     issue, created = Issue.objects.populate_issue()
-    resp = show_issue(request, issue, plain)
-    if created:
-        issue.delete()
+    try:
+        resp = show_issue(request, issue, plain)
+    finally:
+        if created:
+            issue.delete()
     return resp
 
 
