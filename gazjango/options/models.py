@@ -79,7 +79,7 @@ format_for_db  = lambda type, val: OPTION_TYPES[type][2](val)
 class Option(models.Model):
     name = models.CharField(max_length=100, unique=True, db_index=True)
     type = models.CharField(max_length=1, choices=OPTION_CHOICES)
-    _value = models.CharField(blank=True, max_length=100)
+    _value = models.CharField(blank=True, max_length=1000)
     
     def _get_value(self):      return format_from_db(self.type, self._value)
     def _set_value(self, val): self._value = format_for_db(self.type, val)
