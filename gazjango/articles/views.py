@@ -260,7 +260,8 @@ def homepage(request, social_len=7, num_tweets=2, num_comments=2,
                     key=lambda lst: lst[-1].time, reverse=True)[:5]
     
     # events and announcements
-    events = Announcement.events.order_by('event_date', 'event_time', 'pk')
+    events = Announcement.events.order_by('event_date', 'event_time', 'pk') \
+                         .filter(event_date__gte=datetime.date.today())
     announcements = Announcement.regular.order_by('-date_end', '-date_start')
     jobs = JobListing.unfilled.order_by('-pub_date')
     
