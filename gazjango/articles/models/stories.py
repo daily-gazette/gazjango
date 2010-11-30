@@ -320,8 +320,8 @@ class Article(models.Model):
         formatter = formats.FORMAT_FUNCS[self.format]
         return formatter(text)
     
-    
-    _media_link = re.compile(r'^(?:(img|media)://)?([-\w]+)/([-\w]+)$', re.IGNORECASE)
+    _media_link = re.compile(r'^(?:(img|media)://)?([-\w]+)/([-\w]+)(?:/([-\w]+))?/?$',
+                             re.IGNORECASE)
     def resolved_text(self, revision=None):
         """
         Formats the text (at the revision specified by ``revision``, if
@@ -355,7 +355,7 @@ class Article(models.Model):
         if not match:
             return path
         
-        scheme, bucket_slug, slug = match.groups()
+        scheme, bucket_slug, slug, size = match.groups()
         if required_scheme and not scheme:
             return path
         
@@ -377,8 +377,22 @@ class Article(models.Model):
                         raise
                     else:
                         return ""
-        return media.get_absolute_url()
-    
+
+        if not size:
+            return media.get_absolute_url()
+        else:
+            try:
+                int_size = int(size)
+            except ValueError:
+                return media.get_absolute_url()
+            else:
+                if int_size <= 25:
+                    return media.storytwentyfive.url
+                elif int_size <= 50:
+                    return media.storyfifty.url
+                else:
+                    return media.storyhundred.url
+
     
     def related_list(self, num=None):
         """Returns a QuerySet of related stories."""

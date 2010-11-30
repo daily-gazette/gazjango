@@ -121,6 +121,25 @@ class Poster(ImageSpec):
 # = Other Story Images =
 # ======================
 
+class ResizeStoryHundred(processors.Resize):
+    width = 650
+    crop = False
+class StoryHundred(ImageSpec):
+    processors = [ResizeStoryHundred]
+
+class ResizeStoryFifty(processors.Resize):
+    width = 325
+    crop = False
+class StoryFifty(ImageSpec):
+    processors = [ResizeStoryFifty]
+
+class ResizeStoryTwentyFive(processors.Resize):
+    width = 162
+    crop = False
+class StoryTwentyFive(ImageSpec):
+    processors = [ResizeStoryTwentyFive]
+
+
 class ResizeIssue(processors.Resize):
     height = 180
     width = 180
