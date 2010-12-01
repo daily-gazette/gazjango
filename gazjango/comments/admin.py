@@ -29,6 +29,6 @@ class PublicCommentAdmin(admin.ModelAdmin):
         else:
             message_bit = "%s comments were" % rows_updated
         self.message_user(request, message_bit + " were successfully approved.")
-    mark_as_spam.short_description = "Approve selected comments"
+    approve.short_description = "Approve selected comments"
 
 admin.site.register(PublicComment, PublicCommentAdmin)
