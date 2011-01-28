@@ -131,6 +131,8 @@ class ProfilesManager(models.Manager):
         user.save()
         
         d = {'kind': kind, 'year': year} if year else {'kind': kind}
+        if kind in "sa" and year is None:
+            d['year'] = None
         kind, c = UserKind.objects.get_or_create(**d)
         profile = UserProfile.objects.create(user=user, kind=kind)
         profile.add_position(Position.objects.get(name=pos))
