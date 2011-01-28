@@ -1,5 +1,7 @@
 #!/usr/bin/env python
 
+import sys
+
 # TODO: turn this into a manage.py script
 from django.core.management import setup_environ
 from django.core.management import execute_manager
@@ -19,7 +21,7 @@ import optparse
 log = logging.getLogger('community.retrieve')
 
 opts=None
-args=None
+args=sys.argv[1:]
 
 log.info('starting to update sources')
 sources = settings.AGRO_SETTINGS['source_list']
@@ -38,6 +40,7 @@ if hasattr(opts, 'force'):
         force_run = True
 
 for s in import_source_modules(source_list=sources, class_name='retrieve'):
+    print s
     log.info('')
     log.info('trying to update %s', s.__name__)
 
