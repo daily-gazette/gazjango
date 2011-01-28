@@ -68,7 +68,7 @@ class BaseFile(models.Model):
             )
     
     def __unicode__(self):
-        return "%s/%s" % (self.bucket.slug, self.slug)
+        return "%s/%s (%s)" % (self.bucket.slug, self.slug, self.credit())
     
     class Meta:
         unique_together = ('slug', 'bucket')
