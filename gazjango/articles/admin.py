@@ -82,7 +82,7 @@ class SubsectionAdmin(admin.ModelAdmin):
 admin.site.register(Subsection, SubsectionAdmin)
 
 class ColumnAdmin(admin.ModelAdmin):
-    pass
+    filter_horizontal = ('authors',)
 admin.site.register(Column, ColumnAdmin)
 
 class StoryConceptAdmin(admin.ModelAdmin):
