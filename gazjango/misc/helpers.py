@@ -99,9 +99,12 @@ def set_default_slug(namer, extra_limits=lambda x: {}):
     """
     def _func(sender, instance, **kwords):
         if not instance.slug:
+            qset = sender._default_manager.filter(**extra_limits(instance))
+            if instance.pk:
+                qset = qset.exclude(pk=instance.pk)
             instance.slug = find_unique_name(
                 basename=slugify(namer(instance)),
-                qset=sender._default_manager.filter(**extra_limits(instance)),
+                qset=qset,
                 fieldname='slug',
                 mixer='-'
             )
