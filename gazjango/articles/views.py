@@ -234,7 +234,7 @@ def archives(request, section=None, subsection=None, year=None, month=None, day=
     return render_to_response(template, context_instance=rc)
 
 
-def homepage(request, social_len=7, num_tweets=2, num_comments=2,
+def homepage(request, social_len=7, num_tweets=3, num_comments=3,
              template="index.html"):
 
     recent_comments = PublicComment.visible.order_by('-time')[:25]
