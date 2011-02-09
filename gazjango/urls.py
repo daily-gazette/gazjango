@@ -100,9 +100,9 @@ urlpatterns += patterns('issues.views',
     (r'^issue/preview/$',       'preview_issue'),
     (r'^issue/preview/plain/$', 'preview_issue', {'plain': True}),
     
-    (r'^rsd/$',                                         'show_rsd', {}, 'rsd-today'),
+    (r'^rsd/$',                                         'show_rsd', {}, 'rsd-announce-today'),
     (r'^rsd/plain/$',                                   'show_rsd', {'plain': True}),
-    (r'^rsd/%(year)s/%(month)s/%(day)s/$'       % reps, 'show_rsd', {}, 'rsd'),
+    (r'^rsd/%(year)s/%(month)s/%(day)s/$'       % reps, 'show_rsd', {}, 'rsd-announce'),
     (r'^rsd/%(year)s/%(month)s/%(day)s/plain/$' % reps, 'show_rsd', {'plain': True}),
     
     (r'^rsd-events/$',                                         'show_events', {}, 'rsd-events-today'),
@@ -110,9 +110,9 @@ urlpatterns += patterns('issues.views',
     (r'^rsd-events/%(year)s/%(month)s/%(day)s/$'       % reps, 'show_events', {}, 'rsd-events'),
     (r'^rsd-events/%(year)s/%(month)s/%(day)s/plain/$' % reps, 'show_events', {'plain': True}),
     
-    (r'^rsd-full/$',                                         'show_combined', {}, 'rsd-full-today'),
+    (r'^rsd-full/$',                                         'show_combined', {}, 'rsd-today'),
     (r'^rsd-full/plain/$',                                   'show_combined', {'plain': True}),
-    (r'^rsd-full/%(year)s/%(month)s/%(day)s/$'       % reps, 'show_combined', {}, 'rsd-full'),
+    (r'^rsd-full/%(year)s/%(month)s/%(day)s/$'       % reps, 'show_combined', {}, 'rsd'),
     (r'^rsd-full/%(year)s/%(month)s/%(day)s/plain/$' % reps, 'show_combined', {'plain': True}),
     
     (r'^menu/$', 'menu_partial'),
