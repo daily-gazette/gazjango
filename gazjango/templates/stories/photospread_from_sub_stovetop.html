@@ -1,0 +1,27 @@
+{% extends "stories/photospread_from_sec_opinions.html" %}
+
+{% block article-title %}
+    <h1 class="article-title">{{ story.headline|safe }}</h1>		
+{% endblock %}
+
+{% block story-content %}
+  {{ story.resolved_text|safe }}
+
+  <hr />
+
+  <div id="photo-block">
+    {% include "stories/photo.html" %}
+  </div>
+{% endblock %}
+
+{% block poster %}
+    {% if poster %}
+        {% if poster.sponsor_url %}<a href="{{ poster.sponsor_url }}">{% endif %}
+        <img src="{{ poster.poster.poster.url }}" class="poster" title="Poster from {{ poster.sponsor_name }}" />
+        {% if poster.sponsor_url %}</a>{% endif %}
+    {% endif %}
+
+<br />
+<span class="posterannouncement">Want to add your group's poster? Go <a href="/posters/new/">here</a>.</span>
+
+{% endblock poster %}
