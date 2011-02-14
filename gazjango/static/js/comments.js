@@ -119,20 +119,15 @@ function newComments(speed) {
     });
 }
 
-var textareaIsDefault = true;
 function setupSubmission() {
     syncNameDisabled();
     $('input[name="anonymous"]').click(syncNameDisabled);
     $('input[type=reset]').click(function() {
-        textareaIsDefault = true;
         setNameDisabled(true);
     });
     $('#submitComments textarea')
         .focus(function() {
-            if (textareaIsDefault) { $(this).val(''); }
-        })
-        .change(function() {
-            textareaIsDefault = false;
+            if ($(this).val() == "Have your say.") { $(this).val(''); }
         });
 }
 
