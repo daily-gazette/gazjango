@@ -1,7 +1,7 @@
 import re
 import urllib2
 from BeautifulSoup import BeautifulStoneSoup
-from datetime      import date, timedelta
+from datetime      import date, timedelta, datetime
 
 FEED_URL = "http://www.swarthmore.edu/dashboards/feeds/sharples.xml"
 NUM_WEEKS = 4
@@ -59,3 +59,32 @@ def get_menu(url=FEED_URL, tomorrow=False, die_on_closed=False):
             data[meal.lower()] = br.sub("<br />", item.menu.string.strip())
     
     return data
+
+if __name__ == '__main__':
+    import sys
+
+    if 'tomorrow' in sys.argv:
+        tomorrow = True
+    elif 'today' in sys.argv:
+        tomorrow = False
+    else:
+        tomorrow = datetime.now().hour > 8
+
+    day = date.today() + timedelta(days=1 if tomorrow else 0)
+    print day.strftime("%A %D")
+    print
+    menu = get_menu(tomorrow=tomorrow)
+
+    if menu['closed']:
+        print "Sharples is closed!"
+        sys.exit()
+
+    newlines = re.compile(r'<br */?>[\s\n]+')
+    neatify = lambda s: re.sub(newlines, '\n', s)
+
+    print "Lunch:"
+    print neatify(menu['lunch'])
+    print
+    print "Dinner:"
+    print neatify(menu['dinner'])
+
