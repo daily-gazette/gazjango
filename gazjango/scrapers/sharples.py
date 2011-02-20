@@ -68,7 +68,7 @@ if __name__ == '__main__':
     elif 'today' in sys.argv:
         tomorrow = False
     else:
-        tomorrow = datetime.now().hour > 8
+        tomorrow = datetime.now().hour > 20
 
     day = date.today() + timedelta(days=1 if tomorrow else 0)
     print day.strftime("%A %D")
