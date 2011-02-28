@@ -489,12 +489,14 @@ def subsection(request, section, subsection):
         current = []
         sep = re.compile(r',|:')
         for art in articles.filter(pub_date__gte=cutoff):
-            pos, name = [x.strip() for x in sep.split(art.headline + ',', 1)]
-            if name.endswith(','):
-                name = name[:-1]
+            if sep.search(art.headline):
+                pos, name = [x.strip() for x in sep.split(art.headline, 1)]
+            else:
+                pos = ''
+                name = art.headline
             current.append( (pos, name, art) )
         # sort by position then last name
-        current.sort(key=lambda t: (t[0], t[1].split(None, 1)[1]))
+        current.sort(key=lambda t: (t[0], t[1].rsplit(None, 1)[0]))
         
         data = {
             'section': sec,
