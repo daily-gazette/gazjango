@@ -8,6 +8,20 @@ class AnnouncementAdmin(admin.ModelAdmin):
     search_fields = ('slug', 'title', 'text', 'sponsor')
     date_hierarchy = 'date_start'
     save_as = True
+
+    actions = ['make_published']
+
+    def make_published(self, request, queryset):
+        rows_updated = queryset.update(is_published=True)
+        if rows_updated == 1:
+            message_bit = "1 announcement was"
+        else:
+            message_bit = "%s announcements were" % rows_updated
+        self.message_user(request, "%s successfully marked as published." % message_bit)
+    make_published.short_description = "Mark announcements as published"
+    
+
+
 admin.site.register(Announcement, AnnouncementAdmin)
 
 class PosterAdmin(admin.ModelAdmin):
