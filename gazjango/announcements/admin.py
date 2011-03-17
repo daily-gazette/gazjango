@@ -1,5 +1,6 @@
 from django.contrib import admin
 from gazjango.announcements.models import Announcement, Poster
+import datetime
 
 class AnnouncementAdmin(admin.ModelAdmin):
     list_display = ('slug', 'title', 'unlinked_excerpt', 'is_published', 
@@ -9,7 +10,7 @@ class AnnouncementAdmin(admin.ModelAdmin):
     date_hierarchy = 'date_start'
     save_as = True
 
-    actions = ['make_published']
+    actions = ['make_published', 'start_today']
 
     def make_published(self, request, queryset):
         rows_updated = queryset.update(is_published=True)
@@ -20,6 +21,14 @@ class AnnouncementAdmin(admin.ModelAdmin):
         self.message_user(request, "%s successfully marked as published." % message_bit)
     make_published.short_description = "Mark announcements as published"
     
+    def start_today(self, request, queryset):
+        rows_updated = queryset.update(date_start=datetime.date.today())
+        if rows_updated == 1:
+            message_bit = "1 announcement was"
+        else:
+            message_bit = "%s announcements were" % rows_updated
+        self.message_user(request, "%s successfully set to start today." % message_bit)
+    make_published.short_description = "Set announcements' start date to today"
 
 
 admin.site.register(Announcement, AnnouncementAdmin)
