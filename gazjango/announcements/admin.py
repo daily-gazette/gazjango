@@ -28,7 +28,7 @@ class AnnouncementAdmin(admin.ModelAdmin):
         else:
             message_bit = "%s announcements were" % rows_updated
         self.message_user(request, "%s successfully set to start today." % message_bit)
-    make_published.short_description = "Set announcements' start date to today"
+    start_today.short_description = "Set announcements' start date to today"
 
 
 admin.site.register(Announcement, AnnouncementAdmin)
