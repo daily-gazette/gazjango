@@ -186,7 +186,7 @@ class Article(models.Model):
     
     headline    = models.CharField(max_length=200, help_text="Main headline.")
     short_title = models.CharField(blank=True, max_length=40,
-        help_text="For the front page; keep it *short*.")
+        help_text="For the front page; keep it *short*. Only needed if the main headline is long.")
     slug        = models.SlugField(unique_for_date="pub_date", max_length=100,
         help_text="Example: global-neighbors, strong-endowment-in-recession. It's part "
                   "of the article's URL: daily.swarthmore.edu/year/month/day/slug/.")
@@ -199,7 +199,7 @@ class Article(models.Model):
         
     text = models.TextField(blank=True, help_text="""
     Links: &lt;a href="URL"&gt;Link text&lt;/a&gt;<br />
-    Placing images: &lt;div class="alignment size"&gt;&lt;img src="img://bucket/slug"
+    Placing images: &lt;div class="alignment size"&gt;&lt;img src="img://bucket/slug/size"
                     /&gt;by Photographer&lt;/div&gt;<br />
     &nbsp;&nbsp;Alignment: either imgLeft or imgRight<br />
     &nbsp;&nbsp;Size: zero through fifty, in increments of five (ex. thirtyfive)<br />
@@ -220,7 +220,7 @@ class Article(models.Model):
     
     main_image = models.ForeignKey(ImageFile, null=True, blank=True,
                 related_name="articles_with_main",
-                help_text="The image which will be resized/cropped for various displays.")
+                help_text="The image to use on the frontpage (if it's a top story), in issues (if it's the main story in the issue), archive pages, etc.")
     
     media  = models.ManyToManyField(MediaFile, related_name="articles", blank=True)
     images = models.ManyToManyField(ImageFile, related_name="articles", blank=True)
