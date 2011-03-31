@@ -109,6 +109,7 @@ class HousingListing(models.Model):
         ('2',"2010"),
         ('3',"Later"),
         ('4','2011'), # meh, miles
+        ('5', '2012'), # this should really be fixed
     )
     
     student = models.ForeignKey(UserProfile, related_name="student")
