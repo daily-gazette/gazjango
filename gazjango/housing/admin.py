@@ -9,8 +9,8 @@ class SeniorAdmin(admin.ModelAdmin):
 
     actions = ['unpublish']
 
-    def make_published(self, request, queryset):
+    def unpublish(self, request, queryset):
         queryset.update(is_published=False)
-    make_published.short_description = "Remove selected listings from the website"
+    unpublish.short_description = "Remove selected listings from the website"
 
 admin.site.register(HousingListing, SeniorAdmin)
