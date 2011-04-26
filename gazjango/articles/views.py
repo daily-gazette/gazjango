@@ -432,7 +432,7 @@ def section(request, section):
     for i in range(len(lows)):
         lowlist[i % num_low_lists].append(lows[i])
         
-        
+
     entries = Entry.published.get_entries(num=4)
     comments = PublicComment.visible.filter(article__section=sec).order_by('-time').all()[:20]
     
@@ -477,8 +477,7 @@ def subsection(request, section, subsection):
     sec = get_object_or_404(Section, slug=section)
     sub = get_object_or_404(Subsection, section=sec, slug=subsection)
     
-    comments = PublicComment.visible.filter(article__subsection=sub)
-    stream = comments[:5]
+    stream = PublicComment.visible.filter(article__subsection=sub).order_by('-time').all()[:5]
     
     if sub.slug == 'stuco-platforms':
         articles = sub.published_articles()
@@ -515,9 +514,6 @@ def subsection(request, section, subsection):
         for i in range(len(lows)):
             lowlist[i % num_low_lists].append(lows[i])
     
-        comments = PublicComment.visible.filter(article__subsection=sub).order_by('-time')
-        stream = comments[:4]
-        
         rec_multi_story, rec_multi = Article.published.get_recent_multimedia(
             base=sub.articles,
             exclude=[a.main_image for a in tops if a.main_image])
