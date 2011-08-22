@@ -69,8 +69,6 @@ def do_tables(tables):
 ################################################################################
 ### Authors
 
-# TODO - why can't you log into the admin?
-
 wp_usermeta_info = {'sql': '''
 --
 -- Table structure for table `wp_usermeta`
@@ -149,13 +147,13 @@ def get_authors():
 
         if author.user.is_superuser or author.editor_status():
             capabilities = 'a:1:{s:13:"administrator";s:1:"1";}'
-            user_level = 10
+            user_level = '10'
         elif author.is_staff:
             capabilities = 'a:1:{s:11:"contributor";s:1:"1";}'
-            user_level = 1
+            user_level = '1'
         else:
             capabilities = 'a:1:{s:10:"subscriber";s:1:"1";}'
-            user_level = 0
+            user_level = '0'
 
         def meta(key, value):
             author_meta.append([umeta_counter(), author_id, key, value])
@@ -173,8 +171,9 @@ def get_authors():
         meta('aim', '')
         meta('yim', '')
         meta('jabber', '')
-        meta('wp_capabalities', capabilities)
+        meta('wp_capabilities', capabilities)
         meta('wp_user_level', user_level)
+
 
     wp_users = Table('wp_users', data=author_data, **wp_users_info)
     wp_usermeta = Table('wp_usermeta', data=author_meta, **wp_usermeta_info)
