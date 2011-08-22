@@ -409,23 +409,29 @@ WPTermRelationships = namedtuple('WPTermRelationships',
 
 #_escape = re.compile(u'[\u0080-\uffff]+')
 #_entify = lambda c: '&#%d;' % ord(c)
+
+def entify(u):
+    # NOTE - slow and crappy, but I'm too lazy to do it a better way
+    return u.replace(u'\x10', '') \
+            .replace(u'“', '&#8220;') \
+            .replace(u'”', '&#8221;') \
+            .replace(u"‘", "&#8216;") \
+            .replace(u"’", "&#8217;") \
+            .replace(u'–', "&#8211;") \
+            .replace(u'—', "&#8212;") \
+            .replace(u'…', "&#8230;") \
+            .replace(u'&quot;', '&#34;')
+
 def nicify_content(t):
-    # TODO - deal with smart quotes, other unicode
     # TODO - change <div>s for images to make sense on new site
-    return smart_unicode(t).replace(u'\x10', '')
+    s = entify(smart_unicode(t))
+    #article = lxml.html.fromstring(s)
+    return s
 
-    #return _escape.sub("&apos;", smart_unicode(t).replace(u'\x10', ''))
 
-    #return t.replace(u'\xc3\xad', "'") \
-    #        .replace(u"\xe2\u20ac\u0153", u'\xe2\x80\x9c') \
-    #        .replace(u"\xe2\u20ac\x9d", u'\xe2\x80\x9d') \
-    #        .decode('utf-8', 'replace') \
-    #        .replace(u'\u2019', "&#8217;") \
-    #        .replace(u'\u201c', '&#8220;') \
-    #        .replace(u'\u201d', '&#8221;') \
-    #        .replace(u'\xed', "'") \
-    #        .replace('\t', ' ')
-    # \xed isn't actually an apostrophe, but it's in our DB like one
+def nicify_comment(t):
+    s = entify(smart_unicode(t))
+    return s
 
 def get_posts(author_ids, taxonomy_ids):
     posts = []
@@ -436,7 +442,7 @@ def get_posts(author_ids, taxonomy_ids):
     article_id_counter = Counter()
 
     # do the base article stuff
-    for article in Article.published.all():
+    for article in Article.published.all().select_related(depth=2):
         article_ids[article] = article_id = article_id_counter()
 
         authors = article.authors_in_order()
@@ -450,7 +456,7 @@ def get_posts(author_ids, taxonomy_ids):
             post_name=article.slug,
             guid=URL + article.get_absolute_url(),
 
-            post_excerpt=article.summary,
+            post_excerpt=nicify_comment(article.summary),
 
             post_date=article.pub_date,
             post_date_gmt=article.pub_date+TIME_DIFF,
@@ -481,7 +487,6 @@ def get_posts(author_ids, taxonomy_ids):
                 term_taxonomy_id=taxonomy_id,
                 term_order=term_counter(),
             ))
-
 
         # connect to sections
         add_term(taxonomy_ids[article.section])
@@ -602,9 +607,9 @@ def get_comments(author_ids, article_ids):
             comment_author_IP=comment.ip_address,
             comment_date=comment.time,
             comment_date_gmt=comment.time+TIME_DIFF,
-            comment_content=comment.text,
+            comment_content=nicify_comment(comment.text),
             comment_karma=comment.score,
-            comment_approved=comment.is_visible(),
+            comment_approved=not comment.superhidden,
             comment_agent=comment.user_agent,
             comment_type='',
             comment_parent='0',
@@ -620,15 +625,19 @@ def get_comments(author_ids, article_ids):
 ################################################################################
 
 def main():
+    print >>sys.stderr, "doing authors"
     tables, author_ids = get_authors()
     do_tables(tables)
 
+    print >>sys.stderr, "doing terms"
     tables, term_ids, taxonomy_ids = get_terms(author_ids)
     do_tables(tables)
 
+    print >>sys.stderr, "doing articles"
     tables, article_ids = get_posts(author_ids, taxonomy_ids)
     do_tables(tables)
 
+    print >>sys.stderr, "doing comments"
     tables, comment_ids = get_comments(author_ids, article_ids)
     do_tables(tables)
 
@@ -641,6 +650,8 @@ def main():
     print "LOCK TABLES `wp_posts` WRITE, `wp_comments` WRITE;"
     print "UPDATE `wp_posts` SET comment_count=(SELECT COUNT(*) FROM `wp_comments` WHERE `wp_comments`.`comment_post_ID` = `wp_posts`.`ID`);"
     print "UNLOCK TABLES;"
+
+    print >>sys.stderr, "done!"
 
 if __name__ == '__main__':
     main()
