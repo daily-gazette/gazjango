@@ -446,6 +446,34 @@ def get_posts(author_ids, taxonomy_ids):
         article_ids[article] = article_id = article_id_counter()
 
         authors = article.authors_in_order()
+        content = nicify_content(article.resolved_text())
+
+        # do we have to add photospread stuff into the article content?
+        try:
+            ps = article.photospread
+        except PhotoSpread.DoesNotExist:
+            pass
+        else:
+            extra = []
+
+            for page in ps.pages.order_by('number').all():
+                photo = page.photo
+
+                # find the appropriate height/width to be 442 wide
+                height = photo.photospreadimage.height
+                width = photo.photospreadimage.width
+                ratio = min(442. / width, 1)
+                height *= ratio
+                width *= ratio
+
+                extra.append("""[caption align="aligncenter" width="442" caption="%s"]<a href="%s"><img class="size-large" src="%s" alt="" width="%s" height="%s" /></a>[/caption]""" % (page.caption, photo.data.url, photo.photospreadimage.url, width, height))
+
+
+            after_subs = ("Marauder's Map", "The Stovetop Travelers")
+            if article.subsection and article.subsection.name in after_subs:
+                content = content + '<br />' + '\n\n'.join(extra)
+            else:
+                content = '\n\n'.join(extra) + '<br />' + content
 
         # do the basic post
         posts.append(WPPost(
@@ -463,7 +491,7 @@ def get_posts(author_ids, taxonomy_ids):
             post_modified=article.pub_date,
             post_modified_gmt=article.pub_date+TIME_DIFF,
 
-            post_content=nicify_content(article.resolved_text()),
+            post_content=content,
             post_content_filtered='',
 
             post_status='publish',
@@ -498,7 +526,6 @@ def get_posts(author_ids, taxonomy_ids):
             add_term(taxonomy_ids[author])
 
     # TODO - do "attachment" posts (ie images)
-    # TODO - handle photospreads
 
     # TODO - do postmeta stuff...what matters?
     #  _thumbnail_id, _wp_attached_file, _wp_attachment_metadata, _oembed_ crap
