@@ -5,8 +5,6 @@ This file spits out SQL suitable for importing all the articles and comments
 from the old Django site into the new Wordpress site.
 '''
 
-URL = 'http://daily.swarthmore.edu'
-
 import codecs
 import datetime
 import locale
@@ -45,6 +43,9 @@ class Counter(object):
         self.next += 1
         return n
 
+URL = 'http://daily.swarthmore.edu'
+TIME_DIFF = datetime.timedelta(hours=-5) # ignoring DST - fuck off
+
 ################################################################################
 
 Table = namedtuple('Table', ['name', 'data', 'sql', 'fields'])
@@ -56,16 +57,19 @@ def do_tables(tables):
     print 'LOCK TABLES %s;' % ', '.join('`%s` WRITE' % t.name for t in tables)
 
     for table in tables:
-        print 'INSERT INTO `%s` (%s) VALUES' % (table.name,
-                                                ', '.join(table.fields))
-        print ',\n'.join('(%s)' % ', '.join(literal(x) for x in row)
-                         for row in table.data)
-        print ';'
+        if table.data:
+            print 'INSERT INTO `%s` (%s) VALUES' % (table.name,
+                                                    ', '.join(table.fields))
+            print ',\n'.join('(%s)' % ', '.join(literal(x) for x in row)
+                             for row in table.data)
+            print ';'
 
     print 'UNLOCK TABLES;'
 
 ################################################################################
 ### Authors
+
+# TODO - why can't you log into the admin?
 
 wp_usermeta_info = {'sql': '''
 --
@@ -119,17 +123,19 @@ CREATE TABLE `wp_users` (
 }
 AuthorInfo = namedtuple('AuthorInfo', wp_users_info['fields'])
 
-def get_author_data():
+def get_authors():
     user_id_counter = Counter()
     umeta_counter = Counter()
 
     author_data = []
     author_meta = []
 
+    author_ids = {}
+
     author_pks = Writing.objects.all().values_list('user', flat=True).distinct()
     for author_pk in sorted(set(author_pks)):
         author = UserProfile.objects.get(pk=author_pk)
-        author_id = user_id_counter()
+        author_ids[author] = author_id = user_id_counter()
 
         author_data.append(AuthorInfo(
                 ID=author_id,
@@ -141,7 +147,7 @@ def get_author_data():
                 display_name=author.name,
         ))
 
-        if author.editor_status():
+        if author.user.is_superuser or author.editor_status():
             capabilities = 'a:1:{s:13:"administrator";s:1:"1";}'
             user_level = 10
         elif author.is_staff:
@@ -173,7 +179,7 @@ def get_author_data():
     wp_users = Table('wp_users', data=author_data, **wp_users_info)
     wp_usermeta = Table('wp_usermeta', data=author_meta, **wp_usermeta_info)
 
-    return wp_users, wp_usermeta
+    return (wp_users, wp_usermeta), author_ids
 
 ################################################################################
 ### Categories
@@ -227,18 +233,18 @@ CREATE TABLE `wp_term_taxonomy` (
 }
 WPTermTaxonomy = namedtuple('WPTermTaxonomy', wp_term_taxonomy_info['fields'])
 
-# TODO - wp_term_relationships, also wp_term_taxonomy.count
-
-def get_term_data():
-    term_id_counter = Counter()
-    term_taxonomy_counter = Counter()
-
+def get_terms(author_ids):
     terms = []
     term_taxonomy = []
+
+    term_id_counter = Counter()
+    term_taxonomy_counter = Counter()
     term_ids = {}
+    taxonomy_ids = {}
 
     for section in Section.objects.all().order_by('slug'):
         term_ids[section] = term_id = term_id_counter()
+        taxonomy_ids[section] = taxonomy_id = term_taxonomy_counter()
 
         terms.append(WPTerm(
             term_id=term_id,
@@ -248,7 +254,7 @@ def get_term_data():
         ))
 
         term_taxonomy.append(WPTermTaxonomy(
-            term_taxonomy_id=term_taxonomy_counter(),
+            term_taxonomy_id=taxonomy_id,
             term_id=term_id,
             taxonomy='category',
             description=section.description,
@@ -258,6 +264,7 @@ def get_term_data():
 
     for subsection in Subsection.objects.all().order_by('pk'):
         term_ids[subsection] = term_id = term_id_counter()
+        taxonomy_ids[subsection] = taxonomy_id = term_taxonomy_counter()
 
         terms.append(WPTerm(
             term_id=term_id,
@@ -267,22 +274,44 @@ def get_term_data():
         ))
 
         term_taxonomy.append(WPTermTaxonomy(
-            term_taxonomy_id=term_taxonomy_counter(),
+            term_taxonomy_id=taxonomy_id,
             term_id=term_id,
             taxonomy='category',
             description=subsection.description,
             parent=term_ids[subsection.section],
+            count=0, 
+        ))
+
+    # make entries for co-authors+
+    for author, aid in author_ids.iteritems():
+        term_ids[author] = term_id = term_id_counter()
+        taxonomy_ids[author] = taxonomy_id = term_taxonomy_counter()
+
+        terms.append(WPTerm(
+            term_id=term_id,
+            name=author.username,
+            slug=author.username,
+            term_group=0,
+        ))
+
+        term_taxonomy.append(WPTermTaxonomy(
+            term_taxonomy_id=taxonomy_id,
+            term_id=term_id,
+            taxonomy='author',
+            description='',
+            parent=0,
             count=0,
         ))
 
+
     terms = Table('wp_terms', data=terms, **wp_terms_info)
     tax = Table('wp_term_taxonomy', data=term_taxonomy, **wp_term_taxonomy_info)
-    return terms, tax
+    return (terms, tax), term_ids, taxonomy_ids
 
 ################################################################################
 ### Posts
 
-wp_post_info = {
+wp_posts_info = {
     'fields': 'ID post_author post_date post_date_gmt post_content '\
               'post_title post_excerpt post_status comment_status ping_status '\
               'post_password post_name to_ping pinged post_modified '\
@@ -328,7 +357,8 @@ CREATE TABLE `wp_posts` (
 ) ENGINE=MyISAM AUTO_INCREMENT=321 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 '''
-WPPost = namedtuple('WPPost', wp_post_info['fields']
+}
+WPPost = namedtuple('WPPost', wp_posts_info['fields'])
 
 wp_postmeta_info = {
     'fields': 'meta_id post_id meta_key meta_value'.split(),
@@ -352,7 +382,7 @@ CREATE TABLE `wp_postmeta` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 ''',
 }
-WPPostMeta = namedtuple('WPPostMeta', wp_postmeta_info['fields']
+WPPostMeta = namedtuple('WPPostMeta', wp_postmeta_info['fields'])
 
 wp_term_relationships_info = {
     'fields': 'object_id term_taxonomy_id term_order'.split(),
@@ -377,13 +407,14 @@ CREATE TABLE `wp_term_relationships` (
 WPTermRelationships = namedtuple('WPTermRelationships',
                                  wp_term_relationships_info['fields'])
 
-_escape = re.compile(u'[\u0080-\uffff]+')
-_entify = lambda c: '&#%d;' % ord(c)
-def nicify(t):
-    # TODO - are these replacements breaking HTML attributes?
+#_escape = re.compile(u'[\u0080-\uffff]+')
+#_entify = lambda c: '&#%d;' % ord(c)
+def nicify_content(t):
+    # TODO - deal with smart quotes, other unicode
+    # TODO - change <div>s for images to make sense on new site
+    return smart_unicode(t).replace(u'\x10', '')
 
-    # FIXME - for now, just dropping unicode characters (including all quotation marks!)
-    return _escape.sub("&apos;", smart_unicode(t).replace(u'\x10', ''))
+    #return _escape.sub("&apos;", smart_unicode(t).replace(u'\x10', ''))
 
     #return t.replace(u'\xc3\xad', "'") \
     #        .replace(u"\xe2\u20ac\u0153", u'\xe2\x80\x9c') \
@@ -396,68 +427,221 @@ def nicify(t):
     #        .replace('\t', ' ')
     # \xed isn't actually an apostrophe, but it's in our DB like one
 
+def get_posts(author_ids, taxonomy_ids):
+    posts = []
+    postmeta = []
+    term_relns = []
+
+    article_ids = {}
+    article_id_counter = Counter()
+
+    # do the base article stuff
+    for article in Article.published.all():
+        article_ids[article] = article_id = article_id_counter()
+
+        authors = article.authors_in_order()
+
+        # do the basic post
+        posts.append(WPPost(
+            ID=article_id,
+            post_author=author_ids[authors[0]],
+
+            post_title=article.headline,
+            post_name=article.slug,
+            guid=URL + article.get_absolute_url(),
+
+            post_excerpt=article.summary,
+
+            post_date=article.pub_date,
+            post_date_gmt=article.pub_date+TIME_DIFF,
+            post_modified=article.pub_date,
+            post_modified_gmt=article.pub_date+TIME_DIFF,
+
+            post_content=nicify_content(article.resolved_text()),
+            post_content_filtered='',
+
+            post_status='publish',
+            comment_status=article.comments_allowed,
+            ping_status='open',
+            to_ping='',
+            pinged='',
+            
+            post_password='',
+            post_parent=0,
+            menu_order=0,
+            post_type='post',
+            post_mime_type='',
+            comment_count=0, # will be updated laterz
+        ))
+
+        term_counter = Counter()
+        def add_term(taxonomy_id):
+            term_relns.append(WPTermRelationships(
+                object_id=article_id,
+                term_taxonomy_id=taxonomy_id,
+                term_order=term_counter(),
+            ))
+
+
+        # connect to sections
+        add_term(taxonomy_ids[article.section])
+        if article.subsection:
+            add_term(taxonomy_ids[article.subsection])
+
+        # connect to author terms
+        for author in authors:
+            add_term(taxonomy_ids[author])
+
+    # TODO - do "attachment" posts (ie images)
+
+    # TODO - do postmeta stuff...what matters?
+    #  _thumbnail_id, _wp_attached_file, _wp_attachment_metadata, _oembed_ crap
+
+    wp_posts = Table('wp_posts', data=posts, **wp_posts_info)
+    wp_postmeta = Table('wp_postmeta', data=postmeta, **wp_postmeta_info)
+    wp_term_relns = Table('wp_term_relationships', data=term_relns,
+                          **wp_term_relationships_info)
+
+    return (wp_posts, wp_postmeta, wp_term_relns), article_ids
+
+
+################################################################################
+### Comments
+
+wp_comments_info = {
+    'fields': 'comment_ID comment_post_ID comment_author comment_author_email '\
+              'comment_author_url comment_author_IP comment_date ' \
+              'comment_date_gmt comment_content comment_karma comment_approved '\
+              'comment_agent comment_type comment_parent user_id'.split(),
+    'sql': '''
+--
+-- Table structure for table `wp_comments`
+--
+
+DROP TABLE IF EXISTS `wp_comments`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `wp_comments` (
+  `comment_ID` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `comment_post_ID` bigint(20) unsigned NOT NULL DEFAULT '0',
+  `comment_author` tinytext NOT NULL,
+  `comment_author_email` varchar(100) NOT NULL DEFAULT '',
+  `comment_author_url` varchar(200) NOT NULL DEFAULT '',
+  `comment_author_IP` varchar(100) NOT NULL DEFAULT '',
+  `comment_date` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `comment_date_gmt` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `comment_content` text NOT NULL,
+  `comment_karma` int(11) NOT NULL DEFAULT '0',
+  `comment_approved` varchar(20) NOT NULL DEFAULT '1',
+  `comment_agent` varchar(255) NOT NULL DEFAULT '',
+  `comment_type` varchar(20) NOT NULL DEFAULT '',
+  `comment_parent` bigint(20) unsigned NOT NULL DEFAULT '0',
+  `user_id` bigint(20) unsigned NOT NULL DEFAULT '0',
+  PRIMARY KEY (`comment_ID`),
+  KEY `comment_approved` (`comment_approved`),
+  KEY `comment_post_ID` (`comment_post_ID`),
+  KEY `comment_approved_date_gmt` (`comment_approved`,`comment_date_gmt`),
+  KEY `comment_date_gmt` (`comment_date_gmt`),
+  KEY `comment_parent` (`comment_parent`)
+) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+''',
+}
+WPComment = namedtuple('WPComment', wp_comments_info['fields'])
+
+wp_commentmeta_info = {
+    'fields': 'meta_id comment_id meta_key meta_value'.split(),
+    'sql': '''
+--
+-- Table structure for table `wp_commentmeta`
+--
+
+DROP TABLE IF EXISTS `wp_commentmeta`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `wp_commentmeta` (
+  `meta_id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `comment_id` bigint(20) unsigned NOT NULL DEFAULT '0',
+  `meta_key` varchar(255) DEFAULT NULL,
+  `meta_value` longtext,
+  PRIMARY KEY (`meta_id`),
+  KEY `comment_id` (`comment_id`),
+  KEY `meta_key` (`meta_key`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+'''
+}
+WPCommentMeta = namedtuple('WPCommentMeta', wp_commentmeta_info['fields'])    
+
+def get_comments(author_ids, article_ids):
+    comments = []
+    commentmeta = []
+
+    comment_ids = {}
+    comment_id_counter = Counter()
+    comment_meta_counter = Counter()
+
+    for comment in PublicComment.objects.all().select_related(depth=1):
+        comment_id = comment_ids[comment] = comment_id_counter()
+        article_id = article_ids[comment.subject]
+
+        user_id = 0
+        email = comment.email
+        if comment.user:
+            email = comment.user.email
+            if comment.user in author_ids:
+                user_id = author_ids[comment.user]
+
+        comments.append(WPComment(
+            comment_ID=comment_id,
+            comment_post_ID=article_id,
+            comment_author=comment.display_name,
+            comment_author_email=email,
+            comment_author_url='',
+            comment_author_IP=comment.ip_address,
+            comment_date=comment.time,
+            comment_date_gmt=comment.time+TIME_DIFF,
+            comment_content=comment.text,
+            comment_karma=comment.score,
+            comment_approved=comment.is_visible(),
+            comment_agent=comment.user_agent,
+            comment_type='',
+            comment_parent='0',
+            user_id=user_id,
+        ))
+
+        # TODO - anything in commentmeta?
+
+    wp_comments = Table('wp_comments', data=comments, **wp_comments_info)
+    wp_cmeta = Table('wp_commentmeta', data=commentmeta, **wp_commentmeta_info)
+
+    return (wp_comments, wp_cmeta), comment_ids
+        
 
 ################################################################################
 
 def main():
-    do_tables(get_author_data())
-    do_tables(get_term_data())
+    tables, author_ids = get_authors()
+    do_tables(tables)
+
+    tables, term_ids, taxonomy_ids = get_terms(author_ids)
+    do_tables(tables)
+
+    tables, article_ids = get_posts(author_ids, taxonomy_ids)
+    do_tables(tables)
+
+    tables, comment_ids = get_comments(author_ids, article_ids)
+    do_tables(tables)
+
+    # update wp_term_taxonomy.count
+    print "LOCK TABLES `wp_term_taxonomy` WRITE, `wp_term_relationships` WRITE;"
+    print "UPDATE `wp_term_taxonomy` SET count=(SELECT COUNT(*) FROM `wp_term_relationships` WHERE `wp_term_relationships`.`term_taxonomy_id` = `wp_term_taxonomy`.`term_taxonomy_id`);"
+    print "UNLOCK TABLES;"
+
+    # update wp_posts.comment_count
+    print "LOCK TABLES `wp_posts` WRITE, `wp_comments` WRITE;"
+    print "UPDATE `wp_posts` SET comment_count=(SELECT COUNT(*) FROM `wp_comments` WHERE `wp_comments`.`comment_post_ID` = `wp_posts`.`ID`);"
+    print "UNLOCK TABLES;"
 
 if __name__ == '__main__':
     main()
-
-'''
-# articles and comments
-time_diff = datetime.timedelta(hours=-5)
-for article in Article.published.all():
-    a = etree.SubElement(channel, 'item')
-
-    # titles, links, ids
-    sub_text(a, 'title', article.headline)
-    sub_text(a, WP+'post_name', article.slug)
-    sub_text(a, 'link', URL + article.get_absolute_url())
-    sub_text(a, 'guid', URL + article.get_absolute_url())
-    sub_text(a, WP+'post_id', str(article.pk))
-
-    # author
-    sub_text(a, DC+'creator', article.authors_in_order()[0].username)
-    # TODO - coauthors? http://wordpress.org/extend/plugins/co-authors-plus/
-
-    # dates
-    # NOTE: ignoring DST - fuck off
-    sub_text(a, 'pubDate', nice_datify(article.pub_date))
-    sub_text(a, WP+'post_date', datify(article.pub_date))
-    sub_text(a, WP+'post_date_gmt', datify(article.pub_date + time_diff))
-
-    # wordpress metadata that mostly doesn't change
-    sub_text(a, WP+'comment_status', 'open' if article.comments_allowed else 'closed')
-    sub_text(a, WP+'status', 'publish')
-    sub_text(a, WP+'ping_status', 'open')
-    sub_text(a, WP+'post_parent', '0')
-    sub_text(a, WP+'menu_order', '0')
-    sub_text(a, WP+'post_type', 'post')
-    sub_text(a, WP+'post_password', '')
-    sub_text(a, WP+'is_sticky', '0')
-
-    # category
-    s = article.sub_or_sec()
-    sub_text(a, 'category', s.name, nicename=s.slug, domain='category')
-
-    # content
-    # TODO - deal with linked images, etc -- other changes to content
-    try:
-        n = nicify(article.resolved_text())
-    except (UnicodeEncodeError, UnicodeDecodeError, ValueError):
-        print >>sys.stderr, "Error with nicifying text of article %s" % article.pk
-
-    try:
-        sub_text(a, '{%s}encoded' % NS['content'], n)
-    except (UnicodeEncodeError, UnicodeDecodeError, ValueError):
-        print >>sys.stderr, "Error with content of article %s" % article.pk, s
-                
-
-    # TODO - does summary ever have textile?
-    sub_text(a, '{%s}encoded' % NS['excerpt'], article.summary)
-
-print etree.tostring(root, pretty_print=True)
-'''
