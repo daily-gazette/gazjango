@@ -1,25 +1,42 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 '''
-This file creates a Wordpress eXtended RSS (WXR) file with all of the articles
-and comments from the Django site, for importing into the new Wordpress site.
+This file spits out SQL suitable for importing all the articles and comments
+from the old Django site into the new Wordpress site.
 '''
 
+URL = 'http://daily.swarthmore.edu'
+
+import codecs
+import datetime
+import locale
+import re
+import sys
+
+from collections import defaultdict, namedtuple
+from django.utils.encoding import smart_unicode
+
+# do Django setup
 import settings
 import django.core.management
 django.core.management.setup_environ(settings)
 
+# load all the models and so on
 from interactive_load import *
 
-from django.utils.encoding import smart_unicode
-from collections import defaultdict
-import datetime
-from lxml import etree
-import re
-import sys
+# literal function to escape things going in SQL
+User.objects.all()[0] # force a DB connection
+_literal = django.db.connection.connection.literal
 
-URL = 'http://daily.swarthmore.edu'
+def literal(obj):
+    if isinstance(obj, basestring):
+        obj = smart_unicode(obj)
+    return _literal(obj)
 
+# wrap sys.stdout into a StreamWriter to allow writing unicode.
+#sys.stdout = codecs.getwriter(locale.getpreferredencoding())(sys.stdout) 
+
+# a silly little counter class
 class Counter(object):
     def __init__(self, start=1):
         self.next = start
@@ -28,23 +45,341 @@ class Counter(object):
         self.next += 1
         return n
 
-def sub_text(parent, tag, text=None, **extra):
-    el = etree.SubElement(parent, tag, **extra)
-    el.text = text
-    return el
+################################################################################
 
-def nice_datify(d):
-    # hack to avoid doing real timezones
-    return d.strftime('%a, %d %b %Y %H:%M:%S -0500')
+Table = namedtuple('Table', ['name', 'data', 'sql', 'fields'])
 
-def datify(d):
-    return d.strftime('%Y-%m-%d %H:%M:%S')
+def do_tables(tables):
+    for table in tables:
+        print table.sql
 
+    print 'LOCK TABLES %s;' % ', '.join('`%s` WRITE' % t.name for t in tables)
+
+    for table in tables:
+        print 'INSERT INTO `%s` (%s) VALUES' % (table.name,
+                                                ', '.join(table.fields))
+        print ',\n'.join('(%s)' % ', '.join(literal(x) for x in row)
+                         for row in table.data)
+        print ';'
+
+    print 'UNLOCK TABLES;'
+
+################################################################################
+### Authors
+
+wp_usermeta_info = {'sql': '''
+--
+-- Table structure for table `wp_usermeta`
+--
+
+DROP TABLE IF EXISTS `wp_usermeta`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `wp_usermeta` (
+  `umeta_id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `user_id` bigint(20) unsigned NOT NULL DEFAULT '0',
+  `meta_key` varchar(255) DEFAULT NULL,
+  `meta_value` longtext,
+  PRIMARY KEY (`umeta_id`),
+  KEY `user_id` (`user_id`),
+  KEY `meta_key` (`meta_key`)
+) ENGINE=MyISAM AUTO_INCREMENT=133 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+''',
+    'fields': "umeta_id user_id meta_key meta_value".split()
+}
+
+wp_users_info = {'sql': '''
+--
+-- Table structure for table `wp_users`
+--
+
+DROP TABLE IF EXISTS `wp_users`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `wp_users` (
+  `ID` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `user_login` varchar(60) NOT NULL DEFAULT '',
+  `user_pass` varchar(64) NOT NULL DEFAULT '',
+  `user_nicename` varchar(50) NOT NULL DEFAULT '',
+  `user_email` varchar(100) NOT NULL DEFAULT '',
+  `user_url` varchar(100) NOT NULL DEFAULT '',
+  `user_registered` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `user_activation_key` varchar(60) NOT NULL DEFAULT '',
+  `user_status` int(11) NOT NULL DEFAULT '0',
+  `display_name` varchar(250) NOT NULL DEFAULT '',
+  PRIMARY KEY (`ID`),
+  KEY `user_login_key` (`user_login`),
+  KEY `user_nicename` (`user_nicename`)
+) ENGINE=MyISAM AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+''',
+        'fields':'ID user_login user_pass user_nicename user_email ' \
+                  'user_registered display_name'.split()
+}
+AuthorInfo = namedtuple('AuthorInfo', wp_users_info['fields'])
+
+def get_author_data():
+    user_id_counter = Counter()
+    umeta_counter = Counter()
+
+    author_data = []
+    author_meta = []
+
+    author_pks = Writing.objects.all().values_list('user', flat=True).distinct()
+    for author_pk in sorted(set(author_pks)):
+        author = UserProfile.objects.get(pk=author_pk)
+        author_id = user_id_counter()
+
+        author_data.append(AuthorInfo(
+                ID=author_id,
+                user_login=author.username,
+                user_pass='!',
+                user_nicename=author.username,
+                user_email=author.email,
+                user_registered=author.user.date_joined,
+                display_name=author.name,
+        ))
+
+        if author.editor_status():
+            capabilities = 'a:1:{s:13:"administrator";s:1:"1";}'
+            user_level = 10
+        elif author.is_staff:
+            capabilities = 'a:1:{s:11:"contributor";s:1:"1";}'
+            user_level = 1
+        else:
+            capabilities = 'a:1:{s:10:"subscriber";s:1:"1";}'
+            user_level = 0
+
+        def meta(key, value):
+            author_meta.append([umeta_counter(), author_id, key, value])
+
+        meta('first_name', author.user.first_name)
+        meta('last_name', author.user.last_name)
+        meta('nickname', author.name)
+        meta('description', '')
+        meta('rich_editing', 'true')
+        meta('comment_shortcuts', 'false')
+        meta('admin_color', 'fresh')
+        meta('use_ssl', '0')
+        meta('show_admin_bar_front', 'true')
+        meta('show_admin_bar_admin', 'false')
+        meta('aim', '')
+        meta('yim', '')
+        meta('jabber', '')
+        meta('wp_capabalities', capabilities)
+        meta('wp_user_level', user_level)
+
+    wp_users = Table('wp_users', data=author_data, **wp_users_info)
+    wp_usermeta = Table('wp_usermeta', data=author_meta, **wp_usermeta_info)
+
+    return wp_users, wp_usermeta
+
+################################################################################
+### Categories
+
+wp_terms_info = {'sql': '''
+--
+-- Table structure for table `wp_terms`
+--
+
+DROP TABLE IF EXISTS `wp_terms`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `wp_terms` (
+  `term_id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(200) NOT NULL DEFAULT '',
+  `slug` varchar(200) NOT NULL DEFAULT '',
+  `term_group` bigint(10) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`term_id`),
+  UNIQUE KEY `slug` (`slug`),
+  KEY `name` (`name`)
+) ENGINE=MyISAM AUTO_INCREMENT=26 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+''',
+    'fields': 'term_id name slug term_group'.split(),
+}
+WPTerm = namedtuple('WPTerm', wp_terms_info['fields'])
+
+wp_term_taxonomy_info = {'sql': '''
+--
+-- Table structure for table `wp_term_taxonomy`
+--
+
+DROP TABLE IF EXISTS `wp_term_taxonomy`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `wp_term_taxonomy` (
+  `term_taxonomy_id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `term_id` bigint(20) unsigned NOT NULL DEFAULT '0',
+  `taxonomy` varchar(32) NOT NULL DEFAULT '',
+  `description` longtext NOT NULL,
+  `parent` bigint(20) unsigned NOT NULL DEFAULT '0',
+  `count` bigint(20) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`term_taxonomy_id`),
+  UNIQUE KEY `term_id_taxonomy` (`term_id`,`taxonomy`),
+  KEY `taxonomy` (`taxonomy`)
+) ENGINE=MyISAM AUTO_INCREMENT=27 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+''',
+    'fields': 'term_taxonomy_id term_id taxonomy description ' \
+              'parent count'.split(),
+}
+WPTermTaxonomy = namedtuple('WPTermTaxonomy', wp_term_taxonomy_info['fields'])
+
+# TODO - wp_term_relationships, also wp_term_taxonomy.count
+
+def get_term_data():
+    term_id_counter = Counter()
+    term_taxonomy_counter = Counter()
+
+    terms = []
+    term_taxonomy = []
+    term_ids = {}
+
+    for section in Section.objects.all().order_by('slug'):
+        term_ids[section] = term_id = term_id_counter()
+
+        terms.append(WPTerm(
+            term_id=term_id,
+            name=section.name,
+            slug=section.slug,
+            term_group=0,
+        ))
+
+        term_taxonomy.append(WPTermTaxonomy(
+            term_taxonomy_id=term_taxonomy_counter(),
+            term_id=term_id,
+            taxonomy='category',
+            description=section.description,
+            parent=0,
+            count=0,
+        ))
+
+    for subsection in Subsection.objects.all().order_by('pk'):
+        term_ids[subsection] = term_id = term_id_counter()
+
+        terms.append(WPTerm(
+            term_id=term_id,
+            name=subsection.name,
+            slug=subsection.slug,
+            term_group=0,
+        ))
+
+        term_taxonomy.append(WPTermTaxonomy(
+            term_taxonomy_id=term_taxonomy_counter(),
+            term_id=term_id,
+            taxonomy='category',
+            description=subsection.description,
+            parent=term_ids[subsection.section],
+            count=0,
+        ))
+
+    terms = Table('wp_terms', data=terms, **wp_terms_info)
+    tax = Table('wp_term_taxonomy', data=term_taxonomy, **wp_term_taxonomy_info)
+    return terms, tax
+
+################################################################################
+### Posts
+
+wp_post_info = {
+    'fields': 'ID post_author post_date post_date_gmt post_content '\
+              'post_title post_excerpt post_status comment_status ping_status '\
+              'post_password post_name to_ping pinged post_modified '\
+              'post_modified_gmt post_content_filtered post_parent guid '\
+              'menu_order post_type post_mime_type comment_count'.split(),
+    'sql': '''
+--
+-- Table structure for table `wp_posts`
+--
+
+DROP TABLE IF EXISTS `wp_posts`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `wp_posts` (
+  `ID` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `post_author` bigint(20) unsigned NOT NULL DEFAULT '0',
+  `post_date` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `post_date_gmt` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `post_content` longtext NOT NULL,
+  `post_title` text NOT NULL,
+  `post_excerpt` text NOT NULL,
+  `post_status` varchar(20) NOT NULL DEFAULT 'publish',
+  `comment_status` varchar(20) NOT NULL DEFAULT 'open',
+  `ping_status` varchar(20) NOT NULL DEFAULT 'open',
+  `post_password` varchar(20) NOT NULL DEFAULT '',
+  `post_name` varchar(200) NOT NULL DEFAULT '',
+  `to_ping` text NOT NULL,
+  `pinged` text NOT NULL,
+  `post_modified` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `post_modified_gmt` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `post_content_filtered` text NOT NULL,
+  `post_parent` bigint(20) unsigned NOT NULL DEFAULT '0',
+  `guid` varchar(255) NOT NULL DEFAULT '',
+  `menu_order` int(11) NOT NULL DEFAULT '0',
+  `post_type` varchar(20) NOT NULL DEFAULT 'post',
+  `post_mime_type` varchar(100) NOT NULL DEFAULT '',
+  `comment_count` bigint(20) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`ID`),
+  KEY `post_name` (`post_name`),
+  KEY `type_status_date` (`post_type`,`post_status`,`post_date`,`ID`),
+  KEY `post_parent` (`post_parent`),
+  KEY `post_author` (`post_author`)
+) ENGINE=MyISAM AUTO_INCREMENT=321 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+'''
+WPPost = namedtuple('WPPost', wp_post_info['fields']
+
+wp_postmeta_info = {
+    'fields': 'meta_id post_id meta_key meta_value'.split(),
+    'sql': '''
+--
+-- Table structure for table `wp_postmeta`
+--
+
+DROP TABLE IF EXISTS `wp_postmeta`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `wp_postmeta` (
+  `meta_id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `post_id` bigint(20) unsigned NOT NULL DEFAULT '0',
+  `meta_key` varchar(255) DEFAULT NULL,
+  `meta_value` longtext,
+  PRIMARY KEY (`meta_id`),
+  KEY `post_id` (`post_id`),
+  KEY `meta_key` (`meta_key`)
+) ENGINE=MyISAM AUTO_INCREMENT=627 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+''',
+}
+WPPostMeta = namedtuple('WPPostMeta', wp_postmeta_info['fields']
+
+wp_term_relationships_info = {
+    'fields': 'object_id term_taxonomy_id term_order'.split(),
+    'sql': '''
+--
+-- Table structure for table `wp_term_relationships`
+--
+
+DROP TABLE IF EXISTS `wp_term_relationships`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `wp_term_relationships` (
+  `object_id` bigint(20) unsigned NOT NULL DEFAULT '0',
+  `term_taxonomy_id` bigint(20) unsigned NOT NULL DEFAULT '0',
+  `term_order` int(11) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`object_id`,`term_taxonomy_id`),
+  KEY `term_taxonomy_id` (`term_taxonomy_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+'''
+}
+WPTermRelationships = namedtuple('WPTermRelationships',
+                                 wp_term_relationships_info['fields'])
 
 _escape = re.compile(u'[\u0080-\uffff]+')
 _entify = lambda c: '&#%d;' % ord(c)
 def nicify(t):
-    # inefficient but lazy
     # TODO - are these replacements breaking HTML attributes?
 
     # FIXME - for now, just dropping unicode characters (including all quotation marks!)
@@ -62,65 +397,16 @@ def nicify(t):
     # \xed isn't actually an apostrophe, but it's in our DB like one
 
 
-NS = dict(excerpt="http://wordpress.org/export/1.1/excerpt/",
-          content="http://purl.org/rss/1.0/modules/content/",
-          wfw="http://wellformedweb.org/CommentAPI/",
-          dc="http://purl.org/dc/elements/1.1/",
-          wp="http://wordpress.org/export/1.1/")
-WP = '{%s}' % NS['wp']
-DC = '{%s}' % NS['dc']
+################################################################################
 
-root = etree.Element('rss', nsmap=NS)
+def main():
+    do_tables(get_author_data())
+    do_tables(get_term_data())
 
-channel = etree.SubElement(root, 'channel')
-c = lambda *a, **k: sub_text(channel, *a, **k)
+if __name__ == '__main__':
+    main()
 
-# basic metadata
-c('title', "Daily Gazette")
-c('link', URL)
-c('description', "Swarthmore's Daily Paper")
-c('pubDate', nice_datify(datetime.datetime.now()))
-c('language', 'en')
-c(WP+'wxr_version' % NS, '1.1')
-c(WP+'base_site_url' % NS, URL)
-c(WP+'base_blog_url' % NS, URL)
-
-# authors
-author_ids = defaultdict(Counter())
-
-author_pks = Writing.objects.all().values_list('user', flat=True).distinct()
-for author_pk in sorted(set(author_pks)):
-    author = UserProfile.objects.get(pk=author_pk)
-
-    a = etree.SubElement(channel, WP+'author')
-    sub_text(a, WP+'author_id', str(author_ids[author]))
-    sub_text(a, WP+'author_login', author.username)
-    sub_text(a, WP+'author_email', author.email)
-    sub_text(a, WP+'author_display_name', author.name)
-    sub_text(a, WP+'author_first_name', author.user.first_name)
-    sub_text(a, WP+'author_last_name', author.user.last_name)
-
-# categories
-section_ids = defaultdict(Counter())
-
-for section in Section.objects.all().order_by('pk'):
-    s = etree.SubElement(channel, WP+'category')
-    sub_text(s, WP+'term_id', str(section_ids[section]))
-    # apparently nicename=slug, name=human-readable. seems backwards...
-    sub_text(s, WP+'category_nicename', section.slug)
-    sub_text(s, WP+'cat_name', section.name)
-    sub_text(s, WP+'category_description', section.description)
-    sub_text(s, WP+'category_parent', '')
-
-for subsection in Subsection.objects.all().order_by('pk'):
-    s = etree.SubElement(channel, WP+'category')
-    sub_text(s, WP+'term_id', str(section_ids[subsection]))
-    # apparently nicename=slug, name=human-readable. seems backwards...
-    sub_text(s, WP+'category_nicename', subsection.slug)
-    sub_text(s, WP+'cat_name', subsection.name)
-    sub_text(s, WP+'category_description', subsection.description)
-    sub_text(s, WP+'category_parent', subsection.section.slug)
-
+'''
 # articles and comments
 time_diff = datetime.timedelta(hours=-5)
 for article in Article.published.all():
@@ -174,3 +460,4 @@ for article in Article.published.all():
     sub_text(a, '{%s}encoded' % NS['excerpt'], article.summary)
 
 print etree.tostring(root, pretty_print=True)
+'''
