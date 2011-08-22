@@ -11,11 +11,12 @@ django.core.management.setup_environ(settings)
 
 from interactive_load import *
 
+from django.utils.encoding import smart_unicode
 from collections import defaultdict
 import datetime
 from lxml import etree
+import re
 import sys
-
 
 URL = 'http://daily.swarthmore.edu'
 
@@ -40,19 +41,24 @@ def datify(d):
     return d.strftime('%Y-%m-%d %H:%M:%S')
 
 
-
+_escape = re.compile(u'[\u0080-\uffff]+')
+_entify = lambda c: '&#%d;' % ord(c)
 def nicify(t):
     # inefficient but lazy
     # TODO - are these replacements breaking HTML attributes?
-    return t.replace(u'\xc3\xad', "'") \
-            .replace(u"\xe2\u20ac\u0153", u'\xe2\x80\x9c') \
-            .replace(u"\xe2\u20ac\x9d", u'\xe2\x80\x9d') \
-            .decode('utf-8', 'replace') \
-            .replace(u'\u2019', "'") \
-            .replace(u'\u201c', '"') \
-            .replace(u'\u201d', '"') \
-            .replace(u'\xed', "'") \
-            .replace('\t', ' ')
+
+    # FIXME - for now, just dropping unicode characters (including all quotation marks!)
+    return _escape.sub("&apos;", smart_unicode(t).replace(u'\x10', ''))
+
+    #return t.replace(u'\xc3\xad', "'") \
+    #        .replace(u"\xe2\u20ac\u0153", u'\xe2\x80\x9c') \
+    #        .replace(u"\xe2\u20ac\x9d", u'\xe2\x80\x9d') \
+    #        .decode('utf-8', 'replace') \
+    #        .replace(u'\u2019', "&#8217;") \
+    #        .replace(u'\u201c', '&#8220;') \
+    #        .replace(u'\u201d', '&#8221;') \
+    #        .replace(u'\xed', "'") \
+    #        .replace('\t', ' ')
     # \xed isn't actually an apostrophe, but it's in our DB like one
 
 
@@ -154,13 +160,17 @@ for article in Article.published.all():
     # content
     # TODO - deal with linked images, etc -- other changes to content
     try:
-        sub_text(a, '{%s}encoded' % NS['content'], nicify(article.resolved_text()))
-    except (UnicodeEncodeError, UnicodeDecodeError):
-        print >>sys.stderr, "Error with content of article %s" % article.pk, \
-                set(c for c in article.resolved_text() if ord(c) > 127)
+        n = nicify(article.resolved_text())
+    except (UnicodeEncodeError, UnicodeDecodeError, ValueError):
+        print >>sys.stderr, "Error with nicifying text of article %s" % article.pk
+
+    try:
+        sub_text(a, '{%s}encoded' % NS['content'], n)
+    except (UnicodeEncodeError, UnicodeDecodeError, ValueError):
+        print >>sys.stderr, "Error with content of article %s" % article.pk, s
+                
 
     # TODO - does summary ever have textile?
     sub_text(a, '{%s}encoded' % NS['excerpt'], article.summary)
-
 
 print etree.tostring(root, pretty_print=True)
