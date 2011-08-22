@@ -493,6 +493,7 @@ def get_posts(author_ids, taxonomy_ids):
             add_term(taxonomy_ids[author])
 
     # TODO - do "attachment" posts (ie images)
+    # TODO - handle photospreads
 
     # TODO - do postmeta stuff...what matters?
     #  _thumbnail_id, _wp_attached_file, _wp_attachment_metadata, _oembed_ crap
@@ -609,8 +610,6 @@ def get_comments(author_ids, article_ids):
             comment_parent='0',
             user_id=user_id,
         ))
-
-        # TODO - anything in commentmeta?
 
     wp_comments = Table('wp_comments', data=comments, **wp_comments_info)
     wp_cmeta = Table('wp_commentmeta', data=commentmeta, **wp_commentmeta_info)
