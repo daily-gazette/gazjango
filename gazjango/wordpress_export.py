@@ -5,13 +5,10 @@ This file spits out SQL suitable for importing all the articles and comments
 from the old Django site into the new Wordpress site.
 '''
 
-import codecs
 import datetime
-import locale
-import re
 import sys
 
-from collections import defaultdict, namedtuple
+from collections import namedtuple
 from django.utils.encoding import smart_unicode
 
 # do Django setup
@@ -30,9 +27,6 @@ def literal(obj):
     if isinstance(obj, basestring):
         obj = smart_unicode(obj)
     return _literal(obj)
-
-# wrap sys.stdout into a StreamWriter to allow writing unicode.
-#sys.stdout = codecs.getwriter(locale.getpreferredencoding())(sys.stdout) 
 
 # a silly little counter class
 class Counter(object):
@@ -130,8 +124,13 @@ def get_authors():
 
     author_ids = {}
 
-    author_pks = Writing.objects.all().values_list('user', flat=True).distinct()
-    for author_pk in sorted(set(author_pks)):
+    p = set(Writing.objects.all().values_list('user', flat=True).distinct())
+    p.update(ImageFile.objects.all().values_list('users', flat=True).distinct())
+
+    for author_pk in sorted(p):
+        if author_pk is None:
+            continue
+
         author = UserProfile.objects.get(pk=author_pk)
         author_ids[author] = author_id = user_id_counter()
 
@@ -360,7 +359,7 @@ CREATE TABLE `wp_posts` (
 WPPost = namedtuple('WPPost', wp_posts_info['fields'])
 
 wp_postmeta_info = {
-    'fields': 'meta_id post_id meta_key meta_value'.split(),
+    'fields': 'post_id meta_key meta_value'.split(),
     'sql': '''
 --
 -- Table structure for table `wp_postmeta`
@@ -413,7 +412,9 @@ def entify(u):
     # NOTE - slow and crappy, but I'm too lazy to do it a better way
     return u.replace(u'\x10', '') \
             .replace(u'“', '&#8220;') \
+            .replace(u'\xe2\u20ac\u0153', '&#8220;') \
             .replace(u'”', '&#8221;') \
+            .replace(u'\xe2\u20ac\x9d', '&#8221;') \
             .replace(u"‘", "&#8216;") \
             .replace(u"’", "&#8217;") \
             .replace(u'–', "&#8211;") \
@@ -424,13 +425,87 @@ def entify(u):
 def nicify_content(t):
     # TODO - change <div>s for images to make sense on new site
     s = entify(smart_unicode(t))
-    #article = lxml.html.fromstring(s)
+
+    # we want to find things like
+    # <div class="imgRight fifty"><img src="/static/lol.jpg" />A Caption</div>
+    # and turn them into
+    # [caption id="attachment_85" align="alignright" width="300" caption="A Caption"]<a href="/static/lol.jpg" rel="attachment wp-att-85"><img class="size-medium wp-image-85" src="/static/resized/lol_story50.jpg" width="300" height="194" /></a>[/caption]
+
     return s
 
 
 def nicify_comment(t):
     s = entify(smart_unicode(t))
     return s
+
+'''
+# this doesn't seem to be enough to get it working
+def img_post(image, article_ids, id_counter, post_data, postmeta, author_ids):
+    if image in article_ids:
+        return article_ids[image]
+
+    users = list(image.users.all())
+    if users:
+        author = author_ids[users[0]]
+    else:
+        author = 1
+
+    path = image.data.path
+    ext = path[path.rindex('.')+1:].lower()
+    if ext in ('jpg', 'jpeg'):
+        mime_type = 'image/jpeg'
+    elif ext == 'png':
+        mime_type = 'image/png'
+    elif ext == 'gif':
+        mime_type = 'image/gif'
+    elif ext == 'bmp':
+        mime_type = 'image/bmp'
+    else:
+        raise ValueError("unknown image file extension %s" % image.data.path)
+
+    article_id = id_counter()
+    post_data.append(WPPost(
+        ID=article_id,
+        post_author=author,
+
+        post_title=image.name,
+        post_name=image.bucket.slug + '-' + image.slug,
+        guid = URL + image.get_absolute_url(),
+        
+        post_excerpt=image.name,
+        post_content=image.description,
+
+        post_date=image.pub_date,
+        post_date_gmt=image.pub_date+TIME_DIFF,
+        post_modified=image.pub_date,
+        post_modified_gmt=image.pub_date+TIME_DIFF,
+
+        post_content_filtered='',
+        post_status='publish',
+        comment_status='open',
+        ping_status='open',
+        to_ping='',
+        pinged='',
+
+        post_password='',
+        post_parent=0,
+        menu_order=0,
+        post_type='attachment',
+        post_mime_type=mime_type,
+        comment_count=0,
+    ))
+
+    def add_meta(key, value):
+        postmeta.append(WPPostMeta(
+            post_id=article_id,
+            meta_key=key,
+            meta_value=value
+        ))
+
+    add_meta('_wp_attached_file', image.get_absolute_url())
+    # TODO - resizings, attachment metadata
+'''
+
 
 def get_posts(author_ids, taxonomy_ids):
     posts = []
@@ -515,6 +590,13 @@ def get_posts(author_ids, taxonomy_ids):
                 term_order=term_counter(),
             ))
 
+        def add_meta(key, value):
+            postmeta.append(WPPostMeta(
+                post_id=article_id,
+                meta_key=key,
+                meta_value=value
+            ))
+
         # connect to sections
         add_term(taxonomy_ids[article.section])
         if article.subsection:
@@ -523,6 +605,16 @@ def get_posts(author_ids, taxonomy_ids):
         # connect to author terms
         for author in authors:
             add_term(taxonomy_ids[author])
+
+        # save the django PK, for future reference
+        add_meta('_django_pk', article.pk)
+
+        # TODO - thumbnails
+        ## if article.main_image:
+        ##     img = img_post(article.main_image, article_ids, article_id_counter,
+        ##                    posts, postmeta, author_ids)
+        ##     add_meta('_thumbnail_id', img)
+
 
     # TODO - do "attachment" posts (ie images)
 
@@ -611,7 +703,6 @@ def get_comments(author_ids, article_ids):
 
     comment_ids = {}
     comment_id_counter = Counter()
-    comment_meta_counter = Counter()
 
     for comment in PublicComment.objects.all().select_related(depth=1):
         comment_id = comment_ids[comment] = comment_id_counter()
