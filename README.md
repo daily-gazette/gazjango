@@ -15,8 +15,9 @@ Link the `imagekit` and `registration` libraries somewhere into your `$PYTHONPAT
 Set up a MySQL database for the project (`mysqladmin -u root create gazette`).
 
 Create a `settings.py` file with at least these contents:
-    from settings_dev import *
 
+    from settings_dev import *
+    
     DATABASES = {
         'default': {
             'ENGINE':   'django.db.backends.mysql',
